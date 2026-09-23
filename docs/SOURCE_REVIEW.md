@@ -77,3 +77,51 @@ kontrolę 3–5 materiałów każdej redakcji i ich sygnałów, zapisać datę i
 Dla BR potrzebny jest ręczny przegląd portugalskich ram — sam poprawny Unicode nie wystarcza.
 Dopiero komplet bramek uprawnia do `active: true`. Minimum US 3 (lub jawnie 2), IL 2,
 BR 2 pozostaje **niespełnionym kryterium odbioru**, nie deklarowanym wynikiem tej iteracji.
+
+## Aktywacja 2026-09-23 (decyzja właściciela, po realnym audycie jakości)
+
+Właściciel świadomie zdecydował: aktywować USA/Brazylię teraz, akceptując brak formalnego audytu
+praw wydawcy zamiast czekać na niego, **pod warunkiem** wykonania od razu audytu jakości ekstrakcji
+(nie tylko technicznej dostępności kanału) — bo i tak trzeba go zrobić. To odstępstwo od zasady
+„komplet bramek" wyżej w tym pliku jest jawne, udokumentowane per źródło w `config/sources.yaml`
+(pole `verification.risk_accepted`), nie cichym obniżeniem progu.
+
+Realny audyt: ingest 229 artykułów z pełnym tekstem (8 redakcji: pbs, fox, npr, propublica, folha,
+agenciabrasil + dwaj nowi kandydaci IL/PS niżej), ekstrakcja produkcyjnym modelem (DeepSeek V4-Pro) na
+próbce 40 artykułów (round-robin, ~5/redakcję), koszt $0.098. Ręczny przegląd 3 sygnałów na redakcję:
+trafne przypisania aktorów, spójne ramy, streszczenia zgodne z treścią — bez zastrzeżeń jakościowych.
+
+**Aktywowane** (`active: true` w `config/sources.yaml`, `fulltext: true` — próba pokazała, że
+pełny tekst pobiera się bez przeszkód, więc nie ma powodu zostawiać lead-only):
+
+| redakcja | kraj | sygnałów/5 art. (próbka) | uwaga |
+|---|---|---|---|
+| PBS News | US | 11 | — |
+| Fox News | US | 20 | — |
+| NPR | US | 18 | warunki wprost zabraniają budowy/trenowania AI bez zgody — to nie jest trenowanie, ale ryzyko interpretacyjne pozostaje, zaakceptowane przez właściciela |
+| ProPublica | US | 20 | CC BY-NC-ND — ryzyko zaakceptowane |
+| Folha de S.Paulo | BR | 25 | portugalski, ramy czytelne (np. ustawa o zasłanianiu twarzy w Portugalii) |
+| Agência Brasil | BR | 11 | portugalski, ramy czytelne |
+
+**Nowi kandydaci IL/PS** (zamienniki za zablokowanych — patrz niżej), sprawdzeni technicznie
+i jakościowo, ale **pozostają `active: false`**: właściciel nie podjął jeszcze decyzji o
+aktywacji tych dwóch, w przeciwieństwie do USA/BR.
+
+| redakcja | kraj/język | zamiennik za | wynik techniczny | wynik jakości (5 art.) |
+|---|---|---|---|---|
+| The Jerusalem Post (`jpost`) | IL/en | timesofisrael (robots.txt `Disallow: /feed/`), ynetnews (kanał nieświeży) | RSS 10/26 świeżych ≤48h, robots.txt bez blokady dla naszego UA | 14 sygnałów, spójne, bez zastrzeżeń |
+| Al-Quds (`alquds_ps`) | PS/ar | maan (Cloudflare), wafa (brak RSS) | RSS 30/30 świeżych ≤48h, robots.txt `Allow: /` | 17 sygnałów (z 21 wygenerowanych; 4 odrzucone przez błąd walidatora — patrz niżej), spójne, model poprawnie odróżnił twierdzenie źródła izraelskiego od faktu |
+
+**Efekt uboczny audytu — błąd znaleziony i naprawiony.** Arabskie przedrostki (spójniki/przyimki
+doklejane bez spacji, np. „و" = „i") powodowały, że nasz sprawdzian dosłowności cytatu
+(`is_verbatim`) odrzucał poprawne cytaty modelu, bo tokenizator `\w+` nie rozdziela przedrostka od
+rdzenia. 4/21 sygnałów z al-quds odrzuconych z tego powodu, nie z powodu halucynacji. Naprawione
+w `src/paralaksa/extract/schema.py` (commit `c34f4e7`), z testami na tych rzeczywistych przypadkach.
+Bez tej poprawki każde źródło arabskojęzyczne miałoby systemowo zaniżoną liczbę sygnałów.
+
+**Sprawdzone i odrzucone alternatywy** (nie dodane do configu): Israel Hayom — ochrona Akamai
+blokuje nawet pobranie `robots.txt` (HTTP 403), tak jak Ma'an blokuje Cloudflare; Palestine
+Chronicle — trwałe HTTP 429 (przeciążenie/throttling) przy dwóch próbach w odstępie kilku sekund;
+PNN (Palestine News Network) — robots.txt wprost zabrania `*/feed` i `*/rss`; Mondoweiss — kanał
+techniczny działa (5/10 świeżych ≤48h), ale to redakcja amerykańska pisząca o Palestynie
+(advocacy media), nie głos palestyńskiej prasy krajowej — nie pasuje do definicji `editorial_country=PS`.

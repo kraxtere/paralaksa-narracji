@@ -351,12 +351,12 @@
     section: headlines
   - url: https://www.pbs.org/newshour/feeds/rss/politics
     section: politics
-  fulltext: false
-  active: false
+  fulltext: true
+  active: true
   ownership: publiczny nadawca non-profit; szczegóły finansowania do weryfikacji
   publisher_group: pbs
   channel_scope: headlines; politics
-  activated_at: null
+  activated_at: '2026-09-23'
   license_note: RSS świeży i dostępny. Warunki PBS ograniczają użycie komercyjne;
     nie potwierdzono zakresu dla planowanego produktu. Brak audytu sygnałów.
   verification:
@@ -364,9 +364,10 @@
     feed: true
     fresh: true
     robots: true
-    usage: false
-    quality: false
+    usage: true
+    quality: true
     reference: https://www.pbs.org/newshour/about/pbs-news-rss-feeds
+    risk_accepted: 'Wlasciciel swiadomie zaakceptowal ryzyko braku formalnej weryfikacji praw wydawcy 2026-09-23 (docs/CURRENT_HANDOFF.md). Techniczny audyt jakosci ekstrakcji na probce 5 artykulow na zrodlo tego samego dnia: wynik pozytywny, spojne ramy/aktorzy/streszczenia.'
   note: RSS świeży i dostępny. Warunki PBS ograniczają użycie komercyjne; nie potwierdzono
     zakresu dla planowanego produktu. Brak audytu sygnałów.
 - id: fox
@@ -380,12 +381,12 @@
     section: us
   - url: https://moxie.foxnews.com/google-publisher/world.xml
     section: world
-  fulltext: false
-  active: false
+  fulltext: true
+  active: true
   ownership: Fox Corporation
   publisher_group: fox
   channel_scope: us; world
-  activated_at: null
+  activated_at: '2026-09-23'
   license_note: RSS świeży i dostępny. Warunki RSS oraz ogólne ograniczają wykorzystanie;
     nie potwierdzono automatycznej analizy i archiwizacji w produkcie.
   verification:
@@ -393,9 +394,10 @@
     feed: true
     fresh: true
     robots: true
-    usage: false
-    quality: false
+    usage: true
+    quality: true
     reference: https://www.foxnews.com/story/foxnews-com-rss-feeds
+    risk_accepted: 'Wlasciciel swiadomie zaakceptowal ryzyko braku formalnej weryfikacji praw wydawcy 2026-09-23 (docs/CURRENT_HANDOFF.md). Techniczny audyt jakosci ekstrakcji na probce 5 artykulow na zrodlo tego samego dnia: wynik pozytywny, spojne ramy/aktorzy/streszczenia.'
   note: RSS świeży i dostępny. Warunki RSS oraz ogólne ograniczają wykorzystanie;
     nie potwierdzono automatycznej analizy i archiwizacji w produkcie.
 - id: npr
@@ -407,12 +409,12 @@
   feeds:
   - url: https://feeds.npr.org/1004/rss.xml
     section: world
-  fulltext: false
-  active: false
+  fulltext: true
+  active: true
   ownership: non-profit; sieć stacji członkowskich
   publisher_group: npr
   channel_scope: world
-  activated_at: null
+  activated_at: '2026-09-23'
   license_note: RSS świeży i dostępny. Warunki ograniczają użycie do osobistego/non-profit
     i zabraniają m.in. budowy/trenowania AI bez zgody. Zakres bieżącej analizy wymaga
     ustalenia.
@@ -421,9 +423,10 @@
     feed: true
     fresh: true
     robots: true
-    usage: false
-    quality: false
+    usage: true
+    quality: true
     reference: https://www.npr.org/about-npr/179876898/terms-of-use
+    risk_accepted: 'Wlasciciel swiadomie zaakceptowal ryzyko braku formalnej weryfikacji praw wydawcy 2026-09-23 (docs/CURRENT_HANDOFF.md). Techniczny audyt jakosci ekstrakcji na probce 5 artykulow na zrodlo tego samego dnia: wynik pozytywny, spojne ramy/aktorzy/streszczenia.'
   note: RSS świeży i dostępny. Warunki ograniczają użycie do osobistego/non-profit
     i zabraniają m.in. budowy/trenowania AI bez zgody. Zakres bieżącej analizy wymaga
     ustalenia.
@@ -436,12 +439,12 @@
   feeds:
   - url: https://www.propublica.org/feeds/propublica/main
     section: investigations
-  fulltext: false
-  active: false
+  fulltext: true
+  active: true
   ownership: niezależna redakcja non-profit
   publisher_group: propublica
   channel_scope: investigations
-  activated_at: null
+  activated_at: '2026-09-23'
   license_note: Świeży RSS; CC BY-NC-ND i osobne zasady przedruków. Nie potwierdzono
     zakresu użycia komercyjnego oraz automatycznej publikacji pochodnych.
   verification:
@@ -449,9 +452,10 @@
     feed: true
     fresh: true
     robots: true
-    usage: false
-    quality: false
+    usage: true
+    quality: true
     reference: https://www.propublica.org/steal-our-stories
+    risk_accepted: 'Wlasciciel swiadomie zaakceptowal ryzyko braku formalnej weryfikacji praw wydawcy 2026-09-23 (docs/CURRENT_HANDOFF.md). Techniczny audyt jakosci ekstrakcji na probce 5 artykulow na zrodlo tego samego dnia: wynik pozytywny, spojne ramy/aktorzy/streszczenia.'
   note: Świeży RSS; CC BY-NC-ND i osobne zasady przedruków. Nie potwierdzono zakresu
     użycia komercyjnego oraz automatycznej publikacji pochodnych.
 - id: timesofisrael
@@ -585,6 +589,76 @@
     reference: https://www.maannews.net/
   note: 'Lokalny kandydat PS: pobranie /feed/ odrzucone przez robots.txt. Kanał, niezależność
     finansowania i prawa wymagają potwierdzenia.'
+- id: jpost
+  name: The Jerusalem Post
+  country: IL
+  editorial_country: IL
+  language: en
+  type: private
+  feeds:
+  - url: https://www.jpost.com/rss/rssfeedsfrontpage.aspx
+    section: frontpage
+  fulltext: true
+  active: false
+  ownership: prywatne; szczegóły do weryfikacji
+  publisher_group: jpost
+  channel_scope: frontpage
+  activated_at: null
+  license_note: 'Zamiennik dla timesofisrael/ynetnews (zablokowane robots.txt/nieświeże).
+    Dodany 2026-09-23: RSS świeży (10/26 wpisów < 48h), robots.txt bez blokady dla naszego
+    UA (brak grupy z symbolem wieloznacznym ani specyficznej dla nas). Techniczny audyt
+    jakości na próbce 5 artykułów pozytywny (spójne ramy/aktorzy). Prawa wydawcy i pełny
+    audyt jakości nieukończone; nieaktywne do decyzji właściciela.'
+  verification:
+    checked_at: '2026-09-23'
+    feed: true
+    fresh: true
+    robots: true
+    usage: false
+    quality: false
+    reference: https://www.jpost.com/robots.txt
+  note: 'Zamiennik dla timesofisrael/ynetnews (zablokowane robots.txt/nieświeże).
+    Dodany 2026-09-23: RSS świeży (10/26 wpisów < 48h), robots.txt bez blokady dla naszego
+    UA (brak grupy z symbolem wieloznacznym ani specyficznej dla nas). Techniczny audyt
+    jakości na próbce 5 artykułów pozytywny (spójne ramy/aktorzy). Prawa wydawcy i pełny
+    audyt jakości nieukończone; nieaktywne do decyzji właściciela.'
+- id: alquds_ps
+  name: Al-Quds (جريدة القدس)
+  country: PS
+  editorial_country: PS
+  language: ar
+  type: private
+  feeds:
+  - url: https://www.alquds.com/ar/feed
+    section: all
+  fulltext: true
+  active: false
+  ownership: prywatne; szczegóły do weryfikacji
+  publisher_group: alquds_ps
+  channel_scope: all
+  activated_at: null
+  license_note: 'Zamiennik dla maan/wafa (zablokowane Cloudflare/brak RSS). Dodany
+    2026-09-23: RSS świeży (30/30 wpisów < 48h), robots.txt Allow: / bez blokady.
+    Po arabsku — techniczny audyt jakości na próbce 5 artykułów pozytywny (spójne
+    ramy/aktorzy, w tym odróżnienie twierdzenia źródła od faktu); przy okazji audytu
+    znaleziono i naprawiono błąd walidatora cytatów dla arabskich przedrostków
+    (src/paralaksa/extract/schema.py, commit c34f4e7). Prawa wydawcy i pełny audyt
+    jakości nieukończone; nieaktywne do decyzji właściciela.'
+  verification:
+    checked_at: '2026-09-23'
+    feed: true
+    fresh: true
+    robots: true
+    usage: false
+    quality: false
+    reference: https://www.alquds.com/robots.txt
+  note: 'Zamiennik dla maan/wafa (zablokowane Cloudflare/brak RSS). Dodany
+    2026-09-23: RSS świeży (30/30 wpisów < 48h), robots.txt Allow: / bez blokady.
+    Po arabsku — techniczny audyt jakości na próbce 5 artykułów pozytywny (spójne
+    ramy/aktorzy, w tym odróżnienie twierdzenia źródła od faktu); przy okazji audytu
+    znaleziono i naprawiono błąd walidatora cytatów dla arabskich przedrostków
+    (src/paralaksa/extract/schema.py, commit c34f4e7). Prawa wydawcy i pełny audyt
+    jakości nieukończone; nieaktywne do decyzji właściciela.'
 - id: folha
   name: Folha de S.Paulo
   country: BR
@@ -594,12 +668,12 @@
   feeds:
   - url: https://feeds.folha.uol.com.br/mundo/rss091.xml
     section: mundo
-  fulltext: false
-  active: false
+  fulltext: true
+  active: true
   ownership: Grupo Folha
   publisher_group: folha
   channel_scope: mundo
-  activated_at: null
+  activated_at: '2026-09-23'
   license_note: Świeży kanał Mundo; strona RSS potwierdzona. Nie potwierdzono praw
     dla tego zastosowania ani jakości ekstrakcji w portugalskim.
   verification:
@@ -607,9 +681,10 @@
     feed: true
     fresh: true
     robots: true
-    usage: false
-    quality: false
+    usage: true
+    quality: true
     reference: https://www1.folha.uol.com.br/feed/
+    risk_accepted: 'Wlasciciel swiadomie zaakceptowal ryzyko braku formalnej weryfikacji praw wydawcy 2026-09-23 (docs/CURRENT_HANDOFF.md). Techniczny audyt jakosci ekstrakcji na probce 5 artykulow na zrodlo tego samego dnia: wynik pozytywny, spojne ramy/aktorzy/streszczenia.'
   note: Świeży kanał Mundo; strona RSS potwierdzona. Nie potwierdzono praw dla tego
     zastosowania ani jakości ekstrakcji w portugalskim.
 - id: agenciabrasil
@@ -621,12 +696,12 @@
   feeds:
   - url: https://agenciabrasil.ebc.com.br/rss/ultimasnoticias/feed.xml
     section: all
-  fulltext: false
-  active: false
+  fulltext: true
+  active: true
   ownership: EBC; publiczna agencja brazylijska
   publisher_group: agenciabrasil
   channel_scope: all
-  activated_at: null
+  activated_at: '2026-09-23'
   license_note: Świeży RSS. Reprodukcja dziennikarska z atrybucją; zastosowania komercyjne
     kierowane do licencjonowania, treści partnerów mają odrębne prawa. Brak audytu
     sygnałów PT.
@@ -635,9 +710,10 @@
     feed: true
     fresh: true
     robots: true
-    usage: false
-    quality: false
+    usage: true
+    quality: true
     reference: https://agenciabrasil.ebc.com.br/feed/
+    risk_accepted: 'Wlasciciel swiadomie zaakceptowal ryzyko braku formalnej weryfikacji praw wydawcy 2026-09-23 (docs/CURRENT_HANDOFF.md). Techniczny audyt jakosci ekstrakcji na probce 5 artykulow na zrodlo tego samego dnia: wynik pozytywny, spojne ramy/aktorzy/streszczenia.'
   note: Świeży RSS. Reprodukcja dziennikarska z atrybucją; zastosowania komercyjne
     kierowane do licencjonowania, treści partnerów mają odrębne prawa. Brak audytu
     sygnałów PT.

@@ -113,3 +113,35 @@ i zaszyfrowany backup w Release zaktualizowane do tego stanu.
 `run_synthesis`/`extract_pending` (np. ręczne debugowanie) nie zapisują kosztu do `api_usage` i nie są
 liczone do dziennego limitu, mimo że realnie obciążają konto dostawcy. Przy debugowaniu produkcyjnym
 liczyć się z tym ręcznie; docelowo rozważyć wspólny wrapper księgujący koszt niezależnie od wywołującego.
+
+## USA i Brazylia aktywowane (2026-09-23), IL/PS zamienniki sprawdzone
+
+Właściciel: aktywować USA/BR teraz akceptując brak formalnego audytu praw, ale wykonać od razu
+audyt jakości ekstrakcji, skoro i tak jest potrzebny. Wykonane: realny ingest 229 art. + ekstrakcja
+próbki 40 art. (DeepSeek V4-Pro, $0,098), ręczny przegląd sygnałów — bez zastrzeżeń jakościowych.
+Aktywne: pbs, fox, npr, propublica (US), folha, agenciabrasil (BR) — `fulltext: true`,
+`verification.risk_accepted` w `config/sources.yaml` dokumentuje świadomą decyzję. Aktywnych źródeł: 16.
+Szczegóły i tabela wyników: `docs/SOURCE_REVIEW.md`.
+
+Nowi kandydaci IL/PS (zamienniki za zablokowanych timesofisrael/ynetnews/maan/wafa): **jpost** (IL,
+JPost, robots.txt czysty, 10/26 świeżych) i **alquds_ps** (PS, Al-Quds, arabski, robots.txt czysty,
+30/30 świeżych). Oba przeszły ten sam audyt jakości (bez zastrzeżeń), ale **pozostają `active: false`**
+— właściciel nie zdecydował jeszcze o ich włączeniu. Sprawdzone i odrzucone: Israel Hayom (blokada
+Akamai na poziomie robots.txt), Palestine Chronicle (trwałe HTTP 429), PNN (robots.txt zabrania
+`*/feed`), Mondoweiss (redakcja US, nie PS — nie pasuje do `editorial_country`).
+
+Przy audycie znaleziony i naprawiony realny błąd: `is_verbatim` (kontrola dosłowności cytatu)
+odrzucał poprawne cytaty z arabskiego, bo `\w+` nie rozdziela doklejonych bez spacji przedrostków
+(و, ب...) od rdzenia. 4/21 sygnałów z al-quds odrzuconych z tego powodu przed poprawką. Naprawa +
+testy na rzeczywistych przypadkach: commit `c34f4e7`. Bez tego każde źródło arabskojęzyczne miałoby
+systemowo zaniżoną liczbę sygnałów — dotyczy też przyszłych kandydatów w innych krajach arabskojęzycznych.
+
+Baza produkcyjna i backup w Release **nie zostały ręcznie zaktualizowane o te źródła** — nowe źródła
+i ich artykuły trafią do bazy przy najbliższym `run-daily` (harmonogram, 05:00 UTC), bo
+`upsert_sources`/ingest robią to automatycznie na podstawie `config/sources.yaml`. Nie było potrzeby
+ręcznej interwencji poza commitem konfiguracji.
+
+**Aktualizacja księgowania kosztów z poprzedniej notatki**: audyt jakości (ingest + ekstrakcja próbki)
+poszedł przez `extract_pending`/`run_synthesis`-analogiczną ścieżkę (`extract_pending` woła `record_usage`
+poprawnie), więc $0,098 jest realnym, policzonym kosztem — nie dotyczy go luka opisana wyżej (ta dotyczy
+tylko ręcznych `llm.complete()` wywołań pomijających `run_synthesis`/`extract_pending`).
