@@ -278,3 +278,26 @@ def test_llm_payload_is_compact_but_validator_keeps_full_registry(conn, settings
     assert payload['dowody']['kolumny'] == ['signal_id', 'article_id', 'theme_id', 'kraj', 'zrodlo']
     assert len(payload['dowody']['wiersze']) == len(pkg['dowody'])
     assert 'content_group' in pkg['dowody'][0]  # pakiet walidatora bez zmian
+
+
+def test_schema_example_shows_dowody_and_theme_id_inline():
+    """Regresja: model kopiuje kształt przykładu niemal dosłownie i ignoruje pola wspomniane
+    tylko w tekście po nim (2026-09-23: 53/59 błędów walidacji na realnym payloadzie, wszystkie
+    puste dowody/theme_id, zanim dodano je do samego przykładu)."""
+    from paralaksa.report.schema import SCHEMA_EXAMPLE
+    import json
+    depth, end = 0, None
+    for i, c in enumerate(SCHEMA_EXAMPLE):
+        if c == '{':
+            depth += 1
+        elif c == '}':
+            depth -= 1
+            if depth == 0:
+                end = i
+                break
+    example = json.loads(SCHEMA_EXAMPLE[:end + 1])
+    for section in ('w_skrocie', 'co_sie_przesuwa', 'nieobecne_w_polsce', 'slabe_sygnaly'):
+        assert example[section][0]['theme_id'] and example[section][0]['dowody']
+    assert example['wzorce_zbieznosci'][0]['kraje'][0]['dowody']
+    assert example['rozbieznosci'][0]['kraje'][0]['dowody']
+    assert example['autoobraz'][0]['dowody']

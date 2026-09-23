@@ -83,3 +83,33 @@ Przyczyna: rejestr `dowody` wysyłał modelowi wszystkie 1249 sygnałów ze stre
 (~$0,33). Dzień 2026-09-23 miał status inicjalny i 490 artykułów; regularna doba będzie mniejsza.
 Pusty raport przywrócono do wersji archiwalnej (artefakty nieudanej syntezy usunięte z `reports/`).
 Budżet dnia wyczerpany ($2,80/$3), więc kolejna próba: harmonogram 2026-09-24 05:00 UTC.
+
+## Poprawka syntezy: brakujące pola w przykładzie schematu (2026-09-23, po pierwszym daily)
+
+Po zmniejszeniu payloadu (patrz wyżej) synteza nadal nie przechodziła: **53/59 błędów walidacji**,
+we wszystkich sekcjach `dowody: []` i `theme_id: ""`. Przyczyna: przykładowy JSON w
+`SCHEMA_EXAMPLE` (`src/paralaksa/report/schema.py`) nigdy nie pokazywał pól `dowody`/`theme_id` —
+były wspomniane wyłącznie zdaniem tekstu po przykładzie. Model kopiuje kształt przykładu niemal
+dosłownie i pomija to, co jest tylko w opisie. Błąd nie jest regresją mojej zmiany payloadu: istniał
+w promptcie od commita 4b8d3a2, po prostu nikt wcześniej nie uruchomił syntezy na pełnych, prawdziwych
+danych (audyt "pending" z handoffu GPT to teraz potwierdzone: nie zaliczony).
+
+Poprawka: `dowody`/`theme_id` dodane wprost do każdej sekcji przykładu. Weryfikacja na tym samym payloadzie
+(490 artykułów, dzień inicjalny): 53 → 6 błędów po pierwszym wywołaniu, **0 błędów blokujących po
+ponowieniu** (1 usunięta teza — QA z jednym źródłem bez nazwy redakcji, oczekiwane działanie sanityzacji).
+`plx report --date 2026-09-23` zakończone `exit 0`, `status.json.complete = true`.
+Test regresyjny: `test_schema_example_shows_dowody_and_theme_id_inline` (`tests/test_pre_km4.py`).
+
+Koszt tego dnia po korekcie: ingest+extract $0,89 (produkcyjnie) + synteza $0,68 (dwa wywołania z
+poprawionym promptem, po nieudanej próbie $1,90 z 4b8d3a2 usuniętej z bazy) = **$3,79 zaksięgowane
+w bazie**. Do tego moje ad-hoc wywołania diagnostyczne poza `run_synthesis` (~$1,75 realnego kosztu
+API Anthropic, nie przechodziły przez `db.record_usage`, więc nie są w liczniku budżetu ani w bazie) —
+patrz uwaga niżej. Łączny rzeczywisty koszt API tej sesji na koncie Anthropic: **ok. $5,5**, nie $3,79.
+Limit `budget.max_daily_usd` był tymczasowo podniesiony do $4,2 na czas naprawy i przywrócony do $3,0
+w `config/settings.yaml` po zakończeniu. Baza (`data/paralaksa.db`, 490 art., 1249 sygn., 1 raport)
+i zaszyfrowany backup w Release zaktualizowane do tego stanu.
+
+**Uwaga na przyszłość — luka w księgowaniu kosztów.** Wywołania `LLMClient.complete()` poza pętlą
+`run_synthesis`/`extract_pending` (np. ręczne debugowanie) nie zapisują kosztu do `api_usage` i nie są
+liczone do dziennego limitu, mimo że realnie obciążają konto dostawcy. Przy debugowaniu produkcyjnym
+liczyć się z tym ręcznie; docelowo rozważyć wspólny wrapper księgujący koszt niezależnie od wywołującego.

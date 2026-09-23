@@ -96,29 +96,44 @@ class ReportOutput(BaseModel):
 
 
 # Przykład wstawiany w miejsce {schema} w promptcie (zwięźlej niż pełny JSON Schema).
+# "dowody" i "theme_id" muszą być widoczne w samym przykładzie, nie tylko w opisie poniżej:
+# model kopiuje kształt przykładu niemal dosłownie i pomija pola wspomniane wyłącznie w tekście.
+_EX_DOWODY_1 = [{"signal_id": 101, "article_id": 1, "theme_id": "<id tematu>", "kraj": "PL", "zrodlo": "onet"}]
+_EX_DOWODY_2 = [{"signal_id": 101, "article_id": 1, "theme_id": "<id tematu>", "kraj": "PL", "zrodlo": "onet"},
+                {"signal_id": 202, "article_id": 2, "theme_id": "<id tematu>", "kraj": "PL", "zrodlo": "rp"}]
 SCHEMA_EXAMPLE = json.dumps({
-    "w_skrocie": [{"tekst": "...", "pewnosc": "niski|średni|wysoki", "article_ids": [1, 2]}],
+    "w_skrocie": [{"tekst": "...", "pewnosc": "niski|średni|wysoki", "theme_id": "<id tematu>",
+                  "article_ids": [1, 2], "dowody": _EX_DOWODY_2}],
     "wzorce_zbieznosci": [{
         "temat": "<id tematu>", "kierunek": "...",
-        "kraje": [{"kraj": "PL", "n_zrodel": 2, "rama": "...", "stance": "...", "article_ids": [1]}],
+        "kraje": [{"kraj": "PL", "n_zrodel": 2, "rama": "...", "stance": "...", "article_ids": [1],
+                  "dowody": _EX_DOWODY_1}],
         "wspolny_kierunek": "...",
-        "sygnaly_przeciwne": {"tekst": "... albo: brak sygnałów przeciwnych w danych", "article_ids": [3]},
+        "sygnaly_przeciwne": {"tekst": "... albo: brak sygnałów przeciwnych w danych", "article_ids": [3],
+                             "dowody": []},
         "pewnosc": {"poziom": "niski|średni|wysoki", "uzasadnienie": "liczby: kraje, źródła, artykuły"},
         "trend": "rośnie od N dni | nowy | stabilny | brak linii bazowej",
     }],
     "rozbieznosci": [{
         "temat": "<id tematu>", "tekst": "czym różnią się przekazy",
-        "kraje": [{"kraj": "UA", "n_zrodel": 2, "rama": "...", "stance": "...", "article_ids": [4]}],
+        "kraje": [{"kraj": "UA", "n_zrodel": 2, "rama": "...", "stance": "...", "article_ids": [4],
+                  "dowody": _EX_DOWODY_1}],
         "pewnosc": {"poziom": "niski|średni|wysoki", "uzasadnienie": "..."},
     }],
     "autoobraz": [{"kraj": "DE", "jak_opisuje_siebie": "...", "jak_opisuja_go_inni": "...",
-                   "komentarz": "...", "article_ids": [5, 6]}],
-    "co_sie_przesuwa": [{"tekst": "...", "article_ids": [7]}],
-    "nieobecne_w_polsce": [{"temat": "<id tematu>", "tekst": "...", "article_ids": [8]}],
-    "slabe_sygnaly": [{"tekst": "...", "article_ids": [9]}],
+                   "komentarz": "...", "pewnosc": "niski|średni|wysoki",
+                   "article_ids": [5, 6], "dowody": _EX_DOWODY_2}],
+    "co_sie_przesuwa": [{"tekst": "...", "theme_id": "<id tematu>", "article_ids": [7], "dowody": _EX_DOWODY_1}],
+    "nieobecne_w_polsce": [{"temat": "<id tematu>", "tekst": "...", "theme_id": "<id tematu>",
+                            "article_ids": [8], "dowody": _EX_DOWODY_1}],
+    "slabe_sygnaly": [{"tekst": "...", "theme_id": "<id tematu>", "article_ids": [9], "dowody": _EX_DOWODY_1}],
 }, ensure_ascii=False, indent=1)
 
-SCHEMA_EXAMPLE += "\nKażda pozycja z article_ids musi mieć dowody: [{signal_id: int, article_id: int, theme_id: str, kraj: str, zrodlo: str}], przepisane z DANE.dowody. Każda teza tekstowa (w_skrocie, slabe_sygnaly, co_sie_przesuwa, nieobecne_w_polsce) ma także theme_id. Autoobraz ma pewnosc: niski|średni|wysoki. article_ids muszą dokładnie odpowiadać artykułom z dowody."
+SCHEMA_EXAMPLE += ("\n\"dowody\" (jak w przykładzie) jest obowiązkowe wszędzie, gdzie jest article_ids: "
+    "każdy wpis to {signal_id, article_id, theme_id, kraj, zrodlo} przepisane dosłownie z wiersza DANE.dowody "
+    "o tym article_id — nie zmieniaj wartości i nie zgaduj signal_id. article_ids musi być dokładnie zbiorem "
+    "article_id z tych wpisów, nic więcej. \"theme_id\" (jak w przykładzie) jest obowiązkowe w: w_skrocie, "
+    "slabe_sygnaly, co_sie_przesuwa, nieobecne_w_polsce.")
 
 
 def _extract_json_text(text: str) -> str:

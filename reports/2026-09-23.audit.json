@@ -1,0 +1,1590 @@
+{
+  "seed": "2026-09-23",
+  "sample": [
+    {
+      "path": "rozbieznosci.1.kraje.PL",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 959,
+            "article_id": 321,
+            "theme_id": "hybrid_info",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          },
+          {
+            "signal_id": 1018,
+            "article_id": 324,
+            "theme_id": "hybrid_info",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          },
+          {
+            "signal_id": 713,
+            "article_id": 25,
+            "theme_id": "hybrid_info",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          }
+        ],
+        "kraj": "PL",
+        "n_zrodel": 2,
+        "rama": "Rosja eskaluje wojnę hybrydową / zagrożenie dla informacji niejawnych",
+        "stance": "alarm",
+        "article_ids": [
+          321,
+          324,
+          25
+        ]
+      },
+      "context": {
+        "temat": "hybrid_info",
+        "tekst": "Rzeczpospolita i Onet (PL) przedstawiają zagrożenie hybrydowe Rosji w tonie alarmu i eskalacji ('Rosja eskaluje wojnę hybrydową'), podczas gdy Al Jazeera (QA) przy tym samym temacie akcentuje wątki poboczne, np. finansowanie rodziny Trumpa przez rosyjskiego oligarchę, bez alarmistycznego tonu wobec Europy.",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 959,
+                "article_id": 321,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "rp"
+              },
+              {
+                "signal_id": 1018,
+                "article_id": 324,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "rp"
+              },
+              {
+                "signal_id": 713,
+                "article_id": 25,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "onet"
+              }
+            ],
+            "kraj": "PL",
+            "n_zrodel": 2,
+            "rama": "Rosja eskaluje wojnę hybrydową / zagrożenie dla informacji niejawnych",
+            "stance": "alarm",
+            "article_ids": [
+              321,
+              324,
+              25
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 486,
+                "article_id": 249,
+                "theme_id": "hybrid_info",
+                "kraj": "QA",
+                "zrodlo": "aljazeera"
+              },
+              {
+                "signal_id": 431,
+                "article_id": 255,
+                "theme_id": "hybrid_info",
+                "kraj": "QA",
+                "zrodlo": "aljazeera"
+              }
+            ],
+            "kraj": "QA",
+            "n_zrodel": 1,
+            "rama": "Rosja prowadzi wojnę informacyjną / powiązania oligarchów z USA",
+            "stance": "neutralny/krytyka",
+            "article_ids": [
+              249,
+              255
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "niski",
+          "uzasadnienie": "Al Jazeera (QA) to jedyne źródło reprezentujące ten kraj, poniżej progu 2 źródeł/kraj; max_js=0.5 w danych dla pary PL-QA, porównanie ram jakościowe, wymaga ostrożności."
+        }
+      },
+      "signals": [
+        {
+          "signal_id": 959,
+          "theme_id": "hybrid_info",
+          "subject_actor": "RU",
+          "content_group": "8f4543051a97540ae8ed92b46c6d2f60d68159601c5aa26b7b0b7188adec7aa7",
+          "publisher_group": "rp",
+          "article_id": 321,
+          "kraj": "PL",
+          "zrodlo": "rp",
+          "typ_zrodla": "private",
+          "rama": "Rosja eskaluje wojnę hybrydową",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł sygnalizuje, że Rosja przechodzi od prostych operacji z jednorazowymi agentami do bardziej złożonych i skoordynowanych działań hybrydowych, takich jak podpalenia zakładów produkujących drony."
+        },
+        {
+          "signal_id": 1018,
+          "theme_id": "hybrid_info",
+          "subject_actor": "PL",
+          "content_group": "324",
+          "publisher_group": "rp",
+          "article_id": 324,
+          "kraj": "PL",
+          "zrodlo": "rp",
+          "typ_zrodla": "private",
+          "rama": "Zagrożenie dla bezpieczeństwa informacji niejawnych",
+          "stance": "alarm",
+          "intensywnosc": 3,
+          "streszczenie": "Gen. Radosław Kujawa ostrzega, że ucieczka sędziego Tomasza Szmydta oznacza, iż wiedza o informacjach niejawnych może trafić w ręce wrogich służb."
+        },
+        {
+          "signal_id": 713,
+          "theme_id": "hybrid_info",
+          "subject_actor": "EE",
+          "content_group": "5fc78ef320b76304d1a990c54b2af4534d8a36a04de039ffb529745c9a90c0dd",
+          "publisher_group": "onet",
+          "article_id": 25,
+          "kraj": "PL",
+          "zrodlo": "onet",
+          "typ_zrodla": "private",
+          "rama": "Estonia gotowa na prowokacje hybrydowe",
+          "stance": "neutralny",
+          "intensywnosc": 2,
+          "streszczenie": "Estoński minister ocenia, że choć nie widać rosyjskich przygotowań do poważnej operacji, należy być gotowym na prowokacje i ataki hybrydowe ze strony Rosji."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "w_skrocie.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 339,
+            "article_id": 104,
+            "theme_id": "economy_sanctions",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          },
+          {
+            "signal_id": 384,
+            "article_id": 134,
+            "theme_id": "economy_sanctions",
+            "kraj": "DE",
+            "zrodlo": "spiegel"
+          },
+          {
+            "signal_id": 764,
+            "article_id": 70,
+            "theme_id": "economy_sanctions",
+            "kraj": "UA",
+            "zrodlo": "pravda_ua"
+          },
+          {
+            "signal_id": 930,
+            "article_id": 386,
+            "theme_id": "economy_sanctions",
+            "kraj": "UA",
+            "zrodlo": "pravda_ua"
+          },
+          {
+            "signal_id": 349,
+            "article_id": 212,
+            "theme_id": "economy_sanctions",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          }
+        ],
+        "theme_id": "economy_sanctions",
+        "tekst": "Analizowane źródła Tagesschau, Spiegel (DE), BBC, Guardian (UK) i Ukraińska Prawda (UA) przy temacie sankcji opisują usunięcie oligarchów Usmanowa i Fridmana z listy sankcyjnej pod naciskiem Francji jako osłabienie reżimu sankcyjnego i niebezpieczny precedens.",
+        "article_ids": [
+          104,
+          134,
+          70,
+          386,
+          212
+        ],
+        "pewnosc": "niski"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 339,
+            "article_id": 104,
+            "theme_id": "economy_sanctions",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          },
+          {
+            "signal_id": 384,
+            "article_id": 134,
+            "theme_id": "economy_sanctions",
+            "kraj": "DE",
+            "zrodlo": "spiegel"
+          },
+          {
+            "signal_id": 764,
+            "article_id": 70,
+            "theme_id": "economy_sanctions",
+            "kraj": "UA",
+            "zrodlo": "pravda_ua"
+          },
+          {
+            "signal_id": 930,
+            "article_id": 386,
+            "theme_id": "economy_sanctions",
+            "kraj": "UA",
+            "zrodlo": "pravda_ua"
+          },
+          {
+            "signal_id": 349,
+            "article_id": 212,
+            "theme_id": "economy_sanctions",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          }
+        ],
+        "theme_id": "economy_sanctions",
+        "tekst": "Analizowane źródła Tagesschau, Spiegel (DE), BBC, Guardian (UK) i Ukraińska Prawda (UA) przy temacie sankcji opisują usunięcie oligarchów Usmanowa i Fridmana z listy sankcyjnej pod naciskiem Francji jako osłabienie reżimu sankcyjnego i niebezpieczny precedens.",
+        "article_ids": [
+          104,
+          134,
+          70,
+          386,
+          212
+        ],
+        "pewnosc": "niski"
+      },
+      "signals": [
+        {
+          "signal_id": 339,
+          "theme_id": "economy_sanctions",
+          "subject_actor": "UE",
+          "content_group": "e024c44314432c48867eb4704e351c81a4481fd7ef2ad768cf7d392332acd92a",
+          "publisher_group": "tagesschau",
+          "article_id": 104,
+          "kraj": "DE",
+          "zrodlo": "tagesschau",
+          "typ_zrodla": "public",
+          "rama": "Sankcje osłabione przez ustępstwa",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "UE przedłużyła sankcje wobec około 3000 rosyjskich osób i organizacji o trzy lata, ale zdjęła z listy dwóch oligarchów, Usmanowa i Fridmana, pod naciskiem Francji, Słowacji i Luksemburga."
+        },
+        {
+          "signal_id": 384,
+          "theme_id": "economy_sanctions",
+          "subject_actor": "UE",
+          "content_group": "134",
+          "publisher_group": "spiegel",
+          "article_id": 134,
+          "kraj": "DE",
+          "zrodlo": "spiegel",
+          "typ_zrodla": "private",
+          "rama": "UE łagodzi sankcje wobec rosyjskich oligarchów",
+          "stance": "neutralny",
+          "intensywnosc": 2,
+          "streszczenie": "UE znosi sankcje wobec rosyjskich oligarchów Aliszera Usmanowa i Michaiła Fridmana."
+        },
+        {
+          "signal_id": 764,
+          "theme_id": "economy_sanctions",
+          "subject_actor": "UE",
+          "content_group": "596ee79a3074cb6fc8ad8ba5b0872a8e14692ee88893d7fd51f96a4770cbe8ce",
+          "publisher_group": "pravda_ua",
+          "article_id": 70,
+          "kraj": "UA",
+          "zrodlo": "pravda_ua",
+          "typ_zrodla": "private",
+          "rama": "Sankcje jako waluta przetargowa",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "UE z trudem przedłużyła sankcje wobec Rosji, ale kosztem wykluczenia z listy oligarchów Usmanowa i Fridmana, co osłabia reżim sankcyjny i tworzy niebezpieczny precedens."
+        },
+        {
+          "signal_id": 930,
+          "theme_id": "economy_sanctions",
+          "subject_actor": "FR",
+          "content_group": "ede391e400994aa2317ab563c7207c8580c68d3dfe10e483952172fdd61045f9",
+          "publisher_group": "pravda_ua",
+          "article_id": 386,
+          "kraj": "UA",
+          "zrodlo": "pravda_ua",
+          "typ_zrodla": "private",
+          "rama": "Sankcje UE jako karta przetargowa w sprawie zakładników",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Paryż wywierał presję na kraje UE, by wycofać sankcje wobec miliardera Aliszera Usmanowa w zamian za uwolnienie francuskich obywateli więzionych w Azerbejdżanie, co wywołało niezadowolenie innych członków UE."
+        },
+        {
+          "signal_id": 349,
+          "theme_id": "economy_sanctions",
+          "subject_actor": "FR",
+          "content_group": "371fb71b03a1912860bc689290c3c618a0b5e2e67ceba554bf23919510adb478",
+          "publisher_group": "guardian",
+          "article_id": 212,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "Francja osłabia sankcje w imię interesu narodowego",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Francja i Luksemburg zażądały usunięcia oligarchów z listy sankcyjnej, co wiele krajów UE uznało za zły precedens pozwalający osłabiać sankcje w obronie interesów narodowych."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "w_skrocie.1",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 872,
+            "article_id": 403,
+            "theme_id": "security_defense",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          },
+          {
+            "signal_id": 908,
+            "article_id": 429,
+            "theme_id": "security_defense",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 960,
+            "article_id": 321,
+            "theme_id": "security_defense",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          },
+          {
+            "signal_id": 1039,
+            "article_id": 325,
+            "theme_id": "security_defense",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          }
+        ],
+        "theme_id": "security_defense",
+        "tekst": "Tagesschau (DE) i BBC (UK) relacjonują incydent z rosyjskim śmigłowcem nad Polską neutralnie jako fakt naruszenia przestrzeni powietrznej, podczas gdy Rzeczpospolita (PL) nadaje temu ramę alarmu o 'rosyjskiej presji' na Polskę.",
+        "article_ids": [
+          403,
+          429,
+          321,
+          325
+        ],
+        "pewnosc": "niski"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 872,
+            "article_id": 403,
+            "theme_id": "security_defense",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          },
+          {
+            "signal_id": 908,
+            "article_id": 429,
+            "theme_id": "security_defense",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 960,
+            "article_id": 321,
+            "theme_id": "security_defense",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          },
+          {
+            "signal_id": 1039,
+            "article_id": 325,
+            "theme_id": "security_defense",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          }
+        ],
+        "theme_id": "security_defense",
+        "tekst": "Tagesschau (DE) i BBC (UK) relacjonują incydent z rosyjskim śmigłowcem nad Polską neutralnie jako fakt naruszenia przestrzeni powietrznej, podczas gdy Rzeczpospolita (PL) nadaje temu ramę alarmu o 'rosyjskiej presji' na Polskę.",
+        "article_ids": [
+          403,
+          429,
+          321,
+          325
+        ],
+        "pewnosc": "niski"
+      },
+      "signals": [
+        {
+          "signal_id": 872,
+          "theme_id": "security_defense",
+          "subject_actor": "PL",
+          "content_group": "6ba851dabf3ae6d65bf509a8eba972883a0815ae390f363787465b69d25d1f33",
+          "publisher_group": "tagesschau",
+          "article_id": 403,
+          "kraj": "DE",
+          "zrodlo": "tagesschau",
+          "typ_zrodla": "public",
+          "rama": "Rosja testuje polską obronę powietrzną",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Polska zgłosiła naruszenie swojej przestrzeni powietrznej przez rosyjski śmigłowiec wojskowy, który wleciał z kierunku obwodu kaliningradzkiego na 42 sekundy; polskie wojsko poderwało myśliwce i postawiło obronę przeciwlotniczą w gotowości."
+        },
+        {
+          "signal_id": 908,
+          "theme_id": "security_defense",
+          "subject_actor": "PL",
+          "content_group": "89449b96f12febe1ebe79d3df29bb69426fffbbee494a50ad9ee01a204aa34fd",
+          "publisher_group": "bbc",
+          "article_id": 429,
+          "kraj": "UK",
+          "zrodlo": "bbc",
+          "typ_zrodla": "public",
+          "rama": "Rosja testuje polską obronę powietrzną",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Polska informuje, że rosyjski śmigłowiec wojskowy Mi-8 naruszył jej przestrzeń powietrzną na głębokość ok. 300 metrów i przebywał w niej przez 42 sekundy, co skłoniło polskie wojsko do poderwania myśliwców."
+        },
+        {
+          "signal_id": 960,
+          "theme_id": "security_defense",
+          "subject_actor": "PL",
+          "content_group": "8f4543051a97540ae8ed92b46c6d2f60d68159601c5aa26b7b0b7188adec7aa7",
+          "publisher_group": "rp",
+          "article_id": 321,
+          "kraj": "PL",
+          "zrodlo": "rp",
+          "typ_zrodla": "private",
+          "rama": "Polska pod rosyjską presją",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Ostatnie tygodnie przyniosły serię incydentów — podpalenie zakładu dronów, rakietę nad Polską i naruszenia przestrzeni powietrznej — które każą poważnie przyjrzeć się bezpieczeństwu Polski i wschodniej flanki NATO."
+        },
+        {
+          "signal_id": 1039,
+          "theme_id": "security_defense",
+          "subject_actor": "PL",
+          "content_group": "fca2616a56d54addda449b82e62474a5c451522a7f34e800ce8baed0ce6d9d97",
+          "publisher_group": "rp",
+          "article_id": 325,
+          "kraj": "PL",
+          "zrodlo": "rp",
+          "typ_zrodla": "private",
+          "rama": "Polska nieprzygotowana na prowokacje",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Gen. Roman Polko przestrzega, że Polska nie ma procedur, norm prawnych ani algorytmów działania w sytuacjach innych niż pokojowe, mimo obecności uzbrojonych rakiet i dronów przy granicy oraz prowokacji powietrznych."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "slabe_sygnaly.1",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 1192,
+            "article_id": 430,
+            "theme_id": "emergent:gender-based-violence",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 1222,
+            "article_id": 447,
+            "theme_id": "emergent:gender-based-violence",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          }
+        ],
+        "theme_id": "emergent:gender-based-violence",
+        "tekst": "Temat przemocy motywowanej płcią (gender-based-violence) pojawia się jako nowy wątek wyłącznie w BBC i Guardian (UK), dotyczący Gazy i RPA – brak wystąpień w innych analizowanych krajach, co uniemożliwia ocenę zbieżności lub rozbieżności.",
+        "article_ids": [
+          430,
+          447
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 1192,
+            "article_id": 430,
+            "theme_id": "emergent:gender-based-violence",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 1222,
+            "article_id": 447,
+            "theme_id": "emergent:gender-based-violence",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          }
+        ],
+        "theme_id": "emergent:gender-based-violence",
+        "tekst": "Temat przemocy motywowanej płcią (gender-based-violence) pojawia się jako nowy wątek wyłącznie w BBC i Guardian (UK), dotyczący Gazy i RPA – brak wystąpień w innych analizowanych krajach, co uniemożliwia ocenę zbieżności lub rozbieżności.",
+        "article_ids": [
+          430,
+          447
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 1192,
+          "theme_id": "emergent:gender-based-violence",
+          "subject_actor": "UNFPA",
+          "content_group": "67af60991a54aca5d7ef7c52e1c60b4d4e1a9dd7bb98eb628220dc204ddacce3",
+          "publisher_group": "bbc",
+          "article_id": 430,
+          "kraj": "UK",
+          "zrodlo": "bbc",
+          "typ_zrodla": "public",
+          "rama": "Gwałtowny wzrost przemocy wobec kobiet w Gazie",
+          "stance": "neutralny",
+          "intensywnosc": 4,
+          "streszczenie": "UNFPA odnotowuje gwałtowny wzrost zgłoszeń przemocy wobec kobiet i dziewcząt w Strefie Gazy, w tym 123-procentowy wzrost przypadków wczesnych i przymusowych małżeństw w drugim kwartale roku."
+        },
+        {
+          "signal_id": 1222,
+          "theme_id": "emergent:gender-based-violence",
+          "subject_actor": "ZA",
+          "content_group": "725214e4062cbaa42613c3c228c7332958395044d3acb6d262fcc1b3e7639204",
+          "publisher_group": "guardian",
+          "article_id": 447,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "Fala przemocy wobec kobiet i dziewcząt",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Tekst łączy sprawę Sibiyi z ogólnokrajowym kryzysem femicydu, wskazując na odkrycie ciał dziewięciu kobiet w Ekurhuleni we wrześniu oraz na zarzut gwałtu na nieprzytomnej 18-latce."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "rozbieznosci.1.kraje.QA",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 486,
+            "article_id": 249,
+            "theme_id": "hybrid_info",
+            "kraj": "QA",
+            "zrodlo": "aljazeera"
+          },
+          {
+            "signal_id": 431,
+            "article_id": 255,
+            "theme_id": "hybrid_info",
+            "kraj": "QA",
+            "zrodlo": "aljazeera"
+          }
+        ],
+        "kraj": "QA",
+        "n_zrodel": 1,
+        "rama": "Rosja prowadzi wojnę informacyjną / powiązania oligarchów z USA",
+        "stance": "neutralny/krytyka",
+        "article_ids": [
+          249,
+          255
+        ]
+      },
+      "context": {
+        "temat": "hybrid_info",
+        "tekst": "Rzeczpospolita i Onet (PL) przedstawiają zagrożenie hybrydowe Rosji w tonie alarmu i eskalacji ('Rosja eskaluje wojnę hybrydową'), podczas gdy Al Jazeera (QA) przy tym samym temacie akcentuje wątki poboczne, np. finansowanie rodziny Trumpa przez rosyjskiego oligarchę, bez alarmistycznego tonu wobec Europy.",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 959,
+                "article_id": 321,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "rp"
+              },
+              {
+                "signal_id": 1018,
+                "article_id": 324,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "rp"
+              },
+              {
+                "signal_id": 713,
+                "article_id": 25,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "onet"
+              }
+            ],
+            "kraj": "PL",
+            "n_zrodel": 2,
+            "rama": "Rosja eskaluje wojnę hybrydową / zagrożenie dla informacji niejawnych",
+            "stance": "alarm",
+            "article_ids": [
+              321,
+              324,
+              25
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 486,
+                "article_id": 249,
+                "theme_id": "hybrid_info",
+                "kraj": "QA",
+                "zrodlo": "aljazeera"
+              },
+              {
+                "signal_id": 431,
+                "article_id": 255,
+                "theme_id": "hybrid_info",
+                "kraj": "QA",
+                "zrodlo": "aljazeera"
+              }
+            ],
+            "kraj": "QA",
+            "n_zrodel": 1,
+            "rama": "Rosja prowadzi wojnę informacyjną / powiązania oligarchów z USA",
+            "stance": "neutralny/krytyka",
+            "article_ids": [
+              249,
+              255
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "niski",
+          "uzasadnienie": "Al Jazeera (QA) to jedyne źródło reprezentujące ten kraj, poniżej progu 2 źródeł/kraj; max_js=0.5 w danych dla pary PL-QA, porównanie ram jakościowe, wymaga ostrożności."
+        }
+      },
+      "signals": [
+        {
+          "signal_id": 486,
+          "theme_id": "hybrid_info",
+          "subject_actor": "RU",
+          "content_group": "249",
+          "publisher_group": "aljazeera",
+          "article_id": 249,
+          "kraj": "QA",
+          "zrodlo": "aljazeera",
+          "typ_zrodla": "public",
+          "rama": "Rosja prowadzi wojnę informacyjną",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Brytyjski premier potępił Rosję za próby ingerencji w wybory z 2019 roku i określił jej działania jako wojnę informacyjną."
+        },
+        {
+          "signal_id": 431,
+          "theme_id": "hybrid_info",
+          "subject_actor": "RU",
+          "content_group": "0d8a89cfcefd7120e87cfba03bfcb7dfb176c2c28ee48cc4137cfea25bb37a0c",
+          "publisher_group": "aljazeera",
+          "article_id": 255,
+          "kraj": "QA",
+          "zrodlo": "aljazeera",
+          "typ_zrodla": "public",
+          "rama": "Rosyjski oligarcha finansuje rodzinę prezydenta",
+          "stance": "neutralny",
+          "intensywnosc": 2,
+          "streszczenie": "Artykuł przytacza doniesienia ProPublica, że rosyjski oligarcha Umar Kremlev sfinansował przyjęcie weselne Donalda Trumpa Jr. na Bahamach, co rodzi pytania o zagraniczny dostęp do rodziny prezydenta."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "slabe_sygnaly.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 1128,
+            "article_id": 486,
+            "theme_id": "migration_borders",
+            "kraj": "QA",
+            "zrodlo": "aljazeera"
+          },
+          {
+            "signal_id": 416,
+            "article_id": 256,
+            "theme_id": "migration_borders",
+            "kraj": "QA",
+            "zrodlo": "aljazeera"
+          }
+        ],
+        "theme_id": "migration_borders",
+        "tekst": "Temat migracji/granic z kierunkiem negatywnym pojawia się w Al Jazeera (QA) i UK, ale Al Jazeera to jedyne źródło z QA, więc nie spełnia progu 2 źródeł na kraj – sygnał wart obserwacji, nie ogłoszenia jako wzorzec zbieżności.",
+        "article_ids": [
+          486,
+          256
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 1128,
+            "article_id": 486,
+            "theme_id": "migration_borders",
+            "kraj": "QA",
+            "zrodlo": "aljazeera"
+          },
+          {
+            "signal_id": 416,
+            "article_id": 256,
+            "theme_id": "migration_borders",
+            "kraj": "QA",
+            "zrodlo": "aljazeera"
+          }
+        ],
+        "theme_id": "migration_borders",
+        "tekst": "Temat migracji/granic z kierunkiem negatywnym pojawia się w Al Jazeera (QA) i UK, ale Al Jazeera to jedyne źródło z QA, więc nie spełnia progu 2 źródeł na kraj – sygnał wart obserwacji, nie ogłoszenia jako wzorzec zbieżności.",
+        "article_ids": [
+          486,
+          256
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 1128,
+          "theme_id": "migration_borders",
+          "subject_actor": "UK",
+          "content_group": "fc53677d2a899b3d7011c217b3016f6668277f0e31d9d1d8d219ff2049678ef8",
+          "publisher_group": "aljazeera",
+          "article_id": 486,
+          "kraj": "QA",
+          "zrodlo": "aljazeera",
+          "typ_zrodla": "public",
+          "rama": "Antyimigrancka retoryka napędza przemoc",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Tekst łączy antyimigranckie nastroje i protesty z przemocą wobec mniejszości etnicznych, wskazując, że działania skrajnej prawicy wobec migrantów prowadzą do ataków na osoby czarnoskóre niezależnie od ich statusu."
+        },
+        {
+          "signal_id": 416,
+          "theme_id": "migration_borders",
+          "subject_actor": "US",
+          "content_group": "7036d4f4076e8c88860200e68c8bb88cd74dd55ec44798986693dc5ad66bcb4c",
+          "publisher_group": "aljazeera",
+          "article_id": 256,
+          "kraj": "QA",
+          "zrodlo": "aljazeera",
+          "typ_zrodla": "public",
+          "rama": "Prawo imigracyjne używane do tłumienia propalestyńskiego aktywizmu",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Uczestnicy spotkań oskarżają administrację Trumpa o wykorzystywanie prawa imigracyjnego do deportacji i zastraszania osób zaangażowanych w propalestyński aktywizm w USA."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "autoobraz.1",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 807,
+            "article_id": 310,
+            "theme_id": "elections_politics",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 120,
+            "article_id": 180,
+            "theme_id": "elections_politics",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 130,
+            "article_id": 173,
+            "theme_id": "elections_politics",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 266,
+            "article_id": 112,
+            "theme_id": "emergent:antisemitism-in-german-left",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          },
+          {
+            "signal_id": 592,
+            "article_id": 97,
+            "theme_id": "emergent:health-insurance-financial-scandal",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "DE",
+        "jak_opisuje_siebie": "Tagesschau i Spiegel przedstawiają Niemcy w kontekście kryzysu przywództwa politycznego (niskie poparcie Merza), zagrożeń hybrydowych (dron przy bazie Bundeswehry) i skandalu finansowego w systemie ubezpieczeń zdrowotnych – ton głównie krytyczny wobec własnych instytucji.",
+        "jak_opisuja_go_inni": "Onet (PL) i BBC (UK) przy opisie Niemiec koncentrują się niemal wyłącznie na kryzysie politycznym Merza (niskie poparcie, porażki wyborcze CDU), co jest zbieżne tematycznie z autoobrazem Tagesschau.",
+        "komentarz": "Rzadki przypadek zbieżności: zarówno autoobraz Tagesschau, jak i obraz zewnętrzny z Onet i BBC akcentują kryzys przywództwa CDU/Merza, choć źródła zewnętrzne nie wychodzą poza ten wątek do innych krytycznych tematów (skandal zdrowotny, antysemityzm w Linke) obecnych w niemieckim autoobrazie.",
+        "article_ids": [
+          310,
+          180,
+          173,
+          112,
+          97
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 807,
+            "article_id": 310,
+            "theme_id": "elections_politics",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 120,
+            "article_id": 180,
+            "theme_id": "elections_politics",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 130,
+            "article_id": 173,
+            "theme_id": "elections_politics",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 266,
+            "article_id": 112,
+            "theme_id": "emergent:antisemitism-in-german-left",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          },
+          {
+            "signal_id": 592,
+            "article_id": 97,
+            "theme_id": "emergent:health-insurance-financial-scandal",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "DE",
+        "jak_opisuje_siebie": "Tagesschau i Spiegel przedstawiają Niemcy w kontekście kryzysu przywództwa politycznego (niskie poparcie Merza), zagrożeń hybrydowych (dron przy bazie Bundeswehry) i skandalu finansowego w systemie ubezpieczeń zdrowotnych – ton głównie krytyczny wobec własnych instytucji.",
+        "jak_opisuja_go_inni": "Onet (PL) i BBC (UK) przy opisie Niemiec koncentrują się niemal wyłącznie na kryzysie politycznym Merza (niskie poparcie, porażki wyborcze CDU), co jest zbieżne tematycznie z autoobrazem Tagesschau.",
+        "komentarz": "Rzadki przypadek zbieżności: zarówno autoobraz Tagesschau, jak i obraz zewnętrzny z Onet i BBC akcentują kryzys przywództwa CDU/Merza, choć źródła zewnętrzne nie wychodzą poza ten wątek do innych krytycznych tematów (skandal zdrowotny, antysemityzm w Linke) obecnych w niemieckim autoobrazie.",
+        "article_ids": [
+          310,
+          180,
+          173,
+          112,
+          97
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 807,
+          "theme_id": "elections_politics",
+          "subject_actor": "DE",
+          "content_group": "310",
+          "publisher_group": "onet",
+          "article_id": 310,
+          "kraj": "PL",
+          "zrodlo": "onet",
+          "typ_zrodla": "private",
+          "rama": "Kryzys przywództwa w Niemczech",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł przedstawia Friedricha Merza jako wyjątkowo niepopularnego kanclerza, a jego partię CDU jako pogrążoną w najpoważniejszym kryzysie w historii, choć na razie brak alternatywnego kandydata na przywódcę."
+        },
+        {
+          "signal_id": 120,
+          "theme_id": "elections_politics",
+          "subject_actor": "DE",
+          "content_group": "d0adb99539ed2c11d4e81e7994a40a3d8741e7f98825922e2bbc6861f25d5fc4",
+          "publisher_group": "bbc",
+          "article_id": 180,
+          "kraj": "UK",
+          "zrodlo": "bbc",
+          "typ_zrodla": "public",
+          "rama": "Niemcy w kryzysie politycznym",
+          "stance": "neutralny",
+          "intensywnosc": 4,
+          "streszczenie": "Kanclerz Friedrich Merz notuje rekordowo niskie poparcie (13%), a jego partia CDU poniosła trzy porażki w wyborach regionalnych, co podważa stabilność jego rządu i może skutkować utratą stanowiska."
+        },
+        {
+          "signal_id": 130,
+          "theme_id": "elections_politics",
+          "subject_actor": "DE",
+          "content_group": "69b329b206a9e8c41305ca531300615deea0350eb50e07a1a56946c9c3cda5fe",
+          "publisher_group": "bbc",
+          "article_id": 173,
+          "kraj": "UK",
+          "zrodlo": "bbc",
+          "typ_zrodla": "public",
+          "rama": "Niemiecka koalicja pod presją",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Kanclerz Friedrich Merz zapowiada utrzymanie koalicji CDU-SPD po dotkliwych porażkach wyborczych w dwóch landach, określając wyniki jako dramatyczny punkt zwrotny dla jego partii."
+        },
+        {
+          "signal_id": 266,
+          "theme_id": "emergent:antisemitism-in-german-left",
+          "subject_actor": "DE",
+          "content_group": "a5b48ece8f125a37b2d0eb00526a1e85e3991d82c3133c1a0474db8eb9bc422e",
+          "publisher_group": "tagesschau",
+          "article_id": 112,
+          "kraj": "DE",
+          "zrodlo": "tagesschau",
+          "typ_zrodla": "public",
+          "rama": "Linke pod presją w sprawie antysemityzmu",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia Die Linke jako partię zmagającą się z powracającymi oskarżeniami o antysemityzm w swoich szeregach, które mogą zagrozić jej zdolności do sprawowania władzy w Berlinie."
+        },
+        {
+          "signal_id": 592,
+          "theme_id": "emergent:health-insurance-financial-scandal",
+          "subject_actor": "DE",
+          "content_group": "6ab2746f986f6b204d80939ccb6ca403e6dc2e165fb4c3671f2711ccf2ed3809",
+          "publisher_group": "tagesschau",
+          "article_id": 97,
+          "kraj": "DE",
+          "zrodlo": "tagesschau",
+          "typ_zrodla": "public",
+          "rama": "Finanzskandal erschüttert Gesundheitswesen",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Niemieckie kasy chorych i kasy lekarskie poniosły duże straty w ryzykownych funduszach inwestycyjnych, a nowe ustalenia wskazują na możliwe naruszenia wewnętrznych zasad inwestycyjnych."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "rozbieznosci.0.kraje.UK",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 38,
+            "article_id": 193,
+            "theme_id": "migration_borders",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 117,
+            "article_id": 192,
+            "theme_id": "migration_borders",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 467,
+            "article_id": 156,
+            "theme_id": "migration_borders",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          }
+        ],
+        "kraj": "UK",
+        "n_zrodel": 2,
+        "rama": "Deportacje do krajów trzecich bez ochrony prawnej / przemoc wobec migrantów",
+        "stance": "krytyka",
+        "article_ids": [
+          193,
+          192,
+          156
+        ]
+      },
+      "context": {
+        "temat": "migration_borders",
+        "tekst": "Tagesschau (DE) przedstawia migrację neutralnie, jako skutek braku perspektyw ekonomicznych (Maroko) lub kwestię dyplomatyczną (talibowie), bez krytyki konkretnego aktora. BBC i Guardian (UK) przedstawiają migrację głównie przez pryzmat krytyki polityki deportacyjnej USA, z wysoką intensywnością i niemal wyłącznie negatywnym stance.",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 603,
+                "article_id": 95,
+                "theme_id": "migration_borders",
+                "kraj": "DE",
+                "zrodlo": "tagesschau"
+              },
+              {
+                "signal_id": 600,
+                "article_id": 96,
+                "theme_id": "migration_borders",
+                "kraj": "DE",
+                "zrodlo": "tagesschau"
+              }
+            ],
+            "kraj": "DE",
+            "n_zrodel": 1,
+            "rama": "Migracja jako symptom braku perspektyw / współpraca z talibami",
+            "stance": "neutralny",
+            "article_ids": [
+              95,
+              96
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 38,
+                "article_id": 193,
+                "theme_id": "migration_borders",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 117,
+                "article_id": 192,
+                "theme_id": "migration_borders",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 467,
+                "article_id": 156,
+                "theme_id": "migration_borders",
+                "kraj": "UK",
+                "zrodlo": "bbc"
+              }
+            ],
+            "kraj": "UK",
+            "n_zrodel": 2,
+            "rama": "Deportacje do krajów trzecich bez ochrony prawnej / przemoc wobec migrantów",
+            "stance": "krytyka",
+            "article_ids": [
+              193,
+              192,
+              156
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "niski",
+          "uzasadnienie": "Tylko 2 kraje w porównaniu (DE reprezentowane przez 1 źródło Tagesschau, poniżej progu 2 źródeł), maksymalne JS=0.717 wskazuje na dużą odległość rozkładów, ale sama JS nie dowodzi różnicy ram – różnica ram potwierdzona jakościowo przez odmienne streszczenia."
+        }
+      },
+      "signals": [
+        {
+          "signal_id": 38,
+          "theme_id": "migration_borders",
+          "subject_actor": "US",
+          "content_group": "54802cf9992848a87bb4d4ee36d2d96ab629826dc6d7eac1cec37bdd2fce5dfb",
+          "publisher_group": "guardian",
+          "article_id": 193,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "Deportacje do krajów trzecich bez ochrony",
+          "stance": "krytyka",
+          "intensywnosc": 5,
+          "streszczenie": "Artykuł opisuje politykę USA polegającą na deportowaniu migrantów do krajów trzecich, w których nie mają żadnych związków ani statusu prawnego, co prowadzi do przemocy i łamania praw człowieka."
+        },
+        {
+          "signal_id": 117,
+          "theme_id": "migration_borders",
+          "subject_actor": "US",
+          "content_group": "e1c49016930309ccf26654715561127bc6a17e7b77b3341dd3d227d2b08e4a3b",
+          "publisher_group": "guardian",
+          "article_id": 192,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "Deportowani mimo ochrony prawnej sądów",
+          "stance": "krytyka",
+          "intensywnosc": 5,
+          "streszczenie": "Wśród deportowanych do krajów trzecich są osoby, którym sądy imigracyjne przyznały ochronę przed powrotem do kraju pochodzenia, jak Nika z Iranu, która uzyskała \"withholding of removal\" i została aresztowana dwa tygodnie po zwolnieniu."
+        },
+        {
+          "signal_id": 467,
+          "theme_id": "migration_borders",
+          "subject_actor": "US",
+          "content_group": "15bf5dcc9ff3910e2a1b3afb7f5bb6cd68d9015797c2039b94edd53add47fbbf",
+          "publisher_group": "bbc",
+          "article_id": 156,
+          "kraj": "UK",
+          "zrodlo": "bbc",
+          "typ_zrodla": "public",
+          "rama": "imigranci pod ostrzałem ICE",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł opisuje przypadek wenezuelskiego imigranta, który został postrzelony przez agentów ICE podczas zatrzymania i przebywa w ośrodku detencyjnym z kulą w plecach, mimo problemów zdrowotnych."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "autoobraz.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 960,
+            "article_id": 321,
+            "theme_id": "security_defense",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          },
+          {
+            "signal_id": 1039,
+            "article_id": 325,
+            "theme_id": "security_defense",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          },
+          {
+            "signal_id": 872,
+            "article_id": 403,
+            "theme_id": "security_defense",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          },
+          {
+            "signal_id": 908,
+            "article_id": 429,
+            "theme_id": "security_defense",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "PL",
+        "jak_opisuje_siebie": "Onet i Rzeczpospolita przedstawiają Polskę głównie neutralnie w kontekście dyplomacji (Białoruś, ONZ), ale Rzeczpospolita akcentuje też alarm związany z 'rosyjską presją' i nieprzygotowaniem na prowokacje.",
+        "jak_opisuja_go_inni": "Tagesschau (DE) i BBC (UK) opisują incydent z rosyjskim śmigłowcem nad Polską neutralnie, jako techniczny fakt naruszenia przestrzeni powietrznej, bez tonu alarmu obecnego w Rzeczpospolitej.",
+        "komentarz": "Autoobraz Rzeczpospolitej jest bardziej alarmistyczny niż zewnętrzny neutralny opis tego samego zdarzenia przez Tagesschau i BBC – różnica dotyczy tonu, nie faktografii.",
+        "article_ids": [
+          321,
+          325,
+          403,
+          429
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 960,
+            "article_id": 321,
+            "theme_id": "security_defense",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          },
+          {
+            "signal_id": 1039,
+            "article_id": 325,
+            "theme_id": "security_defense",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          },
+          {
+            "signal_id": 872,
+            "article_id": 403,
+            "theme_id": "security_defense",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          },
+          {
+            "signal_id": 908,
+            "article_id": 429,
+            "theme_id": "security_defense",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "PL",
+        "jak_opisuje_siebie": "Onet i Rzeczpospolita przedstawiają Polskę głównie neutralnie w kontekście dyplomacji (Białoruś, ONZ), ale Rzeczpospolita akcentuje też alarm związany z 'rosyjską presją' i nieprzygotowaniem na prowokacje.",
+        "jak_opisuja_go_inni": "Tagesschau (DE) i BBC (UK) opisują incydent z rosyjskim śmigłowcem nad Polską neutralnie, jako techniczny fakt naruszenia przestrzeni powietrznej, bez tonu alarmu obecnego w Rzeczpospolitej.",
+        "komentarz": "Autoobraz Rzeczpospolitej jest bardziej alarmistyczny niż zewnętrzny neutralny opis tego samego zdarzenia przez Tagesschau i BBC – różnica dotyczy tonu, nie faktografii.",
+        "article_ids": [
+          321,
+          325,
+          403,
+          429
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 960,
+          "theme_id": "security_defense",
+          "subject_actor": "PL",
+          "content_group": "8f4543051a97540ae8ed92b46c6d2f60d68159601c5aa26b7b0b7188adec7aa7",
+          "publisher_group": "rp",
+          "article_id": 321,
+          "kraj": "PL",
+          "zrodlo": "rp",
+          "typ_zrodla": "private",
+          "rama": "Polska pod rosyjską presją",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Ostatnie tygodnie przyniosły serię incydentów — podpalenie zakładu dronów, rakietę nad Polską i naruszenia przestrzeni powietrznej — które każą poważnie przyjrzeć się bezpieczeństwu Polski i wschodniej flanki NATO."
+        },
+        {
+          "signal_id": 1039,
+          "theme_id": "security_defense",
+          "subject_actor": "PL",
+          "content_group": "fca2616a56d54addda449b82e62474a5c451522a7f34e800ce8baed0ce6d9d97",
+          "publisher_group": "rp",
+          "article_id": 325,
+          "kraj": "PL",
+          "zrodlo": "rp",
+          "typ_zrodla": "private",
+          "rama": "Polska nieprzygotowana na prowokacje",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Gen. Roman Polko przestrzega, że Polska nie ma procedur, norm prawnych ani algorytmów działania w sytuacjach innych niż pokojowe, mimo obecności uzbrojonych rakiet i dronów przy granicy oraz prowokacji powietrznych."
+        },
+        {
+          "signal_id": 872,
+          "theme_id": "security_defense",
+          "subject_actor": "PL",
+          "content_group": "6ba851dabf3ae6d65bf509a8eba972883a0815ae390f363787465b69d25d1f33",
+          "publisher_group": "tagesschau",
+          "article_id": 403,
+          "kraj": "DE",
+          "zrodlo": "tagesschau",
+          "typ_zrodla": "public",
+          "rama": "Rosja testuje polską obronę powietrzną",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Polska zgłosiła naruszenie swojej przestrzeni powietrznej przez rosyjski śmigłowiec wojskowy, który wleciał z kierunku obwodu kaliningradzkiego na 42 sekundy; polskie wojsko poderwało myśliwce i postawiło obronę przeciwlotniczą w gotowości."
+        },
+        {
+          "signal_id": 908,
+          "theme_id": "security_defense",
+          "subject_actor": "PL",
+          "content_group": "89449b96f12febe1ebe79d3df29bb69426fffbbee494a50ad9ee01a204aa34fd",
+          "publisher_group": "bbc",
+          "article_id": 429,
+          "kraj": "UK",
+          "zrodlo": "bbc",
+          "typ_zrodla": "public",
+          "rama": "Rosja testuje polską obronę powietrzną",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Polska informuje, że rosyjski śmigłowiec wojskowy Mi-8 naruszył jej przestrzeń powietrzną na głębokość ok. 300 metrów i przebywał w niej przez 42 sekundy, co skłoniło polskie wojsko do poderwania myśliwców."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "rozbieznosci.0.kraje.DE",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 603,
+            "article_id": 95,
+            "theme_id": "migration_borders",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          },
+          {
+            "signal_id": 600,
+            "article_id": 96,
+            "theme_id": "migration_borders",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          }
+        ],
+        "kraj": "DE",
+        "n_zrodel": 1,
+        "rama": "Migracja jako symptom braku perspektyw / współpraca z talibami",
+        "stance": "neutralny",
+        "article_ids": [
+          95,
+          96
+        ]
+      },
+      "context": {
+        "temat": "migration_borders",
+        "tekst": "Tagesschau (DE) przedstawia migrację neutralnie, jako skutek braku perspektyw ekonomicznych (Maroko) lub kwestię dyplomatyczną (talibowie), bez krytyki konkretnego aktora. BBC i Guardian (UK) przedstawiają migrację głównie przez pryzmat krytyki polityki deportacyjnej USA, z wysoką intensywnością i niemal wyłącznie negatywnym stance.",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 603,
+                "article_id": 95,
+                "theme_id": "migration_borders",
+                "kraj": "DE",
+                "zrodlo": "tagesschau"
+              },
+              {
+                "signal_id": 600,
+                "article_id": 96,
+                "theme_id": "migration_borders",
+                "kraj": "DE",
+                "zrodlo": "tagesschau"
+              }
+            ],
+            "kraj": "DE",
+            "n_zrodel": 1,
+            "rama": "Migracja jako symptom braku perspektyw / współpraca z talibami",
+            "stance": "neutralny",
+            "article_ids": [
+              95,
+              96
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 38,
+                "article_id": 193,
+                "theme_id": "migration_borders",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 117,
+                "article_id": 192,
+                "theme_id": "migration_borders",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 467,
+                "article_id": 156,
+                "theme_id": "migration_borders",
+                "kraj": "UK",
+                "zrodlo": "bbc"
+              }
+            ],
+            "kraj": "UK",
+            "n_zrodel": 2,
+            "rama": "Deportacje do krajów trzecich bez ochrony prawnej / przemoc wobec migrantów",
+            "stance": "krytyka",
+            "article_ids": [
+              193,
+              192,
+              156
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "niski",
+          "uzasadnienie": "Tylko 2 kraje w porównaniu (DE reprezentowane przez 1 źródło Tagesschau, poniżej progu 2 źródeł), maksymalne JS=0.717 wskazuje na dużą odległość rozkładów, ale sama JS nie dowodzi różnicy ram – różnica ram potwierdzona jakościowo przez odmienne streszczenia."
+        }
+      },
+      "signals": [
+        {
+          "signal_id": 603,
+          "theme_id": "migration_borders",
+          "subject_actor": "DE",
+          "content_group": "c7ba7e76fe2a43e5ca067afdeda2e3a27010798cee218ba2386511154cf2f1da",
+          "publisher_group": "tagesschau",
+          "article_id": 95,
+          "kraj": "DE",
+          "zrodlo": "tagesschau",
+          "typ_zrodla": "public",
+          "rama": "Niemcy jako model współpracy z talibami",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Niemcy jako jedyny kraj UE zaakceptowały talibskich konsularnych przedstawicieli, co doprowadziło do przejęcia przez nich kontroli nad afgańską ambasadą w Berlinie i konsulatem w Bonn."
+        },
+        {
+          "signal_id": 600,
+          "theme_id": "migration_borders",
+          "subject_actor": "MA",
+          "content_group": "72ed0f74f29967862ea2fa13840cb40f9cc48d351dcc4ef97ff98933a22c8ae3",
+          "publisher_group": "tagesschau",
+          "article_id": 96,
+          "kraj": "DE",
+          "zrodlo": "tagesschau",
+          "typ_zrodla": "public",
+          "rama": "Migracja jako symptom braku perspektyw",
+          "stance": "neutralny",
+          "intensywnosc": 2,
+          "streszczenie": "Eksperci interpretują tragedię migracyjną w Ceucie z końca lipca jako dowód braku zaufania młodych Marokańczyków do polityki i perspektyw w kraju."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "w_skrocie.2",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 38,
+            "article_id": 193,
+            "theme_id": "migration_borders",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 117,
+            "article_id": 192,
+            "theme_id": "migration_borders",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 467,
+            "article_id": 156,
+            "theme_id": "migration_borders",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 603,
+            "article_id": 95,
+            "theme_id": "migration_borders",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          },
+          {
+            "signal_id": 600,
+            "article_id": 96,
+            "theme_id": "migration_borders",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          }
+        ],
+        "theme_id": "migration_borders",
+        "tekst": "BBC i Guardian (UK) przy temacie migracji/deportacji USA niemal jednogłośnie krytykują politykę deportacyjną jako łamanie praw człowieka, podczas gdy Tagesschau (DE) przy tym samym temacie opisuje neutralnie sytuację w Afganistanie i Maroku, bez porównywalnej krytyki USA.",
+        "article_ids": [
+          193,
+          192,
+          156,
+          95,
+          96
+        ],
+        "pewnosc": "niski"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 38,
+            "article_id": 193,
+            "theme_id": "migration_borders",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 117,
+            "article_id": 192,
+            "theme_id": "migration_borders",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 467,
+            "article_id": 156,
+            "theme_id": "migration_borders",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 603,
+            "article_id": 95,
+            "theme_id": "migration_borders",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          },
+          {
+            "signal_id": 600,
+            "article_id": 96,
+            "theme_id": "migration_borders",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          }
+        ],
+        "theme_id": "migration_borders",
+        "tekst": "BBC i Guardian (UK) przy temacie migracji/deportacji USA niemal jednogłośnie krytykują politykę deportacyjną jako łamanie praw człowieka, podczas gdy Tagesschau (DE) przy tym samym temacie opisuje neutralnie sytuację w Afganistanie i Maroku, bez porównywalnej krytyki USA.",
+        "article_ids": [
+          193,
+          192,
+          156,
+          95,
+          96
+        ],
+        "pewnosc": "niski"
+      },
+      "signals": [
+        {
+          "signal_id": 38,
+          "theme_id": "migration_borders",
+          "subject_actor": "US",
+          "content_group": "54802cf9992848a87bb4d4ee36d2d96ab629826dc6d7eac1cec37bdd2fce5dfb",
+          "publisher_group": "guardian",
+          "article_id": 193,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "Deportacje do krajów trzecich bez ochrony",
+          "stance": "krytyka",
+          "intensywnosc": 5,
+          "streszczenie": "Artykuł opisuje politykę USA polegającą na deportowaniu migrantów do krajów trzecich, w których nie mają żadnych związków ani statusu prawnego, co prowadzi do przemocy i łamania praw człowieka."
+        },
+        {
+          "signal_id": 117,
+          "theme_id": "migration_borders",
+          "subject_actor": "US",
+          "content_group": "e1c49016930309ccf26654715561127bc6a17e7b77b3341dd3d227d2b08e4a3b",
+          "publisher_group": "guardian",
+          "article_id": 192,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "Deportowani mimo ochrony prawnej sądów",
+          "stance": "krytyka",
+          "intensywnosc": 5,
+          "streszczenie": "Wśród deportowanych do krajów trzecich są osoby, którym sądy imigracyjne przyznały ochronę przed powrotem do kraju pochodzenia, jak Nika z Iranu, która uzyskała \"withholding of removal\" i została aresztowana dwa tygodnie po zwolnieniu."
+        },
+        {
+          "signal_id": 467,
+          "theme_id": "migration_borders",
+          "subject_actor": "US",
+          "content_group": "15bf5dcc9ff3910e2a1b3afb7f5bb6cd68d9015797c2039b94edd53add47fbbf",
+          "publisher_group": "bbc",
+          "article_id": 156,
+          "kraj": "UK",
+          "zrodlo": "bbc",
+          "typ_zrodla": "public",
+          "rama": "imigranci pod ostrzałem ICE",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł opisuje przypadek wenezuelskiego imigranta, który został postrzelony przez agentów ICE podczas zatrzymania i przebywa w ośrodku detencyjnym z kulą w plecach, mimo problemów zdrowotnych."
+        },
+        {
+          "signal_id": 603,
+          "theme_id": "migration_borders",
+          "subject_actor": "DE",
+          "content_group": "c7ba7e76fe2a43e5ca067afdeda2e3a27010798cee218ba2386511154cf2f1da",
+          "publisher_group": "tagesschau",
+          "article_id": 95,
+          "kraj": "DE",
+          "zrodlo": "tagesschau",
+          "typ_zrodla": "public",
+          "rama": "Niemcy jako model współpracy z talibami",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Niemcy jako jedyny kraj UE zaakceptowały talibskich konsularnych przedstawicieli, co doprowadziło do przejęcia przez nich kontroli nad afgańską ambasadą w Berlinie i konsulatem w Bonn."
+        },
+        {
+          "signal_id": 600,
+          "theme_id": "migration_borders",
+          "subject_actor": "MA",
+          "content_group": "72ed0f74f29967862ea2fa13840cb40f9cc48d351dcc4ef97ff98933a22c8ae3",
+          "publisher_group": "tagesschau",
+          "article_id": 96,
+          "kraj": "DE",
+          "zrodlo": "tagesschau",
+          "typ_zrodla": "public",
+          "rama": "Migracja jako symptom braku perspektyw",
+          "stance": "neutralny",
+          "intensywnosc": 2,
+          "streszczenie": "Eksperci interpretują tragedię migracyjną w Ceucie z końca lipca jako dowód braku zaufania młodych Marokańczyków do polityki i perspektyw w kraju."
+        }
+      ],
+      "review": "pending"
+    }
+  ],
+  "claims_total": 11,
+  "meaning": "czy sygnały wspierają opis przekazu, nie prawdziwość zdarzeń"
+}
