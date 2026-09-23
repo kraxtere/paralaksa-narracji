@@ -1,0 +1,257 @@
+{
+  "date": "2026-09-23",
+  "complete": false,
+  "synthesis_calls": 2,
+  "cost_usd": 2.796928468,
+  "elapsed_s": 93.50963539100007,
+  "semantic_review": "pending",
+  "warnings": [
+    "walidacja po ponowieniu: 32 błędów; usunięto twierdzenia bez poprawnych odnośników. Błędy: autoobraz.0: nieistniejące article_ids [913] (używaj tylko id z DANYCH); autoobraz.1: nieistniejące article_ids [592, 807] (używaj tylko id z DANYCH); w_skrocie.0: brak powiązania tezy z sygnałami (dowody); w_skrocie.0: article_ids nie odpowiadają dowodom; w_skrocie.1: brak powiązania tezy z sygnałami (dowody)",
+    "synteza nie dostarczyła żadnych tez; raport jest niepełny"
+  ],
+  "blocking": [
+    "synteza nie dostarczyła żadnych tez; raport jest niepełny"
+  ],
+  "sources": [
+    {
+      "source_id": "aljazeera",
+      "name": "Al Jazeera English",
+      "country": "QA",
+      "language": "en",
+      "ownership": "finansowanie przez państwo Katar",
+      "scope": "all",
+      "sections": [
+        "all",
+        "unknown"
+      ],
+      "articles": 46,
+      "eligible": 46,
+      "fulltext": 46,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 46
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "bbc",
+      "name": "BBC News",
+      "country": "UK",
+      "language": "en",
+      "ownership": "nadawca publiczny",
+      "scope": "world; europe",
+      "sections": [
+        "europe",
+        "unknown",
+        "world"
+      ],
+      "articles": 65,
+      "eligible": 65,
+      "fulltext": 65,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 65
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "cgtn",
+      "name": "CGTN",
+      "country": "CN",
+      "language": "en",
+      "ownership": "państwowy nadawca China Media Group",
+      "scope": "world",
+      "sections": [
+        "unknown"
+      ],
+      "articles": 50,
+      "eligible": 50,
+      "fulltext": 49,
+      "lead_only": 1,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 50
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "guardian",
+      "name": "The Guardian",
+      "country": "UK",
+      "language": "en",
+      "ownership": "prywatne; szczegóły struktury do uzupełnienia",
+      "scope": "world",
+      "sections": [
+        "unknown",
+        "world"
+      ],
+      "articles": 69,
+      "eligible": 69,
+      "fulltext": 69,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 69
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "onet",
+      "name": "Onet Wiadomości",
+      "country": "PL",
+      "language": "pl",
+      "ownership": "prywatne; szczegóły struktury do uzupełnienia",
+      "scope": "wiadomosci",
+      "sections": [
+        "unknown",
+        "wiadomosci"
+      ],
+      "articles": 39,
+      "eligible": 39,
+      "fulltext": 37,
+      "lead_only": 2,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 39
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "pravda_ua",
+      "name": "Ukraińska Prawda",
+      "country": "UA",
+      "language": "uk",
+      "ownership": "prywatne; szczegóły struktury do uzupełnienia",
+      "scope": "wiadomosci",
+      "sections": [
+        "unknown",
+        "wiadomosci"
+      ],
+      "articles": 40,
+      "eligible": 40,
+      "fulltext": 40,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 40
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "rp",
+      "name": "Rzeczpospolita",
+      "country": "PL",
+      "language": "pl",
+      "ownership": "prywatne; szczegóły struktury do uzupełnienia",
+      "scope": "glowne",
+      "sections": [
+        "glowne",
+        "unknown"
+      ],
+      "articles": 39,
+      "eligible": 39,
+      "fulltext": 0,
+      "lead_only": 39,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 39
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "spiegel",
+      "name": "Der Spiegel",
+      "country": "DE",
+      "language": "de",
+      "ownership": "prywatne; szczegóły struktury do uzupełnienia",
+      "scope": "ausland",
+      "sections": [
+        "ausland",
+        "unknown"
+      ],
+      "articles": 28,
+      "eligible": 28,
+      "fulltext": 0,
+      "lead_only": 28,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 28
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "tagesschau",
+      "name": "Tagesschau (ARD)",
+      "country": "DE",
+      "language": "de",
+      "ownership": "nadawca publiczny",
+      "scope": "alle",
+      "sections": [
+        "alle",
+        "unknown"
+      ],
+      "articles": 54,
+      "eligible": 54,
+      "fulltext": 54,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 54
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "ukrinform",
+      "name": "Ukrinform",
+      "country": "UA",
+      "language": "uk",
+      "ownership": "państwowa ukraińska agencja informacyjna",
+      "scope": "ostatnie",
+      "sections": [
+        "ostatnie",
+        "unknown"
+      ],
+      "articles": 60,
+      "eligible": 60,
+      "fulltext": 60,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 60
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    }
+  ]
+}

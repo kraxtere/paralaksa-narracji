@@ -1,0 +1,32 @@
+{
+  "report": {
+    "w_skrocie": [],
+    "wzorce_zbieznosci": [],
+    "rozbieznosci": [],
+    "autoobraz": [],
+    "co_sie_przesuwa": [],
+    "nieobecne_w_polsce": [],
+    "slabe_sygnaly": []
+  },
+  "publication": {
+    "status": "inicjalny",
+    "fetched_day_utc": "2026-09-23",
+    "publication_window_start": "2026-09-22T00:00:00+00:00",
+    "publication_window_end_exclusive": "2026-09-24T00:00:00+00:00",
+    "published_min": "2018-11-30T17:45:13+00:00",
+    "published_max": "2026-09-23T16:44:45+00:00",
+    "fetched_articles": 490,
+    "late_articles": 0,
+    "late_share": 0.0,
+    "missing_publication": 0,
+    "future_publication": 0,
+    "older_than_24h": 66,
+    "older_than_48h": 45,
+    "today_language_allowed": false
+  },
+  "semantic_review": "pending",
+  "warnings": [
+    "walidacja po ponowieniu: 32 błędów; usunięto twierdzenia bez poprawnych odnośników. Błędy: autoobraz.0: nieistniejące article_ids [913] (używaj tylko id z DANYCH); autoobraz.1: nieistniejące article_ids [592, 807] (używaj tylko id z DANYCH); w_skrocie.0: brak powiązania tezy z sygnałami (dowody); w_skrocie.0: article_ids nie odpowiadają dowodom; w_skrocie.1: brak powiązania tezy z sygnałami (dowody)",
+    "synteza nie dostarczyła żadnych tez; raport jest niepełny"
+  ]
+}
