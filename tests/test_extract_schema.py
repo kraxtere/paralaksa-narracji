@@ -66,6 +66,23 @@ def test_is_verbatim_ignores_case_and_punctuation():
     assert not is_verbatim("", SOURCE)
 
 
+# Realne przypadki z audytu al-quds (2026-09-23): model cytuje poprawnie, ale bez arabskiego
+# przedrostka doklejonego bez spacji do następnego słowa (و "i", ب "przez/w").
+@pytest.mark.parametrize("span,source", [
+    ("برر جيش الاحتلال قرار تشغيل الفرقة 98", "الاحتلال. وبرر جيش الاحتلال قرار تشغيل الفرقة 98 بأنه"),
+    ("تضع إيران شرط إنهاء الحرب", "نقاشاً. وتضع إيران شرط إنهاء الحرب على"),
+    ("إصابة أحد عناصر الشرطة", "وإعلامية بإصابة أحد عناصر الشرطة الإسرائيلية"),
+])
+def test_is_verbatim_tolerates_arabic_proclitic_drop(span, source):
+    assert is_verbatim(span, source)
+
+
+def test_is_verbatim_arabic_proclitic_drop_does_not_over_match():
+    # Tolerancja jest wąska: tylko 1-3 znaki z domkniętego zbioru przedrostków (و ف ب ك ل ا).
+    assert not is_verbatim("قصف", "الاستهدافقصف")   # różnica to cały rdzeń "الاستهداف", nie przedrostek
+    assert not is_verbatim("زمة", "أزمة")            # różnica to "أ" (hamza), spoza dozwolonego zbioru
+
+
 @pytest.mark.parametrize("actor", ["US;DK", "US, DK", "US/DK", "emergent:x"])
 def test_bad_actor_rejected(actor):
     out = parse([sig(subject_actor=actor)])

@@ -121,12 +121,39 @@ def _words(text: str) -> list[str]:
     return re.findall(r"\w+", text.casefold())
 
 
+# Arabic conjunctions/prepositions/the definite article attach to the next word with no space
+# (و "and", ف "so", ب "with/by", ك "like", ل "for", ال "the", and short combinations of these).
+# \w+ tokenizes "وبرر" as one word, so a model quoting just the root ("برر") never matches by
+# exact token equality even though the quote is accurate. Found on real Arabic articles
+# (al-quds source audit, 2026-09-23): 4/21 signals wrongly dropped, all of this shape.
+_ARABIC_PROCLITIC_CHARS = set("وفبكلا")
+
+
+def _is_proclitic_drop(source_word: str, span_word: str) -> bool:
+    if source_word == span_word or not source_word.endswith(span_word):
+        return False
+    prefix = source_word[: len(source_word) - len(span_word)]
+    return 1 <= len(prefix) <= 3 and set(prefix) <= _ARABIC_PROCLITIC_CHARS
+
+
 def is_verbatim(span: str, source: str) -> bool:
-    """Span occurs in the source as a contiguous word sequence (punctuation/case-insensitive)."""
+    """Span occurs in the source as a contiguous word sequence (punctuation/case-insensitive).
+
+    The first word of the span may match a source word with an Arabic proclitic prefix dropped
+    (see _is_proclitic_drop); all other words must match exactly.
+    """
     span_words = _words(span)
     if not span_words:
         return False
-    return f" {' '.join(span_words)} " in f" {' '.join(_words(source))} "
+    source_words = _words(source)
+    n = len(span_words)
+    for i in range(len(source_words) - n + 1):
+        window = source_words[i : i + n]
+        if window == span_words:
+            return True
+        if window[1:] == span_words[1:] and _is_proclitic_drop(window[0], span_words[0]):
+            return True
+    return False
 
 
 def _format_error(i: int, err: dict) -> str:
