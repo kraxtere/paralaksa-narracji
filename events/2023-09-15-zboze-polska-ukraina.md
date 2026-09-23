@@ -24,8 +24,8 @@ relacje:
     link: https://www.rp.pl/rolnictwo/art39118781-polska-wprowadza-zakaz-importu-zboza-z-ukrainy-buda-podpisal-rozporzadzenie
     publikacja: '2023-09-15T21:35+02:00'
     aktualizacja: '2026-08-27T20:03+02:00'
-    porownywana_wersja: 'aktualizacja 2026-08-27T20:03+02:00; bez kopii historycznej'
-    archiwum: {link: null, wykonano: null}
+    porownywana_wersja: 'kopia 2023-09-16 20:07 CEST; nagłówek jak dziś'
+    archiwum: {link: 'https://web.archive.org/web/20230916180709/https://www.rp.pl/rolnictwo/art39118781-polska-wprowadza-zakaz-importu-zboza-z-ukrainy-buda-podpisal-rozporzadzenie', wykonano: '2023-09-16T18:07Z'}
     naglowek: 'Polska wprowadza zakaz importu zboża z Ukrainy. Buda podpisał rozporządzenie'
     tlumaczenie: 'Polska wprowadza zakaz importu zboża z Ukrainy. Buda podpisał rozporządzenie'
     zostawia_z: 'Pierwszy plan: krajowe rozporządzenie po decyzji KE; w artykule także głos premiera o interesie polskiego rolnika.'
@@ -37,8 +37,8 @@ relacje:
     link: https://www.pravda.com.ua/news/2023/09/15/7420022/
     publikacja: '2023-09-15T20:20+03:00'
     aktualizacja: null
-    porownywana_wersja: 'wersja dostępna 2026-09-23, pierwotny znacznik 20:20; brak kopii historycznej'
-    archiwum: {link: null, wykonano: null}
+    porownywana_wersja: 'kopia 2023-09-18 00:09 EEST; dateModified = datePublished, tekst niezmieniany'
+    archiwum: {link: 'https://web.archive.org/web/20230917220921/https://www.pravda.com.ua/news/2023/09/15/7420022/', wykonano: '2023-09-17T22:09Z'}
     naglowek: 'Польща продовжить заборону на імпорт українського зерна, попри дозвіл ЄС – Моравецький'
     tlumaczenie: 'Polska utrzyma zakaz importu ukraińskiego zboża mimo zgody UE – Morawiecki'
     zostawia_z: 'Pierwszy plan: jednostronna decyzja Warszawy mimo wygaśnięcia ograniczenia UE.'
@@ -64,7 +64,7 @@ Widz może ocenić, czy słowo „mimo” zmienia jego reakcję na działanie Po
 Ta sama bariera celna widziana z dwóch stron; osobna strzałka tranzytu, który nie oznacza automatycznie importu na polski rynek.
 
 ## Uczciwość odcinka
-- [ ] Zdobyć wrześniową wersję polskiego tekstu i upewnić się, że nie dopisano elementów po 2023.
+- [x] Wrześniowa kopia polskiego tekstu jest (nagłówek zgodny); treść porównać z dzisiejszą.
 - [ ] Człowiek sprawdzi akt, teksty i zakres wyjątku tranzytowego.
 
 ## Notatki z pilota

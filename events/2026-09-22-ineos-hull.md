@@ -20,7 +20,7 @@ relacje:
     link: https://www.thesun.co.uk/money/40459726/sir-jim-ratcliffe-halts-plants-over-gas-costs/
     publikacja: '2026-09-22T15:11+01:00'
     aktualizacja: '2026-09-22T15:53+01:00'
-    porownywana_wersja: 'aktualizacja 2026-09-22T15:53+01:00; brak kopii pierwszej publikacji'
+    porownywana_wersja: 'aktualizacja 2026-09-22T15:53+01:00; Wayback nie ma żadnej kopii (sprawdzone 2026-09-24), trzeba zrobić własną'
     archiwum: {link: null, wykonano: null}
     naglowek: 'Thousands of jobs at risk as Sir Jim Ratcliffe HALTS production…' # skrót oryginalnego nagłówka do limitu 15 słów
     tlumaczenie: 'Tysiące miejsc pracy zagrożonych po wstrzymaniu produkcji przez Jima Ratcliffe’a…'
@@ -31,10 +31,10 @@ relacje:
     kto: The Guardian
     rola: redakcja
     link: https://www.theguardian.com/business/2026/sep/22/jim-ratcliffe-halts-production-hull-chemical-plants-gas-prices-ineos-uk
-    publikacja: '2026-09-22T18:18+02:00'
-    aktualizacja: '2026-09-22T20:51+02:00'
-    porownywana_wersja: 'aktualizacja 2026-09-22T20:51+02:00; brak kopii pierwszej publikacji'
-    archiwum: {link: null, wykonano: null}
+    publikacja: '2026-09-22T17:18+01:00'
+    aktualizacja: '2026-09-22T19:51+01:00'
+    porownywana_wersja: 'kopia 2026-09-22 17:30 BST, 12 min po publikacji; nagłówek jak dziś'
+    archiwum: {link: 'https://web.archive.org/web/20260922163046/https://www.theguardian.com/business/2026/sep/22/jim-ratcliffe-halts-production-hull-chemical-plants-gas-prices-ineos-uk', wykonano: '2026-09-22T16:30Z'}
     naglowek: 'Jim Ratcliffe halts production at Hull chemical plants over ‘ridiculous’ gas prices'
     tlumaczenie: 'Jim Ratcliffe wstrzymuje produkcję w zakładach w Hull z powodu „absurdalnych” cen gazu'
     zostawia_z: 'Koszty gazu według firmy, liczba zatrudnionych bezpośrednio i warunkowy wpływ ewentualnego trwałego zamknięcia.'
@@ -46,8 +46,8 @@ relacje:
     link: https://www.ineos.com/news/shared-news/ineos-idles-europes-last-world-scale-acetyls-plant-as-energy-prices-hit-12-times-us-level/
     publikacja: null # komunikat podaje 22.09.2026, bez godziny
     aktualizacja: null
-    porownywana_wersja: 'wersja dostępna 2026-09-23; godzina wydania nieznana'
-    archiwum: {link: null, wykonano: null}
+    porownywana_wersja: 'komunikat istniał najpóźniej 2026-09-22 12:59 BST (kopia Wayback)'
+    archiwum: {link: 'https://web.archive.org/web/20260922115942/https://www.ineos.com/news/shared-news/ineos-idles-europes-last-world-scale-acetyls-plant-as-energy-prices-hit-12-times-us-level/', wykonano: '2026-09-22T11:59Z'}
     naglowek: 'INEOS Idles Europe’s last world-scale Acetyls plant as Energy prices hit 12 times…' # skrót nagłówka
     tlumaczenie: 'INEOS wygasza instalacje acetylowe; według spółki ceny energii są wielokrotnie wyższe'
     zostawia_z: 'Spółka wskazuje gaz, podatki i konsekwencje środowiskowe jako uzasadnienie decyzji; dane są jej twierdzeniami.'
