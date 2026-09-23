@@ -160,3 +160,15 @@ tylko ręcznych `llm.complete()` wywołań pomijających `run_synthesis`/`extrac
 - Raport 2026-09-23 w repo **zawiera te 4 błędne przypisania** — wygenerowany przed kontrolą.
 - Formalny przegląd warunków 18 źródeł zlecony GPT (praca tekstowa, bez dostępu do kodu):
   `docs/LEGAL_REVIEW_BRIEF.md`.
+
+## Przegląd warunków źródeł (2026-09-23): `docs/LEGAL_REVIEW_2026-09-23.md`
+
+Wykonany przez GPT według `docs/LEGAL_REVIEW_BRIEF.md`. Wynik dla obecnego procesu (publiczny, bez opłat):
+7 × niedozwolone (tagesschau, bbc, guardian, aljazeera, fox, jpost, alquds_ps), 9 × ryzyko, 2 × niejasne
+(rp, npr). Wyrywkowa weryfikacja 5 kluczowych cytatów (tagesschau „nicht archiviert”, guardian „text and data
+aggregation, analysis or mining”, aljazeera „text or data mining”, alquds „personal, non-commercial”,
+jpost warunki RSS): wszystkie zgodne z aktualnymi stronami.
+**Decyzja właściciela: na razie nic nie wyłączamy na tej podstawie.** Wszystkie 18 źródeł pozostają aktywne.
+Większość kolizji dotyczy trzech elementów procesu: kopii pełnego tekstu, przesłania do zewnętrznego API
+i archiwizacji, a nie samego czytania nagłówków. Wyjątki: guardian, aljazeera i bbc zastrzegają samą
+automatyczną analizę.
