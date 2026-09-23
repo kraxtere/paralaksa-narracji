@@ -301,3 +301,36 @@ def test_schema_example_shows_dowody_and_theme_id_inline():
     assert example['wzorce_zbieznosci'][0]['kraje'][0]['dowody']
     assert example['rozbieznosci'][0]['kraje'][0]['dowody']
     assert example['autoobraz'][0]['dowody']
+
+
+def _attr_package():
+    src = lambda sid, name, c, al: dict(source_id=sid, name=name, country=c, aliases=al)
+    return {'kraje': {'UK': {}, 'DE': {}, 'QA': {}, 'PL': {}},
+            'mianowniki_zrodel': [src('bbc', 'BBC News', 'UK', ['BBC']), src('guardian', 'The Guardian', 'UK', ['Guardian']),
+                                  src('tagesschau', 'Tagesschau (ARD)', 'DE', ['Tagesschau']),
+                                  src('aljazeera', 'Al Jazeera English', 'QA', ['Al Jazeer'])]}
+
+
+def _ev(aid, kraj, zrodlo):
+    return dict(signal_id=aid, article_id=aid, theme_id='sanctions', kraj=kraj, zrodlo=zrodlo)
+
+
+def test_attribution_named_publisher_needs_its_evidence():
+    """Regresja z raportu 2026-09-23 (zgłoszone przez przegląd): teza wymieniała BBC bez dowodu z BBC."""
+    from paralaksa.report.validate import attribution_errors
+    r = ReportOutput.model_validate({'w_skrocie': [dict(tekst='Tagesschau (DE), BBC i Guardiana (UK) łączy rama osłabienia sankcji.',
+        pewnosc='niski', theme_id='sanctions', article_ids=[1, 2], dowody=[_ev(1, 'DE', 'tagesschau'), _ev(2, 'UK', 'guardian')])]})
+    errors = attribution_errors(r, _attr_package())
+    assert errors == ['w_skrocie.0: tekst wymienia redakcję bbc, ale żaden dowód nie pochodzi z bbc — '
+                      'usuń ją z tekstu albo dodaj jej sygnał']
+
+
+def test_attribution_country_code_needs_its_evidence():
+    """Regresja z raportu 2026-09-23: „Al Jazeera (QA) i UK”, dowody tylko z QA."""
+    from paralaksa.report.validate import attribution_errors
+    r = ReportOutput.model_validate({'slabe_sygnaly': [dict(tekst='Temat pojawia się w Al Jazeera (QA) i UK.',
+        theme_id='sanctions', article_ids=[3], dowody=[_ev(3, 'QA', 'aljazeera')])]})
+    assert [e.split(':')[0] for e in attribution_errors(r, _attr_package())] == ['slabe_sygnaly.0']
+    ok = ReportOutput.model_validate({'nieobecne_w_polsce': [dict(temat='sanctions', tekst='Obecne w UK, nieobecne w PL.',
+        theme_id='sanctions', article_ids=[4], dowody=[_ev(4, 'UK', 'bbc')])]})
+    assert attribution_errors(ok, _attr_package()) == []   # PL w tej sekcji to nieobecność, nie przypisanie

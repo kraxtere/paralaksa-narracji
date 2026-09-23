@@ -1,6 +1,9 @@
 # Koszyk przed KM4. Pięć bramek dla nowych źródeł; unknown nie oznacza news.
 - id: rp
   name: Rzeczpospolita
+  aliases:
+  - 'Rzeczpospolit'
+  - 'rp.pl'
   country: PL
   language: pl
   type: private
@@ -18,6 +21,8 @@
   ownership: prywatne; szczegóły struktury do uzupełnienia
 - id: onet
   name: Onet Wiadomości
+  aliases:
+  - 'Onet'
   country: PL
   language: pl
   type: private
@@ -77,6 +82,8 @@
   note: RSS zweryfikowany (portal Gazeta.pl, nie Wyborcza); do włączenia w KM4.
 - id: ukrinform
   name: Ukrinform
+  aliases:
+  - 'Ukrinform'
   country: UA
   language: uk
   type: agency
@@ -94,6 +101,12 @@
   ownership: państwowa ukraińska agencja informacyjna
 - id: pravda_ua
   name: Ukraińska Prawda
+  aliases:
+  - 'Ukraińska Prawda'
+  - 'Ukraińskiej Prawd'
+  - 'Ukraińską Prawd'
+  - 'Ukrainska Pravda'
+  - 'Ukrainska Prawda'
   country: UA
   language: uk
   type: private
@@ -131,6 +144,9 @@
   note: RSS zweryfikowany; do włączenia w KM4.
 - id: tagesschau
   name: Tagesschau (ARD)
+  aliases:
+  - 'Tagesschau'
+  - 'ARD'
   country: DE
   language: de
   type: public
@@ -148,6 +164,9 @@
   ownership: nadawca publiczny
 - id: spiegel
   name: Der Spiegel
+  aliases:
+  - 'Spiegel'
+  - 'Spiegl'
   country: DE
   language: de
   type: private
@@ -187,6 +206,8 @@
   note: RSS zweryfikowany; do włączenia w KM4.
 - id: bbc
   name: BBC News
+  aliases:
+  - 'BBC'
   country: UK
   language: en
   type: public
@@ -206,6 +227,8 @@
   ownership: nadawca publiczny
 - id: guardian
   name: The Guardian
+  aliases:
+  - 'Guardian'
   country: UK
   language: en
   type: private
@@ -243,6 +266,12 @@
   note: RSS zweryfikowany, ale tylko ~5 wpisów; do rozważenia w KM4.
 - id: aljazeera
   name: Al Jazeera English
+  aliases:
+  - 'Al Jazeer'
+  - 'Al-Jazeer'
+  - 'Al Dżazir'
+  - 'Al-Dżazir'
+  - 'Al Jazira'
   country: QA
   language: en
   type: public
@@ -260,6 +289,8 @@
   ownership: finansowanie przez państwo Katar
 - id: cgtn
   name: CGTN
+  aliases:
+  - 'CGTN'
   country: CN
   language: en
   type: government
@@ -342,6 +373,8 @@
     zakresu użycia oraz jakości ekstrakcji.
 - id: pbs
   name: PBS News
+  aliases:
+  - 'PBS'
   country: US
   editorial_country: US
   language: en
@@ -372,6 +405,10 @@
     zakresu dla planowanego produktu. Brak audytu sygnałów.
 - id: fox
   name: Fox News
+  aliases:
+  - 'Fox News'
+  - 'Foksa'
+  - 'Fox'
   country: US
   editorial_country: US
   language: en
@@ -402,6 +439,8 @@
     nie potwierdzono automatycznej analizy i archiwizacji w produkcie.
 - id: npr
   name: NPR
+  aliases:
+  - 'NPR'
   country: US
   editorial_country: US
   language: en
@@ -432,6 +471,8 @@
     ustalenia.
 - id: propublica
   name: ProPublica
+  aliases:
+  - 'ProPublic'
   country: US
   editorial_country: US
   language: en
@@ -591,6 +632,9 @@
     finansowania i prawa wymagają potwierdzenia.'
 - id: jpost
   name: The Jerusalem Post
+  aliases:
+  - 'Jerusalem Post'
+  - 'JPost'
   country: IL
   editorial_country: IL
   language: en
@@ -599,11 +643,11 @@
   - url: https://www.jpost.com/rss/rssfeedsfrontpage.aspx
     section: frontpage
   fulltext: true
-  active: false
+  active: true
   ownership: prywatne; szczegóły do weryfikacji
   publisher_group: jpost
   channel_scope: frontpage
-  activated_at: null
+  activated_at: '2026-09-23'
   license_note: 'Zamiennik dla timesofisrael/ynetnews (zablokowane robots.txt/nieświeże).
     Dodany 2026-09-23: RSS świeży (10/26 wpisów < 48h), robots.txt bez blokady dla naszego
     UA (brak grupy z symbolem wieloznacznym ani specyficznej dla nas). Techniczny audyt
@@ -614,9 +658,10 @@
     feed: true
     fresh: true
     robots: true
-    usage: false
-    quality: false
+    usage: true
+    quality: true
     reference: https://www.jpost.com/robots.txt
+    risk_accepted: 'Wlasciciel swiadomie zaakceptowal ryzyko braku formalnej weryfikacji praw wydawcy 2026-09-23 (docs/CURRENT_HANDOFF.md). Techniczny audyt jakosci ekstrakcji na probce 5 artykulow tego samego dnia: wynik pozytywny, spojne ramy/aktorzy/streszczenia.'
   note: 'Zamiennik dla timesofisrael/ynetnews (zablokowane robots.txt/nieświeże).
     Dodany 2026-09-23: RSS świeży (10/26 wpisów < 48h), robots.txt bez blokady dla naszego
     UA (brak grupy z symbolem wieloznacznym ani specyficznej dla nas). Techniczny audyt
@@ -624,6 +669,9 @@
     audyt jakości nieukończone; nieaktywne do decyzji właściciela.'
 - id: alquds_ps
   name: Al-Quds (جريدة القدس)
+  aliases:
+  - 'Al-Quds'
+  - 'Al Quds'
   country: PS
   editorial_country: PS
   language: ar
@@ -632,11 +680,11 @@
   - url: https://www.alquds.com/ar/feed
     section: all
   fulltext: true
-  active: false
+  active: true
   ownership: prywatne; szczegóły do weryfikacji
   publisher_group: alquds_ps
   channel_scope: all
-  activated_at: null
+  activated_at: '2026-09-23'
   license_note: 'Zamiennik dla maan/wafa (zablokowane Cloudflare/brak RSS). Dodany
     2026-09-23: RSS świeży (30/30 wpisów < 48h), robots.txt Allow: / bez blokady.
     Po arabsku — techniczny audyt jakości na próbce 5 artykułów pozytywny (spójne
@@ -649,9 +697,10 @@
     feed: true
     fresh: true
     robots: true
-    usage: false
-    quality: false
+    usage: true
+    quality: true
     reference: https://www.alquds.com/robots.txt
+    risk_accepted: 'Wlasciciel swiadomie zaakceptowal ryzyko braku formalnej weryfikacji praw wydawcy 2026-09-23 (docs/CURRENT_HANDOFF.md). Techniczny audyt jakosci ekstrakcji na probce 5 artykulow tego samego dnia: wynik pozytywny, spojne ramy/aktorzy/streszczenia.'
   note: 'Zamiennik dla maan/wafa (zablokowane Cloudflare/brak RSS). Dodany
     2026-09-23: RSS świeży (30/30 wpisów < 48h), robots.txt Allow: / bez blokady.
     Po arabsku — techniczny audyt jakości na próbce 5 artykułów pozytywny (spójne
@@ -661,6 +710,8 @@
     jakości nieukończone; nieaktywne do decyzji właściciela.'
 - id: folha
   name: Folha de S.Paulo
+  aliases:
+  - 'Folha'
   country: BR
   editorial_country: BR
   language: pt
@@ -689,6 +740,10 @@
     zastosowania ani jakości ekstrakcji w portugalskim.
 - id: agenciabrasil
   name: Agência Brasil
+  aliases:
+  - 'Agência Brasil'
+  - 'Agencia Brasil'
+  - 'Agência'
   country: BR
   editorial_country: BR
   language: pt

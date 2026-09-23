@@ -17,18 +17,18 @@ def test_repo_config_loads():
 def test_repo_sources_milestone1_selection():
     sources = load_sources()
     active = [s for s in sources if s.active]
-    # 10 z KM1 (PL/UA/DE/UK x2 + QA/CN) + 6 aktywowanych 2026-09-23 po realnym audycie jakości
-    # (US: pbs/fox/npr/propublica, BR: folha/agenciabrasil) z zaakceptowanym ryzykiem praw wydawcy
+    # 10 z KM1 (PL/UA/DE/UK x2 + QA/CN) + 8 aktywowanych 2026-09-23 po realnym audycie jakości
+    # (US: pbs/fox/npr/propublica, BR: folha/agenciabrasil, IL: jpost, PS: alquds_ps) z zaakceptowanym ryzykiem praw wydawcy
     # (docs/CURRENT_HANDOFF.md) zamiast formalnego audytu licencji.
-    assert len(active) == 16
+    assert len(active) == 18
     by_country: dict[str, int] = {}
     for s in active:
         by_country[s.country] = by_country.get(s.country, 0) + 1
     for country in ("PL", "UA", "DE", "UK"):
         assert by_country[country] == 2
-    assert by_country["US"] == 4 and by_country["BR"] == 2
-    # 2 spoza bloku z KM1 (QA, CN) + 6 nowych (US, BR)
-    assert sum(n for c, n in by_country.items() if c not in {"PL", "UA", "DE", "UK"}) == 8
+    assert by_country["US"] == 4 and by_country["BR"] == 2 and by_country["IL"] == 1 and by_country["PS"] == 1
+    # 2 spoza bloku z KM1 (QA, CN) + 8 nowych (US, BR, IL, PS)
+    assert sum(n for c, n in by_country.items() if c not in {"PL", "UA", "DE", "UK"}) == 10
 
 
 def test_inactive_sources_have_note():

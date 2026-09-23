@@ -181,6 +181,8 @@ class Source(BaseModel):
     activated_at: str | None = None
     license_note: str = "wymaga okresowego przeglądu warunków wydawcy"
     verification: dict = Field(default_factory=dict)
+    # Nazwy, pod którymi redakcja pojawia się w tekście raportu (prefiksy: łapią odmianę, np. "Guardian" → "Guardiana").
+    aliases: list[str] = []
 
     @field_validator("country")
     @classmethod

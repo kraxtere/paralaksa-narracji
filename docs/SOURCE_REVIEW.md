@@ -125,3 +125,8 @@ Chronicle — trwałe HTTP 429 (przeciążenie/throttling) przy dwóch próbach 
 PNN (Palestine News Network) — robots.txt wprost zabrania `*/feed` i `*/rss`; Mondoweiss — kanał
 techniczny działa (5/10 świeżych ≤48h), ale to redakcja amerykańska pisząca o Palestynie
 (advocacy media), nie głos palestyńskiej prasy krajowej — nie pasuje do definicji `editorial_country=PS`.
+
+**Aktualizacja tego samego dnia:** właściciel zdecydował aktywować także `jpost` (IL) i `alquds_ps` (PS)
+na tych samych zasadach (zaakceptowane ryzyko praw, audyt jakości wykonany wyżej). Test `plx ingest`
+z konfiguracji: jpost 26 nowych, alquds_ps 30 nowych, bez błędów. Aktywnych źródeł: 18, krajów: 10.
+Formalny przegląd warunków wszystkich 18 źródeł zlecony osobno: `docs/LEGAL_REVIEW_BRIEF.md`.

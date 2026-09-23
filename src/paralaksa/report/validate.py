@@ -71,6 +71,7 @@ def validate_report(report: ReportOutput, package: dict, known_ids: set[int]) ->
     errors += _threshold_errors(report, package)
     errors += provenance_errors(report, package)
     errors += language_errors(report, package)
+    errors += attribution_errors(report, package)
     for path, text in _texts(report):
         for q in long_quotes(text):
             errors.append(f"{path}: cytat dłuższy niż {MAX_QUOTE_WORDS} słów: „{' '.join(q.split()[:6])}…”")
@@ -235,4 +236,46 @@ def language_errors(report, package):
             errors.append(f'{path}: trend bez linii bazowej')
     if not package['linia_bazowa']['dostepna']:
         errors += [f'co_sie_przesuwa.{i}: brak linii bazowej' for i,_ in enumerate(report.co_sie_przesuwa)]
+    return errors
+
+
+def _attributed_texts(report):
+    """(path, prose, evidence) for every place where the text names publishers or countries."""
+    for section in ('w_skrocie', 'slabe_sygnaly', 'co_sie_przesuwa', 'nieobecne_w_polsce'):
+        for i, item in enumerate(getattr(report, section)):
+            yield f'{section}.{i}', item.tekst, item.dowody
+    for i, p in enumerate(report.wzorce_zbieznosci):
+        yield f'wzorce_zbieznosci.{i}', f'{p.kierunek} {p.wspolny_kierunek}', [e for k in p.kraje for e in k.dowody]
+        yield f'wzorce_zbieznosci.{i}.sygnaly_przeciwne', p.sygnaly_przeciwne.tekst, p.sygnaly_przeciwne.dowody
+    for i, d in enumerate(report.rozbieznosci):
+        yield f'rozbieznosci.{i}', d.tekst, [e for k in d.kraje for e in k.dowody]
+    for i, a in enumerate(report.autoobraz):
+        yield f'autoobraz.{i}', f'{a.jak_opisuje_siebie} {a.jak_opisuja_go_inni} {a.komentarz}', a.dowody
+
+
+def attribution_errors(report, package):
+    """Every publisher named in a claim and every country code it uses must be backed by its evidence.
+
+    Metadata checks alone let prose credit BBC for a view whose five signals come from other
+    newsrooms (report 2026-09-23). Aliases are word-start prefixes, so Polish inflection matches
+    ("Guardian" -> "Guardiana"). Country adjectives ("brytyjskie media") are not detected.
+    """
+    sources = package.get('mianowniki_zrodel', [])
+    countries = set(package.get('kraje', {})) | {s['country'] for s in sources}
+    alias_re = {s['source_id']: re.compile('|'.join(r'(?<!\w)' + re.escape(a) for a in s.get('aliases') or [s['name']]))
+                for s in sources}
+    errors = []
+    for path, text, evidence in _attributed_texts(report):
+        if not evidence and path.endswith('sygnaly_przeciwne'):
+            continue
+        cited_sources = {e.zrodlo for e in evidence}
+        cited_countries = {e.kraj for e in evidence}
+        for sid, rx in alias_re.items():
+            if sid not in cited_sources and rx.search(text):
+                errors.append(f'{path}: tekst wymienia redakcję {sid}, ale żaden dowód nie pochodzi z {sid} — '
+                              'usuń ją z tekstu albo dodaj jej sygnał')
+        allowed = {'PL'} if path.startswith('nieobecne_w_polsce') else set()
+        for code in sorted(countries - cited_countries - allowed):
+            if re.search(rf'(?<![\w-]){code}(?![\w-])', text):
+                errors.append(f'{path}: tekst przypisuje przekaz krajowi {code}, ale żaden dowód nie pochodzi z {code}')
     return errors

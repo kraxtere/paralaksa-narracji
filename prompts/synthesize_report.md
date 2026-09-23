@@ -34,6 +34,9 @@ Dodatkowe reguły jakości:
   i ramę przywołanego sygnału. Kraj w CountryLine jest krajem redakcji, nie opisywanego aktora.
 - n_zrodel w CountryLine to niezależne redakcje faktycznie przywołane w jej dowodach.
 - Autoobraz: dowody obu stron muszą dotyczyć subject_actor = kraj; dodaj pole pewnosc.
+- Wymieniaj w tekście tylko te redakcje i kody krajów, z których pochodzą dowody tej tezy.
+  Jeśli piszesz „BBC”, w dowodach musi być sygnał BBC; jeśli piszesz „(UK)”, musi być dowód z UK.
+  Nie dopisuj redakcji „dla kontekstu” — dodaj jej sygnał albo jej nie wymieniaj.
 - Dla kraju z jednym źródłem użyj nazwy redakcji, np. CGTN, zamiast zbiorczego „media chińskie”.
   Przy wielu źródłach zawsze ogranicz twierdzenie do analizowanych źródeł/próbki.
 - JS oznacza wyłącznie odległość rozkładów nacechowania. Żadna wartość JS nie dowodzi zbieżności

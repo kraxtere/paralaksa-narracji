@@ -60,6 +60,7 @@ def sample_metadata(conn, day):
         meta = json.loads(arts[0]['metadata'])
         genres = Counter(a['genre'] for a in arts)
         out.append(dict(source_id=sid, name=arts[0]['name'], country=arts[0]['country'],
+                        aliases=meta.get('aliases') or [arts[0]['name']],
                         language=meta.get('language'), ownership=meta.get('ownership', 'niezweryfikowane'),
                         scope=meta.get('channel_scope'), sections=sorted({a['section'] or 'unknown' for a in arts}),
                         articles=len(arts), eligible=sum(a['id'] in eligible for a in arts),

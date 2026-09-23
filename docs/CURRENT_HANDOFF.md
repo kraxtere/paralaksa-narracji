@@ -145,3 +145,18 @@ ręcznej interwencji poza commitem konfiguracji.
 poszedł przez `extract_pending`/`run_synthesis`-analogiczną ścieżkę (`extract_pending` woła `record_usage`
 poprawnie), więc $0,098 jest realnym, policzonym kosztem — nie dotyczy go luka opisana wyżej (ta dotyczy
 tylko ręcznych `llm.complete()` wywołań pomijających `run_synthesis`/`extract_pending`).
+
+## JPost i Al-Quds aktywne; kontrola atrybucji w raporcie (2026-09-23)
+
+- `jpost` (IL) i `alquds_ps` (PS) aktywowane na zasadach USA/BR; `plx ingest` na kopii bazy: 26 + 30 nowych,
+  bez błędów. Aktywnych: 18 źródeł, 10 krajów.
+- Przegląd zewnętrzny (GPT) wykazał w raporcie 2026-09-23 tezy przypisujące przekaz redakcji/krajowi bez
+  dowodu z nich (w_skrocie.0 wymienia BBC, dowody bez BBC; slabe_sygnaly.0 mówi o UK, dowód tylko z QA).
+  Potwierdzone. Nowa kontrola `attribution_errors` (`report/validate.py`): każda redakcja nazwana w tekście
+  (aliasy-prefiksy w `sources.yaml` → `aliases`, łapią odmianę) i każdy kod kraju muszą mieć dowód z niej.
+  Na raporcie 2026-09-23 znajduje 4 błędy: 2 zgłoszone + 2 nowe w autoobrazie (Onet i Spiegel wymienione bez dowodów).
+  Reguła dopisana też do promptu. Ograniczenie: przymiotniki („brytyjskie media”) nie są wykrywane;
+  to nadal nie jest pełny audyt semantyczny (czy sygnał faktycznie wspiera sens zdania).
+- Raport 2026-09-23 w repo **zawiera te 4 błędne przypisania** — wygenerowany przed kontrolą.
+- Formalny przegląd warunków 18 źródeł zlecony GPT (praca tekstowa, bez dostępu do kodu):
+  `docs/LEGAL_REVIEW_BRIEF.md`.
