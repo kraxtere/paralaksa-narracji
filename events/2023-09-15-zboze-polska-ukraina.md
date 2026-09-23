@@ -5,7 +5,7 @@ status: kandydat
 powod_odrzucenia: null
 droga: od_zdarzenia
 dziedzina: [rolnictwo, handel, gospodarka]
-forma: dwie_opowiesci
+forma: os_czasu            # 2026-09-24: z dwie_opowiesci; UP opisuje zapowiedź, RP podpisany akt (różny stan wiedzy)
 fakt:
   czas: '2023-09-16T00:00+02:00'
   opis: 'Po wygaśnięciu środka unijnego Polska wprowadziła krajowy zakaz przywozu określonych produktów rolnych z Ukrainy; rozporządzenie weszło w życie 16 września, nie jest to zakaz wszelkiego tranzytu.'
@@ -47,7 +47,7 @@ kontrasty:
   - miedzy: [r1, r2]
     rodzaj: dobor_slow
     opis: 'Polska redakcja otwiera podpisaniem krajowego aktu; ukraińska decyzją Polski „mimo zgody UE”.'
-    zastrzezenia: 'Ukraińska relacja była wcześniej i dotyczyła zapowiedzi premiera, polska później podpisanego aktu. To dwie fazy jednej decyzji; bez kopii RP z września 2023 siła kontrastu pozostaje niepotwierdzona. Ukraiński tekst streszcza PAP i wypowiedź polskiego premiera, nie zawiera samodzielnego głosu ukraińskich rolników.'
+    zastrzezenia: 'Ukraińska relacja była wcześniej i dotyczyła zapowiedzi premiera, polska później podpisanego aktu. To dwie fazy jednej decyzji, więc karta ma formę os_czasu, a różnicę słów pokazujemy przy widocznych godzinach. Ukraiński tekst streszcza PAP i wypowiedź polskiego premiera, nie zawiera samodzielnego głosu ukraińskich rolników.'
 jak_szukano: ['wyszukiwarka WWW pl/uk/en; przeczytano Rzeczpospolitą, Ukraińską Prawdę, komunikat KE i akt prawny ELI; porównano godziny Kijów/Warszawa']
 ---
 

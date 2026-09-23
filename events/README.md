@@ -15,6 +15,7 @@ i opisujemy, w którym momencie opowieść zaczyna budować spokój, lęk, oburz
 3. **Archiwum**: link do kopii (web.archive.org / archive.today) z godziną jej wykonania. Kopia późniejsza niż porównywana wersja niczego nie dowodzi.
 4. **Nagłówek maks. 15 słów**, reszta własnymi słowami. **Nie kopiujemy pełnych tekstów ani długich fragmentów.**
 5. **Rola źródła**: `redakcja`, `agencja` albo `strona_sprawy` (rząd, ministerstwo, firma, organizacja). Komunikat strony sprawy to jej stanowisko, a nie relacja medialna.
+   **Gatunek**: `wiadomosc`, `relacja_na_zywo`, `wywiad`, `analiza`, `komentarz` albo `komunikat`. Słowa rozmówcy w wywiadzie to nie rama redakcji.
 6. **Liczby**: przy każdej liczbie zapisz, czego dotyczy (np. pracownicy bezpośredni vs łańcuch dostaw).
 7. **`sprawdzil`**: kto otworzył link i przeczytał materiał, np. `GPT 2026-09-24` albo `człowiek 2026-09-24`.
    Do odcinka idą tylko relacje sprawdzone przez człowieka.
