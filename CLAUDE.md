@@ -57,6 +57,16 @@ Pełny ingest z pełnymi tekstami trwa ok. 2–2,5 min (~310 artykułów przy pi
 - Pełne teksty tylko lokalnie (`data/`, poza gitem), nigdy w raportach; cytaty maks. 15 słów.
 - Bez źródeł objętych sankcjami UE (RT, Sputnik). Taksonomii tematów nie zmieniamy automatycznie.
 
+## Znane ograniczenia
+- **rp i spiegel bez pełnego tekstu** (paywall, nie obchodzimy). W KM2 ekstrakcja dla nich działa
+  tylko na tytule i leadzie (lead rp ok. 200 znaków, Spiegel ok. 225). Sygnały będą płytsze: mniej sygnałów na artykuł,
+  niższa `intensity`, uboższe ramy. To oznacza, że PL (rp) i DE (spiegel) są asymetryczne względem źródeł z pełnym
+  tekstem (onet, tagesschau). Przy interpretacji porównań między krajami i w metadanych raportu (KM3) trzeba to uwzględnić.
+  Rozważyć w KM2: flagę „tylko lead” w sygnałach lub wagę per źródło.
+- **Prefiltr odcina całe sekcje.** Artykuły z `/sport/` czy `/weather/` odpadają nawet z kątem
+  politycznym (np. BBC Sport o meczu Izrael–Irlandia, El Niño w BBC Weather). To świadomy kompromis.
+  Kontrola z 2026-09-23: z 319 wpisów odrzucono 5, wszystkie przejrzane ręcznie.
+
 ## Źródła (`config/sources.yaml`, weryfikacja 2026-09-23)
 Aktywne (10): rp, onet (PL); ukrinform, pravda_ua (UA, po ukraińsku); tagesschau, spiegel (DE);
 bbc (world + europe), guardian (UK); aljazeera (QA), cgtn (CN). `fulltext: false`: rp i spiegel (paywall).
