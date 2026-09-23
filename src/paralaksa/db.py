@@ -10,7 +10,7 @@ from typing import Iterable
 
 from paralaksa.config import Source
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS schema_version (
@@ -103,6 +103,10 @@ MIGRATIONS: dict[int, str] = {
       created_at TEXT
     );
     CREATE INDEX IF NOT EXISTS idx_api_usage_date ON api_usage(date);
+    """,
+    3: """
+    -- KM3: ostrzeżenia walidatora raportu (gdy synteza nie przeszła walidacji po ponowieniu).
+    ALTER TABLE reports ADD COLUMN warnings TEXT;
     """,
 }
 
@@ -241,6 +245,37 @@ def spent_on(conn: sqlite3.Connection, day: str) -> float:
     return conn.execute(
         "SELECT COALESCE(SUM(cost_usd), 0) FROM api_usage WHERE date = ?", (day,)
     ).fetchone()[0]
+
+
+def upsert_daily_metrics(conn: sqlite3.Connection, day: str, rows: Iterable[dict]) -> None:
+    """Replace all metrics of a day (re-running aggregation must not leave stale theme rows)."""
+    conn.execute("DELETE FROM daily_metrics WHERE date = ?", (day,))
+    conn.executemany(
+        """
+        INSERT INTO daily_metrics (date, theme_id, country, article_share, n_articles, n_sources,
+                                   dominant_frame, mean_intensity)
+        VALUES (:date, :theme_id, :country, :article_share, :n_articles, :n_sources,
+                :dominant_frame, :mean_intensity)
+        """,
+        list(rows),
+    )
+    conn.commit()
+
+
+def save_report(
+    conn: sqlite3.Connection, day: str, path: str, cost_usd: float,
+    warnings: list[str] | None = None, now: datetime | None = None,
+) -> None:
+    conn.execute(
+        """
+        INSERT INTO reports (date, path, created_at, cost_usd, warnings) VALUES (?, ?, ?, ?, ?)
+        ON CONFLICT(date) DO UPDATE SET
+          path = excluded.path, created_at = excluded.created_at,
+          cost_usd = excluded.cost_usd, warnings = excluded.warnings
+        """,
+        (day, path, to_iso(now or utc_now()), cost_usd, "\n".join(warnings) if warnings else None),
+    )
+    conn.commit()
 
 
 def stale_sources(

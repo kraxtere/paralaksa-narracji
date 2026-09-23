@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from datetime import date
 from pathlib import Path
 from typing import Optional
 
@@ -85,9 +86,14 @@ def ingest(
         typer.echo("Brak źródeł do pobrania.", err=True)
         raise typer.Exit(code=1)
 
+    _run_ingest(conn, settings, selected, fulltext=not no_fulltext)
+    conn.close()
+
+
+def _run_ingest(conn, settings, selected, fulltext: bool) -> int:
     cfg = settings.ingest
     with PoliteClient(cfg.user_agent, cfg.per_domain_delay_s, cfg.timeout_s) as client:
-        results = ingest_sources(conn, client, selected, settings, fulltext=not no_fulltext)
+        results = ingest_sources(conn, client, selected, settings, fulltext=fulltext)
 
     typer.echo(f"{'źródło':<14} {'pobrane':>8} {'nowe':>6} {'odfiltr.':>9} {'duplik.':>8} {'pełny tekst':>12} {'błędy':>6}")
     for r in results:
@@ -103,7 +109,7 @@ def ingest(
     stale = db.stale_sources(conn, [s.id for s in selected], cfg.stale_source_days)
     for sid in stale:
         typer.echo(f"OSTRZEŻENIE: źródło '{sid}' nie dało nowych artykułów od {cfg.stale_source_days} dni.", err=True)
-    conn.close()
+    return total_new
 
 
 @app.command()
@@ -115,8 +121,7 @@ def extract(
     db_path: Optional[Path] = DbPath,
 ) -> None:
     """Wydobądź sygnały narracyjne z nieprzetworzonych artykułów (LLM)."""
-    from paralaksa.extract.llm_client import build_client
-    from paralaksa.extract.signals import estimate_pending, extract_pending
+    from paralaksa.extract.signals import estimate_pending
 
     settings, conn = _open_db(config_dir, db_path)
     themes = load_themes(config_dir)
@@ -131,9 +136,19 @@ def extract(
         conn.close()
         return
 
+    stats = _run_extract(conn, settings, themes, limit, use_batch=not no_batch)
+    conn.close()
+    if stats.failed and not stats.done:
+        raise typer.Exit(code=1)
+
+
+def _run_extract(conn, settings, themes, limit, use_batch: bool):
+    from paralaksa.extract.llm_client import build_client
+    from paralaksa.extract.signals import extract_pending
+
     cfg = settings.extract
     llm = build_client(settings.models.extract, settings.pricing, cfg.batch_poll_interval_s, cfg.batch_timeout_h)
-    stats = extract_pending(conn, llm, settings, themes, limit, use_batch=not no_batch)
+    stats = extract_pending(conn, llm, settings, themes, limit, use_batch=use_batch)
 
     typer.echo(f"Tryb: {stats.mode}" + (f" (batch {stats.batch_id})" if stats.batch_id else ""))
     typer.echo(
@@ -142,12 +157,94 @@ def extract(
     )
     typer.echo(f"Naprawione evidence_span: {stats.repairs} | odrzucone sygnały: {stats.dropped}")
     total = db.spent_on(conn, db.utc_now().date().isoformat())
-    typer.echo(f"Koszt przebiegu: ${stats.cost_usd:.4f} | wydano dziś: ${total:.4f} z limitu ${budget:.2f}")
+    typer.echo(f"Koszt przebiegu: ${stats.cost_usd:.4f} | wydano dziś: ${total:.4f} "
+               f"z limitu ${settings.budget.max_daily_usd:.2f}")
     if stats.budget_stopped:
         typer.echo("OSTRZEŻENIE: osiągnięto dzienny limit kosztów – część artykułów czeka na kolejny przebieg.", err=True)
+    return stats
+
+
+def _parse_day(value: Optional[str]) -> str:
+    if value is None:
+        return db.utc_now().date().isoformat()
+    try:
+        return date.fromisoformat(value).isoformat()
+    except ValueError:
+        typer.echo(f"Niepoprawna data '{value}' (oczekiwano RRRR-MM-DD).", err=True)
+        raise typer.Exit(code=2)
+
+
+DayOpt = typer.Option(None, "--date", "-d", help="Dzień RRRR-MM-DD (UTC, wg daty pobrania artykułów); domyślnie dziś.")
+OutDir = typer.Option(None, "--out-dir", help="Katalog raportów (domyślnie z settings.yaml: reports/).")
+
+
+@app.command()
+def aggregate(day: Optional[str] = DayOpt, config_dir: Path = ConfigDir, db_path: Optional[Path] = DbPath) -> None:
+    """Policz metryki dzienne (udziały tematów per kraj) i zapisz w daily_metrics."""
+    from paralaksa.aggregate.metrics import compute_daily_metrics
+
+    settings, conn = _open_db(config_dir, db_path)
+    d = _parse_day(day)
+    rows = compute_daily_metrics(conn, d)
+    typer.echo(f"{d}: zapisano {len(rows)} wierszy daily_metrics "
+               f"({len({r['theme_id'] for r in rows})} tematów, {len({r['country'] for r in rows})} krajów)")
     conn.close()
-    if stats.failed and not stats.done:
-        raise typer.Exit(code=1)
+
+
+def _run_report(conn, settings, config_dir: Path, d: str, out_dir: Optional[Path]):
+    from paralaksa.extract.llm_client import build_client
+    from paralaksa.report.pipeline import generate_report
+
+    cfg = settings.extract
+    llm = build_client(settings.models.synthesize, settings.pricing, cfg.batch_poll_interval_s, cfg.batch_timeout_h)
+    result = generate_report(conn, llm, settings, load_sources(config_dir), load_themes(config_dir), d,
+                             out_dir or settings.report.resolved_output_dir())
+    s = result.synth
+    typer.echo(f"Raport: {result.path}")
+    typer.echo(f"Synteza: {s.model} | wywołania: {s.calls} | ponowienie: {'tak' if s.retried else 'nie'} | "
+               f"tokeny: {s.input_tokens:,} wej. / {s.output_tokens:,} wyj. | koszt ${s.cost_usd:.4f}")
+    typer.echo(f"Koszt API dnia: ${result.day_cost_usd:.4f} z limitu ${settings.budget.max_daily_usd:.2f}")
+    for w in s.warnings:
+        typer.echo(f"OSTRZEŻENIE: {w}", err=True)
+    return result
+
+
+@app.command()
+def report(
+    day: Optional[str] = DayOpt,
+    out_dir: Optional[Path] = OutDir,
+    config_dir: Path = ConfigDir,
+    db_path: Optional[Path] = DbPath,
+) -> None:
+    """Zbuduj raport dzienny: metryki, pakiet danych, synteza LLM, walidacja, Markdown."""
+    settings, conn = _open_db(config_dir, db_path)
+    _run_report(conn, settings, config_dir, _parse_day(day), out_dir)
+    conn.close()
+
+
+@app.command("run-daily")
+def run_daily(
+    no_fulltext: bool = typer.Option(False, "--no-fulltext", help="Nie pobieraj pełnych tekstów."),
+    skip_ingest: bool = typer.Option(False, "--skip-ingest", help="Bez pobierania (tylko ekstrakcja i raport)."),
+    limit: Optional[int] = typer.Option(None, "--limit", "-n", help="Maks. liczba artykułów do ekstrakcji."),
+    out_dir: Optional[Path] = OutDir,
+    config_dir: Path = ConfigDir,
+    db_path: Optional[Path] = DbPath,
+) -> None:
+    """Pełny przebieg dzienny: ingest → extract → aggregate → report."""
+    settings, conn = _open_db(config_dir, db_path)
+    all_sources = load_sources(config_dir)
+    db.upsert_sources(conn, all_sources)
+    themes = load_themes(config_dir)
+    d = db.utc_now().date().isoformat()
+    if not skip_ingest:
+        typer.echo("== ingest")
+        _run_ingest(conn, settings, [s for s in all_sources if s.active], fulltext=not no_fulltext)
+    typer.echo("== extract")
+    _run_extract(conn, settings, themes, limit, use_batch=True)
+    typer.echo("== aggregate + report")
+    _run_report(conn, settings, config_dir, d, out_dir)
+    conn.close()
 
 
 if __name__ == "__main__":

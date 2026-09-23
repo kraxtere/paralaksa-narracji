@@ -27,6 +27,11 @@ class Thresholds(BaseModel):
     min_history_days_for_trends: int = 14
     absent_in_pl_ratio: float = 0.25
     emergent_similarity: float = 0.8
+    # KM3: progi pomocnicze agregacji (SPEC §9.3 nie podaje liczb).
+    absent_in_pl_min_share: float = 0.10     # "wysoki udział" tematu w kraju dla sekcji "Nieobecne w Polsce"
+    direction_min_nonneutral: float = 0.3    # min. udział sygnałów nie-neutralnych, żeby kraj miał kierunek
+    spillover_days: int = 7                  # okno "rozlewania się"
+    min_signals_self_image: int = 3          # min. sygnałów po każdej stronie porównania autoobrazu
 
 
 class IngestSettings(BaseModel):
@@ -51,6 +56,20 @@ class ExtractSettings(BaseModel):
     batch_poll_interval_s: float = 30.0
     batch_timeout_h: float = 24.0
     est_output_tokens: int = 800
+
+
+class ReportSettings(BaseModel):
+    output_dir: Path = Path("reports")
+    representative_signals_per_item: int = Field(4, ge=1, le=5)
+    # Synteza to jedno wywołanie dziennie na dużym payloadzie; przy myśleniu tokeny rozumowania
+    # liczą się do max_tokens, stąd zapas. Wartości thinking/effort jak w ExtractSettings.
+    max_tokens: int = 16000
+    thinking: Literal["disabled", "adaptive", "enabled"] = "disabled"
+    effort: Literal["low", "medium", "high", "max"] | None = None
+    est_output_tokens: int = 6000
+
+    def resolved_output_dir(self, root: Path | None = None) -> Path:
+        return self.output_dir if self.output_dir.is_absolute() else (root or PROJECT_ROOT) / self.output_dir
 
 
 class ModelPrice(BaseModel):
@@ -130,6 +149,7 @@ class Settings(BaseModel):
     thresholds: Thresholds = Thresholds()
     ingest: IngestSettings = IngestSettings()
     extract: ExtractSettings = ExtractSettings()
+    report: ReportSettings = ReportSettings()
     pricing: Pricing = Pricing()
     budget: Budget = Budget()
 

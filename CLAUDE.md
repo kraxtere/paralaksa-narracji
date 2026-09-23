@@ -27,7 +27,10 @@ Pełna specyfikacja: `SPEC.md`. Jest źródłem prawdy, ale nazewnictwo w repo r
   (`LLMClient` – Anthropic, `DeepSeekClient` – OpenAI-compatible), Message Batches API (Anthropic,
   próg 50 artykułów), walidacja pydantic sygnałów, kontrola kosztów dziennych. Model produkcyjny:
   **DeepSeek V4-Pro**, decyzja i metodologia niżej.
-- [ ] KM3: agregacja, synteza, walidator, render Markdown, `plx run-daily`, GitHub Actions.
+- [x] **KM3: agregacja i raport.** Metryki dzienne, pakiet danych SPEC §9.3 (zbieżność kierunku przez
+  zgrubny kierunek stance zamiast embeddingów; dodatkowo „rozbieżne przekazy”), synteza LLM z walidatorem
+  i jednym ponowieniem, render Markdown do `reports/`, `plx aggregate | report | run-daily`, workflow Actions.
+  Model syntezy: **Sonnet 5 bez myślenia**, decyzja niżej. Bez „Ciekawostek” (KM4).
 - [ ] KM4: pełna lista źródeł, GDELT, Global Times przez sitemap, tematy wyłaniające się, ciekawostki, raport tygodniowy.
 
 Po każdym KM: commit, wpis w `CHANGELOG.md`, aktualizacja README i tego pliku.
@@ -40,6 +43,9 @@ py -3.12 -m venv .venv; .venv\Scripts\python -m pip install -e ".[dev]"   # uv n
 .venv\Scripts\plx sources
 .venv\Scripts\plx ingest [--no-fulltext] [-s ID ...] [--db PATH]
 .venv\Scripts\plx extract [--dry-run] [--limit N] [--no-batch] [--db PATH]   # wymaga DEEPSEEK_API_KEY w .env
+.venv\Scripts\plx aggregate [--date D] [--db PATH]
+.venv\Scripts\plx report [--date D] [--out-dir DIR] [--db PATH]
+.venv\Scripts\plx run-daily [--skip-ingest] [--no-fulltext] [--limit N] [--out-dir DIR]
 ```
 Pełny ingest z pełnymi tekstami trwa ok. 2–2,5 min (~310 artykułów przy pierwszym uruchomieniu).
 Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20 min na ~310 artykułów.
@@ -61,6 +67,17 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
   evidence_span, sprawdzenie dosłowności cytatu w tekście źródłowym).
 - `src/paralaksa/extract/signals.py`: `extract_pending`/`estimate_pending` – pętla ekstrakcji per artykuł,
   budżet dzienny, ponowienie przy błędzie walidacji, wybór trybu batch/direct.
+- `src/paralaksa/aggregate/metrics.py`: `compute_daily_metrics` (udział = artykuły kraju z tematem / wszystkie
+  artykuły kraju danego dnia), `day_signals`. **Dzień artykułu = dzień pobrania** (`fetched_at`, UTC).
+- `src/paralaksa/aggregate/stats.py`: `z_score`, `js_divergence` (log2), `coarse_direction` (stance → kierunek).
+- `src/paralaksa/aggregate/package.py`: `build_data_package` – pakiet SPEC §9.3 (+ „rozbieżności” między
+  krajami); historia/linia bazowa z `daily_metrics`. Payload bez URL-i (model cytuje `article_id`).
+- `src/paralaksa/report/schema.py`: `ReportOutput` (pydantic), `parse_report`, `SCHEMA_EXAMPLE` dla promptu.
+- `src/paralaksa/report/validate.py`: `validate_report` (odnośniki, progi, trend bez linii bazowej, cytaty
+  > 15 słów), `sanitize_report` (ostatnia deska po nieudanym ponowieniu: usuwa twierdzenia bez odnośników).
+- `src/paralaksa/report/synthesize.py`: `run_synthesis` – jedno wywołanie, jedno ponowienie z listą błędów,
+  budżet dzienny; `report/render.py`: `collect_meta`, `render_markdown`; `report/pipeline.py`: `generate_report`.
+- `.github/workflows/daily.yml`: cron 05:00 UTC, baza w cache Actions (+ artefakt), commit `reports/`.
 
 ## Konwencje
 - Identyfikatory i docstringi po angielsku; komunikaty CLI, komentarze w YAML i raporty po polsku.
@@ -108,7 +125,45 @@ pod kątem testu neutralności wobec dostawcy z siedzibą w Chinach):
   automatycznie planowane pod tańsze okna.
 - Narzędzie do przyszłych porównań: `data/compare_models.py` (poza gitem, jednorazowe/ad-hoc użycie).
 
+## Decyzje modelowe (synteza raportu, KM3)
+
+**Sonnet 5 bez myślenia** (zgodnie z domyślnym SPEC §9.4, ale po teście). Porównanie 2026-09-23 na pełnym
+pakiecie dnia (807 sygnałów, ~34–52 tys. tokenów wejścia zależnie od tokenizera), 6 wariantów, po jednym
+przebiegu każdy (wyniki: `data/compare_synth/<wariant>/2026-09-23.md` + `summary.json`, skrypt
+`data/compare_synthesis.py`, oba poza gitem):
+
+| wariant | walidacja 1. odpowiedzi | koszt | czas |
+|---|---|---|---|
+| Sonnet 5, myślenie wył. | 2 błędy (puste article_ids), po ponowieniu OK | $0,29 (2 wywołania) | 85 s |
+| Sonnet 5, adaptive | uszkodzony JSON; po ponowieniu 1 błąd → sanityzacja | $0,43 (2 wywołania) | 223 s |
+| DeepSeek V4-Pro, wył. | OK | $0,028 | 54 s |
+| DeepSeek V4-Pro, low | OK | $0,039 | 156 s |
+| DeepSeek V4-Pro, high | OK | $0,050 | 244 s |
+| DeepSeek V4-Pro, max | ucięte przy 16 000 tokenów (całość na rozumowanie) | $0,055 | 349 s |
+
+- **Jakość (przegląd ręczny) zadecydowała na korzyść Sonnet.** Kluczowa różnica to kalibracja pewności
+  i trzymanie się progów (SPEC §3): Sonnet dawał „niski” tam, gdzie kraj ma 1 źródło albo porównanie
+  obejmuje 2 kraje, i to uzasadniał. DeepSeek bez myślenia dawał „wysoki” na takich samych danych,
+  nazwał temat „nowym” bez linii bazowej i miał usterki językowe („autoresponder” zamiast „autoobraz”);
+  z myśleniem (low/high) kalibracja wyraźnie lepsza, ale nadal „średni” przy krajach z jednym źródłem.
+  Sonnet (oba warianty) uwzględnił autoobraz Chin (najwyższe JS dnia), DeepSeek bez myślenia go pominął.
+- **Myślenie**: u Sonnet adaptive dało nieco bogatszy raport (więcej rozbieżności, Bliski Wschód), ale +48%
+  kosztu, 2,6× dłużej i gorszą niezawodność JSON – nie warto. U DeepSeek myślenie poprawia jakość, a `max`
+  nie mieści się w 16 000 tokenów (jak w KM2: rozumowanie zjada limit).
+- **Tania alternatywa**: DeepSeek V4-Pro z `thinking: enabled`, `effort: high` (~$0,05/dzień zamiast ~$0,14–0,29)
+  – zmiana dwóch linii w `settings.yaml` (`models.synthesize`, `report.thinking/effort`).
+- **Poprawki promptu po teście** (problemy wspólne dla modeli): niepusta lista article_ids w „w_skrocie”,
+  zakaz powtarzania ograniczeń danych w „w_skrocie”, „wysoki” tylko przy spełnionych progach. Przebieg
+  produkcyjny po poprawce: Sonnet bez ponowienia, $0,14, żadnego „wysoki” poniżej progów.
+
 ## Znane ograniczenia
+- **Zbieżność kierunku prawie zawsze pusta przy obecnej ekstrakcji.** ~83% sygnałów ma stance `neutralny`
+  (673/807), więc zgrubny kierunek z rozkładu stance rzadko wychodzi poza „neutralny” (2026-09-23: 0 kandydatów,
+  2 słabe). Do tego źródła jednokrajowe (QA, CN) nigdy nie spełnią progu 2 źródeł. Właściwe grupowanie ram
+  przez embeddingi (KM4) albo kalibracja stance w promptcie ekstrakcji to kolejny krok; nie obniżać progów SPEC.
+- **Dzień raportu = dzień pobrania** (`fetched_at`). Pierwszy przebieg (2026-09-23) zawiera zaległość z RSS
+  (artykuły opublikowane 09-08…09-23). Od kolejnych dni pobranie ≈ publikacja z ostatniej doby.
+- **Cache Actions** znika po 7 dniach bez uruchomienia – baza zaczyna wtedy od zera (artefakt 30 dni jako kopia).
 - **rp i spiegel bez pełnego tekstu** (paywall, nie obchodzimy). W KM2 ekstrakcja dla nich działa
   tylko na tytule i leadzie (lead rp ok. 200 znaków, Spiegel ok. 225). Sygnały będą płytsze: mniej sygnałów na artykuł,
   niższa `intensity`, uboższe ramy. To oznacza, że PL (rp) i DE (spiegel) są asymetryczne względem źródeł z pełnym

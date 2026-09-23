@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.3.0] – 2026-09-23 – Kamień milowy 3: agregacja i raport dzienny
+
+- Metryki dzienne (`aggregate/metrics.py`): udział tematu w publikacjach kraju (normalizacja do wolumenu),
+  liczba artykułów i źródeł, rama dominująca, średnia intensywność → `daily_metrics`. Dzień = dzień pobrania.
+- Pakiet danych SPEC §9.3 (`aggregate/package.py`): udziały + średnia 28 dni + z-score (od 14 dni historii),
+  top 3 ramy per temat × kraj, autoobraz vs obraz zewnętrzny (odległość Jensena–Shannona), kandydaci na
+  zbieżność kierunku (zgrubny kierunek stance zamiast embeddingów – KM4) ze słabymi sygnałami i sygnałami
+  przeciwnymi, rozlewanie się, nieobecne w Polsce, dodatkowo rozbieżne przekazy między krajami.
+- Synteza (`report/synthesize.py`, `prompts/synthesize_report.md`): jedno wywołanie LLM na dzień, walidator
+  (`report/validate.py`: odnośniki do istniejących artykułów, sygnały przeciwne, pewność, progi, trend bez
+  linii bazowej, cytaty > 15 słów), jedno ponowienie z listą błędów, potem sanityzacja i ostrzeżenia w raporcie.
+  Kontrola dziennego budżetu obejmuje syntezę.
+- Render Markdown (SPEC §10, bez „Ciekawostek”) z metadanymi: źródła/artykuły/sygnały per kraj, udział
+  materiału „tylko lead”, flaga materiału niepełnego, koszt API dnia, wersje modeli i promptów.
+- Komendy `plx aggregate`, `plx report`, `plx run-daily` (ingest → extract → aggregate → report);
+  migracja bazy v3 (`reports.warnings`).
+- GitHub Actions (`.github/workflows/daily.yml`): codziennie 05:00 UTC, baza w cache (+ artefakt), commit raportu.
+- **Decyzja modelowa** (CLAUDE.md): synteza na Sonnet 5 bez myślenia po porównaniu 6 wariantów
+  (Sonnet 5 i DeepSeek V4-Pro, z myśleniem i bez) na pełnym dniu danych.
+- Pierwszy raport: `reports/2026-09-23.md` (807 sygnałów, synteza $0,14).
+- 180 testów (offline).
+
 ## [0.2.0] – 2026-09-23 – Kamień milowy 2: ekstrakcja sygnałów
 
 - Ekstrakcja sygnałów narracyjnych z LLM: prompt `prompts/extract_signals.md`, schemat pydantic

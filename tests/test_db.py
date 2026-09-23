@@ -19,10 +19,10 @@ def test_schema_tables(conn):
 def test_init_db_idempotent(conn):
     db.init_db(conn)
     assert conn.execute("SELECT COUNT(*) FROM schema_version").fetchone()[0] == 1
-    assert conn.execute("SELECT version FROM schema_version").fetchone()[0] == 2
+    assert conn.execute("SELECT version FROM schema_version").fetchone()[0] == db.SCHEMA_VERSION
 
 
-def test_migration_v1_to_v2_keeps_data(tmp_path, make_source):
+def test_migration_v1_to_current_keeps_data(tmp_path, make_source):
     path = tmp_path / "v1.db"
     old = db.connect(path)
     old.executescript(db.SCHEMA)  # baza z KM1
@@ -34,10 +34,11 @@ def test_migration_v1_to_v2_keeps_data(tmp_path, make_source):
 
     conn = db.connect(path)
     db.init_db(conn)
-    assert conn.execute("SELECT version FROM schema_version").fetchone()[0] == 2
+    assert conn.execute("SELECT version FROM schema_version").fetchone()[0] == db.SCHEMA_VERSION
     assert conn.execute("SELECT title, extracted, extract_error FROM articles").fetchone()[:] == ("T", 0, None)
     signal_cols = {r["name"] for r in conn.execute("PRAGMA table_info(signals)")}
     assert {"source_depth", "prompt_version"} <= signal_cols
+    assert "warnings" in {r["name"] for r in conn.execute("PRAGMA table_info(reports)")}
     conn.execute("INSERT INTO signals (article_id, source_depth) VALUES (1, 'lead_only')")
     import sqlite3
     import pytest

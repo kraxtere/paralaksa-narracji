@@ -5,6 +5,7 @@ models:
   # Ekstrakcja na DeepSeek V4-Pro zamiast Sonnet 5/Haiku ze SPEC: porównanie 2026-09-23 na 26 artykułach,
   # ~7,7x taniej przy tej samej liczbie sygnałów (decyzja i metodologia w CLAUDE.md). Wymaga DEEPSEEK_API_KEY.
   extract: deepseek-v4-pro
+  # Synteza: Sonnet 5 bez myślenia – porównanie 2026-09-23 z DeepSeek V4-Pro (z/bez myślenia), CLAUDE.md.
   synthesize: claude-sonnet-5
   curiosities: claude-haiku-4-5-20251001
 
@@ -15,6 +16,10 @@ thresholds:
   min_history_days_for_trends: 14
   absent_in_pl_ratio: 0.25
   emergent_similarity: 0.8
+  absent_in_pl_min_share: 0.10     # "wysoki udział" tematu w kraju (sekcja "Nieobecne w Polsce")
+  direction_min_nonneutral: 0.3    # min. udział sygnałów nie-neutralnych, żeby kraj miał kierunek w temacie
+  spillover_days: 7                # okno "rozlewania się"
+  min_signals_self_image: 3        # min. sygnałów po każdej stronie porównania autoobrazu
 
 ingest:
   per_domain_delay_s: 2
@@ -34,6 +39,14 @@ extract:
   batch_poll_interval_s: 30
   batch_timeout_h: 24
   est_output_tokens: 800    # szacunek wyjścia do kontroli budżetu (zmierzone: ~650 na wywołanie)
+
+report:
+  output_dir: reports
+  representative_signals_per_item: 4
+  max_tokens: 16000         # zapas na tokeny myślenia; DeepSeek "max" przekracza nawet to (CLAUDE.md)
+  thinking: disabled        # wynik porównania 2026-09-23: myślenie u Sonnet 5 nie poprawiło jakości wyraźnie
+  effort: null
+  est_output_tokens: 6000   # szacunek do kontroli budżetu (zmierzone: ~3–4 tys. na wywołanie)
 
 # Cennik USD za 1M tokenów (stan 2026-09); Batches API: batch_discount.
 pricing:

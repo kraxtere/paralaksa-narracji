@@ -119,6 +119,65 @@ def test_extract_uses_deepseek_client_for_deepseek_model(config_dir, tmp_path, m
     assert "przetworzone: 4 | sygnały: 4" in result.output
 
 
+def _fake_llm_everywhere(monkeypatch):
+    """One fake for extraction (prompt with 'Tytuł:') and synthesis (anything else)."""
+    from fake_llm import FakeAnthropic, message, valid_json_for
+    from paralaksa.extract import llm_client
+
+    def responder(params):
+        if "Tytuł:" in params["messages"][0]["content"]:
+            return message(valid_json_for(params))
+        return message('{"w_skrocie": [], "wzorce_zbieznosci": []}', 20_000, 500)
+
+    fake = FakeAnthropic(responder)
+    real_init = llm_client.LLMClient.__init__
+    monkeypatch.setattr(llm_client.LLMClient, "__init__",
+                        lambda self, pricing, **kw: real_init(self, pricing, client=fake))
+    return fake
+
+
+def test_aggregate_and_report(config_dir, tmp_path, mock_network, monkeypatch):
+    fake = _fake_llm_everywhere(monkeypatch)
+    runner.invoke(cli.app, ["init-db", "--config-dir", str(config_dir)])
+    runner.invoke(cli.app, ["ingest", "--config-dir", str(config_dir)])
+    runner.invoke(cli.app, ["extract", "--config-dir", str(config_dir)])
+    today = db.utc_now().date().isoformat()
+
+    result = runner.invoke(cli.app, ["aggregate", "--config-dir", str(config_dir)])
+    assert result.exit_code == 0, result.output
+    assert f"{today}: zapisano 1 wierszy daily_metrics (1 tematów, 1 krajów)" in result.output
+
+    out = tmp_path / "reports"
+    result = runner.invoke(cli.app, ["report", "--config-dir", str(config_dir), "--out-dir", str(out)])
+    assert result.exit_code == 0, result.output
+    assert (out / f"{today}.md").exists() and "Synteza: claude-sonnet-5 | wywołania: 1" in result.output
+    synth_calls = [c for c in fake.messages.calls if "Tytuł:" not in c["messages"][0]["content"]]
+    assert len(synth_calls) == 1
+    conn = db.connect(tmp_path / "test.db")
+    assert conn.execute("SELECT COUNT(*) FROM reports").fetchone()[0] == 1
+
+
+def test_report_bad_date(config_dir):
+    result = runner.invoke(cli.app, ["report", "--config-dir", str(config_dir), "--date", "23.09.2026"])
+    assert result.exit_code == 2 and "Niepoprawna data" in result.output
+
+
+def test_run_daily(config_dir, tmp_path, mock_network, monkeypatch):
+    _fake_llm_everywhere(monkeypatch)
+    out = tmp_path / "reports"
+    result = runner.invoke(cli.app, ["run-daily", "--config-dir", str(config_dir), "--out-dir", str(out)])
+    assert result.exit_code == 0, result.output
+    for step in ("== ingest", "Razem nowych artykułów: 4", "== extract", "sygnały: 4", "== aggregate + report"):
+        assert step in result.output, step
+    report_md = (out / f"{db.utc_now().date().isoformat()}.md").read_text(encoding="utf-8")
+    assert "## Metadane" in report_md and "| UK | test | 4 | 4 |" in report_md
+
+    result = runner.invoke(cli.app, ["run-daily", "--skip-ingest", "--config-dir", str(config_dir),
+                                     "--out-dir", str(out)])
+    assert result.exit_code == 0, result.output
+    assert "== ingest" not in result.output and "Artykuły: 0" in result.output
+
+
 def test_ingest_unknown_source(config_dir):
     result = runner.invoke(cli.app, ["ingest", "--config-dir", str(config_dir), "--source", "nope"])
     assert result.exit_code == 2

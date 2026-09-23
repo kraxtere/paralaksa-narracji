@@ -4,9 +4,11 @@ Codzienna analiza przekazu medialnego z wielu krajów. System zbiera publikacje 
 PL, UA, DE, UK i spoza bloku i porównuje **linie przekazu w tematach**: zbieżność kierunku,
 autoobraz vs obraz zewnętrzny, dryf w czasie. Pełna specyfikacja: [SPEC.md](SPEC.md).
 
-> Stan: **kamień milowy 2**. KM1: szkielet, konfiguracja, baza SQLite, ingest RSS dla 10 źródeł.
+> Stan: **kamień milowy 3**. KM1: szkielet, konfiguracja, baza SQLite, ingest RSS dla 10 źródeł.
 > KM2: ekstrakcja sygnałów narracyjnych (LLM, model produkcyjny: DeepSeek V4-Pro – patrz CLAUDE.md).
-> Agregacja, synteza i raport dzienny to kolejne etapy (SPEC §15).
+> KM3: agregacja (metryki dzienne, pakiet danych), synteza LLM z walidatorem, raport Markdown
+> w `reports/`, `plx run-daily` i harmonogram GitHub Actions. Ciekawostki, GDELT i tematy
+> wyłaniające się to KM4 (SPEC §15).
 
 ## Instalacja
 
@@ -32,7 +34,15 @@ plx ingest -s bbc -s guardian
 plx -v ingest                # z logami
 plx extract --dry-run        # szacunek kosztu, bez wywołań API
 plx extract                  # ekstrakcja sygnałów narracyjnych (LLM) z nieprzetworzonych artykułów
+plx aggregate [--date D]     # metryki dzienne (udziały tematów per kraj) -> daily_metrics
+plx report [--date D]        # pakiet danych + synteza LLM + walidacja -> reports/D.md
+plx run-daily                # ingest -> extract -> aggregate -> report (jedną komendą)
+plx run-daily --skip-ingest  # bez pobierania, np. po ręcznym ingest
 ```
+
+Dzień raportu to dzień **pobrania** artykułów (UTC). Raport opisuje przekaz medialny, nie fakty:
+każde twierdzenie ma odnośniki do artykułów, każdy wzorzec – sygnały przeciwne i poziom pewności.
+Przez pierwsze 14 dni działania nie ma linii bazowej i raport nie formułuje trendów.
 
 `plx ingest` wypisuje dla każdego źródła, ile wpisów pobrano, ile jest nowych, ile odrzucił
 filtr (sport, rozrywka, pogoda, horoskopy), ile było duplikatów i ile pełnych tekstów pobrano.
@@ -61,4 +71,13 @@ Testy działają offline: kanały i strony są podstawiane przez `httpx.MockTran
 
 ## Harmonogram
 
-GitHub Actions i lokalny cron zostaną opisane w KM3 (`plx run-daily`).
+**GitHub Actions** (`.github/workflows/daily.yml`): codziennie o 05:00 UTC (i ręcznie przez
+„Run workflow”) uruchamia `plx run-daily` i commituje raport do `reports/`. Baza SQLite nie trafia
+do gita – przechodzi między uruchomieniami przez cache Actions (z kopią zapasową jako artefakt,
+30 dni). Cache znika po 7 dniach bez uruchomienia; wtedy baza startuje od zera (bez linii bazowej).
+
+Wymagane sekrety repozytorium (Settings → Secrets and variables → Actions):
+`DEEPSEEK_API_KEY` (ekstrakcja) i `ANTHROPIC_API_KEY` (gdy w `settings.yaml` jest model Claude).
+
+**Lokalnie** (alternatywa): Harmonogram zadań Windows albo cron, np.
+`0 5 * * * cd /ścieżka/paralaksa-narracji && .venv/bin/plx run-daily >> data/run-daily.log 2>&1`.
