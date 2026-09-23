@@ -173,6 +173,27 @@ def test_robots_network_failure_does_not_authorize_feed():
         with pytest.raises(RobotsDisallowed): client.get('https://example.test/rss')
 
 
+def test_robots_transient_failure_is_retried():
+    calls = []
+    def handler(request):
+        calls.append(str(request.url))
+        if request.url.path == '/robots.txt' and calls.count(str(request.url)) == 1:
+            raise httpx.ReadTimeout('blip')
+        if request.url.path == '/robots.txt':
+            return httpx.Response(200, text='User-agent: *\nAllow: /\n')
+        return httpx.Response(200, text='ok')
+    with PoliteClient('test',0,transport=httpx.MockTransport(handler)) as client:
+        assert client.get('https://example.test/rss').status_code == 200
+    assert calls.count('https://example.test/robots.txt') == 2
+
+
+def test_robots_server_error_after_retries_blocks():
+    def handler(request):
+        return httpx.Response(503) if request.url.path == '/robots.txt' else httpx.Response(200)
+    with PoliteClient('test',0,transport=httpx.MockTransport(handler)) as client:
+        with pytest.raises(RobotsDisallowed): client.get('https://example.test/rss')
+
+
 def test_missing_or_corrupt_state_is_not_initialized(tmp_path):
     import importlib.util
     spec=importlib.util.spec_from_file_location('db_state',Path(__file__).parents[1]/'scripts/db_state.py')

@@ -13,6 +13,9 @@ import httpx
 log = logging.getLogger(__name__)
 
 
+ROBOTS_ATTEMPTS = 2
+
+
 class RobotsDisallowed(Exception):
     """URL is disallowed by the site's robots.txt."""
 
@@ -61,22 +64,27 @@ class PoliteClient:
         parts = urlsplit(url)
         origin = f"{parts.scheme}://{parts.netloc}"
         if origin not in self._robots:
-            parser: RobotFileParser | None = RobotFileParser()
-            try:
-                self._wait_for_domain(parts.netloc)
-                resp = self._client.get(f"{origin}/robots.txt")
+            parser = RobotFileParser()
+            parser.disallow_all = True  # nie pobieraj przy nieznanych regułach
+            # Przejściowy błąd sieci/serwera nie powinien wyłączać redakcji na cały przebieg.
+            for attempt in range(ROBOTS_ATTEMPTS):
+                try:
+                    self._wait_for_domain(parts.netloc)
+                    resp = self._client.get(f"{origin}/robots.txt")
+                except httpx.HTTPError as e:
+                    log.warning("Nie udało się pobrać robots.txt z %s (próba %d): %s", origin, attempt + 1, e)
+                    continue
+                if resp.status_code >= 500 or resp.status_code == 429:
+                    log.warning("robots.txt z %s: HTTP %s (próba %d)", origin, resp.status_code, attempt + 1)
+                    continue
+                parser = RobotFileParser()
                 if resp.status_code in (401, 403):
                     parser.disallow_all = True
-                elif resp.status_code in (404, 410):
+                elif resp.status_code >= 400:  # 404/410 i inne 4xx: brak reguł
                     parser.allow_all = True
-                elif resp.status_code >= 400:
-                    parser.disallow_all = True
                 else:
                     parser.parse(resp.text.splitlines())
-            except httpx.HTTPError as e:
-                log.warning("Nie udało się pobrać robots.txt z %s: %s", origin, e)
-                parser = RobotFileParser()
-                parser.disallow_all = True  # nie pobieraj przy nieznanych regułach
+                break
             self._robots[origin] = parser
         return self._robots[origin]
 

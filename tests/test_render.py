@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, timezone
 
 import pytest
@@ -94,6 +95,9 @@ def test_generate_report_end_to_end(conn, settings, seeded, tmp_path):
     row = conn.execute("SELECT path, cost_usd, warnings FROM reports WHERE date = ?", (DAY,)).fetchone()
     assert row["path"] == str(result.path) and row["cost_usd"] == pytest.approx(result.synth.cost_usd)
     assert "qa1" in row["warnings"]  # aktywne, ale bez materiału
+    # Jedno brakujące źródło to ostrzeżenie informacyjne, nie nieudany przebieg.
+    status = json.loads((tmp_path / "reports" / "2026-09-23.status.json").read_text(encoding="utf-8"))
+    assert result.complete and status["complete"] and status["blocking"] == []
     assert conn.execute("SELECT COUNT(*) FROM daily_metrics WHERE date = ?", (DAY,)).fetchone()[0] == 4
 
 

@@ -18,6 +18,10 @@ from paralaksa.report.schema import ReportOutput
 from paralaksa.report.synthesize import SynthStats, load_prompt, run_synthesis
 
 
+# Brak więcej niż 1/3 aktywnych źródeł blokuje przebieg; mniej to ostrzeżenie informacyjne.
+MAX_MISSING_SOURCES_DIVISOR = 3
+
+
 @dataclass
 class ReportResult:
     path: Path
@@ -45,14 +49,22 @@ def generate_report(
 
     if not any(report.model_dump().values()):
         stats.warnings.append("synteza nie dostarczyła żadnych tez; raport jest niepełny")
-    observed = {r['source_id'] for r in package['mianowniki_zrodel']}
-    missing_sources = [s.id for s in sources if s.active and s.id not in observed]
-    if missing_sources:
-        stats.warnings.append('brak materiałów z aktywnych źródeł: ' + ', '.join(missing_sources))
     failures = [f"{r['source_id']}: {r['pending']} oczekujących, {r['failed']} błędów" for r in package['mianowniki_zrodel']
                 if r['pending'] or r['failed']]
     if failures:
         stats.warnings.append('niepełna ekstrakcja: ' + '; '.join(failures))
+    # Blokujące: synteza/walidacja/ekstrakcja. Informacyjne (pojedyncze źródło, kanał) nie
+    # oznaczają nieudanego przebiegu, ale są widoczne w raporcie i statusie.
+    # Sanityzacja po nieudanym ponowieniu usuwa tylko wadliwe tezy; reszta raportu jest zwalidowana.
+    blocking = [w for w in stats.warnings if not w.startswith('walidacja po ponowieniu')]
+    active = [s.id for s in sources if s.active]
+    observed = {r['source_id'] for r in package['mianowniki_zrodel']}
+    missing_sources = [s for s in active if s not in observed]
+    if missing_sources:
+        msg = 'brak materiałów z aktywnych źródeł: ' + ', '.join(missing_sources)
+        stats.warnings.append(msg)
+        if len(missing_sources) * MAX_MISSING_SOURCES_DIVISOR > len(active):
+            blocking.append(msg)
     feed_errors = conn.execute("SELECT DISTINCT source_id FROM fetch_log WHERE substr(fetched_at,1,10)=? AND status != 'ok'", (day,)).fetchall()
     if feed_errors:
         stats.warnings.append('błędy kanałów: ' + ', '.join(r[0] for r in feed_errors))
@@ -89,10 +101,10 @@ def generate_report(
         summary += ["Brak linii bazowej: nie formułujemy trendów."]
     summary += [f"Ostrzeżenie: {w}" for w in stats.warnings]
     (out_dir / f"{day}.short.md").write_text('\n'.join(summary)+'\n', encoding='utf-8')
-    complete = bool(stats.calls and any(output.values()) and not stats.warnings and not meta.pending_articles)
+    complete = bool(stats.calls and any(output.values()) and not blocking and not meta.pending_articles)
     status = {"date": day, "complete": complete, "synthesis_calls": stats.calls,
               "cost_usd": meta.total_cost, "elapsed_s": stats.elapsed_s,
-              "semantic_review": "pending", "warnings": stats.warnings,
+              "semantic_review": "pending", "warnings": stats.warnings, "blocking": blocking,
               "sources": package['mianowniki_zrodel']}
     (out_dir / f"{day}.status.json").write_text(json.dumps(status,ensure_ascii=False,indent=2), encoding='utf-8')
     return ReportResult(path, stats, meta.total_cost, n_signals, complete)

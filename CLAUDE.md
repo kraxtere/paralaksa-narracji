@@ -80,7 +80,7 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
 - `src/paralaksa/extract/signals.py`: `extract_pending`/`estimate_pending` – pętla ekstrakcji per artykuł,
   budżet dzienny, ponowienie przy błędzie walidacji, wybór trybu batch/direct.
 - `src/paralaksa/aggregate/metrics.py`: `compute_daily_metrics` (udział = artykuły kraju z tematem / wszystkie
-  artykuły kraju danego dnia), `day_signals`. **Dzień artykułu = dzień pobrania** (`fetched_at`, UTC).
+  artykuły kraju danego dnia), `day_signals`. Przebieg D wyznacza `fetched_at`; regularne porównania tylko dla `published_at` w oknie D-1..D UTC (szczegóły: `docs/CURRENT_HANDOFF.md`).
 - `src/paralaksa/aggregate/stats.py`: `z_score`, `js_divergence` (log2), `coarse_direction` (stance → kierunek).
 - `src/paralaksa/aggregate/package.py`: `build_data_package` – pakiet SPEC §9.3 (+ „rozbieżności” między
   krajami); historia/linia bazowa z `daily_metrics`. Payload bez URL-i (model cytuje `article_id`).
@@ -89,7 +89,7 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
   > 15 słów), `sanitize_report` (ostatnia deska po nieudanym ponowieniu: usuwa twierdzenia bez odnośników).
 - `src/paralaksa/report/synthesize.py`: `run_synthesis` – jedno wywołanie, jedno ponowienie z listą błędów,
   budżet dzienny; `report/render.py`: `collect_meta`, `render_markdown`; `report/pipeline.py`: `generate_report`.
-- `.github/workflows/daily.yml`: cron 05:00 UTC, baza w cache Actions (+ artefakt), commit `reports/`.
+- `.github/workflows/daily.yml`: cron 05:00 UTC, baza jako zaszyfrowany snapshot w Release `database-backup` (cache i artefakt to kopie), commit `reports/`. Kod 1 tylko przy ostrzeżeniach blokujących (synteza, ekstrakcja, brak >1/3 aktywnych źródeł); pojedynczy kanał/źródło to ostrzeżenie informacyjne.
 
 ## Konwencje
 - Identyfikatory i docstringi po angielsku; komunikaty CLI, komentarze w YAML i raporty po polsku.
@@ -173,9 +173,9 @@ przebiegu każdy (wyniki: `data/compare_synth/<wariant>/2026-09-23.md` + `summar
   (673/807), więc zgrubny kierunek z rozkładu stance rzadko wychodzi poza „neutralny” (2026-09-23: 0 kandydatów,
   2 słabe). Do tego źródła jednokrajowe (QA, CN) nigdy nie spełnią progu 2 źródeł. Właściwe grupowanie ram
   przez embeddingi (KM4) albo kalibracja stance w promptcie ekstrakcji to kolejny krok; nie obniżać progów SPEC.
-- **Dzień raportu = dzień pobrania** (`fetched_at`). Pierwszy przebieg (2026-09-23) zawiera zaległość z RSS
-  (artykuły opublikowane 09-08…09-23). Od kolejnych dni pobranie ≈ publikacja z ostatniej doby.
-- **Cache Actions** znika po 7 dniach bez uruchomienia – baza zaczyna wtedy od zera (artefakt 30 dni jako kopia).
+- **Pierwszy przebieg (2026-09-23) jest inicjalny**: zawiera zaległość z RSS (publikacje 09-08…09-23)
+  i nie wchodzi do linii bazowej. Kolejne dni porównują tylko okno publikacji D-1..D UTC.
+- **Baza w Actions** żyje w zaszyfrowanym Release (`docs/OPERATIONS.md`); brak backupu zatrzymuje przebieg, nigdy cichy restart.
 - **rp i spiegel bez pełnego tekstu** (paywall, nie obchodzimy). W KM2 ekstrakcja dla nich działa
   tylko na tytule i leadzie (lead rp ok. 200 znaków, Spiegel ok. 225). Sygnały będą płytsze: mniej sygnałów na artykuł,
   niższa `intensity`, uboższe ramy. To oznacza, że PL (rp) i DE (spiegel) są asymetryczne względem źródeł z pełnym

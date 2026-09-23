@@ -17,6 +17,18 @@ def validate(path):
             raise RuntimeError('Naruszona spójność kluczy obcych')
 
 
+def summary(path):
+    """Counts to compare against the last successful run after a restore."""
+    with sqlite3.connect(f'file:{path}?mode=ro', uri=True) as conn:
+        version = conn.execute('SELECT version FROM schema_version').fetchone()[0]
+        arts, first, last, pending = conn.execute(
+            'SELECT COUNT(*), MIN(fetched_at), MAX(fetched_at), COALESCE(SUM(extracted=0),0) FROM articles').fetchone()
+        signals = conn.execute('SELECT COUNT(*) FROM signals').fetchone()[0]
+        reports = [r[0] for r in conn.execute('SELECT date FROM reports ORDER BY date')]
+    return (f'schemat v{version}; artykuły {arts} (nieekstrahowane {pending}), pobrane {first} — {last}; '
+            f'sygnały {signals}; raporty {len(reports)}: {", ".join(reports[-5:])}')
+
+
 def snapshot(source, target):
     validate(source)
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -35,3 +47,4 @@ if __name__ == '__main__':
     else:
         validate(args.source)
     print('SQLite: integralność i schemat OK')
+    print(summary(args.snapshot or args.source))
