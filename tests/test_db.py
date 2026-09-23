@@ -19,6 +19,40 @@ def test_schema_tables(conn):
 def test_init_db_idempotent(conn):
     db.init_db(conn)
     assert conn.execute("SELECT COUNT(*) FROM schema_version").fetchone()[0] == 1
+    assert conn.execute("SELECT version FROM schema_version").fetchone()[0] == 2
+
+
+def test_migration_v1_to_v2_keeps_data(tmp_path, make_source):
+    path = tmp_path / "v1.db"
+    old = db.connect(path)
+    old.executescript(db.SCHEMA)  # baza z KM1
+    old.execute("INSERT INTO schema_version (version) VALUES (1)")
+    db.upsert_sources(old, [make_source()])
+    db.insert_article(old, _article())
+    old.commit()
+    old.close()
+
+    conn = db.connect(path)
+    db.init_db(conn)
+    assert conn.execute("SELECT version FROM schema_version").fetchone()[0] == 2
+    assert conn.execute("SELECT title, extracted, extract_error FROM articles").fetchone()[:] == ("T", 0, None)
+    signal_cols = {r["name"] for r in conn.execute("PRAGMA table_info(signals)")}
+    assert {"source_depth", "prompt_version"} <= signal_cols
+    conn.execute("INSERT INTO signals (article_id, source_depth) VALUES (1, 'lead_only')")
+    import sqlite3
+    import pytest
+    with pytest.raises(sqlite3.IntegrityError):
+        conn.execute("INSERT INTO signals (article_id, source_depth) VALUES (1, 'partial')")
+
+
+def test_record_usage_and_spent_on(conn):
+    now = datetime(2026, 9, 23, 23, 59, tzinfo=timezone.utc)
+    db.record_usage(conn, "m", "direct", "extract", 10, 5, 0.25, now=now)
+    db.record_usage(conn, "m", "batch", "extract", 10, 5, 0.5, now=now)
+    db.record_usage(conn, "m", "batch", "extract", 10, 5, 9.0, now=now + timedelta(minutes=2))
+    assert db.spent_on(conn, "2026-09-23") == 0.75
+    assert db.spent_on(conn, "2026-09-24") == 9.0
+    assert db.spent_on(conn, "2026-09-22") == 0
 
 
 def test_upsert_sources_updates(conn, make_source):

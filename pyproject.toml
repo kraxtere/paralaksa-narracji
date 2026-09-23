@@ -1,6 +1,6 @@
 [project]
 name = "paralaksa"
-version = "0.1.0"
+version = "0.2.0"
 description = "Paralaksa narracji – codzienna analiza przekazu medialnego z wielu krajów"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -12,6 +12,8 @@ dependencies = [
     "pyyaml>=6.0",
     "typer>=0.12",
     "python-dotenv>=1.0",
+    "anthropic>=1.8",
+    "openai>=1.0",
 ]
 
 [project.optional-dependencies]

@@ -10,7 +10,7 @@ from typing import Iterable
 
 from paralaksa.config import Source
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS schema_version (
@@ -79,6 +79,34 @@ CREATE INDEX IF NOT EXISTS idx_fetch_log_source ON fetch_log(source_id, fetched_
 """
 
 
+# Migracje: wersja -> instrukcje. SCHEMA powyżej to zawsze wersja 1.
+MIGRATIONS: dict[int, str] = {
+    2: """
+    -- KM2: głębokość materiału, wersja promptu, błędy ekstrakcji, koszty API.
+    ALTER TABLE signals ADD COLUMN source_depth TEXT
+      CHECK (source_depth IN ('lead_only', 'fulltext'));
+    ALTER TABLE signals ADD COLUMN prompt_version TEXT;
+    CREATE INDEX IF NOT EXISTS idx_signals_article ON signals(article_id);
+    -- articles.extracted: 0 = do przetworzenia, 1 = gotowy, 2 = trwały błąd
+    ALTER TABLE articles ADD COLUMN extract_error TEXT;
+    CREATE TABLE IF NOT EXISTS api_usage (
+      id INTEGER PRIMARY KEY,
+      date TEXT,                -- YYYY-MM-DD (UTC)
+      model TEXT,
+      mode TEXT,                -- direct | batch
+      purpose TEXT,             -- extract | synthesize | curiosities
+      input_tokens INTEGER,
+      output_tokens INTEGER,
+      cost_usd REAL,
+      article_id INTEGER REFERENCES articles(id),
+      batch_id TEXT,
+      created_at TEXT
+    );
+    CREATE INDEX IF NOT EXISTS idx_api_usage_date ON api_usage(date);
+    """,
+}
+
+
 def utc_now() -> datetime:
     return datetime.now(timezone.utc)
 
@@ -99,7 +127,11 @@ def connect(path: Path | str) -> sqlite3.Connection:
 def init_db(conn: sqlite3.Connection) -> None:
     conn.executescript(SCHEMA)
     if conn.execute("SELECT COUNT(*) FROM schema_version").fetchone()[0] == 0:
-        conn.execute("INSERT INTO schema_version (version) VALUES (?)", (SCHEMA_VERSION,))
+        conn.execute("INSERT INTO schema_version (version) VALUES (1)")
+        conn.commit()
+    version = conn.execute("SELECT version FROM schema_version").fetchone()[0]
+    for target in sorted(v for v in MIGRATIONS if v > version):
+        conn.executescript(f"BEGIN; {MIGRATIONS[target]} UPDATE schema_version SET version = {target}; COMMIT;")
     conn.commit()
 
 
@@ -178,6 +210,37 @@ def log_fetch(
         """,
         (source_id, feed_url, fetched_at, status, n_items, n_new, error),
     )
+
+
+def record_usage(
+    conn: sqlite3.Connection,
+    model: str,
+    mode: str,
+    purpose: str,
+    input_tokens: int,
+    output_tokens: int,
+    cost_usd: float,
+    article_id: int | None = None,
+    batch_id: str | None = None,
+    now: datetime | None = None,
+) -> None:
+    now = now or utc_now()
+    conn.execute(
+        """
+        INSERT INTO api_usage (date, model, mode, purpose, input_tokens, output_tokens,
+                               cost_usd, article_id, batch_id, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        (now.date().isoformat(), model, mode, purpose, input_tokens, output_tokens,
+         cost_usd, article_id, batch_id, to_iso(now)),
+    )
+
+
+def spent_on(conn: sqlite3.Connection, day: str) -> float:
+    """Total API cost (USD) recorded for a UTC date (YYYY-MM-DD)."""
+    return conn.execute(
+        "SELECT COALESCE(SUM(cost_usd), 0) FROM api_usage WHERE date = ?", (day,)
+    ).fetchone()[0]
 
 
 def stale_sources(

@@ -15,7 +15,7 @@ SourceType = Literal["agency", "public", "private", "tabloid", "government"]
 
 
 class Models(BaseModel):
-    extract: str = "claude-haiku-4-5-20251001"
+    extract: str = "claude-sonnet-5"
     synthesize: str = "claude-sonnet-5"
     curiosities: str = "claude-haiku-4-5-20251001"
 
@@ -39,6 +39,87 @@ class IngestSettings(BaseModel):
     stale_source_days: int = 2
 
 
+class ExtractSettings(BaseModel):
+    batch_threshold: int = 50
+    max_concurrency: int = Field(4, ge=1)
+    max_tokens: int = 4000
+    # Dla Sonnet 5 (Anthropic): "disabled"/"adaptive" + "low".."high". Dla modeli deepseek-*:
+    # "disabled"/"enabled" (DeepSeek nazywa to inaczej niż Anthropic) + "low"/"high"/"max".
+    # Haiku 4.5 nie obsługuje żadnego z tych pól i są wtedy pomijane.
+    thinking: Literal["disabled", "adaptive", "enabled"] = "disabled"
+    effort: Literal["low", "medium", "high", "max"] | None = None
+    batch_poll_interval_s: float = 30.0
+    batch_timeout_h: float = 24.0
+    est_output_tokens: int = 800
+
+
+class ModelPrice(BaseModel):
+    input: float   # USD / 1M tokenów
+    output: float
+
+
+class DeepSeekModelPrice(BaseModel):
+    """Ceny USD / 1M tokenów; DeepSeek różnicuje godziny szczytu i trafienia w cache."""
+    input_peak: float
+    input_off_peak: float
+    cache_hit: float           # ta sama stawka niezależnie od pory (wg cennika)
+    output_peak: float
+    output_off_peak: float
+
+
+# Godziny szczytu wg cennika DeepSeek: 01:00–04:00 i 06:00–10:00 UTC, pon.–pt. (poza chińskimi świętami,
+# których nie modelujemy). Poza tymi przedziałami: 50% ceny.
+DEEPSEEK_PEAK_WINDOWS_UTC = [(1, 4), (6, 10)]
+
+
+def is_deepseek_peak(at) -> bool:
+    if at.weekday() >= 5:  # sobota, niedziela
+        return False
+    hour = at.hour
+    return any(start <= hour < end for start, end in DEEPSEEK_PEAK_WINDOWS_UTC)
+
+
+class DeepSeekPricing(BaseModel):
+    models: dict[str, DeepSeekModelPrice] = {
+        "deepseek-v4-pro": DeepSeekModelPrice(
+            input_peak=1.32, input_off_peak=0.66, cache_hit=0.022, output_peak=3.96, output_off_peak=1.98
+        ),
+        "deepseek-flash": DeepSeekModelPrice(
+            input_peak=0.30, input_off_peak=0.15, cache_hit=0.003, output_peak=1.20, output_off_peak=0.60
+        ),
+    }
+
+    def cost(self, model: str, input_tokens: int, output_tokens: int, cache_hit_tokens: int = 0, at=None) -> float:
+        price = self.models.get(model)
+        if price is None:
+            raise ValueError(f"brak cennika dla modelu '{model}' w settings.yaml (pricing.deepseek.models)")
+        peak = is_deepseek_peak(at) if at is not None else True  # brak `at`: zakładamy szczyt (bezpieczny szacunek)
+        input_price = price.input_peak if peak else price.input_off_peak
+        output_price = price.output_peak if peak else price.output_off_peak
+        cache_miss_tokens = max(input_tokens - cache_hit_tokens, 0)
+        usd = (cache_miss_tokens * input_price + cache_hit_tokens * price.cache_hit + output_tokens * output_price)
+        return usd / 1_000_000
+
+
+class Pricing(BaseModel):
+    batch_discount: float = 0.5
+    models: dict[str, ModelPrice] = {
+        "claude-haiku-4-5-20251001": ModelPrice(input=1.0, output=5.0),
+        "claude-haiku-4-5": ModelPrice(input=1.0, output=5.0),
+        "claude-sonnet-5": ModelPrice(input=2.0, output=10.0),
+    }
+    deepseek: DeepSeekPricing = DeepSeekPricing()
+
+    def cost(self, model: str, input_tokens: int, output_tokens: int, batch: bool = False, at=None) -> float:
+        if model.startswith("deepseek"):
+            return self.deepseek.cost(model, input_tokens, output_tokens, at=at)
+        price = self.models.get(model)
+        if price is None:
+            raise ValueError(f"brak cennika dla modelu '{model}' w settings.yaml (pricing.models)")
+        usd = (input_tokens * price.input + output_tokens * price.output) / 1_000_000
+        return usd * self.batch_discount if batch else usd
+
+
 class Budget(BaseModel):
     max_daily_usd: float = 3.0
 
@@ -48,6 +129,8 @@ class Settings(BaseModel):
     models: Models = Models()
     thresholds: Thresholds = Thresholds()
     ingest: IngestSettings = IngestSettings()
+    extract: ExtractSettings = ExtractSettings()
+    pricing: Pricing = Pricing()
     budget: Budget = Budget()
 
     def resolved_db_path(self, root: Path = PROJECT_ROOT) -> Path:

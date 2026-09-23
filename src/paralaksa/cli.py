@@ -106,5 +106,49 @@ def ingest(
     conn.close()
 
 
+@app.command()
+def extract(
+    limit: Optional[int] = typer.Option(None, "--limit", "-n", help="Maks. liczba artykułów."),
+    no_batch: bool = typer.Option(False, "--no-batch", help="Zawsze wywołania bezpośrednie (bez Batches API)."),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Tylko szacunek kosztu, bez wywołań API."),
+    config_dir: Path = ConfigDir,
+    db_path: Optional[Path] = DbPath,
+) -> None:
+    """Wydobądź sygnały narracyjne z nieprzetworzonych artykułów (LLM)."""
+    from paralaksa.extract.llm_client import build_client
+    from paralaksa.extract.signals import estimate_pending, extract_pending
+
+    settings, conn = _open_db(config_dir, db_path)
+    themes = load_themes(config_dir)
+    budget = settings.budget.max_daily_usd
+    spent = db.spent_on(conn, db.utc_now().date().isoformat())
+
+    if dry_run:
+        n, tokens, cost, mode = estimate_pending(conn, settings, themes, limit, use_batch=not no_batch)
+        typer.echo(f"Artykuły do ekstrakcji: {n} (tryb: {mode}, model: {settings.models.extract})")
+        typer.echo(f"Szacunek: ~{tokens:,} tokenów wejścia, ~${cost:.3f}")
+        typer.echo(f"Wydano dziś: ${spent:.3f} z limitu ${budget:.2f}")
+        conn.close()
+        return
+
+    cfg = settings.extract
+    llm = build_client(settings.models.extract, settings.pricing, cfg.batch_poll_interval_s, cfg.batch_timeout_h)
+    stats = extract_pending(conn, llm, settings, themes, limit, use_batch=not no_batch)
+
+    typer.echo(f"Tryb: {stats.mode}" + (f" (batch {stats.batch_id})" if stats.batch_id else ""))
+    typer.echo(
+        f"Artykuły: {stats.pending} | przetworzone: {stats.done} | sygnały: {stats.signals} | "
+        f"ponowienia: {stats.retries} | błędy trwałe: {stats.failed} | odłożone: {stats.deferred}"
+    )
+    typer.echo(f"Naprawione evidence_span: {stats.repairs} | odrzucone sygnały: {stats.dropped}")
+    total = db.spent_on(conn, db.utc_now().date().isoformat())
+    typer.echo(f"Koszt przebiegu: ${stats.cost_usd:.4f} | wydano dziś: ${total:.4f} z limitu ${budget:.2f}")
+    if stats.budget_stopped:
+        typer.echo("OSTRZEŻENIE: osiągnięto dzienny limit kosztów – część artykułów czeka na kolejny przebieg.", err=True)
+    conn.close()
+    if stats.failed and not stats.done:
+        raise typer.Exit(code=1)
+
+
 if __name__ == "__main__":
     app()

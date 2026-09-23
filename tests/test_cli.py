@@ -81,6 +81,44 @@ def test_ingest_command(config_dir, tmp_path, mock_network):
     assert "Razem nowych artykułów: 0" in result.output
 
 
+def test_extract_dry_run_and_run(config_dir, tmp_path, mock_network, monkeypatch):
+    from fake_llm import FakeAnthropic
+    from paralaksa.extract import llm_client
+
+    runner.invoke(cli.app, ["ingest", "--config-dir", str(config_dir)])
+    result = runner.invoke(cli.app, ["extract", "--dry-run", "--config-dir", str(config_dir)])
+    assert result.exit_code == 0, result.output
+    assert "Artykuły do ekstrakcji: 4 (tryb: direct" in result.output
+
+    real_init = llm_client.LLMClient.__init__
+    monkeypatch.setattr(llm_client.LLMClient, "__init__",
+                        lambda self, pricing, **kw: real_init(self, pricing, client=FakeAnthropic()))
+    result = runner.invoke(cli.app, ["extract", "--config-dir", str(config_dir)])
+    assert result.exit_code == 0, result.output
+    assert "przetworzone: 4 | sygnały: 4" in result.output
+    conn = db.connect(tmp_path / "test.db")
+    assert conn.execute("SELECT COUNT(*) FROM signals").fetchone()[0] == 4
+
+
+def test_extract_uses_deepseek_client_for_deepseek_model(config_dir, tmp_path, mock_network, monkeypatch):
+    from fake_llm import FakeOpenAI
+    from paralaksa.extract import llm_client
+
+    (config_dir / "settings.yaml").write_text(
+        f"db_path: {(tmp_path / 'test.db').as_posix()}\nmodels:\n  extract: deepseek-v4-pro\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setenv("DEEPSEEK_API_KEY", "sk-test")
+    runner.invoke(cli.app, ["ingest", "--config-dir", str(config_dir)])
+
+    real_init = llm_client.DeepSeekClient.__init__
+    monkeypatch.setattr(llm_client.DeepSeekClient, "__init__",
+                        lambda self, pricing, **kw: real_init(self, pricing, client=FakeOpenAI()))
+    result = runner.invoke(cli.app, ["extract", "--config-dir", str(config_dir)])
+    assert result.exit_code == 0, result.output
+    assert "przetworzone: 4 | sygnały: 4" in result.output
+
+
 def test_ingest_unknown_source(config_dir):
     result = runner.invoke(cli.app, ["ingest", "--config-dir", str(config_dir), "--source", "nope"])
     assert result.exit_code == 2

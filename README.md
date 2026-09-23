@@ -4,8 +4,9 @@ Codzienna analiza przekazu medialnego z wielu krajów. System zbiera publikacje 
 PL, UA, DE, UK i spoza bloku i porównuje **linie przekazu w tematach**: zbieżność kierunku,
 autoobraz vs obraz zewnętrzny, dryf w czasie. Pełna specyfikacja: [SPEC.md](SPEC.md).
 
-> Stan: **kamień milowy 1**, czyli szkielet, konfiguracja, baza SQLite i ingest RSS dla 10 źródeł.
-> Ekstrakcja sygnałów (LLM), agregacja i raport dzienny to kolejne etapy (SPEC §15).
+> Stan: **kamień milowy 2**. KM1: szkielet, konfiguracja, baza SQLite, ingest RSS dla 10 źródeł.
+> KM2: ekstrakcja sygnałów narracyjnych (LLM, model produkcyjny: DeepSeek V4-Pro – patrz CLAUDE.md).
+> Agregacja, synteza i raport dzienny to kolejne etapy (SPEC §15).
 
 ## Instalacja
 
@@ -15,7 +16,7 @@ Wymagany Python 3.12.
 py -3.12 -m venv .venv
 .venv\Scripts\activate
 pip install -e ".[dev]"
-copy .env.example .env   # ANTHROPIC_API_KEY – potrzebny od KM2
+copy .env.example .env   # ANTHROPIC_API_KEY, DEEPSEEK_API_KEY – potrzebne od KM2
 ```
 
 (Linux/macOS: `python3.12 -m venv .venv && source .venv/bin/activate`. Można też użyć `uv sync`.)
@@ -29,6 +30,8 @@ plx ingest                   # pobiera nowe artykuły z aktywnych kanałów (+ p
 plx ingest --no-fulltext     # tylko RSS (tytuł + lead)
 plx ingest -s bbc -s guardian
 plx -v ingest                # z logami
+plx extract --dry-run        # szacunek kosztu, bez wywołań API
+plx extract                  # ekstrakcja sygnałów narracyjnych (LLM) z nieprzetworzonych artykułów
 ```
 
 `plx ingest` wypisuje dla każdego źródła, ile wpisów pobrano, ile jest nowych, ile odrzucił

@@ -2,7 +2,9 @@
 db_path: data/paralaksa.db
 
 models:
-  extract: claude-haiku-4-5-20251001
+  # Ekstrakcja na DeepSeek V4-Pro zamiast Sonnet 5/Haiku ze SPEC: porównanie 2026-09-23 na 26 artykułach,
+  # ~7,7x taniej przy tej samej liczbie sygnałów (decyzja i metodologia w CLAUDE.md). Wymaga DEEPSEEK_API_KEY.
+  extract: deepseek-v4-pro
   synthesize: claude-sonnet-5
   curiosities: claude-haiku-4-5-20251001
 
@@ -22,6 +24,30 @@ ingest:
   title_similarity: 0.9     # próg podobieństwa tytułów przy deduplikacji w obrębie źródła
   title_dedup_hours: 48
   stale_source_days: 2      # ostrzeżenie, gdy źródło nie dało nowych artykułów przez tyle dni
+
+extract:
+  batch_threshold: 50       # powyżej tej liczby artykułów: Message Batches API (-50% kosztu)
+  max_concurrency: 4        # równoległe wywołania bezpośrednie
+  max_tokens: 4000
+  thinking: disabled        # disabled | adaptive (ignorowane dla Haiku 4.5)
+  effort: null              # low | medium | high | null (ignorowane dla Haiku 4.5)
+  batch_poll_interval_s: 30
+  batch_timeout_h: 24
+  est_output_tokens: 800    # szacunek wyjścia do kontroli budżetu (zmierzone: ~650 na wywołanie)
+
+# Cennik USD za 1M tokenów (stan 2026-09); Batches API: batch_discount.
+pricing:
+  batch_discount: 0.5
+  models:
+    claude-haiku-4-5-20251001: {input: 1.0, output: 5.0}
+    claude-haiku-4-5: {input: 1.0, output: 5.0}
+    claude-sonnet-5: {input: 2.0, output: 10.0}
+  # DeepSeek (opcjonalny dostawca do porównań, DEEPSEEK_API_KEY): ceny zależne od pory dnia
+  # (szczyt 01–04 i 06–10 UTC, pon.–pt.: 100%; poza szczytem: 50%) i trafień w cache.
+  deepseek:
+    models:
+      deepseek-v4-pro: {input_peak: 1.32, input_off_peak: 0.66, cache_hit: 0.022, output_peak: 3.96, output_off_peak: 1.98}
+      deepseek-flash: {input_peak: 0.30, input_off_peak: 0.15, cache_hit: 0.003, output_peak: 1.20, output_off_peak: 0.60}
 
 budget:
   max_daily_usd: 3.0        # przerwij ekstrakcję po przekroczeniu i oznacz raport
