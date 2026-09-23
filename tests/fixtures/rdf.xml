@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns="http://purl.org/rss/1.0/"
+         xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel rdf:about="https://rdf.example.org/world">
+    <title>RDF World</title>
+    <link>https://rdf.example.org/world</link>
+    <description>RSS 1.0 test feed</description>
+    <items>
+      <rdf:Seq>
+        <rdf:li rdf:resource="https://rdf.example.org/a/1"/>
+      </rdf:Seq>
+    </items>
+  </channel>
+  <item rdf:about="https://rdf.example.org/a/1">
+    <title>Україна отримала нову партію ППО</title>
+    <link>https://rdf.example.org/a/1</link>
+    <description>Партнери передали системи протиповітряної оборони.</description>
+    <dc:date>2026-09-23T05:54:02Z</dc:date>
+  </item>
+</rdf:RDF>

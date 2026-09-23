@@ -1,0 +1,31 @@
+[project]
+name = "paralaksa"
+version = "0.1.0"
+description = "Paralaksa narracji – codzienna analiza przekazu medialnego z wielu krajów"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "feedparser>=6.0",
+    "httpx>=0.27",
+    "trafilatura>=1.12",
+    "pydantic>=2.6",
+    "pyyaml>=6.0",
+    "typer>=0.12",
+    "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+plx = "paralaksa.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/paralaksa"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

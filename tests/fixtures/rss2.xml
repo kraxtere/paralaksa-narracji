@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Test News – World</title>
+    <link>https://news.example.com/world</link>
+    <description>Test feed</description>
+    <lastBuildDate>Wed, 23 Sep 2026 08:00:00 GMT</lastBuildDate>
+    <item>
+      <title>NATO strengthens eastern flank amid rising tensions</title>
+      <link>https://news.example.com/world/nato-eastern-flank?utm_source=rss&amp;utm_medium=feed</link>
+      <description><![CDATA[<p>Allies agreed to deploy <b>additional</b> troops &amp; air defence.</p>]]></description>
+      <pubDate>Wed, 23 Sep 2026 07:30:00 +0200</pubDate>
+      <category>Europe</category>
+    </item>
+    <item>
+      <title>Poland opens new civil defence shelters programme</title>
+      <link>https://news.example.com/world/poland-shelters</link>
+      <description>Government announces funding for shelters.</description>
+      <pubDate>Tue, 22 Sep 2026 18:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Champions League: late winner in Madrid</title>
+      <link>https://news.example.com/sport/football/cl-madrid</link>
+      <description>Sports report.</description>
+      <pubDate>Tue, 22 Sep 2026 21:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Extreme weather displaces thousands in South Asia</title>
+      <link>https://news.example.com/world/extreme-weather-displaces-thousands</link>
+      <description>Floods hit the region.</description>
+      <pubDate>Tue, 22 Sep 2026 12:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Item without a date</title>
+      <link>https://news.example.com/world/undated</link>
+    </item>
+    <item>
+      <title></title>
+      <link>https://news.example.com/world/no-title</link>
+    </item>
+  </channel>
+</rss>

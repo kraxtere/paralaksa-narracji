@@ -1,0 +1,58 @@
+# Taksonomia tematów startowych (SPEC §8).
+# Nowe tematy pojawiają się jako emergent:<slug>; awans do tej listy tylko ręcznie.
+
+- id: security_defense
+  name_pl: Obronność
+  description: obronność, zbrojenia, wojsko, NATO na wschodniej flance
+
+- id: war_readiness
+  name_pl: Gotowość wojenna
+  description: gotowość wojenna, mobilizacja, ochrona ludności, schrony
+
+- id: civil_preparedness
+  name_pl: Przygotowanie obywateli
+  description: zalecenia dla obywateli (zapasy, ewakuacja, poradniki)
+
+- id: russia
+  name_pl: Rosja
+  description: działania i intencje Rosji
+
+- id: ukraine_war
+  name_pl: Wojna w Ukrainie
+  description: przebieg wojny, negocjacje, pomoc dla Ukrainy
+
+- id: alliances
+  name_pl: Sojusze
+  description: NATO, UE, relacje transatlantyckie, spójność sojuszy
+
+- id: energy
+  name_pl: Energia
+  description: energia, surowce, ceny, infrastruktura krytyczna
+
+- id: economy_sanctions
+  name_pl: Gospodarka i sankcje
+  description: gospodarka, sankcje, handel
+
+- id: migration_borders
+  name_pl: Migracja i granice
+  description: migracja, granice, hybrydowe działania na granicy
+
+- id: hybrid_info
+  name_pl: Działania hybrydowe
+  description: dezinformacja, sabotaż, cyberataki
+
+- id: china_indo_pacific
+  name_pl: Chiny i Indo-Pacyfik
+  description: Chiny, Tajwan, Indo-Pacyfik
+
+- id: us_policy
+  name_pl: Polityka USA
+  description: polityka USA wobec Europy i świata
+
+- id: middle_east
+  name_pl: Bliski Wschód
+  description: Bliski Wschód
+
+- id: elections_politics
+  name_pl: Wybory i polityka
+  description: wybory i polityka wewnętrzna o znaczeniu międzynarodowym

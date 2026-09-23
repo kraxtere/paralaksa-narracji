@@ -1,0 +1,288 @@
+# Lista źródeł (format wg SPEC §6).
+# Kanały zweryfikowane 2026-09-23: HTTP 200, świeże wpisy, robots.txt zezwala
+# (UA paralaksa-narracji oraz *).
+# type: agency | public | private | tabloid | government
+# fulltext: pobieraj pełny tekst tylko bez paywalla i przy zgodzie robots.txt.
+# note: krótki komentarz, pokazywany przez `plx sources` (np. powód nieaktywności).
+
+# ---------------------------------------------------------------- PL
+- id: rp
+  name: Rzeczpospolita
+  country: PL
+  language: pl
+  type: private
+  feeds:
+    - url: https://www.rp.pl/rss_main
+      section: glowne
+  fulltext: false          # paywall
+  active: true
+
+- id: onet
+  name: Onet Wiadomości
+  country: PL
+  language: pl
+  type: private
+  feeds:
+    - url: https://wiadomosci.onet.pl/.feed
+      section: wiadomosci
+  fulltext: true
+  active: true
+
+- id: pap
+  name: Polska Agencja Prasowa
+  country: PL
+  language: pl
+  type: agency
+  feeds: []
+  fulltext: false
+  active: false
+  note: "Brak działającego RSS: pap.pl/rss.xml zwraca HTML 'Not found' (Incapsula), /rss/swiat.xml 404."
+
+- id: polskieradio
+  name: Polskie Radio 24
+  country: PL
+  language: pl
+  type: public
+  feeds: []
+  fulltext: false
+  active: false
+  note: "Brak działającego RSS: polskieradio24.pl/rss zwraca stronę HTML, stare adresy polskieradio.pl 404."
+
+- id: wp
+  name: Wirtualna Polska
+  country: PL
+  language: pl
+  type: private
+  feeds:
+    - url: https://wiadomosci.wp.pl/rss.xml
+      section: wiadomosci
+  fulltext: true
+  active: false
+  note: "RSS zweryfikowany; do włączenia w KM4 (pełna lista źródeł)."
+
+- id: gazeta
+  name: Gazeta.pl
+  country: PL
+  language: pl
+  type: private
+  feeds:
+    - url: https://rss.gazeta.pl/pub/rss/wiadomosci.xml
+      section: wiadomosci
+  fulltext: true
+  active: false
+  note: "RSS zweryfikowany (portal Gazeta.pl, nie Wyborcza); do włączenia w KM4."
+
+# ---------------------------------------------------------------- UA
+- id: ukrinform
+  name: Ukrinform
+  country: UA
+  language: uk
+  type: agency             # państwowa agencja informacyjna
+  feeds:
+    - url: https://www.ukrinform.ua/rss/block-lastnews
+      section: ostatnie
+  fulltext: true
+  active: true
+
+- id: pravda_ua
+  name: Ukraińska Prawda
+  country: UA
+  language: uk
+  type: private
+  feeds:
+    - url: https://www.pravda.com.ua/rss/
+      section: wiadomosci
+  fulltext: true
+  active: true
+
+- id: suspilne
+  name: Suspilne
+  country: UA
+  language: uk
+  type: public
+  feeds: []
+  fulltext: false
+  active: false
+  note: "suspilne.media/rss/all.rss zwraca 403."
+
+- id: kyivindependent
+  name: The Kyiv Independent
+  country: UA
+  language: en
+  type: private
+  feeds:
+    - url: https://kyivindependent.com/news-archive/rss/
+      section: news
+  fulltext: true
+  active: false
+  note: "RSS zweryfikowany; do włączenia w KM4."
+
+# ---------------------------------------------------------------- DE
+- id: tagesschau
+  name: Tagesschau (ARD)
+  country: DE
+  language: de
+  type: public
+  feeds:
+    - url: https://www.tagesschau.de/xml/rss2
+      section: alle
+  fulltext: true
+  active: true
+
+- id: spiegel
+  name: Der Spiegel
+  country: DE
+  language: de
+  type: private
+  feeds:
+    - url: https://www.spiegel.de/ausland/index.rss
+      section: ausland
+  fulltext: false          # część artykułów za paywallem Spiegel+
+  active: true
+
+- id: dw
+  name: Deutsche Welle
+  country: DE
+  language: de
+  type: public
+  feeds:
+    - url: https://rss.dw.com/xml/rss-de-all
+      section: alle
+  fulltext: true
+  active: false
+  note: "RSS zweryfikowany; do włączenia w KM4."
+
+- id: faz
+  name: Frankfurter Allgemeine Zeitung
+  country: DE
+  language: de
+  type: private
+  feeds:
+    - url: https://www.faz.net/rss/aktuell/politik/ausland/
+      section: ausland
+  fulltext: false          # FAZ+ paywall
+  active: false
+  note: "RSS zweryfikowany; do włączenia w KM4."
+
+# ---------------------------------------------------------------- UK
+- id: bbc
+  name: BBC News
+  country: UK
+  language: en
+  type: public
+  feeds:
+    - url: https://feeds.bbci.co.uk/news/world/rss.xml
+      section: world
+    - url: https://feeds.bbci.co.uk/news/world/europe/rss.xml
+      section: europe
+  fulltext: true
+  active: true
+
+- id: guardian
+  name: The Guardian
+  country: UK
+  language: en
+  type: private
+  feeds:
+    - url: https://www.theguardian.com/world/rss
+      section: world
+  fulltext: true
+  active: true
+
+- id: telegraph
+  name: The Telegraph
+  country: UK
+  language: en
+  type: private
+  feeds: []
+  fulltext: false
+  active: false
+  note: "telegraph.co.uk/news/rss.xml zwraca 402 (Payment Required)."
+
+- id: skynews
+  name: Sky News
+  country: UK
+  language: en
+  type: private
+  feeds:
+    - url: https://feeds.skynews.com/feeds/rss/world.xml
+      section: world
+  fulltext: true
+  active: false
+  note: "RSS zweryfikowany, ale tylko ~5 wpisów; do rozważenia w KM4."
+
+# ---------------------------------------------------------------- spoza bloku
+- id: aljazeera
+  name: Al Jazeera English
+  country: QA
+  language: en
+  type: public             # finansowana przez państwo Katar
+  feeds:
+    - url: https://www.aljazeera.com/xml/rss/all.xml
+      section: all
+  fulltext: true
+  active: true
+
+- id: cgtn
+  name: CGTN
+  country: CN
+  language: en
+  type: government         # państwowy nadawca (CMG), oficjalna rama Pekinu
+  feeds:
+    - url: https://www.cgtn.com/subscribe/rss/section/world.xml
+      section: world
+  fulltext: true
+  active: true
+
+- id: globaltimes
+  name: Global Times
+  country: CN
+  language: en
+  type: government
+  feeds: []
+  fulltext: false
+  active: false
+  note: >-
+    Brak redakcyjnego RSS: rss/outbrain.xml to nieaktualny kanał syndykacji
+    (wpisy do 23.08.2026, żaden nie ma pokrycia na stronie głównej), /rss/*.xml 404.
+    Włączyć w KM4 przez Google News sitemap https://www.globaltimes.cn/sitemap.xml
+    razem z nowymi typami strumieni (GDELT).
+
+- id: thehindu
+  name: The Hindu
+  country: IN
+  language: en
+  type: private
+  feeds:
+    - url: https://www.thehindu.com/news/international/feeder/default.rss
+      section: international
+  fulltext: true
+  active: false
+  note: "RSS zweryfikowany; do włączenia w KM4."
+
+- id: dailysabah
+  name: Daily Sabah
+  country: TR
+  language: en
+  type: private
+  feeds:
+    - url: https://www.dailysabah.com/rss/world
+      section: world
+  fulltext: true
+  active: false
+  note: "RSS zweryfikowany; do włączenia w KM4."
+
+- id: hurriyet
+  name: Hürriyet Daily News
+  country: TR
+  language: en
+  type: private
+  feeds:
+    - url: https://www.hurriyetdailynews.com/rss/world
+      section: world
+  fulltext: true
+  active: false
+  note: "RSS zweryfikowany; do włączenia w KM4."
+
+# Reuters, AP, AFP: brak oficjalnych publicznych RSS – do sprawdzenia w KM4.
+# Źródła objęte sankcjami UE (RT, Sputnik itp.) nie są dodawane.

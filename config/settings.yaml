@@ -1,0 +1,27 @@
+# Ustawienia globalne (wartości domyślne wg SPEC §12).
+db_path: data/paralaksa.db
+
+models:
+  extract: claude-haiku-4-5-20251001
+  synthesize: claude-sonnet-5
+  curiosities: claude-haiku-4-5-20251001
+
+thresholds:
+  min_countries: 3
+  min_sources_per_country: 2
+  baseline_days: 28
+  min_history_days_for_trends: 14
+  absent_in_pl_ratio: 0.25
+  emergent_similarity: 0.8
+
+ingest:
+  per_domain_delay_s: 2
+  max_fulltext_words: 1500
+  timeout_s: 20
+  user_agent: "paralaksa-narracji/0.1 (+https://github.com/kraxtere/paralaksa-narracji)"
+  title_similarity: 0.9     # próg podobieństwa tytułów przy deduplikacji w obrębie źródła
+  title_dedup_hours: 48
+  stale_source_days: 2      # ostrzeżenie, gdy źródło nie dało nowych artykułów przez tyle dni
+
+budget:
+  max_daily_usd: 3.0        # przerwij ekstrakcję po przekroczeniu i oznacz raport

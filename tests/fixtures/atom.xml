@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Beispiel Nachrichten – Ausland</title>
+  <link href="https://nachrichten.example.de/ausland"/>
+  <updated>2026-09-23T06:00:00Z</updated>
+  <id>urn:example:ausland</id>
+  <entry>
+    <title>Bundeswehr erhöht Einsatzbereitschaft an der Ostflanke</title>
+    <link href="https://nachrichten.example.de/ausland/ostflanke-123.html"/>
+    <id>urn:example:1</id>
+    <updated>2026-09-23T05:45:00Z</updated>
+    <summary>Die Bundesregierung kündigt neue Maßnahmen an.</summary>
+  </entry>
+  <entry>
+    <title>Wetterbericht: Sturm über Norddeutschland</title>
+    <link href="https://nachrichten.example.de/wetter/sturm-456.html"/>
+    <id>urn:example:2</id>
+    <updated>2026-09-23T04:00:00Z</updated>
+    <summary>Starker Wind erwartet.</summary>
+  </entry>
+</feed>
