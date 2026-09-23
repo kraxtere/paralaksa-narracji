@@ -50,6 +50,33 @@ def load_prompt(path: Path = DEFAULT_PROMPT) -> tuple[str, str]:
     return text, "synthesize_report@" + hashlib.sha256(text.encode("utf-8")).hexdigest()[:12]
 
 
+# Pola rejestru, które model przepisuje do "dowody"; reszta sygnału jest w sekcjach pakietu.
+EVIDENCE_FIELDS = ("signal_id", "article_id", "theme_id", "kraj", "zrodlo")
+# Hashe grup służą tylko walidatorowi (niezależność głosów); w promptcie to czysty szum.
+VALIDATOR_ONLY_FIELDS = {"content_group", "publisher_group"}
+
+
+def _strip(value):
+    if isinstance(value, dict):
+        return {k: _strip(v) for k, v in value.items() if k not in VALIDATOR_ONLY_FIELDS}
+    if isinstance(value, list):
+        return [_strip(v) for v in value]
+    return value
+
+
+def llm_payload(package: dict) -> dict:
+    """Compact view of the package for the model.
+
+    The full evidence registry (every signal with summary and group hashes) made the prompt
+    ~460k tokens on a 490-article day and the model started confusing signal_id with article_id.
+    The validator still checks against the full package.
+    """
+    payload = _strip({k: v for k, v in package.items() if k != "dowody"})
+    payload["dowody"] = {"kolumny": list(EVIDENCE_FIELDS),
+                         "wiersze": [[s[f] for f in EVIDENCE_FIELDS] for s in package.get("dowody", [])]}
+    return payload
+
+
 def render_prompt(template: str, package: dict, settings: Settings) -> str:
     th = settings.thresholds
     values = {
@@ -57,7 +84,7 @@ def render_prompt(template: str, package: dict, settings: Settings) -> str:
         "min_countries": str(th.min_countries),
         "min_sources": str(th.min_sources_per_country),
         "schema": SCHEMA_EXAMPLE,
-        "payload": json.dumps(package, ensure_ascii=False, separators=(",", ":")),
+        "payload": json.dumps(llm_payload(package), ensure_ascii=False, separators=(",", ":")),
     }
     for key, value in values.items():  # nie str.format(): szablon i dane zawierają klamry JSON-a
         template = template.replace("{" + key + "}", value)

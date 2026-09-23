@@ -266,3 +266,15 @@ def test_two_distinct_reprints_still_do_not_create_independent_publishers(conn,s
             conn.execute('UPDATE articles SET fulltext=? WHERE id=?',(('wire'+str(n)+' ')*100,aid))
     mark_syndication(conn)
     assert compute_daily_metrics(conn,DAY)[0]['n_sources']==1
+
+
+def test_llm_payload_is_compact_but_validator_keeps_full_registry(conn, settings):
+    from paralaksa.report.synthesize import llm_payload
+    seed_sources(conn); seed_alarm_convergence(conn)
+    pkg = package(conn, settings)
+    payload = llm_payload(pkg)
+    text = json.dumps(payload, ensure_ascii=False)
+    assert 'content_group' not in text and 'publisher_group' not in text
+    assert payload['dowody']['kolumny'] == ['signal_id', 'article_id', 'theme_id', 'kraj', 'zrodlo']
+    assert len(payload['dowody']['wiersze']) == len(pkg['dowody'])
+    assert 'content_group' in pkg['dowody'][0]  # pakiet walidatora bez zmian

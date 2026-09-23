@@ -65,3 +65,21 @@ Nie twierdzimy, że to pełne rozpoznawanie syndykacji. Próg 3 kraje / 2 niezal
 
 Raport `reports/2026-09-23.md` ma jawną korektę archiwalną, nie ponowną syntezę.
 Nie używać go jako dowodu, że nowy walidator zaliczył rzeczywisty raport.
+
+## Pierwszy produkcyjny daily (2026-09-23, run 35891108377)
+
+Baza KM3 (312 art., 807 sygn.) wgrana do Release `database-backup`; odszyfrowanie i suma SHA-256 sprawdzone.
+Przebieg ręczny 16:46–17:00 UTC (13,5 min). Backup, cache, artefakt i commit działały mimo błędu kroku.
+
+| etap | wynik |
+|---|---|
+| ingest | 178 nowych (cgtn 0 nowych, 50 duplikatów; spiegel 8), 0 błędów kanałów; deduplikacja z KM3 zadziałała |
+| extract (DeepSeek V4-Pro) | 178/178, 442 sygnały, 12 ponowień, 0 błędów trwałych, **$0,29** (dry-run GPT szacował $1,87 na 282 — zawyżone) |
+| synteza (Sonnet 5) | **porażka**: 2 wywołania, 918 529 tokenów wejścia, $1,90; model mylił signal_id z article_id, 32 błędy walidacji → wszystkie tezy usunięte |
+
+Przyczyna: rejestr `dowody` wysyłał modelowi wszystkie 1249 sygnałów ze streszczeniami i hashami grup
+(690 tys. z 930 tys. znaków pakietu). Poprawka: `synthesize.llm_payload` — rejestr jako zwarte wiersze
+5 kolumn, bez `content_group/publisher_group`; walidator nadal używa pełnego pakietu. Ten sam dzień: 258 tys. znaków
+(~$0,33). Dzień 2026-09-23 miał status inicjalny i 490 artykułów; regularna doba będzie mniejsza.
+Pusty raport przywrócono do wersji archiwalnej (artefakty nieudanej syntezy usunięte z `reports/`).
+Budżet dnia wyczerpany ($2,80/$3), więc kolejna próba: harmonogram 2026-09-24 05:00 UTC.

@@ -26,8 +26,10 @@ Zwróć wyłącznie JSON zgodny ze schematem:
 {schema}
 
 Dodatkowe reguły jakości:
-- article_ids i dowody to ta sama lista artykułów. Dowody przepisuj z rejestru DANE.dowody:
-  signal_id, article_id, theme_id, kraj, zrodlo. Nie wybieraj ID tylko dlatego, że istnieje.
+- article_ids i dowody to ta sama lista artykułów. Dowody przepisuj z rejestru DANE.dowody
+  (wiersze w kolejności kolumn: signal_id, article_id, theme_id, kraj, zrodlo). signal_id i article_id
+  to różne liczby: do article_ids trafia wyłącznie article_id. Cytuj sygnały, których ramę i streszczenie
+  widzisz w sekcjach danych; nie wybieraj ID tylko dlatego, że istnieje w rejestrze.
 - Jedna teza tekstowa dotyczy jednego theme_id. Każde zdanie musi być wspierane przez streszczenie
   i ramę przywołanego sygnału. Kraj w CountryLine jest krajem redakcji, nie opisywanego aktora.
 - n_zrodel w CountryLine to niezależne redakcje faktycznie przywołane w jej dowodach.
