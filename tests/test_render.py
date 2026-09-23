@@ -45,7 +45,7 @@ def test_sections_links_and_metadata(conn, settings, seeded):
     assert "Ciekawostki" not in md                                    # KM4
     url = conn.execute("SELECT url FROM articles WHERE id = ?", (ids["pl"][0],)).fetchone()[0]
     assert f"[#{ids['pl'][0]}]({url})" in md
-    assert "**Sygnały przeciwne:** Brytyjskie medium" in md and "**Pewność:** średni – 4 kraje" in md
+    assert "**Sygnały przeciwne:** Brytyjskie medium" in md and "**Pewność:** średnia – 4 kraje" in md
     assert "Brak linii bazowej: 0 dni historii" in md
     assert "Koszt API dnia: $0.120 (extract $0.120)" in md
     assert "synteza claude-sonnet-5" in md and "extract_signals@test; synthesize_report@abc" in md
@@ -72,7 +72,7 @@ def test_self_image_table_uses_package_js(conn, settings, seeded):
         "kraj": "DE", "jak_opisuje_siebie": "stabilna | demokracja", "jak_opisuja_go_inni": "kryzys",
         "komentarz": "rozjazd", "article_ids": [aid]}]})
     md = render(conn, settings, sources, report)
-    assert "| DE | stabilna \\| demokracja | kryzys | 1.00 | 3/3 | rozjazd [" in md
+    assert "| DE | stabilna \\| demokracja | kryzys | 1.00 | 3/3 | pewność: niska; rozjazd [" in md
 
 
 def test_incomplete_material_flag(conn, settings, seeded):
@@ -93,7 +93,7 @@ def test_generate_report_end_to_end(conn, settings, seeded, tmp_path):
     assert "### Obronność: alarm i zbrojenia" in result.path.read_text(encoding="utf-8")
     row = conn.execute("SELECT path, cost_usd, warnings FROM reports WHERE date = ?", (DAY,)).fetchone()
     assert row["path"] == str(result.path) and row["cost_usd"] == pytest.approx(result.synth.cost_usd)
-    assert row["warnings"] is None
+    assert "qa1" in row["warnings"]  # aktywne, ale bez materiału
     assert conn.execute("SELECT COUNT(*) FROM daily_metrics WHERE date = ?", (DAY,)).fetchone()[0] == 4
 
 

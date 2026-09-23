@@ -149,7 +149,7 @@ def test_aggregate_and_report(config_dir, tmp_path, mock_network, monkeypatch):
 
     out = tmp_path / "reports"
     result = runner.invoke(cli.app, ["report", "--config-dir", str(config_dir), "--out-dir", str(out)])
-    assert result.exit_code == 0, result.output
+    assert result.exit_code == 1, result.output  # pusty raport nie jest sukcesem
     assert (out / f"{today}.md").exists() and "Synteza: claude-sonnet-5 | wywołania: 1" in result.output
     synth_calls = [c for c in fake.messages.calls if "Tytuł:" not in c["messages"][0]["content"]]
     assert len(synth_calls) == 1
@@ -166,7 +166,7 @@ def test_run_daily(config_dir, tmp_path, mock_network, monkeypatch):
     _fake_llm_everywhere(monkeypatch)
     out = tmp_path / "reports"
     result = runner.invoke(cli.app, ["run-daily", "--config-dir", str(config_dir), "--out-dir", str(out)])
-    assert result.exit_code == 0, result.output
+    assert result.exit_code == 1, result.output  # synteza testowa jest pusta
     for step in ("== ingest", "Razem nowych artykułów: 4", "== extract", "sygnały: 4", "== aggregate + report"):
         assert step in result.output, step
     report_md = (out / f"{db.utc_now().date().isoformat()}.md").read_text(encoding="utf-8")
@@ -174,7 +174,7 @@ def test_run_daily(config_dir, tmp_path, mock_network, monkeypatch):
 
     result = runner.invoke(cli.app, ["run-daily", "--skip-ingest", "--config-dir", str(config_dir),
                                      "--out-dir", str(out)])
-    assert result.exit_code == 0, result.output
+    assert result.exit_code == 1, result.output
     assert "== ingest" not in result.output and "Artykuły: 0" in result.output
 
 

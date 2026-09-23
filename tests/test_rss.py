@@ -104,7 +104,7 @@ def test_ingest_stores_filters_and_dedups(conn, settings, make_source, fixtures_
     assert rows[0]["published_at"] == "2026-09-23T05:30:00+00:00"
     assert rows[0]["language"] == "en"
     undated = [r for r in rows if r["title"] == "Item without a date"][0]
-    assert undated["published_at"] == "2026-09-23T09:00:00+00:00"  # fallback: czas pobrania
+    assert undated["published_at"] is None  # brak daty nie jest datą pobrania
 
     # Drugie uruchomienie: nic nowego
     with make_client(routes) as client:

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import re
 
-from paralaksa.report.schema import CountryLine, ReportOutput
+from paralaksa.report.schema import ReportOutput
 
 MAX_QUOTE_WORDS = 15
 # Tekst w cudzysłowie: „…”, "…", “…”, «…», »…«.
@@ -69,6 +69,8 @@ def validate_report(report: ReportOutput, package: dict, known_ids: set[int]) ->
         if unknown:
             errors.append(f"wzorce_zbieznosci.{i}.sygnaly_przeciwne: nieistniejące article_ids {unknown}")
     errors += _threshold_errors(report, package)
+    errors += provenance_errors(report, package)
+    errors += language_errors(report, package)
     for path, text in _texts(report):
         for q in long_quotes(text):
             errors.append(f"{path}: cytat dłuższy niż {MAX_QUOTE_WORDS} słów: „{' '.join(q.split()[:6])}…”")
@@ -92,41 +94,17 @@ def _threshold_errors(report: ReportOutput, package: dict) -> list[str]:
 
 
 def sanitize_report(report: ReportOutput, package: dict, known_ids: set[int]) -> ReportOutput:
-    """Drop unknown ids and every claim left without references; force trends without a baseline."""
-    def keep(ids: list[int]) -> list[int]:
-        return [i for i in ids if i in known_ids]
-
-    def lines(ks: list[CountryLine]) -> list[CountryLine]:
-        return [k.model_copy(update={"article_ids": keep(k.article_ids)}) for k in ks if keep(k.article_ids)]
-
-    candidates = {c["temat"] for c in package.get("zbieznosc_kandydaci", [])}
-    min_countries = package["progi"]["min_krajow"]
-    has_baseline = package["linia_bazowa"]["dostepna"]
-
-    patterns = []
-    for p in report.wzorce_zbieznosci:
-        ks = lines(p.kraje)
-        if p.temat in candidates and len({k.kraj for k in ks}) >= min_countries:
-            counter = p.sygnaly_przeciwne.model_copy(update={"article_ids": keep(p.sygnaly_przeciwne.article_ids)})
-            patterns.append(p.model_copy(update={
-                "kraje": ks, "sygnaly_przeciwne": counter,
-                "trend": p.trend if has_baseline else NO_BASELINE,
-            }))
-    divergences = [d.model_copy(update={"kraje": lines(d.kraje)}) for d in report.rozbieznosci if len(lines(d.kraje)) >= 2]
-
-    def claims(items):
-        return [c.model_copy(update={"article_ids": keep(c.article_ids)}) for c in items if keep(c.article_ids)]
-
-    cleaned = ReportOutput(
-        w_skrocie=claims(report.w_skrocie),
-        wzorce_zbieznosci=patterns,
-        rozbieznosci=divergences,
-        autoobraz=claims(report.autoobraz),
-        co_sie_przesuwa=claims(report.co_sie_przesuwa),
-        nieobecne_w_polsce=claims(report.nieobecne_w_polsce),
-        slabe_sygnaly=claims(report.slabe_sygnaly),
-    )
-    return ReportOutput.model_validate(_map_strings(cleaned.model_dump(), shorten_quotes))
+    """Drop whole invalid claims after retry; never detach a bad link from unchanged prose."""
+    cleaned = ReportOutput.model_validate(_map_strings(report.model_dump(), shorten_quotes))
+    if not package['linia_bazowa']['dostepna']:
+        for pattern in cleaned.wzorce_zbieznosci:
+            pattern.trend = NO_BASELINE
+    bad = validate_report(cleaned, package, known_ids)
+    for section in ReportOutput.model_fields:
+        rejected = {int(e.split(".")[1].split(":")[0]) for e in bad
+                    if e.startswith(section + ".")}
+        setattr(cleaned, section, [v for i,v in enumerate(getattr(cleaned, section)) if i not in rejected])
+    return cleaned
 
 
 def shorten_quotes(text: str) -> str:
@@ -147,3 +125,114 @@ def _map_strings(obj, fn):
     if isinstance(obj, dict):
         return {k: _map_strings(v, fn) for k, v in obj.items()}
     return obj
+
+
+def evidence_items(report):
+    for section in ('w_skrocie', 'slabe_sygnaly', 'co_sie_przesuwa', 'nieobecne_w_polsce'):
+        for i, item in enumerate(getattr(report, section)):
+            yield f'{section}.{i}', item, item.theme_id, None
+    for section in ('wzorce_zbieznosci', 'rozbieznosci'):
+        for i, item in enumerate(getattr(report, section)):
+            for line in item.kraje:
+                yield f'{section}.{i}.kraje.{line.kraj}', line, item.temat, line.kraj
+            if section == 'wzorce_zbieznosci':
+                yield f'{section}.{i}.sygnaly_przeciwne', item.sygnaly_przeciwne, item.temat, None
+    for i, item in enumerate(report.autoobraz):
+        yield f'autoobraz.{i}', item, None, None
+
+
+def _independent(evidence, registry):
+    from types import SimpleNamespace
+    from paralaksa.aggregate.sample import independence_count
+    return independence_count([SimpleNamespace(source_id=e.zrodlo, article_id=e.article_id,
+        publisher_group=registry.get(e.signal_id, {}).get('publisher_group'),
+        content_group=registry.get(e.signal_id, {}).get('content_group')) for e in evidence])
+
+
+def provenance_errors(report, package):
+    registry = {s['signal_id']: s for s in package.get('dowody', [])}
+    errors = []
+    for path, item, theme, country in evidence_items(report):
+        if not item.article_ids and path.endswith('sygnaly_przeciwne'):
+            if item.dowody:
+                errors.append(f'{path}: dowody bez article_ids')
+            continue
+        if not item.dowody:
+            errors.append(f'{path}: brak powiązania tezy z sygnałami (dowody)')
+        if getattr(item, 'temat', theme) != theme:
+            errors.append(f'{path}: temat nagłówka różni się od theme_id dowodów')
+        if theme == '':
+            errors.append(f'{path}: wymagany theme_id')
+        if set(item.article_ids) != {e.article_id for e in item.dowody}:
+            errors.append(f'{path}: article_ids nie odpowiadają dowodom')
+        for e in item.dowody:
+            actual = registry.get(e.signal_id)
+            if not actual or any(actual[k] != v for k,v in e.model_dump().items()):
+                errors.append(f'{path}: obcy dowód #{e.article_id}; niezgodne ID, temat, kraj lub źródło')
+            elif (theme and e.theme_id != theme) or (country and e.kraj != country):
+                errors.append(f'{path}: artykuł #{e.article_id} poza tematem/segmentem tezy')
+        if path.startswith('autoobraz.'):
+            valid = [registry[e.signal_id] for e in item.dowody if e.signal_id in registry]
+            if any(s['subject_actor'] != item.kraj for s in valid) or not (
+                any(s['kraj'] == item.kraj for s in valid) and any(s['kraj'] != item.kraj for s in valid)):
+                errors.append(f'{path}: autoobraz wymaga osobnych dowodów własnych i zewnętrznych o tym samym aktorze')
+        if hasattr(item, 'n_zrodel'):
+            if item.n_zrodel != _independent(item.dowody, registry):
+                errors.append(f'{path}: n_zrodel nie odpowiada niezależnym przywołanym dowodom')
+        level = getattr(item, 'pewnosc', None)
+        if isinstance(level, str):
+            countries = {e.kraj for e in item.dowody}
+            counts = [_independent([e for e in item.dowody if e.kraj == c], registry) for c in countries]
+            if level != 'niski' and (not counts or min(counts) < package['progi']['min_zrodel_na_kraj']):
+                errors.append(f'{path}: jeden niezależny głos w kraju wymaga niskiej pewności')
+            if level == 'wysoki' and len(countries) < package['progi']['min_krajow']:
+                errors.append(f'{path}: wysoka pewność wymaga progu krajów')
+    for section in ('wzorce_zbieznosci', 'rozbieznosci'):
+        for i, item in enumerate(getattr(report, section)):
+            if section == 'wzorce_zbieznosci':
+                qualified = {k['kraj'] for c in package.get('zbieznosc_kandydaci', [])
+                             if c['temat'] == item.temat for k in c['kraje'] if k['spelnia_prog_zrodel']}
+                if len({k.kraj for k in item.kraje} & qualified) < package['progi']['min_krajow']:
+                    errors.append(f'{section}.{i}: kraje nie należą do kwalifikowanego segmentu zbieżności')
+                allowed_counter = {s['signal_id'] for c in package.get('zbieznosc_kandydaci', [])
+                                   if c['temat'] == item.temat for s in c['sygnaly_przeciwne']}
+                if any(e.signal_id not in allowed_counter for e in item.sygnaly_przeciwne.dowody):
+                    errors.append(f'{section}.{i}: dowód nie należy do segmentu sygnałów przeciwnych')
+            counts = [_independent(k.dowody, registry) for k in item.kraje]
+            level = item.pewnosc.poziom
+            if (section == 'wzorce_zbieznosci' or level != 'niski') and (
+                    not counts or min(counts) < package['progi']['min_zrodel_na_kraj']):
+                errors.append(f'{section}.{i}: niespełniony próg niezależnych źródeł na kraj')
+            if level == 'wysoki' and len({k.kraj for k in item.kraje}) < package['progi']['min_krajow']:
+                errors.append(f'{section}.{i}: wysoka pewność poniżej progu krajów')
+    return errors
+
+
+def language_errors(report, package):
+    errors = []
+    single = {c for c, info in package.get('kraje', {}).items() if info['n_zrodel'] <= 1}
+    adjectives = {'CN':'chińsk', 'QA':'katarsk', 'US':'amerykańsk', 'IL':'izraelsk',
+                  'PS':'palestyńsk', 'TR':'tureck', 'BR':'brazylijsk', 'PL':'polsk',
+                  'UA':'ukraińsk', 'DE':'niemieck', 'UK':'brytyjsk'}
+    for path, text in _texts(report):
+        for country in single:
+            code = re.escape(country)
+            adj = adjectives.get(country, '(?!)')
+            if re.search(rf'(?:media|medi(?:ów|ach|ami)|źródła|źródeł)\s+(?:(?:z|w)\s+)?(?:{code}\b|{adj}\w*)', text, re.I):
+                errors.append(f'{path}: kraj {country} z jednym źródłem — podaj nazwę redakcji')
+        # A conservative tripwire; semantic review remains necessary for paraphrases.
+        for sentence in re.split(r'[.!?;\n]', text):
+            if re.search(r'\bJS\b|Jensen', sentence, re.I) and re.search(
+                    r'(?:pokryw|podob|zbież|rozbież|rozjazd).*ram|ram.*(?:pokryw|podob|zbież|rozbież)', sentence, re.I):
+                if not re.search(r'nie (?:mierzy|oznacza|dowodzi)', sentence, re.I):
+                    errors.append(f'{path}: JS mierzy rozkłady nacechowania, nie podobieństwo ram')
+        if not package.get('publikacje', {}).get('today_language_allowed', False) and re.search(
+                r'\bdziś\b|\bdzisiaj\b|dzisiejsz', text, re.I):
+            errors.append(f'{path}: data pobrania nie dowodzi publikacji dzisiaj')
+        if re.search(r'\bmedia\b|\bmedi(?:ach|ów|ami)\b', text, re.I) and not re.search(r'analizowan|badanych|prób', text, re.I):
+            errors.append(f'{path}: opisz analizowane źródła, nie wszystkie media kraju')
+        if not package['linia_bazowa']['dostepna'] and re.search(r'rośnie od|maleje od|trend wzrost|trend spad|nowy temat', text, re.I):
+            errors.append(f'{path}: trend bez linii bazowej')
+    if not package['linia_bazowa']['dostepna']:
+        errors += [f'co_sie_przesuwa.{i}: brak linii bazowej' for i,_ in enumerate(report.co_sie_przesuwa)]
+    return errors

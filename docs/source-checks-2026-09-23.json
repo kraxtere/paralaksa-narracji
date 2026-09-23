@@ -1,0 +1,240 @@
+[
+  {
+    "source": "dailysabah",
+    "checked_at": "2026-09-23T14:05:58+00:00",
+    "feeds": [
+      {
+        "url": "https://www.dailysabah.com/rss/world",
+        "error": "RobotsDisallowed: https://www.dailysabah.com/rss/world"
+      }
+    ]
+  },
+  {
+    "source": "hurriyet",
+    "checked_at": "2026-09-23T14:05:58+00:00",
+    "feeds": [
+      {
+        "url": "https://www.hurriyetdailynews.com/rss/world",
+        "http": 200,
+        "robots": true,
+        "entries": 100,
+        "fresh_48h": 24,
+        "latest": "2026-09-23T11:47:02+00:00",
+        "lead_lengths": [
+          234,
+          217,
+          168,
+          272,
+          200
+        ]
+      }
+    ]
+  },
+  {
+    "source": "pbs",
+    "checked_at": "2026-09-23T14:05:58+00:00",
+    "feeds": [
+      {
+        "url": "https://www.pbs.org/newshour/feeds/rss/headlines",
+        "http": 200,
+        "robots": true,
+        "entries": 20,
+        "fresh_48h": 20,
+        "latest": "2026-09-23T13:00:04+00:00",
+        "lead_lengths": [
+          278,
+          194,
+          247,
+          219,
+          343
+        ]
+      },
+      {
+        "url": "https://www.pbs.org/newshour/feeds/rss/politics",
+        "http": 200,
+        "robots": true,
+        "entries": 20,
+        "fresh_48h": 20,
+        "latest": "2026-09-23T09:00:57+00:00",
+        "lead_lengths": [
+          194,
+          247,
+          219,
+          343,
+          398
+        ]
+      }
+    ]
+  },
+  {
+    "source": "fox",
+    "checked_at": "2026-09-23T14:05:58+00:00",
+    "feeds": [
+      {
+        "url": "https://moxie.foxnews.com/google-publisher/us.xml",
+        "http": 200,
+        "robots": true,
+        "entries": 25,
+        "fresh_48h": 25,
+        "latest": "2026-09-23T12:55:40+00:00",
+        "lead_lengths": [
+          141,
+          123,
+          148,
+          147,
+          151
+        ]
+      },
+      {
+        "url": "https://moxie.foxnews.com/google-publisher/world.xml",
+        "http": 200,
+        "robots": true,
+        "entries": 25,
+        "fresh_48h": 5,
+        "latest": "2026-09-23T01:50:20+00:00",
+        "lead_lengths": [
+          136,
+          147,
+          169,
+          152,
+          146
+        ]
+      }
+    ]
+  },
+  {
+    "source": "npr",
+    "checked_at": "2026-09-23T14:06:07+00:00",
+    "feeds": [
+      {
+        "url": "https://feeds.npr.org/1004/rss.xml",
+        "http": 200,
+        "robots": true,
+        "entries": 10,
+        "fresh_48h": 10,
+        "latest": "2026-09-23T13:31:47+00:00",
+        "lead_lengths": [
+          161,
+          191,
+          196,
+          178,
+          152
+        ]
+      }
+    ]
+  },
+  {
+    "source": "propublica",
+    "checked_at": "2026-09-23T14:06:08+00:00",
+    "feeds": [
+      {
+        "url": "https://www.propublica.org/feeds/propublica/main",
+        "http": 200,
+        "robots": true,
+        "entries": 20,
+        "fresh_48h": 2,
+        "latest": "2026-09-23T09:00:00+00:00",
+        "lead_lengths": [
+          136,
+          125,
+          68,
+          142,
+          153
+        ]
+      }
+    ]
+  },
+  {
+    "source": "timesofisrael",
+    "checked_at": "2026-09-23T14:06:09+00:00",
+    "feeds": [
+      {
+        "url": "https://www.timesofisrael.com/feed/",
+        "error": "RobotsDisallowed: https://www.timesofisrael.com/feed/"
+      }
+    ]
+  },
+  {
+    "source": "ynetnews",
+    "checked_at": "2026-09-23T14:06:10+00:00",
+    "feeds": [
+      {
+        "url": "https://www.ynetnews.com/Integration/StoryRss2.xml",
+        "http": 200,
+        "robots": true,
+        "entries": 30,
+        "fresh_48h": 21,
+        "latest": "2026-09-21T22:39:21+00:00",
+        "lead_lengths": [
+          183,
+          134,
+          109,
+          148,
+          282
+        ]
+      }
+    ]
+  },
+  {
+    "source": "haaretz",
+    "checked_at": "2026-09-23T14:06:15+00:00",
+    "feeds": []
+  },
+  {
+    "source": "wafa",
+    "checked_at": "2026-09-23T14:06:15+00:00",
+    "feeds": []
+  },
+  {
+    "source": "maan",
+    "checked_at": "2026-09-23T14:06:15+00:00",
+    "feeds": [
+      {
+        "url": "https://www.maannews.net/feed/",
+        "error": "RobotsDisallowed: https://www.maannews.net/feed/"
+      }
+    ]
+  },
+  {
+    "source": "folha",
+    "checked_at": "2026-09-23T14:06:15+00:00",
+    "feeds": [
+      {
+        "url": "https://feeds.folha.uol.com.br/mundo/rss091.xml",
+        "http": 200,
+        "robots": true,
+        "entries": 100,
+        "fresh_48h": 51,
+        "latest": "2026-09-23T13:41:00+00:00",
+        "lead_lengths": [
+          285,
+          220,
+          222,
+          390,
+          300
+        ]
+      }
+    ]
+  },
+  {
+    "source": "agenciabrasil",
+    "checked_at": "2026-09-23T14:06:17+00:00",
+    "feeds": [
+      {
+        "url": "https://agenciabrasil.ebc.com.br/rss/ultimasnoticias/feed.xml",
+        "http": 200,
+        "robots": true,
+        "entries": 10,
+        "fresh_48h": 10,
+        "latest": "2026-09-23T13:24:00+00:00",
+        "lead_lengths": [
+          1578,
+          2000,
+          2000,
+          1108,
+          2000
+        ]
+      }
+    ]
+  }
+]

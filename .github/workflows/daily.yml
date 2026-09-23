@@ -1,74 +1,130 @@
-# Raport dzienny (SPEC §13): codziennie 05:00 UTC, `plx run-daily`, commit raportu do reports/.
-# Baza SQLite (data/, poza gitem) przechodzi między uruchomieniami przez cache GitHub Actions;
-# kopia zapasowa jako artefakt (cache znika po 7 dniach bez użycia).
-# Wymagane sekrety repozytorium: DEEPSEEK_API_KEY (ekstrakcja), ANTHROPIC_API_KEY (gdy model Claude w settings.yaml).
 name: daily
-
 on:
   schedule:
     - cron: "0 5 * * *"
   workflow_dispatch:
-
+    inputs:
+      initialize_empty:
+        description: "Świadomie utwórz pierwszą bazę (wyłącznie gdy brak backupu)."
+        type: boolean
+        default: false
 permissions:
   contents: write
-
 concurrency:
   group: daily
   cancel-in-progress: false
-
 jobs:
   run-daily:
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    env:
+      GH_TOKEN: ${{ github.token }}
+      DB_BACKUP_KEY: ${{ secrets.DB_BACKUP_KEY }}
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: pip
-
       - name: Instalacja
         run: pip install -e .
-
-      # Klucz z run_id nigdy nie trafia wprost; restore-keys bierze najnowszy zapis z prefiksem "db-".
-      - name: Przywróć bazę
-        uses: actions/cache/restore@v4
-        with:
-          path: data/paralaksa.db
-          key: db-${{ github.run_id }}
-          restore-keys: db-
-
-      - name: plx run-daily
+      - name: Sprawdź konfigurację API i backupu
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: plx -v run-daily
-
-      - name: Zapisz bazę
-        if: always()
+        run: |
+          python - <<'PY'
+          import os
+          from paralaksa.config import load_settings
+          settings = load_settings()
+          required = {'DB_BACKUP_KEY'}
+          for model in (settings.models.extract, settings.models.synthesize):
+              required.add('DEEPSEEK_API_KEY' if model.startswith('deepseek') else 'ANTHROPIC_API_KEY')
+          missing = sorted(k for k in required if not os.environ.get(k))
+          if missing:
+              raise SystemExit('Brak wymaganych sekretów: ' + ', '.join(missing))
+          PY
+      - name: Przywróć zaszyfrowany cache
+        uses: actions/cache/restore@v4
+        with:
+          path: state-cache/
+          key: encrypted-db-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: encrypted-db-
+      - name: Przywróć trwały backup i sprawdź SQLite
+        env:
+          INITIALIZE_EMPTY: ${{ inputs.initialize_empty }}
+        run: |
+          mkdir -p data state-cache
+          if gh release view database-backup >/dev/null 2>&1; then
+            # Release jest autorytatywny; cache może być starszy od ostatniego przebiegu.
+            gh release download database-backup -p latest.db.enc -p latest.db.enc.sha256 -D state-cache --clobber
+          elif [ ! -f state-cache/latest.db.enc ]; then
+            if [ "$INITIALIZE_EMPTY" != 'true' ]; then
+              echo '::error::Brak backupu/cache. Przywróć bazę zgodnie z docs/OPERATIONS.md.'
+              exit 1
+            fi
+            echo '::warning::Jawna inicjalizacja pierwszej bazy; brak wcześniejszej historii.'
+            plx init-db
+          else
+            echo '::warning::Release niedostępny; odzyskiwanie z cache. Sprawdź ciągłość historii.'
+          fi
+          if [ -f state-cache/latest.db.enc ]; then
+            (cd state-cache && sha256sum --check latest.db.enc.sha256)
+            openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 -in state-cache/latest.db.enc -out data/restore.db -pass env:DB_BACKUP_KEY
+            python scripts/db_state.py data/restore.db
+            mv data/restore.db data/paralaksa.db
+          fi
+          python scripts/db_state.py data/paralaksa.db
+      - name: plx run-daily
+        id: pipeline
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: plx run-daily
+      - name: Snapshot i szyfrowanie
+        id: snapshot
+        if: always() && (steps.pipeline.outcome == 'success' || steps.pipeline.outcome == 'failure')
+        run: |
+          python scripts/db_state.py data/paralaksa.db --snapshot data/snapshot.db
+          openssl enc -aes-256-cbc -salt -pbkdf2 -iter 200000 -in data/snapshot.db -out state-cache/latest.db.enc -pass env:DB_BACKUP_KEY
+          (cd state-cache && sha256sum latest.db.enc > latest.db.enc.sha256)
+      - name: Trwały backup (Release, bez automatycznego wygasania)
+        if: always() && steps.snapshot.outcome == 'success'
+        run: |
+          gh release view database-backup >/dev/null 2>&1 || gh release create database-backup --title 'Encrypted database backups' --notes 'Encrypted SQLite snapshots. Recovery: docs/OPERATIONS.md.'
+          cp state-cache/latest.db.enc "state-cache/db-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}.enc"
+          gh release upload database-backup state-cache/latest.db.enc state-cache/latest.db.enc.sha256 "state-cache/db-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}.enc" --clobber
+      - name: Zapisz zaszyfrowany cache
+        if: always() && steps.snapshot.outcome == 'success'
         uses: actions/cache/save@v4
         with:
-          path: data/paralaksa.db
-          key: db-${{ github.run_id }}
-
-      - name: Kopia bazy (artefakt)
-        if: always()
+          path: state-cache/
+          key: encrypted-db-${{ github.run_id }}-${{ github.run_attempt }}
+      - name: Kopia awaryjna (wyłącznie zaszyfrowana)
+        if: always() && steps.snapshot.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
-          name: paralaksa-db
-          path: data/paralaksa.db
+          name: paralaksa-encrypted-db
+          path: state-cache/latest.db.enc*
           retention-days: 30
-          if-no-files-found: ignore
-
-      - name: Commit raportu
+          if-no-files-found: error
+      - name: Raport statusu
+        if: always()
+        run: |
+          echo "Pipeline: ${{ steps.pipeline.outcome }}" >> "$GITHUB_STEP_SUMMARY"
+          for file in reports/*.status.json; do
+            if [ -f "$file" ]; then
+              cat "$file" >> "$GITHUB_STEP_SUMMARY"
+            fi
+          done
+      - name: Commit raportu (również oznaczonego jako niepełny)
+        if: always() && (steps.pipeline.outcome == 'success' || steps.pipeline.outcome == 'failure')
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add reports/
-          if git diff --cached --quiet; then
-            echo "Brak zmian w reports/."
-          else
+          if ! git diff --cached --quiet; then
             git commit -m "Raport dzienny $(date -u +%F)"
+            git pull --rebase
             git push
           fi

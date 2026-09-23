@@ -45,6 +45,7 @@ class IngestSettings(BaseModel):
 
 
 class ExtractSettings(BaseModel):
+    max_runtime_s: float = Field(2400, gt=0)
     batch_threshold: int = 50
     max_concurrency: int = Field(4, ge=1)
     max_tokens: int = 4000
@@ -140,7 +141,7 @@ class Pricing(BaseModel):
 
 
 class Budget(BaseModel):
-    max_daily_usd: float = 3.0
+    max_daily_usd: float = Field(3.0, gt=0)
 
 
 class Settings(BaseModel):
@@ -160,6 +161,7 @@ class Settings(BaseModel):
 class Feed(BaseModel):
     url: str
     section: str | None = None
+    genre: Literal["news", "opinion", "unknown"] = "unknown"
 
 
 class Source(BaseModel):
@@ -172,6 +174,13 @@ class Source(BaseModel):
     fulltext: bool = False
     active: bool = True
     note: str | None = None
+    editorial_country: str | None = None
+    ownership: str = "niezweryfikowane"
+    publisher_group: str | None = None
+    channel_scope: str = "zakres określony przez kanały; próbka nie jest reprezentatywna"
+    activated_at: str | None = None
+    license_note: str = "wymaga okresowego przeglądu warunków wydawcy"
+    verification: dict = Field(default_factory=dict)
 
     @field_validator("country")
     @classmethod
@@ -182,6 +191,10 @@ class Source(BaseModel):
     def _active_needs_feeds(self) -> Source:
         if self.active and not self.feeds:
             raise ValueError(f"aktywne źródło '{self.id}' nie ma żadnego kanału")
+        if self.active and self.verification and not all(
+            self.verification.get(k) is True for k in ("feed", "fresh", "robots", "usage", "quality")
+        ):
+            raise ValueError(f"źródło '{self.id}' nie przeszło wszystkich bramek aktywacji")
         return self
 
 

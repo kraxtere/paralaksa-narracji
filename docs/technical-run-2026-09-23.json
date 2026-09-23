@@ -1,0 +1,80 @@
+{
+  "scope": "rzeczywisty ingest, tylko tytuły i leady, dotychczasowy aktywny koszyk",
+  "dry_run_articles": 282,
+  "input_tokens_estimate": 737814,
+  "extract_cost_estimate_usd": 1.86729048,
+  "api_cost_usd": 0,
+  "double_volume_estimate_usd": 3.73458096,
+  "budget_usd": 3.0,
+  "dry_run_s": 0.01,
+  "llm_executed": false,
+  "feeds": [
+    {
+      "source_id": "rp",
+      "status": "ok",
+      "n_items": 20,
+      "n_new": 19
+    },
+    {
+      "source_id": "onet",
+      "status": "ok",
+      "n_items": 20,
+      "n_new": 20
+    },
+    {
+      "source_id": "ukrinform",
+      "status": "ok",
+      "n_items": 30,
+      "n_new": 27
+    },
+    {
+      "source_id": "pravda_ua",
+      "status": "ok",
+      "n_items": 20,
+      "n_new": 20
+    },
+    {
+      "source_id": "tagesschau",
+      "status": "ok",
+      "n_items": 40,
+      "n_new": 40
+    },
+    {
+      "source_id": "spiegel",
+      "status": "robots_disallowed",
+      "n_items": 0,
+      "n_new": 0
+    },
+    {
+      "source_id": "bbc",
+      "status": "ok",
+      "n_items": 27,
+      "n_new": 25
+    },
+    {
+      "source_id": "bbc",
+      "status": "ok",
+      "n_items": 22,
+      "n_new": 17
+    },
+    {
+      "source_id": "guardian",
+      "status": "ok",
+      "n_items": 45,
+      "n_new": 45
+    },
+    {
+      "source_id": "aljazeera",
+      "status": "ok",
+      "n_items": 25,
+      "n_new": 20
+    },
+    {
+      "source_id": "cgtn",
+      "status": "ok",
+      "n_items": 50,
+      "n_new": 49
+    }
+  ],
+  "note": "Nie zmierzono czasu LLM ani większego aktywnego koszyka; brak lokalnych kluczy API. Cena według zastanej konfiguracji."
+}

@@ -67,13 +67,16 @@ class PoliteClient:
                 resp = self._client.get(f"{origin}/robots.txt")
                 if resp.status_code in (401, 403):
                     parser.disallow_all = True
-                elif resp.status_code >= 400:
+                elif resp.status_code in (404, 410):
                     parser.allow_all = True
+                elif resp.status_code >= 400:
+                    parser.disallow_all = True
                 else:
                     parser.parse(resp.text.splitlines())
             except httpx.HTTPError as e:
                 log.warning("Nie udało się pobrać robots.txt z %s: %s", origin, e)
-                parser = None  # brak informacji: nie blokujemy, ale logujemy
+                parser = RobotFileParser()
+                parser.disallow_all = True  # nie pobieraj przy nieznanych regułach
             self._robots[origin] = parser
         return self._robots[origin]
 

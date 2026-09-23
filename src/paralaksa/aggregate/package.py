@@ -17,6 +17,7 @@ from paralaksa.aggregate.metrics import (
 )
 from paralaksa.aggregate.stats import coarse_direction, distribution, js_divergence, z_score
 from paralaksa.config import Settings, Theme
+from paralaksa.aggregate.sample import publication_meta, sample_metadata, sample_articles, independence_count
 
 MAX_IDS = 10                 # ile article_ids na pozycję trafia do payloadu (walidator zna wszystkie)
 MAX_FRAME_IDS = 5
@@ -59,6 +60,8 @@ def representative(signals: list[SignalRow], n: int, prefer: str | None = None) 
 def signal_dict(s: SignalRow) -> dict:
     # Bez URL: model odwołuje się do article_id, a render rozwiązuje id -> URL z bazy (krótszy payload).
     return {
+        "signal_id": s.id, "theme_id": s.theme_id, "subject_actor": s.subject_actor,
+        "content_group": s.content_group or str(s.article_id), "publisher_group": s.publisher_group or s.source_id,
         "article_id": s.article_id, "kraj": s.country, "zrodlo": s.source_id, "typ_zrodla": s.source_type,
         "rama": s.frame, "stance": s.stance, "intensywnosc": s.intensity, "streszczenie": s.summary_pl,
     }
@@ -80,7 +83,8 @@ def _history(conn: sqlite3.Connection, start: str, end: str):
     shares: dict[tuple[str, str], dict[str, float]] = defaultdict(dict)
     days: dict[str, set[str]] = defaultdict(set)
     for r in conn.execute(
-        "SELECT date, theme_id, country, article_share FROM daily_metrics WHERE date >= ? AND date < ?",
+        "SELECT date, theme_id, country, article_share FROM daily_metrics WHERE date >= ? AND date < ? "
+        "AND date != COALESCE((SELECT MIN(substr(fetched_at,1,10)) FROM articles), '')",
         (start, end),
     ):
         shares[(r[1], r[2])][r[0]] = r[3]
@@ -108,7 +112,7 @@ def _convergence(by_theme: dict[str, dict[str, list[SignalRow]]], settings: Sett
         info = {}
         for country, sigs in per_country.items():
             direction, share = _country_direction(sigs, th.direction_min_nonneutral)
-            info[country] = (direction, share, len({s.source_id for s in sigs}))
+            info[country] = (direction, share, independence_count(sigs))
         for direction in ("negatywny", "pozytywny"):
             same = [c for c, (d, _, _) in info.items() if d == direction]
             qualified = [c for c in same if info[c][2] >= th.min_sources_per_country]
@@ -156,7 +160,7 @@ def _divergences(by_theme: dict[str, dict[str, list[SignalRow]]], n_rep: int) ->
             "temat": theme,
             "max_js": _r(js), "para": [a, b],
             "kraje": [{
-                "kraj": c, "n_sygnalow": len(sigs), "n_zrodel": len({s.source_id for s in sigs}),
+                "kraj": c, "n_sygnalow": len(sigs), "n_zrodel": independence_count(sigs),
                 "rozklad_stance": {k: _r(v, 2) for k, v in dists[c].items() if v},
                 "ramy": _frames(sigs)[:2],
                 "sygnaly": representative(sigs, 2),
@@ -256,6 +260,8 @@ def build_data_package(conn: sqlite3.Connection, day: str, settings: Settings, t
     n_rep = settings.report.representative_signals_per_item
     names = {t.id: t.name_pl for t in themes}
     signals = day_signals(conn, day)
+    sample = sample_articles(conn, day)
+    publication = publication_meta(conn, day)
     totals = country_article_counts(conn, day)
     countries = sorted(totals)
     metrics = compute_daily_metrics(conn, day, save=False)
@@ -283,7 +289,15 @@ def build_data_package(conn: sqlite3.Connection, day: str, settings: Settings, t
         for c in countries:
             today = shares_today[(theme, c)]
             sigs = by_theme.get(theme, {}).get(c, [])
-            entry: dict = {"udzial": _r(today)}
+            source_totals = Counter(a["source_id"] for a in sample if a["country"] == c)
+            source_theme = {sid: len({s.article_id for s in sigs if s.source_id == sid}) for sid in source_totals}
+            balanced = sum(source_theme[sid] / total for sid, total in source_totals.items()) / max(1, len(source_totals))
+            entry: dict = {"udzial": _r(today), "udzial_rowne_redakcje": _r(balanced),
+                           "roznica_wag_pp": _r(100*(today-balanced), 1),
+                           "wrazliwosc_wag": abs(today-balanced) >= 0.10,
+                           "udzial_po_deduplikacji": _r(
+                               len({s.content_group or str(s.article_id) for s in sigs}) /
+                               max(1,len({a['content_group'] or str(a['id']) for a in sample if a['country']==c})))}
             if has_baseline[c]:
                 series = [hist.get((theme, c), {}).get(d, 0.0) for d in sorted(hist_days[c])]
                 mean = sum(series) / len(series)
@@ -297,7 +311,7 @@ def build_data_package(conn: sqlite3.Connection, day: str, settings: Settings, t
                 continue
             if sigs:
                 entry.update(n_artykulow=len({s.article_id for s in sigs}),
-                             n_zrodel=len({s.source_id for s in sigs}),
+                             n_zrodel=independence_count(sigs),
                              sr_intensywnosc=_r(sum(s.intensity for s in sigs) / len(sigs), 2),
                              ramy=_frames(sigs))
             per_country[c] = entry
@@ -309,6 +323,17 @@ def build_data_package(conn: sqlite3.Connection, day: str, settings: Settings, t
 
     return {
         "data": day,
+        "publikacje": {k:v for k,v in publication.items() if k != "eligible_ids"},
+        "mianowniki_zrodel": sample_metadata(conn, day),
+        "dowody": [signal_dict(s) for s in signals],
+        "metryka_js": "odległość rozkładów nacechowania; nie mierzy podobieństwa ram",
+        "porownania_wewnatrz_krajow": [
+            {"kraj": c, "temat": t, "redakcje": [
+                {"zrodlo": sid, "rozklad_stance": distribution(s.stance for s in sigs if s.source_id == sid),
+                 "sygnaly": representative([s for s in sigs if s.source_id == sid], 2)}
+                for sid in sorted({s.source_id for s in sigs})]}
+            for t, countries_ in by_theme.items() for c, sigs in countries_.items()
+            if len({s.source_id for s in sigs}) >= 2],
         "progi": {"min_krajow": th.min_countries, "min_zrodel_na_kraj": th.min_sources_per_country,
                   "linia_bazowa_dni": th.baseline_days, "min_dni_historii": th.min_history_days_for_trends},
         "linia_bazowa": {
@@ -319,7 +344,7 @@ def build_data_package(conn: sqlite3.Connection, day: str, settings: Settings, t
         },
         "kraje": {c: {
             "n_artykulow": totals[c],
-            "n_zrodel": len({s.source_id for s in signals if s.country == c}),
+            "n_zrodel": independence_count([s for s in signals if s.country == c]),
             "n_sygnalow": sum(1 for s in signals if s.country == c),
             "udzial_sygnalow_tylko_lead": _r(
                 sum(1 for s in signals if s.country == c and s.source_depth == "lead_only")

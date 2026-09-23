@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import sqlite3
+import json
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -10,7 +11,7 @@ from typing import Iterable
 
 from paralaksa.config import Source
 
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 4
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS schema_version (
@@ -81,6 +82,13 @@ CREATE INDEX IF NOT EXISTS idx_fetch_log_source ON fetch_log(source_id, fetched_
 
 # Migracje: wersja -> instrukcje. SCHEMA powyżej to zawsze wersja 1.
 MIGRATIONS: dict[int, str] = {
+    4: """
+    ALTER TABLE sources ADD COLUMN metadata TEXT NOT NULL DEFAULT '{}';
+    ALTER TABLE articles ADD COLUMN section TEXT;
+    ALTER TABLE articles ADD COLUMN genre TEXT NOT NULL DEFAULT 'unknown';
+    ALTER TABLE articles ADD COLUMN content_group TEXT;
+    CREATE INDEX idx_articles_content_group ON articles(content_group);
+    """,
     2: """
     -- KM2: głębokość materiału, wersja promptu, błędy ekstrakcji, koszty API.
     ALTER TABLE signals ADD COLUMN source_depth TEXT
@@ -142,12 +150,12 @@ def init_db(conn: sqlite3.Connection) -> None:
 def upsert_sources(conn: sqlite3.Connection, sources: Iterable[Source]) -> None:
     conn.executemany(
         """
-        INSERT INTO sources (id, name, country, language, type) VALUES (?, ?, ?, ?, ?)
+        INSERT INTO sources (id, name, country, language, type, metadata) VALUES (?, ?, ?, ?, ?, ?)
         ON CONFLICT(id) DO UPDATE SET
           name = excluded.name, country = excluded.country,
-          language = excluded.language, type = excluded.type
+          language = excluded.language, type = excluded.type, metadata = excluded.metadata
         """,
-        [(s.id, s.name, s.country, s.language, s.type) for s in sources],
+        [(s.id, s.name, s.country, s.language, s.type, s.model_dump_json()) for s in sources],
     )
     conn.commit()
 
@@ -160,9 +168,11 @@ class ArticleRow:
     title: str
     lead: str | None
     language: str
-    published_at: str
+    published_at: str | None
     fetched_at: str
     fulltext: str | None = None
+    section: str | None = None
+    genre: str = "unknown"
 
 
 def insert_article(conn: sqlite3.Connection, a: ArticleRow) -> int | None:
@@ -170,11 +180,11 @@ def insert_article(conn: sqlite3.Connection, a: ArticleRow) -> int | None:
     cur = conn.execute(
         """
         INSERT OR IGNORE INTO articles
-          (source_id, url, url_hash, title, lead, fulltext, language, published_at, fetched_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+          (source_id, url, url_hash, title, lead, fulltext, language, published_at, fetched_at, section, genre)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         (a.source_id, a.url, a.url_hash, a.title, a.lead, a.fulltext,
-         a.language, a.published_at, a.fetched_at),
+         a.language, a.published_at, a.fetched_at, a.section, a.genre),
     )
     return cur.lastrowid if cur.rowcount else None
 

@@ -9,6 +9,8 @@ from paralaksa import db
 from paralaksa.config import Settings, Source, Theme
 from paralaksa.report.schema import CountryLine, ReportOutput
 
+CONFIDENCE_PL = {"niski": "niska", "średni": "średnia", "wysoki": "wysoka"}
+
 LEAD_ONLY_WARN = 0.5   # udział sygnałów "tylko lead", od którego kraj jest oznaczany jako materiał niepełny
 
 
@@ -96,13 +98,30 @@ def _theme(theme_id: str, meta: ReportMeta) -> str:
 
 
 def _country_line(k: CountryLine, meta: ReportMeta) -> str:
-    return f"- **{k.kraj}** (źródła: {k.n_zrodel}): {k.rama}, {k.stance} – {_refs(k.article_ids, meta)}"
+    names = sorted({e.zrodlo for e in k.dowody})
+    label = ", ".join(names) + f" ({k.kraj})" if k.n_zrodel == 1 and names else f"analizowane źródła z {k.kraj}"
+    return f"- **{label}** (źródła: {k.n_zrodel}): {k.rama}, {k.stance} – {_refs(k.article_ids, meta)}"
 
 
 # ------------------------------------------------------------------ render
 
 def render_markdown(report: ReportOutput, package: dict, meta: ReportMeta) -> str:
     out: list[str] = [f"# Paralaksa narracji – {meta.date}", ""]
+    publication = package.get("publikacje", {})
+    if publication:
+        out += [f"> **Raport {publication['status']}**. Pobranie: {meta.date} UTC. "
+                f"Wykryte daty publikacji: {publication['published_min'] or 'brak'} — {publication['published_max'] or 'brak'}.",
+                f"> Starsze niż 24 h: {publication['older_than_24h']}; starsze niż 48 h: {publication['older_than_48h']}; "
+                f"bez daty: {publication['missing_publication']}; spóźnione poza oknem: {publication['late_articles']} "
+                f"({publication['late_share']:.1%}); przyszłe daty: {publication['future_publication']}.", ""]
+        if publication['status'] == 'regularny':
+            out += [f"> Okno publikacji: [{publication['publication_window_start']}, "
+                    f"{publication['publication_window_end_exclusive']}). Starsze i niedatowane uzupełnienia "
+                    "nie wchodzą do porównań tego przebiegu.", ""]
+        else:
+            out += ["> Pierwszy odczyt RSS obejmuje zaległość. Nie służy do oceny trendów ani jako materiał marketingowy.", ""]
+    out += ["> **Kontrola semantyczna:** nie wykonano audytu człowieka; automatyczna walidacja sprawdza "
+            "powiązania temat–kraj–sygnał, nie dowodzi prawdziwości zdarzeń ani pełnego wynikania tekstu tezy.", ""]
     if meta.warnings:
         out += ["> **Ostrzeżenia walidacji:**"] + [f"> - {w}" for w in meta.warnings] + [""]
     baseline = package["linia_bazowa"]
@@ -115,7 +134,7 @@ def render_markdown(report: ReportOutput, package: dict, meta: ReportMeta) -> st
         out += [f"> **Materiał niepełny:** {'; '.join(incomplete)}.", ""]
 
     out += ["## W skrócie", ""]
-    out += [f"- {s.tekst} (pewność: {s.pewnosc}) {_refs(s.article_ids, meta)}" for s in report.w_skrocie] \
+    out += [f"- {s.tekst} (pewność: {CONFIDENCE_PL[s.pewnosc]}) {_refs(s.article_ids, meta)}" for s in report.w_skrocie] \
         or ["_Synteza nie zwróciła podsumowania._"]
 
     out += ["", "## Wzorce zbieżności", ""]
@@ -130,7 +149,7 @@ def render_markdown(report: ReportOutput, package: dict, meta: ReportMeta) -> st
             "",
             f"**Wspólny kierunek:** {p.wspolny_kierunek}  ",
             f"**Sygnały przeciwne:** {p.sygnaly_przeciwne.tekst} {_refs(p.sygnaly_przeciwne.article_ids, meta)}  ",
-            f"**Pewność:** {p.pewnosc.poziom} – {p.pewnosc.uzasadnienie}  ",
+            f"**Pewność:** {CONFIDENCE_PL[p.pewnosc.poziom]} – {p.pewnosc.uzasadnienie}  ",
             f"**Trend:** {p.trend}",
             "",
         ]
@@ -141,19 +160,19 @@ def render_markdown(report: ReportOutput, package: dict, meta: ReportMeta) -> st
     for d in report.rozbieznosci:
         out += [f"### {_theme(d.temat, meta)}", "", d.tekst, ""]
         out += [_country_line(k, meta) for k in d.kraje]
-        out += ["", f"**Pewność:** {d.pewnosc.poziom} – {d.pewnosc.uzasadnienie}", ""]
+        out += ["", f"**Pewność:** {CONFIDENCE_PL[d.pewnosc.poziom]} – {d.pewnosc.uzasadnienie}", ""]
 
     out += ["", "## Autoobraz vs obraz zewnętrzny", ""]
     js = {a["kraj"]: a for a in package.get("autoobraz", [])}
     if report.autoobraz:
-        out += ["| kraj | jak opisuje siebie | jak opisują go inni | rozjazd (JS) | sygnały (własne/zewn.) | komentarz |",
+        out += ["| kraj | jak opisuje siebie | jak opisują go inni | odległość rozkładów nacechowania (JS) | sygnały (własne/zewn.) | komentarz |",
                 "|---|---|---|---|---|---|"]
         for a in report.autoobraz:
             data = js.get(a.kraj, {})
             value = f"{data['js']:.2f}" if "js" in data else "–"
             counts = f"{data.get('n_wlasne', '–')}/{data.get('n_zewnetrzne', '–')}"
             out.append(f"| {a.kraj} | {_cell(a.jak_opisuje_siebie)} | {_cell(a.jak_opisuja_go_inni)} | {value} | "
-                       f"{counts} | {_cell(a.komentarz)} {_refs(a.article_ids, meta)} |")
+                       f"{counts} | pewność: {CONFIDENCE_PL[a.pewnosc]}; {_cell(a.komentarz)} {_refs(a.article_ids, meta)} |")
     else:
         out.append("_Brak._")
 
@@ -172,7 +191,28 @@ def render_markdown(report: ReportOutput, package: dict, meta: ReportMeta) -> st
         out += ["", "## Słabe sygnały (poniżej progów)", ""]
         out += [f"- {c.tekst} {_refs(c.article_ids, meta)}" for c in report.slabe_sygnaly]
 
-    out += ["", *_metadata(meta), ""]
+    out += ["", "## Zakres i mianowniki pobranej próbki", "",
+            "Udziały dotyczą pobranej próbki. Nie są udziałami całego przekazu krajów. "
+            "JS porównuje nacechowanie; ramy są analizowane jakościowo.", "",
+            "| redakcja / kraj / język | zakres | pobrane / w porównaniu | pełny tekst / lead | news / opinion / unknown | oczekujące / błędy |",
+            "|---|---|---|---|---|---|"]
+    for row in package.get('mianowniki_zrodel', []):
+        genres = row['genres']
+        out.append(f"| {_cell(row['name'])} / {row['country']} / {row['language']} | {_cell(row['scope'] or 'nieznany')} | "
+                   f"{row['articles']} / {row['eligible']} | {row['fulltext']} / {row['lead_only']} | "
+                   f"{genres.get('news',0)} / {genres.get('opinion',0)} / {genres.get('unknown',0)} | "
+                   f"{row['pending']} / {row['failed']} |")
+    out += ["", "### Wrażliwość na ważenie redakcji", "",
+            "Porównujemy udział liczony po artykułach i średni udział przy równej wadze każdej redakcji. "
+            "Flaga pojawia się od różnicy 10 punktów procentowych; nie jest testem istotności.", "",
+            "| temat / kraj | po artykułach | równe redakcje | po deduplikacji | wrażliwość |", "|---|---|---|---|---|"]
+    for topic in package.get('tematy', []):
+        for country, values in topic['kraje'].items():
+            if 'udzial_rowne_redakcje' in values:
+                out.append(f"| {_theme(topic['temat'],meta)} / {country} | {values['udzial']:.1%} | "
+                           f"{values['udzial_rowne_redakcje']:.1%} | {values['udzial_po_deduplikacji']:.1%} | {'TAK' if values['wrazliwosc_wag'] else '—'} |")
+    out += ["", "Syndykacja: identyczne długie teksty/leady nie zwiększają liczby niezależnych głosów. "
+            "Przeredagowane i tłumaczone depesze mogą pozostać nierozpoznane.", "", *_metadata(meta), ""]
     return "\n".join(out)
 
 

@@ -20,7 +20,19 @@ Pełna specyfikacja: `SPEC.md`. Jest źródłem prawdy, ale nazewnictwo w repo r
 | komenda `radar` | `plx` |
 | `data/radar.db` | `data/paralaksa.db` |
 
-## Stan (2026-09-23)
+## Aktualizacja przed KM4 (2026-09-23)
+
+Aktualny punkt wejścia: `docs/CURRENT_HANDOFF.md`, stan źródeł: `docs/SOURCE_REVIEW.md`,
+obsługa: `docs/OPERATIONS.md`. Poniższe decyzje KM1–3 zachowano jako historię.
+Nowe reguły mają pierwszeństwo przed dawnymi uwagami o dniu pobrania i starcie od zera:
+- migracja v4, rzeczywiste braki dat publikacji; regularne porównania z okna D-1..D UTC;
+- pochodzenie każdej tezy po signal_id/theme_id/kraju/redakcji, odrzucenie całej wadliwej tezy;
+- JS wyłącznie rozkład stance, pewność niska przy jednej redakcji; audyt semantyczny pending;
+- metadane i wagi, konserwatywna kontrola identycznej syndykacji, jawne odłożenia;
+- trwały zaszyfrowany backup Release, nigdy cichy restart bazy; wymagany DB_BACKUP_KEY;
+- kandydaci nieaktywni do kompletu bramek. Nie twierdzić, że rozszerzony koszyk przeszedł odbiór.
+
+## Stan KM3 (2026-09-23)
 - [x] **KM1: szkielet i ingest.** Konfiguracja YAML + pydantic, SQLite (pełny schemat §7
   + `fetch_log`, `schema_version`), ingest RSS/Atom/RDF dla 10 źródeł, pełne teksty, `plx init-db | sources | ingest`, testy.
 - [x] **KM2: ekstrakcja sygnałów.** Prompt (`prompts/extract_signals.md`), klient LLM z retry

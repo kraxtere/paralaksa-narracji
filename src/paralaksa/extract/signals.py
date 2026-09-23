@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import logging
 import sqlite3
+import time
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import datetime
@@ -103,10 +104,13 @@ def pending_articles(conn: sqlite3.Connection, limit: int | None = None) -> list
         SELECT a.id, a.source_id, s.country, s.type, a.title, a.lead, a.fulltext
         FROM articles a JOIN sources s ON s.id = a.source_id
         WHERE a.extracted = 0
-        ORDER BY a.published_at, a.id
+        ORDER BY ROW_NUMBER() OVER (PARTITION BY s.country,a.source_id ORDER BY a.fetched_at DESC,a.published_at DESC,a.id),
+                 s.country,a.source_id
     """
     params: tuple = ()
-    if limit:
+    if limit is not None:
+        if limit < 1:
+            raise ValueError("limit musi być dodatni")
         sql += " LIMIT ?"
         params = (limit,)
     return [ArticleForExtraction(*row) for row in conn.execute(sql, params).fetchall()]
@@ -151,15 +155,17 @@ class _Run:
         self.max_daily = settings.budget.max_daily_usd
         self.day = now.date().isoformat()
         self.stats = ExtractStats()
+        self.deadline = time.monotonic() + settings.extract.max_runtime_s
 
     # --- budżet
 
     def spent(self) -> float:
         return db.spent_on(self.conn, self.day)
 
-    def estimate(self, prompt: str, batch: bool) -> float:
+    def estimate(self, prompt: str, batch: bool, reserve: bool = False) -> float:
         in_tokens = int(len(prompt) / CHARS_PER_TOKEN)
-        return self.settings.pricing.cost(self.model, in_tokens, self.settings.extract.est_output_tokens, batch)
+        return self.settings.pricing.cost(self.model, in_tokens,
+            self.settings.extract.max_tokens if reserve else self.settings.extract.est_output_tokens, batch)
 
     def fits(self, extra_usd: float) -> bool:
         return self.spent() + extra_usd <= self.max_daily
@@ -181,8 +187,9 @@ class _Run:
                             res.cost_usd, article_id=article_id, batch_id=res.batch_id, now=self.now)
             self.stats.cost_usd += res.cost_usd
 
-    def handle(self, art: ArticleForExtraction, req: LLMRequest, res: LLMResult) -> None:
-        self.record(res, art.id)
+    def handle(self, art: ArticleForExtraction, req: LLMRequest, res: LLMResult, recorded=False) -> None:
+        if not recorded:
+            self.record(res, art.id)
         if not res.ok:
             self._fail(art, res.error or "nieznany błąd", res.retryable)
             return
@@ -219,7 +226,7 @@ class _Run:
                 {"role": "user", "content": RETRY_INSTRUCTION.format(errors="\n".join(f"- {e}" for e in errors))},
             ],
         )
-        if not self.fits(self.estimate(str(retry_req.messages), batch=False)):
+        if not self.fits(self.estimate(str(retry_req.messages), batch=False, reserve=True)):
             self.stats.budget_stopped = True
             log.warning("Artykuł %s: pominięto ponowienie (dzienny limit kosztów)", art.id)
             return None
@@ -253,7 +260,7 @@ class _Run:
         remaining = self.max_daily - self.spent()
         selected, total = [], 0.0
         for art, req in items:
-            est = self.estimate(req.messages[0]["content"], batch)
+            est = self.estimate(req.messages[0]["content"], batch, reserve=True)
             if total + est > remaining:
                 self.stats.budget_stopped = True
                 break
@@ -270,21 +277,31 @@ class _Run:
         outcome = self.llm.run_batch([req for _, req in selected])
         self.stats.batch_id = outcome.batch_id
         for art, req in selected:
-            self.handle(art, req, outcome.results[req.custom_id])
+            self.record(outcome.results[req.custom_id], art.id)
+        self.conn.commit()
+        for art, req in selected:
+            self.handle(art, req, outcome.results[req.custom_id], recorded=True)
 
     def run_direct(self, items) -> None:
         self.stats.mode = "direct"
         chunk_size = self.settings.extract.max_concurrency
         with ThreadPoolExecutor(max_workers=chunk_size) as pool:
             for i in range(0, len(items), chunk_size):
+                if time.monotonic() >= self.deadline:
+                    self.stats.deferred += len(items) - i
+                    log.warning("Limit czasu ekstrakcji; pozostałe artykuły zachowano do kolejnego przebiegu")
+                    return
                 chunk = items[i : i + chunk_size]
-                chunk_est = sum(self.estimate(req.messages[0]["content"], False) for _, req in chunk)
+                chunk_est = sum(self.estimate(req.messages[0]["content"], False, reserve=True) for _, req in chunk)
                 if not self.fits(chunk_est):
                     chunk = self.within_budget(chunk, batch=False)
                     self.stats.budget_stopped = True
                 results = list(pool.map(lambda item: self.llm.complete(item[1]), chunk))
                 for (art, req), res in zip(chunk, results):
-                    self.handle(art, req, res)
+                    self.record(res, art.id)
+                self.conn.commit()
+                for (art, req), res in zip(chunk, results):
+                    self.handle(art, req, res, recorded=True)
                 if self.stats.budget_stopped:
                     self.stats.deferred += len(items) - i - len(chunk)
                     return
@@ -302,7 +319,8 @@ def extract_pending(
 ) -> ExtractStats:
     run = _Run(conn, llm, settings, themes, prompt_path, now or db.utc_now())
     articles = pending_articles(conn, limit)
-    run.stats.pending = len(articles)
+    run.stats.pending = conn.execute("SELECT COUNT(*) FROM articles WHERE extracted=0").fetchone()[0]
+    run.stats.deferred = run.stats.pending - len(articles)
     if not articles:
         return run.stats
     items = [(art, run.request(art)) for art in articles]

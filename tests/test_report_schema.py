@@ -50,7 +50,7 @@ def test_missing_references_detected(data):
 def test_counter_signals_may_be_empty_but_must_exist(data):
     ids, package, known = data
     r = mutate(valid_report(ids), lambda r: r["wzorce_zbieznosci"][0]["sygnaly_przeciwne"].update(
-        tekst="Brak sygnałów przeciwnych w danych.", article_ids=[]))
+        tekst="Brak sygnałów przeciwnych w danych.", article_ids=[], dowody=[]))
     assert check(r, package, known) == []
     r = mutate(valid_report(ids), lambda r: r["wzorce_zbieznosci"][0]["sygnaly_przeciwne"].update(article_ids=[42_000]))
     assert any("sygnaly_przeciwne: nieistniejące" in e for e in check(r, package, known))
@@ -96,8 +96,7 @@ def test_sanitize_drops_unbacked_claims(data):
     clean = sanitize_report(parsed, package, known)
     assert validate_report(clean, package, known) == []
     assert len(clean.w_skrocie) == 1 and clean.slabe_sygnaly == []
-    assert clean.wzorce_zbieznosci[0].trend == "brak linii bazowej"
-    assert clean.wzorce_zbieznosci[0].kraje[0].article_ids == ids["pl"]
+    assert clean.wzorce_zbieznosci == []  # błędny link usuwa całą tezę, nie tylko odnośnik
 
 
 def test_sanitize_drops_pattern_below_threshold(data):

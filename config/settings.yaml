@@ -31,6 +31,7 @@ ingest:
   stale_source_days: 2      # ostrzeżenie, gdy źródło nie dało nowych artykułów przez tyle dni
 
 extract:
+  max_runtime_s: 2400       # zakończ po bieżącej paczce i raportuj odłożone materiały
   batch_threshold: 50       # powyżej tej liczby artykułów: Message Batches API (-50% kosztu)
   max_concurrency: 4        # równoległe wywołania bezpośrednie
   max_tokens: 4000
@@ -38,7 +39,7 @@ extract:
   effort: null              # low | medium | high | null (ignorowane dla Haiku 4.5)
   batch_poll_interval_s: 30
   batch_timeout_h: 24
-  est_output_tokens: 800    # szacunek wyjścia do kontroli budżetu (zmierzone: ~650 na wywołanie)
+  est_output_tokens: 800    # szacunek dry-run; rezerwacja API używa max_tokens (zmierzone: ~650 na wywołanie)
 
 report:
   output_dir: reports
@@ -63,4 +64,4 @@ pricing:
       deepseek-flash: {input_peak: 0.30, input_off_peak: 0.15, cache_hit: 0.003, output_peak: 1.20, output_off_peak: 0.60}
 
 budget:
-  max_daily_usd: 3.0        # przerwij ekstrakcję po przekroczeniu i oznacz raport
+  max_daily_usd: 3.0        # rezerwuj koszt przed wywołaniem; niepełny przebieg kończy się kodem 1

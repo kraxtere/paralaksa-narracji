@@ -142,7 +142,9 @@ def ingest_feed(
             title=entry.title,
             lead=entry.lead,
             language=source.language,
-            published_at=db.to_iso(entry.published or now),
+            published_at=db.to_iso(entry.published) if entry.published else None,
+            section=feed.section,
+            genre=("opinion" if set(c.casefold() for c in entry.categories) & {"opinion", "opinions", "editorial", "blogs"} else feed.genre),
             fetched_at=fetched_at,
         )
         article_id = db.insert_article(conn, row)
@@ -196,4 +198,6 @@ def ingest_sources(
             db.set_fulltext(conn, article_id, text)
             results[source_id].fulltext_ok += 1
         conn.commit()
+    from paralaksa.ingest.dedup import mark_syndication
+    mark_syndication(conn)
     return list(results.values())

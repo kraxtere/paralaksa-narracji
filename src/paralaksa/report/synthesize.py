@@ -97,10 +97,11 @@ def run_synthesis(
     started = time.monotonic()
 
     def call(r: LLMRequest) -> LLMResult:
+        # Reserve maximum output on every attempt, including validation retries.
+        cost = settings.pricing.cost(model, int(len(str(r.messages))/CHARS_PER_TOKEN), r.max_tokens)
+        if db.spent_on(conn, now.date().isoformat()) + cost > settings.budget.max_daily_usd:
+            return LLMResult(custom_id=r.custom_id, model=model, mode="direct", error="dzienny limit kosztów", retryable=False)
         res = llm.complete(r)
-        if not res.ok and res.retryable:
-            log.warning("Synteza: błąd przejściowy (%s), ponawiam", res.error)
-            res = llm.complete(r)
         stats.calls += 1
         if res.input_tokens or res.output_tokens:
             db.record_usage(conn, res.model, res.mode, "synthesize", res.input_tokens, res.output_tokens,

@@ -27,8 +27,8 @@ def test_migration_v1_to_current_keeps_data(tmp_path, make_source):
     old = db.connect(path)
     old.executescript(db.SCHEMA)  # baza z KM1
     old.execute("INSERT INTO schema_version (version) VALUES (1)")
-    db.upsert_sources(old, [make_source()])
-    db.insert_article(old, _article())
+    old.execute("INSERT INTO sources(id,name,country,language,type) VALUES ('test','Test','UK','en','private')")
+    old.execute("INSERT INTO articles(source_id,url,url_hash,title,extracted) VALUES ('test','https://a.example/1','h1','T',0)")
     old.commit()
     old.close()
 

@@ -58,3 +58,19 @@ def is_similar_title(title: str, others: list[str], threshold: float) -> bool:
     if not norm:
         return False
     return any(title_similarity(title, o) >= threshold for o in others)
+
+
+def mark_syndication(conn):
+    """Conservative exact-text groups; never infer shared origin merely from a shared subject.
+
+    Full texts >=80 words or leads >=40 words are hashed separately. Short/translated/edited
+    agency copies remain an explicit limitation; no fuzzy cross-language identity is claimed.
+    """
+    rows = conn.execute('SELECT id,lead,fulltext FROM articles').fetchall()
+    for row in rows:
+        text = row['fulltext'] or row['lead'] or ''
+        words = re.sub(r'\W+', ' ', text.casefold()).split()
+        minimum = 80 if row['fulltext'] else 40
+        group = hashlib.sha256(' '.join(words).encode()).hexdigest() if len(words) >= minimum else None
+        conn.execute('UPDATE articles SET content_group=? WHERE id=?', (group, row['id']))
+    conn.commit()

@@ -79,7 +79,7 @@ def ingest(
         if unknown:
             typer.echo(f"Nieznane źródła: {', '.join(unknown)}", err=True)
             raise typer.Exit(code=2)
-        selected = [s for s in all_sources if s.id in source and s.feeds]
+        selected = [s for s in all_sources if s.id in source and s.feeds and s.active]
     else:
         selected = [s for s in all_sources if s.active]
     if not selected:
@@ -138,7 +138,7 @@ def extract(
 
     stats = _run_extract(conn, settings, themes, limit, use_batch=not no_batch)
     conn.close()
-    if stats.failed and not stats.done:
+    if stats.failed or stats.deferred:
         raise typer.Exit(code=1)
 
 
@@ -218,8 +218,10 @@ def report(
 ) -> None:
     """Zbuduj raport dzienny: metryki, pakiet danych, synteza LLM, walidacja, Markdown."""
     settings, conn = _open_db(config_dir, db_path)
-    _run_report(conn, settings, config_dir, _parse_day(day), out_dir)
+    result = _run_report(conn, settings, config_dir, _parse_day(day), out_dir)
     conn.close()
+    if not result.complete:
+        raise typer.Exit(code=1)
 
 
 @app.command("run-daily")
@@ -243,8 +245,10 @@ def run_daily(
     typer.echo("== extract")
     _run_extract(conn, settings, themes, limit, use_batch=True)
     typer.echo("== aggregate + report")
-    _run_report(conn, settings, config_dir, d, out_dir)
+    result = _run_report(conn, settings, config_dir, d, out_dir)
     conn.close()
+    if not result.complete:
+        raise typer.Exit(code=1)
 
 
 if __name__ == "__main__":

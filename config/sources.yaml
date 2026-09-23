@@ -1,33 +1,38 @@
-# Lista źródeł (format wg SPEC §6).
-# Kanały zweryfikowane 2026-09-23: HTTP 200, świeże wpisy, robots.txt zezwala
-# (UA paralaksa-narracji oraz *).
-# type: agency | public | private | tabloid | government
-# fulltext: pobieraj pełny tekst tylko bez paywalla i przy zgodzie robots.txt.
-# note: krótki komentarz, pokazywany przez `plx sources` (np. powód nieaktywności).
-
-# ---------------------------------------------------------------- PL
+# Koszyk przed KM4. Pięć bramek dla nowych źródeł; unknown nie oznacza news.
 - id: rp
   name: Rzeczpospolita
   country: PL
   language: pl
   type: private
   feeds:
-    - url: https://www.rp.pl/rss_main
-      section: glowne
-  fulltext: false          # paywall
+  - url: https://www.rp.pl/rss_main
+    section: glowne
+  fulltext: false
   active: true
-
+  editorial_country: PL
+  publisher_group: rp
+  activated_at: '2026-09-23'
+  channel_scope: glowne
+  license_note: Źródło odziedziczone z KM3; pierwotny audyt 2026-09-23. Nie oznacza
+    udzielenia nowej licencji.
+  ownership: prywatne; szczegóły struktury do uzupełnienia
 - id: onet
   name: Onet Wiadomości
   country: PL
   language: pl
   type: private
   feeds:
-    - url: https://wiadomosci.onet.pl/.feed
-      section: wiadomosci
+  - url: https://wiadomosci.onet.pl/.feed
+    section: wiadomosci
   fulltext: true
   active: true
-
+  editorial_country: PL
+  publisher_group: onet
+  activated_at: '2026-09-23'
+  channel_scope: wiadomosci
+  license_note: Źródło odziedziczone z KM3; pierwotny audyt 2026-09-23. Nie oznacza
+    udzielenia nowej licencji.
+  ownership: prywatne; szczegóły struktury do uzupełnienia
 - id: pap
   name: Polska Agencja Prasowa
   country: PL
@@ -36,8 +41,8 @@
   feeds: []
   fulltext: false
   active: false
-  note: "Brak działającego RSS: pap.pl/rss.xml zwraca HTML 'Not found' (Incapsula), /rss/swiat.xml 404."
-
+  note: 'Brak działającego RSS: pap.pl/rss.xml zwraca HTML ''Not found'' (Incapsula),
+    /rss/swiat.xml 404.'
 - id: polskieradio
   name: Polskie Radio 24
   country: PL
@@ -46,55 +51,64 @@
   feeds: []
   fulltext: false
   active: false
-  note: "Brak działającego RSS: polskieradio24.pl/rss zwraca stronę HTML, stare adresy polskieradio.pl 404."
-
+  note: 'Brak działającego RSS: polskieradio24.pl/rss zwraca stronę HTML, stare adresy
+    polskieradio.pl 404.'
 - id: wp
   name: Wirtualna Polska
   country: PL
   language: pl
   type: private
   feeds:
-    - url: https://wiadomosci.wp.pl/rss.xml
-      section: wiadomosci
+  - url: https://wiadomosci.wp.pl/rss.xml
+    section: wiadomosci
   fulltext: true
   active: false
-  note: "RSS zweryfikowany; do włączenia w KM4 (pełna lista źródeł)."
-
+  note: RSS zweryfikowany; do włączenia w KM4 (pełna lista źródeł).
 - id: gazeta
   name: Gazeta.pl
   country: PL
   language: pl
   type: private
   feeds:
-    - url: https://rss.gazeta.pl/pub/rss/wiadomosci.xml
-      section: wiadomosci
+  - url: https://rss.gazeta.pl/pub/rss/wiadomosci.xml
+    section: wiadomosci
   fulltext: true
   active: false
-  note: "RSS zweryfikowany (portal Gazeta.pl, nie Wyborcza); do włączenia w KM4."
-
-# ---------------------------------------------------------------- UA
+  note: RSS zweryfikowany (portal Gazeta.pl, nie Wyborcza); do włączenia w KM4.
 - id: ukrinform
   name: Ukrinform
   country: UA
   language: uk
-  type: agency             # państwowa agencja informacyjna
+  type: agency
   feeds:
-    - url: https://www.ukrinform.ua/rss/block-lastnews
-      section: ostatnie
+  - url: https://www.ukrinform.ua/rss/block-lastnews
+    section: ostatnie
   fulltext: true
   active: true
-
+  editorial_country: UA
+  publisher_group: ukrinform
+  activated_at: '2026-09-23'
+  channel_scope: ostatnie
+  license_note: Źródło odziedziczone z KM3; pierwotny audyt 2026-09-23. Nie oznacza
+    udzielenia nowej licencji.
+  ownership: państwowa ukraińska agencja informacyjna
 - id: pravda_ua
   name: Ukraińska Prawda
   country: UA
   language: uk
   type: private
   feeds:
-    - url: https://www.pravda.com.ua/rss/
-      section: wiadomosci
+  - url: https://www.pravda.com.ua/rss/
+    section: wiadomosci
   fulltext: true
   active: true
-
+  editorial_country: UA
+  publisher_group: pravda_ua
+  activated_at: '2026-09-23'
+  channel_scope: wiadomosci
+  license_note: Źródło odziedziczone z KM3; pierwotny audyt 2026-09-23. Nie oznacza
+    udzielenia nowej licencji.
+  ownership: prywatne; szczegóły struktury do uzupełnienia
 - id: suspilne
   name: Suspilne
   country: UA
@@ -103,92 +117,110 @@
   feeds: []
   fulltext: false
   active: false
-  note: "suspilne.media/rss/all.rss zwraca 403."
-
+  note: suspilne.media/rss/all.rss zwraca 403.
 - id: kyivindependent
   name: The Kyiv Independent
   country: UA
   language: en
   type: private
   feeds:
-    - url: https://kyivindependent.com/news-archive/rss/
-      section: news
+  - url: https://kyivindependent.com/news-archive/rss/
+    section: news
   fulltext: true
   active: false
-  note: "RSS zweryfikowany; do włączenia w KM4."
-
-# ---------------------------------------------------------------- DE
+  note: RSS zweryfikowany; do włączenia w KM4.
 - id: tagesschau
   name: Tagesschau (ARD)
   country: DE
   language: de
   type: public
   feeds:
-    - url: https://www.tagesschau.de/xml/rss2
-      section: alle
+  - url: https://www.tagesschau.de/xml/rss2
+    section: alle
   fulltext: true
   active: true
-
+  editorial_country: DE
+  publisher_group: tagesschau
+  activated_at: '2026-09-23'
+  channel_scope: alle
+  license_note: Źródło odziedziczone z KM3; pierwotny audyt 2026-09-23. Nie oznacza
+    udzielenia nowej licencji.
+  ownership: nadawca publiczny
 - id: spiegel
   name: Der Spiegel
   country: DE
   language: de
   type: private
   feeds:
-    - url: https://www.spiegel.de/ausland/index.rss
-      section: ausland
-  fulltext: false          # część artykułów za paywallem Spiegel+
+  - url: https://www.spiegel.de/ausland/index.rss
+    section: ausland
+  fulltext: false
   active: true
-
+  editorial_country: DE
+  publisher_group: spiegel
+  activated_at: '2026-09-23'
+  channel_scope: ausland
+  license_note: Źródło odziedziczone z KM3; pierwotny audyt 2026-09-23. Nie oznacza
+    udzielenia nowej licencji.
+  ownership: prywatne; szczegóły struktury do uzupełnienia
 - id: dw
   name: Deutsche Welle
   country: DE
   language: de
   type: public
   feeds:
-    - url: https://rss.dw.com/xml/rss-de-all
-      section: alle
+  - url: https://rss.dw.com/xml/rss-de-all
+    section: alle
   fulltext: true
   active: false
-  note: "RSS zweryfikowany; do włączenia w KM4."
-
+  note: RSS zweryfikowany; do włączenia w KM4.
 - id: faz
   name: Frankfurter Allgemeine Zeitung
   country: DE
   language: de
   type: private
   feeds:
-    - url: https://www.faz.net/rss/aktuell/politik/ausland/
-      section: ausland
-  fulltext: false          # FAZ+ paywall
+  - url: https://www.faz.net/rss/aktuell/politik/ausland/
+    section: ausland
+  fulltext: false
   active: false
-  note: "RSS zweryfikowany; do włączenia w KM4."
-
-# ---------------------------------------------------------------- UK
+  note: RSS zweryfikowany; do włączenia w KM4.
 - id: bbc
   name: BBC News
   country: UK
   language: en
   type: public
   feeds:
-    - url: https://feeds.bbci.co.uk/news/world/rss.xml
-      section: world
-    - url: https://feeds.bbci.co.uk/news/world/europe/rss.xml
-      section: europe
+  - url: https://feeds.bbci.co.uk/news/world/rss.xml
+    section: world
+  - url: https://feeds.bbci.co.uk/news/world/europe/rss.xml
+    section: europe
   fulltext: true
   active: true
-
+  editorial_country: UK
+  publisher_group: bbc
+  activated_at: '2026-09-23'
+  channel_scope: world; europe
+  license_note: Źródło odziedziczone z KM3; pierwotny audyt 2026-09-23. Nie oznacza
+    udzielenia nowej licencji.
+  ownership: nadawca publiczny
 - id: guardian
   name: The Guardian
   country: UK
   language: en
   type: private
   feeds:
-    - url: https://www.theguardian.com/world/rss
-      section: world
+  - url: https://www.theguardian.com/world/rss
+    section: world
   fulltext: true
   active: true
-
+  editorial_country: UK
+  publisher_group: guardian
+  activated_at: '2026-09-23'
+  channel_scope: world
+  license_note: Źródło odziedziczone z KM3; pierwotny audyt 2026-09-23. Nie oznacza
+    udzielenia nowej licencji.
+  ownership: prywatne; szczegóły struktury do uzupełnienia
 - id: telegraph
   name: The Telegraph
   country: UK
@@ -197,43 +229,52 @@
   feeds: []
   fulltext: false
   active: false
-  note: "telegraph.co.uk/news/rss.xml zwraca 402 (Payment Required)."
-
+  note: telegraph.co.uk/news/rss.xml zwraca 402 (Payment Required).
 - id: skynews
   name: Sky News
   country: UK
   language: en
   type: private
   feeds:
-    - url: https://feeds.skynews.com/feeds/rss/world.xml
-      section: world
+  - url: https://feeds.skynews.com/feeds/rss/world.xml
+    section: world
   fulltext: true
   active: false
-  note: "RSS zweryfikowany, ale tylko ~5 wpisów; do rozważenia w KM4."
-
-# ---------------------------------------------------------------- spoza bloku
+  note: RSS zweryfikowany, ale tylko ~5 wpisów; do rozważenia w KM4.
 - id: aljazeera
   name: Al Jazeera English
   country: QA
   language: en
-  type: public             # finansowana przez państwo Katar
+  type: public
   feeds:
-    - url: https://www.aljazeera.com/xml/rss/all.xml
-      section: all
+  - url: https://www.aljazeera.com/xml/rss/all.xml
+    section: all
   fulltext: true
   active: true
-
+  editorial_country: QA
+  publisher_group: aljazeera
+  activated_at: '2026-09-23'
+  channel_scope: all
+  license_note: Źródło odziedziczone z KM3; pierwotny audyt 2026-09-23. Nie oznacza
+    udzielenia nowej licencji.
+  ownership: finansowanie przez państwo Katar
 - id: cgtn
   name: CGTN
   country: CN
   language: en
-  type: government         # państwowy nadawca (CMG), oficjalna rama Pekinu
+  type: government
   feeds:
-    - url: https://www.cgtn.com/subscribe/rss/section/world.xml
-      section: world
+  - url: https://www.cgtn.com/subscribe/rss/section/world.xml
+    section: world
   fulltext: true
   active: true
-
+  editorial_country: CN
+  publisher_group: cgtn
+  activated_at: '2026-09-23'
+  channel_scope: world
+  license_note: Źródło odziedziczone z KM3; pierwotny audyt 2026-09-23. Nie oznacza
+    udzielenia nowej licencji.
+  ownership: państwowy nadawca China Media Group
 - id: globaltimes
   name: Global Times
   country: CN
@@ -242,47 +283,361 @@
   feeds: []
   fulltext: false
   active: false
-  note: >-
-    Brak redakcyjnego RSS: rss/outbrain.xml to nieaktualny kanał syndykacji
-    (wpisy do 23.08.2026, żaden nie ma pokrycia na stronie głównej), /rss/*.xml 404.
-    Włączyć w KM4 przez Google News sitemap https://www.globaltimes.cn/sitemap.xml
-    razem z nowymi typami strumieni (GDELT).
-
+  note: 'Brak redakcyjnego RSS: rss/outbrain.xml to nieaktualny kanał syndykacji (wpisy
+    do 23.08.2026, żaden nie ma pokrycia na stronie głównej), /rss/*.xml 404. Włączyć
+    w KM4 przez Google News sitemap https://www.globaltimes.cn/sitemap.xml razem z
+    nowymi typami strumieni (GDELT).'
 - id: thehindu
   name: The Hindu
   country: IN
   language: en
   type: private
   feeds:
-    - url: https://www.thehindu.com/news/international/feeder/default.rss
-      section: international
+  - url: https://www.thehindu.com/news/international/feeder/default.rss
+    section: international
   fulltext: true
   active: false
-  note: "RSS zweryfikowany; do włączenia w KM4."
-
+  note: RSS zweryfikowany; do włączenia w KM4.
 - id: dailysabah
   name: Daily Sabah
   country: TR
   language: en
   type: private
   feeds:
-    - url: https://www.dailysabah.com/rss/world
-      section: world
+  - url: https://www.dailysabah.com/rss/world
+    section: world
   fulltext: true
   active: false
-  note: "RSS zweryfikowany; do włączenia w KM4."
-
+  note: 'Ponowny test: timeout robots.txt, więc nie pobierano kanału. Warunki i jakość
+    pozostają niepotwierdzone.'
+  verification:
+    checked_at: '2026-09-23'
+    feed: false
+    fresh: false
+    robots: false
+    usage: false
+    quality: false
+  license_note: 'Ponowny test: timeout robots.txt, więc nie pobierano kanału. Warunki
+    i jakość pozostają niepotwierdzone.'
 - id: hurriyet
   name: Hürriyet Daily News
   country: TR
   language: en
   type: private
   feeds:
-    - url: https://www.hurriyetdailynews.com/rss/world
-      section: world
+  - url: https://www.hurriyetdailynews.com/rss/world
+    section: world
   fulltext: true
   active: false
-  note: "RSS zweryfikowany; do włączenia w KM4."
-
-# Reuters, AP, AFP: brak oficjalnych publicznych RSS – do sprawdzenia w KM4.
-# Źródła objęte sankcjami UE (RT, Sputnik itp.) nie są dodawane.
+  note: Świeży kanał world i dostęp techniczny. Nie potwierdzono dopuszczalnego zakresu
+    użycia oraz jakości ekstrakcji.
+  verification:
+    checked_at: '2026-09-23'
+    feed: true
+    fresh: true
+    robots: true
+    usage: false
+    quality: false
+  license_note: Świeży kanał world i dostęp techniczny. Nie potwierdzono dopuszczalnego
+    zakresu użycia oraz jakości ekstrakcji.
+- id: pbs
+  name: PBS News
+  country: US
+  editorial_country: US
+  language: en
+  type: public
+  feeds:
+  - url: https://www.pbs.org/newshour/feeds/rss/headlines
+    section: headlines
+  - url: https://www.pbs.org/newshour/feeds/rss/politics
+    section: politics
+  fulltext: false
+  active: false
+  ownership: publiczny nadawca non-profit; szczegóły finansowania do weryfikacji
+  publisher_group: pbs
+  channel_scope: headlines; politics
+  activated_at: null
+  license_note: RSS świeży i dostępny. Warunki PBS ograniczają użycie komercyjne;
+    nie potwierdzono zakresu dla planowanego produktu. Brak audytu sygnałów.
+  verification:
+    checked_at: '2026-09-23'
+    feed: true
+    fresh: true
+    robots: true
+    usage: false
+    quality: false
+    reference: https://www.pbs.org/newshour/about/pbs-news-rss-feeds
+  note: RSS świeży i dostępny. Warunki PBS ograniczają użycie komercyjne; nie potwierdzono
+    zakresu dla planowanego produktu. Brak audytu sygnałów.
+- id: fox
+  name: Fox News
+  country: US
+  editorial_country: US
+  language: en
+  type: private
+  feeds:
+  - url: https://moxie.foxnews.com/google-publisher/us.xml
+    section: us
+  - url: https://moxie.foxnews.com/google-publisher/world.xml
+    section: world
+  fulltext: false
+  active: false
+  ownership: Fox Corporation
+  publisher_group: fox
+  channel_scope: us; world
+  activated_at: null
+  license_note: RSS świeży i dostępny. Warunki RSS oraz ogólne ograniczają wykorzystanie;
+    nie potwierdzono automatycznej analizy i archiwizacji w produkcie.
+  verification:
+    checked_at: '2026-09-23'
+    feed: true
+    fresh: true
+    robots: true
+    usage: false
+    quality: false
+    reference: https://www.foxnews.com/story/foxnews-com-rss-feeds
+  note: RSS świeży i dostępny. Warunki RSS oraz ogólne ograniczają wykorzystanie;
+    nie potwierdzono automatycznej analizy i archiwizacji w produkcie.
+- id: npr
+  name: NPR
+  country: US
+  editorial_country: US
+  language: en
+  type: public
+  feeds:
+  - url: https://feeds.npr.org/1004/rss.xml
+    section: world
+  fulltext: false
+  active: false
+  ownership: non-profit; sieć stacji członkowskich
+  publisher_group: npr
+  channel_scope: world
+  activated_at: null
+  license_note: RSS świeży i dostępny. Warunki ograniczają użycie do osobistego/non-profit
+    i zabraniają m.in. budowy/trenowania AI bez zgody. Zakres bieżącej analizy wymaga
+    ustalenia.
+  verification:
+    checked_at: '2026-09-23'
+    feed: true
+    fresh: true
+    robots: true
+    usage: false
+    quality: false
+    reference: https://www.npr.org/about-npr/179876898/terms-of-use
+  note: RSS świeży i dostępny. Warunki ograniczają użycie do osobistego/non-profit
+    i zabraniają m.in. budowy/trenowania AI bez zgody. Zakres bieżącej analizy wymaga
+    ustalenia.
+- id: propublica
+  name: ProPublica
+  country: US
+  editorial_country: US
+  language: en
+  type: private
+  feeds:
+  - url: https://www.propublica.org/feeds/propublica/main
+    section: investigations
+  fulltext: false
+  active: false
+  ownership: niezależna redakcja non-profit
+  publisher_group: propublica
+  channel_scope: investigations
+  activated_at: null
+  license_note: Świeży RSS; CC BY-NC-ND i osobne zasady przedruków. Nie potwierdzono
+    zakresu użycia komercyjnego oraz automatycznej publikacji pochodnych.
+  verification:
+    checked_at: '2026-09-23'
+    feed: true
+    fresh: true
+    robots: true
+    usage: false
+    quality: false
+    reference: https://www.propublica.org/steal-our-stories
+  note: Świeży RSS; CC BY-NC-ND i osobne zasady przedruków. Nie potwierdzono zakresu
+    użycia komercyjnego oraz automatycznej publikacji pochodnych.
+- id: timesofisrael
+  name: The Times of Israel
+  country: IL
+  editorial_country: IL
+  language: en
+  type: private
+  feeds:
+  - url: https://www.timesofisrael.com/feed/
+    section: news
+  fulltext: false
+  active: false
+  ownership: prywatne; szczegóły do weryfikacji
+  publisher_group: timesofisrael
+  channel_scope: news
+  activated_at: null
+  license_note: PoliteClient odmówił pobrania RSS według robots.txt. Edycja angielska;
+    blogi/opinie muszą być oddzielone od wiadomości.
+  verification:
+    checked_at: '2026-09-23'
+    feed: false
+    fresh: false
+    robots: false
+    usage: false
+    quality: false
+    reference: https://www.timesofisrael.com/contact/
+  note: PoliteClient odmówił pobrania RSS według robots.txt. Edycja angielska; blogi/opinie
+    muszą być oddzielone od wiadomości.
+- id: ynetnews
+  name: Ynetnews
+  country: IL
+  editorial_country: IL
+  language: en
+  type: private
+  feeds:
+  - url: https://www.ynetnews.com/Integration/StoryRss2.xml
+    section: news
+  fulltext: false
+  active: false
+  ownership: Yedioth Ahronoth Group
+  publisher_group: ynetnews
+  channel_scope: news
+  activated_at: null
+  license_note: Świeży RSS. Warunki kanału przewidują prywatny niekomercyjny użytek.
+    Edycja angielska, nie pełny obraz debaty w Izraelu.
+  verification:
+    checked_at: '2026-09-23'
+    feed: true
+    fresh: true
+    robots: true
+    usage: false
+    quality: false
+    reference: https://www.ynetnews.com/articles/0,7340,L-3124381,00.html
+  note: Świeży RSS. Warunki kanału przewidują prywatny niekomercyjny użytek. Edycja
+    angielska, nie pełny obraz debaty w Izraelu.
+- id: haaretz
+  name: Haaretz English
+  country: IL
+  editorial_country: IL
+  language: en
+  type: private
+  feeds: []
+  fulltext: false
+  active: false
+  ownership: prywatne; pełny tekst ograniczony paywallem
+  publisher_group: haaretz
+  channel_scope: niezweryfikowany kanał
+  activated_at: null
+  license_note: Nie potwierdzono technicznego kanału ani zakresu użycia. Paywall;
+    bez obchodzenia zabezpieczeń.
+  verification:
+    checked_at: '2026-09-23'
+    feed: false
+    fresh: false
+    robots: false
+    usage: false
+    quality: false
+    reference: https://www.haaretz.com/
+  note: Nie potwierdzono technicznego kanału ani zakresu użycia. Paywall; bez obchodzenia
+    zabezpieczeń.
+- id: wafa
+  name: WAFA
+  country: PS
+  editorial_country: PS
+  language: en
+  type: government
+  feeds: []
+  fulltext: false
+  active: false
+  ownership: oficjalna palestyńska agencja instytucjonalna
+  publisher_group: wafa
+  channel_scope: niezweryfikowany kanał
+  activated_at: null
+  license_note: Oficjalna perspektywa instytucjonalna PS. Nie potwierdzono technicznego
+    kanału; nie jest niezależną redakcją ani źródłem IL.
+  verification:
+    checked_at: '2026-09-23'
+    feed: false
+    fresh: false
+    robots: false
+    usage: false
+    quality: false
+    reference: https://english.wafa.ps/Home/AboutUs/1000
+  note: Oficjalna perspektywa instytucjonalna PS. Nie potwierdzono technicznego kanału;
+    nie jest niezależną redakcją ani źródłem IL.
+- id: maan
+  name: Ma’an News Agency
+  country: PS
+  editorial_country: PS
+  language: ar
+  type: private
+  feeds:
+  - url: https://www.maannews.net/feed/
+    section: news
+  fulltext: false
+  active: false
+  ownership: lokalna palestyńska redakcja; niezależność finansowania do potwierdzenia
+  publisher_group: maan
+  channel_scope: news
+  activated_at: null
+  license_note: 'Lokalny kandydat PS: pobranie /feed/ odrzucone przez robots.txt.
+    Kanał, niezależność finansowania i prawa wymagają potwierdzenia.'
+  verification:
+    checked_at: '2026-09-23'
+    feed: false
+    fresh: false
+    robots: false
+    usage: false
+    quality: false
+    reference: https://www.maannews.net/
+  note: 'Lokalny kandydat PS: pobranie /feed/ odrzucone przez robots.txt. Kanał, niezależność
+    finansowania i prawa wymagają potwierdzenia.'
+- id: folha
+  name: Folha de S.Paulo
+  country: BR
+  editorial_country: BR
+  language: pt
+  type: private
+  feeds:
+  - url: https://feeds.folha.uol.com.br/mundo/rss091.xml
+    section: mundo
+  fulltext: false
+  active: false
+  ownership: Grupo Folha
+  publisher_group: folha
+  channel_scope: mundo
+  activated_at: null
+  license_note: Świeży kanał Mundo; strona RSS potwierdzona. Nie potwierdzono praw
+    dla tego zastosowania ani jakości ekstrakcji w portugalskim.
+  verification:
+    checked_at: '2026-09-23'
+    feed: true
+    fresh: true
+    robots: true
+    usage: false
+    quality: false
+    reference: https://www1.folha.uol.com.br/feed/
+  note: Świeży kanał Mundo; strona RSS potwierdzona. Nie potwierdzono praw dla tego
+    zastosowania ani jakości ekstrakcji w portugalskim.
+- id: agenciabrasil
+  name: Agência Brasil
+  country: BR
+  editorial_country: BR
+  language: pt
+  type: public
+  feeds:
+  - url: https://agenciabrasil.ebc.com.br/rss/ultimasnoticias/feed.xml
+    section: all
+  fulltext: false
+  active: false
+  ownership: EBC; publiczna agencja brazylijska
+  publisher_group: agenciabrasil
+  channel_scope: all
+  activated_at: null
+  license_note: Świeży RSS. Reprodukcja dziennikarska z atrybucją; zastosowania komercyjne
+    kierowane do licencjonowania, treści partnerów mają odrębne prawa. Brak audytu
+    sygnałów PT.
+  verification:
+    checked_at: '2026-09-23'
+    feed: true
+    fresh: true
+    robots: true
+    usage: false
+    quality: false
+    reference: https://agenciabrasil.ebc.com.br/feed/
+  note: Świeży RSS. Reprodukcja dziennikarska z atrybucją; zastosowania komercyjne
+    kierowane do licencjonowania, treści partnerów mają odrębne prawa. Brak audytu
+    sygnałów PT.

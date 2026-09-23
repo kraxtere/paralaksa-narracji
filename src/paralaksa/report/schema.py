@@ -14,7 +14,21 @@ from pydantic import BaseModel, Field, ValidationError
 Confidence = Literal["niski", "średni", "wysoki"]
 
 
-class Claim(BaseModel):
+class Evidence(BaseModel):
+    signal_id: int
+    article_id: int
+    theme_id: str
+    kraj: str
+    zrodlo: str
+
+
+class Referenced(BaseModel):
+    dowody: list[Evidence] = Field(default_factory=list)
+
+
+class Claim(Referenced):
+    theme_id: str = ""
+
     tekst: str = Field(min_length=1)
     article_ids: list[int] = []
 
@@ -28,7 +42,7 @@ class Summary(Claim):
     pewnosc: Confidence
 
 
-class CountryLine(BaseModel):
+class CountryLine(Referenced):
     kraj: str
     n_zrodel: int = Field(ge=0)
     rama: str
@@ -36,7 +50,7 @@ class CountryLine(BaseModel):
     article_ids: list[int] = []
 
 
-class CounterSignals(BaseModel):
+class CounterSignals(Referenced):
     tekst: str = Field(min_length=1)       # gdy brak w danych: napisz to wprost
     article_ids: list[int] = []
 
@@ -58,7 +72,8 @@ class Divergence(BaseModel):
     pewnosc: ConfidenceNote
 
 
-class SelfImage(BaseModel):
+class SelfImage(Referenced):
+    pewnosc: Confidence = "niski"
     kraj: str
     jak_opisuje_siebie: str
     jak_opisuja_go_inni: str
@@ -102,6 +117,8 @@ SCHEMA_EXAMPLE = json.dumps({
     "nieobecne_w_polsce": [{"temat": "<id tematu>", "tekst": "...", "article_ids": [8]}],
     "slabe_sygnaly": [{"tekst": "...", "article_ids": [9]}],
 }, ensure_ascii=False, indent=1)
+
+SCHEMA_EXAMPLE += "\nKażda pozycja z article_ids musi mieć dowody: [{signal_id: int, article_id: int, theme_id: str, kraj: str, zrodlo: str}], przepisane z DANE.dowody. Każda teza tekstowa (w_skrocie, slabe_sygnaly, co_sie_przesuwa, nieobecne_w_polsce) ma także theme_id. Autoobraz ma pewnosc: niski|średni|wysoki. article_ids muszą dokładnie odpowiadać artykułom z dowody."
 
 
 def _extract_json_text(text: str) -> str:

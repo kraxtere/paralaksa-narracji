@@ -144,7 +144,8 @@ def test_budget_stops_direct_run(conn, settings, seeded):
     settings.extract.max_concurrency = 1
     stats, _ = run(conn, settings)
     assert stats.budget_stopped
-    assert 0 < stats.done < 10 and stats.done + stats.deferred == 10
+    assert 0 <= stats.done < 10 and stats.done + stats.deferred == 10
+    assert stats.cost_usd <= settings.budget.max_daily_usd
     assert statuses(conn).count(0) == stats.deferred
     assert db.spent_on(conn, "2026-09-23") <= 0.02
 

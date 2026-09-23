@@ -1,3 +1,23 @@
+# Aktualizacja przed KM4 — 2026-09-23
+
+- Dodano migrację bazy v4, metadane redakcji/kanału/gatunku oraz identycznej syndykacji.
+- Powiązano tezy z rejestrem sygnałów (temat, kraj, redakcja, article_id i signal_id),
+  dodano regresję #147, walidację języka JS, ostrożną pewność także skrótu/autoobrazu.
+- Błędne tezy usuwa się w całości po ponowieniu; semantyka pozostaje jawnie nieaudytowana.
+- Naprawiono zastępowanie brakującej daty publikacji datą pobrania; raporty inicjalne,
+  okno regularne i opóźnienia są widoczne; inicjalny dzień nie wchodzi do baseline.
+- Dodano mianowniki, wariant równych wag redakcji, deduplikację identycznych treści,
+  dane do porównań redakcji wewnątrz kraju, JSON audytu i skrót.
+- Dodano 11 kandydatów US/IL/PS/BR i ponownie sprawdzono 2 TR; brak aktywacji bez kompletu bramek.
+- Round-robin i jawne odłożenia, rezerwacje kosztu również przy retry, limit czasu direct,
+  kod błędu zamiast pozornie pełnego raportu.
+- Actions: osobny workflow testów, zaszyfrowane snapshoty w Release/cache/artefakcie,
+  kontrola stanu, sekretów oraz instrukcja odtwarzania.
+- Pierwszy raport oznaczono jako archiwalny inicjalny i dodano jawną korektę znanych usterek.
+- Granice odbioru i wyniki: `docs/CURRENT_HANDOFF.md`. To nie jest ukończony KM4.
+
+---
+
 # Changelog
 
 ## [0.3.0] – 2026-09-23 – Kamień milowy 3: agregacja i raport dzienny
