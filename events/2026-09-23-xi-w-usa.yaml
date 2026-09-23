@@ -1,0 +1,23 @@
+# Plansza „Paralaksa zdarzeń”. article_id z data/paralaksa.db; tłumaczenia robocze.
+id: 2026-09-23-xi-w-usa
+title: Xi Jinping z wizytą państwową w USA, przed rozmowami z Trumpem
+when: 22–23.09.2026
+rule: wszystkie nagłówki z bazy z 22–23.09, których nagłówek lub lead wprost dotyczy wizyty Xi w USA lub jego spotkania z Trumpem.
+items:
+  - article_id: 289
+    translation_pl: Rozszyfrowujemy „konstruktywną stabilność strategiczną” przed wizytą Xi w USA
+  - article_id: 307
+    translation_pl: Dlaczego chiński plan pięcioletni ma znaczenie dla Ameryki
+  - article_id: 302
+    translation_pl: Gdzie Chiny i USA mogą znaleźć miejsce na współpracę mimo rywalizacji?
+  - article_id: 24
+  - article_id: 442
+    translation_pl: "Wideo: Trump i Xi spotykają się na amerykańskiej ziemi. O co toczy się gra?"
+  - article_id: 489
+    translation_pl: Xi spotyka się z Trumpem. Kto wygrywa ich wojnę handlową?
+  - article_id: 405
+    translation_pl: "Xi w USA: Trumpa i przywódcę Chin czekają trudne rozmowy"
+  - article_id: 348
+  - article_id: 347
+  - article_id: 425
+    translation_pl: Biały Dom rozwija czerwony dywan przed historyczną wizytą Xi Jinpinga

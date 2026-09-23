@@ -20,6 +20,13 @@ Pełna specyfikacja: `SPEC.md`. Jest źródłem prawdy, ale nazewnictwo w repo r
 | komenda `radar` | `plx` |
 | `data/radar.db` | `data/paralaksa.db` |
 
+## Zwrot koncepcji: Paralaksa zdarzeń (2026-09-23)
+Po przeglądzie prawnym kierunek to krótka forma: jedno zdarzenie, nagłówki z wielu krajów obok siebie, bez komentarza.
+Koncepcja, zasady formatu i plan KM4 w nowym kierunku: `docs/PARALAKSA_ZDARZEN.md`. Prototyp: `plx board events/<id>.yaml`
+(`src/paralaksa/board/`, wynik w `data/boards/`). Daily z raportem działa dalej bez zmian.
+2026-09-24: format „Jedno zdarzenie. Dwie opowieści.”, ręczny pilot na kartach `events/*.md` (zasady: `events/README.md`).
+Automatyzacja dopiero po pilocie.
+
 ## Aktualizacja przed KM4 (2026-09-23)
 
 Aktualny punkt wejścia: `docs/CURRENT_HANDOFF.md`, stan źródeł: `docs/SOURCE_REVIEW.md`,
@@ -58,6 +65,7 @@ py -3.12 -m venv .venv; .venv\Scripts\python -m pip install -e ".[dev]"   # uv n
 .venv\Scripts\plx aggregate [--date D] [--db PATH]
 .venv\Scripts\plx report [--date D] [--out-dir DIR] [--db PATH]
 .venv\Scripts\plx run-daily [--skip-ingest] [--no-fulltext] [--limit N] [--out-dir DIR]
+.venv\Scripts\plx board events\<id>.yaml [-o data/boards] [--no-png]   # plansza 1080×1920, PNG przez Chrome/Edge
 ```
 Pełny ingest z pełnymi tekstami trwa ok. 2–2,5 min (~310 artykułów przy pierwszym uruchomieniu).
 Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20 min na ~310 artykułów.

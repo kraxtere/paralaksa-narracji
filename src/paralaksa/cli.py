@@ -224,6 +224,41 @@ def report(
         raise typer.Exit(code=1)
 
 
+@app.command()
+def board(
+    event_file: Path = typer.Argument(..., exists=True, dir_okay=False, help="Plik YAML zdarzenia (events/*.yaml)."),
+    out_dir: Path = typer.Option(Path("data/boards"), "--out-dir", "-o", help="Katalog wyjściowy."),
+    png: bool = typer.Option(True, "--png/--no-png", help="Zrzut PNG 1080×1920 przez przeglądarkę headless."),
+    config_dir: Path = ConfigDir,
+    db_path: Optional[Path] = DbPath,
+) -> None:
+    """Plansza „Paralaksa zdarzeń”: nagłówki o jednym zdarzeniu z wielu krajów, bez komentarza."""
+    from paralaksa.board.render import BoardError, collect_board, find_browser, render_html, screenshot
+    from paralaksa.board.spec import load_event
+
+    spec = load_event(event_file)
+    _, conn = _open_db(config_dir, db_path)
+    try:
+        b = collect_board(conn, spec)
+    except BoardError as e:
+        typer.echo(f"BŁĄD: {e}", err=True)
+        raise typer.Exit(code=1)
+    finally:
+        conn.close()
+    out_dir.mkdir(parents=True, exist_ok=True)
+    html_path = out_dir / f"{spec.id}.html"
+    html_path.write_text(render_html(b), encoding="utf-8")
+    typer.echo(f"{spec.id}: {len(b.groups)} krajów, {b.n_headlines} nagłówków: {html_path}")
+    if png:
+        browser = find_browser()
+        if not browser:
+            typer.echo("OSTRZEŻENIE: brak Chromium/Chrome/Edge (ustaw PLX_BROWSER); pominięto PNG", err=True)
+            return
+        png_path = out_dir / f"{spec.id}.png"
+        screenshot(html_path, png_path, browser)
+        typer.echo(f"PNG: {png_path}")
+
+
 @app.command("run-daily")
 def run_daily(
     no_fulltext: bool = typer.Option(False, "--no-fulltext", help="Nie pobieraj pełnych tekstów."),

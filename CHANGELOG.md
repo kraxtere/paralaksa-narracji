@@ -1,3 +1,22 @@
+# Paralaksa zdarzeń — karty zdarzeń, pilot — 2026-09-24
+
+- Kierunek doprecyzowany: „Jedno zdarzenie. Dwie opowieści.” Jednostką jest zdarzenie, relacje dopinane do niego.
+- `events/_szablon_zdarzenia.md`: karta z nagłówkiem YAML (status, forma, fakt, oś czasu, relacje z rolą źródła,
+  wersją i archiwum, kontrasty między parami) + sekcje Fakt / Przekaz / Hipoteza odbioru / Ilustracja. Zasady: `events/README.md`.
+- 4 karty startowe z ręcznego rozpoznania GPT (niezweryfikowane, bez linków): Mercosur, Ineos Hull, śmigłowce 2023
+  (oś czasu), alarm-ptaki (odrzucony: kontrast pozorny).
+- Pilot ręczny; API (GDELT, wyszukiwarki) dopiero po ~5 kartach, na podstawie notatek z pilota.
+
+# Paralaksa zdarzeń — prototyp — 2026-09-23
+
+- Zwrot koncepcji po przeglądzie prawnym: krótka forma z nagłówków, bez komentarza (`docs/PARALAKSA_ZDARZEN.md`).
+- `plx board`: plansza 1080×1920 (HTML + PNG przez przeglądarkę headless) z kuratorowanego YAML zdarzenia;
+  dobór jawną regułą, kolejność wg czasu publikacji, oryginał + tłumaczenie robocze, cytat maks. 15 słów.
+- Dwa zdarzenia przykładowe w `events/` (sankcje UE 22.09, wizyta Xi w USA). 7 nowych testów.
+- Daily i raport bez zmian. To nie jest ukończony KM4.
+
+---
+
 # Aktualizacja przed KM4 — 2026-09-23
 
 - Dodano migrację bazy v4, metadane redakcji/kanału/gatunku oraz identycznej syndykacji.

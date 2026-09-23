@@ -1,0 +1,21 @@
+# Plansza „Paralaksa zdarzeń”. article_id z data/paralaksa.db; tłumaczenia robocze.
+id: 2026-09-22-sankcje-oligarchowie
+title: UE przedłuża sankcje wobec Rosji o trzy lata i skreśla z listy dwóch oligarchów
+when: 22–23.09.2026
+rule: wszystkie nagłówki z bazy z 22–23.09, których nagłówek lub lead dotyczy decyzji UE z 22.09 o rosyjskiej liście sankcyjnej (także skutków, które redakcje z nią wiążą).
+items:
+  - article_id: 104
+    translation_pl: UE skreśla dwóch rosyjskich oligarchów z listy sankcyjnej
+  - article_id: 212
+    translation_pl: UE usuwa dwóch oligarchów z rosyjskiej listy sankcyjnej, gdy zbliża się termin
+  - article_id: 154
+    translation_pl: Gniew Ukrainy, bo UE usuwa rosyjskich oligarchów z listy sankcyjnej
+  - article_id: 134
+    translation_pl: "Wojna w Ukrainie: UE znosi sankcje wobec dwóch rosyjskich miliarderów"
+  - article_id: 12
+  - article_id: 70
+    translation_pl: Handel sankcjami i zakładnikami. Jak UE ledwo utrzymała presję na Putina i kto poparł Ukrainę
+  - article_id: 419
+    translation_pl: Azerbejdżan ułaskawia Francuza po cofnięciu sankcji UE
+  - article_id: 433
+    translation_pl: Azerbejdżan ułaskawia Francuza, gdy UE znosi sankcje wobec rosyjskiego miliardera
