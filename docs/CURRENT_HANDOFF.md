@@ -172,3 +172,5 @@ jpost warunki RSS): wszystkie zgodne z aktualnymi stronami.
 Większość kolizji dotyczy trzech elementów procesu: kopii pełnego tekstu, przesłania do zewnętrznego API
 i archiwizacji, a nie samego czytania nagłówków. Wyjątki: guardian, aljazeera i bbc zastrzegają samą
 automatyczną analizę.
+
+Warianty (Guardian Open Platform, bez archiwum pełnych tekstów, szkic listu do wydawców, wariant prywatny): `docs/LEGAL_OPTIONS_2026-09-23.md`. Nic nie wdrożono.
