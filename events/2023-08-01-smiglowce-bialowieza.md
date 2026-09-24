@@ -17,7 +17,7 @@ os_czasu:
   - {czas: '2023-08-01T12:41+02:00', co_wiadomo: 'WP publikuje świadectwa mieszkańców, nadal cytując zaprzeczenie dowództwa', zrodlo: r2}
   - {czas: '2023-08-01T15:21+02:00', co_wiadomo: 'ten sam adres Reutersa ma jeszcze nagłówek o Łukaszence i Wagnerze, bez śmigłowców (kopia Wayback)', zrodlo: r4}
   - {czas: null, co_wiadomo: 'MON po analizie potwierdza naruszenie; godzina nieznana, komunikat istniał najpóźniej o 20:07 (kopia Wayback)', zrodlo: r3}
-  - {czas: '2023-08-01T20:49+00:00', co_wiadomo: 'Reuters relacjonuje już polskie potwierdzenie i późniejsze zaprzeczenie ministerstwa Białorusi', zrodlo: r4}
+  - {czas: '2023-08-01T22:54+00:00', co_wiadomo: 'Reuters pod tym samym adresem: polskie potwierdzenie i zaprzeczenie Białorusi; nowy nagłówek między kopiami 22:35 a 23:26 UTC, dateModified 22:54 UTC', zrodlo: r4}
 relacje:
   - id: r1
     kraj: PL
@@ -67,8 +67,8 @@ relacje:
     rola: agencja
     gatunek: wiadomosc
     link: https://www.reuters.com/world/europe/lukashenko-taunts-poland-again-over-wagner-troops-near-border-2023-08-01/
-    publikacja: '2023-08-01T20:49+00:00'
-    aktualizacja: null # serwis podaje Updated 1 sierpnia, bez drugiej godziny
+    publikacja: '2023-08-01T12:31+00:00' # datePublished w kopiach Wayback; GPT odczytał ze strony 20:49 UTC
+    aktualizacja: '2023-08-01T22:54+00:00' # dateModified kopii z nowym nagłówkiem
     porownywana_wersja: 'kopia 2023-08-02 01:26 CEST z tym nagłówkiem; o 15:21 CEST ten sam adres miał nagłówek: Lukashenko taunts Poland again over Wagner troops near border'
     archiwum: {link: 'https://web.archive.org/web/20230801232600/https://www.reuters.com/world/europe/lukashenko-taunts-poland-again-over-wagner-troops-near-border-2023-08-01/', wykonano: '2023-08-01T23:26Z'}
     naglowek: 'Poland rushes troops to border, Belarus denies helicopter violation'

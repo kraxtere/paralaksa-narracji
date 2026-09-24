@@ -21,8 +21,8 @@ relacje:
     link: https://www.theguardian.com/business/article/2024/may/08/astrazeneca-withdraws-covid-19-vaccine-worldwide-citing-surplus-of-newer-vaccines
     publikacja: '2024-05-07T22:18-04:00' # EDT; 8 maja 03:18 BST
     aktualizacja: '2024-05-08T21:31-04:00' # EDT; 9 maja 02:31 BST
-    porownywana_wersja: 'kopia 2024-05-08 23:59 BST (po aktualizacji 19:42 BST); nagłówek jak dziś'
-    archiwum: {link: 'https://web.archive.org/web/20240508225957/https://www.theguardian.com/business/article/2024/may/08/astrazeneca-withdraws-covid-19-vaccine-worldwide-citing-surplus-of-newer-vaccines', wykonano: '2024-05-08T22:59Z'}
+    porownywana_wersja: 'kopia 2024-05-08 03:35 BST, 17 min po publikacji; nagłówek jak dziś, bez zmian do wieczora'
+    archiwum: {link: 'https://web.archive.org/web/20240508023501/https://www.theguardian.com/business/article/2024/may/08/astrazeneca-withdraws-covid-19-vaccine-worldwide-citing-surplus-of-newer-vaccines', wykonano: '2024-05-08T02:35Z'}
     naglowek: 'AstraZeneca withdraws Covid-19 vaccine worldwide, citing surplus of newer vaccines'
     tlumaczenie: 'AstraZeneca wycofuje szczepionkę przeciw COVID-19 na świecie, wskazując nadwyżkę nowszych preparatów'
     zostawia_z: 'Pierwszy plan to decyzja biznesowa o produkcie wypieranym przez nowsze preparaty; tekst wspomina też znane działania niepożądane.'
@@ -33,9 +33,9 @@ relacje:
     rola: redakcja
     gatunek: wiadomosc
     link: https://www.independent.co.uk/news/science/astrazeneca-covid-vaccine-withdraw-blood-clots-b2541291.html
-    publikacja: '2024-05-08T06:29+01:00' # datePublished w kopii 07:10 BST; 14:30 na stronie to ponowna publikacja
+    publikacja: '2024-05-08T06:25+01:00' # datePublished pierwszej kopii; druga wersja 06:29; 14:30 na stronie to ponowna publikacja
     aktualizacja: '2024-05-08T14:30+01:00'
-    porownywana_wersja: 'kopia 2024-05-08 07:10 BST. Kopia 06:27 BST ma INNY nagłówek: AstraZeneca withdrawing Covid vaccine, months after admitting rare side effect'
+    porownywana_wersja: 'kopia 2024-05-08 07:10 BST. Między 06:27 a 07:08 BST kopie pokazują NA PRZEMIAN dwa nagłówki (drugi: AstraZeneca withdrawing Covid vaccine, months after admitting rare side effect); og:title od pierwszej kopii jak w polu naglowek; od 07:08 już tylko ta wersja'
     archiwum: {link: 'https://web.archive.org/web/20240508061007/https://www.independent.co.uk/news/science/astrazeneca-covid-vaccine-withdraw-blood-clots-b2541291.html', wykonano: '2024-05-08T06:10Z'}
     naglowek: 'AstraZeneca withdraws Covid vaccine worldwide after admitting it can cause rare blood clots'
     tlumaczenie: 'AstraZeneca wycofuje szczepionkę na świecie po przyznaniu, że może powodować rzadkie zakrzepy'
@@ -45,7 +45,7 @@ kontrasty:
   - miedzy: [r1, r2]
     rodzaj: kolejnosc_informacji
     opis: 'Oba nagłówki dotyczą globalnego wycofania, ale jeden podaje kontekst rynkowy, a drugi zestawia je czasowo z przyznaniem rzadkiego ryzyka.'
-    zastrzezenia: 'Independent w pierwszej godzinie zmienił nagłówek z „months after admitting rare side effect” na „after admitting it can cause rare blood clots”; to zmiana w obrębie jednej redakcji i sama jest materiałem. Słowo after opisuje chronologię, nie dowodzi przyczyny. Wniosek o cofnięcie pozwolenia UE złożono 5 marca, wcześniej niż majowe doniesienia o dokumentach sądowych; rzadki zespół TTS był znany od 2021. Guardian ostatnio aktualizowano po publikacji Independent. Brak wspólnego archiwalnego okna; żadnej tezy o zagrożeniu konkretnych osób ani przyczynowym wycofaniu z powodu zakrzepów.'
+    zastrzezenia: 'Independent przez pierwszą godzinę pokazywał na przemian dwa nagłówki („months after admitting rare side effect” i „after admitting it can cause rare blood clots”), a tytuł do udostępnień od początku miał wersję z zakrzepami. To wygląda na test A/B albo cache, nie na wyostrzenie tytułu przez redakcję; tak tego nie opisywać. Słowo after opisuje chronologię, nie dowodzi przyczyny. Wniosek o cofnięcie pozwolenia UE złożono 5 marca, wcześniej niż majowe doniesienia o dokumentach sądowych; rzadki zespół TTS był znany od 2021. Guardian ostatnio aktualizowano po publikacji Independent. Brak wspólnego archiwalnego okna; żadnej tezy o zagrożeniu konkretnych osób ani przyczynowym wycofaniu z powodu zakrzepów.'
 jak_szukano: ['wyszukiwarka WWW en/pl; otwarto Guardian, Independent, decyzję Komisji (PDF) i analizę FactCheck.org; porównano strefy EDT i BST; strona EMA chwilowo niedostępna']
 ---
 

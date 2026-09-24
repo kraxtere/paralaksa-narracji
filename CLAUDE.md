@@ -26,6 +26,9 @@ Koncepcja, zasady formatu i plan KM4 w nowym kierunku: `docs/PARALAKSA_ZDARZEN.m
 (`src/paralaksa/board/`, wynik w `data/boards/`). Daily z raportem działa dalej bez zmian.
 2026-09-24: format „Jedno zdarzenie. Dwie opowieści.”, ręczny pilot na kartach `events/*.md` (zasady: `events/README.md`).
 Automatyzacja dopiero po pilocie.
+Wyjątek: `plx events check` (`src/paralaksa/events/check.py`) podpowiada do kart kopie Wayback z dnia publikacji, h1/og:title
+i datePublished/dateModified z kopii, zmiany i naprzemienność nagłówków (test A/B) oraz tytuł z naszej bazy. Raport w `data/checks/`.
+Nigdy nie zmienia karty ani `sprawdzil`. Indeks CDX odmawia części domen (np. Guardian, 403), wtedy są tylko kopie najbliższe krańcom okna.
 
 ## Aktualizacja przed KM4 (2026-09-23)
 
@@ -66,6 +69,7 @@ py -3.12 -m venv .venv; .venv\Scripts\python -m pip install -e ".[dev]"   # uv n
 .venv\Scripts\plx report [--date D] [--out-dir DIR] [--db PATH]
 .venv\Scripts\plx run-daily [--skip-ingest] [--no-fulltext] [--limit N] [--out-dir DIR]
 .venv\Scripts\plx board events\<id>.yaml [-o data/boards] [--no-png]   # plansza 1080×1920, PNG przez Chrome/Edge
+.venv\Scripts\plx events check events\<karta>.md|events [--dni 2] [--max-fetch 12] [-o data/checks]   # podpowiedzi z Wayback, karty nie zmienia
 ```
 Pełny ingest z pełnymi tekstami trwa ok. 2–2,5 min (~310 artykułów przy pierwszym uruchomieniu).
 Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20 min na ~310 artykułów.

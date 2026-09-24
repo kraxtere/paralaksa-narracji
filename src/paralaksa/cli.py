@@ -259,6 +259,50 @@ def board(
         typer.echo(f"PNG: {png_path}")
 
 
+events_app = typer.Typer(help="Karty zdarzeń (events/*.md).", no_args_is_help=True)
+app.add_typer(events_app, name="events")
+
+
+@events_app.command("check")
+def events_check(
+    cards: list[Path] = typer.Argument(..., exists=True, help="Karty events/*.md albo katalog z kartami."),
+    out_dir: Path = typer.Option(Path("data/checks"), "--out-dir", "-o", help="Katalog raportów."),
+    days: int = typer.Option(2, "--dni", min=1, max=14, help="Ile dni (UTC) od dnia publikacji przeszukać w archiwum."),
+    max_fetch: int = typer.Option(12, "--max-fetch", min=1, max=50, help="Ile kopii pobrać na relację (równo rozłożonych)."),
+    config_dir: Path = ConfigDir,
+    db_path: Optional[Path] = DbPath,
+) -> None:
+    """Podpowiedzi do karty: kopie Wayback, metadane stron, zmiany nagłówków, nasza baza. Karty nie zmienia."""
+    from paralaksa.events.check import CardError, card_paths, check_card, open_db_readonly, render_check
+
+    settings = load_settings(config_dir)
+    cfg = settings.ingest
+    conn = open_db_readonly(db_path or settings.resolved_db_path())
+    out_dir.mkdir(parents=True, exist_ok=True)
+    failed = False
+    try:
+        with PoliteClient(cfg.user_agent, cfg.per_domain_delay_s, 60.0) as client:
+            for path in card_paths(cards):
+                try:
+                    cc = check_card(path, client, conn, days, max_fetch)
+                except CardError as e:
+                    typer.echo(f"BŁĄD: {e}", err=True)
+                    failed = True
+                    continue
+                report_path = out_dir / f"{cc.card['id']}.md"
+                report_path.write_text(render_check(cc), encoding="utf-8")
+                n_hints = sum(len(r.hints) for r in cc.relations)
+                typer.echo(f"{cc.card['id']}: {len(cc.relations)} relacji, {n_hints} podpowiedzi: {report_path}")
+                for r in cc.relations:
+                    for h in r.hints:
+                        typer.echo(f"  {r.rid} {r.kto}: {h}")
+    finally:
+        if conn is not None:
+            conn.close()
+    if failed:
+        raise typer.Exit(code=1)
+
+
 @app.command("run-daily")
 def run_daily(
     no_fulltext: bool = typer.Option(False, "--no-fulltext", help="Nie pobieraj pełnych tekstów."),

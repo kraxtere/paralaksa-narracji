@@ -24,4 +24,8 @@ i opisujemy, w którym momencie opowieść zaczyna budować spokój, lęk, oburz
 10. **Nie przypisujemy redakcjom intencji.** Hipoteza odbioru jest hipotezą do oceny widza.
 11. **`jak_szukano`**: narzędzia i języki. **Notatki z pilota**: czas pracy i to, co było najbardziej żmudne. Na tej podstawie zdecydujemy, co automatyzować.
 
+Pomoc: `plx events check events/<karta>.md` (albo `events` dla wszystkich) zapisuje w `data/checks/` podpowiedzi:
+kopie Wayback z dnia publikacji, nagłówek i metadane z każdej kopii, zmiany nagłówka i nagłówki pokazywane na przemian (test A/B).
+Karty nie zmienia. Podpowiedź to nie weryfikacja: `sprawdzil` wpisuje ten, kto przeczytał materiał.
+
 Karty edytujemy tylko w `events/`. Zmiany w kodzie (`src/`, `tests/`, `config/`, `.github/`) nie należą do pracy nad kartami.
