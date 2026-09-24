@@ -1,0 +1,86 @@
+# Roboczy odcinek (pionowy, ok. 55 s). Karta: events/2024-05-07-vaxzevria-wycofanie.md
+# Render: .venv\Scripts\python scripts\odcinek.py events\scenariusze\vaxzevria.odcinek.yaml
+# Wynik (poza gitem): data/odcinki/<id>/ — plansze PNG, odcinek.mp4, napisy.srt, lektor.txt, opis.txt
+# Podstawa: karta (r1 Guardian, r2 Independent), raport `plx events check` (kopie A/B), scenariusz independent-vaxzevria.md.
+#
+# Czas polski (CEST = czas londyński + 1 h). Godziny Independentu to godziny wykonania kopii, nie edycji strony.
+# Czego nie twierdzimy: że redakcja „wyostrzyła” nagłówek, że był potwierdzony test A/B, że zakrzepy były przyczyną wycofania.
+#
+# Przed publikacją:
+# - człowiek otwiera oba artykuły, kopie A/B/A/B z raportu i decyzję KE (dziś `sprawdzil` wpisał GPT, nie człowiek);
+# - link EMA pochodzi ze scenariusza GPT, nieotwarty.
+
+id: 2024-05-07-vaxzevria-wycofanie
+tytul: 'Jedna szczepionka, jeden poranek, trzy nagłówki'
+karta: events/2024-05-07-vaxzevria-wycofanie.md
+wersja: robocza
+os: {od: '2024-05-08T04:00+02:00', do: '2024-05-08T09:00+02:00'}
+zrodla:
+  - {kto: 'Komisja Europejska, decyzja z 27.03.2024 o wycofaniu pozwolenia (PDF)', link: 'https://ec.europa.eu/health/documents/community-register/2024/20240327162288/dec_162288_en.pdf'}
+  - {kto: 'EMA, raport roczny 2021 (TTS)', link: 'https://www.ema.europa.eu/assets/en/annual-report/2021/covid-19-european-medicines-regulatory-networks-response-pandemic.html'}
+  - {kto: 'Kopie Independentu A/B/A/B (Wayback)', link: 'https://web.archive.org/web/20240508*/https://www.independent.co.uk/news/science/astrazeneca-covid-vaccine-withdraw-blood-clots-b2541291.html'}
+
+ujecia:
+  - czas: 4
+    lektor: 'Ósmy maja 2024. AstraZeneca kończy sprzedaż swojej szczepionki na COVID. Jak to podać w jednym zdaniu?'
+    bloki:
+      - {typ: tytul, tekst: 'Jedna szczepionka.', maly: '8 maja 2024 · Vaxzevria (AstraZeneca)'}
+      - {typ: tekst, tekst: 'Jeden poranek. Trzy nagłówki.'}
+
+  - czas: 7
+    zegar: '2024-05-08T04:18+02:00'
+    lektor: 'Guardian, nad ranem: firma wycofuje szczepionkę i jako powód podaje nadwyżkę nowszych preparatów.'
+    bloki:
+      - {typ: naglowek, rel: r1, kto: 'The Guardian', kraj: UK, godzina: '8.05 · 04:18',
+         tekst: 'AstraZeneca withdraws Covid-19 vaccine worldwide, citing surplus of newer vaccines',
+         pl: 'AstraZeneca wycofuje szczepionkę na świecie, wskazując nadwyżkę nowszych preparatów', podkresl: 'nadwyżkę nowszych preparatów'}
+
+  - czas: 7
+    zegar: '2024-05-08T07:33+02:00'
+    lektor: 'Independent, trzy godziny później: wycofuje, po tym jak przyznała, że może powodować rzadkie zakrzepy.'
+    bloki:
+      - {typ: naglowek, rel: r2, kto: 'The Independent', kraj: UK, godzina: '8.05 · 07:33',
+         tekst: 'AstraZeneca withdraws Covid vaccine worldwide after admitting it can cause rare blood clots',
+         pl: 'AstraZeneca wycofuje szczepionkę na świecie po przyznaniu, że może powodować rzadkie zakrzepy', podkresl: 'rzadkie zakrzepy'}
+
+  - czas: 6
+    lektor: 'Ten sam fakt, inne pierwsze skojarzenie. A w środku tekstu Independent też podaje powód handlowy.'
+    bloki:
+      - {typ: tytul, tekst: 'Nadwyżka czy zakrzepy?'}
+      - {typ: tekst, tekst: 'Ten sam fakt. Inne pierwsze skojarzenie.'}
+      - {typ: stopka, tekst: 'W treści Independent także podaje spadek zapotrzebowania jako powód.'}
+
+  - czas: 10
+    zegar: '2024-05-08T08:08+02:00'
+    lektor: 'Ale to nie koniec. Pod tym samym adresem archiwum zapisało dwa różne nagłówki. Na przemian: A, B, A, B.'
+    bloki:
+      - {typ: kopie, rel: r2, kto: 'The Independent · jeden adres · kopie archiwum Wayback', kopie: [
+          {godzina: '07:27', wariant: A, tekst: 'AstraZeneca withdrawing Covid vaccine, months after admitting rare side effect', podkresl: 'rare side effect'},
+          {godzina: '07:33', wariant: B, tekst: 'AstraZeneca withdraws Covid vaccine worldwide after admitting it can cause rare blood clots', podkresl: 'rare blood clots'},
+          {godzina: '07:39', wariant: A, tekst: 'AstraZeneca withdrawing Covid vaccine, months after admitting rare side effect', podkresl: 'rare side effect'},
+          {godzina: '08:08', wariant: B, tekst: 'AstraZeneca withdraws Covid vaccine worldwide after admitting it can cause rare blood clots', podkresl: 'rare blood clots'}]}
+      - {typ: tekst, tekst: 'A: „rzadkie działanie niepożądane”. B: „rzadkie zakrzepy”.', maly: true}
+
+  - czas: 7
+    lektor: 'Dlaczego? Nie wiemy. Może test dwóch wersji, może pamięć podręczna. Tytuł do udostępnień od pierwszej kopii miał wersję z zakrzepami.'
+    bloki:
+      - {typ: tytul, tekst: 'Test dwóch wersji? Pamięć podręczna?'}
+      - {typ: tekst, tekst: 'Nie wiemy. Wiemy tylko, co zapisały kopie.'}
+      - {typ: stopka, tekst: 'Tytuł do udostępnień (og:title) od pierwszej kopii: wersja B. Od 08:08 kopie pokazują już tylko B.'}
+
+  - czas: 9
+    lektor: 'A kalendarz? O rzadkich zakrzepach wiadomo od 2021. Wniosek o cofnięcie pozwolenia w Unii firma złożyła piątego marca.'
+    bloki:
+      - {typ: kalendarium, rel: r2, wpisy: [
+          {data: '2021', co: 'EMA opisuje bardzo rzadki zespół zakrzepowy (TTS)'},
+          {data: '5.03.2024', co: 'AstraZeneca wnioskuje o cofnięcie pozwolenia w UE'},
+          {data: '27.03.2024', co: 'Decyzja Komisji Europejskiej'},
+          {data: '7.05.2024', co: 'Decyzja wchodzi w życie'},
+          {data: '8.05.2024', co: 'Nagłówki', wyroznij: true}]}
+
+  - czas: 7
+    lektor: 'Po nie znaczy dlatego że. Nagłówek ustawia kolejność. Przyczyny nie dowodzi.'
+    bloki:
+      - {typ: tytul, tekst: '„Po” ≠ „dlatego że”'}
+      - {typ: tekst, tekst: 'Nagłówek ustawia kolejność. Przyczyny nie dowodzi.'}
+      - {typ: stopka, tekst: 'Jedno zdarzenie. Dwie opowieści. Źródła i kopie archiwalne w opisie.'}

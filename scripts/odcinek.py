@@ -40,6 +40,7 @@ body { font-family: "Segoe UI", Arial, sans-serif; color: #111; background-color
 .title small { display: block; font-family: "Segoe UI", Arial, sans-serif; font-size: 34px; font-weight: 700; color: #555; margin-top: 18px; }
 .text { font-size: 50px; font-weight: 700; line-height: 1.22; }
 .text.small { font-size: 36px; font-weight: 600; color: #333; }
+.hl .text.small { margin-top: 12px; }
 .note { font-size: 30px; color: #333; border-top: 4px solid #111; padding-top: 14px; }
 .hl { position: relative; background: #fff; border: 6px solid #111; box-shadow: 12px 12px 0 #111; padding: 54px 34px 30px; }
 .hl.small { padding: 44px 28px 20px; border-width: 5px; box-shadow: 8px 8px 0 #111; }
@@ -67,6 +68,20 @@ mark { background: #ffd23f; padding: 0 6px; box-shadow: 0 0 0 3px #111 inset; }
   font-weight: 800; font-size: 28px; padding: 4px 12px; }
 .axis .day { position: absolute; top: 96px; font-size: 22px; font-weight: 700; color: #444; transform: translateX(-50%); white-space: nowrap; }
 .axis .mid { position: absolute; top: 40px; width: 3px; height: 46px; background: #111; opacity: .5; }
+.copies { background: #fff; border: 6px solid #111; box-shadow: 12px 12px 0 #111; padding: 26px 28px; }
+.copies .who { margin-bottom: 14px; }
+.copy { display: flex; align-items: center; gap: 18px; padding: 12px 0; }
+.copy + .copy { border-top: 3px dashed #111; }
+.copy .t { background: #111; color: #fff; font-weight: 800; font-size: 26px; padding: 4px 10px; white-space: nowrap; }
+.copy .v { flex: none; width: 58px; height: 58px; border: 5px solid #111; border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; font-family: "Arial Black", Impact, sans-serif; font-size: 30px; background: #fff; }
+.copy .v.B { background: #ffd23f; }
+.copy .x { font-size: 27px; font-weight: 700; line-height: 1.2; }
+.cal { display: flex; flex-direction: column; gap: 18px; }
+.cal .row { display: flex; gap: 22px; align-items: baseline; background: #fff; border: 5px solid #111; box-shadow: 8px 8px 0 #111; padding: 16px 22px; }
+.cal .row.hot { background: #ffd23f; }
+.cal .d { flex: none; width: 250px; font-family: "Arial Black", Impact, sans-serif; font-size: 34px; }
+.cal .e { font-size: 32px; font-weight: 700; line-height: 1.2; }
 .sub { position: absolute; left: 50px; right: 50px; bottom: 60px; min-height: 200px; display: flex; align-items: center;
   background: rgba(17,17,17,.9); color: #fff; font-size: 38px; font-weight: 600; line-height: 1.28; padding: 22px 30px; }
 """
@@ -107,6 +122,15 @@ def block_html(b: dict) -> str:
         else:
             body = f"<div class='q pl-only'>{marked(quote, b.get('podkresl'))}</div>"
         return f"<div class='hl{small}'>{head}{body}</div>"
+    if t == "kopie":  # kolejne kopie archiwum pod jednym adresem: godzina, wariant, nagłówek
+        rows = "".join(
+            f"<div class='copy'><div class='t'>{esc(c['godzina'])}</div><div class='v {esc(c['wariant'])}'>{esc(c['wariant'])}</div>"
+            f"<div class='x'>{marked(clip_words(c['tekst']), c.get('podkresl'))}</div></div>" for c in b["kopie"])
+        return f"<div class='copies'><div class='who'>{esc(b['kto'])}</div>{rows}</div>"
+    if t == "kalendarium":
+        rows = "".join(f"<div class='row{' hot' if w.get('wyroznij') else ''}'><div class='d'>{esc(w['data'])}</div>"
+                       f"<div class='e'>{esc(w['co'])}</div></div>" for w in b["wpisy"])
+        return f"<div class='cal'>{rows}</div>"
     raise ValueError(f"nieznany blok: {t}")
 
 
@@ -187,6 +211,8 @@ def description(ep: dict, card_path: Path) -> str:
         r = rels[rid]
         arch = (r.get("archiwum") or {}).get("link") or "kopia archiwalna: brak (do zrobienia)"
         lines.append(f"- {r.get('kto')}: {r.get('link')}\n  archiwum: {arch}")
+    for z in ep.get("zrodla") or []:  # dokumenty spoza relacji (decyzje, raporty)
+        lines.append(f"- {z['kto']}: {z['link']}")
     lines += ["", "Tłumaczenia robocze. Nagłówki cytowane w oryginale, bez oceny redakcji."]
     return "\n".join(lines) + "\n"
 
