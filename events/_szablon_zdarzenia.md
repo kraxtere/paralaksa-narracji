@@ -23,7 +23,7 @@ relacje:
     kraj: null
     kto: null
     rola: redakcja         # redakcja | agencja | strona_sprawy (rząd, firma, organizacja)
-    gatunek: null          # wiadomosc | relacja_na_zywo | wywiad | analiza | komentarz | komunikat
+    gatunek: null          # wiadomosc | relacja_na_zywo | wywiad | analiza | komentarz | przeglad | komunikat
     link: null
     publikacja: null       # ISO 8601 ze strefą
     aktualizacja: null     # ISO 8601 ze strefą, jeśli redakcja ją podaje
