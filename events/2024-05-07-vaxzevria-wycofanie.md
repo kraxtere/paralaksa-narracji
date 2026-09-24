@@ -17,6 +17,7 @@ relacje:
     kraj: UK
     kto: The Guardian
     rola: redakcja
+    gatunek: wiadomosc
     link: https://www.theguardian.com/business/article/2024/may/08/astrazeneca-withdraws-covid-19-vaccine-worldwide-citing-surplus-of-newer-vaccines
     publikacja: '2024-05-07T22:18-04:00' # EDT; 8 maja 03:18 BST
     aktualizacja: '2024-05-08T21:31-04:00' # EDT; 9 maja 02:31 BST
@@ -30,6 +31,7 @@ relacje:
     kraj: UK
     kto: The Independent
     rola: redakcja
+    gatunek: wiadomosc
     link: https://www.independent.co.uk/news/science/astrazeneca-covid-vaccine-withdraw-blood-clots-b2541291.html
     publikacja: '2024-05-08T06:29+01:00' # datePublished w kopii 07:10 BST; 14:30 na stronie to ponowna publikacja
     aktualizacja: '2024-05-08T14:30+01:00'

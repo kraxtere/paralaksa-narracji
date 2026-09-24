@@ -23,6 +23,7 @@ relacje:
     kraj: PL
     kto: Onet
     rola: redakcja
+    gatunek: wiadomosc
     link: https://wiadomosci.onet.pl/kraj/bialoruskie-smiglowce-widziane-w-bialowiezy-wojsko-uspokaja/n7c34km
     publikacja: '2023-08-01T10:10+02:00'
     aktualizacja: '2023-08-01T10:20+02:00'
@@ -36,6 +37,7 @@ relacje:
     kraj: PL
     kto: Wirtualna Polska
     rola: redakcja
+    gatunek: wiadomosc
     link: https://wiadomosci.wp.pl/bialoruskie-smiglowce-w-okolicy-bialowiezy-byly-od-mnie-kilkaset-metrow-6925863973902976a
     publikacja: '2023-08-01T12:41+02:00'
     aktualizacja: null # na stronie nie podano
@@ -49,6 +51,7 @@ relacje:
     kraj: PL
     kto: Ministerstwo Obrony Narodowej
     rola: strona_sprawy
+    gatunek: komunikat
     link: https://www.gov.pl/web/obrona-narodowa/komunikat-mon-granica
     publikacja: null # komunikat pokazuje datę 01.08.2023, bez godziny
     aktualizacja: null
@@ -62,6 +65,7 @@ relacje:
     kraj: UK
     kto: Reuters
     rola: agencja
+    gatunek: wiadomosc
     link: https://www.reuters.com/world/europe/lukashenko-taunts-poland-again-over-wagner-troops-near-border-2023-08-01/
     publikacja: '2023-08-01T20:49+00:00'
     aktualizacja: null # serwis podaje Updated 1 sierpnia, bez drugiej godziny

@@ -17,6 +17,7 @@ relacje:
     kraj: US
     kto: Axios
     rola: redakcja
+    gatunek: wiadomosc
     link: https://www.axios.com/2024/08/02/jobs-economy-unemployment-fed-rate-recession
     publikacja: null # widoczna data aktualizacji 2.08, brak godziny
     aktualizacja: null
@@ -30,6 +31,7 @@ relacje:
     kraj: US
     kto: Bloomberg (wywiad z p.o. sekretarz pracy Julie Su)
     rola: redakcja
+    gatunek: wywiad
     link: https://www.bloomberg.com/news/videos/2024-08-02/acting-labor-secretary-says-she-s-not-worried-about-recession-risk
     publikacja: '2024-08-02T13:52+00:00'
     aktualizacja: null

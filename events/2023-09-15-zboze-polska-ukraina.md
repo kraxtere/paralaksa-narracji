@@ -21,6 +21,7 @@ relacje:
     kraj: PL
     kto: Rzeczpospolita
     rola: redakcja
+    gatunek: wiadomosc
     link: https://www.rp.pl/rolnictwo/art39118781-polska-wprowadza-zakaz-importu-zboza-z-ukrainy-buda-podpisal-rozporzadzenie
     publikacja: '2023-09-15T21:35+02:00'
     aktualizacja: '2026-08-27T20:03+02:00'
@@ -34,6 +35,7 @@ relacje:
     kraj: UA
     kto: Ukraińska Prawda / Europejska Prawda
     rola: redakcja
+    gatunek: wiadomosc
     link: https://www.pravda.com.ua/news/2023/09/15/7420022/
     publikacja: '2023-09-15T20:20+03:00'
     aktualizacja: null

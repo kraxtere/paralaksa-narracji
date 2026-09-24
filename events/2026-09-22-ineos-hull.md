@@ -17,6 +17,7 @@ relacje:
     kraj: UK
     kto: The Sun
     rola: redakcja
+    gatunek: wiadomosc
     link: https://www.thesun.co.uk/money/40459726/sir-jim-ratcliffe-halts-plants-over-gas-costs/
     publikacja: '2026-09-22T15:11+01:00'
     aktualizacja: '2026-09-22T15:53+01:00'
@@ -30,6 +31,7 @@ relacje:
     kraj: UK
     kto: The Guardian
     rola: redakcja
+    gatunek: wiadomosc
     link: https://www.theguardian.com/business/2026/sep/22/jim-ratcliffe-halts-production-hull-chemical-plants-gas-prices-ineos-uk
     publikacja: '2026-09-22T17:18+01:00'
     aktualizacja: '2026-09-22T19:51+01:00'
@@ -43,6 +45,7 @@ relacje:
     kraj: UK
     kto: INEOS
     rola: strona_sprawy
+    gatunek: komunikat
     link: https://www.ineos.com/news/shared-news/ineos-idles-europes-last-world-scale-acetyls-plant-as-energy-prices-hit-12-times-us-level/
     publikacja: null # komunikat podaje 22.09.2026, bez godziny
     aktualizacja: null

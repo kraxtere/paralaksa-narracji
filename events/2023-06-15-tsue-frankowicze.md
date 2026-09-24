@@ -17,6 +17,7 @@ relacje:
     kraj: PL
     kto: Rzeczpospolita
     rola: redakcja
+    gatunek: wiadomosc
     link: https://www.rp.pl/konsumenci/art38607281-frankowicze-sie-ciesza-banki-placza-jest-przelomowy-wyrok-tsue
     publikacja: '2023-06-15T09:44+02:00'
     aktualizacja: '2023-06-15T14:06+02:00'
@@ -30,6 +31,7 @@ relacje:
     kraj: DE
     kto: DW
     rola: redakcja
+    gatunek: analiza
     link: https://amp.dw.com/en/whats-at-stake-in-polands-swiss-franc-case/a-65920810
     publikacja: '2023-06-15T15:33+02:00' # datePublished w kopii Wayback
     aktualizacja: '2023-06-15T16:54+02:00'

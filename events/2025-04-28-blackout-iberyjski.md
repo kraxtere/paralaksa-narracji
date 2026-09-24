@@ -20,6 +20,7 @@ relacje:
     kraj: ES
     kto: El País
     rola: redakcja
+    gatunek: wiadomosc
     link: https://elpais.com/economia/2025-04-28/apagon-electrico-masivo-en-espana.html
     publikacja: '2025-04-28T12:54+02:00'
     aktualizacja: '2025-04-28T22:34+02:00'
@@ -33,6 +34,7 @@ relacje:
     kraj: PT
     kto: Observador (tekst z materiałami Agência Lusa)
     rola: redakcja
+    gatunek: wiadomosc
     link: https://observador.pt/2025/04/28/avioes-e-comboios-parados-pessoas-retiradas-do-metro-de-lisboa-semaforos-desligados-e-escolas-fechadas-um-pais-as-escuras/
     publikacja: '2025-04-28T15:54+01:00'
     aktualizacja: null # na stronie bez godziny aktualizacji
