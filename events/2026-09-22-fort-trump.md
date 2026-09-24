@@ -12,7 +12,7 @@ fakt:
   opis: >-
     22 września 2026 prezydent Karol Nawrocki powiedział w Bloomberg TV, że stała baza USA w Polsce to „kwestia czasu”,
     a jeśli powstanie, będzie nosić nazwę „Fort Trump”. Terminów nie podał. Mówił też, że sprawa jest jego zdaniem
-    „definitywnie potwierdzona”. Decyzji USA w tej sprawie nie ogłoszono.
+    „definitywnie potwierdzona”. W przeszukanych materiałach USA z 22–24.09 nie znaleziono decyzji Pentagonu ani jego odpowiedzi na wywiad.
   zrodlo_pierwotne: https://www.bloomberg.com/news/articles/2026-09-22/if-poland-gets-a-us-base-it-ll-be-called-fort-trump-nawrocki-says   # paywall; wywiad wideo
 
 stan_wiedzy_zmienial_sie: false
@@ -114,12 +114,12 @@ kontrasty:
     opis: 'UP: „potencjalna baza” i nazwa. Fox: baza jako odpowiedź na śmigłowiec nad Polską.'
     zastrzezenia: 'Dwa zdarzenia z różnych dni; zestawienie jest decyzją redakcji Fox.'
 
-jak_szukano: ['nasza baza (RSS 23.09): UP, Onet', 'wyszukiwarka WWW en: Bloomberg, Notes from Poland, TVP World, Fox, RFE/RL, UNN, Political Wire']
+jak_szukano: ['nasza baza (RSS 23.09): UP, Onet', 'wyszukiwarka WWW en: Bloomberg, Notes from Poland, TVP World, Fox, RFE/RL, UNN, Political Wire', 'wyszukiwarka WWW en/pl 24.09: Fort Trump, Nawrocki, Pentagon, Department of War/Defense; domeny war.gov i defense.gov, Reuters 17.09; brak odnalezionego komentarza Pentagonu po wywiadzie']
 ---
 
 ## Fakt
 Wywiad Bloomberg TV z 22.09. Nawrocki: baza to „kwestia czasu”, infrastruktura jest wybierana, a jeśli baza powstanie, nazwa ma brzmieć „Fort Trump”.
-Terminu nie podał. Wiceminister obrony mówił o 3–5 tys. żołnierzy (liczba zamiaru, nie decyzji). Nazwę „Fort Trump” zaproponował już w 2018 Andrzej Duda.
+Terminu nie podał. Nie udało się znaleźć komentarza Pentagonu do wypowiedzi z 22.09. Reuters 17.09 informował o wcześniejszej warunkowej deklaracji Trumpa o postępach rozmów; ta wcześniejsza deklaracja nie potwierdza decyzji po wywiadzie: https://www.reuters.com/world/europe/trump-says-progress-made-toward-establishing-us-army-base-poland-2026-09-17/. Wiceminister obrony mówił o 3–5 tys. żołnierzy (liczba zamiaru, nie decyzji). Nazwę „Fort Trump” zaproponował już w 2018 Andrzej Duda.
 
 ## Przekaz
 Z jednej wypowiedzi redakcje biorą do nagłówka co innego: warunek („jeśli”, „potencjalna”), pewność („potwierdzona”, „kwestia czasu”),
@@ -133,11 +133,11 @@ Tabliczka „Fort Trump” na pustej działce z rusztowaniem i znakiem zapytania
 
 ## Uczciwość odcinka
 - [ ] Człowiek otwiera Bloomberg (paywall: wystarczy nagłówek i wideo) i Notes from Poland.
-- [ ] Sprawdzić, czy Pentagon albo Biały Dom skomentowały.
+- [ ] Ponowić kontrolę stanowiska Pentagonu przed publikacją: 24.09 wyszukiwanie war.gov/defense.gov i mediów en/pl nie dało wypowiedzi Pentagonu odnoszącej się do wywiadu z 22.09. Nie dopisywać relacji ani cytatu bez oryginału; wcześniejsza wypowiedź Trumpa z 17.09 jest innym momentem negocjacji.
 - [ ] Nie sugerować, że Notes from Poland przekręciło słowa: „confirmed” to cytat.
 - [ ] Liczby 3–5 tys. i 15 tys. to deklaracje, nie decyzje.
 
 ## Notatki z pilota
 - Czas pracy: ok. 10 min (Claude).
-- Co było najbardziej żmudne: nic; najprostszy z czterech przypadków.
+- Co było najbardziej żmudne: po dodatkowym szukaniu 24.09 ok. 10 min (GPT) oddzielenie wcześniejszej wypowiedzi Trumpa od odpowiedzi Pentagonu na wywiad z 22.09.
 - Czego zabrakło w karcie: nic.
