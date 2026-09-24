@@ -13,7 +13,7 @@ fakt:
     22 września 2026 Donald Trump powiedział w ONZ, że stoi przed „wielką decyzją”: porozumienie z Iranem kończące wojnę
     albo „unicestwienie” Republiki Islamskiej. Porozumienia spodziewa się po listopadowych wyborach do Kongresu.
     Tego samego dnia delegacje USA i Iranu rozmawiały w Nowym Jorku.
-  zrodlo_pierwotne: null     # zapis przemówienia (whitehouse.gov / un.org) do dopięcia
+  zrodlo_pierwotne: https://gadebate.un.org/en/81/united-states-america   # strona wystąpienia i wideo ONZ; transkrypt AI nie jest oficjalnym zapisem
 
 stan_wiedzy_zmienial_sie: false
 os_czasu: []
@@ -114,7 +114,7 @@ kontrasty:
     opis: 'Ta sama groźba jako szok (Guardian) albo jako powód do drwiny (Onet).'
     zastrzezenia: 'Onet: opinia, możliwy przedruk; nagłówek zmieniony względem adresu URL.'
 
-jak_szukano: ['nasza baza (RSS 22–23.09): tagesschau, Guardian, Spiegel, CGTN, Al Jazeera, BBC, Onet', 'wyszukiwarka WWW en: ABC, NBC, CBS, CNN, Axios, Fox']
+jak_szukano: ['nasza baza (RSS 22–23.09): tagesschau, Guardian, Spiegel, CGTN, Al Jazeera, BBC, Onet', 'wyszukiwarka WWW en: ABC, NBC, CBS, CNN, Axios, Fox', 'wyszukiwarka WWW en 24.09: strona przemówienia na gadebate.un.org; otwarta notatka ONZ, transkrypt AI oznaczony jako nieoficjalny']
 ---
 
 ## Fakt
@@ -132,11 +132,11 @@ Widz zobaczy, że nagłówek komentarza to wybór jednego zdania z całego przem
 Mównica z dwoma mikrofonami: jeden cichy, drugi z czerwoną falą dźwięku. Bez wizerunku Trumpa i bez karykatury.
 
 ## Uczciwość odcinka
-- [ ] Zapis przemówienia (dokładny cytat, godzina).
+- [ ] Obejrzeć wideo przemówienia na stronie ONZ i ustalić godzinę; automatyczny transkrypt AI ONZ jest jawnie nieoficjalny, więc dokładny cytat trzeba sprawdzić w nagraniu.
 - [ ] Nie zestawiać komentarza z depeszą; para r1/r2 to komentarz i analiza.
 - [ ] Człowiek otwiera komentarz tagesschau: czy odnosi się do groźby.
 
 ## Notatki z pilota
 - Czas pracy: ok. 10 min (Claude).
-- Co było najbardziej żmudne: pilnowanie gatunków. Najostrzejsze nagłówki są w komentarzach.
+- Co było najbardziej żmudne: pilnowanie gatunków. Najostrzejsze nagłówki są w komentarzach. Dopięcie źródła ONZ 24.09 ok. 5 min (GPT); na stronie brak godziny przemówienia.
 - Czego zabrakło w karcie: nic.
