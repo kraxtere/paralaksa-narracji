@@ -83,7 +83,7 @@ def card_file(tmp_path: Path) -> Path:
 
 
 def run(card_file, wb, auth="LOW k:s", **kw):
-    return archive_card(card_file, client_for(wb), auth, today=date(2026, 1, 20), sleep=lambda s: None, **kw)
+    return archive_card(card_file, client_for(wb), auth, today=date(2026, 1, 12), sleep=lambda s: None, **kw)
 
 
 def test_existing_copy_after_publication_written_other_fields_untouched(card_file):
@@ -106,11 +106,11 @@ def test_existing_copy_after_publication_written_other_fields_untouched(card_fil
 
 def test_save_page_now_when_no_copy(card_file):
     wb = Wayback({URL: ["20260109113000"]}, statuses=[
-        {"status": "pending"}, {"status": "success", "timestamp": "20260120101500", "original_url": URL2}])
+        {"status": "pending"}, {"status": "success", "timestamp": "20260112101500", "original_url": URL2}])
     res = run(card_file, wb)
     assert wb.saved == [URL2] and wb.auth == ["LOW k:s"]
     r2 = load_card(card_file)["relacje"][1]
-    assert r2["archiwum"] == {"link": f"https://web.archive.org/web/20260120101500/{URL2}", "wykonano": "2026-01-20T10:15Z"}
+    assert r2["archiwum"] == {"link": f"https://web.archive.org/web/20260112101500/{URL2}", "wykonano": "2026-01-12T10:15Z"}
     assert "nie z dnia publikacji" in card_file.read_text(encoding="utf-8")
     assert res.relations[1].action == "własna"
 
@@ -178,7 +178,7 @@ def test_cli_archive(card_file, monkeypatch):
 
 
 def test_late_existing_copy_reported_not_written(card_file):
-    wb = Wayback({URL: ["20260115080000"], URL2: ["20260109200000"]})
+    wb = Wayback({URL: ["20260111220000"], URL2: ["20260109200000"]})
     res = run(card_file, wb)
     assert res.relations[0].action == "późna" and "nie wpisuję" in res.relations[0].message
     assert wb.saved == []  # nowa kopia byłaby jeszcze późniejsza
@@ -188,7 +188,7 @@ def test_late_existing_copy_reported_not_written(card_file):
 
 def test_redirected_capture_rejected(card_file):
     wb = Wayback({URL: ["20260109113000"]}, statuses=[
-        {"status": "success", "timestamp": "20260120101500", "original_url": "https://news.example/?mp=promo"}])
+        {"status": "success", "timestamp": "20260112101500", "original_url": "https://news.example/?mp=promo"}])
     res = run(card_file, wb)
     assert res.relations[1].action == "błąd" and "przekierowanie" in res.relations[1].message
     assert load_card(card_file)["relacje"][1]["archiwum"]["link"] is None
@@ -196,5 +196,13 @@ def test_redirected_capture_rejected(card_file):
 
 def test_same_url_with_trailing_slash_accepted(card_file):
     wb = Wayback({URL: ["20260109113000"]}, statuses=[
-        {"status": "success", "timestamp": "20260120101500", "original_url": "http://news.example/b/2/"}])
+        {"status": "success", "timestamp": "20260112101500", "original_url": "http://news.example/b/2/"}])
     assert run(card_file, wb).relations[1].action == "własna"
+
+
+def test_old_relation_without_copy_no_own_copy(card_file):
+    wb = Wayback({URL: ["20260109113000"]})
+    res = archive_card(card_file, client_for(wb), "LOW k:s", today=date(2026, 3, 1), sleep=lambda s: None)
+    assert wb.saved == []
+    assert res.relations[1].action == "pominięta" and "dzisiejszą stronę" in res.relations[1].message
+    assert res.relations[0].action == "istniejąca"  # kopię z czasu publikacji nadal wpisujemy

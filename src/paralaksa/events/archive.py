@@ -38,6 +38,7 @@ KEYS_URL = "https://archive.org/account/s3.php"
 POLL_INTERVAL_S = 5.0
 SAVE_TIMEOUT_S = 180.0
 LATE_AFTER = timedelta(hours=48)  # późniejszej istniejącej kopii nie wpisujemy automatycznie
+OWN_COPY_MAX_AGE = timedelta(days=7)  # później własna kopia pokazuje już inną stronę niż w dniu publikacji
 EMPTY_ARCHIVE = re.compile(
     r"^(?P<indent>[ \t]+)archiwum:[ \t]*\{[ \t]*link:[ \t]*null[ \t]*,[ \t]*wykonano:[ \t]*null[ \t]*\}(?P<rest>[^\n]*)$", re.M
 )
@@ -174,6 +175,11 @@ def _archive_relation(
             return RelationArchive(rid, kto, "późna", f"{msg}; {days} dni po publikacji, nie wpisuję: sprawdzić ręcznie")
         return RelationArchive(rid, kto, "istniejąca", msg, first, NOTE_EXISTING)
 
+    if today - start > OWN_COPY_MAX_AGE:
+        return RelationArchive(
+            rid, kto, "pominięta",
+            f"brak kopii z czasu publikacji; własna kopia po {(today - start).days} dniach pokazałaby dzisiejszą stronę, nie robię",
+        )
     if dry_run:
         return RelationArchive(rid, kto, "pominięta", "brak kopii: zrobiłbym własną (Save Page Now)")
     if not auth:
