@@ -28,6 +28,7 @@ from paralaksa.events.check import (
     parse_time,
     relation_day,
 )
+from paralaksa.ingest.dedup import normalize_url
 from paralaksa.ingest.http import PoliteClient, RobotsDisallowed
 
 log = logging.getLogger(__name__)
@@ -185,6 +186,11 @@ def _archive_relation(
         snap = save_page(client, url, auth, sleep=sleep, clock=clock)
     except SaveError as e:
         return RelationArchive(rid, kto, "błąd", f"Save Page Now: {e}")
+    if normalize_url(snap.original) != normalize_url(url):  # przekierowanie: paywall, strona główna, inny tekst
+        return RelationArchive(
+            rid, kto, "błąd",
+            f"Save Page Now zapisał inny adres (przekierowanie): {snap.link}; nie wpisuję, sprawdzić link w karcie",
+        )
     return RelationArchive(
         rid, kto, "własna", f"własna kopia {snap.when:%Y-%m-%d %H:%M} UTC: {snap.link}",
         snap, NOTE_OWN.format(day=f"{snap.when:%Y-%m-%d}"),

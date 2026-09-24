@@ -56,7 +56,7 @@ relacje:
     publikacja: '2026-09-23T02:54+00:00'   # z RSS
     aktualizacja: null
     porownywana_wersja: 'tytuł z RSS pobrany 2026-09-23'
-    archiwum: {link: null, wykonano: null}
+    archiwum: {link: 'https://web.archive.org/web/20260924021125/https://www.pravda.com.ua/news/2026/09/23/8054676/', wykonano: '2026-09-24T02:11Z'}   # własna kopia Save Page Now z 2026-09-24: strona z chwili kopii, nie z dnia publikacji
     naglowek: 'Навроцький заявив, що потенційну військову базу США в Польщі назвуть на честь Трампа'
     tlumaczenie: 'Nawrocki oświadczył, że potencjalną bazę wojskową USA w Polsce nazwą na cześć Trumpa'
     zostawia_z: '„Potencjalna” baza: warunek zachowany.'
@@ -70,7 +70,7 @@ relacje:
     publikacja: '2026-09-23T06:12+00:00'   # z RSS
     aktualizacja: null
     porownywana_wersja: 'tytuł i lead z RSS pobrane 2026-09-23'
-    archiwum: {link: null, wykonano: null}
+    archiwum: {link: 'https://web.archive.org/web/20260924021202/https://wiadomosci.onet.pl/kraj/karol-nawrocki-o-stalej-bazie-usa-w-polsce-powinna-sie-nazwac-fort-trump/vy0s8q9', wykonano: '2026-09-24T02:12Z'}   # własna kopia Save Page Now z 2026-09-24: strona z chwili kopii, nie z dnia publikacji
     naglowek: 'Karol Nawrocki o stałej amerykańskiej bazie w Polsce. Zaproponował nazwę'
     tlumaczenie: null
     zostawia_z: 'Nazwa jako zagadka w nagłówku („zaproponował nazwę”), „Fort Trump” dopiero w leadzie.'
@@ -84,7 +84,7 @@ relacje:
     publikacja: null
     aktualizacja: null
     porownywana_wersja: null
-    archiwum: {link: null, wykonano: null}
+    archiwum: {link: 'https://web.archive.org/web/20260924021329/https://tvpworld.com/95537904/nawrocki-fort-trump-us-base-in-poland-is-just-a-question-of-time', wykonano: '2026-09-24T02:13Z'}   # własna kopia Save Page Now z 2026-09-24: strona z chwili kopii, nie z dnia publikacji
     naglowek: '‘Fort Trump’ army base in Poland ‘just a question of time’, Nawrocki says'
     tlumaczenie: 'Baza „Fort Trump” w Polsce to „tylko kwestia czasu”, mówi Nawrocki'
     zostawia_z: 'Pewność w czasie („kwestia czasu”), z atrybucją.'
@@ -98,7 +98,7 @@ relacje:
     publikacja: null
     aktualizacja: null
     porownywana_wersja: null
-    archiwum: {link: null, wykonano: null}
+    archiwum: {link: 'https://web.archive.org/web/20260924021435/https://www.foxnews.com/world/nato-ally-pushes-fort-trump-us-military-base-russian-helicopter-penetrates-airspace', wykonano: '2026-09-24T02:14Z'}   # własna kopia Save Page Now z 2026-09-24: strona z chwili kopii, nie z dnia publikacji
     naglowek: "NATO ally pushes 'Fort Trump' US military base as Russian helicopter penetrates airspace"
     tlumaczenie: 'Sojusznik z NATO forsuje amerykańską bazę „Fort Trump”, gdy rosyjski śmigłowiec wdziera się w przestrzeń'
     zostawia_z: 'Baza jako odpowiedź na rosyjskie zagrożenie; zdarzenie z 23.09 dopięte do wywiadu z 22.09.'

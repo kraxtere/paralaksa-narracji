@@ -184,3 +184,17 @@ def test_late_existing_copy_reported_not_written(card_file):
     assert wb.saved == []  # nowa kopia byłaby jeszcze późniejsza
     assert load_card(card_file)["relacje"][0]["archiwum"]["link"] is None
     assert res.written == 1
+
+
+def test_redirected_capture_rejected(card_file):
+    wb = Wayback({URL: ["20260109113000"]}, statuses=[
+        {"status": "success", "timestamp": "20260120101500", "original_url": "https://news.example/?mp=promo"}])
+    res = run(card_file, wb)
+    assert res.relations[1].action == "błąd" and "przekierowanie" in res.relations[1].message
+    assert load_card(card_file)["relacje"][1]["archiwum"]["link"] is None
+
+
+def test_same_url_with_trailing_slash_accepted(card_file):
+    wb = Wayback({URL: ["20260109113000"]}, statuses=[
+        {"status": "success", "timestamp": "20260120101500", "original_url": "http://news.example/b/2/"}])
+    assert run(card_file, wb).relations[1].action == "własna"

@@ -22,7 +22,7 @@ relacje:
     publikacja: '2026-09-22T15:11+01:00'
     aktualizacja: '2026-09-22T15:53+01:00'
     porownywana_wersja: 'aktualizacja 2026-09-22T15:53+01:00; Wayback nie ma żadnej kopii (sprawdzone 2026-09-24), trzeba zrobić własną'
-    archiwum: {link: null, wykonano: null}
+    archiwum: {link: 'https://web.archive.org/web/20260924021700/https://www.thesun.co.uk/money/40459726/sir-jim-ratcliffe-halts-plants-over-gas-costs/', wykonano: '2026-09-24T02:17Z'}   # własna kopia Save Page Now z 2026-09-24: strona z chwili kopii, nie z dnia publikacji
     naglowek: 'Thousands of jobs at risk as Sir Jim Ratcliffe HALTS production…' # skrót oryginalnego nagłówka do limitu 15 słów
     tlumaczenie: 'Tysiące miejsc pracy zagrożonych po wstrzymaniu produkcji przez Jima Ratcliffe’a…'
     zostawia_z: 'Pierwszy plan to ryzyko dla tysięcy miejsc pracy; artykuł dalej precyzuje skalę i brak planowanych zwolnień.'

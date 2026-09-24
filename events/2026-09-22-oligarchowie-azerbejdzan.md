@@ -152,7 +152,7 @@ relacje:
     publikacja: null
     aktualizacja: null
     porownywana_wersja: null
-    archiwum: {link: null, wykonano: null}
+    archiwum: {link: 'https://web.archive.org/web/20260924022023/https://meduza.io/en/news/2026/09/23/azerbaijan-pardons-french-businessman-martin-ryan-after-eu-lifts-sanctions-on-russian-billionaire-alisher-usmanov', wykonano: '2026-09-24T02:20Z'}   # własna kopia Save Page Now z 2026-09-24: strona z chwili kopii, nie z dnia publikacji
     naglowek: 'Azerbaijan pardons French businessman Martin Ryan after EU lifts sanctions on Russian billionaire Alisher Usmanov'
     tlumaczenie: 'Azerbejdżan ułaskawia francuskiego biznesmena Martina Ryana po zdjęciu sankcji UE z rosyjskiego miliardera Alishera Usmanowa'
     zostawia_z: null
@@ -180,7 +180,7 @@ relacje:
     publikacja: '2026-09-23T11:19+04:00'   # godzina na stronie, strefa Baku
     aktualizacja: null
     porownywana_wersja: 'dekret dostępny 2026-09-24; brak kopii z chwili publikacji'
-    archiwum: {link: null, wykonano: null}
+    archiwum: {link: 'https://web.archive.org/web/20260923084657/https://president.az/az/articles/view/73554', wykonano: '2026-09-23T08:46Z'}   # kopia Wayback: pierwsza po publikacji (plx events archive)
     naglowek: 'Məhkum edilmiş bir sıra şəxslərin əfv olunması haqqında Azərbaycan Respublikası Prezidentinin Sərəncamı'
     tlumaczenie: 'Dekret prezydenta Azerbejdżanu o ułaskawieniu części skazanych'
     zostawia_z: 'Punkt 1.16: Ryan Martin Riçard; dekret powołuje się na humanizm, nie wymienia sankcji UE.'
@@ -194,7 +194,7 @@ relacje:
     publikacja: null          # na stronie jest data 23.09.2026, ale brak godziny
     aktualizacja: null
     porownywana_wersja: 'oświadczenie datowane 23.09.2026, otwarte 2026-09-24'
-    archiwum: {link: null, wykonano: null}
+    archiwum: {link: 'https://web.archive.org/web/20260924022146/https://www.diplomatie.gouv.fr/fr/presse-et-ressources/decouvrir-et-informer/actualites/azerbaidjan-grace-accordee-a-martin-ryan', wykonano: '2026-09-24T02:21Z'}   # własna kopia Save Page Now z 2026-09-24: strona z chwili kopii, nie z dnia publikacji
     naglowek: 'Azerbaïdjan - Grâce accordée à Martin Ryan'
     tlumaczenie: 'Azerbejdżan – ułaskawienie Martina Ryana'
     zostawia_z: 'Ulgę, gest humanitarny i normalizację; bez twierdzenia o wymianie za sankcje.'
@@ -208,7 +208,7 @@ relacje:
     publikacja: '2026-09-23T15:24+04:00'
     aktualizacja: null
     porownywana_wersja: 'strona otwarta 2026-09-24; kopia z chwili publikacji nieustalona'
-    archiwum: {link: null, wykonano: null}
+    archiwum: {link: 'https://web.archive.org/web/20260924022215/https://en.apa.az/social/french-citizen-martin-ryan-released-from-azerbaijans-lankaran-penitentiary-under-pardon-order-525801', wykonano: '2026-09-24T02:22Z'}   # własna kopia Save Page Now z 2026-09-24: strona z chwili kopii, nie z dnia publikacji
     naglowek: "French citizen Martin Ryan released from Azerbaijan's Lankaran Penitentiary under pardon order"
     tlumaczenie: 'Francuz Martin Ryan zwolniony z zakładu karnego w Lankaran na mocy dekretu o ułaskawieniu'
     zostawia_z: 'Fakt wyjścia z więzienia; materiał nie wiąże tego z unijną decyzją sankcyjną.'
@@ -222,7 +222,7 @@ relacje:
     publikacja: '2026-09-23T12:07+02:00'
     aktualizacja: '2026-09-23T19:45+02:00'
     porownywana_wersja: 'bieżąca strona po aktualizacji 19:45; brak otwartej kopii wersji o 12:07'
-    archiwum: {link: null, wykonano: null}
+    archiwum: {link: 'https://web.archive.org/web/20260924022314/https://fr.euronews.com/2026/09/23/bakou-gracie-le-francais-martin-ryan-apres-le-retrait-des-sanctions-de-lue-contre-alicher-', wykonano: '2026-09-24T02:23Z'}   # własna kopia Save Page Now z 2026-09-24: strona z chwili kopii, nie z dnia publikacji
     naglowek: 'Bakou gracie le Français Martin Ryan après la levée des sanctions contre Alicher Ousmanov'
     tlumaczenie: 'Baku ułaskawia Francuza Martina Ryana po zniesieniu sankcji wobec Alichera Ousmanowa'
     zostawia_z: 'Tekst redakcji opisuje porozumienie i wymianę; źródła urzędowe r11/r12 takiego związku nie podają.'

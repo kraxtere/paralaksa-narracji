@@ -34,7 +34,7 @@ relacje:
     publikacja: '2026-09-23T05:14+00:00'   # z RSS
     aktualizacja: null
     porownywana_wersja: 'tytuł i lead z RSS pobrane 2026-09-23'
-    archiwum: {link: null, wykonano: null}
+    archiwum: {link: 'https://web.archive.org/web/20260924022437/https://wiadomosci.onet.pl/kraj/rosja-atakuje-ukraine-polskie-wojsko-reaguje/7kqptkw', wykonano: '2026-09-24T02:24Z'}   # własna kopia Save Page Now z 2026-09-24: strona z chwili kopii, nie z dnia publikacji
     naglowek: 'Rosja atakuje Ukrainę. Polska poderwała samoloty'
     tlumaczenie: null
     zostawia_z: 'Działania prewencyjne, przestrzeń nienaruszona. To NIE jest relacja o śmigłowcu (ten wleciał kilka godzin później).'
@@ -48,7 +48,7 @@ relacje:
     publikacja: '2026-09-23T13:58+00:00'   # z RSS
     aktualizacja: null
     porownywana_wersja: 'tytuł i lead z RSS pobrane 2026-09-23'
-    archiwum: {link: null, wykonano: null}
+    archiwum: {link: 'https://web.archive.org/web/20260924022510/https://wiadomosci.onet.pl/trojmiasto/akcja-sluzb-pod-malborkiem-poszukiwany-jest-niezidentyfikowany-obiekt/kj8l256', wykonano: '2026-09-24T02:25Z'}   # własna kopia Save Page Now z 2026-09-24: strona z chwili kopii, nie z dnia publikacji
     naglowek: 'Akcja służb pod Malborkiem. Poszukiwany jest niezidentyfikowany obiekt'
     tlumaczenie: null
     zostawia_z: 'Coś mogło spaść koło jednostki wojskowej. Związek ze śmigłowcem nieustalony, nie łączyć.'
@@ -76,7 +76,7 @@ relacje:
     publikacja: null
     aktualizacja: null
     porownywana_wersja: null
-    archiwum: {link: null, wykonano: null}
+    archiwum: {link: 'https://web.archive.org/web/20260924022601/https://www.usnews.com/news/world/articles/2026-09-23/russian-military-helicopter-entered-polish-airspace-briefly-polish-army-says', wykonano: '2026-09-24T02:26Z'}   # własna kopia Save Page Now z 2026-09-24: strona z chwili kopii, nie z dnia publikacji
     naglowek: 'Russian Military Helicopter Entered Polish Airspace Briefly, Polish Army Says'
     tlumaczenie: 'Rosyjski śmigłowiec wojskowy na krótko wleciał w polską przestrzeń, podaje polska armia'
     zostawia_z: '„Na krótko” w nagłówku; źródłem jest polska armia.'
@@ -90,7 +90,7 @@ relacje:
     publikacja: null
     aktualizacja: null
     porownywana_wersja: null
-    archiwum: {link: null, wykonano: null}
+    archiwum: {link: 'https://web.archive.org/web/20260924022637/https://www.pravda.com.ua/eng/news/2026/09/23/8054747/', wykonano: '2026-09-24T02:26Z'}   # własna kopia Save Page Now z 2026-09-24: strona z chwili kopii, nie z dnia publikacji
     naglowek: 'Russian Mi-8 helicopter violates Polish airspace near Braniewo'
     tlumaczenie: 'Rosyjski śmigłowiec Mi-8 narusza polską przestrzeń powietrzną koło Braniewa'
     zostawia_z: 'Naruszenie jako fakt, bez atrybucji w nagłówku.'
@@ -104,7 +104,7 @@ relacje:
     publikacja: '2026-09-23T13:42+02:00'   # godzina na stronie rp.pl
     aktualizacja: '2026-09-23T15:04+02:00'
     porownywana_wersja: 'bieżący H1 po aktualizacji; wcześniejszy nagłówek z dnia publikacji nieustalony'
-    archiwum: {link: null, wykonano: null}
+    archiwum: {link: 'https://web.archive.org/web/20260924022724/https://www.rp.pl/wojsko/art45179981-rosyjski-smiglowiec-wojskowy-naruszyl-przestrzen-powietrzna-polski', wykonano: '2026-09-24T02:27Z'}   # własna kopia Save Page Now z 2026-09-24: strona z chwili kopii, nie z dnia publikacji
     naglowek: 'Rosyjski śmigłowiec wojskowy naruszył przestrzeń powietrzną Polski'
     tlumaczenie: null
     zostawia_z: 'Naruszenie podane wprost; ocena wojska „Rosja testuje” jest w podtytule i innym tytule strony.'
@@ -118,7 +118,7 @@ relacje:
     publikacja: null
     aktualizacja: null
     porownywana_wersja: null
-    archiwum: {link: null, wykonano: null}
+    archiwum: {link: 'https://web.archive.org/web/20260924021435/https://www.foxnews.com/world/nato-ally-pushes-fort-trump-us-military-base-russian-helicopter-penetrates-airspace', wykonano: '2026-09-24T02:14Z'}   # kopia Wayback: pierwsza po publikacji (plx events archive)
     naglowek: "NATO ally pushes 'Fort Trump' US military base as Russian helicopter penetrates airspace"
     tlumaczenie: 'Sojusznik z NATO forsuje amerykańską bazę „Fort Trump”, gdy rosyjski śmigłowiec wdziera się w przestrzeń'
     zostawia_z: 'Śmigłowiec jako uzasadnienie bazy: dwa niezależne zdarzenia w jednym zdaniu (por. karta 2026-09-22-fort-trump).'
@@ -146,7 +146,7 @@ relacje:
     publikacja: '2026-09-23T17:25+03:00'  # godzina moskiewska widoczna na stronie
     aktualizacja: null
     porownywana_wersja: 'strona otwarta 2026-09-24; kopii z dnia publikacji nie znaleziono'
-    archiwum: {link: null, wykonano: null}
+    archiwum: {link: 'https://web.archive.org/web/20260924022853/https://www.bfm.ru/news/618787', wykonano: '2026-09-24T02:28Z'}   # własna kopia Save Page Now z 2026-09-24: strona z chwili kopii, nie z dnia publikacji
     naglowek: 'Польша обвинила Россию в нарушении воздушного пространства страны'
     tlumaczenie: 'Polska oskarżyła Rosję o naruszenie przestrzeni powietrznej kraju'
     zostawia_z: 'Opis polskiego zarzutu; tekst stwierdza, że komentarza ze strony rosyjskiej na razie brak.'
