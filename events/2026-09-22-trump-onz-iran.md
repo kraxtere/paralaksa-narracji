@@ -28,7 +28,7 @@ relacje:
     publikacja: '2026-09-22T22:44+00:00'   # z RSS
     aktualizacja: null
     porownywana_wersja: 'tytuł i lead z RSS pobrane 2026-09-23'
-    archiwum: {link: null, wykonano: null}
+    archiwum: {link: 'https://web.archive.org/web/20260923095832/https://www.tagesschau.de/kommentar/trump-rede-un-kommentar-100.html', wykonano: '2026-09-23T09:58Z'}
     naglowek: 'Trump bei UN-Vollversammlung: Mehr Staatsmann und weniger Konfrontation'
     tlumaczenie: 'Trump na Zgromadzeniu Ogólnym ONZ: bardziej mąż stanu, mniej konfrontacji'
     zostawia_z: 'Trump „nietypowo zdyscyplinowany”, z powodu presji krajowej.'
@@ -42,7 +42,7 @@ relacje:
     publikacja: '2026-09-22T18:23+00:00'   # z RSS
     aktualizacja: null
     porownywana_wersja: 'tytuł i lead z RSS pobrane 2026-09-23'
-    archiwum: {link: null, wykonano: null}
+    archiwum: {link: 'https://web.archive.org/web/20260922185635/https://www.theguardian.com/us-news/2026/sep/22/donald-trump-unga-speech', wykonano: '2026-09-22T18:56Z'}
     naglowek: 'Trump’s threat to annihilate Iran to UN general assembly is stunning, even for him'
     tlumaczenie: 'Groźba Trumpa, że unicestwi Iran, rzucona na forum ONZ jest szokująca, nawet jak na niego'
     zostawia_z: 'Groźba bez precedensu (porównanie z Chruszczowem).'
@@ -56,7 +56,7 @@ relacje:
     publikacja: '2026-09-23T00:20+00:00'   # z RSS
     aktualizacja: null
     porownywana_wersja: 'tytuł i lead z RSS pobrane 2026-09-23'
-    archiwum: {link: null, wykonano: null}
+    archiwum: {link: 'https://web.archive.org/web/20260923010927/https://www.spiegel.de/ausland/donald-trump-bei-der-uno-ein-bisschen-drohen-ein-bisschen-kuscheln-a-9dafdd6f-d8ac-489e-986b-94242834a103', wykonano: '2026-09-23T01:09Z'}
     naglowek: 'Donald Trump bei der Uno: Ein bisschen drohen, ein bisschen kuscheln'
     tlumaczenie: 'Donald Trump w ONZ: trochę grozić, trochę się przytulać'
     zostawia_z: '„Dziwnie oswojona wersja” Trumpa; porażek tym nie przykryje.'
@@ -81,10 +81,10 @@ relacje:
     rola: redakcja
     gatunek: wiadomosc
     link: https://www.nbcnews.com/politics/trump-administration/trump-address-united-nations-general-assembly-iran-war-rcna599085
-    publikacja: null
-    aktualizacja: null
-    porownywana_wersja: null
-    archiwum: {link: null, wykonano: null}
+    publikacja: '2026-09-22T09:00+00:00'   # datePublished: zapowiedź przed przemówieniem pod tym samym adresem
+    aktualizacja: '2026-09-23T07:15+00:00'
+    porownywana_wersja: 'kopia 2026-09-23 21:11 UTC. Kopia 2026-09-22 11:51 UTC ma zapowiedź: Trump to address the U.N. General Assembly as Iran war rumbles on'
+    archiwum: {link: 'https://web.archive.org/web/20260923211149/https://www.nbcnews.com/politics/trump-administration/trump-address-united-nations-general-assembly-iran-war-rcna599085', wykonano: '2026-09-23T21:11Z'}
     naglowek: 'Trump tells U.N. he could ‘annihilate’ Iran but expects a deal after the midterm elections'
     tlumaczenie: 'Trump mówi ONZ, że może „unicestwić” Iran, ale spodziewa się porozumienia po wyborach'
     zostawia_z: 'Groźba i porozumienie w jednym zdaniu.'
@@ -98,7 +98,7 @@ relacje:
     publikacja: '2026-09-23T06:34+00:00'   # z RSS
     aktualizacja: null
     porownywana_wersja: 'tytuł z RSS; adres URL sugeruje inny, wcześniejszy tytuł („Iran może złożyć Trumpowi ofertę…”)'
-    archiwum: {link: null, wykonano: null}
+    archiwum: {link: 'https://web.archive.org/web/20260923091021/https://wiadomosci.onet.pl/swiat/iran-moze-zlozyc-trumpowi-oferte-ktorej-nie-bedzie-mogl-odrzucic-opinia/33pv5b0', wykonano: '2026-09-23T09:10Z'}
     naglowek: 'Donald Trump robi z siebie pośmiewisko w sprawie Iranu [OPINIA]'
     tlumaczenie: null
     zostawia_z: 'Groźba nie budzi strachu, tylko drwinę.'
