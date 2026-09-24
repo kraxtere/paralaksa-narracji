@@ -12,7 +12,7 @@ fakt:
   opis: >-
     22 września 2026 ambasadorowie UE zgodzili się przedłużyć sankcje indywidualne wobec ok. 3000 osób i podmiotów
     o trzy lata i zdjąć z listy Alishera Usmanova i Michaiła Fridmana. 23 września prezydent Azerbejdżanu ułaskawił
-    Francuza Martina Ryana, skazanego za szpiegostwo. Francja nie potwierdziła oficjalnie związku obu decyzji.
+    Francuza Martina Ryana, skazanego za szpiegostwo. Francuskie MSZ mówi o geście humanitarnym i normalizacji, bez wzmianki o sankcjach; Euronews opisuje powiązanie decyzji według własnych ustaleń.
   zrodlo_pierwotne: https://www.eeas.europa.eu/eeas/ukraines-territorial-integrity-eu-extends-individual-listings-three-years_en   # z wyszukiwarki, nieotwarte
 
 stan_wiedzy_zmienial_sie: true
@@ -24,7 +24,10 @@ os_czasu:
   - {czas: '2026-09-22T21:06+02:00', co_wiadomo: 'BBC prowadzi gniewem Ukrainy', zrodlo: r3}
   - {czas: '2026-09-23T06:30+02:00', co_wiadomo: 'Rzeczpospolita (poranny przegląd): „UE przedłuża sankcje na Rosję” obok chińskich aut i Bitcoina', zrodlo: r5}
   - {czas: '2026-09-23T09:09+03:00', co_wiadomo: 'Ukraińska Prawda: „handel sankcjami i zakładnikami”, Francja jako lobbystka łagodzenia', zrodlo: r7}
+  - {czas: '2026-09-23T09:19+02:00', co_wiadomo: 'Dekret prezydenta Azerbejdżanu wymienia Martina Ryana w punkcie 1.16 (na stronie: 11:19 czasu Baku)', zrodlo: r11}
   - {czas: '2026-09-23T11:38+02:00', co_wiadomo: 'Spiegel: Azerbejdżan ułaskawia Francuza „po cofnięciu sankcji UE”', zrodlo: r8}
+  - {czas: '2026-09-23T12:07+02:00', co_wiadomo: 'Euronews po francusku relacjonuje rzekomą wymianę; tekst później aktualizowany', zrodlo: r14}
+  - {czas: '2026-09-23T13:24+02:00', co_wiadomo: 'APA donosi o opuszczeniu więzienia przez Ryana (15:24 czasu Baku)', zrodlo: r13}
   - {czas: '2026-09-23T17:50+03:00', co_wiadomo: 'Ukrinform: Francja nazywa ułaskawienie krokiem do normalizacji relacji z Azerbejdżanem', zrodlo: r10}
 
 relacje:
@@ -168,6 +171,62 @@ relacje:
     tlumaczenie: 'Francja nazwała ułaskawienie swojego obywatela krokiem do normalizacji stosunków z Azerbejdżanem'
     zostawia_z: 'Głos Paryża: normalizacja, bez słowa o sankcjach.'
     sprawdzil: null          # z RSS
+  - id: r11
+    kraj: AZ
+    kto: Prezydent Azerbejdżanu
+    rola: strona_sprawy
+    gatunek: komunikat
+    link: https://president.az/az/articles/view/73554
+    publikacja: '2026-09-23T11:19+04:00'   # godzina na stronie, strefa Baku
+    aktualizacja: null
+    porownywana_wersja: 'dekret dostępny 2026-09-24; brak kopii z chwili publikacji'
+    archiwum: {link: null, wykonano: null}
+    naglowek: 'Məhkum edilmiş bir sıra şəxslərin əfv olunması haqqında Azərbaycan Respublikası Prezidentinin Sərəncamı'
+    tlumaczenie: 'Dekret prezydenta Azerbejdżanu o ułaskawieniu części skazanych'
+    zostawia_z: 'Punkt 1.16: Ryan Martin Riçard; dekret powołuje się na humanizm, nie wymienia sankcji UE.'
+    sprawdzil: GPT 2026-09-24
+  - id: r12
+    kraj: FR
+    kto: Ministerstwo Europy i Spraw Zagranicznych Francji
+    rola: strona_sprawy
+    gatunek: komunikat
+    link: https://www.diplomatie.gouv.fr/fr/presse-et-ressources/decouvrir-et-informer/actualites/azerbaidjan-grace-accordee-a-martin-ryan
+    publikacja: null          # na stronie jest data 23.09.2026, ale brak godziny
+    aktualizacja: null
+    porownywana_wersja: 'oświadczenie datowane 23.09.2026, otwarte 2026-09-24'
+    archiwum: {link: null, wykonano: null}
+    naglowek: 'Azerbaïdjan - Grâce accordée à Martin Ryan'
+    tlumaczenie: 'Azerbejdżan – ułaskawienie Martina Ryana'
+    zostawia_z: 'Ulgę, gest humanitarny i normalizację; bez twierdzenia o wymianie za sankcje.'
+    sprawdzil: GPT 2026-09-24
+  - id: r13
+    kraj: AZ
+    kto: APA
+    rola: agencja
+    gatunek: wiadomosc
+    link: https://en.apa.az/social/french-citizen-martin-ryan-released-from-azerbaijans-lankaran-penitentiary-under-pardon-order-525801
+    publikacja: '2026-09-23T15:24+04:00'
+    aktualizacja: null
+    porownywana_wersja: 'strona otwarta 2026-09-24; kopia z chwili publikacji nieustalona'
+    archiwum: {link: null, wykonano: null}
+    naglowek: "French citizen Martin Ryan released from Azerbaijan's Lankaran Penitentiary under pardon order"
+    tlumaczenie: 'Francuz Martin Ryan zwolniony z zakładu karnego w Lankaran na mocy dekretu o ułaskawieniu'
+    zostawia_z: 'Fakt wyjścia z więzienia; materiał nie wiąże tego z unijną decyzją sankcyjną.'
+    sprawdzil: GPT 2026-09-24
+  - id: r14
+    kraj: FR
+    kto: Euronews (wydanie francuskojęzyczne, redakcja paneuropejska)
+    rola: redakcja
+    gatunek: wiadomosc
+    link: https://fr.euronews.com/2026/09/23/bakou-gracie-le-francais-martin-ryan-apres-le-retrait-des-sanctions-de-lue-contre-alicher-
+    publikacja: '2026-09-23T12:07+02:00'
+    aktualizacja: '2026-09-23T19:45+02:00'
+    porownywana_wersja: 'bieżąca strona po aktualizacji 19:45; brak otwartej kopii wersji o 12:07'
+    archiwum: {link: null, wykonano: null}
+    naglowek: 'Bakou gracie le Français Martin Ryan après la levée des sanctions contre Alicher Ousmanov'
+    tlumaczenie: 'Baku ułaskawia Francuza Martina Ryana po zniesieniu sankcji wobec Alichera Ousmanowa'
+    zostawia_z: 'Tekst redakcji opisuje porozumienie i wymianę; źródła urzędowe r11/r12 takiego związku nie podają.'
+    sprawdzil: GPT 2026-09-24
 
 kontrasty:
   - miedzy: [r4, r5]
@@ -181,26 +240,30 @@ kontrasty:
   - miedzy: [r7, r10]
     rodzaj: czyj_glos
     opis: '„Handel sankcjami i zakładnikami” (ukraińska redakcja) wobec „kroku do normalizacji” (francuskie MSZ w ukraińskiej agencji).'
-    zastrzezenia: 'r7 to analiza, r10 relacjonuje stanowisko strony sprawy. Związku nie potwierdziła oficjalnie żadna ze stron; źródłem są dyplomaci anonimowi.'
+    zastrzezenia: 'r7 to analiza, r10 relacjonuje stanowisko strony sprawy. Francuskie oświadczenie r12 nie wymienia sankcji; o powiązaniu pisze Euronews r14 według własnych ustaleń.'
+  - miedzy: [r11, r12, r13, r14]
+    rodzaj: czyj_glos
+    opis: 'Dekret Azerbejdżanu wymienia skazanego i podstawę humanitarną; APA raportuje zwolnienie; francuskie MSZ nazywa je krokiem do normalizacji; Euronews opisuje porozumienie o sankcjach.'
+    zastrzezenia: 'Urząd, agencja i redakcja pełnią różne role. Euronews to redakcja paneuropejska pisząca po francusku, nie osobna redakcja krajowa Francji. Wersja Euronews z godziny 12:07 nie została zachowana; porównywany tekst mógł zmienić się o 19:45.'
 
-jak_szukano: ['nasza baza (RSS 22–23.09): tagesschau, Guardian, BBC, Spiegel, rp, UP, Ukrinform', 'wyszukiwarka WWW en/pl: Euronews, Meduza, Moscow Times, money.pl, Polsat, WP, Interia', 'rp.pl (Polityka) otwarte przez WebFetch 2026-09-24']
+jak_szukano: ['nasza baza (RSS 22–23.09): tagesschau, Guardian, BBC, Spiegel, rp, UP, Ukrinform', 'wyszukiwarka WWW en/pl: Euronews, Meduza, Moscow Times, money.pl, Polsat, WP, Interia', 'rp.pl (Polityka) otwarte przez WebFetch 2026-09-24', 'wyszukiwarka WWW fr/az/en 24.09: diplomatie.gouv.fr, president.az, APA, fr.euronews.com; otwarte cztery oryginalne strony']
 ---
 
 ## Fakt
 Decyzja UE miała dwie części: przedłużenie ok. 3000 pozycji o trzy lata (zamiast zwykłych sześciu miesięcy) i skreślenie dwóch nazwisk.
 Usmanowa zdjęto na wniosek Francji (oficjalnie: względy bezpieczeństwa narodowego), Fridmana na wniosek Luksemburga.
 Łotwa wstrzymała się od głosu. Dzień później Azerbejdżan ułaskawił Martina Ryana. Związek obu decyzji opisują anonimowi dyplomaci,
-Francja go nie potwierdziła.
+Francuskie MSZ nie wymieniło sankcji w swoim oświadczeniu; Euronews donosi o porozumieniu. Dekret prezydenta Azerbejdżanu (r11, pkt 1.16) potwierdza ułaskawienie Martina Ryana i powołuje się na humanizm, a APA r13 potwierdza zwolnienie z więzienia.
 
 ## Przekaz
 Jedna decyzja ma dwie połowy i redakcje wybierają, którą postawić w nagłówku: „przedłuża” albo „skreśla”.
 Najciekawsze jest to, że wybór różni się **wewnątrz jednej redakcji** (Rzeczpospolita, r4 i r5).
 Drugiego dnia ułaskawienie dopisuje do decyzji motyw wymiany. Ukraińska Prawda nazywa go wprost handlem zakładnikami,
-Spiegel i BBC tylko zestawiają kolejność („po”), a francuskie MSZ mówi o normalizacji.
+Spiegel i BBC tylko zestawiają kolejność („po”), a francuskie MSZ r12 mówi o normalizacji. Francuskojęzyczny Euronews r14 idzie dalej i w treści opisuje wymianę; wersja po aktualizacji o 19:45 wymaga kopii przed użyciem porównania godzinowego.
 
 ## Hipoteza odbioru
 Czytelnik porannego przeglądu może zostać z myślą „UE trzyma kurs”, czytelnik wieczornej wiadomości z myślą „UE mięknie”.
-Po 23.09 słowo „po” w nagłówku o ułaskawieniu może być czytane jak „w zamian za”. Tego żadna redakcja nie twierdzi.
+Po 23.09 słowo „po” w nagłówku o ułaskawieniu może być czytane jak „w zamian za”. Euronews twierdzi, że był to element porozumienia, czego same komunikaty urzędowe r11/r12 nie potwierdzają.
 
 ## Ilustracja
 Jedna kartka decyzji rozcięta na dwie połowy: „+3 lata dla 3000” i „−2 nazwiska”. Dzień później obok kartki pojawia się klucz od celi.
@@ -211,8 +274,10 @@ Bez portretów oligarchów i więźnia.
 - [ ] `plx events check`: kopie z 22–23.09, zwłaszcza rp r4 (aktualizowany 24.09 02:50).
 - [ ] Nie przedstawiać „handlu” jako faktu: to rama r7 i relacje anonimowych dyplomatów.
 - [ ] Oryginalny komunikat UE (godzina, liczby) zamiast EEAS z wyszukiwarki.
+- [ ] Zachować kopię Euronews sprzed aktualizacji 19:45, jeśli porównujemy moment 12:07; nie traktować wersji późniejszej jako tekstu z południa.
+- [ ] Godzina publikacji francuskiego MSZ nie widnieje na stronie; nie wywodzić jej z godziny relacji w mediach.
 
 ## Notatki z pilota
 - Czas pracy: ok. 25 min (Claude): typowanie z bazy, 3 wyszukiwania, 1 otwarta strona, karta.
-- Co było najbardziej żmudne: odróżnienie tytułu z RSS od tytułu na stronie; godziny spoza bazy.
+- Co było najbardziej żmudne: odróżnienie tytułu z RSS od tytułu na stronie; godziny spoza bazy. Dodatkowe wyszukanie i lektura fr/az/en 24.09 ok. 20 min (GPT): przeliczenie Baku–Warszawa oraz oddzielenie dokumentu urzędowego od ustaleń Euronews.
 - Czego zabrakło w karcie: nic nowego. `gatunek: przeglad` dopisany do listy.
