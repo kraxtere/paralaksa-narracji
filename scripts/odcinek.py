@@ -21,7 +21,8 @@ FADE_S = 0.4
 FPS = 30
 COUNTRY = {"PL": "Polska", "UA": "Ukraina", "DE": "Niemcy", "UK": "Wielka Brytania", "EU": "Europa",
            "FR": "Francja", "AZ": "Azerbejdżan", "US": "USA", "RU": "Rosja", "IT": "Włochy", "ES": "Hiszpania",
-           "IN": "Indie", "AU": "Australia", "MX": "Meksyk", "BR": "Brazylia", "CO": "Kolumbia", "PE": "Peru"}
+           "IN": "Indie", "AU": "Australia", "MX": "Meksyk", "BR": "Brazylia", "CO": "Kolumbia", "PE": "Peru",
+           "RO": "Rumunia", "CZ": "Czechy"}
 DAYS = ["pon", "wt", "śr", "czw", "pt", "sob", "nd"]
 
 CSS = """

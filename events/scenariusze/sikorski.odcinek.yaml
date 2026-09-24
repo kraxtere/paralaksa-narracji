@@ -1,0 +1,76 @@
+# Roboczy odcinek (pionowy, ok. 50 s). Karta: events/2026-09-12-sikorski-yes-rosja.md (zebrał GPT)
+# Render: .venv\Scripts\python scripts\odcinek.py events\scenariusze\sikorski.odcinek.yaml
+# Wynik (poza gitem): data/odcinki/<id>/
+#
+# Forma: kilka perspektyw jednej wypowiedzi (co zostało z warunku w nagłówku). Godziny: czas polski.
+# Warunek wypowiedzi: potwierdzony przez człowieka na nagraniach panelu YES (2026-09-24); na planszy parafraza, nie cytat.
+# Nagłówki sprawdzone 2026-09-24: na stronach (Do Rzeczy, Independent, Daily Beast, UP) i w kopiach Wayback z 14.09
+# (Kommersant 00:38 UTC, Digi24 08:55 UTC, Daily Beast 17:53 UTC — nagłówek bez zmian od pierwszej kopii).
+# UP opiera się na późniejszym wpisie ministra w X; „2–3 dni” to Patruszew (16–17.09), nie Sikorski.
+
+id: 2026-09-12-sikorski-yes-rosja
+tytul: 'Jedno zdanie z warunkiem. Pięć opowieści.'
+karta: events/2026-09-12-sikorski-yes-rosja.md
+wersja: robocza
+zrodla:
+  - {kto: 'Ukraińska Prawda o groźbie Patruszewa („2–3 dni”), 17.09', link: 'https://www.pravda.com.ua/eng/news/2026/09/17/8053865/'}
+
+ujecia:
+  - czas: 5
+    lektor: 'Kijów, dwunasty września. Radosław Sikorski mówi, co by się stało, gdyby Rosja zaatakowała NATO.'
+    bloki:
+      - {typ: tytul, tekst: 'Jedno zdanie.', maly: '12 września 2026 · Kijów, konferencja YES'}
+      - {typ: tekst, tekst: 'Z warunkiem. Co z tego warunku zostało w nagłówkach?'}
+
+  - czas: 6
+    lektor: 'Jeśli Rosja zaatakuje sojuszników, NATO pokona ją szybko. Tak brzmi warunek.'
+    bloki:
+      - {typ: dwie_polowy, lewa: 'JEŚLI', lewa_opis: 'Rosja zaatakuje sojuszników…', prawa: 'TO', prawa_opis: '…NATO szybko ją pokona', rel: r1}
+      - {typ: stopka, tekst: 'Parafraza wypowiedzi Sikorskiego na panelu, nie dosłowny cytat.'}
+
+  - czas: 8
+    lektor: 'Część redakcji zostawia warunek w nagłówku. Rumuńskie Digi24 i brytyjski Independent.'
+    bloki:
+      - {typ: naglowek, rel: r6, kto: Digi24, kraj: RO, godzina: '14.09',
+         tekst: '… NATO ar învinge rapid Rusia „dacă ne-ar ataca și ne-am da jos mănușile”',
+         pl: 'NATO szybko pokonałoby Rosję, „gdyby nas zaatakowała, a my zdjęlibyśmy rękawice”', podkresl: 'gdyby nas zaatakowała', maly: true}
+      - {typ: naglowek, rel: r3, kto: 'The Independent', kraj: UK, godzina: '14.09 · 12:41',
+         tekst: 'Nato would defeat Russia quickly if ‘we took our gloves off’, says Poland',
+         pl: 'NATO szybko pokonałoby Rosję, gdybyśmy zdjęli rękawice — mówi Polska', podkresl: 'gdybyśmy', maly: true}
+
+  - czas: 6
+    lektor: 'W Polsce Do Rzeczy, w dziale opinii. W nagłówku warunku już nie ma.'
+    bloki:
+      - {typ: naglowek, rel: r2, kto: 'Do Rzeczy · Opinie', kraj: PL, godzina: '14.09 · 07:05',
+         tekst: 'Sikorski zaskakuje: Pokonalibyśmy Rosję bardzo szybko', podkresl: 'Pokonalibyśmy Rosję bardzo szybko'}
+      - {typ: stopka, tekst: 'Dział Opinie. Nagłówek bez „jeśli”.'}
+
+  - czas: 6
+    lektor: 'Amerykański Daily Beast robi z tego pojedynek. Putin upokorzony.'
+    bloki:
+      - {typ: naglowek, rel: r4, kto: 'The Daily Beast', kraj: US, godzina: '14.09 · 14:55',
+         tekst: 'Putin Humiliated as His Enemy Reveals Embarrassing Truth',
+         pl: 'Putin upokorzony, gdy jego wróg ujawnia wstydliwą prawdę', podkresl: 'upokorzony'}
+
+  - czas: 8
+    lektor: 'Ukraińska Prawda wyciąga rafinerie. Rosyjski Kommersant prowadzi odpowiedzią rzeczniczki MSZ i ma ją już w nocy, przed resztą naszej próby.'
+    bloki:
+      - {typ: naglowek, rel: r5, kto: 'Ukraińska Prawda', kraj: UA, godzina: '14.09',
+         tekst: "Polish foreign minister: NATO forces could destroy half of Russia's oil refineries …",
+         pl: 'Polski minister: siły NATO mogłyby zniszczyć połowę rosyjskich rafinerii', podkresl: 'rafinerii', maly: true}
+      - {typ: naglowek, rel: r7, kto: Kommersant, kraj: RU, godzina: 'kopia 14.09 · 02:38',
+         tekst: 'Захарова прокомментировала слова Сикорского о быстрой победе над Россией',
+         pl: 'Zacharowa skomentowała słowa Sikorskiego o szybkim zwycięstwie nad Rosją', podkresl: 'Zacharowa', maly: true}
+
+  - czas: 6
+    lektor: 'I uwaga. Dwa, trzy dni to nie słowa Sikorskiego. To groźba Patruszewa, kilka dni później.'
+    bloki:
+      - {typ: tytul, tekst: '„2–3 dni” to nie Sikorski'}
+      - {typ: tekst, tekst: 'Groźbę, że Polska przestałaby istnieć w 2–3 dni, wygłosił kilka dni później Nikołaj Patruszew.', maly: true}
+
+  - czas: 7
+    lektor: 'Jedno zdanie z warunkiem. Pięć opowieści. Który nagłówek przeczytałeś ty?'
+    bloki:
+      - {typ: tytul, tekst: 'Jedno zdanie.'}
+      - {typ: tekst, tekst: 'Warunek. Zwycięstwo. Upokorzenie. Rafinerie. Riposta.'}
+      - {typ: stopka, tekst: 'Jedno zdarzenie. Wiele opowieści. Źródła w opisie.'}
