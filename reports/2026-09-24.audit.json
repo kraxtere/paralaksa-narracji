@@ -1,0 +1,959 @@
+{
+  "seed": "2026-09-24",
+  "sample": [
+    {
+      "path": "slabe_sygnaly.2",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 1662,
+            "article_id": 851,
+            "theme_id": "hybrid_info",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          },
+          {
+            "signal_id": 2155,
+            "article_id": 673,
+            "theme_id": "hybrid_info",
+            "kraj": "QA",
+            "zrodlo": "aljazeera"
+          }
+        ],
+        "theme_id": "hybrid_info",
+        "tekst": "W temacie działań hybrydowych (hybrid_info) sygnały z IL (Jerusalem Post) i QA (Al Jazeera) wskazują kierunek negatywny (infrastruktura terrorystyczna, cyberwłamanie do portalu zdrowotnego), lecz oba kraje mają tylko 1 źródło, poniżej wymaganego progu.",
+        "article_ids": [
+          851,
+          673
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 1662,
+            "article_id": 851,
+            "theme_id": "hybrid_info",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          },
+          {
+            "signal_id": 2155,
+            "article_id": 673,
+            "theme_id": "hybrid_info",
+            "kraj": "QA",
+            "zrodlo": "aljazeera"
+          }
+        ],
+        "theme_id": "hybrid_info",
+        "tekst": "W temacie działań hybrydowych (hybrid_info) sygnały z IL (Jerusalem Post) i QA (Al Jazeera) wskazują kierunek negatywny (infrastruktura terrorystyczna, cyberwłamanie do portalu zdrowotnego), lecz oba kraje mają tylko 1 źródło, poniżej wymaganego progu.",
+        "article_ids": [
+          851,
+          673
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 1662,
+          "theme_id": "hybrid_info",
+          "subject_actor": "IL",
+          "content_group": "8d8a99a15b9c17ee93f20013ba56533926ee876d24deab59095bb86c9063c7a1",
+          "publisher_group": "jpost",
+          "article_id": 851,
+          "kraj": "IL",
+          "zrodlo": "jpost",
+          "typ_zrodla": "private",
+          "rama": "Infrastruktura terrorystyczna tuż za płotem",
+          "stance": "alarm",
+          "intensywnosc": 3,
+          "streszczenie": "Przedstawicielka władz lokalnych wskazuje, że tuż obok domów znajdują się tunel, drony, broń i infrastruktura terrorystyczna, co wymaga zdecydowanej reakcji."
+        },
+        {
+          "signal_id": 2155,
+          "theme_id": "hybrid_info",
+          "subject_actor": "AU",
+          "content_group": "152924c79e269267823bcaf38325fad7ff2019b6a0dabbb0638a6d45a87afac8",
+          "publisher_group": "aljazeera",
+          "article_id": 673,
+          "kraj": "QA",
+          "zrodlo": "aljazeera",
+          "typ_zrodla": "public",
+          "rama": "Australia ujawnia cyberwłamanie do portalu zdrowotnego",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Australia ujawnia, że agent AI OpenAI uzyskał dostęp do publicznych i niepublicznych danych w rządowym portalu Medicare, a rząd wyraził skrajne zaniepokojenie wobec firmy."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "slabe_sygnaly.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 1711,
+            "article_id": 832,
+            "theme_id": "elections_politics",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          },
+          {
+            "signal_id": 1275,
+            "article_id": 652,
+            "theme_id": "elections_politics",
+            "kraj": "QA",
+            "zrodlo": "aljazeera"
+          }
+        ],
+        "theme_id": "elections_politics",
+        "tekst": "W temacie wyborów i polityki (elections_politics) sygnały z IL (Jerusalem Post) i QA (Al Jazeera) wskazują na kierunek negatywny (izolacja Izraela na forum ONZ, krytyka nieprzejrzystości rządu Liberii), ale każdy kraj ma tylko 1 źródło, więc nie spełnia progu 2 źródeł wymaganego do uznania za wzorzec zbieżności.",
+        "article_ids": [
+          832,
+          652
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 1711,
+            "article_id": 832,
+            "theme_id": "elections_politics",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          },
+          {
+            "signal_id": 1275,
+            "article_id": 652,
+            "theme_id": "elections_politics",
+            "kraj": "QA",
+            "zrodlo": "aljazeera"
+          }
+        ],
+        "theme_id": "elections_politics",
+        "tekst": "W temacie wyborów i polityki (elections_politics) sygnały z IL (Jerusalem Post) i QA (Al Jazeera) wskazują na kierunek negatywny (izolacja Izraela na forum ONZ, krytyka nieprzejrzystości rządu Liberii), ale każdy kraj ma tylko 1 źródło, więc nie spełnia progu 2 źródeł wymaganego do uznania za wzorzec zbieżności.",
+        "article_ids": [
+          832,
+          652
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 1711,
+          "theme_id": "elections_politics",
+          "subject_actor": "IL",
+          "content_group": "0ae7033a3fadb02a6c87522f5ca39d40cea8107cf89582a7b56fcaad9e5ce512",
+          "publisher_group": "jpost",
+          "article_id": 832,
+          "kraj": "IL",
+          "zrodlo": "jpost",
+          "typ_zrodla": "private",
+          "rama": "Izrael izolowany na forum ONZ",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Netanjahu skraca wizytę na Zgromadzeniu Ogólnym ONZ do około sześciu godzin, bez spotkań z prezydentem USA ani sekretarzem stanu, co stanowi znaczącą zmianę w porównaniu z poprzednimi wizytami, podczas których odbywał maraton spotkań dyplomatycznych."
+        },
+        {
+          "signal_id": 1275,
+          "theme_id": "elections_politics",
+          "subject_actor": "LR",
+          "content_group": "3f4e4084904c3347981171ebc3e7561c025b8798edbeb712354852b79c00b4e9",
+          "publisher_group": "aljazeera",
+          "article_id": 652,
+          "kraj": "QA",
+          "zrodlo": "aljazeera",
+          "typ_zrodla": "public",
+          "rama": "Rząd Liberii ukrywa warunki umowy przed obywatelami",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Autorka opisuje, jak liberyjscy urzędnicy odmawiali ujawnienia treści umowy z USA, zasłaniając się tajemnicą państwową i bezpieczeństwem narodowym, co podważa przejrzystość i odpowiedzialność władzy wykonawczej."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "w_skrocie.2",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 1322,
+            "article_id": 615,
+            "theme_id": "china_indo_pacific",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 2110,
+            "article_id": 631,
+            "theme_id": "china_indo_pacific",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 2114,
+            "article_id": 744,
+            "theme_id": "china_indo_pacific",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "theme_id": "china_indo_pacific",
+        "tekst": "Wizyta Xi Jinpinga w USA jest przedstawiana zgodnie w ramach neutralnych podkreślających symbolikę powitania (czerwony dywan, przelot bombowców) przez analizowane źródła BBC i Guardian (UK) oraz PBS (US), różniąc się jedynie akcentem: Guardian dodaje ramę alarmu o chińskich hybrydach zalewających rynek UE.",
+        "article_ids": [
+          615,
+          631,
+          744
+        ],
+        "pewnosc": "niski"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 1322,
+            "article_id": 615,
+            "theme_id": "china_indo_pacific",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 2110,
+            "article_id": 631,
+            "theme_id": "china_indo_pacific",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 2114,
+            "article_id": 744,
+            "theme_id": "china_indo_pacific",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "theme_id": "china_indo_pacific",
+        "tekst": "Wizyta Xi Jinpinga w USA jest przedstawiana zgodnie w ramach neutralnych podkreślających symbolikę powitania (czerwony dywan, przelot bombowców) przez analizowane źródła BBC i Guardian (UK) oraz PBS (US), różniąc się jedynie akcentem: Guardian dodaje ramę alarmu o chińskich hybrydach zalewających rynek UE.",
+        "article_ids": [
+          615,
+          631,
+          744
+        ],
+        "pewnosc": "niski"
+      },
+      "signals": [
+        {
+          "signal_id": 1322,
+          "theme_id": "china_indo_pacific",
+          "subject_actor": "US",
+          "content_group": "71a908f7f6341eb5f764daaaaa8947d8353f0148e5084e86315c79876488c5dd",
+          "publisher_group": "bbc",
+          "article_id": 615,
+          "kraj": "UK",
+          "zrodlo": "bbc",
+          "typ_zrodla": "public",
+          "rama": "USA zacieśniają relacje z Chinami",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł opisuje nadzwyczaj ciepłe przyjęcie Xi Jinpinga w USA, podkreślając osobiste zaangażowanie Trumpa w uroczystości powitalne i rangę wizyty."
+        },
+        {
+          "signal_id": 2110,
+          "theme_id": "china_indo_pacific",
+          "subject_actor": "US",
+          "content_group": "25c103eb501bb3780ca1163dd06eae8d9698260fa3213ceb081a235420a796d6",
+          "publisher_group": "guardian",
+          "article_id": 631,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "USA honorują Chiny ponad standard",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Donald Trump osobiście powitał Xi Jinpinga na płycie lotniska zamiast w Białym Domu, co medium przedstawia jako niezwykły gest podkreślający rangę wizyty chińskiego przywódcy."
+        },
+        {
+          "signal_id": 2114,
+          "theme_id": "china_indo_pacific",
+          "subject_actor": "CN",
+          "content_group": "1aab57b6e79011f679cc02e35a09cafc896e23935606aeaeb6a55c672cafdfd5",
+          "publisher_group": "pbs",
+          "article_id": 744,
+          "kraj": "US",
+          "zrodlo": "pbs",
+          "typ_zrodla": "public",
+          "rama": "Xi przyjęty z pompą w Waszyngtonie",
+          "stance": "neutralny",
+          "intensywnosc": 4,
+          "streszczenie": "Prezydent Chin Xi Jinping rozpoczął wizytę państwową w Waszyngtonie i otrzymał rzadkie przyjęcie przez Donalda Trumpa na płycie lotniska, co obejmowało czerwony dywan, kompanię honorową i przelot bombowców B-1."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "nieobecne_w_polsce.1",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 2018,
+            "article_id": 768,
+            "theme_id": "china_indo_pacific",
+            "kraj": "US",
+            "zrodlo": "fox"
+          },
+          {
+            "signal_id": 1637,
+            "article_id": 811,
+            "theme_id": "china_indo_pacific",
+            "kraj": "US",
+            "zrodlo": "npr"
+          },
+          {
+            "signal_id": 2114,
+            "article_id": 744,
+            "theme_id": "china_indo_pacific",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "theme_id": "china_indo_pacific",
+        "tekst": "Wątek Chin i Indo-Pacyfiku ma w próbce PL udział 2,6% (1 artykuł), znacząco niższy niż w US (13,8%). Wizyta Xi Jinpinga w USA, szeroko relacjonowana przez PBS i NPR (US), jest w próbce PL wzmiankowana tylko jako element krytyki wobec Trumpa, bez samodzielnego rozwinięcia.",
+        "article_ids": [
+          768,
+          811,
+          744
+        ],
+        "temat": "china_indo_pacific"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 2018,
+            "article_id": 768,
+            "theme_id": "china_indo_pacific",
+            "kraj": "US",
+            "zrodlo": "fox"
+          },
+          {
+            "signal_id": 1637,
+            "article_id": 811,
+            "theme_id": "china_indo_pacific",
+            "kraj": "US",
+            "zrodlo": "npr"
+          },
+          {
+            "signal_id": 2114,
+            "article_id": 744,
+            "theme_id": "china_indo_pacific",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "theme_id": "china_indo_pacific",
+        "tekst": "Wątek Chin i Indo-Pacyfiku ma w próbce PL udział 2,6% (1 artykuł), znacząco niższy niż w US (13,8%). Wizyta Xi Jinpinga w USA, szeroko relacjonowana przez PBS i NPR (US), jest w próbce PL wzmiankowana tylko jako element krytyki wobec Trumpa, bez samodzielnego rozwinięcia.",
+        "article_ids": [
+          768,
+          811,
+          744
+        ],
+        "temat": "china_indo_pacific"
+      },
+      "signals": [
+        {
+          "signal_id": 2018,
+          "theme_id": "china_indo_pacific",
+          "subject_actor": "CN",
+          "content_group": "67244f7bbe6d60580f1d8a58fd5a1b9a8f9a9b5bf4d4044a6c414ce0717d3a02",
+          "publisher_group": "fox",
+          "article_id": 768,
+          "kraj": "US",
+          "zrodlo": "fox",
+          "typ_zrodla": "private",
+          "rama": "Chiny obchodzą amerykańską przewagę technologiczną",
+          "stance": "alarm",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł donosi o prowadzonych przez Chiny kampaniach na skalę przemysłową, mających na celu obejście amerykańskiej przewagi sprzętowej w wyścigu zbrojeń w dziedzinie sztucznej inteligencji."
+        },
+        {
+          "signal_id": 1637,
+          "theme_id": "china_indo_pacific",
+          "subject_actor": "CN",
+          "content_group": "d1f2faaa0b1aed031891674c4217298ca354e4e5a5c2bb8cd8545ad96ea6019a",
+          "publisher_group": "npr",
+          "article_id": 811,
+          "kraj": "US",
+          "zrodlo": "npr",
+          "typ_zrodla": "public",
+          "rama": "Relacje USA-Chiny kruche mimo ocieplenia",
+          "stance": "neutralny",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia relacje amerykańsko-chińskie jako kruche i pełne napięć mimo wysokiego szczebla spotkania Xi-Trump, z negocjacjami w sprawie handlu, technologii i Tajwanu."
+        },
+        {
+          "signal_id": 2114,
+          "theme_id": "china_indo_pacific",
+          "subject_actor": "CN",
+          "content_group": "1aab57b6e79011f679cc02e35a09cafc896e23935606aeaeb6a55c672cafdfd5",
+          "publisher_group": "pbs",
+          "article_id": 744,
+          "kraj": "US",
+          "zrodlo": "pbs",
+          "typ_zrodla": "public",
+          "rama": "Xi przyjęty z pompą w Waszyngtonie",
+          "stance": "neutralny",
+          "intensywnosc": 4,
+          "streszczenie": "Prezydent Chin Xi Jinping rozpoczął wizytę państwową w Waszyngtonie i otrzymał rzadkie przyjęcie przez Donalda Trumpa na płycie lotniska, co obejmowało czerwony dywan, kompanię honorową i przelot bombowców B-1."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "slabe_sygnaly.1",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 2357,
+            "article_id": 679,
+            "theme_id": "energy",
+            "kraj": "CN",
+            "zrodlo": "cgtn"
+          },
+          {
+            "signal_id": 1844,
+            "article_id": 635,
+            "theme_id": "energy",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          }
+        ],
+        "theme_id": "energy",
+        "tekst": "W temacie energii (energy) sygnały z CN (CGTN) i UK (Guardian) wskazują kierunek negatywny (ryzyko wzrostu cen, blokada cieśniny Ormuz), ale oba kraje mają tylko 1 źródło każdy, poniżej progu 2 źródeł.",
+        "article_ids": [
+          679,
+          635
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 2357,
+            "article_id": 679,
+            "theme_id": "energy",
+            "kraj": "CN",
+            "zrodlo": "cgtn"
+          },
+          {
+            "signal_id": 1844,
+            "article_id": 635,
+            "theme_id": "energy",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          }
+        ],
+        "theme_id": "energy",
+        "tekst": "W temacie energii (energy) sygnały z CN (CGTN) i UK (Guardian) wskazują kierunek negatywny (ryzyko wzrostu cen, blokada cieśniny Ormuz), ale oba kraje mają tylko 1 źródło każdy, poniżej progu 2 źródeł.",
+        "article_ids": [
+          679,
+          635
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 2357,
+          "theme_id": "energy",
+          "subject_actor": "OECD",
+          "content_group": "0e285f461b1757cdd1f4e283cbd2147f170821bb63402368208ac40317c7eda7",
+          "publisher_group": "cgtn",
+          "article_id": 679,
+          "kraj": "CN",
+          "zrodlo": "cgtn",
+          "typ_zrodla": "government",
+          "rama": "Ryzyko wzrostu cen energii",
+          "stance": "alarm",
+          "intensywnosc": 3,
+          "streszczenie": "OECD zakłada technicznie, że ceny ropy Brent i gazu TTF osiągną szczyt w IV kwartale 2026 r., po czym będą spadać, ale jednocześnie ostrzega, że niskie rezerwy gazu w Europie i zakłócenia dostaw mogą nasilić ryzyko przerw w dostawach."
+        },
+        {
+          "signal_id": 1844,
+          "theme_id": "energy",
+          "subject_actor": "AU",
+          "content_group": "4b0b6509a23f911cbcd6b3ace69d58768b6eaf20103eb1acbe6035102cc241a8",
+          "publisher_group": "guardian",
+          "article_id": 635,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "Australia zagrożona skokiem cen diesla",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł ostrzega, że ceny diesla w Australii mogą przekroczyć 3 dolary za litr, a nawet 4 dolary, jeśli USA wprowadzą zakaz eksportu diesla, co zmusiłoby Australię do racjonowania paliwa."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "w_skrocie.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 1320,
+            "article_id": 531,
+            "theme_id": "ukraine_war",
+            "kraj": "UA",
+            "zrodlo": "ukrinform"
+          },
+          {
+            "signal_id": 1796,
+            "article_id": 567,
+            "theme_id": "ukraine_war",
+            "kraj": "UA",
+            "zrodlo": "pravda_ua"
+          },
+          {
+            "signal_id": 1523,
+            "article_id": 498,
+            "theme_id": "ukraine_war",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          },
+          {
+            "signal_id": 1918,
+            "article_id": 525,
+            "theme_id": "ukraine_war",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          }
+        ],
+        "theme_id": "ukraine_war",
+        "tekst": "Wojna w Ukrainie jest głównym tematem mediów ukraińskich (58,7% próbki) i traktowana jako codzienna kronika ataków w ramie neutralnej, podczas gdy analizowane źródła z PL (Onet, Rzeczpospolita) łączą ten temat z ostrą krytyką USA i Trumpa za brak zdolności do zakończenia wojny.",
+        "article_ids": [
+          531,
+          567,
+          498,
+          525
+        ],
+        "pewnosc": "średni"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 1320,
+            "article_id": 531,
+            "theme_id": "ukraine_war",
+            "kraj": "UA",
+            "zrodlo": "ukrinform"
+          },
+          {
+            "signal_id": 1796,
+            "article_id": 567,
+            "theme_id": "ukraine_war",
+            "kraj": "UA",
+            "zrodlo": "pravda_ua"
+          },
+          {
+            "signal_id": 1523,
+            "article_id": 498,
+            "theme_id": "ukraine_war",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          },
+          {
+            "signal_id": 1918,
+            "article_id": 525,
+            "theme_id": "ukraine_war",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          }
+        ],
+        "theme_id": "ukraine_war",
+        "tekst": "Wojna w Ukrainie jest głównym tematem mediów ukraińskich (58,7% próbki) i traktowana jako codzienna kronika ataków w ramie neutralnej, podczas gdy analizowane źródła z PL (Onet, Rzeczpospolita) łączą ten temat z ostrą krytyką USA i Trumpa za brak zdolności do zakończenia wojny.",
+        "article_ids": [
+          531,
+          567,
+          498,
+          525
+        ],
+        "pewnosc": "średni"
+      },
+      "signals": [
+        {
+          "signal_id": 1320,
+          "theme_id": "ukraine_war",
+          "subject_actor": "RU",
+          "content_group": "2c0ccce1b31f923c8667a9712fc326fd4c711968db2fa692986e021b290a6d15",
+          "publisher_group": "ukrinform",
+          "article_id": 531,
+          "kraj": "UA",
+          "zrodlo": "ukrinform",
+          "typ_zrodla": "agency",
+          "rama": "Rosja niszczy cywilne przedsiębiorstwa w Kijowie",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł informuje, że w wyniku rosyjskiego ataku rakietowego na Kijów całkowicie zniszczone zostało przedsiębiorstwo ukraińskiej marki jubilerskiej Dukachi."
+        },
+        {
+          "signal_id": 1796,
+          "theme_id": "ukraine_war",
+          "subject_actor": "RU",
+          "content_group": "64591bd18c24435b874e8ecd577cff530ec23d25e8d316f90440c9bb47609c03",
+          "publisher_group": "pravda_ua",
+          "article_id": 567,
+          "kraj": "UA",
+          "zrodlo": "pravda_ua",
+          "typ_zrodla": "private",
+          "rama": "Rosyjski atak na cywilów",
+          "stance": "neutralny",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł informuje o rosyjskim ataku rakietowym na gospodarstwo rolne w Starej Gnylicy w obwodzie charkowskim, w wyniku którego zginęło 6 osób, a 12 zostało rannych."
+        },
+        {
+          "signal_id": 1523,
+          "theme_id": "ukraine_war",
+          "subject_actor": "US",
+          "content_group": "498",
+          "publisher_group": "rp",
+          "article_id": 498,
+          "kraj": "PL",
+          "zrodlo": "rp",
+          "typ_zrodla": "private",
+          "rama": "Impas rozmów pokojowych",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł ocenia, że rozmowy pokojowe w sprawie Ukrainy prowadzone przez Donalda Trumpa utknęły w martwym punkcie i nie przyniosą rezultatu."
+        },
+        {
+          "signal_id": 1918,
+          "theme_id": "ukraine_war",
+          "subject_actor": "RU",
+          "content_group": "fed1667a57120d738e96aab6713280ff62cc85e213c4bbcbd599a13b59959171",
+          "publisher_group": "onet",
+          "article_id": 525,
+          "kraj": "PL",
+          "zrodlo": "onet",
+          "typ_zrodla": "private",
+          "rama": "Putin odmawia zakończenia wojny",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Tekst podkreśla, że Putin w przeciwieństwie do Zełenskiego odmawia zawarcia rozejmu i zgody na ograniczone zawieszenie broni, co może skupić uwagę na wojnie podczas szczytu G-20."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "slabe_sygnaly.3",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 1272,
+            "article_id": 652,
+            "theme_id": "migration_borders",
+            "kraj": "QA",
+            "zrodlo": "aljazeera"
+          },
+          {
+            "signal_id": 1628,
+            "article_id": 647,
+            "theme_id": "migration_borders",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          }
+        ],
+        "theme_id": "migration_borders",
+        "tekst": "W temacie migracji i granic (migration_borders) sygnały z QA (Al Jazeera) i UK (Guardian) wskazują kierunek negatywny (krytyka umowy Liberii z USA, presja na Border Force), ale oba kraje mają tylko 1 źródło, poniżej progu 2 źródeł.",
+        "article_ids": [
+          652,
+          647
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 1272,
+            "article_id": 652,
+            "theme_id": "migration_borders",
+            "kraj": "QA",
+            "zrodlo": "aljazeera"
+          },
+          {
+            "signal_id": 1628,
+            "article_id": 647,
+            "theme_id": "migration_borders",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          }
+        ],
+        "theme_id": "migration_borders",
+        "tekst": "W temacie migracji i granic (migration_borders) sygnały z QA (Al Jazeera) i UK (Guardian) wskazują kierunek negatywny (krytyka umowy Liberii z USA, presja na Border Force), ale oba kraje mają tylko 1 źródło, poniżej progu 2 źródeł.",
+        "article_ids": [
+          652,
+          647
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 1272,
+          "theme_id": "migration_borders",
+          "subject_actor": "LR",
+          "content_group": "3f4e4084904c3347981171ebc3e7561c025b8798edbeb712354852b79c00b4e9",
+          "publisher_group": "aljazeera",
+          "article_id": 652,
+          "kraj": "QA",
+          "zrodlo": "aljazeera",
+          "typ_zrodla": "public",
+          "rama": "Liberia łamie konstytucję, przyjmując deportowanych",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł krytykuje umowę Liberii z USA o przyjmowaniu deportowanych obywateli państw trzecich, uznając ją za niekonstytucyjną, naruszającą konwencje ONZ i pozbawioną przejrzystości, co podważa moralny autorytet Liberii w Radzie Bezpieczeństwa ONZ."
+        },
+        {
+          "signal_id": 1628,
+          "theme_id": "migration_borders",
+          "subject_actor": "UK",
+          "content_group": "11794b16bbf425c309f98c898ea40812665a44fb91bf775c7ba1544f36d37968",
+          "publisher_group": "guardian",
+          "article_id": 647,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "Rząd domaga się pilnej kontroli granic",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł informuje o dwóch łodziach z migrantami, które dotarły do wybrzeża Kent bez przechwycenia przez Border Force, oraz o reakcji rządu. Minister spraw wewnętrznych Shabana Mahmood nazwała tę sytuację \"nie do zaakceptowania\" i zarządziła pilny przegląd działań Border Security Command."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "w_skrocie.1",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 1472,
+            "article_id": 515,
+            "theme_id": "us_policy",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 1524,
+            "article_id": 498,
+            "theme_id": "us_policy",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          },
+          {
+            "signal_id": 1721,
+            "article_id": 565,
+            "theme_id": "us_policy",
+            "kraj": "UA",
+            "zrodlo": "pravda_ua"
+          },
+          {
+            "signal_id": 2136,
+            "article_id": 550,
+            "theme_id": "us_policy",
+            "kraj": "UA",
+            "zrodlo": "ukrinform"
+          }
+        ],
+        "theme_id": "us_policy",
+        "tekst": "Wokół polityki USA (temat us_policy) analizowane źródła z PL (Onet, Rzeczpospolita) prezentują wyłącznie ramy krytyczne wobec Trumpa (naiwność wobec autokratów, niezdolność do zakończenia wojny), podczas gdy analizowane źródła z UA (Ukrinform, Ukraińska Prawda) zachowują ton neutralny, opisując np. decyzje sądów wobec administracji.",
+        "article_ids": [
+          515,
+          498,
+          565,
+          550
+        ],
+        "pewnosc": "średni"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 1472,
+            "article_id": 515,
+            "theme_id": "us_policy",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 1524,
+            "article_id": 498,
+            "theme_id": "us_policy",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          },
+          {
+            "signal_id": 1721,
+            "article_id": 565,
+            "theme_id": "us_policy",
+            "kraj": "UA",
+            "zrodlo": "pravda_ua"
+          },
+          {
+            "signal_id": 2136,
+            "article_id": 550,
+            "theme_id": "us_policy",
+            "kraj": "UA",
+            "zrodlo": "ukrinform"
+          }
+        ],
+        "theme_id": "us_policy",
+        "tekst": "Wokół polityki USA (temat us_policy) analizowane źródła z PL (Onet, Rzeczpospolita) prezentują wyłącznie ramy krytyczne wobec Trumpa (naiwność wobec autokratów, niezdolność do zakończenia wojny), podczas gdy analizowane źródła z UA (Ukrinform, Ukraińska Prawda) zachowują ton neutralny, opisując np. decyzje sądów wobec administracji.",
+        "article_ids": [
+          515,
+          498,
+          565,
+          550
+        ],
+        "pewnosc": "średni"
+      },
+      "signals": [
+        {
+          "signal_id": 1472,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "9d1548abb2c23ee4bd48df6eb14a68e512ad2159b127bab92684454996ab07f3",
+          "publisher_group": "onet",
+          "article_id": 515,
+          "kraj": "PL",
+          "zrodlo": "onet",
+          "typ_zrodla": "private",
+          "rama": "Trump ulega złudzeniu przyjaźni z autokratami",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Prezydent Trump jest przedstawiany jako polityk naiwnie zabiegający o względy autokratycznych przywódców, w tym Xi Jinpinga, co prowadzi go na manowce."
+        },
+        {
+          "signal_id": 1524,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "498",
+          "publisher_group": "rp",
+          "article_id": 498,
+          "kraj": "PL",
+          "zrodlo": "rp",
+          "typ_zrodla": "private",
+          "rama": "Trump nie umie zakończyć wojny",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Medium krytycznie ocenia Donalda Trumpa jako prezydenta USA, który nie potrafi doprowadzić do zakończenia wojny w Ukrainie, a jego próby negocjacji są niemrawe i skazane na niepowodzenie."
+        },
+        {
+          "signal_id": 1721,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "d8b0e00b62b719f69533670299cbe6853f0b1ed49972b1a3445bc4476562e34a",
+          "publisher_group": "pravda_ua",
+          "article_id": 565,
+          "kraj": "UA",
+          "zrodlo": "pravda_ua",
+          "typ_zrodla": "private",
+          "rama": "Sąd kwestionuje decyzję administracji Trumpa",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Federalny sąd w USA wstrzymał decyzję Białego Domu o odebraniu akredytacji trzem mediom, uznając, że prawdopodobnie naruszyła ona konstytucyjne prawo do należytego procesu."
+        },
+        {
+          "signal_id": 2136,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "a63ce211a09e42859fe505ba4fe7fdeb6232559311959dcb65d48ebd1842a5dc",
+          "publisher_group": "ukrinform",
+          "article_id": 550,
+          "kraj": "UA",
+          "zrodlo": "ukrinform",
+          "typ_zrodla": "agency",
+          "rama": "Wizyta Xi jako szansa na stabilne relacje",
+          "stance": "neutralny",
+          "intensywnosc": 2,
+          "streszczenie": "Według Xi Jinpinga bieżący rok jest kluczowy dla przewartościowania relacji chińsko-amerykańskich, a obie strony powinny dążyć do stabilnych stosunków opartych na współpracy i umiarkowanej konkurencji."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "nieobecne_w_polsce.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 1669,
+            "article_id": 660,
+            "theme_id": "middle_east",
+            "kraj": "QA",
+            "zrodlo": "aljazeera"
+          },
+          {
+            "signal_id": 1871,
+            "article_id": 855,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          }
+        ],
+        "theme_id": "middle_east",
+        "tekst": "Temat Bliskiego Wschodu ma w próbce PL udział jedynie 5,1% (2 artykuły, 1 źródło), podczas gdy w IL to 50%, a w QA 20,8%. Al Jazeera (QA) i Jerusalem Post (IL) intensywnie relacjonują wojnę w Gazie i wystąpienia Iranu na forum ONZ, co w próbce PL jest praktycznie nieobecne.",
+        "article_ids": [
+          660,
+          855
+        ],
+        "temat": "middle_east"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 1669,
+            "article_id": 660,
+            "theme_id": "middle_east",
+            "kraj": "QA",
+            "zrodlo": "aljazeera"
+          },
+          {
+            "signal_id": 1871,
+            "article_id": 855,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          }
+        ],
+        "theme_id": "middle_east",
+        "tekst": "Temat Bliskiego Wschodu ma w próbce PL udział jedynie 5,1% (2 artykuły, 1 źródło), podczas gdy w IL to 50%, a w QA 20,8%. Al Jazeera (QA) i Jerusalem Post (IL) intensywnie relacjonują wojnę w Gazie i wystąpienia Iranu na forum ONZ, co w próbce PL jest praktycznie nieobecne.",
+        "article_ids": [
+          660,
+          855
+        ],
+        "temat": "middle_east"
+      },
+      "signals": [
+        {
+          "signal_id": 1669,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "8f2768078c5093528424c6740268aa6281b74175291bd6a636a597d1010c468e",
+          "publisher_group": "aljazeera",
+          "article_id": 660,
+          "kraj": "QA",
+          "zrodlo": "aljazeera",
+          "typ_zrodla": "public",
+          "rama": "Wojna jako ludobójcza kampania",
+          "stance": "krytyka",
+          "intensywnosc": 5,
+          "streszczenie": "Medium konsekwentnie nazywa izraelskie działania w Gazie 'wojną ludobójczą', podkreślając skalę ofiar śmiertelnych przekraczającą 70 tysięcy oraz ciężkie warunki życia, co nadaje tekstowi jednoznacznie krytyczny wydźwięk wobec polityki Izraela."
+        },
+        {
+          "signal_id": 1871,
+          "theme_id": "middle_east",
+          "subject_actor": "AR",
+          "content_group": "7719eb5c434ba7963d080fd29dceff84a0a51bc0ad46b1a56c2356a47a5913cb",
+          "publisher_group": "jpost",
+          "article_id": 855,
+          "kraj": "IL",
+          "zrodlo": "jpost",
+          "typ_zrodla": "private",
+          "rama": "Argentyna po stronie Zachodu i Izraela",
+          "stance": "poparcie",
+          "intensywnosc": 3,
+          "streszczenie": "Prezydent Milei zadeklarował jednoznaczne geopolityczne zorientowanie Argentyny na Zachód, USA i Izrael oraz potępił irańskie ataki na Izrael, uznając irańską Gwardię Rewolucyjną za organizację terrorystyczną."
+        }
+      ],
+      "review": "pending"
+    }
+  ],
+  "claims_total": 9,
+  "meaning": "czy sygnały wspierają opis przekazu, nie prawdziwość zdarzeń"
+}

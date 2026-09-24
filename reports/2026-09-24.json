@@ -1,0 +1,305 @@
+{
+  "report": {
+    "w_skrocie": [
+      {
+        "dowody": [
+          {
+            "signal_id": 1320,
+            "article_id": 531,
+            "theme_id": "ukraine_war",
+            "kraj": "UA",
+            "zrodlo": "ukrinform"
+          },
+          {
+            "signal_id": 1796,
+            "article_id": 567,
+            "theme_id": "ukraine_war",
+            "kraj": "UA",
+            "zrodlo": "pravda_ua"
+          },
+          {
+            "signal_id": 1523,
+            "article_id": 498,
+            "theme_id": "ukraine_war",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          },
+          {
+            "signal_id": 1918,
+            "article_id": 525,
+            "theme_id": "ukraine_war",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          }
+        ],
+        "theme_id": "ukraine_war",
+        "tekst": "Wojna w Ukrainie jest głównym tematem mediów ukraińskich (58,7% próbki) i traktowana jako codzienna kronika ataków w ramie neutralnej, podczas gdy analizowane źródła z PL (Onet, Rzeczpospolita) łączą ten temat z ostrą krytyką USA i Trumpa za brak zdolności do zakończenia wojny.",
+        "article_ids": [
+          531,
+          567,
+          498,
+          525
+        ],
+        "pewnosc": "średni"
+      },
+      {
+        "dowody": [
+          {
+            "signal_id": 1472,
+            "article_id": 515,
+            "theme_id": "us_policy",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 1524,
+            "article_id": 498,
+            "theme_id": "us_policy",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          },
+          {
+            "signal_id": 1721,
+            "article_id": 565,
+            "theme_id": "us_policy",
+            "kraj": "UA",
+            "zrodlo": "pravda_ua"
+          },
+          {
+            "signal_id": 2136,
+            "article_id": 550,
+            "theme_id": "us_policy",
+            "kraj": "UA",
+            "zrodlo": "ukrinform"
+          }
+        ],
+        "theme_id": "us_policy",
+        "tekst": "Wokół polityki USA (temat us_policy) analizowane źródła z PL (Onet, Rzeczpospolita) prezentują wyłącznie ramy krytyczne wobec Trumpa (naiwność wobec autokratów, niezdolność do zakończenia wojny), podczas gdy analizowane źródła z UA (Ukrinform, Ukraińska Prawda) zachowują ton neutralny, opisując np. decyzje sądów wobec administracji.",
+        "article_ids": [
+          515,
+          498,
+          565,
+          550
+        ],
+        "pewnosc": "średni"
+      },
+      {
+        "dowody": [
+          {
+            "signal_id": 1322,
+            "article_id": 615,
+            "theme_id": "china_indo_pacific",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 2110,
+            "article_id": 631,
+            "theme_id": "china_indo_pacific",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 2114,
+            "article_id": 744,
+            "theme_id": "china_indo_pacific",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "theme_id": "china_indo_pacific",
+        "tekst": "Wizyta Xi Jinpinga w USA jest przedstawiana zgodnie w ramach neutralnych podkreślających symbolikę powitania (czerwony dywan, przelot bombowców) przez analizowane źródła BBC i Guardian (UK) oraz PBS (US), różniąc się jedynie akcentem: Guardian dodaje ramę alarmu o chińskich hybrydach zalewających rynek UE.",
+        "article_ids": [
+          615,
+          631,
+          744
+        ],
+        "pewnosc": "niski"
+      }
+    ],
+    "wzorce_zbieznosci": [],
+    "rozbieznosci": [],
+    "autoobraz": [],
+    "co_sie_przesuwa": [],
+    "nieobecne_w_polsce": [
+      {
+        "dowody": [
+          {
+            "signal_id": 1669,
+            "article_id": 660,
+            "theme_id": "middle_east",
+            "kraj": "QA",
+            "zrodlo": "aljazeera"
+          },
+          {
+            "signal_id": 1871,
+            "article_id": 855,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          }
+        ],
+        "theme_id": "middle_east",
+        "tekst": "Temat Bliskiego Wschodu ma w próbce PL udział jedynie 5,1% (2 artykuły, 1 źródło), podczas gdy w IL to 50%, a w QA 20,8%. Al Jazeera (QA) i Jerusalem Post (IL) intensywnie relacjonują wojnę w Gazie i wystąpienia Iranu na forum ONZ, co w próbce PL jest praktycznie nieobecne.",
+        "article_ids": [
+          660,
+          855
+        ],
+        "temat": "middle_east"
+      },
+      {
+        "dowody": [
+          {
+            "signal_id": 2018,
+            "article_id": 768,
+            "theme_id": "china_indo_pacific",
+            "kraj": "US",
+            "zrodlo": "fox"
+          },
+          {
+            "signal_id": 1637,
+            "article_id": 811,
+            "theme_id": "china_indo_pacific",
+            "kraj": "US",
+            "zrodlo": "npr"
+          },
+          {
+            "signal_id": 2114,
+            "article_id": 744,
+            "theme_id": "china_indo_pacific",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "theme_id": "china_indo_pacific",
+        "tekst": "Wątek Chin i Indo-Pacyfiku ma w próbce PL udział 2,6% (1 artykuł), znacząco niższy niż w US (13,8%). Wizyta Xi Jinpinga w USA, szeroko relacjonowana przez PBS i NPR (US), jest w próbce PL wzmiankowana tylko jako element krytyki wobec Trumpa, bez samodzielnego rozwinięcia.",
+        "article_ids": [
+          768,
+          811,
+          744
+        ],
+        "temat": "china_indo_pacific"
+      }
+    ],
+    "slabe_sygnaly": [
+      {
+        "dowody": [
+          {
+            "signal_id": 1711,
+            "article_id": 832,
+            "theme_id": "elections_politics",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          },
+          {
+            "signal_id": 1275,
+            "article_id": 652,
+            "theme_id": "elections_politics",
+            "kraj": "QA",
+            "zrodlo": "aljazeera"
+          }
+        ],
+        "theme_id": "elections_politics",
+        "tekst": "W temacie wyborów i polityki (elections_politics) sygnały z IL (Jerusalem Post) i QA (Al Jazeera) wskazują na kierunek negatywny (izolacja Izraela na forum ONZ, krytyka nieprzejrzystości rządu Liberii), ale każdy kraj ma tylko 1 źródło, więc nie spełnia progu 2 źródeł wymaganego do uznania za wzorzec zbieżności.",
+        "article_ids": [
+          832,
+          652
+        ]
+      },
+      {
+        "dowody": [
+          {
+            "signal_id": 2357,
+            "article_id": 679,
+            "theme_id": "energy",
+            "kraj": "CN",
+            "zrodlo": "cgtn"
+          },
+          {
+            "signal_id": 1844,
+            "article_id": 635,
+            "theme_id": "energy",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          }
+        ],
+        "theme_id": "energy",
+        "tekst": "W temacie energii (energy) sygnały z CN (CGTN) i UK (Guardian) wskazują kierunek negatywny (ryzyko wzrostu cen, blokada cieśniny Ormuz), ale oba kraje mają tylko 1 źródło każdy, poniżej progu 2 źródeł.",
+        "article_ids": [
+          679,
+          635
+        ]
+      },
+      {
+        "dowody": [
+          {
+            "signal_id": 1662,
+            "article_id": 851,
+            "theme_id": "hybrid_info",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          },
+          {
+            "signal_id": 2155,
+            "article_id": 673,
+            "theme_id": "hybrid_info",
+            "kraj": "QA",
+            "zrodlo": "aljazeera"
+          }
+        ],
+        "theme_id": "hybrid_info",
+        "tekst": "W temacie działań hybrydowych (hybrid_info) sygnały z IL (Jerusalem Post) i QA (Al Jazeera) wskazują kierunek negatywny (infrastruktura terrorystyczna, cyberwłamanie do portalu zdrowotnego), lecz oba kraje mają tylko 1 źródło, poniżej wymaganego progu.",
+        "article_ids": [
+          851,
+          673
+        ]
+      },
+      {
+        "dowody": [
+          {
+            "signal_id": 1272,
+            "article_id": 652,
+            "theme_id": "migration_borders",
+            "kraj": "QA",
+            "zrodlo": "aljazeera"
+          },
+          {
+            "signal_id": 1628,
+            "article_id": 647,
+            "theme_id": "migration_borders",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          }
+        ],
+        "theme_id": "migration_borders",
+        "tekst": "W temacie migracji i granic (migration_borders) sygnały z QA (Al Jazeera) i UK (Guardian) wskazują kierunek negatywny (krytyka umowy Liberii z USA, presja na Border Force), ale oba kraje mają tylko 1 źródło, poniżej progu 2 źródeł.",
+        "article_ids": [
+          652,
+          647
+        ]
+      }
+    ]
+  },
+  "publication": {
+    "status": "regularny",
+    "fetched_day_utc": "2026-09-24",
+    "publication_window_start": "2026-09-23T00:00:00+00:00",
+    "publication_window_end_exclusive": "2026-09-25T00:00:00+00:00",
+    "published_min": "2026-09-10T11:00:00+00:00",
+    "published_max": "2026-09-24T11:49:29+00:00",
+    "fetched_articles": 463,
+    "late_articles": 120,
+    "late_share": 0.2591792656587473,
+    "missing_publication": 0,
+    "future_publication": 7,
+    "older_than_24h": 140,
+    "older_than_48h": 89,
+    "today_language_allowed": false
+  },
+  "semantic_review": "pending",
+  "warnings": [
+    "walidacja po ponowieniu: 7 błędów; usunięto twierdzenia bez poprawnych odnośników. Błędy: autoobraz.2: jeden niezależny głos w kraju wymaga niskiej pewności; autoobraz.0: kraj CN z jednym źródłem — podaj nazwę redakcji; autoobraz.0: opisz analizowane źródła, nie wszystkie media kraju; autoobraz.1: kraj IL z jednym źródłem — podaj nazwę redakcji; autoobraz.1: opisz analizowane źródła, nie wszystkie media kraju",
+    "brak materiałów z aktywnych źródeł: alquds_ps",
+    "błędy kanałów: alquds_ps"
+  ]
+}

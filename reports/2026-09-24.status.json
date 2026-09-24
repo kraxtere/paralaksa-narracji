@@ -1,0 +1,479 @@
+{
+  "date": "2026-09-24",
+  "complete": true,
+  "synthesis_calls": 2,
+  "cost_usd": 2.222621308,
+  "elapsed_s": 125.24119832399992,
+  "semantic_review": "pending",
+  "warnings": [
+    "walidacja po ponowieniu: 7 błędów; usunięto twierdzenia bez poprawnych odnośników. Błędy: autoobraz.2: jeden niezależny głos w kraju wymaga niskiej pewności; autoobraz.0: kraj CN z jednym źródłem — podaj nazwę redakcji; autoobraz.0: opisz analizowane źródła, nie wszystkie media kraju; autoobraz.1: kraj IL z jednym źródłem — podaj nazwę redakcji; autoobraz.1: opisz analizowane źródła, nie wszystkie media kraju",
+    "brak materiałów z aktywnych źródeł: alquds_ps",
+    "błędy kanałów: alquds_ps"
+  ],
+  "blocking": [],
+  "sources": [
+    {
+      "source_id": "agenciabrasil",
+      "name": "Agência Brasil",
+      "country": "BR",
+      "aliases": [
+        "Agência Brasil",
+        "Agencia Brasil",
+        "Agência"
+      ],
+      "language": "pt",
+      "ownership": "EBC; publiczna agencja brazylijska",
+      "scope": "all",
+      "sections": [
+        "all"
+      ],
+      "articles": 10,
+      "eligible": 10,
+      "fulltext": 10,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 10
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "aljazeera",
+      "name": "Al Jazeera English",
+      "country": "QA",
+      "aliases": [
+        "Al Jazeer",
+        "Al-Jazeer",
+        "Al Dżazir",
+        "Al-Dżazir",
+        "Al Jazira"
+      ],
+      "language": "en",
+      "ownership": "finansowanie przez państwo Katar",
+      "scope": "all",
+      "sections": [
+        "all"
+      ],
+      "articles": 24,
+      "eligible": 24,
+      "fulltext": 24,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "opinion": 1,
+        "unknown": 23
+      },
+      "genre_shares": {
+        "opinion": 0.041666666666666664,
+        "unknown": 0.9583333333333334
+      }
+    },
+    {
+      "source_id": "bbc",
+      "name": "BBC News",
+      "country": "UK",
+      "aliases": [
+        "BBC"
+      ],
+      "language": "en",
+      "ownership": "nadawca publiczny",
+      "scope": "world; europe",
+      "sections": [
+        "europe",
+        "world"
+      ],
+      "articles": 15,
+      "eligible": 15,
+      "fulltext": 15,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 15
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "cgtn",
+      "name": "CGTN",
+      "country": "CN",
+      "aliases": [
+        "CGTN"
+      ],
+      "language": "en",
+      "ownership": "państwowy nadawca China Media Group",
+      "scope": "world",
+      "sections": [
+        "world"
+      ],
+      "articles": 49,
+      "eligible": 42,
+      "fulltext": 49,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 49
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "folha",
+      "name": "Folha de S.Paulo",
+      "country": "BR",
+      "aliases": [
+        "Folha"
+      ],
+      "language": "pt",
+      "ownership": "Grupo Folha",
+      "scope": "mundo",
+      "sections": [
+        "mundo"
+      ],
+      "articles": 87,
+      "eligible": 29,
+      "fulltext": 87,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 87
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "fox",
+      "name": "Fox News",
+      "country": "US",
+      "aliases": [
+        "Fox News",
+        "Foksa",
+        "Fox"
+      ],
+      "language": "en",
+      "ownership": "Fox Corporation",
+      "scope": "us; world",
+      "sections": [
+        "us",
+        "world"
+      ],
+      "articles": 50,
+      "eligible": 21,
+      "fulltext": 50,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 50
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "guardian",
+      "name": "The Guardian",
+      "country": "UK",
+      "aliases": [
+        "Guardian"
+      ],
+      "language": "en",
+      "ownership": "prywatne; szczegóły struktury do uzupełnienia",
+      "scope": "world",
+      "sections": [
+        "world"
+      ],
+      "articles": 23,
+      "eligible": 23,
+      "fulltext": 23,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 23
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "jpost",
+      "name": "The Jerusalem Post",
+      "country": "IL",
+      "aliases": [
+        "Jerusalem Post",
+        "JPost"
+      ],
+      "language": "en",
+      "ownership": "prywatne; szczegóły do weryfikacji",
+      "scope": "frontpage",
+      "sections": [
+        "frontpage"
+      ],
+      "articles": 25,
+      "eligible": 12,
+      "fulltext": 25,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 25
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "npr",
+      "name": "NPR",
+      "country": "US",
+      "aliases": [
+        "NPR"
+      ],
+      "language": "en",
+      "ownership": "non-profit; sieć stacji członkowskich",
+      "scope": "world",
+      "sections": [
+        "world"
+      ],
+      "articles": 10,
+      "eligible": 10,
+      "fulltext": 10,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 10
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "onet",
+      "name": "Onet Wiadomości",
+      "country": "PL",
+      "aliases": [
+        "Onet"
+      ],
+      "language": "pl",
+      "ownership": "prywatne; szczegóły struktury do uzupełnienia",
+      "scope": "wiadomosci",
+      "sections": [
+        "wiadomosci"
+      ],
+      "articles": 19,
+      "eligible": 19,
+      "fulltext": 19,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 19
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "pbs",
+      "name": "PBS News",
+      "country": "US",
+      "aliases": [
+        "PBS"
+      ],
+      "language": "en",
+      "ownership": "publiczny nadawca non-profit; szczegóły finansowania do weryfikacji",
+      "scope": "headlines; politics",
+      "sections": [
+        "headlines",
+        "politics"
+      ],
+      "articles": 29,
+      "eligible": 24,
+      "fulltext": 29,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 29
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "pravda_ua",
+      "name": "Ukraińska Prawda",
+      "country": "UA",
+      "aliases": [
+        "Ukraińska Prawda",
+        "Ukraińskiej Prawd",
+        "Ukraińską Prawd",
+        "Ukrainska Pravda",
+        "Ukrainska Prawda"
+      ],
+      "language": "uk",
+      "ownership": "prywatne; szczegóły struktury do uzupełnienia",
+      "scope": "wiadomosci",
+      "sections": [
+        "wiadomosci"
+      ],
+      "articles": 20,
+      "eligible": 20,
+      "fulltext": 20,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 20
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "propublica",
+      "name": "ProPublica",
+      "country": "US",
+      "aliases": [
+        "ProPublic"
+      ],
+      "language": "en",
+      "ownership": "niezależna redakcja non-profit",
+      "scope": "investigations",
+      "sections": [
+        "investigations"
+      ],
+      "articles": 18,
+      "eligible": 3,
+      "fulltext": 18,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 18
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "rp",
+      "name": "Rzeczpospolita",
+      "country": "PL",
+      "aliases": [
+        "Rzeczpospolit",
+        "rp.pl"
+      ],
+      "language": "pl",
+      "ownership": "prywatne; szczegóły struktury do uzupełnienia",
+      "scope": "glowne",
+      "sections": [
+        "glowne"
+      ],
+      "articles": 20,
+      "eligible": 20,
+      "fulltext": 0,
+      "lead_only": 20,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 20
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "spiegel",
+      "name": "Der Spiegel",
+      "country": "DE",
+      "aliases": [
+        "Spiegel",
+        "Spiegl"
+      ],
+      "language": "de",
+      "ownership": "prywatne; szczegóły struktury do uzupełnienia",
+      "scope": "ausland",
+      "sections": [
+        "ausland"
+      ],
+      "articles": 17,
+      "eligible": 17,
+      "fulltext": 0,
+      "lead_only": 17,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 17
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "tagesschau",
+      "name": "Tagesschau (ARD)",
+      "country": "DE",
+      "aliases": [
+        "Tagesschau",
+        "ARD"
+      ],
+      "language": "de",
+      "ownership": "nadawca publiczny",
+      "scope": "alle",
+      "sections": [
+        "alle"
+      ],
+      "articles": 21,
+      "eligible": 21,
+      "fulltext": 21,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 21
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "ukrinform",
+      "name": "Ukrinform",
+      "country": "UA",
+      "aliases": [
+        "Ukrinform"
+      ],
+      "language": "uk",
+      "ownership": "państwowa ukraińska agencja informacyjna",
+      "scope": "ostatnie",
+      "sections": [
+        "ostatnie"
+      ],
+      "articles": 26,
+      "eligible": 26,
+      "fulltext": 26,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 0,
+      "genres": {
+        "unknown": 26
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    }
+  ]
+}
