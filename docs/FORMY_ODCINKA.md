@@ -120,12 +120,14 @@ godzina kopii z archiwum. Morał to „aktualizacja jest normalna, godzina jest 
 - **Pierwsze 3 s:** adres wpisywany znak po znaku, potem napis „Ten adres o 15:21 mówił o Wagnerze. O 01:26 o śmigłowcach”.
 - **Zegar:** dwa znaczniki czasu kopii na krawędzi ekranu, a między nimi szary odcinek „tu zmiana, nie wiemy kiedy”.
 - **Najlepiej:** Reuters w karcie śmigłowców (nagłówek o Łukaszence i Wagnerze → *„Poland rushes troops to border,
-  Belarus denies helicopter violation”*). Inne przypadki: Independent (Vaxzevria, zmiana w pierwszej godzinie) i Folha
-  (Mercosur, krótka wersja poranna → dłuższa wieczorna).
+  Belarus denies helicopter violation”*). Inne przypadki: Folha (Mercosur: „UE aprova” → „Países da UE aprovam / dão aval”
+  → po decyzji Rady znów „UE aprova”; nagłówek śledzi etapy procedury). Independent (Vaxzevria) to NIE jest zmiana,
+  tylko dwa nagłówki na przemian przez 40 min (korekta 2026-09-24, niżej).
 - **Co może pójść źle:** diff wygląda jak dowód „cichej edycji” czy „zacierania śladów”. Potrzebne jawne zdanie, że serwisy
   informacyjne aktualizują teksty w miarę dopływu informacji. Moment zmiany znamy tylko z dokładnością do odstępu między
-  kopiami, więc nie wolno pokazywać go jako punktu. W Independent karta ma kopię z 06:27 BST, czyli sprzed podanej publikacji
-  (06:29 BST, `datePublished`). Metadane i archiwum się nie zgadzają i człowiek musi to wyjaśnić przed użyciem.
+  kopiami, więc nie wolno pokazywać go jako punktu. Rozbieżność w Independent (kopia 06:27 BST sprzed `datePublished`
+  06:29) wyjaśnił `plx events check`: istniały dwie wersje (06:25 i 06:29 BST) pokazywane na przemian, możliwy test A/B.
+  Forma „ten sam adres” musi odróżniać zmianę od naprzemienności.
   Przy Vaxzevrii diff pogrubia słowa o zakrzepach, więc ryzyko wzmocnienia lęku zdrowotnego jest wysokie.
 
 ### 4. Dwa zegary na ścianie

@@ -1,5 +1,14 @@
 # Independent: ten sam adres, dwa nagłówki
 
+> **Korekta 2026-09-24 (Claude, `plx events check`): scenariusz stoi na błędnym założeniu, do przepisania.**
+> Nie było jednej zmiany A → B. Kopie z 8 maja pokazują dwa nagłówki **na przemian**:
+> 06:27 BST A („…months after admitting rare side effect”), 06:33 B („…after admitting it can cause rare blood clots”),
+> 06:39 znów A, 07:08 znów B, dalej już tylko B. Wersja A ma w metadanych `datePublished` 06:25 BST, wersja B 06:29 BST.
+> Tytuł do udostępnień (og:title) już w kopii 06:27 miał wariant „blood clots”. To wygląda na test A/B nagłówków
+> albo dwie wersje w pamięci podręcznej, a nie na „doprecyzowanie w tej samej redakcji”. Ujęcie 3 („43 minuty później…
+> to doprecyzowanie”) jest więc nieprawdziwe. Kopie: `data/checks/2024-05-07-vaxzevria-wycofanie.md`
+> (`plx events check events/2024-05-07-vaxzevria-wycofanie.md`).
+
 Próbny odcinek pionowy, ok. **50–55 s**. Materiał źródłowy: `../2024-05-07-vaxzevria-wycofanie.md` (relacja r2). Zegar pokazuje **czas Londynu, BST (UTC+1), 8 maja 2024**. Karta odnotowuje wcześniejszą kopię z 06:27 BST w polu `porownywana_wersja` oraz link i czas kopii z **07:10 BST** w polu `archiwum`. Między zapisami upływają **43 minuty**; godziny kopii nie są godzinami, w których redakcja edytowała nagłówek.
 
 | Ujęcie / czas filmu | Tekst na ekranie | Lektor | Co widać na zegarze i w kadrze |
