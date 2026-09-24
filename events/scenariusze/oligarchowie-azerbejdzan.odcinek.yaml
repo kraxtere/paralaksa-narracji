@@ -1,0 +1,100 @@
+# Roboczy odcinek (pionowy, ok. 60 s). Karta: events/2026-09-22-oligarchowie-azerbejdzan.md
+# Render: .venv\Scripts\python scripts\odcinek.py events\scenariusze\oligarchowie-azerbejdzan.odcinek.yaml
+# Wynik (poza gitem): data/odcinki/<id>/ — plansze PNG, odcinek.mp4, napisy.srt, lektor.txt
+#
+# Ujęcia: czas w sekundach; `lektor` to tekst przyszłego głosu (na razie napis na dole);
+# `zegar` to chwila na osi czasu (czas polski, tylko godziny z karty); bloki: tytul, tekst, naglowek, dwie_polowy, stopka.
+# Nagłówki dosłownie z karty (relacja rX), maks. 15 słów; tłumaczenia robocze.
+# Kolejność ujęć idzie za osią czasu (znacznik nie cofa się).
+#
+# Przed publikacją:
+# - człowiek otwiera r1, r3, r4, r5, r6, r7, r8, r10 i wpisuje `sprawdzil` (dziś większość z RSS / wyszukiwarki);
+# - godzina r7 (UP, 08:09) jest z RSS: potwierdzić, bo ujęcie 7 stoi na tym, że UP pisała przed dekretem (09:19);
+# - kopie r4, r5, r7, r8, r10 (archiwum ich nie przyjęło): archive.today albo zrzut z datą.
+
+id: 2026-09-22-oligarchowie-azerbejdzan
+tytul: 'Jedna decyzja, dwa nagłówki'
+karta: events/2026-09-22-oligarchowie-azerbejdzan.md
+wersja: robocza          # znak wodny
+os: {od: '2026-09-22T16:00+02:00', do: '2026-09-23T18:00+02:00'}
+
+ujecia:
+  - czas: 4
+    lektor: 'Jedna decyzja Unii. Jedna gazeta. Dwa nagłówki.'
+    bloki:
+      - {typ: tytul, tekst: 'Jedna decyzja.', maly: '22 września 2026'}
+      - {typ: tekst, tekst: 'Dwa nagłówki. W tej samej gazecie.'}
+
+  - czas: 7
+    lektor: 'Unia przedłuża sankcje wobec około trzech tysięcy osób i firm z Rosji. I zdejmuje z listy dwa nazwiska.'
+    bloki:
+      - {typ: dwie_polowy, lewa: '+3 lata', lewa_opis: 'sankcje dla ok. 3000 osób i firm', prawa: '−2', prawa_opis: 'nazwiska skreślone z listy: Usmanow, Fridman'}
+      - {typ: tekst, tekst: 'Obie połowy to jedna decyzja ambasadorów UE.', maly: true}
+
+  - czas: 8
+    zegar: '2026-09-22T16:47+02:00'
+    lektor: 'Wieczorem Europa wybiera, od której połowy zacząć. Od przedłużenia, od skreślenia albo od gniewu Kijowa.'
+    bloki:
+      - {typ: naglowek, rel: r6, kto: 'Euronews (Lyon)', kraj: EU, godzina: '22.09 · 16:47',
+         tekst: "EU renews Russia sanctions but removes Usmanov at France's request",
+         pl: 'UE odnawia sankcje wobec Rosji, ale na prośbę Francji zdejmuje Usmanowa', maly: true}
+      - {typ: naglowek, rel: r1, kto: tagesschau, kraj: DE, godzina: '22.09 · 19:11',
+         tekst: 'EU streicht zwei russische Oligarchen von Sanktionsliste',
+         pl: 'UE skreśla dwóch rosyjskich oligarchów z listy sankcyjnej', maly: true}
+      - {typ: naglowek, rel: r3, kto: BBC, kraj: UK, godzina: '22.09 · 21:06',
+         tekst: 'Ukraine anger as EU removes Russian oligarchs from sanctions list',
+         pl: 'Gniew Ukrainy, gdy UE zdejmuje rosyjskich oligarchów z listy sankcyjnej', maly: true}
+
+  - czas: 7
+    zegar: '2026-09-22T20:08+02:00'
+    lektor: 'W Polsce Rzeczpospolita. Wieczorem, dział Polityka.'
+    bloki:
+      - {typ: naglowek, rel: r4, kto: 'Rzeczpospolita · Polityka', kraj: PL, godzina: '22.09 · 20:08',
+         tekst: '„Moskwa świętuje”. Unia Europejska zdjęła sankcje z dwóch rosyjskich oligarchów', podkresl: 'zdjęła sankcje'}
+
+  - czas: 7
+    zegar: '2026-09-23T06:30+02:00'
+    lektor: 'Następnego ranka ta sama gazeta, poranny przegląd.'
+    bloki:
+      - {typ: naglowek, rel: r5, kto: 'Rzeczpospolita · poranny przegląd', kraj: PL, godzina: '23.09 · 06:30',
+         tekst: 'UE przedłuża sankcje na Rosję, spór o chińskie auta, saudyjska ropa i Bitcoin', podkresl: 'przedłuża sankcje'}
+
+  - czas: 5
+    lektor: 'Oba zdania są prawdziwe. Różni je to, co stoi na początku.'
+    bloki:
+      - {typ: tytul, tekst: 'Oba zdania są prawdziwe.'}
+      - {typ: tekst, tekst: 'Różni je to, co idzie pierwsze.'}
+      - {typ: stopka, tekst: 'To dwa różne działy i dwa gatunki: wiadomość i przegląd kilku tematów.'}
+
+  - czas: 7
+    zegar: '2026-09-23T08:09+02:00'
+    lektor: 'Tego samego ranka Ukraińska Prawda pisze już o handlu. Azerbejdżan jeszcze niczego nie ogłosił.'
+    bloki:
+      - {typ: naglowek, rel: r7, kto: 'Ukraińska Prawda · analiza', kraj: UA, godzina: '23.09 · 08:09',
+         tekst: 'Торгівля санкціями та заручниками',
+         pl: 'Handel sankcjami i zakładnikami', podkresl: 'Handel'}
+
+  - czas: 5
+    zegar: '2026-09-23T09:19+02:00'
+    lektor: 'Godzinę później prezydent Azerbejdżanu ułaskawia skazanego Francuza. Dekret mówi o humanizmie.'
+    bloki:
+      - {typ: tytul, tekst: 'Godzinę później', maly: '23.09 · 09:19 · dekret prezydenta Azerbejdżanu'}
+      - {typ: tekst, tekst: 'Ułaskawienie skazanego Francuza. Dekret powołuje się na humanizm, nie na sankcje.', rel: r11}
+
+  - czas: 8
+    zegar: '2026-09-23T16:50+02:00'
+    lektor: 'Spiegel zestawia kolejność: po. Paryż mówi o normalizacji stosunków.'
+    bloki:
+      - {typ: naglowek, rel: r8, kto: Spiegel, kraj: DE, godzina: '23.09 · 11:38',
+         tekst: 'Aserbaidschan begnadigt Franzosen nach Rücknahme von EU-Sanktionen',
+         pl: 'Azerbejdżan ułaskawia Francuza po cofnięciu sankcji UE', podkresl: 'po', maly: true}
+      - {typ: naglowek, rel: r10, kto: 'Ukrinform za MSZ Francji', kraj: UA, godzina: '23.09 · 16:50',
+         tekst: 'Франція назвала помилування свого громадянина кроком до нормалізації відносин з Азербайджаном',
+         pl: 'Francja: ułaskawienie to krok do normalizacji stosunków z Azerbejdżanem', podkresl: 'normalizacji', maly: true}
+
+  - czas: 7
+    lektor: 'Po nie znaczy w zamian za. Oficjalne komunikaty nie łączą tych decyzji. Robią to redakcje i anonimowi dyplomaci.'
+    bloki:
+      - {typ: tytul, tekst: '„Po” ≠ „w zamian za”'}
+      - {typ: tekst, tekst: 'Dekret Baku i oświadczenie Paryża nie wspominają o sankcjach. Związek opisują redakcje i anonimowi dyplomaci.', rel: [r11, r12, r14]}
+      - {typ: stopka, tekst: 'Jedno zdarzenie. Dwie opowieści. Źródła i kopie archiwalne w opisie.'}
