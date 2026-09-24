@@ -1,86 +1,80 @@
-# Roboczy odcinek (pionowy, ok. 55 s). Karta: events/2024-05-07-vaxzevria-wycofanie.md
+# Roboczy odcinek (pionowy, ok. 50 s). Karta: events/2024-05-07-vaxzevria-wycofanie.md (39 relacji, 14 krajów, zebrał GPT)
 # Render: .venv\Scripts\python scripts\odcinek.py events\scenariusze\vaxzevria.odcinek.yaml
-# Wynik (poza gitem): data/odcinki/<id>/ — plansze PNG, odcinek.mp4, napisy.srt, lektor.txt, opis.txt
-# Podstawa: karta (r1 Guardian, r2 Independent), raport `plx events check` (kopie A/B), scenariusz independent-vaxzevria.md.
+# Wynik (poza gitem): data/odcinki/<id>/
 #
-# Czas polski (CEST = czas londyński + 1 h). Godziny Independentu to godziny wykonania kopii, nie edycji strony.
-# Czego nie twierdzimy: że redakcja „wyostrzyła” nagłówek, że był potwierdzony test A/B, że zakrzepy były przyczyną wycofania.
-#
-# Przed publikacją:
-# - człowiek otwiera oba artykuły, kopie A/B/A/B z raportu i decyzję KE (dziś `sprawdzil` wpisał GPT, nie człowiek);
-# - link EMA pochodzi ze scenariusza GPT, nieotwarty.
+# Porównanie krajów, nie wersji: bez osi czasu i bez wątku A/B Independentu (ciekawostka techniczna, nie treść).
+# Godziny: czas polski. Nagłówki pokazane w odcinku sprawdzone 2026-09-24 na stronach (h1/og:title zgodne z kartą);
+# Reuters (robots) i Ukraińska Prawda (403) nie otworzyły się, więc ich nie pokazujemy.
+# Liczby 21/11/3/4 to klasyfikacja GPT pierwszej tezy nagłówka w tej próbie, nie całość mediów.
 
 id: 2024-05-07-vaxzevria-wycofanie
-tytul: 'Jedna szczepionka, jeden poranek, trzy nagłówki'
+tytul: 'Szczepionka znika z rynku. Jak podał to świat?'
 karta: events/2024-05-07-vaxzevria-wycofanie.md
 wersja: robocza
-os: {od: '2024-05-08T04:00+02:00', do: '2024-05-08T09:00+02:00'}
-zrodla:
-  - {kto: 'Komisja Europejska, decyzja z 27.03.2024 o wycofaniu pozwolenia (PDF)', link: 'https://ec.europa.eu/health/documents/community-register/2024/20240327162288/dec_162288_en.pdf'}
-  - {kto: 'EMA, raport roczny 2021 (TTS)', link: 'https://www.ema.europa.eu/assets/en/annual-report/2021/covid-19-european-medicines-regulatory-networks-response-pandemic.html'}
-  - {kto: 'Kopie Independentu A/B/A/B (Wayback)', link: 'https://web.archive.org/web/20240508*/https://www.independent.co.uk/news/science/astrazeneca-covid-vaccine-withdraw-blood-clots-b2541291.html'}
 
 ujecia:
-  - czas: 4
-    lektor: 'Ósmy maja 2024. AstraZeneca kończy sprzedaż swojej szczepionki na COVID. Jak to podać w jednym zdaniu?'
+  - czas: 5
+    lektor: 'Ósmy maja 2024. AstraZeneca wycofuje swoją szczepionkę na COVID. Przejrzeliśmy 39 nagłówków z 14 krajów.'
     bloki:
-      - {typ: tytul, tekst: 'Jedna szczepionka.', maly: '8 maja 2024 · Vaxzevria (AstraZeneca)'}
-      - {typ: tekst, tekst: 'Jeden poranek. Trzy nagłówki.'}
+      - {typ: tytul, tekst: 'Szczepionka znika z rynku.', maly: '8 maja 2024 · Vaxzevria (AstraZeneca)'}
+      - {typ: tekst, tekst: 'Jak podał to świat? 39 nagłówków, 14 krajów.'}
 
-  - czas: 7
-    zegar: '2024-05-08T04:18+02:00'
-    lektor: 'Guardian, nad ranem: firma wycofuje szczepionkę i jako powód podaje nadwyżkę nowszych preparatów.'
+  - czas: 8
+    lektor: 'Wiele redakcji podaje powód od razu: nadwyżka nowszych szczepionek, spadek popytu.'
     bloki:
       - {typ: naglowek, rel: r1, kto: 'The Guardian', kraj: UK, godzina: '8.05 · 04:18',
          tekst: 'AstraZeneca withdraws Covid-19 vaccine worldwide, citing surplus of newer vaccines',
-         pl: 'AstraZeneca wycofuje szczepionkę na świecie, wskazując nadwyżkę nowszych preparatów', podkresl: 'nadwyżkę nowszych preparatów'}
+         pl: 'AstraZeneca wycofuje szczepionkę, wskazując nadwyżkę nowszych preparatów', podkresl: 'nadwyżkę nowszych preparatów', maly: true}
+      - {typ: naglowek, rel: r33, kto: 'ABC News', kraj: AU, godzina: '8.05 · 06:16',
+         tekst: 'AstraZeneca withdraws COVID-19 vaccine citing a decline in demand',
+         pl: 'AstraZeneca wycofuje szczepionkę, wskazując spadek popytu', podkresl: 'spadek popytu', maly: true}
+      - {typ: naglowek, rel: r23, kto: RTL, kraj: FR, godzina: '8.05 · 12:26',
+         tekst: 'Covid-19 : Astrazeneca retire son vaccin à cause du "déclin de la demande"',
+         pl: 'AstraZeneca wycofuje szczepionkę z powodu „spadku popytu”', podkresl: 'spadku popytu', maly: true}
 
-  - czas: 7
-    zegar: '2024-05-08T07:33+02:00'
-    lektor: 'Independent, trzy godziny później: wycofuje, po tym jak przyznała, że może powodować rzadkie zakrzepy.'
+  - czas: 8
+    lektor: 'Tylko trzy z trzydziestu dziewięciu zaczynają od bezpieczeństwa: zakrzepów i skutków ubocznych.'
     bloki:
-      - {typ: naglowek, rel: r2, kto: 'The Independent', kraj: UK, godzina: '8.05 · 07:33',
+      - {typ: naglowek, rel: r2, kto: 'The Independent', kraj: UK, godzina: '8.05 · 07:25',
          tekst: 'AstraZeneca withdraws Covid vaccine worldwide after admitting it can cause rare blood clots',
-         pl: 'AstraZeneca wycofuje szczepionkę na świecie po przyznaniu, że może powodować rzadkie zakrzepy', podkresl: 'rzadkie zakrzepy'}
-
-  - czas: 6
-    lektor: 'Ten sam fakt, inne pierwsze skojarzenie. A w środku tekstu Independent też podaje powód handlowy.'
-    bloki:
-      - {typ: tytul, tekst: 'Nadwyżka czy zakrzepy?'}
-      - {typ: tekst, tekst: 'Ten sam fakt. Inne pierwsze skojarzenie.'}
-      - {typ: stopka, tekst: 'W treści Independent także podaje spadek zapotrzebowania jako powód.'}
-
-  - czas: 10
-    zegar: '2024-05-08T08:08+02:00'
-    lektor: 'Ale to nie koniec. Pod tym samym adresem archiwum zapisało dwa różne nagłówki. Na przemian: A, B, A, B.'
-    bloki:
-      - {typ: kopie, rel: r2, kto: 'The Independent · jeden adres · kopie archiwum Wayback', kopie: [
-          {godzina: '07:27', wariant: A, tekst: 'AstraZeneca withdrawing Covid vaccine, months after admitting rare side effect', podkresl: 'rare side effect'},
-          {godzina: '07:33', wariant: B, tekst: 'AstraZeneca withdraws Covid vaccine worldwide after admitting it can cause rare blood clots', podkresl: 'rare blood clots'},
-          {godzina: '07:39', wariant: A, tekst: 'AstraZeneca withdrawing Covid vaccine, months after admitting rare side effect', podkresl: 'rare side effect'},
-          {godzina: '08:08', wariant: B, tekst: 'AstraZeneca withdraws Covid vaccine worldwide after admitting it can cause rare blood clots', podkresl: 'rare blood clots'}]}
-      - {typ: tekst, tekst: 'A: „rzadkie działanie niepożądane”. B: „rzadkie zakrzepy”.', maly: true}
-
-  - czas: 7
-    lektor: 'Dlaczego? Nie wiemy. Może test dwóch wersji, może pamięć podręczna. Tytuł do udostępnień od pierwszej kopii miał wersję z zakrzepami.'
-    bloki:
-      - {typ: tytul, tekst: 'Test dwóch wersji? Pamięć podręczna?'}
-      - {typ: tekst, tekst: 'Nie wiemy. Wiemy tylko, co zapisały kopie.'}
-      - {typ: stopka, tekst: 'Tytuł do udostępnień (og:title) od pierwszej kopii: wersja B. Od 08:08 kopie pokazują już tylko B.'}
+         pl: 'AstraZeneca wycofuje szczepionkę po przyznaniu, że może powodować rzadkie zakrzepy', podkresl: 'rzadkie zakrzepy', maly: true}
+      - {typ: naglowek, rel: r18, kto: 'la Repubblica', kraj: IT, godzina: '8.05',
+         tekst: 'Covid, AstraZeneca ritira il suo vaccino dopo le ammissioni sugli effetti collaterali',
+         pl: 'AstraZeneca wycofuje szczepionkę po przyznaniu się do skutków ubocznych', podkresl: 'skutków ubocznych', maly: true}
+      - {typ: naglowek, rel: r31, kto: 'Hindustan Times', kraj: IN, godzina: '8.05',
+         tekst: 'AstraZeneca to withdraw Covid vaccine worldwide amid safety issues: Report',
+         pl: 'AstraZeneca wycofa szczepionkę na świecie wśród problemów z bezpieczeństwem', podkresl: 'problemów z bezpieczeństwem', maly: true}
 
   - czas: 9
-    lektor: 'A kalendarz? O rzadkich zakrzepach wiadomo od 2021. Wniosek o cofnięcie pozwolenia w Unii firma złożyła piątego marca.'
+    lektor: 'A w Polsce? Powód jest. Tylko że za kliknięciem.'
     bloki:
-      - {typ: kalendarium, rel: r2, wpisy: [
-          {data: '2021', co: 'EMA opisuje bardzo rzadki zespół zakrzepowy (TTS)'},
-          {data: '5.03.2024', co: 'AstraZeneca wnioskuje o cofnięcie pozwolenia w UE'},
-          {data: '27.03.2024', co: 'Decyzja Komisji Europejskiej'},
-          {data: '7.05.2024', co: 'Decyzja wchodzi w życie'},
-          {data: '8.05.2024', co: 'Nagłówki', wyroznij: true}]}
+      - {typ: naglowek, rel: r8, kto: Interia, kraj: PL, godzina: '8.05 · 08:40',
+         tekst: 'AstraZeneca wycofuje szczepionkę. Podano powód', podkresl: 'Podano powód', maly: true}
+      - {typ: naglowek, rel: r10, kto: 'Gazeta.pl', kraj: PL, godzina: '8.05 · 12:22',
+         tekst: 'AstraZeneca wycofuje szczepionkę na COVID-19 na całym świecie. Znamy powód', podkresl: 'Znamy powód', maly: true}
+      - {typ: naglowek, rel: r9, kto: 'Wirtualna Polska', kraj: PL, godzina: '8.05 · 08:14',
+         tekst: 'Klamka zapadła. Szczepionka na COVID-19 znika z rynku', podkresl: 'Klamka zapadła', maly: true}
+
+  - czas: 5
+    lektor: 'Nie tylko u nas. Meksykańskie N plus pyta wprost: dlaczego?'
+    bloki:
+      - {typ: naglowek, rel: r37, kto: 'N+', kraj: MX, godzina: '8.05 · 12:28',
+         tekst: '¿Por Qué AstraZeneca Retira Su Vacuna contra COVID-19?',
+         pl: 'Dlaczego AstraZeneca wycofuje swoją szczepionkę przeciw COVID-19?', podkresl: 'Dlaczego'}
+
+  - czas: 8
+    lektor: 'Razem: dwadzieścia jeden nagłówków bez powodu, jedenaście z rynkiem, trzy z zakrzepami.'
+    bloki:
+      - {typ: kalendarium, wpisy: [
+          {data: '21', co: 'samo wycofanie, bez powodu w nagłówku'},
+          {data: '11', co: 'rynek: nadwyżka, spadek popytu'},
+          {data: '3', co: 'bezpieczeństwo: zakrzepy, skutki uboczne', wyroznij: true},
+          {data: '4', co: 'inne, np. pytanie „dlaczego?”'}]}
+      - {typ: stopka, tekst: 'Próba 39 nagłówków z 14 krajów, zebrana ręcznie. To nie są wszystkie media świata.'}
 
   - czas: 7
-    lektor: 'Po nie znaczy dlatego że. Nagłówek ustawia kolejność. Przyczyny nie dowodzi.'
+    lektor: 'Ten sam fakt. Różni go tylko to, gdzie stoi powód: w nagłówku, w tekście albo za kliknięciem.'
     bloki:
-      - {typ: tytul, tekst: '„Po” ≠ „dlatego że”'}
-      - {typ: tekst, tekst: 'Nagłówek ustawia kolejność. Przyczyny nie dowodzi.'}
-      - {typ: stopka, tekst: 'Jedno zdarzenie. Dwie opowieści. Źródła i kopie archiwalne w opisie.'}
+      - {typ: tytul, tekst: 'Ten sam fakt.'}
+      - {typ: tekst, tekst: 'Powód w nagłówku, w tekście albo za kliknięciem.'}
+      - {typ: stopka, tekst: 'Jedno zdarzenie. Wiele opowieści. Źródła w opisie.'}

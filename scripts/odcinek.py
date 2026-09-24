@@ -20,7 +20,8 @@ from paralaksa.events.check import load_card
 FADE_S = 0.4
 FPS = 30
 COUNTRY = {"PL": "Polska", "UA": "Ukraina", "DE": "Niemcy", "UK": "Wielka Brytania", "EU": "Europa",
-           "FR": "Francja", "AZ": "Azerbejdżan", "US": "USA", "RU": "Rosja"}
+           "FR": "Francja", "AZ": "Azerbejdżan", "US": "USA", "RU": "Rosja", "IT": "Włochy", "ES": "Hiszpania",
+           "IN": "Indie", "AU": "Australia", "MX": "Meksyk", "BR": "Brazylia", "CO": "Kolumbia", "PE": "Peru"}
 DAYS = ["pon", "wt", "śr", "czw", "pt", "sob", "nd"]
 
 CSS = """
@@ -53,6 +54,7 @@ body { font-family: "Segoe UI", Arial, sans-serif; color: #111; background-color
 .hl.small .q { font-size: 34px; font-style: italic; font-weight: 600; color: #333; }
 .hl.small .pl { font-size: 38px; font-weight: 800; line-height: 1.16; margin-top: 6px; }
 .q.pl-only { font-style: normal; }
+.hl.small .q.pl-only { font-size: 42px; font-style: normal; font-weight: 800; color: #111; line-height: 1.16; }
 mark { background: #ffd23f; padding: 0 6px; box-shadow: 0 0 0 3px #111 inset; }
 .halves { display: flex; gap: 26px; }
 .half { flex: 1; background: #fff; border: 6px solid #111; box-shadow: 10px 10px 0 #111; padding: 30px 26px; }
@@ -166,7 +168,7 @@ def axis_html(ep: dict, now: str | None, stamps: list[str]) -> str:
 def shot_html(ep: dict, shot: dict, stamps: list[str]) -> str:
     draft = "<div class='draft'>WERSJA ROBOCZA</div>" if ep.get("wersja") == "robocza" else ""
     blocks = "".join(block_html(b) for b in shot["bloki"])
-    axis = axis_html(ep, shot.get("zegar"), stamps)
+    axis = axis_html(ep, shot.get("zegar"), stamps) if ep.get("os") else ""  # oś tylko gdy godziny są treścią odcinka
     return (f"<!doctype html><html lang='pl'><head><meta charset='utf-8'><style>{CSS}</style></head><body>"
             f"<div class='top'><div class='brand'>PARALAKSA ZDARZEŃ</div>{draft}</div>"
             f"<div class='stage'>{blocks}</div>{axis}<div class='sub'>{esc(shot.get('lektor', ''))}</div></body></html>")
