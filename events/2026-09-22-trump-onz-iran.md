@@ -70,7 +70,7 @@ relacje:
     publikacja: '2026-09-22T16:56+00:00'   # z RSS
     aktualizacja: null
     porownywana_wersja: 'tytuł i lead z RSS pobrane 2026-09-23'
-    archiwum: {link: null, wykonano: null}
+    archiwum: {link: 'https://web.archive.org/web/20260924012642/https://newsaf.cgtn.com/news/2026-09-23/Trump-warns-in-UN-speech-he-could-annihilate-Iran-without-peace-deal-1QEGX6APjmU/p.html', wykonano: '2026-09-24T01:26Z'}   # kopia Wayback: pierwsza po publikacji (plx events archive)
     naglowek: "Trump warns in UN speech he could 'annihilate' Iran without peace deal"
     tlumaczenie: 'Trump ostrzega w ONZ, że może „unicestwić” Iran bez porozumienia pokojowego'
     zostawia_z: 'Rzeczowy zapis groźby z warunkiem.'

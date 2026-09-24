@@ -28,4 +28,10 @@ Pomoc: `plx events check events/<karta>.md` (albo `events` dla wszystkich) zapis
 kopie Wayback z dnia publikacji, nagłówek i metadane z każdej kopii, zmiany nagłówka i nagłówki pokazywane na przemian (test A/B).
 Karty nie zmienia. Podpowiedź to nie weryfikacja: `sprawdzil` wpisuje ten, kto przeczytał materiał.
 
+Kopie: `plx events archive events/<karta>.md` (albo `events`) wypełnia puste `archiwum`. Najpierw szuka kopii Wayback
+zrobionej do 48 h po publikacji; gdy jej nie ma, robi nową przez Save Page Now (wymaga darmowego konta archive.org:
+klucze z https://archive.org/account/s3.php w `.env` jako `IA_ACCESS_KEY` i `IA_SECRET_KEY`). Nowa kopia pokazuje stronę
+z chwili kopii, nie z dnia publikacji; komentarz przy polu to mówi. Robić ją od razu po dodaniu relacji.
+Nie nadpisuje wpisanych archiwów, nie zmienia innych pól. `--na-sucho` tylko pokazuje, co by zrobiło.
+
 Karty edytujemy tylko w `events/`. Zmiany w kodzie (`src/`, `tests/`, `config/`, `.github/`) nie należą do pracy nad kartami.

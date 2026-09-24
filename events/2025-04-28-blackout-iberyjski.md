@@ -25,7 +25,7 @@ relacje:
     publikacja: '2025-04-28T12:54+02:00'
     aktualizacja: '2025-04-28T22:34+02:00'
     porownywana_wersja: 'aktualizacja 2025-04-28T22:34+02:00; bez kopii z 12:54'
-    archiwum: {link: null, wykonano: null}
+    archiwum: {link: 'https://web.archive.org/web/20250428110107/https://elpais.com/economia/2025-04-28/apagon-electrico-masivo-en-espana.html', wykonano: '2025-04-28T11:01Z'}   # kopia Wayback: pierwsza po publikacji (plx events archive)
     naglowek: 'Un apagón eléctrico masivo en España y Portugal desata el caos'
     tlumaczenie: 'Masowy blackout w Hiszpanii i Portugalii wywołuje chaos'
     zostawia_z: 'Brak prądu dezorganizuje życie w Hiszpanii i Portugalii; przyczyna pozostaje przedmiotem dochodzenia.'
@@ -39,7 +39,7 @@ relacje:
     publikacja: '2025-04-28T15:54+01:00'
     aktualizacja: null # na stronie bez godziny aktualizacji
     porownywana_wersja: 'wersja dostępna 2026-09-23; brak historii zmian'
-    archiwum: {link: null, wykonano: null}
+    archiwum: {link: 'https://web.archive.org/web/20250428212003/https://observador.pt/2025/04/28/avioes-e-comboios-parados-pessoas-retiradas-do-metro-de-lisboa-semaforos-desligados-e-escolas-fechadas-um-pais-as-escuras/', wykonano: '2025-04-28T21:20Z'}   # kopia Wayback: pierwsza po publikacji (plx events archive)
     naglowek: 'Aviões e comboios parados, pessoas retiradas do Metro de Lisboa…' # skrót nagłówka do 15 słów
     tlumaczenie: 'Samoloty i pociągi stoją, pasażerowie ewakuowani z metra w Lizbonie…'
     zostawia_z: 'Konkrety o transporcie, szpitalach i szkołach w Portugalii; rząd nie potwierdza przyczyny.'

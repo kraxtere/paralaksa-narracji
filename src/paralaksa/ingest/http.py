@@ -92,10 +92,18 @@ class PoliteClient:
         parser = self._robots_for(url)
         return True if parser is None else parser.can_fetch(self.user_agent, url)
 
-    def get(self, url: str) -> httpx.Response:
+    def get(self, url: str, headers: dict[str, str] | None = None) -> httpx.Response:
         if not self.allowed(url):
             raise RobotsDisallowed(url)
         self._wait_for_domain(urlsplit(url).netloc)
-        resp = self._client.get(url)
+        resp = self._client.get(url, headers=headers)
+        resp.raise_for_status()
+        return resp
+
+    def post(self, url: str, data: dict[str, str], headers: dict[str, str] | None = None) -> httpx.Response:
+        if not self.allowed(url):
+            raise RobotsDisallowed(url)
+        self._wait_for_domain(urlsplit(url).netloc)
+        resp = self._client.post(url, data=data, headers=headers)
         resp.raise_for_status()
         return resp

@@ -303,6 +303,43 @@ def events_check(
         raise typer.Exit(code=1)
 
 
+@events_app.command("archive")
+def events_archive(
+    cards: list[Path] = typer.Argument(..., exists=True, help="Karty events/*.md albo katalog z kartami."),
+    dry_run: bool = typer.Option(False, "--na-sucho", help="Tylko pokaż, co byłoby zrobione (bez nowych kopii i zapisu)."),
+    no_write: bool = typer.Option(False, "--bez-wpisu", help="Rób kopie, ale nie wpisuj ich do karty."),
+    config_dir: Path = ConfigDir,
+) -> None:
+    """Uzupełnia puste `archiwum` w kartach: istniejąca kopia Wayback albo nowa (Save Page Now).
+
+    Nowa kopia wymaga konta archive.org (IA_ACCESS_KEY, IA_SECRET_KEY w .env). Nie nadpisuje
+    wpisanych archiwów, nie zmienia `sprawdzil` ani innych pól.
+    """
+    from paralaksa.events.archive import archive_card, ia_auth_from_env
+    from paralaksa.events.check import CardError, card_paths
+
+    cfg = load_settings(config_dir).ingest
+    auth = ia_auth_from_env()
+    if not auth and not dry_run:
+        typer.echo("Uwaga: brak IA_ACCESS_KEY/IA_SECRET_KEY, więc tylko istniejące kopie (bez Save Page Now).")
+    failed = False
+    with PoliteClient(cfg.user_agent, cfg.per_domain_delay_s, 60.0) as client:
+        for path in card_paths(cards):
+            try:
+                ca = archive_card(path, client, auth, write=not no_write, dry_run=dry_run)
+            except CardError as e:
+                typer.echo(f"BŁĄD: {e}", err=True)
+                failed = True
+                continue
+            typer.echo(f"{ca.card_id}: wpisano {ca.written} archiwów")
+            for ra in ca.relations:
+                if ra.action != "jest":
+                    typer.echo(f"  {ra.rid} {ra.kto}: {ra.message}")
+                failed |= ra.action == "błąd"
+    if failed:
+        raise typer.Exit(code=1)
+
+
 @app.command("run-daily")
 def run_daily(
     no_fulltext: bool = typer.Option(False, "--no-fulltext", help="Nie pobieraj pełnych tekstów."),
