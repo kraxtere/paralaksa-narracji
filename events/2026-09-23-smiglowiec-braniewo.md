@@ -12,14 +12,16 @@ fakt:
   opis: >-
     23 września 2026 rosyjski śmigłowiec Mi-8 z obwodu królewieckiego wleciał na ok. 300 m w polską przestrzeń powietrzną
     na północ od Braniewa i przebywał w niej 42 sekundy. Poderwano myśliwce. Według DORSZ Rosja ponownie testuje gotowość
-    obrony powietrznej. Rosja (stan na 23.09) nie skomentowała.
-  zrodlo_pierwotne: null     # komunikat Dowództwa Operacyjnego RSZ (X / gov.pl) do dopięcia
+    obrony powietrznej. Rosyjska redakcja BFM 23.09 odnotowała brak komentarza władz Rosji w chwili publikacji.
+  zrodlo_pierwotne: https://x.com/DowOperSZ/status/2102723364439679215   # oryginalny wpis DORSZ; X nie dał się otworzyć, treść za rp.pl
 
 stan_wiedzy_zmienial_sie: true
 os_czasu:
   - {czas: '2026-09-23T07:14+02:00', co_wiadomo: 'INNE ZDARZENIE: poranne poderwanie samolotów z powodu ataku Rosji na Ukrainę; DORSZ: przestrzeń nie została naruszona', zrodlo: r1}
   - {czas: '2026-09-23T11:08+02:00', co_wiadomo: 'naruszenie przez Mi-8 koło Braniewa (godzina wg DORSZ w relacjach)', zrodlo: fakt}
+  - {czas: '2026-09-23T13:42+02:00', co_wiadomo: 'Rzeczpospolita publikuje wiadomość o Mi-8; obecny nagłówek po aktualizacji o 15:04', zrodlo: r6}
   - {czas: '2026-09-23T15:58+02:00', co_wiadomo: 'INNE ZDARZENIE: Onet (za Dziennikiem Bałtyckim) o poszukiwaniu niezidentyfikowanego obiektu pod Malborkiem', zrodlo: r2}
+  - {czas: '2026-09-23T16:25+02:00', co_wiadomo: 'BFM w Rosji relacjonuje polski komunikat i pisze, że brak komentarza strony rosyjskiej', zrodlo: r9}
   - {czas: '2026-09-23T17:37+02:00', co_wiadomo: 'BBC: Polska oskarża rosyjski śmigłowiec o naruszenie przestrzeni', zrodlo: r3}
 
 relacje:
@@ -99,14 +101,14 @@ relacje:
     rola: redakcja
     gatunek: wiadomosc
     link: https://www.rp.pl/wojsko/art45179981-rosyjski-smiglowiec-wojskowy-naruszyl-przestrzen-powietrzna-polski
-    publikacja: null
-    aktualizacja: null
-    porownywana_wersja: null
+    publikacja: '2026-09-23T13:42+02:00'   # godzina na stronie rp.pl
+    aktualizacja: '2026-09-23T15:04+02:00'
+    porownywana_wersja: 'bieżący H1 po aktualizacji; wcześniejszy nagłówek z dnia publikacji nieustalony'
     archiwum: {link: null, wykonano: null}
-    naglowek: 'Rosyjski śmigłowiec wleciał nad Polskę, poderwano myśliwce. „Rosja testuje”'
+    naglowek: 'Rosyjski śmigłowiec wojskowy naruszył przestrzeń powietrzną Polski'
     tlumaczenie: null
-    zostawia_z: 'Ocena wojska („Rosja testuje”) w nagłówku.'
-    sprawdzil: null          # tytuł z wyników wyszukiwania; nie było go w naszym RSS rp
+    zostawia_z: 'Naruszenie podane wprost; ocena wojska „Rosja testuje” jest w podtytule i innym tytule strony.'
+    sprawdzil: GPT 2026-09-24
   - id: r7
     kraj: US
     kto: Fox News
@@ -121,18 +123,46 @@ relacje:
     tlumaczenie: 'Sojusznik z NATO forsuje amerykańską bazę „Fort Trump”, gdy rosyjski śmigłowiec wdziera się w przestrzeń'
     zostawia_z: 'Śmigłowiec jako uzasadnienie bazy: dwa niezależne zdarzenia w jednym zdaniu (por. karta 2026-09-22-fort-trump).'
     sprawdzil: null          # tytuł z wyników wyszukiwania
+  - id: r8
+    kraj: PL
+    kto: Dowództwo Operacyjne RSZ
+    rola: strona_sprawy
+    gatunek: komunikat
+    link: https://x.com/DowOperSZ/status/2102723364439679215
+    publikacja: null          # nie potwierdzono godziny w samym wpisie; 11:08 to czas zdarzenia
+    aktualizacja: null
+    porownywana_wersja: 'wpis X rozpoznany w wyszukiwarce, treść cytowana w r6; oryginał wymaga otwarcia'
+    archiwum: {link: null, wykonano: null}
+    naglowek: null           # wpis społecznościowy nie ma odrębnego nagłówka
+    tlumaczenie: null
+    zostawia_z: 'Źródło danych 11:08, do 300 m i 42 sekundy; nie jest niezależną redakcją.'
+    sprawdzil: null
+  - id: r9
+    kraj: RU
+    kto: Business FM / BFM.ru
+    rola: redakcja
+    gatunek: wiadomosc
+    link: https://www.bfm.ru/news/618787
+    publikacja: '2026-09-23T17:25+03:00'  # godzina moskiewska widoczna na stronie
+    aktualizacja: null
+    porownywana_wersja: 'strona otwarta 2026-09-24; kopii z dnia publikacji nie znaleziono'
+    archiwum: {link: null, wykonano: null}
+    naglowek: 'Польша обвинила Россию в нарушении воздушного пространства страны'
+    tlumaczenie: 'Polska oskarżyła Rosję o naruszenie przestrzeni powietrznej kraju'
+    zostawia_z: 'Opis polskiego zarzutu; tekst stwierdza, że komentarza ze strony rosyjskiej na razie brak.'
+    sprawdzil: GPT 2026-09-24
 
 kontrasty:
   - miedzy: [r3, r5]
     rodzaj: dobor_slow
     opis: 'BBC: Polska „oskarża” (zarzut jednej strony). UP: śmigłowiec „narusza” (fakt). Reuters: „na krótko… podaje armia”.'
-    zastrzezenia: 'Rosja nie zaprzeczyła, więc „oskarża” nie oznacza sporu o fakty. Tytuły r4 i r5 tylko z wyszukiwarki.'
+    zastrzezenia: 'BFM również pisze „oskarżyła”, ale to relacja o polskim stanowisku, nie odpowiedź władz Rosji. Nie ustalono późniejszego oficjalnego stanowiska. Tytuły r4 i r5 tylko z wyszukiwarki.'
   - miedzy: [r3, r7]
     rodzaj: kolejnosc_informacji
     opis: 'Fox łączy naruszenie z kampanią Nawrockiego o „Fort Trump”; BBC opisuje samo naruszenie.'
     zastrzezenia: 'Związek wskazuje redakcja, nie strony. Wywiad Nawrockiego dla Bloomberga był dzień wcześniej (22.09).'
 
-jak_szukano: ['nasza baza (RSS 23.09): Onet, rp, BBC', 'wyszukiwarka WWW en/pl: Reuters/US News, UP eng, Kyiv Post, TVP World, Euronews, Fox, rp, TVN24, Defence24, Interia', 'newscord.org (porównywarka redakcji) dla kontroli']
+jak_szukano: ['nasza baza (RSS 23.09): Onet, rp, BBC', 'wyszukiwarka WWW en/pl: Reuters/US News, UP eng, Kyiv Post, TVP World, Euronews, Fox, rp, TVN24, Defence24, Interia', 'newscord.org (porównywarka redakcji) dla kontroli', 'wyszukiwarka WWW pl/ru/en 24.09: DORSZ X i Facebook, rp.pl, bfm.ru, mid.ru, mil.ru; otwarte rp.pl i bfm.ru']
 ---
 
 ## Fakt
@@ -141,7 +171,7 @@ Tego samego dnia są jeszcze dwa inne zdarzenia na niebie: poranne poderwanie sa
 i popołudniowe poszukiwania obiektu pod Malborkiem.
 
 ## Przekaz
-Nagłówki różnią się czasownikiem: „oskarża”, „narusza”, „wleciał na krótko”, „wdziera się”. Fox wiąże zdarzenie z „Fort Trump”.
+Nagłówki różnią się czasownikiem: „oskarża”, „narusza”, „wleciał na krótko”, „wdziera się”. Polska Rzeczpospolita używa „naruszył”, a rosyjskie BFM „Polska oskarżyła”. To wybór słów redakcji, nie rosyjska odpowiedź. Fox wiąże zdarzenie z „Fort Trump”.
 **Pułapka:** porównywarka newscord.org pokazuje jako „kluczową rozbieżność” jedną redakcję z „brief violation” i drugą z „no violation detected”.
 To wygląda na pomylenie z porannym komunikatem o innym zdarzeniu (r1). Do sprawdzenia, ale dokładnie tę pomyłkę ma wyłapywać nasza oś czasu.
 
@@ -152,12 +182,12 @@ To wygląda na pomylenie z porannym komunikatem o innym zdarzeniu (r1). Do spraw
 Zegar z trzema znacznikami (7:14, 11:08, 15:58) i trzema różnymi kolorami. Linia granicy z kreską 300 m. Bez rekonstrukcji lotu.
 
 ## Uczciwość odcinka
-- [ ] Komunikat DORSZ (godzina publikacji) jako źródło pierwotne.
+- [ ] Otworzyć wpis DORSZ w X; potwierdzić godzinę publikacji na samej platformie i treść bez pośrednictwa redakcji.
 - [ ] Nie łączyć poranka, śmigłowca i Malborka w jedną historię.
-- [ ] Sprawdzić, czy Rosja zareagowała później (w podobnych incydentach mówiła o awarii nawigacji).
+- [ ] Ponowić sprawdzenie oficjalnej odpowiedzi Rosji przed odcinkiem; BFM 23.09 o 17:25 MSK notowało jej brak, a przeszukanie stron MSZ i MON Rosji 24.09 nie ujawniło stanowiska. Brak znalezionego komunikatu nie dowodzi, że go nie było.
 - [ ] Porównanie z kartą 2023-08-01-smiglowce-bialowieza: tu wojsko potwierdziło od razu, w 2023 nie.
 
 ## Notatki z pilota
 - Czas pracy: ok. 15 min (Claude).
-- Co było najbardziej żmudne: rozplątanie trzech zdarzeń jednego dnia.
+- Co było najbardziej żmudne: rozplątanie trzech zdarzeń jednego dnia; dodatkowe wyszukanie i lektura źródeł 24.09 ok. 20 min (GPT), trudność: niedostępny bezpośrednio post X i brak potwierdzenia rosyjskiej odpowiedzi.
 - Czego zabrakło w karcie: pole „zdarzenia pokrewne tego dnia, nie mylić”. Na razie wpisy w os_czasu z dopiskiem INNE ZDARZENIE.
