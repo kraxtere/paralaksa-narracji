@@ -26,7 +26,14 @@ def strip_boilerplate(text: str) -> str:
     return "\n".join(lines).strip()
 
 
+_CJK = re.compile(r"[぀-ヿ㐀-䶿一-鿿가-힯]")
+CJK_CHARS_PER_WORD = 1.3  # chiński bez spacji: limit słów liczony w znakach (1500 słów ≈ 1950 znaków)
+
+
 def truncate_words(text: str, max_words: int) -> str:
+    if len(_CJK.findall(text)) > 0.3 * len(text.replace(" ", "")):
+        max_chars = int(max_words * CJK_CHARS_PER_WORD)
+        return text if len(text) <= max_chars else text[:max_chars]
     words = text.split()
     return text if len(words) <= max_words else " ".join(words[:max_words])
 

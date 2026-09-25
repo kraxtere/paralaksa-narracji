@@ -104,7 +104,7 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
   > 15 słów), `sanitize_report` (ostatnia deska po nieudanym ponowieniu: usuwa twierdzenia bez odnośników).
 - `src/paralaksa/report/synthesize.py`: `run_synthesis` – jedno wywołanie, jedno ponowienie z listą błędów,
   budżet dzienny; `report/render.py`: `collect_meta`, `render_markdown`; `report/pipeline.py`: `generate_report`.
-- `.github/workflows/daily.yml`: cron 05:00 UTC, baza jako zaszyfrowany snapshot w Release `database-backup` (cache i artefakt to kopie), commit `reports/`. Kod 1 tylko przy ostrzeżeniach blokujących (synteza, ekstrakcja, brak >1/3 aktywnych źródeł); pojedynczy kanał/źródło to ostrzeżenie informacyjne.
+- `.github/workflows/daily.yml`: cron 10:30 UTC (poza szczytem DeepSeek; GitHub opóźnia start nawet o 4–5 h), baza jako zaszyfrowany snapshot w Release `database-backup` (cache i artefakt to kopie), commit `reports/`. Kod 1 tylko przy ostrzeżeniach blokujących (synteza, ekstrakcja, brak >1/3 aktywnych źródeł); pojedynczy kanał/źródło to ostrzeżenie informacyjne.
 
 ## Konwencje
 - Identyfikatory i docstringi po angielsku; komunikaty CLI, komentarze w YAML i raporty po polsku.
@@ -206,7 +206,8 @@ przebiegu każdy (wyniki: `data/compare_synth/<wariant>/2026-09-23.md` + `summar
 Aktywne (10): rp, onet (PL); ukrinform, pravda_ua (UA, po ukraińsku); tagesschau, spiegel (DE);
 bbc (world + europe), guardian (UK); aljazeera (QA), cgtn (CN). `fulltext: false`: rp i spiegel (paywall).
 
-Nieaktywne, bo nie działa RSS: PAP (Incapsula), Polskie Radio, Suspilne (403), Telegraph (402), Global Times
-(`rss/outbrain.xml` to nieaktualny kanał syndykacji; w KM4 przez `https://www.globaltimes.cn/sitemap.xml`).
+2026-09-25 (decyzja właściciela): globaltimes (CN, Google News sitemap, `parse_news_sitemap`), chinanews (CN, po chińsku,
+tekst CJK przycinany w znakach), scmp (HK, tylko lead). Razem 21 aktywnych; CN ma 3 źródła.
+Nieaktywne, bo nie działa RSS: PAP (Incapsula), Polskie Radio, Suspilne (403), Telegraph (402). People's Daily RSS stoi od 06.2025.
 Nieaktywne, ale zweryfikowane, do włączenia w KM4: wp, gazeta (to nie Wyborcza), kyivindependent, dw, faz, skynews,
 thehindu, dailysabah, hurriyet. Martwe: Xinhua RSS (2018), China Daily RSS (404). Reuters/AP/AFP bez publicznego RSS.

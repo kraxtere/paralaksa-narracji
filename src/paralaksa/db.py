@@ -95,7 +95,7 @@ MIGRATIONS: dict[int, str] = {
       CHECK (source_depth IN ('lead_only', 'fulltext'));
     ALTER TABLE signals ADD COLUMN prompt_version TEXT;
     CREATE INDEX IF NOT EXISTS idx_signals_article ON signals(article_id);
-    -- articles.extracted: 0 = do przetworzenia, 1 = gotowy, 2 = trwały błąd
+    -- articles.extracted: 0 = do przetworzenia, 1 = gotowy, 2 = trwały błąd, 3 = pominięty (poza oknem publikacji)
     ALTER TABLE articles ADD COLUMN extract_error TEXT;
     CREATE TABLE IF NOT EXISTS api_usage (
       id INTEGER PRIMARY KEY,

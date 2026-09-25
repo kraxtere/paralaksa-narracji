@@ -1,7 +1,8 @@
 name: daily
 on:
   schedule:
-    - cron: "0 5 * * *"
+    # 10:30 UTC: poza szczytem DeepSeek (01–04 i 06–10 UTC), także przy wielogodzinnych opóźnieniach crona GitHuba
+    - cron: "30 10 * * *"
   workflow_dispatch:
     inputs:
       initialize_empty:

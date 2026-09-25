@@ -61,6 +61,7 @@ class ExtractStats:
     signals: int = 0
     failed: int = 0          # trwały błąd (extracted=2)
     deferred: int = 0        # błąd przejściowy lub budżet: zostaje extracted=0
+    skipped: int = 0         # poza oknem publikacji (extracted=3), bez kosztu
     retries: int = 0
     repairs: int = 0         # obcięte evidence_span (bez kosztu)
     dropped: int = 0         # sygnały odrzucone po ponowieniu
@@ -114,6 +115,33 @@ def pending_articles(conn: sqlite3.Connection, limit: int | None = None) -> list
         sql += " LIMIT ?"
         params = (limit,)
     return [ArticleForExtraction(*row) for row in conn.execute(sql, params).fetchall()]
+
+
+SKIPPED_OUT_OF_WINDOW = 3  # articles.extracted: poza oknem publikacji, bez wywołania modelu
+SKIP_NOTE = "pominięty: publikacja poza oknem D-1..D (nie wchodzi do porównań)"
+
+
+def out_of_window_ids(conn: sqlite3.Connection) -> list[int]:
+    """Pending articles that no report will compare (late, future or undated outside the initial run)."""
+    from paralaksa.aggregate.sample import publication_meta
+
+    days = [r[0] for r in conn.execute(
+        "SELECT DISTINCT substr(fetched_at, 1, 10) FROM articles WHERE extracted = 0")]
+    skip: list[int] = []
+    for day in days:
+        eligible = set(publication_meta(conn, day)["eligible_ids"])
+        skip += [r[0] for r in conn.execute(
+            "SELECT id FROM articles WHERE extracted = 0 AND substr(fetched_at, 1, 10) = ?", (day,))
+            if r[0] not in eligible]
+    return skip
+
+
+def skip_out_of_window(conn: sqlite3.Connection) -> int:
+    ids = out_of_window_ids(conn)
+    conn.executemany("UPDATE articles SET extracted = ?, extract_error = ? WHERE id = ?",
+                     [(SKIPPED_OUT_OF_WINDOW, SKIP_NOTE, i) for i in ids])
+    conn.commit()
+    return len(ids)
 
 
 def save_signals(
@@ -318,6 +346,7 @@ def extract_pending(
     now: datetime | None = None,
 ) -> ExtractStats:
     run = _Run(conn, llm, settings, themes, prompt_path, now or db.utc_now())
+    run.stats.skipped = skip_out_of_window(conn)
     articles = pending_articles(conn, limit)
     run.stats.pending = conn.execute("SELECT COUNT(*) FROM articles WHERE extracted=0").fetchone()[0]
     run.stats.deferred = run.stats.pending - len(articles)
@@ -338,7 +367,8 @@ def estimate_pending(conn: sqlite3.Connection, settings: Settings, themes: list[
                      prompt_path: Path = DEFAULT_PROMPT) -> tuple[int, int, float, str]:
     """(articles, estimated input tokens, estimated cost USD, mode) without calling the API."""
     run = _Run(conn, None, settings, themes, prompt_path, db.utc_now())  # type: ignore[arg-type]
-    articles = pending_articles(conn, limit)
+    skip = set(out_of_window_ids(conn))
+    articles = [a for a in pending_articles(conn) if a.id not in skip][:limit]
     batch_capable = settings.models.extract.startswith("claude")
     batch = use_batch and batch_capable and len(articles) > settings.extract.batch_threshold
     prompts = [run.request(a).messages[0]["content"] for a in articles]

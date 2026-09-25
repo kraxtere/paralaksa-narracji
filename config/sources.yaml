@@ -308,16 +308,70 @@
   ownership: państwowy nadawca China Media Group
 - id: globaltimes
   name: Global Times
+  aliases:
+  - 'Global Times'
   country: CN
+  editorial_country: CN
   language: en
   type: government
-  feeds: []
-  fulltext: false
-  active: false
-  note: 'Brak redakcyjnego RSS: rss/outbrain.xml to nieaktualny kanał syndykacji (wpisy
-    do 23.08.2026, żaden nie ma pokrycia na stronie głównej), /rss/*.xml 404. Włączyć
-    w KM4 przez Google News sitemap https://www.globaltimes.cn/sitemap.xml razem z
-    nowymi typami strumieni (GDELT).'
+  feeds:
+  - url: https://www.globaltimes.cn/sitemap.xml   # Google News sitemap (ok. 50 najnowszych), nie RSS
+    section: all
+  fulltext: true
+  active: true
+  ownership: państwowe, wydawany przez People's Daily (KPCh)
+  publisher_group: peoples_daily
+  channel_scope: all
+  activated_at: '2026-09-25'
+  note: 'RSS martwy (rss/outbrain.xml nieaktualny, /rss/*.xml 404); od 2026-09-25 przez Google
+    News sitemap. Sitemap bez leadów i sekcji; słowa kluczowe idą do kategorii (prefiltr).'
+  license_note: 'Dodany 2026-09-25 decyzją właściciela (perspektywa chińska). robots.txt bez blokady
+    dla naszego UA; pełny tekst sprawdzony na 2 artykułach. Prawa wydawcy niezweryfikowane.'
+- id: chinanews
+  name: China News Service (中新网)
+  aliases:
+  - 'China News Service'
+  - 'Chinanews'
+  - '中新网'
+  country: CN
+  editorial_country: CN
+  language: zh
+  type: agency
+  feeds:
+  - url: https://www.chinanews.com.cn/rss/world.xml
+    section: world
+  - url: https://www.chinanews.com.cn/rss/china.xml
+    section: politics
+  fulltext: true
+  active: true
+  ownership: państwowa agencja informacyjna ChRL
+  publisher_group: chinanews
+  channel_scope: world; politics
+  activated_at: '2026-09-25'
+  license_note: 'Dodany 2026-09-25 decyzją właściciela: jedyne źródło po chińsku (przekaz do własnych
+    odbiorców, w odróżnieniu od CGTN i Global Times). RSS świeży, pełny tekst sprawdzony. Prawa wydawcy niezweryfikowane.'
+- id: scmp
+  name: South China Morning Post
+  aliases:
+  - 'South China Morning Post'
+  - 'SCMP'
+  country: HK
+  editorial_country: HK
+  language: en
+  type: private
+  feeds:
+  - url: https://www.scmp.com/rss/4/feed
+    section: china
+  - url: https://www.scmp.com/rss/5/feed
+    section: world
+  fulltext: false   # paywall z limitem: tylko tytuł i lead, nie obchodzimy
+  active: true
+  ownership: prywatne, Alibaba Group
+  publisher_group: scmp
+  channel_scope: china; world
+  activated_at: '2026-09-25'
+  license_note: 'Dodany 2026-09-25 decyzją właściciela (perspektywa Hongkongu). RSS świeży; pełny tekst
+    za paywallem, więc tylko lead. Prawa wydawcy niezweryfikowane.'
 - id: thehindu
   name: The Hindu
   country: IN

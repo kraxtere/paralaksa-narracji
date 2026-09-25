@@ -74,7 +74,7 @@ Testy działają offline: kanały i strony są podstawiane przez `httpx.MockTran
 
 ## Harmonogram
 
-**GitHub Actions** (`.github/workflows/daily.yml`): codziennie o 05:00 UTC (i ręcznie przez
+**GitHub Actions** (`.github/workflows/daily.yml`): codziennie o 10:30 UTC (i ręcznie przez
 „Run workflow”) uruchamia `plx run-daily` i commituje raport do `reports/`. Baza SQLite nie trafia
 do gita. Zaszyfrowane snapshoty zapisują się w Release `database-backup` bez automatycznego wygasania,
 a także w cache i artefakcie Actions (30 dni). Utrata cache nie uruchamia pustej bazy; odtwarzany jest zaszyfrowany trwały backup z Release.
@@ -84,7 +84,7 @@ Wymagane sekrety repozytorium (Settings → Secrets and variables → Actions):
 (szyfrowanie bazy). Pierwsza konfiguracja i przywracanie: [OPERATIONS.md](docs/OPERATIONS.md).
 
 **Lokalnie** (alternatywa): Harmonogram zadań Windows albo cron, np.
-`0 5 * * * cd /ścieżka/paralaksa-narracji && .venv/bin/plx run-daily >> data/run-daily.log 2>&1`.
+`30 10 * * * cd /ścieżka/paralaksa-narracji && .venv/bin/plx run-daily >> data/run-daily.log 2>&1`.
 
 
 ## Jakość raportów przed KM4

@@ -155,7 +155,8 @@ def _run_extract(conn, settings, themes, limit, use_batch: bool):
         f"Artykuły: {stats.pending} | przetworzone: {stats.done} | sygnały: {stats.signals} | "
         f"ponowienia: {stats.retries} | błędy trwałe: {stats.failed} | odłożone: {stats.deferred}"
     )
-    typer.echo(f"Naprawione evidence_span: {stats.repairs} | odrzucone sygnały: {stats.dropped}")
+    typer.echo(f"Naprawione evidence_span: {stats.repairs} | odrzucone sygnały: {stats.dropped} | "
+               f"pominięte poza oknem publikacji: {stats.skipped}")
     total = db.spent_on(conn, db.utc_now().date().isoformat())
     typer.echo(f"Koszt przebiegu: ${stats.cost_usd:.4f} | wydano dziś: ${total:.4f} "
                f"z limitu ${settings.budget.max_daily_usd:.2f}")

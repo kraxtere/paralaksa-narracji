@@ -214,7 +214,8 @@ def language_errors(report, package):
     single = {c for c, info in package.get('kraje', {}).items() if info['n_zrodel'] <= 1}
     adjectives = {'CN':'chińsk', 'QA':'katarsk', 'US':'amerykańsk', 'IL':'izraelsk',
                   'PS':'palestyńsk', 'TR':'tureck', 'BR':'brazylijsk', 'PL':'polsk',
-                  'UA':'ukraińsk', 'DE':'niemieck', 'UK':'brytyjsk'}
+                  'UA':'ukraińsk', 'DE':'niemieck', 'UK':'brytyjsk',
+                  'HK':'hongkońsk'}
     for path, text in _texts(report):
         for country in single:
             code = re.escape(country)
