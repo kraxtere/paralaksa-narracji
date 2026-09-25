@@ -130,3 +130,40 @@ techniczny działa (5/10 świeżych ≤48h), ale to redakcja amerykańska piszą
 na tych samych zasadach (zaakceptowane ryzyko praw, audyt jakości wykonany wyżej). Test `plx ingest`
 z konfiguracji: jpost 26 nowych, alquds_ps 30 nowych, bez błędów. Aktywnych źródeł: 18, krajów: 10.
 Formalny przegląd warunków wszystkich 18 źródeł zlecony osobno: `docs/LEGAL_REVIEW_BRIEF.md`.
+
+## Dwa źródła na kraj — 2026-09-25 (decyzja właściciela)
+
+Cel: co najmniej 2 niezależnych wydawców (`publisher_group`) w każdym kraju, bo tylko wtedy kraj może przejść próg SPEC
+(≥2 źródła/kraj). Przed zmianą próg osiągały PL, UA, DE, UK, US, BR i CN, a nie osiągały HK, IL, PS (Al-Quds z GitHub Actions
+dostaje 403, z domowego łącza działa; blokady adresów serwerów nie obchodzimy), QA, IN i TR.
+
+**Błąd znaleziony przy okazji:** `urllib.robotparser` nie rozumie `*` w ścieżkach, więc `Disallow: */feed` (PNN) nie blokował
+niczego. `PoliteClient` używa teraz dopasowania RFC 9309 (`*`, `$`, najdłuższa reguła wygrywa, przy remisie Allow).
+Po zmianie wszystkie dotychczasowe kanały nadal są dozwolone; PNN odpada.
+
+**Blokady botów AI z nazwy** (ClaudeBot, GPTBot) mają Guardian, BBC, Al Jazeera, The Hindu, Indian Express i HKFP. Nasz UA
+ich nie dotyczy i tak traktowaliśmy je dotąd; to ryzyko interpretacyjne do przeglądu prawnego, nie blokada techniczna.
+
+Audyt jakości: ingest do osobnej bazy, ekstrakcja DeepSeek V4-Pro na 54 artykułach (6 na źródło), koszt $0,086,
+0 błędów trwałych; ręczny przegląd sygnałów każdego źródła.
+
+| redakcja | kraj | typ | kanał | pełny tekst | sygnałów / 6 art. | uwagi |
+|---|---|---|---|---|---|---|
+| The Hindu | IN | prywatne | international | tak | 22 | trafne ramy |
+| The Indian Express | IN | prywatne | world | tak | 21 | kanał ma 200 wpisów, większość starsza (pomijana przed ekstrakcją) |
+| Daily Sabah | TR | prywatne, prorządowe | world | tak | 27 | ostry język redakcji oddany jako głos źródła |
+| Hürriyet Daily News | TR | prywatne (Demirören) | world | tak | 24 | — |
+| RTHK | HK | publiczne (departament rządu HK) | local + world | tak | 7 | krótkie depesze, dużo sportu bez sygnałów |
+| Hong Kong Free Press | HK | niezależne | all | tak | 13 | oddziela stanowisko władz od krytyki |
+| Israel Hayom | IL | prywatne, prorządowe | all | nie: artykuły 403 (Akamai), RSS działa | 6 | tylko lead |
+| Haaretz | IL | prywatne | latest headlines | nie: paywall | 6 | tylko lead |
+| WAFA | PS | agencja Autonomii Palestyńskiej | dzienna mapa strony | tak | 19 | nagłówek z adresu (bez interpunkcji), data z `lastmod` |
+
+Nowe w kodzie: kanał z datą w adresie (`{yyyy}`, `{mm}`, `{dd}`; pobierane D-1 i D), zwykła mapa strony bez `news:`,
+usuwanie stopki WordPressa „The post … appeared first on …” z leadów.
+
+Odrzucone: PNN (robots.txt `*/feed`), Palinfo (powiązane z Hamasem; nie bez osobnej decyzji), Ma'an i Al-Ayyam (robots.txt),
+Times of Israel (robots.txt), Ynetnews (kanał nieświeży), Anadolu i Turkish Minute (możliwe później: agencja państwowa, emigracja).
+**Katar zostaje z jednym wydawcą.** Gulf Times, Raya i Qatar Tribune blokują robots.txt, Lusail zwraca 403, The Peninsula
+ma uszkodzony XML; Al-Araby al-Jadeed to redakcja londyńska, a Al Jazeera po arabsku to ten sam wydawca.
+Po zmianie: 30 aktywnych źródeł, 13 krajów, 12 z nich ma co najmniej 2 wydawców.

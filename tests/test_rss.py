@@ -234,3 +234,57 @@ def test_truncate_words_cjk_by_characters():
     out = truncate_words(zh, 100)
     assert len(out) == 130
     assert truncate_words("one two three", 2) == "one two"
+
+
+def test_robots_wildcards_and_longest_match():
+    from paralaksa.ingest.http import RobotsRules
+
+    rules = RobotsRules()
+    rules.parse("""User-Agent: *
+Disallow: /wp-
+Disallow: */feed
+Disallow: *?attachment_id=
+Allow: /wp-content/uploads/
+Disallow: /*.gz$
+
+User-agent: ClaudeBot
+Disallow: /
+""".splitlines())  # skrót robots.txt PNN (pnn.ps) z 2026-09-25 + reguła z $
+    ua = "paralaksa-narracji/0.1"
+    assert not rules.can_fetch(ua, "https://pnn.ps/feed")
+    assert not rules.can_fetch(ua, "https://pnn.ps/category/news/feed")
+    assert not rules.can_fetch(ua, "https://pnn.ps/x?attachment_id=5")
+    assert rules.can_fetch(ua, "https://pnn.ps/news/123")
+    assert rules.can_fetch(ua, "https://pnn.ps/wp-content/uploads/a.jpg")  # dłuższe Allow wygrywa
+    assert not rules.can_fetch(ua, "https://pnn.ps/wp-login.php")
+    assert not rules.can_fetch(ua, "https://pnn.ps/dump.gz") and rules.can_fetch(ua, "https://pnn.ps/dump.gz.html")
+    assert not rules.can_fetch("ClaudeBot/1.0", "https://pnn.ps/news/123")
+
+
+def test_plain_daily_sitemap_wafa():
+    from datetime import datetime, timezone
+
+    from paralaksa.ingest.rss import feed_urls, parse_feed
+
+    xml = """<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.wafa.ps/news/2026/9/25/%D8%AA%D8%B1%D8%A7%D8%AC%D8%B9-%D8%A3%D8%B3%D8%B9%D8%A7%D8%B1-%D8%A7%D9%84%D9%86%D9%81%D8%B7-154630</loc>
+    <lastmod>2026-09-25T08:27:21.1+00:00</lastmod><priority>0.9</priority></url>
+  <url><loc>https://www.wafa.ps/news/2026/9/25/krotki-154631</loc><lastmod>2026-09-25T08:29:21+00:00</lastmod></url>
+</urlset>"""  # skrót dziennej mapy WAFA z 2026-09-25
+    entries = parse_feed(xml)
+    assert len(entries) == 1  # z jednego słowa w adresie nie robimy nagłówka
+    assert entries[0].title == "تراجع أسعار النفط"
+    assert entries[0].published == datetime(2026, 9, 25, 8, 27, 21, 100000, tzinfo=timezone.utc)
+    now = datetime(2026, 9, 1, 3, tzinfo=timezone.utc)
+    assert feed_urls("https://x.ps/s.xml?yyyy={yyyy}&mm={mm}&dd={dd}", now) == [
+        "https://x.ps/s.xml?yyyy=2026&mm=8&dd=31", "https://x.ps/s.xml?yyyy=2026&mm=9&dd=1"]
+    assert feed_urls("https://x.example/rss", now) == ["https://x.example/rss"]
+
+
+def test_strip_wordpress_footer():
+    from paralaksa.ingest.rss import strip_wp_footer
+
+    lead = ("Trump welcomed Xi Jinping to Washington. The post Trump courts Xi in Washington, "
+            "Beijing's price could be Taiwan appeared first on www.israelhayom.com .")  # Israel Hayom, 2026-09-24
+    assert strip_wp_footer(lead) == "Trump welcomed Xi Jinping to Washington."
+    assert strip_wp_footer("Zwykły lead.") == "Zwykły lead."

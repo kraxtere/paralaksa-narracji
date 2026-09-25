@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 import logging
+import re
 import time
 from typing import Callable
-from urllib.parse import urlsplit
+from urllib.parse import unquote, urlsplit
 from urllib.robotparser import RobotFileParser
 
 import httpx
@@ -18,6 +19,42 @@ ROBOTS_ATTEMPTS = 2
 
 class RobotsDisallowed(Exception):
     """URL is disallowed by the site's robots.txt."""
+
+
+def _rule_regex(path: str) -> re.Pattern[str]:
+    """Google/RFC 9309 pattern: `*` matches any sequence, trailing `$` anchors the end."""
+    anchored = path.endswith("$")
+    body = re.escape(path[:-1] if anchored else path).replace(r"\*", ".*")
+    return re.compile(body + ("$" if anchored else ""))
+
+
+class RobotsRules(RobotFileParser):
+    """RobotFileParser with RFC 9309 matching: wildcards and longest match wins (Allow on ties).
+
+    The stdlib parser compares plain prefixes, so `Disallow: */feed` never matched `/feed`.
+    """
+
+    def can_fetch(self, useragent: str, url: str) -> bool:
+        if self.disallow_all:
+            return False
+        if self.allow_all:
+            return True
+        if not self.last_checked:
+            return False
+        parts = urlsplit(url)
+        target = unquote(parts.path or "/") + (f"?{unquote(parts.query)}" if parts.query else "")
+        entry = next((e for e in self.entries if e.applies_to(useragent)), self.default_entry)
+        if entry is None:
+            return True
+        best: tuple[int, bool] | None = None
+        for line in entry.rulelines:
+            path = unquote(line.path)
+            if not path or not _rule_regex(path).match(target):
+                continue
+            key = (len(path), line.allowance)  # dłuższa reguła wygrywa, przy remisie Allow
+            if best is None or key > best:
+                best = key
+        return True if best is None else best[1]
 
 
 class PoliteClient:
@@ -35,7 +72,7 @@ class PoliteClient:
         self._sleep = sleep
         self._clock = clock
         self._last_request: dict[str, float] = {}
-        self._robots: dict[str, RobotFileParser | None] = {}
+        self._robots: dict[str, RobotsRules | None] = {}
         self._client = httpx.Client(
             headers={"User-Agent": user_agent},
             timeout=timeout_s,
@@ -60,11 +97,11 @@ class PoliteClient:
                 self._sleep(remaining)
         self._last_request[host] = self._clock()
 
-    def _robots_for(self, url: str) -> RobotFileParser | None:
+    def _robots_for(self, url: str) -> RobotsRules | None:
         parts = urlsplit(url)
         origin = f"{parts.scheme}://{parts.netloc}"
         if origin not in self._robots:
-            parser = RobotFileParser()
+            parser = RobotsRules()
             parser.disallow_all = True  # nie pobieraj przy nieznanych regułach
             # Przejściowy błąd sieci/serwera nie powinien wyłączać redakcji na cały przebieg.
             for attempt in range(ROBOTS_ATTEMPTS):
@@ -77,7 +114,7 @@ class PoliteClient:
                 if resp.status_code >= 500 or resp.status_code == 429:
                     log.warning("robots.txt z %s: HTTP %s (próba %d)", origin, resp.status_code, attempt + 1)
                     continue
-                parser = RobotFileParser()
+                parser = RobotsRules()
                 if resp.status_code in (401, 403):
                     parser.disallow_all = True
                 elif resp.status_code >= 400:  # 404/410 i inne 4xx: brak reguł
