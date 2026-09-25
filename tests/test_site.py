@@ -183,10 +183,12 @@ def test_stories_verification_moves_and_drops_articles():
     cands = parse_candidates(first, items)
     assert cands[0]["ids"] == [1, 2, 3] and cands[1]["ids"] == [4, 5, 6]   # nieznane id i powtórki odpadają
     assert "#3 | UK" in build_verify_prompt(cands, items)
-    verify = json.dumps({"oceny": [
+    assert "#3 | UK" not in build_verify_prompt(cands, items, [4, 5])   # porcja weryfikacji: tylko jej artykuły
+    verify = [json.dumps({"oceny": [
         {"article_id": 1, "wydarzenie": 1, "naglowek_pl": "Nagłówek 1"}, {"article_id": 2, "wydarzenie": 1},
-        {"article_id": 3, "wydarzenie": None}, {"article_id": 4, "wydarzenie": 1, "naglowek_pl": "N4"},
-        {"article_id": 5, "wydarzenie": 1}, {"article_id": 6, "wydarzenie": 2}]})
+        {"article_id": 3, "wydarzenie": None}]}), json.dumps({"oceny": [
+        {"article_id": 4, "wydarzenie": 1, "naglowek_pl": "N4"}, {"article_id": 5, "wydarzenie": 1},
+        {"article_id": 6, "wydarzenie": 2}]})]
     stories = parse_stories(cands, verify, items)
     assert len(stories) == 1   # B zostaje z jednym krajem
     a = stories[0]

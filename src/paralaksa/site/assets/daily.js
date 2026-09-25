@@ -126,7 +126,7 @@ function viewEssence() {
   const meta = D.historie_meta;
   return `<h2 style="margin-top:4px">Historie dnia · ${D.historie.length}</h2>
     <p class="hint">Wydarzenia opisywane w co najmniej trzech krajach. Z każdego kraju jeden nagłówek przetłumaczony przez model, oryginał pod spodem.
-      Grupowanie jest automatyczne (dwa wywołania: wyszukanie i sprawdzenie każdego artykułu) i może się pomylić, dlatego zawsze widać oryginał.
+      Grupowanie jest automatyczne (dwa kroki: wyszukanie i sprawdzenie każdego artykułu) i może się pomylić, dlatego zawsze widać oryginał.
       ${meta ? `<span class="muted">${esc(meta.model)}, ${esc(meta.created)}, ${meta.cost_usd.toFixed(3)} $.</span>` : ""}</p>
     ${viewStories()}
     <h2>Co się wyróżnia</h2>

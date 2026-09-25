@@ -7,6 +7,9 @@
   Pierwsza wersja bez weryfikacji dokleja artykuły nie na temat, żeby dobić do 3 krajów (np. dowódca NATO o Putinie przy przemówieniu
   prezydenta Iranu). Drugi krok przypisuje każdy artykuł do wydarzenia albo go odrzuca. Po nim na 12 historiach z 23–24.09 zostały
   2–3 wątpliwe przypisania na ok. 60, zawsze z widocznym oryginałem.
+- Weryfikacja w porcjach po 60 artykułów: 25.09 (1094 artykuły po dodaniu źródeł, 141 kandydatów przy wizycie Xi) jedna odpowiedź
+  przekroczyła 8000 tokenów i strona wyszła bez historii. Po podziale: 6 historii, 0,049 $. Słabość do obserwacji: nagłówek kraju
+  bywa o wątku pobocznym (protest w Nowym Jorku zamiast przemówienia Netanjahu), choć artykuł o samym wydarzeniu jest na liście.
 - Tematy nazwane przez model poza taksonomią (156 dziennie) schowane z mapy, porównania i filtrów. „Artykuły” → „Wszystkie artykuły”.
 
 # Strona wewnętrzna: nowy wygląd — 2026-09-25

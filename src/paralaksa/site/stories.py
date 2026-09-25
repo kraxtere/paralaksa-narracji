@@ -1,5 +1,6 @@
-"""Stories of the day for the internal site: one model call groups a day's headlines into events covered by several
-countries, with one translated headline per country. Built only by `plx site`, never by the daily run; cached per day."""
+"""Stories of the day for the internal site: the model groups a day's headlines into events covered by several
+countries (one call), then checks every candidate article (chunked calls) and translates one headline per country.
+Built only by `plx site`, never by the daily run; cached per day."""
 from __future__ import annotations
 
 import hashlib
@@ -16,6 +17,7 @@ PROMPT_VERSION = "historie-v4"
 MIN_COUNTRIES = 3
 MAX_STORIES = 6        # na stronie
 MAX_CANDIDATES = 8     # w pierwszym kroku: więcej, bo weryfikacja część odrzuci
+VERIFY_CHUNK = 60      # artykułów na jedno wywołanie weryfikacji; duży dzień nie mieści się w limicie odpowiedzi
 SUMMARY_CHARS = 220
 
 PROMPT = """Dostajesz listę artykułów z jednego dnia z mediów z różnych krajów. Każdy wiersz: numer artykułu, kraj, redakcja,
@@ -118,22 +120,23 @@ def parse_candidates(text: str, items: list[dict]) -> list[dict]:
     return out
 
 
-def build_verify_prompt(cands: list[dict], items: list[dict]) -> str:
+def build_verify_prompt(cands: list[dict], items: list[dict], ids: list[int] | None = None) -> str:
     by_id = {i["id"]: i for i in items}
     events = "\n".join(f"{n}. {c['tytul']}: {c['opis']}" for n, c in enumerate(cands, 1))
-    ids = [i for c in cands for i in c["ids"]]
+    ids = ids if ids is not None else [i for c in cands for i in c["ids"]]
     articles = "\n".join(f"#{i} | {by_id[i]['kraj']} | {by_id[i]['zrodlo']} | {' '.join(by_id[i]['tytul'].split())} | "
                          f"{' '.join(by_id[i]['streszczenie'].split())}" for i in ids)
     return VERIFY_PROMPT.format(events=events, articles=articles)
 
 
-def parse_stories(cands: list[dict], verify_text: str, items: list[dict]) -> list[dict]:
-    """Second call decides: each candidate article goes to the event it directly concerns (possibly another one than
-    the first call guessed) or nowhere. One article per country (in candidate order), >= MIN_COUNTRIES countries."""
+def parse_stories(cands: list[dict], verify_texts: list[str], items: list[dict]) -> list[dict]:
+    """Second step decides: each candidate article goes to the event it directly concerns (possibly another one than
+    the first call guessed) or nowhere. One article per country (in candidate order), >= MIN_COUNTRIES countries.
+    The step may be split into several calls (VERIFY_CHUNK); their answers are merged."""
     by_id = {i["id"]: i for i in items}
     pool = [i for c in cands for i in c["ids"]]
     assigned: dict[int, tuple[int, str]] = {}
-    for o in _json(verify_text).get("oceny") or []:
+    for o in [o for t in verify_texts for o in _json(t).get("oceny") or []]:
         if not isinstance(o, dict):
             continue
         aid, n = _as_int(o.get("article_id")), _as_int(o.get("wydarzenie"))
@@ -178,21 +181,20 @@ def _call(client: Any, model: str, custom_id: str, prompt: str) -> Any:
 
 
 def generate(client: Any, model: str, day: str, items: list[dict], cache_dir: Path) -> dict:
-    """Two calls: find events with candidates, then verify each candidate and translate the ones that pass.
-    The result (also an empty one) is cached, so rebuilding the site does not pay again."""
+    """Find events with candidates, then verify each candidate and translate the ones that pass (in chunks of
+    VERIFY_CHUNK articles). The result (also an empty one) is cached, so rebuilding the site does not pay again."""
     first = _call(client, model, f"historie-{day}", build_prompt(items))
     cands = parse_candidates(first.text, items)
     calls = [first]
-    verify_text = None
-    if cands:
-        second = _call(client, model, f"historie-weryfikacja-{day}", build_verify_prompt(cands, items))
-        calls.append(second)
-        verify_text = second.text
+    pool = [i for c in cands for i in c["ids"]]
+    for n, k in enumerate(range(0, len(pool), VERIFY_CHUNK), 1):
+        calls.append(_call(client, model, f"historie-weryfikacja-{day}-{n}",
+                           build_verify_prompt(cands, items, pool[k:k + VERIFY_CHUNK])))
     out = {"day": day, "model": model, "prompt": PROMPT_VERSION, "input_hash": input_hash(items),
            "created": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
            "cost_usd": round(sum(c.cost_usd for c in calls), 4),
            "input_tokens": sum(c.input_tokens for c in calls), "output_tokens": sum(c.output_tokens for c in calls),
-           "kandydaci": cands, "historie": parse_stories(cands, verify_text, items) if cands else []}
+           "kandydaci": cands, "historie": parse_stories(cands, [c.text for c in calls[1:]], items)}
     cache_dir.mkdir(parents=True, exist_ok=True)
     (cache_dir / f"{day}.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
     return out
