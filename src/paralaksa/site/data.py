@@ -100,13 +100,29 @@ def event_payload(path: Path, conn: sqlite3.Connection | None = None) -> dict:
     }
 
 
+def teaser(ev: dict) -> list[dict]:
+    """Two headlines for the index card: the first contrast, else the first relation of the first two threads."""
+    by_id = {r["id"]: r for r in ev["relacje"]}
+    picked = [by_id[i] for i in (ev["kontrasty"][0]["miedzy"] if ev["kontrasty"] else []) if i in by_id][:2]
+    if len(picked) < 2:
+        for w in ev["watki"]:
+            first = next((r for r in ev["relacje"] if r.get("watek") == w["id"] and r not in picked), None)
+            if first:
+                picked.append(first)
+            if len(picked) == 2:
+                break
+    return [{"kraj": r["kraj"], "kto": r["kto"], "typ": r["typ"], "naglowek": r["tlumaczenie"] or r["naglowek"]}
+            for r in picked]
+
+
 def event_summary(ev: dict) -> dict:
     """Index entry."""
     countries = sorted({r["kraj"] for r in ev["relacje"] if r.get("kraj")})
     return {"id": ev["id"], "tytul": ev["tytul"], "status": ev["status"], "forma": ev["forma"],
             "dziedzina": ev["dziedzina"], "n_relacji": len(ev["relacje"]), "kraje": countries,
             "n_kontrastow": len(ev["kontrasty"]), "watki": len(ev["watki"]),
-            "czlowiek": sum(r["czlowiek"] for r in ev["relacje"])}
+            "czlowiek": sum(r["czlowiek"] for r in ev["relacje"]), "zapowiedz": teaser(ev),
+            "rodzaj": ev["kontrasty"][0]["rodzaj"] if ev["kontrasty"] else None}
 
 
 # --- daily ------------------------------------------------------------------------------------------------------------

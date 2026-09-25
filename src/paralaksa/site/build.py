@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from paralaksa.events.check import CardError, card_paths
-from paralaksa.site.data import daily_days, daily_payload, daily_summary, event_payload, event_summary, load_report
+from paralaksa.site.data import COUNTRY_NAMES, daily_days, daily_payload, daily_summary, event_payload, event_summary, load_report
 
 ASSETS = Path(__file__).parent / "assets"
 
@@ -89,7 +89,7 @@ def build_site(out_dir: Path, events_dir: Path, reports_dir: Path, conn: sqlite3
                                                                encoding="utf-8")
         res.events.append(ev["id"])
 
-    index = {"zdarzenia": summaries, "dni": days,
+    index = {"zdarzenia": summaries, "dni": days, "kraje": COUNTRY_NAMES,
              "zbudowano": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")}
     (out_dir / "index.html").write_text(page("Przegląd", "index", index, ""), encoding="utf-8")
     return res

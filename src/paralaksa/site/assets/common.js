@@ -22,3 +22,21 @@ function fmtTime(ms, zone, withDate = true) {
 function link(url, label) { return url ? `<a href="${esc(url)}" target="_blank" rel="noopener">${esc(label)}</a>` : ""; }
 const STANCES = ["alarm", "krytyka", "neutralny", "poparcie", "uspokojenie"];
 function stanceDot(st) { return `<span class="st st-${esc(st)}" title="${esc(st)}"></span>`; }
+// typ medium: państwowe i prorządowe wyróżnione, bo zmieniają sposób czytania nagłówka
+const MEDIA = { "państwowe": ["state", "państwowe"], "prorządowe": ["state", "prorządowe"], government: ["state", "rządowe"],
+  state: ["state", "państwowe"], emigracyjne: ["exile", "emigracyjne"], publiczne: ["", "publiczne"], public: ["", "publiczne"],
+  prywatne: ["", "prywatne"], private: ["", "prywatne"], agency: ["", "agencja"] };
+function mediaTag(typ) {
+  if (!typ) return "";
+  const [cls, label] = MEDIA[typ] || ["", typ];
+  return `<span class="tag ${cls}">${esc(label)}</span>`;
+}
+const MONTHS = ["stycznia", "lutego", "marca", "kwietnia", "maja", "czerwca", "lipca", "sierpnia", "września", "października", "listopada", "grudnia"];
+function fmtDay(iso) {
+  const [y, m, d] = String(iso).slice(0, 10).split("-").map(Number);
+  return m ? `${d} ${MONTHS[m - 1]} ${y}` : esc(iso);
+}
+// elementy z role="button" działają też z klawiatury
+document.addEventListener("keydown", e => {
+  if ((e.key === "Enter" || e.key === " ") && e.target.matches && e.target.matches('[role="button"]')) { e.preventDefault(); e.target.click(); }
+});

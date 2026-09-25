@@ -1,3 +1,12 @@
+# Strona wewnętrzna: nowy wygląd — 2026-09-25
+
+- Zdarzenie: nowa pierwsza zakładka „Obok siebie” (kontrast = nagłówki w kolumnach, „zostawia z”, opis różnicy, zastrzeżenia).
+  Wątki pionowo z kartami w siatce, bez przewijania w bok. W tabeli wątków i w kontrastach nazwy redakcji zamiast numerów relacji.
+- Strona główna: karta zdarzenia z dwoma zestawionymi nagłówkami (pierwszy kontrast, inaczej pierwsze relacje dwóch wątków),
+  zdarzenia według miesięcy, dni dziennika jako kafelki.
+- Dziennik: liczby dnia w kafelkach, puste sekcje raportu zwinięte do jednej linii, odnośniki z nazwą redakcji, kolor pewności, legenda mapy.
+- Typ medium wyróżniony (państwowe/prorządowe, emigracyjne). Nagłówki szeryfowe, układ na telefon, obsługa klawiatury.
+
 # Dwa źródła na kraj — 2026-09-25
 
 - 9 nowych aktywnych źródeł po audycie jakości (54 art., $0,086): The Hindu, Indian Express (IN), Daily Sabah, Hürriyet (TR),

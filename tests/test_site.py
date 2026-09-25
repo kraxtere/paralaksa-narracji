@@ -5,7 +5,7 @@ from paralaksa.aggregate.metrics import compute_daily_metrics
 from paralaksa.config import load_themes
 from paralaksa.ingest.dedup import url_hash
 from paralaksa.site.build import build_site
-from paralaksa.site.data import event_payload, markdown_html, report_item
+from paralaksa.site.data import event_payload, event_summary, markdown_html, report_item
 from seed import DAY, article_with, seed_sources
 
 CARD = """---
@@ -95,6 +95,17 @@ def test_event_payload(tmp_path, conn):
     assert r2["t"] is None and r2["baza"] is None and not r2["czlowiek"]
     assert ev["watki"][0]["nazwa"] == "Partnerstwo" and ev["fakt"]["t"] is not None
     assert "<strong>pogrubiony</strong>" in ev["opis_html"] and "☑" in ev["opis_html"]
+
+
+def test_event_summary_teaser(tmp_path):
+    card = tmp_path / "2026-09-23-test.md"
+    card.write_text(CARD.format(link="https://a.example/x"), encoding="utf-8")
+    ev = event_payload(card)
+    s = event_summary(ev)
+    assert [z["kto"] for z in s["zapowiedz"]] == ["Redakcja A", "Redakcja B"]
+    assert s["zapowiedz"][1]["naglowek"] == "Nagłówek B" and s["rodzaj"] == "dobor_slow"
+    ev["kontrasty"] = []
+    assert [z["kto"] for z in event_summary(ev)["zapowiedz"]] == ["Redakcja A"]  # jeden wątek: jedna relacja
 
 
 def test_markdown_escapes_html():
