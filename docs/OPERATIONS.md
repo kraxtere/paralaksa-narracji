@@ -83,7 +83,7 @@ Jeżeli Release już istnieje, pomiń create. Przed zastąpieniem jego plików z
 
 1. Ustawić sekrety i przenieść istniejącą bazę.
 2. Ręcznie wywołać Actions → daily → Run workflow. Zachować URL, koszt, czas, liczby rekordów.
-3. Sprawdzić dwa kolejne przebiegi harmonogramu 05:00 UTC. Historia ma rosnąć; odłożone pozycje mają być widoczne.
+3. Sprawdzić dwa kolejne przebiegi harmonogramu 10:30 UTC. Historia ma rosnąć; odłożone pozycje mają być widoczne.
 4. Przećwiczyć odzyskanie z Release bez cache i kontrolę błędnej/nieobecnej bazy.
 5. Ukończyć audyt semantyczny trzech regularnych raportów. Dopiero wtedy zatwierdzić ich skróty do prezentacji.
 

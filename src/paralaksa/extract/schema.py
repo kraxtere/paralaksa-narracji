@@ -25,7 +25,7 @@ EMERGENT_RE = re.compile(r"^emergent:[a-z0-9]+(?:-[a-z0-9]+)*$")
 ACTOR_ALIASES = {
     "USA": "US", "U.S.": "US", "UNITED STATES": "US", "STANY ZJEDNOCZONE": "US",
     "EU": "UE", "EUROPEAN UNION": "UE", "UNIA EUROPEJSKA": "UE",
-    "PRC": "CN", "CHINA": "CN", "CHINY": "CN",
+    "PRC": "CN", "CHINA": "CN", "CHINY": "CN", "HONG KONG": "HK", "HONGKONG": "HK",
     "RUSSIA": "RU", "ROSJA": "RU", "UKRAINE": "UA", "UKRAINA": "UA",
     "POLAND": "PL", "POLSKA": "PL", "GERMANY": "DE", "NIEMCY": "DE",
     "UNITED KINGDOM": "UK", "UK": "UK", "GB": "UK", "WIELKA BRYTANIA": "UK", "BRITAIN": "UK",

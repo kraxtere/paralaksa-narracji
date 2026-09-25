@@ -226,3 +226,19 @@ def test_batch_validation_retry_is_direct(conn, settings, seeded):
     stats, fake = run(conn, settings, responder)
     assert stats.mode == "batch" and stats.retries == 1 and stats.done == 51
     assert len(fake.messages.calls) == 1  # tylko ponowienie poza batchem
+
+
+# ------------------------------------------------------------------ okno publikacji
+
+def test_out_of_window_articles_skipped_without_llm_call(conn, settings, seeded):
+    seeded(1, "full")  # 2026-09-23: przebieg inicjalny, wszystko w porównaniu
+    for i, pub in enumerate(["2026-09-24T05:00:00+00:00", "2026-09-19T05:00:00+00:00", None]):
+        db.insert_article(conn, db.ArticleRow(
+            source_id="full", url=f"https://ex.com/d2/{i}", url_hash=f"d2-{i}", title=f"Drugi dzień {i} o ataku",
+            lead="Lead.", language="en", published_at=pub, fetched_at="2026-09-24T07:00:00+00:00", fulltext=FULLTEXT))
+    conn.commit()
+    stats, fake = run(conn, settings)
+    assert stats.skipped == 2 and stats.done == 2
+    assert len(fake.messages.calls) == 2
+    assert statuses(conn) == [1, 1, 3, 3]  # spóźniony (19.09) i bez daty poza przebiegiem inicjalnym
+    assert pending_articles(conn) == []

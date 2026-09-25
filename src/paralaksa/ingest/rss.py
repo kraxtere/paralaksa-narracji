@@ -10,6 +10,7 @@ from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from urllib.parse import urlsplit
+from xml.etree import ElementTree
 
 import feedparser
 import httpx
@@ -71,8 +72,36 @@ def _entry_datetime(entry) -> datetime | None:
     return None
 
 
+SITEMAP_NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9", "news": "http://www.google.com/schemas/sitemap-news/0.9"}
+
+
+def parse_news_sitemap(content: bytes | str) -> list[FeedEntry]:
+    """Google News sitemap (`<urlset>` with `news:title` and `news:publication_date`), e.g. Global Times."""
+    root = ElementTree.fromstring(content.encode("utf-8") if isinstance(content, str) else content)
+    entries = []
+    for node in root.findall("sm:url", SITEMAP_NS):
+        url = clean_link((node.findtext("sm:loc", "", SITEMAP_NS) or "").strip())
+        title = clean_html(node.findtext("news:news/news:title", None, SITEMAP_NS)) or ""
+        if not url or not title:
+            continue
+        published = None
+        raw = (node.findtext("news:news/news:publication_date", "", SITEMAP_NS) or "").strip()
+        if raw:
+            try:
+                published = datetime.fromisoformat(raw.replace("Z", "+00:00")).astimezone(timezone.utc)
+            except ValueError:
+                published = None
+        keywords = node.findtext("news:news/news:keywords", "", SITEMAP_NS) or ""
+        entries.append(FeedEntry(url=url, title=title, lead=None, published=published,
+                                 categories=[k.strip() for k in keywords.split(",") if k.strip()]))
+    return entries
+
+
 def parse_feed(content: bytes | str) -> list[FeedEntry]:
-    """Parse RSS 2.0 / RSS 1.0 (RDF) / Atom into normalized entries."""
+    """Parse RSS 2.0 / RSS 1.0 (RDF) / Atom, or a Google News sitemap, into normalized entries."""
+    head = content[:600].decode("utf-8", "ignore") if isinstance(content, bytes) else content[:600]
+    if "<urlset" in head:
+        return parse_news_sitemap(content)
     parsed = feedparser.parse(content)
     if not parsed.entries and (parsed.bozo or not parsed.version):
         # np. strona HTML zwrócona z kodem 200 zamiast kanału

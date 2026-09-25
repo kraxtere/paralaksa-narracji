@@ -20,15 +20,17 @@ def test_repo_sources_milestone1_selection():
     # 10 z KM1 (PL/UA/DE/UK x2 + QA/CN) + 8 aktywowanych 2026-09-23 po realnym audycie jakości
     # (US: pbs/fox/npr/propublica, BR: folha/agenciabrasil, IL: jpost, PS: alquds_ps) z zaakceptowanym ryzykiem praw wydawcy
     # (docs/CURRENT_HANDOFF.md) zamiast formalnego audytu licencji.
-    assert len(active) == 18
+    # + 3 z 2026-09-25 decyzją właściciela: CN globaltimes/chinanews, HK scmp.
+    assert len(active) == 21
     by_country: dict[str, int] = {}
     for s in active:
         by_country[s.country] = by_country.get(s.country, 0) + 1
     for country in ("PL", "UA", "DE", "UK"):
         assert by_country[country] == 2
     assert by_country["US"] == 4 and by_country["BR"] == 2 and by_country["IL"] == 1 and by_country["PS"] == 1
-    # 2 spoza bloku z KM1 (QA, CN) + 8 nowych (US, BR, IL, PS)
-    assert sum(n for c, n in by_country.items() if c not in {"PL", "UA", "DE", "UK"}) == 10
+    assert by_country["CN"] == 3 and by_country["HK"] == 1
+    # 2 spoza bloku z KM1 (QA, CN) + 8 z 23.09 (US, BR, IL, PS) + 3 z 25.09 (CN, HK)
+    assert sum(n for c, n in by_country.items() if c not in {"PL", "UA", "DE", "UK"}) == 13
 
 
 def test_inactive_sources_have_note():

@@ -210,3 +210,27 @@ def test_fulltext_helpers(fixtures_dir):
     assert "Copyright" not in text
     assert truncate_words("a b c d", 2) == "a b"
     assert truncate_words("a b", 5) == "a b"
+
+
+def test_parse_google_news_sitemap():
+    xml = """<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+  <url><loc>https://www.globaltimes.cn/page/202609/1.shtml</loc>
+    <news:news><news:publication><news:name>Global Times</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-09-25T07:48:03+08:00</news:publication_date>
+      <news:title>China sweep 3 golds in canoe sprint</news:title><news:keywords>canoe,gold,</news:keywords></news:news></url>
+  <url><loc>https://www.globaltimes.cn/page/202609/2.shtml</loc></url>
+</urlset>"""
+    entries = parse_feed(xml.encode("utf-8"))
+    assert len(entries) == 1  # bez news:title pomijamy
+    e = entries[0]
+    assert e.url == "https://www.globaltimes.cn/page/202609/1.shtml" and e.lead is None
+    assert e.published == datetime(2026, 9, 24, 23, 48, 3, tzinfo=timezone.utc)
+    assert e.categories == ["canoe", "gold"]
+
+
+def test_truncate_words_cjk_by_characters():
+    zh = "日本政府及执政党相关人士近日透露" * 200  # bez spacji: jedno „słowo”
+    out = truncate_words(zh, 100)
+    assert len(out) == 130
+    assert truncate_words("one two three", 2) == "one two"
