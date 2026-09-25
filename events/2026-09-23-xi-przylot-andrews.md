@@ -212,8 +212,82 @@ relacje:
     tlumaczenie: 'Spotkanie Donalda Trumpa z Xi Jinpingiem w Białym Domu. „Wspaniała przyjaźń”'
     zostawia_z: 'Słowa Trumpa o przyjaźni; Xi o „pokojowym współistnieniu” i dwóch pandach.'
     sprawdzil: 'Claude 2026-09-24: h1, og:title, data i lead; bez lektury całości'
+  - id: r15
+    kraj: RU
+    kto: Kommersant
+    rola: redakcja
+    gatunek: wiadomosc
+    link: https://www.kommersant.ru/doc/8973676
+    publikacja: null # 24.09 według wyszukiwarki
+    aktualizacja: null
+    porownywana_wersja: 'tytuł z indeksu wyszukiwarki 2026-09-25; robots.txt blokuje nasz UA, CDX Wayback 503'
+    archiwum: {link: null, wykonano: null}
+    naglowek: 'Си Цзиньпин прибыл в США, Трамп лично встретил его на базе Эндрюс'
+    tlumaczenie: 'Xi Jinping przyleciał do USA, Trump osobiście powitał go w bazie Andrews'
+    zostawia_z: 'Protokół: przylot i osobisty gest Trumpa.'
+    sprawdzil: 'Claude 2026-09-25: tylko tytuł z wyszukiwarki; strony nie otwarto'
+  - id: r16
+    kraj: RU
+    kto: Wiedomosti
+    rola: redakcja
+    gatunek: wiadomosc
+    link: https://www.vedomosti.ru/politics/news/2026/09/24/1231344-tramp-lichno-vstretil
+    publikacja: '2026-09-24T06:21+03:00'
+    aktualizacja: null
+    porownywana_wersja: 'strona otwarta 2026-09-25'
+    archiwum: {link: null, wykonano: null}
+    naglowek: 'Трамп лично встретил Си Цзиньпина у трапа самолета'
+    tlumaczenie: 'Trump osobiście powitał Xi Jinpinga przy trapie samolotu'
+    zostawia_z: 'Gest Trumpa jako wiadomość.'
+    sprawdzil: 'Claude 2026-09-25: h1, og:title i data; bez lektury całości'
+  - id: r17
+    kraj: RU
+    kto: Pierwyj Kanał
+    rola: redakcja # telewizja państwowa
+    gatunek: wiadomosc
+    link: https://www.1tv.ru/news/2026-09-24/554094
+    publikacja: null # 24.09 według adresu
+    aktualizacja: null
+    porownywana_wersja: 'strona otwarta 2026-09-25'
+    archiwum: {link: null, wykonano: null}
+    naglowek: 'Председатель КНР Си Цзиньпин прибыл в США с государственным визитом'
+    tlumaczenie: 'Przewodniczący ChRL Xi Jinping przybył do USA z wizytą państwową'
+    zostawia_z: 'Czysty komunikat protokolarny, bez Trumpa w nagłówku.'
+    sprawdzil: 'Claude 2026-09-25: h1 i og:title; bez lektury całości'
+  - id: r18
+    kraj: RU
+    kto: Wzgliad (vz.ru)
+    rola: redakcja
+    gatunek: wiadomosc
+    link: https://vz.ru/news/2026/9/24/1454765.html
+    publikacja: '2026-09-24T10:02+03:00'
+    aktualizacja: null
+    porownywana_wersja: 'strona otwarta 2026-09-25'
+    archiwum: {link: null, wykonano: null}
+    naglowek: 'Трамп лично встретил Си Цзиньпина на военной базе Эндрюс'
+    tlumaczenie: 'Trump osobiście powitał Xi Jinpinga w bazie wojskowej Andrews'
+    zostawia_z: 'Gest Trumpa, jak Wiedomosti.'
+    sprawdzil: 'Claude 2026-09-25: h1, og:title i data; bez lektury całości'
+  - id: r19
+    kraj: RU
+    kto: Meduza
+    rola: redakcja # emigracyjna, redakcja w Rydze
+    gatunek: wiadomosc
+    link: https://meduza.io/short/2026/09/24/predsedatel-knr-si-tszinpin-priehal-v-ssha-s-gosudarstvennym-vizitom-tramp-lichno-vstretil-ego-na-aviabaze-endryus-fotografiya
+    publikacja: '2026-09-24T05:37Z'
+    aktualizacja: '2026-09-24T07:11Z'
+    porownywana_wersja: 'strona otwarta 2026-09-25'
+    archiwum: {link: null, wykonano: null}
+    naglowek: 'Си Цзиньпин приехал с государственным визитом в США. Трамп лично встретил его … «как лидера единственной другой сверхдержавы»'
+    tlumaczenie: 'Xi Jinping przyjechał z wizytą państwową do USA. Trump osobiście powitał go „jako przywódcę jedynego innego supermocarstwa”'
+    zostawia_z: 'Świat dwóch supermocarstw, w którym Rosji nie ma.'
+    sprawdzil: 'Claude 2026-09-25: h1, og:title i daty; bez lektury całości; źródła cytatu o supermocarstwie nie ustalono'
 
 kontrasty:
+  - miedzy: [r17, r16, r19]
+    rodzaj: dobor_slow
+    opis: 'Rosyjskie media państwowe i prorządowe podają przylot protokolarnie albo przez gest Trumpa. Emigracyjna Meduza jako jedyna daje w nagłówku „jedyne inne supermocarstwo”, czyli świat bez Rosji.'
+    zastrzezenia: 'W żadnym rosyjskim nagłówku nie ma przelotu B-1; RIA i TASS nie sprawdzone (RIA niedostępna z naszej sieci).'
   - miedzy: [r3, r8]
     rodzaj: dobor_slow
     opis: 'Ten sam przelot B-1. BBC opisuje bombowce jako kluczową część arsenału USA i element powitania. Spiegel robi z niego scenę z zaskoczonym Trumpem, „na mema”.'
@@ -254,6 +328,7 @@ Rozmowy w Białym Domu odbyły się 24 września.
 - **Scena z bombowcem**: BBC mówi o arsenale, Spiegel o zaskoczonym Trumpie (r3, r8).
 - **Oprawa kontra konkrety**: Folha (r10) i tagesschau (r9) zestawiają pompę z brakiem postępów i trudnymi tematami.
   Guardian (r2) jako jedyny w nagłówku daje konkret: rozejm handlowy przedłużony.
+- **Rosja**: protokół i gest Trumpa (Kommersant, Wiedomosti, Wzgliad, Pierwyj Kanał); Meduza: „jedyne inne supermocarstwo”.
 - **Polska próba (Onet, rp)**: o przylocie tylko komentarz (r13); dzień później wiadomość o „wspaniałej przyjaźni” (r14).
 
 ## Hipoteza odbioru
@@ -269,7 +344,7 @@ Nie ustalono.
 - [ ] Widać, ile relacji znaleziono (14 z 8 krajów, próba z naszych kanałów RSS).
 - [ ] Gatunki nazwane (galeria r7, wideo r3/r8, analiza r9, komentarz r13).
 - [ ] Przed odcinkiem: obejrzeć wideo BBC i Spiegla (scena z B-1), bo kontrast r3/r8 na nich stoi.
-- [x] Bez źródeł objętych sankcjami UE.
+- [ ] Źródła rosyjskie (r15–r19) podpisane jako państwowe/prywatne/emigracyjne; decyzja właściciela z 2026-09-25.
 
 ## Notatki z pilota
 - Czas pracy: ok. 20 min (ingest RSS, wybór, odczyt meta ze stron).

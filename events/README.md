@@ -19,7 +19,9 @@ i opisujemy, w którym momencie opowieść zaczyna budować spokój, lęk, oburz
 6. **Liczby**: przy każdej liczbie zapisz, czego dotyczy (np. pracownicy bezpośredni vs łańcuch dostaw).
 7. **`sprawdzil`**: kto otworzył link i przeczytał materiał, np. `GPT 2026-09-24` albo `człowiek 2026-09-24`.
    Do odcinka idą tylko relacje sprawdzone przez człowieka.
-8. **Bez źródeł objętych sankcjami UE** (RT, Sputnik i inne z listy UE). Perspektywę rosyjską czy białoruską bierzemy z dozwolonych źródeł albo z oficjalnych komunikatów.
+8. **Strona rosyjska obowiązkowo, także ze źródeł objętych sankcjami UE** (RIA, Izwiestia, RT itd.; decyzja właściciela z 2026-09-25,
+   wcześniej ich nie używaliśmy). Podpisujemy typ: państwowe, prorządowe, prywatne, emigracyjne (np. Meduza).
+   Robots.txt nadal obowiązuje; gdy strona niedostępna, tytuł z wyszukiwarki lub kopii z adnotacją w `sprawdzil`.
 9. **Odrzucone przypadki zostają** (`status: odrzucony` + `powod_odrzucenia`). To wiedza o granicy między kontrastem rzeczywistym a pozornym.
 10. **Nie przypisujemy redakcjom intencji.** Hipoteza odbioru jest hipotezą do oceny widza.
 11. **`jak_szukano`**: narzędzia i języki. **Notatki z pilota**: czas pracy i to, co było najbardziej żmudne. Na tej podstawie zdecydujemy, co automatyzować.

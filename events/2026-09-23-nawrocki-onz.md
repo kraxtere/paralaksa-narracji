@@ -198,8 +198,96 @@ relacje:
     tlumaczenie: 'Prezydent Polski krytykuje „imperialną wizję” Rosji i wychwala rolę NATO'
     zostawia_z: 'Krótki wpis w relacji z całego dnia: Rosja i NATO.'
     sprawdzil: 'Claude 2026-09-24: nagłówek i lead z RSS; strona relacji otwarta, wpisu na niej nie odszukano'
+  - id: r14
+    kraj: RU
+    kto: RIA Nowosti
+    rola: agencja # państwowa
+    gatunek: wiadomosc
+    link: https://ria.ru/20260923/navrotskij-2119883865.html
+    publikacja: null # 23.09 według adresu i indeksu wyszukiwarki; godziny nie ustalono
+    aktualizacja: null
+    porownywana_wersja: 'tytuł z indeksu wyszukiwarki 2026-09-25; strona niedostępna z naszej sieci (DNS), CDX Wayback 503'
+    archiwum: {link: null, wykonano: null}
+    naglowek: 'Навроцкий потребовал принять Польшу в G20'
+    tlumaczenie: 'Nawrocki zażądał przyjęcia Polski do G20'
+    zostawia_z: 'Z całego wystąpienia żądanie miejsca w G20; krytyki Rosji w nagłówku nie ma.'
+    sprawdzil: 'Claude 2026-09-25: tylko tytuł z wyszukiwarki; strony nie otwarto'
+  - id: r15
+    kraj: RU
+    kto: Izwiestia
+    rola: redakcja
+    gatunek: wiadomosc
+    link: https://iz.ru/2172498/2026-09-24/navrotckii-s-tribuny-ga-oon-prizval-priniat-polshu-v-sostav-g20
+    publikacja: null # 24.09 według adresu
+    aktualizacja: null
+    porownywana_wersja: 'tytuł z indeksu wyszukiwarki 2026-09-25; robots.txt blokuje nasz UA, CDX Wayback 503'
+    archiwum: {link: null, wykonano: null}
+    naglowek: 'Навроцкий с трибуны ГА ООН призвал принять Польшу в состав G20'
+    tlumaczenie: 'Nawrocki z trybuny ZO ONZ wezwał do przyjęcia Polski do G20'
+    zostawia_z: 'G20 jako temat wystąpienia; łagodniejsze „wezwał” zamiast „zażądał”.'
+    sprawdzil: 'Claude 2026-09-25: tylko tytuł z wyszukiwarki; strony nie otwarto'
+  - id: r16
+    kraj: RU
+    kto: Lenta.ru
+    rola: redakcja
+    gatunek: wiadomosc
+    link: https://lenta.ru/news/2026/09/24/prezident-polshi-potreboval-prinyat-stranu-v-g20/
+    publikacja: null # 24.09 według adresu
+    aktualizacja: null
+    porownywana_wersja: 'tytuł z indeksu wyszukiwarki 2026-09-25; strona niedostępna z naszej sieci (DNS)'
+    archiwum: {link: null, wykonano: null}
+    naglowek: 'Президент Польши потребовал принять страну в G20'
+    tlumaczenie: 'Prezydent Polski zażądał przyjęcia kraju do G20'
+    zostawia_z: 'Jak RIA: żądanie G20.'
+    sprawdzil: 'Claude 2026-09-25: tylko tytuł z wyszukiwarki; strony nie otwarto'
+  - id: r17
+    kraj: RU
+    kto: Life.ru
+    rola: redakcja
+    gatunek: wiadomosc
+    link: https://life.ru/p/navrotskiy-potreboval-prinyat-polshu-v-g20-s-tribuny-oon
+    publikacja: '2026-09-24T01:30+03:00'
+    aktualizacja: null
+    porownywana_wersja: 'strona otwarta 2026-09-25'
+    archiwum: {link: null, wykonano: null}
+    naglowek: 'Навроцкий потребовал принять Польшу в G20 с трибуны ООН'
+    tlumaczenie: 'Nawrocki z trybuny ONZ zażądał przyjęcia Polski do G20'
+    zostawia_z: 'Żądanie G20, jak RIA.'
+    sprawdzil: 'Claude 2026-09-25: h1, og:title i data; bez lektury całości'
+  - id: r18
+    kraj: RU
+    kto: News.ru
+    rola: redakcja
+    gatunek: wiadomosc
+    link: https://news.ru/europe/polsha-poprosilas-v-g20
+    publikacja: '2026-09-24T01:47+03:00'
+    aktualizacja: '2026-09-24T02:26+03:00'
+    porownywana_wersja: 'strona otwarta 2026-09-25'
+    archiwum: {link: null, wykonano: null}
+    naglowek: 'Польша попросилась в G20'
+    tlumaczenie: 'Polska poprosiła się do G20'
+    zostawia_z: 'Polska jako petent; „попросилась” brzmi jak prośba o wpuszczenie, lekko protekcjonalnie.'
+    sprawdzil: 'Claude 2026-09-25: h1, og:title i daty; bez lektury całości'
+  - id: r19
+    kraj: RU
+    kto: yapolitic.net („Я Политик”)
+    rola: redakcja # serwis o nieustalonym profilu i zasięgu
+    gatunek: wiadomosc
+    link: https://yapolitic.net/lenta/14076
+    publikacja: '2026-09-24T05:06Z'
+    aktualizacja: null
+    porownywana_wersja: 'strona otwarta 2026-09-24'
+    archiwum: {link: null, wykonano: null}
+    naglowek: 'Навроцкий связал Россию с трагедиями двух мировых войн на трибуне ООН'
+    tlumaczenie: 'Nawrocki na trybunie ONZ powiązał Rosję z tragediami dwóch wojen światowych'
+    zostawia_z: 'Jedyny znaleziony rosyjski nagłówek o krytyce Rosji; „powiązał” sugeruje nadużycie historii.'
+    sprawdzil: 'Claude 2026-09-24: h1, og:title, data i opis; bez lektury całości'
 
 kontrasty:
+  - miedzy: [r5, r14, r18]
+    rodzaj: pominiecie
+    opis: 'To samo wystąpienie. Polska: „Imperialna pycha Rosji”. Rosja: „Nawrocki zażądał przyjęcia Polski do G20”, „Polska poprosiła się do G20”. Główne rosyjskie nagłówki pomijają krytykę Rosji i robią z Polski petenta.'
+    zastrzezenia: 'Tytuły RIA, Izwiestii i Lenty tylko z wyszukiwarki (strony niedostępne). Wątek G20 padł w przemówieniu naprawdę; polskie nagłówki z kolei go pomijają.'
   - miedzy: [r11, r12]
     rodzaj: dobor_slow
     opis: 'Hiszpańskojęzyczne agencje tego samego wieczoru, w odstępie pół godziny: „Polska chce uniknąć wojny mimo gróźb Kremla” i „Polska ostrzega przed imperialistyczną arogancją Rosji”. To samo przemówienie, obrona albo oskarżenie.'
@@ -220,7 +308,8 @@ kontrasty:
 jak_szukano:
   - 'nasza baza (RSS 18 redakcji, stan 2026-09-24): o samym wystąpieniu tylko zapowiedź transmisji Onetu i wpis w relacji Folhy; BBC, Guardian, Spiegel, tagesschau, Al Jazeera, PBS, NPR, Fox, CGTN bez materiału'
   - 'wyszukiwarka: pl, en, de, uk, ru, es; w wynikach nie było Reutersa, AP, BBC, Guardiana ani Politico'
-  - 'pominięte: Izwiestia (iz.ru, nagłówek o G20; objęte sankcjami UE); Goniec, Censor.net (403), Dziennik Narodowy (530); yapolitic.net (RU, nieznany serwis, nagłówek o „dwóch wojnach światowych”)'
+  - 'pominięte: Goniec, Censor.net (403), Dziennik Narodowy (530)'
+  - '2026-09-25: dodana strona rosyjska (decyzja właściciela: źródła rosyjskie także spod sankcji UE). Szukano RIA, TASS, Izwiestia, Lenta, Kommersant, RT; TASS i RT bez trafień w wyszukiwarce. Meduza (emigracyjna) ma tylko przegląd całej sesji'
   - 'uwaga: część wyników wyszukiwarki dotyczyła wystąpienia z 80. sesji (2025); daty sprawdzone na stronach'
 ---
 
@@ -233,6 +322,8 @@ jak_szukano:
   („zdecydowana”, „mocno”). Wyjątki: Interia („Nie jest za późno”), Kresy.pl (G20 i migracja), komentarz rp (za długie i o wszystkim).
 - **Ukraina**: wezwanie do wspólnej odpowiedzi na rosyjskie prowokacje.
 - **Świat hiszpańskojęzyczny**: dwie wersje tego samego wieczoru: Polska broni się przed wojną albo ostrzega przed arogancją Rosji.
+- **Rosja**: prawie wszędzie G20: „zażądał przyjęcia Polski do G20” (RIA, Lenta, Life), „Polska poprosiła się do G20” (News.ru).
+  O „imperialnej pysze” mówi tylko jeden mały serwis („powiązał Rosję z dwiema wojnami światowymi”). Dokładne odwrócenie polskich nagłówków.
 - **Duże redakcje zachodnie**: w naszej próbie i w wyszukiwarce nic. To też jest informacja: poza Polską, Ukrainą
   i depeszami agencyjnymi wystąpienie przeszło niezauważone.
 
@@ -249,7 +340,7 @@ Nie ustalono.
 - [ ] Widać, ile relacji znaleziono (13, 5 krajów) i czego nie znaleziono (duże media zachodnie).
 - [ ] Gatunki nazwane (komentarz r2, relacja na żywo r13).
 - [ ] Przed odcinkiem: obejrzeć nagranie UN Web TV i potwierdzić oba zdania z r11/r12 oraz wątek migracji (r7).
-- [x] Bez źródeł objętych sankcjami UE (Izwiestia pominięte).
+- [ ] Źródła rosyjskie (w tym objęte sankcjami UE) podpisane jako państwowe/prywatne; decyzja właściciela z 2026-09-25.
 
 ## Notatki z pilota
 - Czas pracy: ok. 15 min.

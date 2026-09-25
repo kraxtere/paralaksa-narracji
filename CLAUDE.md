@@ -121,7 +121,9 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
 - Opisujemy przekaz medialny, nie fakty; bez prognoz jako faktów.
 - Pobieranie: respektuj robots.txt, nie obchodź paywalli ani ochrony antybotowej, identyfikujący UA.
 - Pełne teksty tylko lokalnie (`data/`, poza gitem), nigdy w raportach; cytaty maks. 15 słów.
-- Bez źródeł objętych sankcjami UE (RT, Sputnik). Taksonomii tematów nie zmieniamy automatycznie.
+- Źródła rosyjskie, także objęte sankcjami UE (RT, RIA, Izwiestia), są dozwolone i w kartach zdarzeń wymagane
+  (decyzja właściciela 2026-09-25, zmienia wcześniejszy zakaz). Daily: lista źródeł bez zmian, dopóki właściciel nie zdecyduje.
+  Taksonomii tematów nie zmieniamy automatycznie.
 
 ## Decyzje modelowe (ekstrakcja sygnałów, KM2)
 
