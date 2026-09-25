@@ -9,7 +9,7 @@ import sqlite3
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
-from urllib.parse import urlsplit
+from urllib.parse import unquote, urlsplit
 from xml.etree import ElementTree
 
 import feedparser
@@ -55,6 +55,14 @@ def clean_html(text: str | None) -> str | None:
     return text[:MAX_LEAD_CHARS] or None
 
 
+WP_FOOTER = re.compile(r"\s*The post .{1,300}? appeared first on .{1,120}?\.?\s*$", re.S)
+
+
+def strip_wp_footer(lead: str | None) -> str | None:
+    """Drop WordPress's `The post <title> appeared first on <site>.` added to RSS summaries."""
+    return (WP_FOOTER.sub("", lead) or None) if lead else lead
+
+
 def clean_link(url: str) -> str | None:
     """Fix feed links like 'https://site.uahttps://other/...' (seen in Ukrinform); reject non-http."""
     url = url.strip()
@@ -75,6 +83,22 @@ def _entry_datetime(entry) -> datetime | None:
 SITEMAP_NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9", "news": "http://www.google.com/schemas/sitemap-news/0.9"}
 
 
+def slug_title(url: str) -> str:
+    """Headline from the last URL segment: `.../news/2026/9/25/tekst-naglowka-154628` -> `tekst naglowka`."""
+    slug = unquote(urlsplit(url).path.rstrip("/").rsplit("/", 1)[-1])
+    slug = re.sub(r"[-_]\d+$", "", re.sub(r"\.[a-z]{2,5}$", "", slug))
+    words = [w for w in re.split(r"[-_]+", slug) if w]
+    return " ".join(words) if len(words) >= 3 else ""
+
+
+def feed_urls(url: str, now: datetime) -> list[str]:
+    """Expand a daily feed template (`{yyyy}`, `{mm}`, `{dd}`, no zero padding) for days D-1 and D UTC."""
+    if "{yyyy}" not in url:
+        return [url]
+    days = [(now - timedelta(days=1)).date(), now.date()]
+    return [url.format(yyyy=d.year, mm=d.month, dd=d.day) for d in days]
+
+
 def parse_news_sitemap(content: bytes | str) -> list[FeedEntry]:
     """Google News sitemap (`<urlset>` with `news:title` and `news:publication_date`), e.g. Global Times."""
     root = ElementTree.fromstring(content.encode("utf-8") if isinstance(content, str) else content)
@@ -82,10 +106,15 @@ def parse_news_sitemap(content: bytes | str) -> list[FeedEntry]:
     for node in root.findall("sm:url", SITEMAP_NS):
         url = clean_link((node.findtext("sm:loc", "", SITEMAP_NS) or "").strip())
         title = clean_html(node.findtext("news:news/news:title", None, SITEMAP_NS)) or ""
+        plain = node.find("news:news", SITEMAP_NS) is None
+        if plain and not title:
+            title = slug_title(url)  # zwykła mapa strony (np. WAFA): nagłówek tylko w adresie
         if not url or not title:
             continue
         published = None
         raw = (node.findtext("news:news/news:publication_date", "", SITEMAP_NS) or "").strip()
+        if plain:
+            raw = (node.findtext("sm:lastmod", "", SITEMAP_NS) or "").strip()
         if raw:
             try:
                 published = datetime.fromisoformat(raw.replace("Z", "+00:00")).astimezone(timezone.utc)
@@ -117,7 +146,7 @@ def parse_feed(content: bytes | str) -> list[FeedEntry]:
             FeedEntry(
                 url=url,
                 title=title,
-                lead=clean_html(e.get("summary") or e.get("description")),
+                lead=strip_wp_footer(clean_html(e.get("summary") or e.get("description"))),
                 published=_entry_datetime(e),
                 categories=[t.get("term", "") for t in e.get("tags", []) if t.get("term")],
             )
@@ -133,22 +162,24 @@ def ingest_feed(
     settings: Settings,
     result: SourceResult,
     now: datetime,
+    url: str | None = None,
 ) -> list[tuple[int, str]]:
-    """Ingest a single feed; returns (article_id, url) pairs of newly inserted articles."""
+    """Ingest a single feed (or one expanded daily URL); returns (article_id, url) pairs of new articles."""
     fetched_at = db.to_iso(now)
+    url = url or feed.url
     try:
-        resp = client.get(feed.url)
+        resp = client.get(url)
         entries = parse_feed(resp.content)
     except RobotsDisallowed:
-        msg = f"robots.txt blokuje kanał {feed.url}"
+        msg = f"robots.txt blokuje kanał {url}"
         result.errors.append(msg)
-        db.log_fetch(conn, source.id, feed.url, fetched_at, "robots_disallowed", error=msg)
+        db.log_fetch(conn, source.id, url, fetched_at, "robots_disallowed", error=msg)
         conn.commit()
         return []
     except (httpx.HTTPError, ValueError) as e:
-        msg = f"{feed.url}: {e}"
+        msg = f"{url}: {e}"
         result.errors.append(msg)
-        db.log_fetch(conn, source.id, feed.url, fetched_at, "error", error=str(e)[:500])
+        db.log_fetch(conn, source.id, url, fetched_at, "error", error=str(e)[:500])
         conn.commit()
         return []
 
@@ -183,7 +214,7 @@ def ingest_feed(
         recent.append(entry.title)
         inserted.append((article_id, row.url))
     result.new += len(inserted)
-    db.log_fetch(conn, source.id, feed.url, fetched_at, "ok", n_items=len(entries), n_new=len(inserted))
+    db.log_fetch(conn, source.id, url, fetched_at, "ok", n_items=len(entries), n_new=len(inserted))
     conn.commit()
     return inserted
 
@@ -217,9 +248,10 @@ def ingest_sources(
     for source in sources:
         result = results[source.id] = SourceResult(source.id)
         for feed in source.feeds:
-            new = ingest_feed(conn, client, source, feed, settings, result, now)
-            if fulltext and source.fulltext:
-                pending_fulltext.extend((source.id, aid, url) for aid, url in new)
+            for feed_url in feed_urls(feed.url, now):
+                new = ingest_feed(conn, client, source, feed, settings, result, now, feed_url)
+                if fulltext and source.fulltext:
+                    pending_fulltext.extend((source.id, aid, url) for aid, url in new)
 
     for source_id, article_id, url in _round_robin_by_host(pending_fulltext):
         text = fetch_fulltext(client, url, settings.ingest.max_fulltext_words)
