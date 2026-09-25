@@ -107,7 +107,8 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
   budżet dzienny; `report/render.py`: `collect_meta`, `render_markdown`; `report/pipeline.py`: `generate_report`.
 - `src/paralaksa/site/`: `plx site`. `data.py` składa dane stron (karty: wątki, typ, oś czasu, link do naszej bazy;
   dzień: próbka z okna publikacji, sygnały, metryki, raport), `build.py` pisze samowystarczalne HTML (CSS, JS i dane w pliku,
-  działa z file://), `assets/*.js` renderuje widoki. Bez pełnych tekstów, leadów i `evidence_span`. Nie publikujemy (decyzja 2026-09-25).
+  działa z file://), `assets/*.js` renderuje widoki.
+  Kolory tylko przez zmienne CSS (jest tryb ciemny `[data-theme="dark"]`); logo: `build.logo_mark`. Bez pełnych tekstów, leadów i `evidence_span`. Nie publikujemy (decyzja 2026-09-25).
   `stories.py`: „historie dnia” w zakładce Najważniejsze (wydarzenia z ≥ 3 krajów, jeden przetłumaczony nagłówek na kraj). Dwa kroki
   modelu ekstrakcji: wyszukanie kandydatów, potem przypisanie każdego artykułu do wydarzenia albo odrzucenie (porcje po 60 artykułów). Tylko przy `plx site`, nigdy w daily;
   wynik w `data/stories/<dzień>.json` (ok. 0,03–0,04 $ na dzień, ponowna budowa za darmo). Pierwszy krok bez weryfikacji dokleja artykuły

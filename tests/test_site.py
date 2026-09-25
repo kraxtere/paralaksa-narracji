@@ -147,6 +147,8 @@ def test_build_site_self_contained(tmp_path, conn):
     for page in (daily, event):
         assert "<script src=" not in page and '<link rel="stylesheet"' not in page  # działa z file://
         assert 'content="noindex, nofollow"' in page
+        assert 'rel="icon" href="data:image/svg+xml,' in page and 'id="theme"' in page   # logo i tryb ciemny bez plików obok
+    assert (out / "logo.svg").read_text(encoding="utf-8").startswith("<svg")
     assert "Nagłówek <\\/script> A" in event  # dane nie zamykają znacznika <script>
     data = json.loads(re.search(r'<script type="application/json" id="data">(.*?)</script>', daily, re.S).group(1))
     assert {a["id"] for a in data["artykuly"]} == {aid, aid + 1, aid + 2}

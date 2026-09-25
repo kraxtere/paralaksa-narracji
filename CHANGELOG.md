@@ -1,3 +1,10 @@
+# Strona wewnętrzna: tryb ciemny i logo — 2026-09-25
+
+- Tryb ciemny: przy pierwszym wejściu według ustawień systemu, przełącznik w pasku, wybór zapamiętany w przeglądarce.
+  Wszystkie kolory strony idą przez zmienne CSS (`site.css`, zestaw `[data-theme="dark"]`), także mapa cieplna i oś czasu w JS.
+- Logo: ten sam punkt widziany z dwóch miejsc (pełne koło i przesunięty pierścień). W pasku, jako ikona karty (data URI,
+  strona nadal bez plików zewnętrznych) i jako `logo.svg` / `logo-ciemne-tlo.svg` obok strony.
+
 # Strona wewnętrzna: najważniejsze z dnia — 2026-09-25
 
 - Dziennik ma nową pierwszą zakładkę „Najważniejsze”: historie dnia (wydarzenia opisywane w co najmniej 3 krajach, po jednym

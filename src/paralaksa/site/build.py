@@ -8,11 +8,13 @@ import sqlite3
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import quote
 
 from paralaksa.events.check import CardError, card_paths
 from paralaksa.site.data import COUNTRY_NAMES, daily_days, daily_payload, daily_summary, event_payload, event_summary, load_report
 
 ASSETS = Path(__file__).parent / "assets"
+LOGO_RING = "#e0643c"
 
 
 @dataclass
@@ -27,6 +29,23 @@ def _asset(name: str) -> str:
     return (ASSETS / name).read_text(encoding="utf-8")
 
 
+def logo_mark(ink: str = "currentColor", ring: str = LOGO_RING) -> str:
+    """The same point seen from two places: a disc and its displaced outline (32×32 grid)."""
+    return (f'<circle cx="12.5" cy="16" r="8" fill="{ink}"/>'
+            f'<circle cx="19.5" cy="16" r="8" fill="none" stroke="{ring}" stroke-width="2.6"/>')
+
+
+def logo_svg(ink: str = "#1c1c1a", background: str | None = None) -> str:
+    bg = f'<rect width="32" height="32" rx="7" fill="{background}"/>' if background else ""
+    return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">{bg}{logo_mark(ink)}</svg>'
+
+
+FAVICON = "data:image/svg+xml," + quote(logo_svg("#fff", "#1c1c1a"))
+# przed pierwszym malowaniem: zapamiętany wybór albo ustawienie systemu
+THEME_INIT = ('try{document.documentElement.dataset.theme=localStorage.getItem("plx-theme")||'
+              '(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch(e){}')
+
+
 def page(title: str, kind: str, payload: dict, root: str) -> str:
     """HTML shell; `kind` picks the page script (event, daily, index)."""
     data = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
@@ -37,13 +56,16 @@ def page(title: str, kind: str, payload: dict, root: str) -> str:
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>{html.escape(title)} · Paralaksa</title>
+<link rel="icon" href="{FAVICON}">
+<script>{THEME_INIT}</script>
 <style>{_asset("site.css")}</style>
 </head>
 <body data-kind="{kind}" data-root="{root}">
 <header class="top">
-  <a class="brand" href="{root}index.html">Paralaksa</a>
+  <a class="brand" href="{root}index.html"><svg viewBox="0 0 32 32" aria-hidden="true">{logo_mark()}</svg>Paralaksa</a>
   <nav><a href="{root}index.html#zdarzenia">Zdarzenia</a><a href="{root}index.html#dziennik">Dziennik</a></nav>
   <span class="internal">wersja wewnętrzna, do oceny</span>
+  <button class="theme" id="theme" type="button" title="Tryb jasny albo ciemny"><span aria-hidden="true">◐</span><span class="lbl">tryb</span></button>
 </header>
 <main id="app"></main>
 <script type="application/json" id="data">{data}</script>
@@ -93,6 +115,8 @@ def build_site(out_dir: Path, events_dir: Path, reports_dir: Path, conn: sqlite3
     index = {"zdarzenia": summaries, "dni": days, "kraje": COUNTRY_NAMES,
              "zbudowano": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")}
     (out_dir / "index.html").write_text(page("Przegląd", "index", index, ""), encoding="utf-8")
+    (out_dir / "logo.svg").write_text(logo_svg(), encoding="utf-8")
+    (out_dir / "logo-ciemne-tlo.svg").write_text(logo_svg("#fff", "#1c1c1a"), encoding="utf-8")
     return res
 
 

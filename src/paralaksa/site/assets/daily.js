@@ -154,7 +154,7 @@ function viewMap() {
       const m = M[t][c];
       if (!m) return `<td class="empty"></td>`;
       const a = Math.max(.06, Math.min(1, m.article_share * 2.2));
-      return `<td class="cell ${m.n_sources < 2 ? "one" : ""}" data-cell="${esc(t)}|${esc(c)}" style="background-color:rgba(47,93,138,${a.toFixed(2)});color:${a > .55 ? "#fff" : "inherit"}"
+      return `<td class="cell ${m.n_sources < 2 ? "one" : ""}" data-cell="${esc(t)}|${esc(c)}" style="background-color:rgb(var(--heat) / ${a.toFixed(2)});color:${a > .55 ? "var(--heat-ink)" : "inherit"}"
         title="${esc(countryName(c))} · ${esc(themeName(t))}\n${m.n_articles} art., ${m.n_sources} źr.\nDominująca rama: ${esc(m.dominant_frame || "")}\nHistoria: ${esc(hist(t, c))}">${(m.article_share * 100).toFixed(0)}%</td>`;
     }).join("")}</tr>`).join("")}${more}</tbody></table></div>
     <div class="scale"><span>0%</span><span class="grad"></span><span>45% i więcej</span><span style="margin-left:18px" class="one"></span><span>tylko jedno źródło w kraju: słabszy sygnał</span></div>`;

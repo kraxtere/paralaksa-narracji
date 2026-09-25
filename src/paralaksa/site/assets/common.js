@@ -40,3 +40,17 @@ function fmtDay(iso) {
 document.addEventListener("keydown", e => {
   if ((e.key === "Enter" || e.key === " ") && e.target.matches && e.target.matches('[role="button"]')) { e.preventDefault(); e.target.click(); }
 });
+// tryb jasny/ciemny: stan ustawia skrypt w <head>, tu tylko przełącznik i jego podpis
+const themeBtn = document.getElementById("theme");
+function themeLabel() {
+  const dark = document.documentElement.dataset.theme === "dark";
+  themeBtn.querySelector(".lbl").textContent = dark ? "tryb jasny" : "tryb ciemny";
+  themeBtn.setAttribute("aria-label", dark ? "Włącz tryb jasny" : "Włącz tryb ciemny");
+}
+themeBtn.addEventListener("click", () => {
+  const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+  document.documentElement.dataset.theme = next;
+  try { localStorage.setItem("plx-theme", next); } catch (e) { /* file:// bez localStorage: wybór tylko do przeładowania */ }
+  themeLabel();
+});
+themeLabel();

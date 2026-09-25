@@ -163,18 +163,18 @@ function viewTimeline() {
   const grid = ticks.map(t => `<line x1="${x(t)}" x2="${x(t)}" y1="30" y2="${H}"/>`).join("");
   const axis = ticks.map(t => `<text x="${x(t)}" y="20" text-anchor="middle">${esc(fmtTime(t, state.zone))}</text>`).join("");
   const body = lanes.map((l, li) => {
-    const bg = li % 2 ? "" : `<rect x="0" y="${l.y - 8}" width="${W}" height="${l.rows * ROW + 16}" fill="#faf9f6"/>`;
+    const bg = li % 2 ? "" : `<rect x="0" y="${l.y - 8}" width="${W}" height="${l.rows * ROW + 16}" style="fill:var(--inset)"/>`;
     const dots = l.items.map(it => {
       const cy = l.y + 6 + it.row * ROW;
       if (it.kind === "r") {
         const r = it.r, w = r.watek && threadOf[r.watek], col = w ? w.kolor : "#555";
-        const upd = r.tu != null && r.tu !== r.t ? `<line class="upd" x1="${x(r.t)}" x2="${x(r.tu)}" y1="${cy}" y2="${cy}"/><circle cx="${x(r.tu)}" cy="${cy}" r="3.5" fill="#fff" stroke="${col}"/>` : "";
+        const upd = r.tu != null && r.tu !== r.t ? `<line class="upd" x1="${x(r.t)}" x2="${x(r.tu)}" y1="${cy}" y2="${cy}"/><circle cx="${x(r.tu)}" cy="${cy}" r="3.5" style="fill:var(--card)" stroke="${col}"/>` : "";
         return `<g class="dot" data-rid="${esc(r.id)}">${upd}<circle cx="${it.x}" cy="${cy}" r="6.5" fill="${col}"/>
           <text x="${it.x + 10}" y="${cy + 4}">${esc(it.label)}</text><title>${esc(r.id)} · ${esc(r.kto)}: ${esc(r.tlumaczenie || r.naglowek)}</title></g>`;
       }
-      const col = it.kind === "f" ? "#1d1d1b" : "#888";
+      const col = it.kind === "f" ? "var(--ink)" : "#888";
       const tip = it.kind === "f" ? (EV.fakt.opis || "") : (it.o.co_wiadomo || "");
-      return `<g class="dot fact-dot"><rect x="${it.x - 5}" y="${cy - 5}" width="10" height="10" fill="${col}" transform="rotate(45 ${it.x} ${cy})"/>
+      return `<g class="dot fact-dot"><rect x="${it.x - 5}" y="${cy - 5}" width="10" height="10" style="fill:${col}" transform="rotate(45 ${it.x} ${cy})"/>
         <text x="${it.x + 10}" y="${cy + 4}">${esc(it.label)}</text><title>${esc(tip)}</title></g>`;
     }).join("");
     return `${bg}<text class="lane-label" x="8" y="${l.y + 10}">${esc(l.name.length > 22 ? l.name.slice(0, 21) + "…" : l.name)}</text>${dots}`;
@@ -183,7 +183,7 @@ function viewTimeline() {
   const undated = EV.relacje.filter(r => r.t == null);
   const kn = EV.os_czasu.length ? `<h3>Stan wiedzy w czasie</h3><ol class="small">${EV.os_czasu.map(o => `<li><strong>${o.t != null ? fmtTime(o.t, state.zone) : esc(o.czas || "")}</strong> ${esc(o.co_wiadomo)} <span class="muted">(${/^r\d+$/.test(o.zrodlo || "") ? esc(o.zrodlo) : link(o.zrodlo, "źródło")})</span></li>`).join("")}</ol>` : "";
   return `<p class="hint">Kropka to publikacja, puste kółko na końcu przerywanej linii to aktualizacja. Kolor to wątek. Kliknij kropkę, żeby zobaczyć relację.</p>${legend}
-    <div class="tl-wrap"><svg class="tl" width="${W}" height="${H}"><defs><pattern id="brk" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="3" height="8" fill="#ecebe6"/></pattern></defs><g class="grid">${grid}</g><g class="axis">${axis}${breaks}</g>${body}</svg></div>
+    <div class="tl-wrap"><svg class="tl" width="${W}" height="${H}"><defs><pattern id="brk" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="3" height="8" style="fill:var(--grid)"/></pattern></defs><g class="grid">${grid}</g><g class="axis">${axis}${breaks}</g>${body}</svg></div>
     ${undated.length ? `<div class="tl-undated"><span class="muted">Bez godziny publikacji:</span> ${undated.map(r => `<a href="#" data-pick="${esc(r.id)}">${esc(r.id)} ${esc(r.kto)}</a>`).join(", ")}</div>` : ""}
     <div class="tl-detail" id="tl-detail">${state.picked ? relCard(EV.relacje.find(r => r.id === state.picked)) : ""}</div>${kn}`;
 }
