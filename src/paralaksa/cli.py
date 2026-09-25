@@ -266,14 +266,22 @@ def site(
     events_dir: Path = typer.Option(Path("events"), "--events", help="Katalog kart zdarzeń."),
     reports_dir: Path = typer.Option(Path("reports"), "--reports", help="Katalog raportów dziennych (JSON)."),
     make_zip: bool = typer.Option(False, "--zip", help="Dodatkowo spakuj stronę do .zip (do przesłania)."),
+    no_stories: bool = typer.Option(False, "--bez-historii",
+                                    help="Nie wywołuj modelu dla brakujących historii dnia (tylko zapisane w --historie-dir)."),
+    stories_dir: Path = typer.Option(Path("data/stories"), "--historie-dir", help="Zapisane historie dnia (JSON)."),
     config_dir: Path = ConfigDir,
     db_path: Optional[Path] = DbPath,
 ) -> None:
-    """Strona wewnętrzna: interaktywne karty zdarzeń i dziennik z bazy. Statyczne pliki HTML, bez publikacji."""
+    """Strona wewnętrzna: interaktywne karty zdarzeń i dziennik z bazy. Statyczne pliki HTML, bez publikacji.
+
+    Historie dnia (wydarzenia opisywane w wielu krajach): jedno wywołanie modelu ekstrakcji na dzień, wynik zapisany
+    w --historie-dir i używany przy kolejnych budowach. Daily ich nie liczy."""
     from paralaksa.config import load_themes
     from paralaksa.events.check import open_db_readonly
     import sqlite3
 
+    from paralaksa.extract.llm_client import build_client
+    from paralaksa.site import stories
     from paralaksa.site.build import build_site, zip_site
 
     settings = load_settings(config_dir)
@@ -283,13 +291,39 @@ def site(
         typer.echo(f"OSTRZEŻENIE: brak bazy {path}; strona bez dziennika i bez odnośników do bazy", err=True)
     else:
         conn.row_factory = sqlite3.Row
+
+    model = settings.models.extract
+    client = None
+    spent = 0.0
+
+    def stories_for(day: str, eligible: set[int]) -> dict | None:
+        nonlocal client, spent
+        items = stories.story_items(conn, day, eligible)
+        cached = stories.load_cached(stories_dir, day, items)
+        if cached is not None or no_stories:
+            return cached
+        try:
+            client = client or build_client(model, settings.pricing, settings.extract.batch_poll_interval_s,
+                                            settings.extract.batch_timeout_h)
+            out = stories.generate(client, model, day, items, stories_dir)
+        except RuntimeError as e:
+            typer.echo(f"OSTRZEŻENIE: {e}; strona bez historii dnia {day}", err=True)
+            return None
+        spent += out["cost_usd"]
+        typer.echo(f"Historie dnia {day}: {len(out['historie'])} ({out['input_tokens']} + {out['output_tokens']} tokenów, "
+                   f"{out['cost_usd']:.3f} $)")
+        return out
+
     try:
-        res = build_site(out_dir, events_dir, reports_dir, conn, {t.id: t.name_pl for t in load_themes(config_dir)})
+        res = build_site(out_dir, events_dir, reports_dir, conn, {t.id: t.name_pl for t in load_themes(config_dir)},
+                         stories_for)
     finally:
         if conn is not None:
             conn.close()
     for err in res.errors:
         typer.echo(f"OSTRZEŻENIE: {err}", err=True)
+    if spent:
+        typer.echo(f"Koszt historii dnia: {spent:.3f} $")
     typer.echo(f"Zdarzenia: {len(res.events)}, dni dziennika: {len(res.days)}. Start: {out_dir / 'index.html'}")
     if make_zip:
         typer.echo(f"Paczka: {zip_site(out_dir)}")

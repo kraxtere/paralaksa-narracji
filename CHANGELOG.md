@@ -1,3 +1,14 @@
+# Strona wewnętrzna: najważniejsze z dnia — 2026-09-25
+
+- Dziennik ma nową pierwszą zakładkę „Najważniejsze”: historie dnia (wydarzenia opisywane w co najmniej 3 krajach, po jednym
+  nagłówku z kraju w tłumaczeniu z oryginałem pod spodem), „Co się wyróżnia” (największe odchylenia udziału tematu w kraju od średniej
+  pozostałych, bez modelu) i „W skrócie” z raportu. Strona główna pokazuje historie ostatniego dnia.
+- Historie dnia liczy `plx site` (nie daily): dwa wywołania DeepSeek V4-Pro na dzień, ok. 0,03–0,04 $, wynik w `data/stories/`.
+  Pierwsza wersja bez weryfikacji dokleja artykuły nie na temat, żeby dobić do 3 krajów (np. dowódca NATO o Putinie przy przemówieniu
+  prezydenta Iranu). Drugi krok przypisuje każdy artykuł do wydarzenia albo go odrzuca. Po nim na 12 historiach z 23–24.09 zostały
+  2–3 wątpliwe przypisania na ok. 60, zawsze z widocznym oryginałem.
+- Tematy nazwane przez model poza taksonomią (156 dziennie) schowane z mapy, porównania i filtrów. „Artykuły” → „Wszystkie artykuły”.
+
 # Strona wewnętrzna: nowy wygląd — 2026-09-25
 
 - Zdarzenie: nowa pierwsza zakładka „Obok siebie” (kontrast = nagłówki w kolumnach, „zostawia z”, opis różnicy, zastrzeżenia).

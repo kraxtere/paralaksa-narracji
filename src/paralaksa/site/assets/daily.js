@@ -2,8 +2,9 @@
 const D = DATA;
 const ART = new Map(D.artykuly.map(a => [a.id, a]));
 const SRC = D.zrodla;
-const state = { tab: "raport", theme: null, f: { kraj: "", src: "", th: "", st: "", q: "" } };
+const state = { tab: "najwazniejsze", theme: null, f: { kraj: "", src: "", th: "", st: "", q: "" } };
 const themeName = id => D.tematy[id] || id;
+const fixedTheme = t => !t.startsWith("emergent:");   // tematy spoza taksonomii (nazwane przez model) chowamy
 
 const countryCounts = {};
 D.artykuly.forEach(a => { countryCounts[a.kraj] = (countryCounts[a.kraj] || 0) + 1; });
@@ -11,7 +12,7 @@ const COUNTRIES = Object.keys(countryCounts).sort((a, b) => countryCounts[b] - c
 
 function artLine(a, withSignals = true) {
   const s = SRC[a.src] || {};
-  const sig = withSignals ? a.s.map(x => `<div class="sig">${stanceDot(x.st)}<span class="pill">${esc(themeName(x.th))}</span>
+  const sig = withSignals ? a.s.filter(x => fixedTheme(x.th)).map(x => `<div class="sig">${stanceDot(x.st)}<span class="pill">${esc(themeName(x.th))}</span>
       <span>${esc(x.frame || "")}</span>${x.actor ? `<span class="muted">· aktor: ${esc(x.actor)}</span>` : ""}</div>`).join("") : "";
   return `<div class="art" id="a${a.id}"><div class="src">${cc(a.kraj)} <span>${esc(s.name || a.src)}</span> ${mediaTag(s.typ)}
       <span>· ${a.pub ? esc(a.pub.slice(0, 16).replace("T", " ")) + " UTC" : "bez daty"}</span>${a.lead ? `<span class="pill" title="ekstrakcja tylko z tytułu i leadu">tylko lead</span>` : ""}</div>
@@ -61,13 +62,8 @@ function ref(id) {
 }
 const CONF = { niski: "warn", "średni": "", wysoki: "ok" };
 
-function viewReport() {
-  if (!D.raport.length) return `<div class="notice">Brak raportu z syntezy dla tego dnia.</div>`;
-  const warn = D.ostrzezenia.length ? `<details class="notice"><summary>Ostrzeżenia przebiegu (${D.ostrzezenia.length})</summary><ul class="small">${D.ostrzezenia.map(w => `<li>${esc(w)}</li>`).join("")}</ul></details>` : "";
-  const full = D.raport.filter(sec => sec.pozycje.length), empty = D.raport.filter(sec => !sec.pozycje.length);
-  return warn + `<p class="hint">Tekst syntezy modelu z walidacją. Pod każdą tezą artykuły źródłowe; kliknij, żeby zobaczyć nagłówek i sygnały.
-      Audyt semantyczny: ${esc(D.audyt || "brak")}.</p>` +
-    full.map(sec => `<section class="section"><h2>${esc(sec.nazwa)} · ${sec.pozycje.length}</h2>${sec.pozycje.map(it => `<div class="claim">
+function claimHtml(it) {
+  return `<div class="claim">
       <div class="meta">${it.temat ? `<span class="pill">${esc(themeName(it.temat))}</span>` : ""}${it.kraj ? cc(it.kraj) : ""}
         ${it.kierunek ? `<span>kierunek: ${esc(it.kierunek)}</span>` : ""}${it.pewnosc ? `<span class="pill ${CONF[it.pewnosc] ?? ""}">pewność: ${esc(it.pewnosc)}</span>` : ""}</div>
       <div class="txt">${esc(it.tekst || "")}</div>
@@ -75,8 +71,68 @@ function viewReport() {
       ${it.dodatki.map(([k, v]) => `<div class="small"><span class="muted">${esc(k)}:</span> ${esc(v)}</div>`).join("")}
       ${it.uzasadnienie ? `<div class="conf">Dlaczego taka pewność: ${esc(it.uzasadnienie)}</div>` : ""}
       <div class="refs">${it.artykuly.map(ref).join("")}</div>
-    </div>`).join("")}</section>`).join("") +
+    </div>`;
+}
+
+function viewReport() {
+  if (!D.raport.length) return `<div class="notice">Brak raportu z syntezy dla tego dnia.</div>`;
+  const warn = D.ostrzezenia.length ? `<details class="notice"><summary>Ostrzeżenia przebiegu (${D.ostrzezenia.length})</summary><ul class="small">${D.ostrzezenia.map(w => `<li>${esc(w)}</li>`).join("")}</ul></details>` : "";
+  const full = D.raport.filter(sec => sec.pozycje.length), empty = D.raport.filter(sec => !sec.pozycje.length);
+  return warn + `<p class="hint">Tekst syntezy modelu z walidacją. Pod każdą tezą artykuły źródłowe; kliknij, żeby zobaczyć nagłówek i sygnały.
+      Audyt semantyczny: ${esc(D.audyt || "brak")}.</p>` +
+    full.map(sec => `<section class="section"><h2>${esc(sec.nazwa)} · ${sec.pozycje.length}</h2>${sec.pozycje.map(claimHtml).join("")}</section>`).join("") +
     (empty.length ? `<p class="empty-sections">Bez pozycji w tym dniu: ${empty.map(sec => esc(sec.nazwa)).join(", ")}.</p>` : "");
+}
+
+// --- najważniejsze ------------------------------------------------------------------------------------------------
+
+function storyArticles(h) { return [...h.kraje.map(k => k.article_id), ...h.pozostale].map(id => ART.get(id)).filter(Boolean); }
+
+function viewStories() {
+  if (!D.historie.length)
+    return `<div class="notice">Brak historii dnia: strona zbudowana bez modelu (<code>--bez-historii</code>) albo żadne wydarzenie nie trafiło do co najmniej 3 krajów.</div>`;
+  return D.historie.map((h, i) => {
+    const n = storyArticles(h).length;
+    return `<section class="story">
+      <div class="story-head"><h3>${esc(h.tytul)}</h3><span class="chips">${h.kraje.map(k => cc(k.kraj)).join("")}</span></div>
+      ${h.opis ? `<p class="story-desc">${esc(h.opis)}</p>` : ""}
+      <div class="story-grid">${h.kraje.map(k => {
+        const a = ART.get(k.article_id) || {}, s = SRC[a.src] || {};
+        return `<div class="sh"><div class="src">${cc(k.kraj)} <span>${esc(s.name || a.src || "")}</span> ${mediaTag(s.typ)}</div>
+          <a class="h" href="#" data-art="${k.article_id}">${esc(k.naglowek_pl)}</a>
+          ${a.tytul && a.tytul !== k.naglowek_pl ? `<div class="alt">${esc(a.tytul)}</div>` : ""}</div>`;
+      }).join("")}</div>
+      <div class="small" style="margin-top:10px"><a href="#" data-story="${i}">wszystkie artykuły o tym wydarzeniu (${n}) →</a></div></section>`;
+  }).join("");
+}
+
+const pct = v => `${Math.round(v * 100)}%`;
+function viewStandouts() {
+  if (!D.wyroznia.length) return `<p class="muted small">Żaden kraj nie odstaje wyraźnie od pozostałych.</p>`;
+  return `<div class="standouts">${D.wyroznia.map(w => {
+    const more = w.kierunek === "wiecej";
+    const caveat = w.zrodla < 2 ? "jedno źródło w kraju" : w.n_kraj < 20 ? "mała próbka" : "";
+    return `<div class="standout" role="button" tabindex="0" data-cell="${esc(w.temat)}|${esc(w.kraj)}">
+      <div>${cc(w.kraj)} <b>${esc(countryName(w.kraj))}</b> ${more ? "pisze znacznie więcej niż inni o temacie" : "prawie pomija temat"}
+        <b>${esc(themeName(w.temat))}</b>${caveat ? ` <span class="pill warn">${caveat}</span>` : ""}
+        <div class="small muted">${pct(w.udzial)} artykułów kraju (${w.n} z ${w.n_kraj}); pozostałe kraje średnio ${pct(w.srednia)}</div></div>
+      <div class="bars"><div><span class="lbl">${esc(w.kraj)}</span><span class="b"><i style="width:${Math.min(100, w.udzial * 100 / .6)}%"></i></span></div>
+        <div><span class="lbl">inni</span><span class="b other"><i style="width:${Math.min(100, w.srednia * 100 / .6)}%"></i></span></div></div></div>`;
+  }).join("")}</div>`;
+}
+
+function viewEssence() {
+  const brief = (D.raport.find(sec => sec.klucz === "w_skrocie") || { pozycje: [] }).pozycje;
+  const meta = D.historie_meta;
+  return `<h2 style="margin-top:4px">Historie dnia · ${D.historie.length}</h2>
+    <p class="hint">Wydarzenia opisywane w co najmniej trzech krajach. Z każdego kraju jeden nagłówek przetłumaczony przez model, oryginał pod spodem.
+      Grupowanie jest automatyczne (dwa wywołania: wyszukanie i sprawdzenie każdego artykułu) i może się pomylić, dlatego zawsze widać oryginał.
+      ${meta ? `<span class="muted">${esc(meta.model)}, ${esc(meta.created)}, ${meta.cost_usd.toFixed(3)} $.</span>` : ""}</p>
+    ${viewStories()}
+    <h2>Co się wyróżnia</h2>
+    <p class="hint">Największe różnice między udziałem tematu w danym kraju a średnią pozostałych krajów (kraje z co najmniej 10 artykułami). Kliknij, żeby zobaczyć artykuły.</p>
+    ${viewStandouts()}
+    ${brief.length ? `<h2>W skrócie z raportu</h2>${brief.map(claimHtml).join("")}<p class="small"><a href="#" data-tab="raport">cały raport →</a></p>` : ""}`;
 }
 
 // --- mapa ---------------------------------------------------------------------------------------------------------
@@ -90,11 +146,8 @@ function viewMap() {
   });
   const cols = COUNTRIES.filter(c => D.metryki.some(m => m.country === c));
   const hist = (t, c) => ((D.historia[t] || {})[c] || []).map(([d, v]) => `${d.slice(5)}: ${(v * 100).toFixed(0)}%`).join(" → ");
-  const fixed = themes.filter(t => !t.startsWith("emergent:"));
-  const emergent = themes.filter(t => t.startsWith("emergent:"));
-  const shown = state.emergent ? themes : fixed;
-  const more = emergent.length ? `<tr><td colspan="${cols.length + 1}" style="text-align:left"><a href="#" data-emergent>${state.emergent ? "ukryj" : "pokaż"} nowe tematy spoza taksonomii (${emergent.length})</a>
-      <span class="muted">: model nazywa je sam, często pojedyncze artykuły</span></td></tr>` : "";
+  const shown = themes.filter(fixedTheme);
+  const more = "";
   return `<p class="hint">Jaka część artykułów danego kraju z tego dnia dotyczy tematu. Kliknij komórkę, żeby zobaczyć artykuły, a temat, żeby porównać kraje.</p>
     <div style="overflow-x:auto"><table class="heat"><thead><tr><th class="theme"></th>${cols.map(c => `<th title="${esc(countryName(c))}">${cc(c)}<div class="muted">${countryCounts[c]} art.</div></th>`).join("")}</tr></thead>
     <tbody>${shown.map(t => `<tr><th class="theme"><a href="#" data-theme="${esc(t)}">${esc(themeName(t))}</a></th>${cols.map(c => {
@@ -110,7 +163,7 @@ function viewMap() {
 // --- porównanie ---------------------------------------------------------------------------------------------------
 
 function viewCompare() {
-  const themes = Object.keys(D.tematy).filter(t => D.artykuly.some(a => a.s.some(s => s.th === t)));
+  const themes = Object.keys(D.tematy).filter(fixedTheme).filter(t => D.artykuly.some(a => a.s.some(s => s.th === t)));
   const count = t => D.artykuly.filter(a => a.s.some(s => s.th === t)).length;
   themes.sort((a, b) => count(b) - count(a));
   const t = state.theme || themes[0];
@@ -145,7 +198,7 @@ function viewArticles() {
   return `<div class="filters">
       <select data-f="kraj">${opts(COUNTRIES.map(c => [c, `${c} ${countryName(c)} (${countryCounts[c]})`]), f.kraj, "wszystkie kraje")}</select>
       <select data-f="src">${opts(srcIds.map(s => [s, (SRC[s] || {}).name || s]), f.src, "wszystkie źródła")}</select>
-      <select data-f="th">${opts(Object.keys(D.tematy).map(t => [t, themeName(t)]), f.th, "wszystkie tematy")}</select>
+      <select data-f="th">${opts(Object.keys(D.tematy).filter(fixedTheme).map(t => [t, themeName(t)]), f.th, "wszystkie tematy")}</select>
       <select data-f="st">${opts(STANCES.map(s => [s, s]), f.st, "każdy ton")}</select>
       <input data-f="q" type="search" placeholder="szukaj w nagłówkach i ramach" value="${esc(f.q)}">
       <span class="muted">${list.length} z ${D.artykuly.length}</span></div>
@@ -169,20 +222,20 @@ function header() {
     ${D.zdarzenia.length ? `<div class="notice" style="margin-top:12px">Karty zdarzeń z tych dni: ${D.zdarzenia.map(e => `<a href="${ROOT}zdarzenia/${esc(e.id)}.html">${esc(e.tytul)}</a>`).join(" · ")}</div>` : ""}`;
 }
 
-const TABS = [["raport", "Raport"], ["mapa", "Mapa tematów"], ["porownanie", "Porównanie krajów"], ["artykuly", "Artykuły"]];
+const TABS = [["najwazniejsze", "Najważniejsze"], ["raport", "Raport"], ["mapa", "Mapa tematów"], ["porownanie", "Porównanie krajów"], ["artykuly", "Wszystkie artykuły"]];
 function render() {
-  const views = { raport: viewReport, mapa: viewMap, porownanie: viewCompare, artykuly: viewArticles };
+  const views = { najwazniejsze: viewEssence, raport: viewReport, mapa: viewMap, porownanie: viewCompare, artykuly: viewArticles };
   app.innerHTML = `${header()}<div class="tabs">${TABS.map(([id, l]) => `<button data-tab="${id}" class="${state.tab === id ? "on" : ""}">${l}</button>`).join("")}</div>
     <div id="view">${views[state.tab]()}</div>`;
 }
 
 document.addEventListener("click", e => {
-  const el = e.target.closest("[data-tab],[data-art],[data-cell],[data-theme],[data-close],[data-emergent]");
+  const el = e.target.closest("[data-tab],[data-art],[data-cell],[data-theme],[data-close],[data-story]");
   if (!el) return;
   if (el.dataset.close !== undefined) { closeDrawer(); return; }
   e.preventDefault();
-  if (el.dataset.emergent !== undefined) { state.emergent = !state.emergent; render(); return; }
-  if (el.dataset.tab) { state.tab = el.dataset.tab; history.replaceState(null, "", "#" + state.tab); render(); }
+  if (el.dataset.story !== undefined) { const h = D.historie[+el.dataset.story]; showArticles(esc(h.tytul), storyArticles(h)); return; }
+  if (el.dataset.tab) { state.tab = el.dataset.tab; history.replaceState(null, "", "#" + state.tab); render(); window.scrollTo(0, 0); }
   else if (el.dataset.art) showArticle(el.dataset.art);
   else if (el.dataset.theme) { state.theme = el.dataset.theme; state.tab = "porownanie"; render(); }
   else if (el.dataset.cell) {

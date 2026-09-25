@@ -139,8 +139,51 @@ def daily_days(conn: sqlite3.Connection) -> list[str]:
     return [r[0] for r in conn.execute("SELECT DISTINCT date FROM daily_metrics ORDER BY date")]
 
 
+STANDOUT_MIN_ARTICLES = 10   # kraj z mniejszą próbką nie wchodzi do porównania
+STANDOUT_LIMIT = 6
+
+
+def standouts(metrics: list[dict], country_counts: dict[str, int], country_sources: dict[str, int]) -> list[dict]:
+    """Largest gaps between a country's share of a theme and the mean of the other countries (taxonomy themes only).
+
+    More: the country gives the theme at least 15% and twice the others' mean. Less: the others give it at least 15%
+    on average and the country at most a third of that. At most two entries per country."""
+    countries = [c for c, n in country_counts.items() if n >= STANDOUT_MIN_ARTICLES]
+    if len(countries) < 3:
+        return []
+    by: dict[str, dict[str, dict]] = {}
+    for m in metrics:
+        if not m["theme_id"].startswith("emergent:"):
+            by.setdefault(m["theme_id"], {})[m["country"]] = m
+    found = []
+    for theme, rows in by.items():
+        for c in countries:
+            share = rows[c]["article_share"] if c in rows else 0.0
+            others = [rows[o]["article_share"] if o in rows else 0.0 for o in countries if o != c]
+            mean = sum(others) / len(others)
+            n = rows[c]["n_articles"] if c in rows else 0
+            if share >= 0.15 and share >= 2 * mean and n >= 3:
+                kind = "wiecej"
+            elif mean >= 0.15 and share <= mean / 3:
+                kind = "mniej"
+            else:
+                continue
+            found.append({"kraj": c, "temat": theme, "kierunek": kind, "udzial": round(share, 3), "srednia": round(mean, 3),
+                          "n": n, "n_kraj": country_counts[c], "zrodla": country_sources.get(c, 0),
+                          "roznica": abs(share - mean)})
+    found.sort(key=lambda f: -f["roznica"])
+    out, per_country = [], {}
+    for f in found:
+        if per_country.get(f["kraj"], 0) < 2:
+            per_country[f["kraj"]] = per_country.get(f["kraj"], 0) + 1
+            out.append(f)
+        if len(out) == STANDOUT_LIMIT:
+            break
+    return out
+
+
 def daily_payload(conn: sqlite3.Connection, day: str, report: dict | None, theme_names: dict[str, str],
-                  events: list[dict]) -> dict:
+                  events: list[dict], stories_for=None) -> dict:
     conn.row_factory = sqlite3.Row
     pub = publication_meta(conn, day)
     eligible = set(pub.pop("eligible_ids"))
@@ -180,6 +223,12 @@ def daily_payload(conn: sqlite3.Connection, day: str, report: dict | None, theme
         for key, label in REPORT_SECTIONS:
             items = [report_item(it) for it in body.get(key) or []]
             sections.append({"klucz": key, "nazwa": label, "pozycje": items})
+    counts: dict[str, int] = {}
+    srcs: dict[str, set] = {}
+    for a in arts.values():
+        counts[a["kraj"]] = counts.get(a["kraj"], 0) + 1
+        srcs.setdefault(a["kraj"], set()).add(a["src"])
+    stories = stories_for(day, eligible) if stories_for and arts else None
     lo = (date.fromisoformat(day) - timedelta(days=1)).isoformat()
     related = [e for e in events if lo <= e["id"][:10] <= day]
     return {
@@ -190,6 +239,9 @@ def daily_payload(conn: sqlite3.Connection, day: str, report: dict | None, theme
         "audyt": (report or {}).get("semantic_review"), "koszt": cost,
         "zdarzenia": [{"id": e["id"], "tytul": e["tytul"]} for e in related],
         "kraje": COUNTRY_NAMES,
+        "wyroznia": standouts(metrics, counts, {c: len(v) for c, v in srcs.items()}),
+        "historie": (stories or {}).get("historie") or [],
+        "historie_meta": {k: stories[k] for k in ("model", "created", "cost_usd")} if stories else None,
     }
 
 
@@ -238,7 +290,8 @@ def daily_summary(p: dict) -> dict:
     return {"dzien": p["dzien"], "status": p["publikacja"]["status"], "artykuly": len(p["artykuly"]),
             "pobrane": p["publikacja"]["fetched_articles"], "kraje": sorted({a["kraj"] for a in p["artykuly"]}),
             "sygnaly": sum(len(a["s"]) for a in p["artykuly"]), "raport": bool(p["raport"]),
-            "koszt": round(sum(p["koszt"].values()), 2)}
+            "koszt": round(sum(p["koszt"].values()), 2),
+            "historie": [{"tytul": h["tytul"], "kraje": [k["kraj"] for k in h["kraje"]]} for h in p["historie"][:3]]}
 
 
 def load_report(reports_dir: Path, day: str) -> dict | None:

@@ -53,6 +53,8 @@ Dodatkową kopię zaszyfrowanego Release przechowuj poza GitHubem, jeżeli histo
 Dziennik na stronie potrzebuje bazy z produkcji. Odszyfruj ją jak wyżej, ale do osobnego pliku (np. `data/prod.db`),
 i zbuduj stronę: `plx site --db data/prod.db` (Git Bash na Windows: `export DB_BACKUP_KEY=...` z `.env`, reszta bez zmian).
 Wynik trafia do `data/site/index.html`, a `--zip` robi paczkę do przesłania. Strona nie jest publikowana.
+Historie dnia (zakładka Najważniejsze) wymagają `DEEPSEEK_API_KEY`: dla dnia bez zapisanego wyniku w `data/stories/` strona wywołuje model
+dwa razy (ok. 0,03–0,04 $). `--bez-historii` używa tylko zapisanych wyników. Daily ich nie liczy.
 Repozytorium jest publiczne, więc GitHub Pages i artefakty Actions też byłyby publiczne.
 
 ## Zainicjowanie Release z istniejącej bazy

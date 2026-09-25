@@ -40,12 +40,21 @@ function dayCard(d) {
     <div class="small muted" style="margin-top:6px">pobrano ${d.pobrane} · koszt ${d.koszt.toFixed(2)} $</div></a>`;
 }
 
+function latest() {
+  const d = DATA.dni.find(d => d.historie && d.historie.length);
+  if (!d) return "";
+  return `<div class="latest"><div class="meta"><span>Dziennik, ${fmtDay(d.dzien)}</span><span>historie opisywane w wielu krajach</span></div>
+    <ul>${d.historie.map(h => `<li><a href="dziennik/${esc(d.dzien)}.html">${esc(h.tytul)}</a><span class="chips">${h.kraje.map(c => cc(c)).join("")}</span></li>`).join("")}</ul>
+    <div class="small" style="margin-top:6px"><a href="dziennik/${esc(d.dzien)}.html">wszystko z tego dnia →</a></div></div>`;
+}
+
 function render() {
   const evs = DATA.zdarzenia.filter(e => state.rejected || e.status !== "odrzucony");
   const hidden = DATA.zdarzenia.length - DATA.zdarzenia.filter(e => e.status !== "odrzucony").length;
   app.innerHTML = `<div class="intro"><h1>Paralaksa</h1>
     <p class="lede">Jedno zdarzenie, wiele opowieści. Zestawiamy nagłówki z różnych krajów i pokazujemy, od czego każda redakcja zaczyna.</p>
     <p class="small muted">Wersja wewnętrzna do oceny, zbudowana ${esc(DATA.zbudowano)}.</p></div>
+    ${latest()}
     <h2 id="zdarzenia">Zdarzenia · ${DATA.zdarzenia.length - hidden}</h2>
     ${hidden ? `<div class="filters"><label><input type="checkbox" id="rej" ${state.rejected ? "checked" : ""}> pokaż odrzucone (${hidden})</label></div>` : ""}
     ${groups(evs).map(g => `<div class="month">${esc(g.label)}</div><div class="list-events">${g.items.map(evCard).join("")}</div>`).join("")}

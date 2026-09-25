@@ -72,7 +72,7 @@ py -3.12 -m venv .venv; .venv\Scripts\python -m pip install -e ".[dev]"   # uv n
 .venv\Scripts\plx run-daily [--skip-ingest] [--no-fulltext] [--limit N] [--out-dir DIR]
 .venv\Scripts\plx board events\<id>.yaml [-o data/boards] [--no-png]   # plansza 1080×1920, PNG przez Chrome/Edge
 .venv\Scripts\plx events check events\<karta>.md|events [--dni 2] [--max-fetch 12] [-o data/checks]   # podpowiedzi z Wayback, karty nie zmienia
-.venv\Scripts\plx site [--db data/prod.db] [-o data/site] [--zip]   # strona wewnętrzna: zdarzenia + dziennik, statyczny HTML
+.venv\Scripts\plx site [--db data/prod.db] [-o data/site] [--zip] [--bez-historii]   # strona wewnętrzna: zdarzenia + dziennik, statyczny HTML
 .venv\Scripts\plx events archive events\<karta>.md|events [--na-sucho] [--bez-wpisu]   # wypełnia puste archiwum (Wayback / Save Page Now)
 ```
 Pełny ingest z pełnymi tekstami trwa ok. 2–2,5 min (~310 artykułów przy pierwszym uruchomieniu).
@@ -108,6 +108,10 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
 - `src/paralaksa/site/`: `plx site`. `data.py` składa dane stron (karty: wątki, typ, oś czasu, link do naszej bazy;
   dzień: próbka z okna publikacji, sygnały, metryki, raport), `build.py` pisze samowystarczalne HTML (CSS, JS i dane w pliku,
   działa z file://), `assets/*.js` renderuje widoki. Bez pełnych tekstów, leadów i `evidence_span`. Nie publikujemy (decyzja 2026-09-25).
+  `stories.py`: „historie dnia” w zakładce Najważniejsze (wydarzenia z ≥ 3 krajów, jeden przetłumaczony nagłówek na kraj). Dwa wywołania
+  modelu ekstrakcji: wyszukanie kandydatów, potem przypisanie każdego artykułu do wydarzenia albo odrzucenie. Tylko przy `plx site`, nigdy w daily;
+  wynik w `data/stories/<dzień>.json` (ok. 0,03–0,04 $ na dzień, ponowna budowa za darmo). Pierwszy krok bez weryfikacji dokleja artykuły
+  nie na temat (sprawdzone 2026-09-25), więc drugiego kroku nie usuwać. „Co się wyróżnia” (`data.standouts`) liczy się bez modelu.
 - `.github/workflows/daily.yml`: cron 10:30 UTC (poza szczytem DeepSeek; GitHub opóźnia start nawet o 4–5 h), baza jako zaszyfrowany snapshot w Release `database-backup` (cache i artefakt to kopie), commit `reports/`. Kod 1 tylko przy ostrzeżeniach blokujących (synteza, ekstrakcja, brak >1/3 aktywnych źródeł); pojedynczy kanał/źródło to ostrzeżenie informacyjne.
 
 ## Konwencje

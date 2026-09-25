@@ -5,7 +5,8 @@ from paralaksa.aggregate.metrics import compute_daily_metrics
 from paralaksa.config import load_themes
 from paralaksa.ingest.dedup import url_hash
 from paralaksa.site.build import build_site
-from paralaksa.site.data import event_payload, event_summary, markdown_html, report_item
+from paralaksa.site.data import event_payload, event_summary, markdown_html, report_item, standouts
+from paralaksa.site.stories import build_verify_prompt, parse_candidates, parse_stories
 from seed import DAY, article_with, seed_sources
 
 CARD = """---
@@ -154,3 +155,41 @@ def test_build_site_self_contained(tmp_path, conn):
     assert data["zdarzenia"] == [{"id": "2026-09-23-test", "tytul": "Zdarzenie testowe"}]
     # bez pełnych tekstów, leadów i cytatów dowodowych
     assert "Lead." not in daily and "dowód" not in daily
+
+
+def test_standouts_more_and_less():
+    metrics = [
+        {"theme_id": "middle_east", "country": "IL", "article_share": 0.5, "n_articles": 10, "n_sources": 2},
+        {"theme_id": "middle_east", "country": "PL", "article_share": 0.05, "n_articles": 1, "n_sources": 1},
+        {"theme_id": "middle_east", "country": "DE", "article_share": 0.1, "n_articles": 2, "n_sources": 1},
+        {"theme_id": "ukraine_war", "country": "PL", "article_share": 0.3, "n_articles": 6, "n_sources": 2},
+        {"theme_id": "ukraine_war", "country": "DE", "article_share": 0.3, "n_articles": 6, "n_sources": 2},
+        {"theme_id": "emergent:x", "country": "IL", "article_share": 0.9, "n_articles": 9, "n_sources": 1},
+    ]
+    out = standouts(metrics, {"IL": 20, "PL": 20, "DE": 20, "CN": 5}, {"IL": 1, "PL": 2, "DE": 2})
+    got = {(o["kraj"], o["temat"], o["kierunek"]) for o in out}
+    assert ("IL", "middle_east", "wiecej") in got and ("IL", "ukraine_war", "mniej") in got
+    assert all(o["temat"] != "emergent:x" and o["kraj"] != "CN" for o in out)   # poza taksonomią, mała próbka
+    assert next(o for o in out if o["temat"] == "middle_east")["zrodla"] == 1
+
+
+def test_stories_verification_moves_and_drops_articles():
+    items = [{"id": i, "kraj": k, "zrodlo": "z", "tytul": f"t{i}", "streszczenie": ""}
+             for i, k in [(1, "PL"), (2, "DE"), (3, "UK"), (4, "US"), (5, "PL"), (6, "CN")]]
+    first = json.dumps({"historie": [
+        {"tytul": "A", "opis": "a", "kraje": [{"kraj": "PL", "article_id": 1}, {"kraj": "DE", "article_id": 2}],
+         "pozostale": [3, 99]},
+        {"tytul": "B", "opis": "b", "kraje": [{"kraj": "US", "article_id": "#4"}, {"article_id": 1}], "pozostale": [5, 6]}]})
+    cands = parse_candidates(first, items)
+    assert cands[0]["ids"] == [1, 2, 3] and cands[1]["ids"] == [4, 5, 6]   # nieznane id i powtórki odpadają
+    assert "#3 | UK" in build_verify_prompt(cands, items)
+    verify = json.dumps({"oceny": [
+        {"article_id": 1, "wydarzenie": 1, "naglowek_pl": "Nagłówek 1"}, {"article_id": 2, "wydarzenie": 1},
+        {"article_id": 3, "wydarzenie": None}, {"article_id": 4, "wydarzenie": 1, "naglowek_pl": "N4"},
+        {"article_id": 5, "wydarzenie": 1}, {"article_id": 6, "wydarzenie": 2}]})
+    stories = parse_stories(cands, verify, items)
+    assert len(stories) == 1   # B zostaje z jednym krajem
+    a = stories[0]
+    assert [k["kraj"] for k in a["kraje"]] == ["PL", "DE", "US"] and a["pozostale"] == [5]
+    assert a["kraje"][0]["naglowek_pl"] == "Nagłówek 1" and a["kraje"][1]["naglowek_pl"] == "t2"   # brak tłumaczenia: oryginał
+    assert a["odrzucone"] == [3]
