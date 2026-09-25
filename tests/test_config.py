@@ -21,16 +21,17 @@ def test_repo_sources_milestone1_selection():
     # (US: pbs/fox/npr/propublica, BR: folha/agenciabrasil, IL: jpost, PS: alquds_ps) z zaakceptowanym ryzykiem praw wydawcy
     # (docs/CURRENT_HANDOFF.md) zamiast formalnego audytu licencji.
     # + 3 z 2026-09-25 decyzją właściciela: CN globaltimes/chinanews, HK scmp.
-    assert len(active) == 21
+    # + 9 z 2026-09-25 po audycie jakości (co najmniej 2 wydawców na kraj poza QA): IN, TR, HK, IL, PS.
+    assert len(active) == 30
     by_country: dict[str, int] = {}
     for s in active:
         by_country[s.country] = by_country.get(s.country, 0) + 1
     for country in ("PL", "UA", "DE", "UK"):
         assert by_country[country] == 2
-    assert by_country["US"] == 4 and by_country["BR"] == 2 and by_country["IL"] == 1 and by_country["PS"] == 1
-    assert by_country["CN"] == 3 and by_country["HK"] == 1
-    # 2 spoza bloku z KM1 (QA, CN) + 8 z 23.09 (US, BR, IL, PS) + 3 z 25.09 (CN, HK)
-    assert sum(n for c, n in by_country.items() if c not in {"PL", "UA", "DE", "UK"}) == 13
+    assert by_country["US"] == 4 and by_country["BR"] == 2 and by_country["IL"] == 3 and by_country["PS"] == 2
+    assert by_country["CN"] == 3 and by_country["HK"] == 3
+    assert by_country["IN"] == 2 and by_country["TR"] == 2 and by_country["QA"] == 1
+    assert sum(n for c, n in by_country.items() if c not in {"PL", "UA", "DE", "UK"}) == 22
 
 
 def test_inactive_sources_have_note():

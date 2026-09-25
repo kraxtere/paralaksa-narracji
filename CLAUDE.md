@@ -212,6 +212,8 @@ bbc (world + europe), guardian (UK); aljazeera (QA), cgtn (CN). `fulltext: false
 
 2026-09-25 (decyzja właściciela): globaltimes (CN, Google News sitemap, `parse_news_sitemap`), chinanews (CN, po chińsku,
 tekst CJK przycinany w znakach), scmp (HK, tylko lead). Razem 21 aktywnych; CN ma 3 źródła.
+2026-09-25, dwa źródła na kraj (po audycie jakości): thehindu, indianexpress (IN), dailysabah, hurriyet (TR), rthk, hongkongfp (HK),
+israelhayom, haaretz (IL, tylko lead), wafa (PS, dzienna mapa strony `{yyyy}/{mm}/{dd}`). Razem 30 aktywnych, 13 krajów; tylko QA ma
+jednego wydawcę. Al-Quds z GitHub Actions dostaje 403 (z domowego łącza działa), nie obchodzimy.
 Nieaktywne, bo nie działa RSS: PAP (Incapsula), Polskie Radio, Suspilne (403), Telegraph (402). People's Daily RSS stoi od 06.2025.
-Nieaktywne, ale zweryfikowane, do włączenia w KM4: wp, gazeta (to nie Wyborcza), kyivindependent, dw, faz, skynews,
-thehindu, dailysabah, hurriyet. Martwe: Xinhua RSS (2018), China Daily RSS (404). Reuters/AP/AFP bez publicznego RSS.
+Nieaktywne, ale zweryfikowane, do włączenia w KM4: wp, gazeta (to nie Wyborcza), kyivindependent, dw, faz, skynews. Martwe: Xinhua RSS (2018), China Daily RSS (404). Reuters/AP/AFP bez publicznego RSS.

@@ -372,59 +372,167 @@
   activated_at: '2026-09-25'
   license_note: 'Dodany 2026-09-25 decyzją właściciela (perspektywa Hongkongu). RSS świeży; pełny tekst
     za paywallem, więc tylko lead. Prawa wydawcy niezweryfikowane.'
+- id: rthk
+  name: RTHK
+  aliases:
+  - 'RTHK'
+  - 'Radio Television Hong Kong'
+  country: HK
+  editorial_country: HK
+  language: en
+  type: public
+  feeds:
+  - url: https://rthk.hk/rthk/news/rss/e_expressnews_elocal.xml
+    section: local
+  - url: https://rthk.hk/rthk/news/rss/e_expressnews_einternational.xml
+    section: world
+  fulltext: true
+  active: true
+  ownership: publiczny nadawca, departament rządu Hongkongu
+  publisher_group: rthk
+  channel_scope: local; world
+  activated_at: '2026-09-25'
+  note: 'Kandydat HK (2026-09-25): RSS świeży (20/20 < 48 h w obu), robots.txt bez blokady. Audyt jakości 2026-09-25 (DeepSeek V4-Pro, 6 art.): 7/6; krótkie depesze, dużo sportu i spraw lokalnych bez sygnałów; przekaz „jedności z ojczyzną” uchwycony.'
+  verification:
+    checked_at: '2026-09-25'
+    feed: true
+    fresh: true
+    robots: true
+    usage: true
+    quality: true
+    risk_accepted: 'Właściciel aktywował 2026-09-25 na zasadach USA/BR/IL/PS: ryzyko braku formalnej weryfikacji praw wydawcy zaakceptowane, audyt jakości ekstrakcji wykonany (docs/SOURCE_REVIEW.md).'
+- id: hongkongfp
+  name: Hong Kong Free Press
+  aliases:
+  - 'Hong Kong Free Press'
+  - 'HKFP'
+  country: HK
+  editorial_country: HK
+  language: en
+  type: private
+  feeds:
+  - url: https://hongkongfp.com/feed/
+    section: all
+  fulltext: true
+  active: true
+  ownership: niezależna redakcja non-profit
+  publisher_group: hongkongfp
+  channel_scope: all
+  activated_at: '2026-09-25'
+  note: 'Kandydat HK (2026-09-25): RSS świeży (15/30 < 48 h); robots.txt nie blokuje naszego UA, ale z nazwy wyklucza boty AI i archiwa (ClaudeBot, GPTBot, ia_archiver). Audyt jakości 2026-09-25 (DeepSeek V4-Pro, 6 art.): 13/6; trafne, oddziela stanowisko władz od krytyki (Hong Kong 47).'
+  verification:
+    checked_at: '2026-09-25'
+    feed: true
+    fresh: true
+    robots: true
+    usage: true
+    quality: true
+    risk_accepted: 'Właściciel aktywował 2026-09-25 na zasadach USA/BR/IL/PS: ryzyko braku formalnej weryfikacji praw wydawcy zaakceptowane, audyt jakości ekstrakcji wykonany (docs/SOURCE_REVIEW.md).'
 - id: thehindu
   name: The Hindu
+  aliases:
+  - 'The Hindu'
   country: IN
+  editorial_country: IN
   language: en
   type: private
   feeds:
   - url: https://www.thehindu.com/news/international/feeder/default.rss
     section: international
   fulltext: true
-  active: false
-  note: RSS zweryfikowany; do włączenia w KM4.
+  active: true
+  ownership: prywatne, The Hindu Group (Kasturi & Sons)
+  publisher_group: thehindu
+  channel_scope: international
+  activated_at: '2026-09-25'
+  note: 'Kandydat IN (2026-09-25): RSS świeży (51/60 < 48 h), robots.txt bez blokady dla naszego UA (boty AI blokuje z nazwy, jak Guardian). Audyt jakości 2026-09-25 (DeepSeek V4-Pro, 6 art.): 22 sygnały/6 art.; ramy i aktorzy trafne (Pakistan–Afganistan, reforma weta RB ONZ).'
+  verification:
+    checked_at: '2026-09-25'
+    feed: true
+    fresh: true
+    robots: true
+    usage: true
+    quality: true
+    risk_accepted: 'Właściciel aktywował 2026-09-25 na zasadach USA/BR/IL/PS: ryzyko braku formalnej weryfikacji praw wydawcy zaakceptowane, audyt jakości ekstrakcji wykonany (docs/SOURCE_REVIEW.md).'
+- id: indianexpress
+  name: The Indian Express
+  aliases:
+  - 'Indian Express'
+  country: IN
+  editorial_country: IN
+  language: en
+  type: private
+  feeds:
+  - url: https://indianexpress.com/section/world/feed/
+    section: world
+  fulltext: true
+  active: true
+  ownership: prywatne, Indian Express Group
+  publisher_group: indianexpress
+  channel_scope: world
+  activated_at: '2026-09-25'
+  note: 'Kandydat IN (2026-09-25): RSS świeży, robots.txt bez blokady dla naszego UA (boty AI blokuje z nazwy). Audyt jakości 2026-09-25 (DeepSeek V4-Pro, 6 art.): 21/6; trafne, dobrze oddziela perspektywę indyjską (wizy USA).'
+  verification:
+    checked_at: '2026-09-25'
+    feed: true
+    fresh: true
+    robots: true
+    usage: true
+    quality: true
+    risk_accepted: 'Właściciel aktywował 2026-09-25 na zasadach USA/BR/IL/PS: ryzyko braku formalnej weryfikacji praw wydawcy zaakceptowane, audyt jakości ekstrakcji wykonany (docs/SOURCE_REVIEW.md).'
 - id: dailysabah
   name: Daily Sabah
+  aliases:
+  - 'Daily Sabah'
   country: TR
+  editorial_country: TR
   language: en
   type: private
   feeds:
   - url: https://www.dailysabah.com/rss/world
     section: world
   fulltext: true
-  active: false
-  note: 'Ponowny test: timeout robots.txt, więc nie pobierano kanału. Warunki i jakość
-    pozostają niepotwierdzone.'
+  active: true
+  ownership: prywatne, Turkuvaz Media (prorządowe)
+  publisher_group: turkuvaz
+  channel_scope: world
+  activated_at: '2026-09-25'
+  note: 'Kandydat TR (2026-09-25): robots.txt już odpowiada i nie blokuje kanału (23.09 timeout); RSS świeży (25/42 < 48 h). Audyt jakości 2026-09-25 (DeepSeek V4-Pro, 6 art.): 27/6; trafnie oddaje własny, mocny język redakcji jako głos źródła.'
   verification:
-    checked_at: '2026-09-23'
-    feed: false
-    fresh: false
-    robots: false
-    usage: false
-    quality: false
-  license_note: 'Ponowny test: timeout robots.txt, więc nie pobierano kanału. Warunki
-    i jakość pozostają niepotwierdzone.'
+    checked_at: '2026-09-25'
+    feed: true
+    fresh: true
+    robots: true
+    usage: true
+    quality: true
+    risk_accepted: 'Właściciel aktywował 2026-09-25 na zasadach USA/BR/IL/PS: ryzyko braku formalnej weryfikacji praw wydawcy zaakceptowane, audyt jakości ekstrakcji wykonany (docs/SOURCE_REVIEW.md).'
 - id: hurriyet
   name: Hürriyet Daily News
+  aliases:
+  - 'Hürriyet'
+  - 'Hurriyet'
   country: TR
+  editorial_country: TR
   language: en
   type: private
   feeds:
   - url: https://www.hurriyetdailynews.com/rss/world
     section: world
   fulltext: true
-  active: false
-  note: Świeży kanał world i dostęp techniczny. Nie potwierdzono dopuszczalnego zakresu
-    użycia oraz jakości ekstrakcji.
+  active: true
+  ownership: prywatne, Demirören Holding
+  publisher_group: demiroren
+  channel_scope: world
+  activated_at: '2026-09-25'
+  note: 'Kandydat TR (2026-09-25): RSS świeży, robots.txt bez blokady. Audyt jakości 2026-09-25 (DeepSeek V4-Pro, 6 art.): 24/6; rzeczowe, spójne ramy.'
   verification:
-    checked_at: '2026-09-23'
+    checked_at: '2026-09-25'
     feed: true
     fresh: true
     robots: true
-    usage: false
-    quality: false
-  license_note: Świeży kanał world i dostęp techniczny. Nie potwierdzono dopuszczalnego
-    zakresu użycia oraz jakości ekstrakcji.
+    usage: true
+    quality: true
+    risk_accepted: 'Właściciel aktywował 2026-09-25 na zasadach USA/BR/IL/PS: ryzyko braku formalnej weryfikacji praw wydawcy zaakceptowane, audyt jakości ekstrakcji wykonany (docs/SOURCE_REVIEW.md).'
 - id: pbs
   name: PBS News
   aliases:
@@ -609,54 +717,57 @@
     angielska, nie pełny obraz debaty w Izraelu.
 - id: haaretz
   name: Haaretz English
+  aliases:
+  - 'Haaretz'
   country: IL
   editorial_country: IL
   language: en
   type: private
-  feeds: []
-  fulltext: false
-  active: false
-  ownership: prywatne; pełny tekst ograniczony paywallem
+  feeds:
+  - url: https://www.haaretz.com/srv/haaretz-latest-headlines
+    section: latest
+  fulltext: false   # paywall: nie obchodzimy
+  active: true
+  ownership: prywatne, rodzina Schocken i M. DuMont Schauberg
   publisher_group: haaretz
-  channel_scope: niezweryfikowany kanał
-  activated_at: null
-  license_note: Nie potwierdzono technicznego kanału ani zakresu użycia. Paywall;
-    bez obchodzenia zabezpieczeń.
+  channel_scope: latest
+  activated_at: '2026-09-25'
+  note: 'Kandydat IL (2026-09-25): kanał nagłówków świeży (81/100 < 48 h), robots.txt go nie blokuje. Paywall, więc tylko tytuł i lead. Audyt jakości 2026-09-25 (DeepSeek V4-Pro, 6 art.): 6/6 (tylko lead); płytsze, ale trafne.'
   verification:
-    checked_at: '2026-09-23'
-    feed: false
-    fresh: false
-    robots: false
-    usage: false
-    quality: false
-    reference: https://www.haaretz.com/
-  note: Nie potwierdzono technicznego kanału ani zakresu użycia. Paywall; bez obchodzenia
-    zabezpieczeń.
+    checked_at: '2026-09-25'
+    feed: true
+    fresh: true
+    robots: true
+    usage: true
+    quality: true
+    risk_accepted: 'Właściciel aktywował 2026-09-25 na zasadach USA/BR/IL/PS: ryzyko braku formalnej weryfikacji praw wydawcy zaakceptowane, audyt jakości ekstrakcji wykonany (docs/SOURCE_REVIEW.md).'
 - id: wafa
-  name: WAFA
+  name: WAFA (وفا)
+  aliases:
+  - 'WAFA'
+  - 'Wafa'
   country: PS
   editorial_country: PS
-  language: en
+  language: ar
   type: government
-  feeds: []
-  fulltext: false
-  active: false
-  ownership: oficjalna palestyńska agencja instytucjonalna
+  feeds:
+  - url: https://www.wafa.ps/sitemap.xml?yyyy={yyyy}&mm={mm}&dd={dd}   # dzienna mapa strony D-1 i D; RSS brak
+    section: all
+  fulltext: true
+  active: true
+  ownership: oficjalna agencja Autonomii Palestyńskiej
   publisher_group: wafa
-  channel_scope: niezweryfikowany kanał
-  activated_at: null
-  license_note: Oficjalna perspektywa instytucjonalna PS. Nie potwierdzono technicznego
-    kanału; nie jest niezależną redakcją ani źródłem IL.
+  channel_scope: all
+  activated_at: '2026-09-25'
+  note: 'Kandydat PS (2026-09-25): brak RSS, ale robots.txt Allow: / i dzienna mapa strony. Nagłówek z adresu (bez interpunkcji), data z lastmod. Głos instytucjonalny, nie niezależna redakcja. Audyt jakości 2026-09-25 (DeepSeek V4-Pro, 6 art.): 19/6 po arabsku; opisy wojska izraelskiego oddane jako przekaz źródła, bez przejmowania ocen.'
   verification:
-    checked_at: '2026-09-23'
-    feed: false
-    fresh: false
-    robots: false
-    usage: false
-    quality: false
-    reference: https://english.wafa.ps/Home/AboutUs/1000
-  note: Oficjalna perspektywa instytucjonalna PS. Nie potwierdzono technicznego kanału;
-    nie jest niezależną redakcją ani źródłem IL.
+    checked_at: '2026-09-25'
+    feed: true
+    fresh: true
+    robots: true
+    usage: true
+    quality: true
+    risk_accepted: 'Właściciel aktywował 2026-09-25 na zasadach USA/BR/IL/PS: ryzyko braku formalnej weryfikacji praw wydawcy zaakceptowane, audyt jakości ekstrakcji wykonany (docs/SOURCE_REVIEW.md).'
 - id: maan
   name: Ma’an News Agency
   country: PS
@@ -721,6 +832,32 @@
     UA (brak grupy z symbolem wieloznacznym ani specyficznej dla nas). Techniczny audyt
     jakości na próbce 5 artykułów pozytywny (spójne ramy/aktorzy). Prawa wydawcy i pełny
     audyt jakości nieukończone; nieaktywne do decyzji właściciela.'
+- id: israelhayom
+  name: Israel Hayom
+  aliases:
+  - 'Israel Hayom'
+  country: IL
+  editorial_country: IL
+  language: en
+  type: private
+  feeds:
+  - url: https://www.israelhayom.com/feed/
+    section: all
+  fulltext: false   # artykuły za ochroną Akamai (403), kanał RSS działa: tylko lead
+  active: true
+  ownership: prywatne, rodzina Adelsonów (prorządowe)
+  publisher_group: israelhayom
+  channel_scope: all
+  activated_at: '2026-09-25'
+  note: 'Kandydat IL (2026-09-25): RSS świeży (10/10 < 48 h); robots.txt dla naszego UA 404 (23.09 Akamai dawał 403, wtedy nie pobieraliśmy). Audyt jakości 2026-09-25 (DeepSeek V4-Pro, 6 art.): 6/6 (tylko lead); płytsze, ale trafne.'
+  verification:
+    checked_at: '2026-09-25'
+    feed: true
+    fresh: true
+    robots: true
+    usage: true
+    quality: true
+    risk_accepted: 'Właściciel aktywował 2026-09-25 na zasadach USA/BR/IL/PS: ryzyko braku formalnej weryfikacji praw wydawcy zaakceptowane, audyt jakości ekstrakcji wykonany (docs/SOURCE_REVIEW.md).'
 - id: alquds_ps
   name: Al-Quds (جريدة القدس)
   aliases:
