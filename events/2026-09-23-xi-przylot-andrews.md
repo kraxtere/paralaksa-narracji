@@ -15,10 +15,19 @@ fakt:
 stan_wiedzy_zmienial_sie: false
 os_czasu: []
 
+watki:   # opowieści: od czego zaczyna nagłówek; każda relacja ma jedno pole watek
+  - {id: w1, nazwa: 'Partnerzy, nie rywale', opis: 'Przesłanie Xi z pisemnego wystąpienia, za chińskimi mediami państwowymi.'}
+  - {id: w2, nazwa: 'Powitanie przy samolocie', opis: 'Gest Trumpa i protokół: osobiste powitanie, ceremonia, przyjaźń przywódców.'}
+  - {id: w3, nazwa: 'Bombowiec B-1', opis: 'Przelot bombowców jako pokaz siły albo scena na mema.'}
+  - {id: w4, nazwa: 'Oprawa kontra konkrety', opis: 'Pompa zestawiona z handlem, sporami i brakiem postępów.'}
+  - {id: w5, nazwa: 'Naiwność Trumpa', opis: 'Gościnność jako pułapka; komentarz.'}
+  - {id: w6, nazwa: 'Świat dwóch supermocarstw', opis: 'USA i Chiny jako jedyne supermocarstwa; Rosji w tym obrazie nie ma.'}
+
 relacje:
   - id: r1
     kraj: CN
     kto: CGTN
+    typ: państwowe
     rola: redakcja # nadawca państwowy; relacjonuje pisemne wystąpienie własnego przywódcy
     gatunek: wiadomosc
     link: https://news.cgtn.com/news/2026-09-24/Xi-Jinping-says-China-US-should-be-partners-not-rivals-1QGWmC5AvEA/p.html
@@ -29,10 +38,12 @@ relacje:
     naglowek: 'Xi Jinping says China, US should be partners, not rivals'
     tlumaczenie: 'Xi Jinping: Chiny i USA powinny być partnerami, nie rywalami'
     zostawia_z: 'Przylot jako przesłanie Xi o partnerstwie; ceremonia i Trump w tle.'
+    watek: w1
     sprawdzil: 'Claude 2026-09-24: h1, og:title, daty i lead; bez lektury całości'
   - id: r2
     kraj: UK
     kto: The Guardian
+    typ: prywatne
     rola: redakcja
     gatunek: wiadomosc
     link: https://www.theguardian.com/us-news/2026/sep/23/trump-xi-jinping-china-us-state-visit
@@ -43,10 +54,12 @@ relacje:
     naglowek: 'Trump greets Xi Jinping on arrival in rare move as US-China trade truce extended'
     tlumaczenie: 'Trump wita Xi Jinpinga po przylocie, rzadki gest; rozejm handlowy USA–Chiny przedłużony'
     zostawia_z: 'Nietypowy gest Trumpa plus konkret: przedłużony rozejm handlowy.'
+    watek: w4
     sprawdzil: 'Claude 2026-09-24: h1, og:title, daty i lead; bez lektury całości'
   - id: r3
     kraj: UK
     kto: BBC News
+    typ: publiczne
     rola: redakcja
     gatunek: wiadomosc # materiał wideo
     link: https://www.bbc.co.uk/news/videos/c6804ne8knklo
@@ -57,10 +70,12 @@ relacje:
     naglowek: 'A red carpet and military flyover - How Trump welcomed Xi'
     tlumaczenie: 'Czerwony dywan i przelot wojskowy. Jak Trump powitał Xi'
     zostawia_z: 'Ceremonia z pokazem siły: opis podkreśla, że B-1 to kluczowa część arsenału USA.'
+    watek: w3
     sprawdzil: 'Claude 2026-09-24: h1, og:title i opis wideo; wideo nieobejrzane'
   - id: r4
     kraj: UK
     kto: BBC News
+    typ: publiczne
     rola: redakcja
     gatunek: wiadomosc
     link: https://www.bbc.co.uk/news/articles/cqgmrk7187lzo
@@ -71,10 +86,12 @@ relacje:
     naglowek: "Trump offers warm welcome as China's Xi arrives for US visit"
     tlumaczenie: 'Trump ciepło wita przylatującego do USA Xi'
     zostawia_z: 'Ciepłe przyjęcie, relacja osobista między przywódcami.'
+    watek: w2
     sprawdzil: 'Claude 2026-09-24: h1, og:title i daty; bez lektury całości'
   - id: r5
     kraj: US
     kto: PBS News
+    typ: publiczne
     rola: redakcja
     gatunek: wiadomosc
     link: https://www.pbs.org/newshour/world/chinas-xi-kicks-off-state-visit-to-washington-with-a-rare-planeside-welcome-from-trump
@@ -85,10 +102,12 @@ relacje:
     naglowek: "China's Xi kicks off state visit to Washington with a rare planeside welcome from Trump"
     tlumaczenie: 'Xi rozpoczyna wizytę w Waszyngtonie; Trump wyjątkowo wita go przy samolocie'
     zostawia_z: 'Wyjątkowość gestu Trumpa jako otwarcie wizyty.'
+    watek: w2
     sprawdzil: 'Claude 2026-09-24: h1, og:title i daty; bez lektury całości'
   - id: r6
     kraj: US
     kto: PBS NewsHour
+    typ: publiczne
     rola: redakcja
     gatunek: wiadomosc # materiał programu wieczornego; w tym samym wydaniu pozew CNN, MS NOW i Politico
     link: https://www.pbs.org/newshour/show/xi-arrives-for-state-visit-amid-u-s-china-trade-tensions-and-ai-concerns
@@ -99,10 +118,12 @@ relacje:
     naglowek: 'Xi arrives for state visit amid U.S.-China trade tensions and AI concerns'
     tlumaczenie: 'Xi przylatuje z wizytą w cieniu napięć handlowych i obaw o AI'
     zostawia_z: 'Przylot na tle sporów: handel i sztuczna inteligencja.'
+    watek: w4
     sprawdzil: 'Claude 2026-09-24: h1, og:title, daty i lead; materiał wideo nieobejrzany'
   - id: r7
     kraj: DE
     kto: Der Spiegel
+    typ: prywatne
     rola: redakcja
     gatunek: wiadomosc # galeria zdjęć („die besten Bilder”)
     link: https://www.spiegel.de/ausland/donald-trump-empfaengt-xi-jinping-in-den-usa-handschlag-blumen-roter-teppich-a-622f38c4-c8f1-4cf0-ba14-988f8b55666c
@@ -113,10 +134,12 @@ relacje:
     naglowek: 'Donald Trump empfängt Xi Jinping in den USA: Handschlag, Blumen, roter Teppich'
     tlumaczenie: 'Trump przyjmuje Xi w USA: uścisk dłoni, kwiaty, czerwony dywan'
     zostawia_z: 'Sama ceremonia w obrazach, bez treści rozmów.'
+    watek: w2
     sprawdzil: 'Claude 2026-09-24: h1, og:title, daty i lead; bez lektury całości'
   - id: r8
     kraj: DE
     kto: Der Spiegel
+    typ: prywatne
     rola: redakcja
     gatunek: wiadomosc # wideo
     link: https://www.spiegel.de/ausland/usa-donald-trump-empfaengt-xi-jinping-und-ein-us-bomber-bringt-ihn-aus-der-fassung-a-499602db-bb91-4f9a-8805-42757564b0b0
@@ -127,10 +150,12 @@ relacje:
     naglowek: 'USA: Donald Trump empfängt Xi Jinping - und ein US-Bomber bringt ihn aus der Fassung'
     tlumaczenie: 'Trump przyjmuje Xi, a amerykański bombowiec wytrąca go z równowagi'
     zostawia_z: 'Przelot jako zabawna scena z Trumpem zaskoczonym hukiem; lead: „scena przejdzie do memów”.'
+    watek: w3
     sprawdzil: 'Claude 2026-09-24: h1, og:title, daty i lead; wideo nieobejrzane'
   - id: r9
     kraj: DE
     kto: tagesschau (ARD)
+    typ: publiczne
     rola: redakcja
     gatunek: analiza # tekst korespondenta (Ralf Borchard)
     link: https://www.tagesschau.de/ausland/amerika/xi-staatsbesuch-usa-102.html
@@ -141,10 +166,12 @@ relacje:
     naglowek: 'Xi bei Trump: Größtmögliche Bühne - aber viele schwierige Themen'
     tlumaczenie: 'Xi u Trumpa: największa możliwa scena, ale wiele trudnych tematów'
     zostawia_z: 'Wielka oprawa kontra trudne sprawy; lead: sukcesu bardziej potrzebuje Trump niż jego „hołubiony gość”.'
+    watek: w4
     sprawdzil: 'Claude 2026-09-24: h1, og:title, daty i lead; bez lektury całości'
   - id: r10
     kraj: BR
     kto: Folha de S.Paulo
+    typ: prywatne
     rola: redakcja
     gatunek: wiadomosc
     link: https://www1.folha.uol.com.br/mundo/2026/09/trump-recebe-xi-em-washington-com-pompa-mas-poucos-avancos-a-vista.shtml
@@ -155,10 +182,12 @@ relacje:
     naglowek: 'Trump recebe Xi em Washington com pompa, mas poucos avanços à vista'
     tlumaczenie: 'Trump przyjmuje Xi w Waszyngtonie z pompą, ale postępów nie widać'
     zostawia_z: 'Pompa zamiast konkretów; ograniczone oczekiwania wobec porozumień.'
+    watek: w4
     sprawdzil: 'Claude 2026-09-24: h1, og:title, daty i lead; bez lektury całości'
   - id: r11
     kraj: BR
     kto: Folha de S.Paulo
+    typ: prywatne
     rola: redakcja
     gatunek: wiadomosc
     link: https://www1.folha.uol.com.br/mundo/2026/09/xi-jinping-defende-que-china-e-estados-unidos-sejam-parceiros-nao-rivais.shtml
@@ -169,10 +198,12 @@ relacje:
     naglowek: "Xi Jinping defende que China e Estados Unidos sejam 'parceiros, não rivais'"
     tlumaczenie: 'Xi Jinping opowiada się za tym, by Chiny i USA były „partnerami, nie rywalami”'
     zostawia_z: 'Przesłanie Xi, z zaznaczeniem w leadzie, że według chińskich mediów państwowych.'
+    watek: w1
     sprawdzil: 'Claude 2026-09-24: h1, og:title, daty i lead; bez lektury całości'
   - id: r12
     kraj: UA
     kto: Ukrinform
+    typ: państwowe
     rola: agencja
     gatunek: wiadomosc
     link: https://www.ukrinform.ua/rubric-world/4167474-kitaj-i-ssa-maut-buti-partnerami-a-ne-suprotivnikami-si-czinpin.html
@@ -183,10 +214,12 @@ relacje:
     naglowek: 'Китай і США мають бути партнерами, а не супротивниками - Сі Цзіньпін'
     tlumaczenie: 'Chiny i USA powinny być partnerami, a nie przeciwnikami. Xi Jinping'
     zostawia_z: 'Przesłanie Xi przekazane bez ramy ukraińskiej w nagłówku.'
+    watek: w1
     sprawdzil: 'Claude 2026-09-24: og:title i daty; bez lektury całości'
   - id: r13
     kraj: PL
     kto: Onet
+    typ: prywatne
     rola: redakcja
     gatunek: komentarz # oznaczony [KOMENTARZ] w h1
     link: https://wiadomosci.onet.pl/swiat/trump-zabiega-o-wzgledy-xi-jinpinga-i-wpada-w-pulapke-zludzenia-przyjazni-moga-go/7b068ec
@@ -197,10 +230,12 @@ relacje:
     naglowek: 'Trump zabiega o względy Xi Jinpinga i wpada w pułapkę. Złudzenia przyjaźni mogą go wiele kosztować'
     tlumaczenie: 'Trump zabiega o względy Xi Jinpinga i wpada w pułapkę. Złudzenia przyjaźni mogą go wiele kosztować'
     zostawia_z: 'Gościnność jako naiwność Trumpa; to komentarz, nie wiadomość.'
+    watek: w5
     sprawdzil: 'Claude 2026-09-24: h1, og:title i data; bez lektury całości'
   - id: r14
     kraj: PL
     kto: Onet
+    typ: prywatne
     rola: redakcja
     gatunek: wiadomosc # dotyczy już rozmów w Białym Domu 24.09, nie przylotu
     link: https://wiadomosci.onet.pl/swiat/spotkanie-donalda-trumpa-z-xi-jinpingiem-w-bialym-domu-wspaniala-przyjazn/0smcrns
@@ -211,10 +246,12 @@ relacje:
     naglowek: 'Spotkanie Donalda Trumpa z Xi Jinpingiem w Białym Domu. "Wspaniała przyjaźń"'
     tlumaczenie: 'Spotkanie Donalda Trumpa z Xi Jinpingiem w Białym Domu. „Wspaniała przyjaźń”'
     zostawia_z: 'Słowa Trumpa o przyjaźni; Xi o „pokojowym współistnieniu” i dwóch pandach.'
+    watek: w2
     sprawdzil: 'Claude 2026-09-24: h1, og:title, data i lead; bez lektury całości'
   - id: r15
     kraj: RU
     kto: Kommersant
+    typ: prywatne
     rola: redakcja
     gatunek: wiadomosc
     link: https://www.kommersant.ru/doc/8973676
@@ -225,10 +262,12 @@ relacje:
     naglowek: 'Си Цзиньпин прибыл в США, Трамп лично встретил его на базе Эндрюс'
     tlumaczenie: 'Xi Jinping przyleciał do USA, Trump osobiście powitał go w bazie Andrews'
     zostawia_z: 'Protokół: przylot i osobisty gest Trumpa.'
+    watek: w2
     sprawdzil: 'Claude 2026-09-25: tylko tytuł z wyszukiwarki; strony nie otwarto'
   - id: r16
     kraj: RU
     kto: Wiedomosti
+    typ: prywatne
     rola: redakcja
     gatunek: wiadomosc
     link: https://www.vedomosti.ru/politics/news/2026/09/24/1231344-tramp-lichno-vstretil
@@ -239,10 +278,12 @@ relacje:
     naglowek: 'Трамп лично встретил Си Цзиньпина у трапа самолета'
     tlumaczenie: 'Trump osobiście powitał Xi Jinpinga przy trapie samolotu'
     zostawia_z: 'Gest Trumpa jako wiadomość.'
+    watek: w2
     sprawdzil: 'Claude 2026-09-25: h1, og:title i data; bez lektury całości'
   - id: r17
     kraj: RU
     kto: Pierwyj Kanał
+    typ: państwowe
     rola: redakcja # telewizja państwowa
     gatunek: wiadomosc
     link: https://www.1tv.ru/news/2026-09-24/554094
@@ -253,10 +294,12 @@ relacje:
     naglowek: 'Председатель КНР Си Цзиньпин прибыл в США с государственным визитом'
     tlumaczenie: 'Przewodniczący ChRL Xi Jinping przybył do USA z wizytą państwową'
     zostawia_z: 'Czysty komunikat protokolarny, bez Trumpa w nagłówku.'
+    watek: w2
     sprawdzil: 'Claude 2026-09-25: h1 i og:title; bez lektury całości'
   - id: r18
     kraj: RU
     kto: Wzgliad (vz.ru)
+    typ: prorządowe
     rola: redakcja
     gatunek: wiadomosc
     link: https://vz.ru/news/2026/9/24/1454765.html
@@ -267,10 +310,12 @@ relacje:
     naglowek: 'Трамп лично встретил Си Цзиньпина на военной базе Эндрюс'
     tlumaczenie: 'Trump osobiście powitał Xi Jinpinga w bazie wojskowej Andrews'
     zostawia_z: 'Gest Trumpa, jak Wiedomosti.'
+    watek: w2
     sprawdzil: 'Claude 2026-09-25: h1, og:title i data; bez lektury całości'
   - id: r19
     kraj: RU
     kto: Meduza
+    typ: emigracyjne
     rola: redakcja # emigracyjna, redakcja w Rydze
     gatunek: wiadomosc
     link: https://meduza.io/short/2026/09/24/predsedatel-knr-si-tszinpin-priehal-v-ssha-s-gosudarstvennym-vizitom-tramp-lichno-vstretil-ego-na-aviabaze-endryus-fotografiya
@@ -281,6 +326,7 @@ relacje:
     naglowek: 'Си Цзиньпин приехал с государственным визитом в США. Трамп лично встретил его … «как лидера единственной другой сверхдержавы»'
     tlumaczenie: 'Xi Jinping przyjechał z wizytą państwową do USA. Trump osobiście powitał go „jako przywódcę jedynego innego supermocarstwa”'
     zostawia_z: 'Świat dwóch supermocarstw, w którym Rosji nie ma.'
+    watek: w6
     sprawdzil: 'Claude 2026-09-25: h1, og:title i daty; bez lektury całości; źródła cytatu o supermocarstwie nie ustalono'
 
 kontrasty:

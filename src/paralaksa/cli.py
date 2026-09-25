@@ -260,6 +260,41 @@ def board(
         typer.echo(f"PNG: {png_path}")
 
 
+@app.command()
+def site(
+    out_dir: Path = typer.Option(Path("data/site"), "--out-dir", "-o", help="Katalog strony (nadpisywany w całości)."),
+    events_dir: Path = typer.Option(Path("events"), "--events", help="Katalog kart zdarzeń."),
+    reports_dir: Path = typer.Option(Path("reports"), "--reports", help="Katalog raportów dziennych (JSON)."),
+    make_zip: bool = typer.Option(False, "--zip", help="Dodatkowo spakuj stronę do .zip (do przesłania)."),
+    config_dir: Path = ConfigDir,
+    db_path: Optional[Path] = DbPath,
+) -> None:
+    """Strona wewnętrzna: interaktywne karty zdarzeń i dziennik z bazy. Statyczne pliki HTML, bez publikacji."""
+    from paralaksa.config import load_themes
+    from paralaksa.events.check import open_db_readonly
+    import sqlite3
+
+    from paralaksa.site.build import build_site, zip_site
+
+    settings = load_settings(config_dir)
+    path = db_path or settings.resolved_db_path()
+    conn = open_db_readonly(path)
+    if conn is None:
+        typer.echo(f"OSTRZEŻENIE: brak bazy {path}; strona bez dziennika i bez odnośników do bazy", err=True)
+    else:
+        conn.row_factory = sqlite3.Row
+    try:
+        res = build_site(out_dir, events_dir, reports_dir, conn, {t.id: t.name_pl for t in load_themes(config_dir)})
+    finally:
+        if conn is not None:
+            conn.close()
+    for err in res.errors:
+        typer.echo(f"OSTRZEŻENIE: {err}", err=True)
+    typer.echo(f"Zdarzenia: {len(res.events)}, dni dziennika: {len(res.days)}. Start: {out_dir / 'index.html'}")
+    if make_zip:
+        typer.echo(f"Paczka: {zip_site(out_dir)}")
+
+
 events_app = typer.Typer(help="Karty zdarzeń (events/*.md).", no_args_is_help=True)
 app.add_typer(events_app, name="events")
 

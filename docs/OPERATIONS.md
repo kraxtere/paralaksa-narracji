@@ -48,6 +48,13 @@ Dopiero po tej kontroli zastąp `data/paralaksa.db` odzyskaną bazą. Nie urucha
 aby „naprawić” brak cache. Przy uszkodzeniu latest pobierz poprzedni `db-RUN-ATTEMPT.enc`.
 Dodatkową kopię zaszyfrowanego Release przechowuj poza GitHubem, jeżeli historia stanie się krytyczna.
 
+## Strona wewnętrzna (`plx site`)
+
+Dziennik na stronie potrzebuje bazy z produkcji. Odszyfruj ją jak wyżej, ale do osobnego pliku (np. `data/prod.db`),
+i zbuduj stronę: `plx site --db data/prod.db` (Git Bash na Windows: `export DB_BACKUP_KEY=...` z `.env`, reszta bez zmian).
+Wynik trafia do `data/site/index.html`, a `--zip` robi paczkę do przesłania. Strona nie jest publikowana.
+Repozytorium jest publiczne, więc GitHub Pages i artefakty Actions też byłyby publiczne.
+
 ## Zainicjowanie Release z istniejącej bazy
 
 ```bash

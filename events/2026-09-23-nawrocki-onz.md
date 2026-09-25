@@ -15,10 +15,19 @@ fakt:
 stan_wiedzy_zmienial_sie: false
 os_czasu: []
 
+watki:   # opowieści: od czego zaczyna nagłówek; każda relacja ma jedno pole watek
+  - {id: w1, nazwa: 'Imperialna pycha Rosji', opis: 'Oskarżenie i ostrzeżenie: Rosja destabilizuje Europę.'}
+  - {id: w2, nazwa: 'Wspólna odpowiedź świata', opis: 'Apel do innych państw o zdecydowaną, wspólną reakcję na Rosję.'}
+  - {id: w3, nazwa: 'Polska chce uniknąć wojny', opis: 'Polska jako strona, która broni się przed groźbami i chce pokoju.'}
+  - {id: w4, nazwa: 'Polska do G20', opis: 'Z całego wystąpienia żądanie albo prośba o miejsce w G20; krytyki Rosji brak.'}
+  - {id: w5, nazwa: 'Rosja i wojny światowe', opis: 'Wystąpienie jako wiązanie Rosji z tragediami historii.'}
+  - {id: w6, nazwa: 'Przemówienie o wszystkim', opis: 'Wyliczenie wątków albo ocena całego wystąpienia.'}
+
 relacje:
   - id: r1
     kraj: PL
     kto: Rzeczpospolita
+    typ: prywatne
     rola: redakcja
     gatunek: wiadomosc
     link: https://www.rp.pl/polityka/art45184041-prezydent-karol-nawrocki-w-onz-rosja-destabilizuje-sytuacje-w-europie
@@ -29,10 +38,12 @@ relacje:
     naglowek: 'Prezydent Karol Nawrocki w ONZ: Rosja destabilizuje sytuację w Europie'
     tlumaczenie: 'Prezydent Karol Nawrocki w ONZ: Rosja destabilizuje sytuację w Europie'
     zostawia_z: 'Rosja jako główny temat; w h1 rzeczowo, w og:title (udostępnienia) mocniej: „imperialna pycha”.'
+    watek: w1
     sprawdzil: 'Claude 2026-09-24: h1, og:title, data i lead; bez lektury całości'
   - id: r2
     kraj: PL
     kto: Rzeczpospolita (Bogusław Chrabota)
+    typ: prywatne
     rola: redakcja
     gatunek: komentarz
     link: https://www.rp.pl/komentarze/art45184831-boguslaw-chrabota-karol-nawrocki-w-onz-oredzie-o-ratowaniu-swiata
@@ -43,10 +54,12 @@ relacje:
     naglowek: 'Bogusław Chrabota: Karolowi Nawrockiemu w ONZ wystawiłbym czwórkę. Orędzie o ratowaniu świata'
     tlumaczenie: 'Bogusław Chrabota: Karolowi Nawrockiemu w ONZ wystawiłbym czwórkę. Orędzie o ratowaniu świata'
     zostawia_z: 'Przemówienie jako szkolna praca do oceny: długie, o wszystkim naraz.'
+    watek: w6
     sprawdzil: 'Claude 2026-09-24: h1, og:title, data i lead; bez lektury całości'
   - id: r3
     kraj: PL
     kto: Wprost
+    typ: prywatne
     rola: redakcja
     gatunek: wiadomosc
     link: https://www.wprost.pl/polityka/12451185/nawrocki-przemawial-w-onz-padly-wazne-slowa-o-dzialaniach-moskwy.html
@@ -57,10 +70,12 @@ relacje:
     naglowek: 'Zdecydowana postawa Nawrockiego w ONZ. „Rosja wykazuje się tą samą imperialną pychą”'
     tlumaczenie: 'Zdecydowana postawa Nawrockiego w ONZ. „Rosja wykazuje się tą samą imperialną pychą”'
     zostawia_z: 'Stanowczy prezydent; ocena („zdecydowana postawa”) w nagłówku wiadomości.'
+    watek: w1
     sprawdzil: 'Claude 2026-09-24: h1, og:title i daty; bez lektury całości'
   - id: r4
     kraj: PL
     kto: Interia
+    typ: prywatne
     rola: redakcja
     gatunek: wiadomosc # na stronie wzmianki AFP i PAP
     link: https://wydarzenia.interia.pl/zagranica/news-nawrocki-w-onz-apeluje-ws-rosji-nie-jest-za-pozno,nId,23548217
@@ -71,10 +86,12 @@ relacje:
     naglowek: 'Nawrocki w ONZ apeluje ws. Rosji. "Nie jest za późno"'
     tlumaczenie: 'Nawrocki w ONZ apeluje ws. Rosji. „Nie jest za późno”'
     zostawia_z: 'Apel z nutą nadziei; cytat bez kontekstu (na co nie jest za późno?) zachęca do kliknięcia.'
+    watek: w2
     sprawdzil: 'Claude 2026-09-24: h1, og:title, daty i lead; bez lektury całości'
   - id: r5
     kraj: PL
     kto: TVP Info
+    typ: publiczne
     rola: redakcja # nadawca publiczny
     gatunek: wiadomosc
     link: https://www.tvp.info/95551476/karol-nawrocki-w-onz-mowil-o-rosji-i-zagrozeniu-wojna
@@ -85,10 +102,12 @@ relacje:
     naglowek: 'Prezydent w ONZ. „Imperialna pycha Rosji”'
     tlumaczenie: 'Prezydent w ONZ. „Imperialna pycha Rosji”'
     zostawia_z: 'Jedna fraza o Rosji jako streszczenie całego wystąpienia.'
+    watek: w1
     sprawdzil: 'Claude 2026-09-24: og:title i data; bez lektury całości'
   - id: r6
     kraj: PL
     kto: Telewizja Republika
+    typ: prywatne
     rola: redakcja
     gatunek: wiadomosc
     link: https://tvrepublika.pl/Polska/Karol-Nawrocki-wystapil-na-forum-ONZ/222411
@@ -99,10 +118,12 @@ relacje:
     naglowek: 'Prezydent Nawrocki w ONZ mocno przeciw rosyjskiemu imperializmowi: „To siła prawa powinna decydować…”'
     tlumaczenie: 'Prezydent Nawrocki w ONZ mocno przeciw rosyjskiemu imperializmowi: „To siła prawa powinna decydować, a nie prawo siły”'
     zostawia_z: 'Mocny prezydent przeciw imperializmowi; dalsza część cytatu ucięta w polu nagłówka (limit 15 słów).'
+    watek: w1
     sprawdzil: 'Claude 2026-09-24: h1, og:title i daty; bez lektury całości'
   - id: r7
     kraj: PL
     kto: Kresy.pl
+    typ: prywatne
     rola: redakcja
     gatunek: wiadomosc
     link: https://kresy.pl/wydarzenia/nawrocki-przed-zgromadzeniem-ogolnym-onz-mowil-o-rosji-g20-i-nielegalnej-migracji/
@@ -113,10 +134,12 @@ relacje:
     naglowek: 'Nawrocki przed Zgromadzeniem Ogólnym ONZ. Mówił o Rosji, G20 i nielegalnej migracji'
     tlumaczenie: 'Nawrocki przed Zgromadzeniem Ogólnym ONZ. Mówił o Rosji, G20 i nielegalnej migracji'
     zostawia_z: 'Wyliczenie wątków; jako jedyny w próbie wyciąga do nagłówka nielegalną migrację.'
+    watek: w6
     sprawdzil: 'Claude 2026-09-24: h1, og:title i data; bez lektury całości'
   - id: r8
     kraj: PL
     kto: TVP World
+    typ: publiczne
     rola: redakcja # anglojęzyczny kanał TVP; na stronie wzmianka PAP
     gatunek: wiadomosc
     link: https://tvpworld.com/95559082/nawrocki-warns-un-over-russias-actions-in-europe
@@ -127,10 +150,12 @@ relacje:
     naglowek: 'Nawrocki warns UN over Russia’s actions in Europe'
     tlumaczenie: 'Nawrocki ostrzega ONZ przed działaniami Rosji w Europie'
     zostawia_z: 'Ostrzeżenie; opis dodaje, że Polska zbroi się dla odstraszania, nie konfrontacji.'
+    watek: w1
     sprawdzil: 'Claude 2026-09-24: og:title, daty i opis; bez lektury całości'
   - id: r9
     kraj: UA
     kto: Ukrinform
+    typ: państwowe
     rola: agencja
     gatunek: wiadomosc
     link: https://www.ukrinform.ua/rubric-world/4167381-navrockij-v-oon-zaklikav-do-risucoi-spilnoi-vidpovidi-na-rosijski-provokacii.html
@@ -141,10 +166,12 @@ relacje:
     naglowek: 'Навроцький в ООН закликав до рішучої спільної відповіді на російські провокації'
     tlumaczenie: 'Nawrocki w ONZ wezwał do zdecydowanej wspólnej odpowiedzi na rosyjskie prowokacje'
     zostawia_z: 'Wezwanie do wspólnego działania świata wobec Rosji; akcent na „wspólnej”.'
+    watek: w2
     sprawdzil: 'Claude 2026-09-24: og:title i data; bez lektury całości'
   - id: r10
     kraj: UA
     kto: UA.News
+    typ: prywatne
     rola: redakcja
     gatunek: wiadomosc
     link: https://ua.news/en/world/navrotskii-v-oon-zaklikav-krayini-do-spilnoyi-vidpovidi-na-diyi-rosiyi
@@ -155,10 +182,12 @@ relacje:
     naglowek: "At the UN, Navrotsky called on countries to mount a joint response to Russia's actions"
     tlumaczenie: 'W ONZ Nawrocki wezwał państwa do wspólnej odpowiedzi na działania Rosji'
     zostawia_z: 'Ta sama rama co Ukrinform: wspólna odpowiedź.'
+    watek: w2
     sprawdzil: 'Claude 2026-09-24: h1, og:title i data; bez lektury całości'
   - id: r11
     kraj: ES
     kto: EFE (przez Infobae)
+    typ: państwowe
     rola: agencja
     gatunek: wiadomosc
     link: https://www.infobae.com/america/agencias/2026/09/23/polonia-defiende-en-onu-querer-evitar-la-guerra-con-rusia-pese-a-las-amenazas-del-kremlin/
@@ -169,10 +198,12 @@ relacje:
     naglowek: 'Polonia defiende en ONU querer evitar la guerra con Rusia pese a las amenazas del Kremlin'
     tlumaczenie: 'Polska broni w ONZ chęci uniknięcia wojny z Rosją mimo gróźb Kremla'
     zostawia_z: 'Polska jako strona, która chce uniknąć wojny i odpowiada na groźby.'
+    watek: w3
     sprawdzil: 'Claude 2026-09-24: h1, og:title i data; oznaczenie EFE na stronie; bez lektury całości'
   - id: r12
     kraj: ES
     kto: agencja (przez Infobae; ten sam nagłówek w La Tercera, CL)
+    typ: null # nieustalony
     rola: agencja
     gatunek: wiadomosc
     link: https://www.infobae.com/america/agencias/2026/09/23/polonia-advierte-ante-la-onu-contra-la-arrogancia-imperialista-de-rusia-hacia-europa/
@@ -183,10 +214,12 @@ relacje:
     naglowek: 'Polonia advierte ante la ONU contra la "arrogancia imperialista" de Rusia hacia Europa'
     tlumaczenie: 'Polska ostrzega w ONZ przed „imperialistyczną arogancją” Rosji wobec Europy'
     zostawia_z: 'Polska jako strona ostrzegająca i oskarżająca.'
+    watek: w1
     sprawdzil: 'Claude 2026-09-24: h1, og:title i data; bez lektury całości'
   - id: r13
     kraj: BR
     kto: Folha de S.Paulo
+    typ: prywatne
     rola: redakcja
     gatunek: relacja_na_zywo
     link: https://aovivo.folha.uol.com.br/mundo/2026/09/21/6560-acompanhe-a-81-assembleia-geral-da-onu.shtml
@@ -197,10 +230,12 @@ relacje:
     naglowek: "Presidente da Polônia critica 'visão imperial' da Rússia e exalta papel da Otan"
     tlumaczenie: 'Prezydent Polski krytykuje „imperialną wizję” Rosji i wychwala rolę NATO'
     zostawia_z: 'Krótki wpis w relacji z całego dnia: Rosja i NATO.'
+    watek: w1
     sprawdzil: 'Claude 2026-09-24: nagłówek i lead z RSS; strona relacji otwarta, wpisu na niej nie odszukano'
   - id: r14
     kraj: RU
     kto: RIA Nowosti
+    typ: państwowe
     rola: agencja # państwowa
     gatunek: wiadomosc
     link: https://ria.ru/20260923/navrotskij-2119883865.html
@@ -211,10 +246,12 @@ relacje:
     naglowek: 'Навроцкий потребовал принять Польшу в G20'
     tlumaczenie: 'Nawrocki zażądał przyjęcia Polski do G20'
     zostawia_z: 'Z całego wystąpienia żądanie miejsca w G20; krytyki Rosji w nagłówku nie ma.'
+    watek: w4
     sprawdzil: 'Claude 2026-09-25: tylko tytuł z wyszukiwarki; strony nie otwarto'
   - id: r15
     kraj: RU
     kto: Izwiestia
+    typ: prorządowe
     rola: redakcja
     gatunek: wiadomosc
     link: https://iz.ru/2172498/2026-09-24/navrotckii-s-tribuny-ga-oon-prizval-priniat-polshu-v-sostav-g20
@@ -225,10 +262,12 @@ relacje:
     naglowek: 'Навроцкий с трибуны ГА ООН призвал принять Польшу в состав G20'
     tlumaczenie: 'Nawrocki z trybuny ZO ONZ wezwał do przyjęcia Polski do G20'
     zostawia_z: 'G20 jako temat wystąpienia; łagodniejsze „wezwał” zamiast „zażądał”.'
+    watek: w4
     sprawdzil: 'Claude 2026-09-25: tylko tytuł z wyszukiwarki; strony nie otwarto'
   - id: r16
     kraj: RU
     kto: Lenta.ru
+    typ: prorządowe
     rola: redakcja
     gatunek: wiadomosc
     link: https://lenta.ru/news/2026/09/24/prezident-polshi-potreboval-prinyat-stranu-v-g20/
@@ -239,10 +278,12 @@ relacje:
     naglowek: 'Президент Польши потребовал принять страну в G20'
     tlumaczenie: 'Prezydent Polski zażądał przyjęcia kraju do G20'
     zostawia_z: 'Jak RIA: żądanie G20.'
+    watek: w4
     sprawdzil: 'Claude 2026-09-25: tylko tytuł z wyszukiwarki; strony nie otwarto'
   - id: r17
     kraj: RU
     kto: Life.ru
+    typ: prorządowe
     rola: redakcja
     gatunek: wiadomosc
     link: https://life.ru/p/navrotskiy-potreboval-prinyat-polshu-v-g20-s-tribuny-oon
@@ -253,10 +294,12 @@ relacje:
     naglowek: 'Навроцкий потребовал принять Польшу в G20 с трибуны ООН'
     tlumaczenie: 'Nawrocki z trybuny ONZ zażądał przyjęcia Polski do G20'
     zostawia_z: 'Żądanie G20, jak RIA.'
+    watek: w4
     sprawdzil: 'Claude 2026-09-25: h1, og:title i data; bez lektury całości'
   - id: r18
     kraj: RU
     kto: News.ru
+    typ: null # nieustalony
     rola: redakcja
     gatunek: wiadomosc
     link: https://news.ru/europe/polsha-poprosilas-v-g20
@@ -267,10 +310,12 @@ relacje:
     naglowek: 'Польша попросилась в G20'
     tlumaczenie: 'Polska poprosiła się do G20'
     zostawia_z: 'Polska jako petent; „попросилась” brzmi jak prośba o wpuszczenie, lekko protekcjonalnie.'
+    watek: w4
     sprawdzil: 'Claude 2026-09-25: h1, og:title i daty; bez lektury całości'
   - id: r19
     kraj: RU
     kto: yapolitic.net („Я Политик”)
+    typ: null # nieustalony
     rola: redakcja # serwis o nieustalonym profilu i zasięgu
     gatunek: wiadomosc
     link: https://yapolitic.net/lenta/14076
@@ -281,6 +326,7 @@ relacje:
     naglowek: 'Навроцкий связал Россию с трагедиями двух мировых войн на трибуне ООН'
     tlumaczenie: 'Nawrocki na trybunie ONZ powiązał Rosję z tragediami dwóch wojen światowych'
     zostawia_z: 'Jedyny znaleziony rosyjski nagłówek o krytyce Rosji; „powiązał” sugeruje nadużycie historii.'
+    watek: w5
     sprawdzil: 'Claude 2026-09-24: h1, og:title, data i opis; bez lektury całości'
 
 kontrasty:

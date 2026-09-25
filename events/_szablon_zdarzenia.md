@@ -18,10 +18,14 @@ fakt:                      # tylko to, co potwierdza źródło pierwotne
 stan_wiedzy_zmienial_sie: false
 os_czasu: []               # gdy true: [{czas: ..., co_wiadomo: ..., zrodlo: r1}]
 
+watki: []                  # opowieści: od czego zaczyna nagłówek, np. [{id: w1, nazwa: 'Partnerzy, nie rywale', opis: '...'}]
+                           # strona (plx site) układa relacje w kolumny wątków; każda relacja ma jedno pole watek
+
 relacje:
   - id: r1
     kraj: null
     kto: null
+    typ: null              # państwowe | publiczne | prorządowe | prywatne | emigracyjne (null, gdy nieustalony)
     rola: redakcja         # redakcja | agencja | strona_sprawy (rząd, firma, organizacja)
     gatunek: null          # wiadomosc | relacja_na_zywo | wywiad | analiza | komentarz | przeglad | komunikat
     link: null
@@ -32,6 +36,7 @@ relacje:
     naglowek: null         # oryginał, maks. 15 słów
     tlumaczenie: null
     zostawia_z: null       # jedno zdanie: z jaką myślą zostaje odbiorca
+    watek: null            # id z listy watki
     sprawdzil: null        # kto otworzył link i przeczytał; bez tego relacja nie idzie do odcinka
 
 kontrasty:                 # jedno zdarzenie może mieć kilka kontrastów między różnymi parami

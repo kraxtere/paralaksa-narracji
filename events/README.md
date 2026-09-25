@@ -24,7 +24,9 @@ i opisujemy, w którym momencie opowieść zaczyna budować spokój, lęk, oburz
    Robots.txt nadal obowiązuje; gdy strona niedostępna, tytuł z wyszukiwarki lub kopii z adnotacją w `sprawdzil`.
 9. **Odrzucone przypadki zostają** (`status: odrzucony` + `powod_odrzucenia`). To wiedza o granicy między kontrastem rzeczywistym a pozornym.
 10. **Nie przypisujemy redakcjom intencji.** Hipoteza odbioru jest hipotezą do oceny widza.
-11. **`jak_szukano`**: narzędzia i języki. **Notatki z pilota**: czas pracy i to, co było najbardziej żmudne. Na tej podstawie zdecydujemy, co automatyzować.
+11. **Wątki** (`watki` + `watek` przy relacji): opowieść, od której zaczyna nagłówek; jedna na relację. **`typ`** źródła:
+    państwowe, publiczne, prorządowe, prywatne, emigracyjne. Oba pola opcjonalne, ale bez wątków strona pokazuje tylko układ według krajów.
+12. **`jak_szukano`**: narzędzia i języki. **Notatki z pilota**: czas pracy i to, co było najbardziej żmudne. Na tej podstawie zdecydujemy, co automatyzować.
 
 Pomoc: `plx events check events/<karta>.md` (albo `events` dla wszystkich) zapisuje w `data/checks/` podpowiedzi:
 kopie Wayback z dnia publikacji, nagłówek i metadane z każdej kopii, zmiany nagłówka i nagłówki pokazywane na przemian (test A/B).
@@ -36,5 +38,8 @@ klucze z https://archive.org/account/s3.php w `.env` jako `IA_ACCESS_KEY` i `IA_
 z chwili kopii, nie z dnia publikacji; komentarz przy polu to mówi. Robić ją od razu po dodaniu relacji;
 przy relacjach starszych niż 7 dni narzędzie własnej kopii nie robi (pokazałaby już inną stronę).
 Nie nadpisuje wpisanych archiwów, nie zmienia innych pól. `--na-sucho` tylko pokazuje, co by zrobiło.
+
+Podgląd: `plx site` buduje w `data/site/` stronę wewnętrzną: każda karta w widokach Wątki (zestawienie wątek × kraj i kolumny opowieści),
+Oś czasu (publikacje i aktualizacje według krajów), Kraje i Opis; kontrasty podświetlają porównywane relacje.
 
 Karty edytujemy tylko w `events/`. Zmiany w kodzie (`src/`, `tests/`, `config/`, `.github/`) nie należą do pracy nad kartami.
