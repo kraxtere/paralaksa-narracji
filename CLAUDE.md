@@ -78,7 +78,8 @@ py -3.12 -m venv .venv; .venv\Scripts\python -m pip install -e ".[dev]"   # uv n
 .venv\Scripts\plx gdelt szukaj events\<karta>.md [--fraza F ...] [--dni-po 3]   # brakujące relacje do karty, karty nie zmienia
 ```
 Pełny ingest z pełnymi tekstami trwa ok. 2–2,5 min (~310 artykułów przy pierwszym uruchomieniu).
-Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20 min na ~310 artykułów.
+Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20 min na ~310 artykułów; przy 30 źródłach
+(25.09: 840 artykułów w 40 min, limit `max_runtime_s`) concurrency podniesione do 8.
 
 ## Układ kodu
 - `src/paralaksa/config.py`: modele `Settings`, `Source`, `Feed`, `Theme`; `load_settings/sources/themes()`;

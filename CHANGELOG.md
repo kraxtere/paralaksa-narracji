@@ -63,6 +63,14 @@
 - Dziennik: liczby dnia w kafelkach, puste sekcje raportu zwinięte do jednej linii, odnośniki z nazwą redakcji, kolor pewności, legenda mapy.
 - Typ medium wyróżniony (państwowe/prorządowe, emigracyjne). Nagłówki szeryfowe, układ na telefon, obsługa klawiatury.
 
+# Ekstrakcja: 8 równoległych wywołań — 2026-09-25
+
+- Pierwszy przebieg z 30 źródłami (25.09, 1094 nowe artykuły, 862 w oknie publikacji) doszedł do `max_runtime_s` 2400 s:
+  840 przetworzonych, 22 (WAFA) odłożone na kolejny przebieg, kod 1. `extract.max_concurrency` 4 → 8, limit czasu bez zmian.
+  Koszt na artykuł się nie zmienia; dzień kosztował 2,55 $ z limitu 3 $ (ekstrakcja 1,17 $, synteza 1,38 $).
+- Z GitHub Actions nie działają Al-Quds (403 na kanał) i Indian Express (robots.txt blokuje; z domowego łącza przepuszcza).
+  Obie blokady dotyczą adresów centrów danych; nie obchodzimy ich.
+
 # Dwa źródła na kraj — 2026-09-25
 
 - 9 nowych aktywnych źródeł po audycie jakości (54 art., $0,086): The Hindu, Indian Express (IN), Daily Sabah, Hürriyet (TR),

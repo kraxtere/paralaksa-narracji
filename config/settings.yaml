@@ -33,7 +33,7 @@ ingest:
 extract:
   max_runtime_s: 2400       # zakończ po bieżącej paczce i raportuj odłożone materiały
   batch_threshold: 50       # powyżej tej liczby artykułów: Message Batches API (-50% kosztu)
-  max_concurrency: 4        # równoległe wywołania bezpośrednie
+  max_concurrency: 8        # równoległe wywołania bezpośrednie (4 nie mieściło 30 źródeł w max_runtime_s, 2026-09-25)
   max_tokens: 4000
   thinking: disabled        # disabled | adaptive (ignorowane dla Haiku 4.5)
   effort: null              # low | medium | high | null (ignorowane dla Haiku 4.5)

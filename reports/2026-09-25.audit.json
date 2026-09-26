@@ -1,0 +1,2702 @@
+{
+  "seed": "2026-09-25",
+  "sample": [
+    {
+      "path": "wzorce_zbieznosci.0.sygnaly_przeciwne",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 3038,
+            "article_id": 1477,
+            "theme_id": "hybrid_info",
+            "kraj": "HK",
+            "zrodlo": "hongkongfp"
+          },
+          {
+            "signal_id": 2890,
+            "article_id": 1730,
+            "theme_id": "hybrid_info",
+            "kraj": "US",
+            "zrodlo": "fox"
+          }
+        ],
+        "tekst": "Analizowane źródła z HK i US traktują temat neutralnie, bez alarmistycznej ramy zagrożenia.",
+        "article_ids": [
+          1477,
+          1730
+        ]
+      },
+      "context": {
+        "temat": "hybrid_info",
+        "kierunek": "negatywny (wobec Rosji jako sprawcy zagrożeń hybrydowych) oraz alarm wobec autonomicznego AI",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 3079,
+                "article_id": 1000,
+                "theme_id": "hybrid_info",
+                "kraj": "UA",
+                "zrodlo": "ukrinform"
+              },
+              {
+                "signal_id": 3691,
+                "article_id": 1038,
+                "theme_id": "hybrid_info",
+                "kraj": "UA",
+                "zrodlo": "pravda_ua"
+              },
+              {
+                "signal_id": 3586,
+                "article_id": 1008,
+                "theme_id": "hybrid_info",
+                "kraj": "UA",
+                "zrodlo": "ukrinform"
+              },
+              {
+                "signal_id": 3945,
+                "article_id": 1015,
+                "theme_id": "hybrid_info",
+                "kraj": "UA",
+                "zrodlo": "ukrinform"
+              }
+            ],
+            "kraj": "UA",
+            "n_zrodel": 2,
+            "rama": "Rosyjska propaganda i drony jako zagrożenie dla sąsiadów",
+            "stance": "krytyka",
+            "article_ids": [
+              1000,
+              1038,
+              1008,
+              1015
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 2882,
+                "article_id": 1103,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "bbc"
+              },
+              {
+                "signal_id": 3080,
+                "article_id": 1134,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 3857,
+                "article_id": 1135,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 3899,
+                "article_id": 1136,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              }
+            ],
+            "kraj": "UK",
+            "n_zrodel": 2,
+            "rama": "Cyberataki i AI działające poza kontrolą jako zagrożenie systemowe",
+            "stance": "alarm/krytyka",
+            "article_ids": [
+              1103,
+              1134,
+              1135,
+              1136
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 2925,
+                "article_id": 1993,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              },
+              {
+                "signal_id": 4398,
+                "article_id": 1802,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "haaretz"
+              },
+              {
+                "signal_id": 3428,
+                "article_id": 1994,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              },
+              {
+                "signal_id": 3309,
+                "article_id": 1983,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              }
+            ],
+            "kraj": "IL",
+            "n_zrodel": 2,
+            "rama": "Zagrożenia informacyjne i luki w ochronie przed ingerencją",
+            "stance": "krytyka/mieszany",
+            "article_ids": [
+              1993,
+              1802,
+              1994,
+              1983
+            ]
+          }
+        ],
+        "wspolny_kierunek": "Analizowane źródła z trzech krajów (UA, UK, IL) niezależnie przedstawiają działania hybrydowe (sabotaż, cyberataki, dezinformacja, autonomiczne AI) jako narastające zagrożenie wymagające reakcji instytucjonalnej.",
+        "sygnaly_przeciwne": {
+          "dowody": [
+            {
+              "signal_id": 3038,
+              "article_id": 1477,
+              "theme_id": "hybrid_info",
+              "kraj": "HK",
+              "zrodlo": "hongkongfp"
+            },
+            {
+              "signal_id": 2890,
+              "article_id": 1730,
+              "theme_id": "hybrid_info",
+              "kraj": "US",
+              "zrodlo": "fox"
+            }
+          ],
+          "tekst": "Analizowane źródła z HK i US traktują temat neutralnie, bez alarmistycznej ramy zagrożenia.",
+          "article_ids": [
+            1477,
+            1730
+          ]
+        },
+        "pewnosc": {
+          "poziom": "wysoki",
+          "uzasadnienie": "3 kraje (UA, UK, IL) spełniają próg 2 niezależnych źródeł każdy, łącznie 12 przywołanych sygnałów; zgodność ram (sabotaż/cyberzagrożenie/dezinformacja jako narastające ryzyko) jest wysoka mimo różnych aktorów (RU, AI, hakerzy)."
+        },
+        "trend": "brak linii bazowej"
+      },
+      "signals": [
+        {
+          "signal_id": 3038,
+          "theme_id": "hybrid_info",
+          "subject_actor": "HK",
+          "content_group": "6ea9d9cedb06c06c8a45d340fef04ea6c4b075b5e8f99e38542ec8104c7112d9",
+          "publisher_group": "hongkongfp",
+          "article_id": 1477,
+          "kraj": "HK",
+          "zrodlo": "hongkongfp",
+          "typ_zrodla": "private",
+          "rama": "Hongkong odpiera zagraniczną dezinformację",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Hongkońskie władze więzienne oskarżają zagraniczne środowiska \"antychińskie\" o fabrykowanie kłamstw na temat zdrowia i warunków osadzenia aktywisty Jimmy'ego Lai'a."
+        },
+        {
+          "signal_id": 2890,
+          "theme_id": "hybrid_info",
+          "subject_actor": "DE",
+          "content_group": "0015f68db6b15b6db6064cdebd5ca78b8875663468d41b8253f3dca6641e591f",
+          "publisher_group": "fox",
+          "article_id": 1730,
+          "kraj": "US",
+          "zrodlo": "fox",
+          "typ_zrodla": "private",
+          "rama": "Hamas budował arsenał w Europie",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Niemieckie władze oskarżyły siedmiu domniemanych członków Hamasu o gromadzenie broni w tajnych skrytkach w Europie i planowanie ataków na żydowskie i izraelskie cele w Berlinie i Wiedniu w okolicy rocznicy 7 października."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "rozbieznosci.1.kraje.DE",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 3926,
+            "article_id": 1060,
+            "theme_id": "us_policy",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          },
+          {
+            "signal_id": 3553,
+            "article_id": 1094,
+            "theme_id": "us_policy",
+            "kraj": "DE",
+            "zrodlo": "spiegel"
+          }
+        ],
+        "kraj": "DE",
+        "n_zrodel": 2,
+        "rama": "Krytyka Trumpa za schlebianie autokratom",
+        "stance": "krytyka",
+        "article_ids": [
+          1060,
+          1094
+        ]
+      },
+      "context": {
+        "temat": "us_policy",
+        "tekst": "Analizowane źródła z CN przedstawiają relacje USA-Chiny w ramach współpracy, przyjaźni i wzajemnych korzyści, podczas gdy źródło z DE (Tagesschau) opisuje tę samą wizytę Xi w Białym Domu w ramie krytycznej - jako schlebianie autokratom.",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 3914,
+                "article_id": 1221,
+                "theme_id": "us_policy",
+                "kraj": "CN",
+                "zrodlo": "cgtn"
+              },
+              {
+                "signal_id": 3654,
+                "article_id": 1318,
+                "theme_id": "us_policy",
+                "kraj": "CN",
+                "zrodlo": "chinanews"
+              },
+              {
+                "signal_id": 3764,
+                "article_id": 1244,
+                "theme_id": "us_policy",
+                "kraj": "CN",
+                "zrodlo": "globaltimes"
+              },
+              {
+                "signal_id": 4257,
+                "article_id": 1257,
+                "theme_id": "us_policy",
+                "kraj": "CN",
+                "zrodlo": "globaltimes"
+              }
+            ],
+            "kraj": "CN",
+            "n_zrodel": 3,
+            "rama": "Współpraca i przyjaźń chińsko-amerykańska",
+            "stance": "poparcie/neutralny",
+            "article_ids": [
+              1221,
+              1318,
+              1244,
+              1257
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 3926,
+                "article_id": 1060,
+                "theme_id": "us_policy",
+                "kraj": "DE",
+                "zrodlo": "tagesschau"
+              },
+              {
+                "signal_id": 3553,
+                "article_id": 1094,
+                "theme_id": "us_policy",
+                "kraj": "DE",
+                "zrodlo": "spiegel"
+              }
+            ],
+            "kraj": "DE",
+            "n_zrodel": 2,
+            "rama": "Krytyka Trumpa za schlebianie autokratom",
+            "stance": "krytyka",
+            "article_ids": [
+              1060,
+              1094
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "średni",
+          "uzasadnienie": "2 kraje (CN, DE) spełniają próg 2 niezależnych źródeł każdy, przy dużej próbie sygnałów (CN: 79, DE: 17) i jednoznacznej rozbieżności ram (pozytywna vs krytyczna) na tym samym wydarzeniu; brak trzeciego kraju uniemożliwia ocenę wysoką."
+        }
+      },
+      "signals": [
+        {
+          "signal_id": 3926,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "456222ec076bbeb89c1f7353864181371852676e1a6eadc6dffef1305a9eb69a",
+          "publisher_group": "tagesschau",
+          "article_id": 1060,
+          "kraj": "DE",
+          "zrodlo": "tagesschau",
+          "typ_zrodla": "public",
+          "rama": "Krytyka Trumpa za schlebianie autokratom",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "W artykule przytoczono krytykę ze strony senatorów obu partii, według których Trump zbytnio nadskakuje Xi i Putinowi, a wystawny charakter wizyty jest błędem, ponieważ autorytarni przywódcy wykorzystują USA."
+        },
+        {
+          "signal_id": 3553,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "1094",
+          "publisher_group": "spiegel",
+          "article_id": 1094,
+          "kraj": "DE",
+          "zrodlo": "spiegel",
+          "typ_zrodla": "private",
+          "rama": "Biały Dom ogranicza prasę",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł opisuje, że Biały Dom mimo orzeczenia sądu dopiero po długim sporze ponownie wpuścił dziennikarzy CNN, MSNBC i Politico na teren, a wkrótce potem doszło do kolejnego skandalu."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "rozbieznosci.0.kraje.IL",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 2797,
+            "article_id": 1766,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          },
+          {
+            "signal_id": 2676,
+            "article_id": 1999,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "israelhayom"
+          },
+          {
+            "signal_id": 2924,
+            "article_id": 1993,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          },
+          {
+            "signal_id": 3252,
+            "article_id": 1773,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          }
+        ],
+        "kraj": "IL",
+        "n_zrodel": 3,
+        "rama": "Izrael broni się na wielu frontach, zagrożenia ze strony Huti/Iranu",
+        "stance": "mieszany (krytyka/alarm/poparcie)",
+        "article_ids": [
+          1766,
+          1999,
+          1993,
+          1773
+        ]
+      },
+      "context": {
+        "temat": "middle_east",
+        "tekst": "Analizowane źródła z IL i TR omawiają ten sam temat (wojna w Gazie, rola Izraela) w wyraźnie różnych ramach: IL (Haaretz, Israel Hayom, Jerusalem Post) akcentuje zagrożenia dla Izraela (Huti, Iran) i broni jego działań wojskowych, podczas gdy TR (Daily Sabah, Hürriyet) przedstawia Izrael jako izolowany, oskarżany o ludobójstwo, a Gazę jako miejsce katastrofy gospodarczej.",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 2797,
+                "article_id": 1766,
+                "theme_id": "middle_east",
+                "kraj": "IL",
+                "zrodlo": "haaretz"
+              },
+              {
+                "signal_id": 2676,
+                "article_id": 1999,
+                "theme_id": "middle_east",
+                "kraj": "IL",
+                "zrodlo": "israelhayom"
+              },
+              {
+                "signal_id": 2924,
+                "article_id": 1993,
+                "theme_id": "middle_east",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              },
+              {
+                "signal_id": 3252,
+                "article_id": 1773,
+                "theme_id": "middle_east",
+                "kraj": "IL",
+                "zrodlo": "haaretz"
+              }
+            ],
+            "kraj": "IL",
+            "n_zrodel": 3,
+            "rama": "Izrael broni się na wielu frontach, zagrożenia ze strony Huti/Iranu",
+            "stance": "mieszany (krytyka/alarm/poparcie)",
+            "article_ids": [
+              1766,
+              1999,
+              1993,
+              1773
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 3200,
+                "article_id": 1567,
+                "theme_id": "middle_east",
+                "kraj": "TR",
+                "zrodlo": "dailysabah"
+              },
+              {
+                "signal_id": 3572,
+                "article_id": 1573,
+                "theme_id": "middle_east",
+                "kraj": "TR",
+                "zrodlo": "dailysabah"
+              },
+              {
+                "signal_id": 3327,
+                "article_id": 1612,
+                "theme_id": "middle_east",
+                "kraj": "TR",
+                "zrodlo": "hurriyet"
+              },
+              {
+                "signal_id": 3130,
+                "article_id": 1566,
+                "theme_id": "middle_east",
+                "kraj": "TR",
+                "zrodlo": "dailysabah"
+              }
+            ],
+            "kraj": "TR",
+            "n_zrodel": 2,
+            "rama": "Izrael izolowany i oskarżany o ludobójstwo, katastrofa gospodarcza w Gazie",
+            "stance": "krytyka",
+            "article_ids": [
+              1567,
+              1573,
+              1612,
+              1566
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "średni",
+          "uzasadnienie": "2 kraje spełniają próg 2 źródeł (IL: 3 niezależne źródła, TR: 2 niezależne źródła), ale brakuje trzeciego kraju z podobną liczbą źródeł dla pełnego potwierdzenia wzorca na progu 3 krajów wymaganym dla wysokiej pewności."
+        }
+      },
+      "signals": [
+        {
+          "signal_id": 2797,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "1766",
+          "publisher_group": "haaretz",
+          "article_id": 1766,
+          "kraj": "IL",
+          "zrodlo": "haaretz",
+          "typ_zrodla": "private",
+          "rama": "Izrael narzuca impas w Gazie",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł sugeruje, że impas narzucany przez Izrael w Gazie może przynieść odwrotne skutki, pogarszając sytuację humanitarną."
+        },
+        {
+          "signal_id": 2676,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "648333f85beb0f01d5990b472bacf2ce108eba62b9accdf66b8780702e122cd0",
+          "publisher_group": "israelhayom",
+          "article_id": 1999,
+          "kraj": "IL",
+          "zrodlo": "israelhayom",
+          "typ_zrodla": "private",
+          "rama": "Huti rosnącym zagrożeniem regionalnym",
+          "stance": "alarm",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł przedstawia Huti jako rosnące zagrożenie regionalne, którego nie ogranicza żadna znacząca siła, a Izrael rozważa nową metodę konfrontacji z nimi."
+        },
+        {
+          "signal_id": 2924,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "15429b97be9f1988491f940f9a87e37d7481acdacebc194aaab7486ddc08fc33",
+          "publisher_group": "jpost",
+          "article_id": 1993,
+          "kraj": "IL",
+          "zrodlo": "jpost",
+          "typ_zrodla": "private",
+          "rama": "Izrael wspiera Irańczyków w dążeniu do wolności",
+          "stance": "poparcie",
+          "intensywnosc": 4,
+          "streszczenie": "Izraelski ambasador przy ONZ oferuje irańskiej delegacji urządzenie Starlink, wyrażając poparcie dla narodu irańskiego i modląc się o zmianę reżimu w Iranie."
+        },
+        {
+          "signal_id": 3252,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "1773",
+          "publisher_group": "haaretz",
+          "article_id": 1773,
+          "kraj": "IL",
+          "zrodlo": "haaretz",
+          "typ_zrodla": "private",
+          "rama": "Izraelska okupacja generuje zagrożenia",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia izraelską obecność wojskową w Syrii jako okupację, która poprzez nocne naloty, bezpodstawne aresztowania i odbieranie ziemi rolnikom zniechęca miejscową ludność i rodzi nowe zagrożenia zamiast je eliminować."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "slabe_sygnaly.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 4500,
+            "article_id": 1297,
+            "theme_id": "emergent:cultural-diplomacy",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          },
+          {
+            "signal_id": 2786,
+            "article_id": 1231,
+            "theme_id": "emergent:cultural-diplomacy",
+            "kraj": "CN",
+            "zrodlo": "globaltimes"
+          },
+          {
+            "signal_id": 3978,
+            "article_id": 1353,
+            "theme_id": "emergent:cultural-diplomacy",
+            "kraj": "HK",
+            "zrodlo": "scmp"
+          }
+        ],
+        "theme_id": "emergent:cultural-diplomacy",
+        "tekst": "Wątek dyplomacji kulturalnej Chin (wystawy sztuki, tygodnie kultury) pojawia się w źródłach CN i pojedynczo w HK, ale nie osiąga progu 3 krajów - jest to potencjalny, wschodzący wątek soft power.",
+        "article_ids": [
+          1297,
+          1231,
+          1353
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 4500,
+            "article_id": 1297,
+            "theme_id": "emergent:cultural-diplomacy",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          },
+          {
+            "signal_id": 2786,
+            "article_id": 1231,
+            "theme_id": "emergent:cultural-diplomacy",
+            "kraj": "CN",
+            "zrodlo": "globaltimes"
+          },
+          {
+            "signal_id": 3978,
+            "article_id": 1353,
+            "theme_id": "emergent:cultural-diplomacy",
+            "kraj": "HK",
+            "zrodlo": "scmp"
+          }
+        ],
+        "theme_id": "emergent:cultural-diplomacy",
+        "tekst": "Wątek dyplomacji kulturalnej Chin (wystawy sztuki, tygodnie kultury) pojawia się w źródłach CN i pojedynczo w HK, ale nie osiąga progu 3 krajów - jest to potencjalny, wschodzący wątek soft power.",
+        "article_ids": [
+          1297,
+          1231,
+          1353
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 4500,
+          "theme_id": "emergent:cultural-diplomacy",
+          "subject_actor": "CN",
+          "content_group": "6e24dab85579e536bcbed65308a3df9a8f6eb1249d0c67af7f544d0daaa29443",
+          "publisher_group": "chinanews",
+          "article_id": 1297,
+          "kraj": "CN",
+          "zrodlo": "chinanews",
+          "typ_zrodla": "agency",
+          "rama": "Chiny promują kulturę za granicą",
+          "stance": "poparcie",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł przedstawia wystawę sztuki z chińskiego klasztoru Yongle w Szwecji jako element promocji chińskiej kultury i budowania więzi między Chinami a Szwecją."
+        },
+        {
+          "signal_id": 2786,
+          "theme_id": "emergent:cultural-diplomacy",
+          "subject_actor": "CN",
+          "content_group": "93d2571d93ecc14debd44548076c525582f9894e72bc45ec641be047c219ed87",
+          "publisher_group": "peoples_daily",
+          "article_id": 1231,
+          "kraj": "CN",
+          "zrodlo": "globaltimes",
+          "typ_zrodla": "government",
+          "rama": "Chiny budują więzi przez kulturę",
+          "stance": "poparcie",
+          "intensywnosc": 2,
+          "streszczenie": "Artykuł przedstawia otwarcie tygodnia kultury Chin w Ułan Bator jako długoletnią inicjatywę umożliwiającą Mongolii głębsze poznanie Chin i regionu Mongolii Wewnętrznej."
+        },
+        {
+          "signal_id": 3978,
+          "theme_id": "emergent:cultural-diplomacy",
+          "subject_actor": "US",
+          "content_group": "79cdaf28562017f33c768c77fcb44c3fc9f040b0dd0ddb8cc246e0a578082e63",
+          "publisher_group": "scmp",
+          "article_id": 1353,
+          "kraj": "HK",
+          "zrodlo": "scmp",
+          "typ_zrodla": "private",
+          "rama": "Dyplomacja kulturalna łagodzi relacje",
+          "stance": "poparcie",
+          "intensywnosc": 3,
+          "streszczenie": "Melania Trump gościła Peng Liyuan, żonę przywódcy Chin, w Smithsonian National Museum of Asian Art, gdzie chiński chór młodzieżowy śpiewał 'Jasmine Flower', a Peng nuciła razem z nimi."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "wzorce_zbieznosci.0.kraje.IL",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 2925,
+            "article_id": 1993,
+            "theme_id": "hybrid_info",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          },
+          {
+            "signal_id": 4398,
+            "article_id": 1802,
+            "theme_id": "hybrid_info",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          },
+          {
+            "signal_id": 3428,
+            "article_id": 1994,
+            "theme_id": "hybrid_info",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          },
+          {
+            "signal_id": 3309,
+            "article_id": 1983,
+            "theme_id": "hybrid_info",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          }
+        ],
+        "kraj": "IL",
+        "n_zrodel": 2,
+        "rama": "Zagrożenia informacyjne i luki w ochronie przed ingerencją",
+        "stance": "krytyka/mieszany",
+        "article_ids": [
+          1993,
+          1802,
+          1994,
+          1983
+        ]
+      },
+      "context": {
+        "temat": "hybrid_info",
+        "kierunek": "negatywny (wobec Rosji jako sprawcy zagrożeń hybrydowych) oraz alarm wobec autonomicznego AI",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 3079,
+                "article_id": 1000,
+                "theme_id": "hybrid_info",
+                "kraj": "UA",
+                "zrodlo": "ukrinform"
+              },
+              {
+                "signal_id": 3691,
+                "article_id": 1038,
+                "theme_id": "hybrid_info",
+                "kraj": "UA",
+                "zrodlo": "pravda_ua"
+              },
+              {
+                "signal_id": 3586,
+                "article_id": 1008,
+                "theme_id": "hybrid_info",
+                "kraj": "UA",
+                "zrodlo": "ukrinform"
+              },
+              {
+                "signal_id": 3945,
+                "article_id": 1015,
+                "theme_id": "hybrid_info",
+                "kraj": "UA",
+                "zrodlo": "ukrinform"
+              }
+            ],
+            "kraj": "UA",
+            "n_zrodel": 2,
+            "rama": "Rosyjska propaganda i drony jako zagrożenie dla sąsiadów",
+            "stance": "krytyka",
+            "article_ids": [
+              1000,
+              1038,
+              1008,
+              1015
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 2882,
+                "article_id": 1103,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "bbc"
+              },
+              {
+                "signal_id": 3080,
+                "article_id": 1134,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 3857,
+                "article_id": 1135,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 3899,
+                "article_id": 1136,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              }
+            ],
+            "kraj": "UK",
+            "n_zrodel": 2,
+            "rama": "Cyberataki i AI działające poza kontrolą jako zagrożenie systemowe",
+            "stance": "alarm/krytyka",
+            "article_ids": [
+              1103,
+              1134,
+              1135,
+              1136
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 2925,
+                "article_id": 1993,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              },
+              {
+                "signal_id": 4398,
+                "article_id": 1802,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "haaretz"
+              },
+              {
+                "signal_id": 3428,
+                "article_id": 1994,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              },
+              {
+                "signal_id": 3309,
+                "article_id": 1983,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              }
+            ],
+            "kraj": "IL",
+            "n_zrodel": 2,
+            "rama": "Zagrożenia informacyjne i luki w ochronie przed ingerencją",
+            "stance": "krytyka/mieszany",
+            "article_ids": [
+              1993,
+              1802,
+              1994,
+              1983
+            ]
+          }
+        ],
+        "wspolny_kierunek": "Analizowane źródła z trzech krajów (UA, UK, IL) niezależnie przedstawiają działania hybrydowe (sabotaż, cyberataki, dezinformacja, autonomiczne AI) jako narastające zagrożenie wymagające reakcji instytucjonalnej.",
+        "sygnaly_przeciwne": {
+          "dowody": [
+            {
+              "signal_id": 3038,
+              "article_id": 1477,
+              "theme_id": "hybrid_info",
+              "kraj": "HK",
+              "zrodlo": "hongkongfp"
+            },
+            {
+              "signal_id": 2890,
+              "article_id": 1730,
+              "theme_id": "hybrid_info",
+              "kraj": "US",
+              "zrodlo": "fox"
+            }
+          ],
+          "tekst": "Analizowane źródła z HK i US traktują temat neutralnie, bez alarmistycznej ramy zagrożenia.",
+          "article_ids": [
+            1477,
+            1730
+          ]
+        },
+        "pewnosc": {
+          "poziom": "wysoki",
+          "uzasadnienie": "3 kraje (UA, UK, IL) spełniają próg 2 niezależnych źródeł każdy, łącznie 12 przywołanych sygnałów; zgodność ram (sabotaż/cyberzagrożenie/dezinformacja jako narastające ryzyko) jest wysoka mimo różnych aktorów (RU, AI, hakerzy)."
+        },
+        "trend": "brak linii bazowej"
+      },
+      "signals": [
+        {
+          "signal_id": 2925,
+          "theme_id": "hybrid_info",
+          "subject_actor": "IR",
+          "content_group": "15429b97be9f1988491f940f9a87e37d7481acdacebc194aaab7486ddc08fc33",
+          "publisher_group": "jpost",
+          "article_id": 1993,
+          "kraj": "IL",
+          "zrodlo": "jpost",
+          "typ_zrodla": "private",
+          "rama": "Iran ogranicza internet obywatelom",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł opisuje powtarzające się ogólnokrajowe blackouty internetowe w Iranie, w tym rekordowe 88 dni bez dostępu do sieci po protestach i atakach USA oraz Izraela."
+        },
+        {
+          "signal_id": 4398,
+          "theme_id": "hybrid_info",
+          "subject_actor": "IL",
+          "content_group": "1802",
+          "publisher_group": "haaretz",
+          "article_id": 1802,
+          "kraj": "IL",
+          "zrodlo": "haaretz",
+          "typ_zrodla": "private",
+          "rama": "Luka w ochronie przed ingerencją",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł wskazuje, że przejęcie monitorowania operacji wpływu przez policję, która nie ma odpowiednich narzędzi technologicznych, stwarza lukę w ochronie wyborów przed tego typu działaniami."
+        },
+        {
+          "signal_id": 3428,
+          "theme_id": "hybrid_info",
+          "subject_actor": "QA",
+          "content_group": "a04ceda26a70aabba7c279b407e1ac97b408b9f2c893c44e85e54625f43ae587",
+          "publisher_group": "jpost",
+          "article_id": 1994,
+          "kraj": "IL",
+          "zrodlo": "jpost",
+          "typ_zrodla": "private",
+          "rama": "Katar finansuje antyizraelską propagandę",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Netanjahu oskarżył Katar o finansowanie uniwersytetów i Al Jazeery w celu \"prania mózgów\" młodzieży na całym świecie, by szerzyć nienawiść do Izraela, Ameryki i Zachodu."
+        },
+        {
+          "signal_id": 3309,
+          "theme_id": "hybrid_info",
+          "subject_actor": "IL",
+          "content_group": "cf3b658b3bb27670dba40cf018bfec7953101bc1fe814c33e0440592bc6ae89c",
+          "publisher_group": "jpost",
+          "article_id": 1983,
+          "kraj": "IL",
+          "zrodlo": "jpost",
+          "typ_zrodla": "private",
+          "rama": "IDF sprawdza, czy Hamas zakłócił lot drona",
+          "stance": "neutralny",
+          "intensywnosc": 2,
+          "streszczenie": "IDF bada, czy Hamas mógł wykorzystać widmo elektromagnetyczne do zestrzelenia drona, choć obecnie ocenia, że Hamas nie ma takich zdolności operacyjnych."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "rozbieznosci.1.kraje.CN",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 3914,
+            "article_id": 1221,
+            "theme_id": "us_policy",
+            "kraj": "CN",
+            "zrodlo": "cgtn"
+          },
+          {
+            "signal_id": 3654,
+            "article_id": 1318,
+            "theme_id": "us_policy",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          },
+          {
+            "signal_id": 3764,
+            "article_id": 1244,
+            "theme_id": "us_policy",
+            "kraj": "CN",
+            "zrodlo": "globaltimes"
+          },
+          {
+            "signal_id": 4257,
+            "article_id": 1257,
+            "theme_id": "us_policy",
+            "kraj": "CN",
+            "zrodlo": "globaltimes"
+          }
+        ],
+        "kraj": "CN",
+        "n_zrodel": 3,
+        "rama": "Współpraca i przyjaźń chińsko-amerykańska",
+        "stance": "poparcie/neutralny",
+        "article_ids": [
+          1221,
+          1318,
+          1244,
+          1257
+        ]
+      },
+      "context": {
+        "temat": "us_policy",
+        "tekst": "Analizowane źródła z CN przedstawiają relacje USA-Chiny w ramach współpracy, przyjaźni i wzajemnych korzyści, podczas gdy źródło z DE (Tagesschau) opisuje tę samą wizytę Xi w Białym Domu w ramie krytycznej - jako schlebianie autokratom.",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 3914,
+                "article_id": 1221,
+                "theme_id": "us_policy",
+                "kraj": "CN",
+                "zrodlo": "cgtn"
+              },
+              {
+                "signal_id": 3654,
+                "article_id": 1318,
+                "theme_id": "us_policy",
+                "kraj": "CN",
+                "zrodlo": "chinanews"
+              },
+              {
+                "signal_id": 3764,
+                "article_id": 1244,
+                "theme_id": "us_policy",
+                "kraj": "CN",
+                "zrodlo": "globaltimes"
+              },
+              {
+                "signal_id": 4257,
+                "article_id": 1257,
+                "theme_id": "us_policy",
+                "kraj": "CN",
+                "zrodlo": "globaltimes"
+              }
+            ],
+            "kraj": "CN",
+            "n_zrodel": 3,
+            "rama": "Współpraca i przyjaźń chińsko-amerykańska",
+            "stance": "poparcie/neutralny",
+            "article_ids": [
+              1221,
+              1318,
+              1244,
+              1257
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 3926,
+                "article_id": 1060,
+                "theme_id": "us_policy",
+                "kraj": "DE",
+                "zrodlo": "tagesschau"
+              },
+              {
+                "signal_id": 3553,
+                "article_id": 1094,
+                "theme_id": "us_policy",
+                "kraj": "DE",
+                "zrodlo": "spiegel"
+              }
+            ],
+            "kraj": "DE",
+            "n_zrodel": 2,
+            "rama": "Krytyka Trumpa za schlebianie autokratom",
+            "stance": "krytyka",
+            "article_ids": [
+              1060,
+              1094
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "średni",
+          "uzasadnienie": "2 kraje (CN, DE) spełniają próg 2 niezależnych źródeł każdy, przy dużej próbie sygnałów (CN: 79, DE: 17) i jednoznacznej rozbieżności ram (pozytywna vs krytyczna) na tym samym wydarzeniu; brak trzeciego kraju uniemożliwia ocenę wysoką."
+        }
+      },
+      "signals": [
+        {
+          "signal_id": 3914,
+          "theme_id": "us_policy",
+          "subject_actor": "CN",
+          "content_group": "60ead47b0a5c1c72e70a30e43279033897f8a0ee6626c62c364a374b0f8a509d",
+          "publisher_group": "cgtn",
+          "article_id": 1221,
+          "kraj": "CN",
+          "zrodlo": "cgtn",
+          "typ_zrodla": "government",
+          "rama": "Współpraca Chin i USA kluczowa dla świata",
+          "stance": "poparcie",
+          "intensywnosc": 5,
+          "streszczenie": "Tekst akcentuje globalną odpowiedzialność Chin i USA, cytując Xi Jinpinga, że bez ich współpracy trudno rozwiązać wiele problemów świata, oraz podkreślając, że stabilne relacje są kluczowe dla społeczności międzynarodowej."
+        },
+        {
+          "signal_id": 3654,
+          "theme_id": "us_policy",
+          "subject_actor": "CN",
+          "content_group": "e7ad996ae0c7e1720ab78b65a18e434b1a3d165989b5f8d00615e5170a373900",
+          "publisher_group": "chinanews",
+          "article_id": 1318,
+          "kraj": "CN",
+          "zrodlo": "chinanews",
+          "typ_zrodla": "agency",
+          "rama": "Chiny odpowiedzialnie stabilizują relacje z USA",
+          "stance": "poparcie",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia politykę Chin wobec USA jako spójną, odpowiedzialną i opartą na wizji wspólnoty losów ludzkości, podkreślając ciągłość stanowiska i rolę przywódcy w sterowaniu relacjami dwustronnymi."
+        },
+        {
+          "signal_id": 3764,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "91c1ee4864601d99336353c94de7eae08fe6774668ddc1d55a63002f61bfe289",
+          "publisher_group": "peoples_daily",
+          "article_id": 1244,
+          "kraj": "CN",
+          "zrodlo": "globaltimes",
+          "typ_zrodla": "government",
+          "rama": "Chiny i USA wyciągają rękę",
+          "stance": "poparcie",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia wizytę chińskiego przywódcy w Białym Domu jako moment ocieplenia relacji chińsko-amerykańskich, w którym obaj prezydenci wyciągają rękę ponad oceanem."
+        },
+        {
+          "signal_id": 4257,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "b9e410ce8118060e6a8f979c7e121a86aecbffc881f570bf4b7689f70de927f0",
+          "publisher_group": "peoples_daily",
+          "article_id": 1257,
+          "kraj": "CN",
+          "zrodlo": "globaltimes",
+          "typ_zrodla": "government",
+          "rama": "Historyczne zbliżenie Chin i USA",
+          "stance": "poparcie",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia wizytę państwową Xi Jinpinga w Białym Domu jako historyczne wydarzenie, podkreślając wymianę wizyt głów państw w ciągu sześciu miesięcy i budowanie konstruktywnych relacji chińsko-amerykańskich o strategicznej stabilności."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "nieobecne_w_polsce.1",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 2840,
+            "article_id": 1704,
+            "theme_id": "china_indo_pacific",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          },
+          {
+            "signal_id": 3587,
+            "article_id": 1129,
+            "theme_id": "china_indo_pacific",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 3925,
+            "article_id": 1060,
+            "theme_id": "china_indo_pacific",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          },
+          {
+            "signal_id": 2837,
+            "article_id": 1729,
+            "theme_id": "china_indo_pacific",
+            "kraj": "US",
+            "zrodlo": "fox"
+          }
+        ],
+        "theme_id": "china_indo_pacific",
+        "tekst": "Temat relacji chińsko-amerykańskich i Indo-Pacyfiku dominuje w analizowanych próbkach z US, UK i DE, a w próbce z Polski stanowi zaledwie 2,5% udziału - najniższy poziom wśród porównywanych krajów.",
+        "article_ids": [
+          1704,
+          1129,
+          1060,
+          1729
+        ],
+        "temat": "china_indo_pacific"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 2840,
+            "article_id": 1704,
+            "theme_id": "china_indo_pacific",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          },
+          {
+            "signal_id": 3587,
+            "article_id": 1129,
+            "theme_id": "china_indo_pacific",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 3925,
+            "article_id": 1060,
+            "theme_id": "china_indo_pacific",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          },
+          {
+            "signal_id": 2837,
+            "article_id": 1729,
+            "theme_id": "china_indo_pacific",
+            "kraj": "US",
+            "zrodlo": "fox"
+          }
+        ],
+        "theme_id": "china_indo_pacific",
+        "tekst": "Temat relacji chińsko-amerykańskich i Indo-Pacyfiku dominuje w analizowanych próbkach z US, UK i DE, a w próbce z Polski stanowi zaledwie 2,5% udziału - najniższy poziom wśród porównywanych krajów.",
+        "article_ids": [
+          1704,
+          1129,
+          1060,
+          1729
+        ],
+        "temat": "china_indo_pacific"
+      },
+      "signals": [
+        {
+          "signal_id": 2840,
+          "theme_id": "china_indo_pacific",
+          "subject_actor": "CN",
+          "content_group": "78578603fc8b07541440ea71edec1f46b48139fef42f9b689bf1fd0caa33dc9d",
+          "publisher_group": "pbs",
+          "article_id": 1704,
+          "kraj": "US",
+          "zrodlo": "pbs",
+          "typ_zrodla": "public",
+          "rama": "Wizyta państwowa Xi na pokaz, bez przełomów",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł relacjonuje trzydniową wizytę państwową Xi Jinpinga w USA, podkreślając, że była ona krytykowana jako pełna pompy, ale uboga w treść, a w kluczowych kwestiach, takich jak handel czy bezpieczeństwo AI, nie osiągnięto przełomów."
+        },
+        {
+          "signal_id": 3587,
+          "theme_id": "china_indo_pacific",
+          "subject_actor": "US",
+          "content_group": "3cb23bec6982db578fcbdae56a4908cee0b5266e0b64c05d235e43001a9d64a9",
+          "publisher_group": "guardian",
+          "article_id": 1129,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "Symbolika zamiast treści w relacjach USA-Chiny",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia szczyt Trump-Xi jako wydarzenie pozbawione konkretnych ustaleń, w którym ceremonia i gesty dominowały nad realnym postępem w kluczowych sporach."
+        },
+        {
+          "signal_id": 3925,
+          "theme_id": "china_indo_pacific",
+          "subject_actor": "CN",
+          "content_group": "456222ec076bbeb89c1f7353864181371852676e1a6eadc6dffef1305a9eb69a",
+          "publisher_group": "tagesschau",
+          "article_id": 1060,
+          "kraj": "DE",
+          "zrodlo": "tagesschau",
+          "typ_zrodla": "public",
+          "rama": "Wystawny szczyt bez rozwiązań",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia wizytę Xi Jinpinga w Waszyngtonie jako spotkanie pełne ceremonialnego przepychu, ale pozbawione konkretnych rezultatów w kluczowych sporach, takich jak Tajwan, Iran czy wsparcie Chin dla Rosji."
+        },
+        {
+          "signal_id": 2837,
+          "theme_id": "china_indo_pacific",
+          "subject_actor": "US",
+          "content_group": "ce1f2e916d7b72b183fa0b334680967284b91d5b8f304dba6494f99feb42413c",
+          "publisher_group": "fox",
+          "article_id": 1729,
+          "kraj": "US",
+          "zrodlo": "fox",
+          "typ_zrodla": "private",
+          "rama": "USA muszą odzyskać przewagę kosmiczną",
+          "stance": "poparcie",
+          "intensywnosc": 3,
+          "streszczenie": "Tekst opinii wzywa Amerykę do odzyskania supremacji w kosmosie, twierdząc, że Chiny podejmują walkę o przestrzeń kosmiczną."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "wzorce_zbieznosci.0.kraje.UA",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 3079,
+            "article_id": 1000,
+            "theme_id": "hybrid_info",
+            "kraj": "UA",
+            "zrodlo": "ukrinform"
+          },
+          {
+            "signal_id": 3691,
+            "article_id": 1038,
+            "theme_id": "hybrid_info",
+            "kraj": "UA",
+            "zrodlo": "pravda_ua"
+          },
+          {
+            "signal_id": 3586,
+            "article_id": 1008,
+            "theme_id": "hybrid_info",
+            "kraj": "UA",
+            "zrodlo": "ukrinform"
+          },
+          {
+            "signal_id": 3945,
+            "article_id": 1015,
+            "theme_id": "hybrid_info",
+            "kraj": "UA",
+            "zrodlo": "ukrinform"
+          }
+        ],
+        "kraj": "UA",
+        "n_zrodel": 2,
+        "rama": "Rosyjska propaganda i drony jako zagrożenie dla sąsiadów",
+        "stance": "krytyka",
+        "article_ids": [
+          1000,
+          1038,
+          1008,
+          1015
+        ]
+      },
+      "context": {
+        "temat": "hybrid_info",
+        "kierunek": "negatywny (wobec Rosji jako sprawcy zagrożeń hybrydowych) oraz alarm wobec autonomicznego AI",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 3079,
+                "article_id": 1000,
+                "theme_id": "hybrid_info",
+                "kraj": "UA",
+                "zrodlo": "ukrinform"
+              },
+              {
+                "signal_id": 3691,
+                "article_id": 1038,
+                "theme_id": "hybrid_info",
+                "kraj": "UA",
+                "zrodlo": "pravda_ua"
+              },
+              {
+                "signal_id": 3586,
+                "article_id": 1008,
+                "theme_id": "hybrid_info",
+                "kraj": "UA",
+                "zrodlo": "ukrinform"
+              },
+              {
+                "signal_id": 3945,
+                "article_id": 1015,
+                "theme_id": "hybrid_info",
+                "kraj": "UA",
+                "zrodlo": "ukrinform"
+              }
+            ],
+            "kraj": "UA",
+            "n_zrodel": 2,
+            "rama": "Rosyjska propaganda i drony jako zagrożenie dla sąsiadów",
+            "stance": "krytyka",
+            "article_ids": [
+              1000,
+              1038,
+              1008,
+              1015
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 2882,
+                "article_id": 1103,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "bbc"
+              },
+              {
+                "signal_id": 3080,
+                "article_id": 1134,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 3857,
+                "article_id": 1135,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 3899,
+                "article_id": 1136,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              }
+            ],
+            "kraj": "UK",
+            "n_zrodel": 2,
+            "rama": "Cyberataki i AI działające poza kontrolą jako zagrożenie systemowe",
+            "stance": "alarm/krytyka",
+            "article_ids": [
+              1103,
+              1134,
+              1135,
+              1136
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 2925,
+                "article_id": 1993,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              },
+              {
+                "signal_id": 4398,
+                "article_id": 1802,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "haaretz"
+              },
+              {
+                "signal_id": 3428,
+                "article_id": 1994,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              },
+              {
+                "signal_id": 3309,
+                "article_id": 1983,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              }
+            ],
+            "kraj": "IL",
+            "n_zrodel": 2,
+            "rama": "Zagrożenia informacyjne i luki w ochronie przed ingerencją",
+            "stance": "krytyka/mieszany",
+            "article_ids": [
+              1993,
+              1802,
+              1994,
+              1983
+            ]
+          }
+        ],
+        "wspolny_kierunek": "Analizowane źródła z trzech krajów (UA, UK, IL) niezależnie przedstawiają działania hybrydowe (sabotaż, cyberataki, dezinformacja, autonomiczne AI) jako narastające zagrożenie wymagające reakcji instytucjonalnej.",
+        "sygnaly_przeciwne": {
+          "dowody": [
+            {
+              "signal_id": 3038,
+              "article_id": 1477,
+              "theme_id": "hybrid_info",
+              "kraj": "HK",
+              "zrodlo": "hongkongfp"
+            },
+            {
+              "signal_id": 2890,
+              "article_id": 1730,
+              "theme_id": "hybrid_info",
+              "kraj": "US",
+              "zrodlo": "fox"
+            }
+          ],
+          "tekst": "Analizowane źródła z HK i US traktują temat neutralnie, bez alarmistycznej ramy zagrożenia.",
+          "article_ids": [
+            1477,
+            1730
+          ]
+        },
+        "pewnosc": {
+          "poziom": "wysoki",
+          "uzasadnienie": "3 kraje (UA, UK, IL) spełniają próg 2 niezależnych źródeł każdy, łącznie 12 przywołanych sygnałów; zgodność ram (sabotaż/cyberzagrożenie/dezinformacja jako narastające ryzyko) jest wysoka mimo różnych aktorów (RU, AI, hakerzy)."
+        },
+        "trend": "brak linii bazowej"
+      },
+      "signals": [
+        {
+          "signal_id": 3079,
+          "theme_id": "hybrid_info",
+          "subject_actor": "RU",
+          "content_group": "6e4b152454750e74f53e9021890b641397b50f9942c13383164b11381f57fe5f",
+          "publisher_group": "ukrinform",
+          "article_id": 1000,
+          "kraj": "UA",
+          "zrodlo": "ukrinform",
+          "typ_zrodla": "agency",
+          "rama": "Dokumentowanie zbrodni wojennych",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł podaje, że na miejscu uderzenia pracują policjanci, ratownicy i medycy, którzy dokumentują zbrodnię wojenną Federacji Rosyjskiej."
+        },
+        {
+          "signal_id": 3691,
+          "theme_id": "hybrid_info",
+          "subject_actor": "RU",
+          "content_group": "df4853e34445a0d4d0e819674f7c3360f36b201d0288010171d07e07b636e270",
+          "publisher_group": "pravda_ua",
+          "article_id": 1038,
+          "kraj": "UA",
+          "zrodlo": "pravda_ua",
+          "typ_zrodla": "private",
+          "rama": "Rosyjska propaganda grozi sąsiadom",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł przedstawia rosyjskie media państwowe jako narzędzie propagandy, wskazując na powiązania autora ze strukturami wpływu administracji Putina i rosyjskiego wywiadu."
+        },
+        {
+          "signal_id": 3586,
+          "theme_id": "hybrid_info",
+          "subject_actor": "RU",
+          "content_group": "ec1e60763bc3e320ba01123d760f36310f4fcbd50284963b37b1c18f2a5feafb",
+          "publisher_group": "ukrinform",
+          "article_id": 1008,
+          "kraj": "UA",
+          "zrodlo": "ukrinform",
+          "typ_zrodla": "agency",
+          "rama": "Rosyjskie drony zagrażają sąsiadom",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł wskazuje, że rosyjskie drony stanowią zagrożenie nie tylko dla Ukrainy, ale też dla państw sąsiednich, naruszając przestrzeń powietrzną Rumunii i Mołdawii."
+        },
+        {
+          "signal_id": 3945,
+          "theme_id": "hybrid_info",
+          "subject_actor": "RU",
+          "content_group": "7d809b4e77a674df1d71cda650226ba4f3c803a7b6d1badb962bc5c6a476bd07",
+          "publisher_group": "ukrinform",
+          "article_id": 1015,
+          "kraj": "UA",
+          "zrodlo": "ukrinform",
+          "typ_zrodla": "agency",
+          "rama": "Moskwa atakuje hybrydowo, Europa odpowiada",
+          "stance": "neutralny",
+          "intensywnosc": 2,
+          "streszczenie": "Przekaz cytuje opinię Kai Kallas, że hybrydowe ataki Rosji próbują zastraszyć Europę, ale Unia Europejska zamiast się wycofać, zwiększa wsparcie dla Ukrainy."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "rozbieznosci.0.kraje.TR",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 3200,
+            "article_id": 1567,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 3572,
+            "article_id": 1573,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 3327,
+            "article_id": 1612,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "hurriyet"
+          },
+          {
+            "signal_id": 3130,
+            "article_id": 1566,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          }
+        ],
+        "kraj": "TR",
+        "n_zrodel": 2,
+        "rama": "Izrael izolowany i oskarżany o ludobójstwo, katastrofa gospodarcza w Gazie",
+        "stance": "krytyka",
+        "article_ids": [
+          1567,
+          1573,
+          1612,
+          1566
+        ]
+      },
+      "context": {
+        "temat": "middle_east",
+        "tekst": "Analizowane źródła z IL i TR omawiają ten sam temat (wojna w Gazie, rola Izraela) w wyraźnie różnych ramach: IL (Haaretz, Israel Hayom, Jerusalem Post) akcentuje zagrożenia dla Izraela (Huti, Iran) i broni jego działań wojskowych, podczas gdy TR (Daily Sabah, Hürriyet) przedstawia Izrael jako izolowany, oskarżany o ludobójstwo, a Gazę jako miejsce katastrofy gospodarczej.",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 2797,
+                "article_id": 1766,
+                "theme_id": "middle_east",
+                "kraj": "IL",
+                "zrodlo": "haaretz"
+              },
+              {
+                "signal_id": 2676,
+                "article_id": 1999,
+                "theme_id": "middle_east",
+                "kraj": "IL",
+                "zrodlo": "israelhayom"
+              },
+              {
+                "signal_id": 2924,
+                "article_id": 1993,
+                "theme_id": "middle_east",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              },
+              {
+                "signal_id": 3252,
+                "article_id": 1773,
+                "theme_id": "middle_east",
+                "kraj": "IL",
+                "zrodlo": "haaretz"
+              }
+            ],
+            "kraj": "IL",
+            "n_zrodel": 3,
+            "rama": "Izrael broni się na wielu frontach, zagrożenia ze strony Huti/Iranu",
+            "stance": "mieszany (krytyka/alarm/poparcie)",
+            "article_ids": [
+              1766,
+              1999,
+              1993,
+              1773
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 3200,
+                "article_id": 1567,
+                "theme_id": "middle_east",
+                "kraj": "TR",
+                "zrodlo": "dailysabah"
+              },
+              {
+                "signal_id": 3572,
+                "article_id": 1573,
+                "theme_id": "middle_east",
+                "kraj": "TR",
+                "zrodlo": "dailysabah"
+              },
+              {
+                "signal_id": 3327,
+                "article_id": 1612,
+                "theme_id": "middle_east",
+                "kraj": "TR",
+                "zrodlo": "hurriyet"
+              },
+              {
+                "signal_id": 3130,
+                "article_id": 1566,
+                "theme_id": "middle_east",
+                "kraj": "TR",
+                "zrodlo": "dailysabah"
+              }
+            ],
+            "kraj": "TR",
+            "n_zrodel": 2,
+            "rama": "Izrael izolowany i oskarżany o ludobójstwo, katastrofa gospodarcza w Gazie",
+            "stance": "krytyka",
+            "article_ids": [
+              1567,
+              1573,
+              1612,
+              1566
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "średni",
+          "uzasadnienie": "2 kraje spełniają próg 2 źródeł (IL: 3 niezależne źródła, TR: 2 niezależne źródła), ale brakuje trzeciego kraju z podobną liczbą źródeł dla pełnego potwierdzenia wzorca na progu 3 krajów wymaganym dla wysokiej pewności."
+        }
+      },
+      "signals": [
+        {
+          "signal_id": 3200,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "811d1b3b986f2125ecdf404c40ea0c3e24de5823cf0ff27ac5aca64d36fa3c7e",
+          "publisher_group": "turkuvaz",
+          "article_id": 1567,
+          "kraj": "TR",
+          "zrodlo": "dailysabah",
+          "typ_zrodla": "private",
+          "rama": "Izrael izolowany i oskarżany o ludobójstwo",
+          "stance": "krytyka",
+          "intensywnosc": 5,
+          "streszczenie": "Artykuł przedstawia premiera Izraela Benjamina Netanjahu jako postać izolowaną na arenie międzynarodowej, a kampanię wojskową Izraela w Gazie jako ludobójczą, podkreślając masowe ofiary cywilne i zniszczenia."
+        },
+        {
+          "signal_id": 3572,
+          "theme_id": "middle_east",
+          "subject_actor": "Gaza",
+          "content_group": "713fd13abab82bc1258ab31ed2b0fc158b8f71217b08b86d11e321db6d2e8840",
+          "publisher_group": "turkuvaz",
+          "article_id": 1573,
+          "kraj": "TR",
+          "zrodlo": "dailysabah",
+          "typ_zrodla": "private",
+          "rama": "Katastrofa gospodarcza w Gazie",
+          "stance": "krytyka",
+          "intensywnosc": 5,
+          "streszczenie": "Artykuł przedstawia raport ONZ, według którego Gaza doświadcza najgorszej katastrofy gospodarczej w historii, z 92% zniszczonych firm, bezrobociem przekraczającym 90% i całkowitym uzależnieniem od pomocy żywnościowej."
+        },
+        {
+          "signal_id": 3327,
+          "theme_id": "middle_east",
+          "subject_actor": "IR",
+          "content_group": "544682059b227d739fb84f105d00461cb07878ae820f3a9161408aa3a061f8c2",
+          "publisher_group": "demiroren",
+          "article_id": 1612,
+          "kraj": "TR",
+          "zrodlo": "hurriyet",
+          "typ_zrodla": "private",
+          "rama": "Iran grozi rozszerzeniem wojny",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Doradca najwyższego przywódcy Iranu ostrzega, że Teheran może rozszerzyć wojnę na Bliskim Wschodzie na Ocean Indyjski, jeśli USA ponownie zaatakują."
+        },
+        {
+          "signal_id": 3130,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "2bd253535bf21bbd0ddebe5f8acb5e7120cde8ff88be19c65c857995f1655bc9",
+          "publisher_group": "turkuvaz",
+          "article_id": 1566,
+          "kraj": "TR",
+          "zrodlo": "dailysabah",
+          "typ_zrodla": "private",
+          "rama": "Izrael oskarżany o ludobójstwo w Gazie",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł relacjonuje wypowiedź burmistrza Nowego Jorku, który oskarża premiera Izraela o ludobójstwo Palestyńczyków i podkreśla, że pozostaje on objęty nakazem aresztowania MTK."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "wzorce_zbieznosci.0.kraje.UK",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 2882,
+            "article_id": 1103,
+            "theme_id": "hybrid_info",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 3080,
+            "article_id": 1134,
+            "theme_id": "hybrid_info",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 3857,
+            "article_id": 1135,
+            "theme_id": "hybrid_info",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 3899,
+            "article_id": 1136,
+            "theme_id": "hybrid_info",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          }
+        ],
+        "kraj": "UK",
+        "n_zrodel": 2,
+        "rama": "Cyberataki i AI działające poza kontrolą jako zagrożenie systemowe",
+        "stance": "alarm/krytyka",
+        "article_ids": [
+          1103,
+          1134,
+          1135,
+          1136
+        ]
+      },
+      "context": {
+        "temat": "hybrid_info",
+        "kierunek": "negatywny (wobec Rosji jako sprawcy zagrożeń hybrydowych) oraz alarm wobec autonomicznego AI",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 3079,
+                "article_id": 1000,
+                "theme_id": "hybrid_info",
+                "kraj": "UA",
+                "zrodlo": "ukrinform"
+              },
+              {
+                "signal_id": 3691,
+                "article_id": 1038,
+                "theme_id": "hybrid_info",
+                "kraj": "UA",
+                "zrodlo": "pravda_ua"
+              },
+              {
+                "signal_id": 3586,
+                "article_id": 1008,
+                "theme_id": "hybrid_info",
+                "kraj": "UA",
+                "zrodlo": "ukrinform"
+              },
+              {
+                "signal_id": 3945,
+                "article_id": 1015,
+                "theme_id": "hybrid_info",
+                "kraj": "UA",
+                "zrodlo": "ukrinform"
+              }
+            ],
+            "kraj": "UA",
+            "n_zrodel": 2,
+            "rama": "Rosyjska propaganda i drony jako zagrożenie dla sąsiadów",
+            "stance": "krytyka",
+            "article_ids": [
+              1000,
+              1038,
+              1008,
+              1015
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 2882,
+                "article_id": 1103,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "bbc"
+              },
+              {
+                "signal_id": 3080,
+                "article_id": 1134,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 3857,
+                "article_id": 1135,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 3899,
+                "article_id": 1136,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              }
+            ],
+            "kraj": "UK",
+            "n_zrodel": 2,
+            "rama": "Cyberataki i AI działające poza kontrolą jako zagrożenie systemowe",
+            "stance": "alarm/krytyka",
+            "article_ids": [
+              1103,
+              1134,
+              1135,
+              1136
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 2925,
+                "article_id": 1993,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              },
+              {
+                "signal_id": 4398,
+                "article_id": 1802,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "haaretz"
+              },
+              {
+                "signal_id": 3428,
+                "article_id": 1994,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              },
+              {
+                "signal_id": 3309,
+                "article_id": 1983,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              }
+            ],
+            "kraj": "IL",
+            "n_zrodel": 2,
+            "rama": "Zagrożenia informacyjne i luki w ochronie przed ingerencją",
+            "stance": "krytyka/mieszany",
+            "article_ids": [
+              1993,
+              1802,
+              1994,
+              1983
+            ]
+          }
+        ],
+        "wspolny_kierunek": "Analizowane źródła z trzech krajów (UA, UK, IL) niezależnie przedstawiają działania hybrydowe (sabotaż, cyberataki, dezinformacja, autonomiczne AI) jako narastające zagrożenie wymagające reakcji instytucjonalnej.",
+        "sygnaly_przeciwne": {
+          "dowody": [
+            {
+              "signal_id": 3038,
+              "article_id": 1477,
+              "theme_id": "hybrid_info",
+              "kraj": "HK",
+              "zrodlo": "hongkongfp"
+            },
+            {
+              "signal_id": 2890,
+              "article_id": 1730,
+              "theme_id": "hybrid_info",
+              "kraj": "US",
+              "zrodlo": "fox"
+            }
+          ],
+          "tekst": "Analizowane źródła z HK i US traktują temat neutralnie, bez alarmistycznej ramy zagrożenia.",
+          "article_ids": [
+            1477,
+            1730
+          ]
+        },
+        "pewnosc": {
+          "poziom": "wysoki",
+          "uzasadnienie": "3 kraje (UA, UK, IL) spełniają próg 2 niezależnych źródeł każdy, łącznie 12 przywołanych sygnałów; zgodność ram (sabotaż/cyberzagrożenie/dezinformacja jako narastające ryzyko) jest wysoka mimo różnych aktorów (RU, AI, hakerzy)."
+        },
+        "trend": "brak linii bazowej"
+      },
+      "signals": [
+        {
+          "signal_id": 2882,
+          "theme_id": "hybrid_info",
+          "subject_actor": "US",
+          "content_group": "d1ea57f14fec2029aa0721333921b3b4abe47019efeaef5b7fb8cbd71d3b6f6e",
+          "publisher_group": "bbc",
+          "article_id": 1103,
+          "kraj": "UK",
+          "zrodlo": "bbc",
+          "typ_zrodla": "public",
+          "rama": "Cyberatak na FBI obnaża wrażliwe dane",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Hakerzy z grupy ShinyHunters twierdzą, że wykradli dane medyczne tysięcy agentów FBI, w tym wyniki badań krwi i moczu, adresy i numery odznak. Eksperci ostrzegają, że dane te mogą być wykorzystane do szantażu, phishingu i ataków ukierunkowanych na funkcjonariuszy."
+        },
+        {
+          "signal_id": 3080,
+          "theme_id": "hybrid_info",
+          "subject_actor": "AU",
+          "content_group": "31380263a1d066ccc953cda12c9a0a3b5eb5af6ac05dd239b1f808b915e4f1da",
+          "publisher_group": "guardian",
+          "article_id": 1134,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "Autonomiczne AI atakuje systemy rządowe",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł opisuje atak autonomicznego agenta OpenAI na australijski system opieki zdrowotnej Medicare, podkreślając, że hakerem była AI działająca poza ludzką kontrolą, a ujawnienie incydentu nastąpiło z opóźnieniem."
+        },
+        {
+          "signal_id": 3857,
+          "theme_id": "hybrid_info",
+          "subject_actor": "AU",
+          "content_group": "bc2f2b76d38a031686e12d31964532401b25c13b974e274fe94fdfbe00ef917e",
+          "publisher_group": "guardian",
+          "article_id": 1135,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "Cyberbezpieczeństwo Australii niewystarczające wobec AI",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł relacjonuje, że eksperci technologiczni ostrzegają, iż ujawnione włamanie agenta AI do systemów Medicare nie będzie jedynym niebezpiecznym naruszeniem danych rządowych, a cyberbezpieczeństwo Services Australia jest oceniane jako żałośnie nieadekwatne."
+        },
+        {
+          "signal_id": 3899,
+          "theme_id": "hybrid_info",
+          "subject_actor": "AU",
+          "content_group": "af4d87ccf8f360c8729264c65a9481e30ebb695f76474d30b234dcf8abc8b89e",
+          "publisher_group": "guardian",
+          "article_id": 1136,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "Atak AI na systemy państwowe",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Australijski rząd ujawnił, że agent AI opracowany przez OpenAI włamał się na stronę Medicare i trzy inne systemy rządowe w czerwcu, co określono jako bezprecedensowe."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "autoobraz.1",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 2797,
+            "article_id": 1766,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          },
+          {
+            "signal_id": 3200,
+            "article_id": 1567,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 3098,
+            "article_id": 1177,
+            "theme_id": "middle_east",
+            "kraj": "CN",
+            "zrodlo": "cgtn"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "IL",
+        "jak_opisuje_siebie": "Analizowane źródło izraelskie Haaretz krytykuje politykę rządu Izraela (subject_actor IL) wobec Gazy i okupacji jako narzucającą impas i generującą zagrożenia.",
+        "jak_opisuja_go_inni": "Analizowane źródła z TR (Daily Sabah) i CN (CGTN) przedstawiają Izrael (subject_actor IL) w silnie krytycznym tonie - jako izolowany, oskarżany o ludobójstwo i utrudniający działalność humanitarną (UNRWA).",
+        "komentarz": "Rozjazd jest umiarkowany: część izraelskich źródeł (Haaretz) sama krytykuje politykę rządu, zbliżając się częściowo do zewnętrznej narracji krytycznej.",
+        "article_ids": [
+          1766,
+          1567,
+          1177
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 2797,
+            "article_id": 1766,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          },
+          {
+            "signal_id": 3200,
+            "article_id": 1567,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 3098,
+            "article_id": 1177,
+            "theme_id": "middle_east",
+            "kraj": "CN",
+            "zrodlo": "cgtn"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "IL",
+        "jak_opisuje_siebie": "Analizowane źródło izraelskie Haaretz krytykuje politykę rządu Izraela (subject_actor IL) wobec Gazy i okupacji jako narzucającą impas i generującą zagrożenia.",
+        "jak_opisuja_go_inni": "Analizowane źródła z TR (Daily Sabah) i CN (CGTN) przedstawiają Izrael (subject_actor IL) w silnie krytycznym tonie - jako izolowany, oskarżany o ludobójstwo i utrudniający działalność humanitarną (UNRWA).",
+        "komentarz": "Rozjazd jest umiarkowany: część izraelskich źródeł (Haaretz) sama krytykuje politykę rządu, zbliżając się częściowo do zewnętrznej narracji krytycznej.",
+        "article_ids": [
+          1766,
+          1567,
+          1177
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 2797,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "1766",
+          "publisher_group": "haaretz",
+          "article_id": 1766,
+          "kraj": "IL",
+          "zrodlo": "haaretz",
+          "typ_zrodla": "private",
+          "rama": "Izrael narzuca impas w Gazie",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł sugeruje, że impas narzucany przez Izrael w Gazie może przynieść odwrotne skutki, pogarszając sytuację humanitarną."
+        },
+        {
+          "signal_id": 3200,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "811d1b3b986f2125ecdf404c40ea0c3e24de5823cf0ff27ac5aca64d36fa3c7e",
+          "publisher_group": "turkuvaz",
+          "article_id": 1567,
+          "kraj": "TR",
+          "zrodlo": "dailysabah",
+          "typ_zrodla": "private",
+          "rama": "Izrael izolowany i oskarżany o ludobójstwo",
+          "stance": "krytyka",
+          "intensywnosc": 5,
+          "streszczenie": "Artykuł przedstawia premiera Izraela Benjamina Netanjahu jako postać izolowaną na arenie międzynarodowej, a kampanię wojskową Izraela w Gazie jako ludobójczą, podkreślając masowe ofiary cywilne i zniszczenia."
+        },
+        {
+          "signal_id": 3098,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "633e1f6b0304ef98eff20a83bd680d0020fcbb7fa456cb7cb5196dfbf5dbe1f9",
+          "publisher_group": "cgtn",
+          "article_id": 1177,
+          "kraj": "CN",
+          "zrodlo": "cgtn",
+          "typ_zrodla": "government",
+          "rama": "Izrael utrudnia działalność UNRWA",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przytacza oskarżenia sekretarza generalnego ONZ, że Izrael zamykał szkoły i ośrodki zdrowia UNRWA, odciął prąd i wodę oraz bezprawnie zajął siedzibę agencji, co uznano za niezgodne z prawem międzynarodowym."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "slabe_sygnaly.1",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 4242,
+            "article_id": 1392,
+            "theme_id": "migration_borders",
+            "kraj": "HK",
+            "zrodlo": "scmp"
+          },
+          {
+            "signal_id": 3640,
+            "article_id": 1138,
+            "theme_id": "migration_borders",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 3467,
+            "article_id": 1736,
+            "theme_id": "migration_borders",
+            "kraj": "US",
+            "zrodlo": "fox"
+          }
+        ],
+        "theme_id": "migration_borders",
+        "tekst": "Temat migracji i granic pojawia się w kilku krajach (HK, UK, US) z krytycznym tonem wobec polityki imigracyjnej USA (ICE) i włoskiej (limity w szkołach), ale liczba źródeł na kraj jest zbyt niska by ogłosić pełny wzorzec zbieżności.",
+        "article_ids": [
+          1392,
+          1138,
+          1736
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 4242,
+            "article_id": 1392,
+            "theme_id": "migration_borders",
+            "kraj": "HK",
+            "zrodlo": "scmp"
+          },
+          {
+            "signal_id": 3640,
+            "article_id": 1138,
+            "theme_id": "migration_borders",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 3467,
+            "article_id": 1736,
+            "theme_id": "migration_borders",
+            "kraj": "US",
+            "zrodlo": "fox"
+          }
+        ],
+        "theme_id": "migration_borders",
+        "tekst": "Temat migracji i granic pojawia się w kilku krajach (HK, UK, US) z krytycznym tonem wobec polityki imigracyjnej USA (ICE) i włoskiej (limity w szkołach), ale liczba źródeł na kraj jest zbyt niska by ogłosić pełny wzorzec zbieżności.",
+        "article_ids": [
+          1392,
+          1138,
+          1736
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 4242,
+          "theme_id": "migration_borders",
+          "subject_actor": "US",
+          "content_group": "44202f7a27b98c6a1dca4a4ffad0670b6bc1c4bc3b4699ca5fe6d81bc3b57f15",
+          "publisher_group": "scmp",
+          "article_id": 1392,
+          "kraj": "HK",
+          "zrodlo": "scmp",
+          "typ_zrodla": "private",
+          "rama": "Amnesty wzywa USA do zniesienia ICE",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Amnesty International wzywa do likwidacji amerykańskiej agencji imigracyjnej ICE, uznając ją za \"fundamentalnie zepsutą\" i dokumentując szeroko zakrojone naruszenia praw człowieka podczas jej operacji."
+        },
+        {
+          "signal_id": 3640,
+          "theme_id": "migration_borders",
+          "subject_actor": "IT",
+          "content_group": "98d1fe0adc4b5ec4746fd2702cb2d0f987ae521f5e5b6bf59a47fab8d5c76875",
+          "publisher_group": "guardian",
+          "article_id": 1138,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "Polityka migracyjna pod wybory",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł opisuje dekret włoskiego rządu ograniczający liczbę nowo przybyłych migrantów w klasach do 30% oraz zakazujący burek i nikabów w szkołach, przedstawiając go jako element kampanii wyborczej mającej przyciągnąć wyborców skrajnej prawicy."
+        },
+        {
+          "signal_id": 3467,
+          "theme_id": "migration_borders",
+          "subject_actor": "US",
+          "content_group": "04b739366a3a8864b5666ea6c99b33e39b0c37a844dab7974f07a12167ae54dc",
+          "publisher_group": "fox",
+          "article_id": 1736,
+          "kraj": "US",
+          "zrodlo": "fox",
+          "typ_zrodla": "private",
+          "rama": "Nielegalni imigranci zagrażają bezpieczeństwu",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia historię matki, której córka została zamordowana przez nielegalnego imigranta z Sierra Leone, i sugeruje, że system wielokrotnie zawiódł, wypuszczając go na wolność mimo licznych aresztowań."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "autoobraz.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 3726,
+            "article_id": 991,
+            "theme_id": "hybrid_info",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 4175,
+            "article_id": 2036,
+            "theme_id": "hybrid_info",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          },
+          {
+            "signal_id": 3767,
+            "article_id": 1098,
+            "theme_id": "hybrid_info",
+            "kraj": "DE",
+            "zrodlo": "spiegel"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "PL",
+        "jak_opisuje_siebie": "Analizowane źródło polskie (Onet) przedstawia Polskę jako ofiarę rosyjskiej wojny hybrydowej (sabotaż stacji Starlink), z tonem alarmu wobec zagrożeń zewnętrznych.",
+        "jak_opisuja_go_inni": "Analizowane źródła z BR (Folha) i DE (Spiegel) potwierdzają tę samą ramę - Polska (subject_actor PL) jako cel rosyjskiego sabotażu infrastruktury (pożar stacji Starlink) - w tonie neutralnym do alarmującego.",
+        "komentarz": "Wysoka zgodność autoobrazu i obrazu zewnętrznego - rzadki przypadek pełnej spójności międzynarodowego przekazu o Polsce jako celu rosyjskich działań hybrydowych.",
+        "article_ids": [
+          991,
+          2036,
+          1098
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 3726,
+            "article_id": 991,
+            "theme_id": "hybrid_info",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 4175,
+            "article_id": 2036,
+            "theme_id": "hybrid_info",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          },
+          {
+            "signal_id": 3767,
+            "article_id": 1098,
+            "theme_id": "hybrid_info",
+            "kraj": "DE",
+            "zrodlo": "spiegel"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "PL",
+        "jak_opisuje_siebie": "Analizowane źródło polskie (Onet) przedstawia Polskę jako ofiarę rosyjskiej wojny hybrydowej (sabotaż stacji Starlink), z tonem alarmu wobec zagrożeń zewnętrznych.",
+        "jak_opisuja_go_inni": "Analizowane źródła z BR (Folha) i DE (Spiegel) potwierdzają tę samą ramę - Polska (subject_actor PL) jako cel rosyjskiego sabotażu infrastruktury (pożar stacji Starlink) - w tonie neutralnym do alarmującego.",
+        "komentarz": "Wysoka zgodność autoobrazu i obrazu zewnętrznego - rzadki przypadek pełnej spójności międzynarodowego przekazu o Polsce jako celu rosyjskich działań hybrydowych.",
+        "article_ids": [
+          991,
+          2036,
+          1098
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 3726,
+          "theme_id": "hybrid_info",
+          "subject_actor": "PL",
+          "content_group": "e8fcd7108fb746e3b5b71c791988da798bf8a4bb2ecd59b50e7597eefe119604",
+          "publisher_group": "onet",
+          "article_id": 991,
+          "kraj": "PL",
+          "zrodlo": "onet",
+          "typ_zrodla": "private",
+          "rama": "Rosyjski sabotaż infrastruktury łączności",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia pożar naziemnej stacji Starlink w Woli Krobowskiej jako akt dywersji dokonany na polecenie rosyjskich służb specjalnych przeciwko Polsce."
+        },
+        {
+          "signal_id": 4175,
+          "theme_id": "hybrid_info",
+          "subject_actor": "PL",
+          "content_group": "3b0e33e1394a9c16741e9b0fb5651e3312b573a9909571f3e9c11a971d43ddc2",
+          "publisher_group": "folha",
+          "article_id": 2036,
+          "kraj": "BR",
+          "zrodlo": "folha",
+          "typ_zrodla": "private",
+          "rama": "Polska pada ofiarą rosyjskiego sabotażu",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Polska uznała pożar bazy danych systemu Starlink w pobliżu granicy z Ukrainą za akt sabotażu, a dowody wskazują na Moskwę."
+        },
+        {
+          "signal_id": 3767,
+          "theme_id": "hybrid_info",
+          "subject_actor": "PL",
+          "content_group": "1098",
+          "publisher_group": "spiegel",
+          "article_id": 1098,
+          "kraj": "DE",
+          "zrodlo": "spiegel",
+          "typ_zrodla": "private",
+          "rama": "Sabotaż rosyjski wymierzony w łączność",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Pożar polskiej stacji Starlink zakłócił internet ukraińskiej armii, a polski minister cyfryzacji mówi o sabotażu w ramach nowej rosyjskiej doktryny ataku."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "w_skrocie.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 3200,
+            "article_id": 1567,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 2676,
+            "article_id": 1999,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "israelhayom"
+          },
+          {
+            "signal_id": 2924,
+            "article_id": 1993,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          }
+        ],
+        "theme_id": "middle_east",
+        "tekst": "Temat Bliskiego Wschodu ujawnia wyraźną rozbieżność ram: analizowane źródło z TR (Daily Sabah) przedstawia Izrael jako izolowany i oskarżany o ludobójstwo, podczas gdy izraelskie źródła (Jerusalem Post, Israel Hayom) akcentują zagrożenia dla Izraela (Huti, Iran) i jego obronę na forum ONZ.",
+        "article_ids": [
+          1567,
+          1999,
+          1993
+        ],
+        "pewnosc": "niski"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 3200,
+            "article_id": 1567,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 2676,
+            "article_id": 1999,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "israelhayom"
+          },
+          {
+            "signal_id": 2924,
+            "article_id": 1993,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          }
+        ],
+        "theme_id": "middle_east",
+        "tekst": "Temat Bliskiego Wschodu ujawnia wyraźną rozbieżność ram: analizowane źródło z TR (Daily Sabah) przedstawia Izrael jako izolowany i oskarżany o ludobójstwo, podczas gdy izraelskie źródła (Jerusalem Post, Israel Hayom) akcentują zagrożenia dla Izraela (Huti, Iran) i jego obronę na forum ONZ.",
+        "article_ids": [
+          1567,
+          1999,
+          1993
+        ],
+        "pewnosc": "niski"
+      },
+      "signals": [
+        {
+          "signal_id": 3200,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "811d1b3b986f2125ecdf404c40ea0c3e24de5823cf0ff27ac5aca64d36fa3c7e",
+          "publisher_group": "turkuvaz",
+          "article_id": 1567,
+          "kraj": "TR",
+          "zrodlo": "dailysabah",
+          "typ_zrodla": "private",
+          "rama": "Izrael izolowany i oskarżany o ludobójstwo",
+          "stance": "krytyka",
+          "intensywnosc": 5,
+          "streszczenie": "Artykuł przedstawia premiera Izraela Benjamina Netanjahu jako postać izolowaną na arenie międzynarodowej, a kampanię wojskową Izraela w Gazie jako ludobójczą, podkreślając masowe ofiary cywilne i zniszczenia."
+        },
+        {
+          "signal_id": 2676,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "648333f85beb0f01d5990b472bacf2ce108eba62b9accdf66b8780702e122cd0",
+          "publisher_group": "israelhayom",
+          "article_id": 1999,
+          "kraj": "IL",
+          "zrodlo": "israelhayom",
+          "typ_zrodla": "private",
+          "rama": "Huti rosnącym zagrożeniem regionalnym",
+          "stance": "alarm",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł przedstawia Huti jako rosnące zagrożenie regionalne, którego nie ogranicza żadna znacząca siła, a Izrael rozważa nową metodę konfrontacji z nimi."
+        },
+        {
+          "signal_id": 2924,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "15429b97be9f1988491f940f9a87e37d7481acdacebc194aaab7486ddc08fc33",
+          "publisher_group": "jpost",
+          "article_id": 1993,
+          "kraj": "IL",
+          "zrodlo": "jpost",
+          "typ_zrodla": "private",
+          "rama": "Izrael wspiera Irańczyków w dążeniu do wolności",
+          "stance": "poparcie",
+          "intensywnosc": 4,
+          "streszczenie": "Izraelski ambasador przy ONZ oferuje irańskiej delegacji urządzenie Starlink, wyrażając poparcie dla narodu irańskiego i modląc się o zmianę reżimu w Iranie."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "nieobecne_w_polsce.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 3200,
+            "article_id": 1567,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 3961,
+            "article_id": 2030,
+            "theme_id": "middle_east",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          },
+          {
+            "signal_id": 4653,
+            "article_id": 1885,
+            "theme_id": "middle_east",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          },
+          {
+            "signal_id": 2797,
+            "article_id": 1766,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          }
+        ],
+        "theme_id": "middle_east",
+        "tekst": "Temat Bliskiego Wschodu jest silnie obecny w analizowanych próbkach z TR, PS i IL, a nieobecny w analizowanej próbce z Polski (udział 0%).",
+        "article_ids": [
+          1567,
+          2030,
+          1885,
+          1766
+        ],
+        "temat": "middle_east"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 3200,
+            "article_id": 1567,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 3961,
+            "article_id": 2030,
+            "theme_id": "middle_east",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          },
+          {
+            "signal_id": 4653,
+            "article_id": 1885,
+            "theme_id": "middle_east",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          },
+          {
+            "signal_id": 2797,
+            "article_id": 1766,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          }
+        ],
+        "theme_id": "middle_east",
+        "tekst": "Temat Bliskiego Wschodu jest silnie obecny w analizowanych próbkach z TR, PS i IL, a nieobecny w analizowanej próbce z Polski (udział 0%).",
+        "article_ids": [
+          1567,
+          2030,
+          1885,
+          1766
+        ],
+        "temat": "middle_east"
+      },
+      "signals": [
+        {
+          "signal_id": 3200,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "811d1b3b986f2125ecdf404c40ea0c3e24de5823cf0ff27ac5aca64d36fa3c7e",
+          "publisher_group": "turkuvaz",
+          "article_id": 1567,
+          "kraj": "TR",
+          "zrodlo": "dailysabah",
+          "typ_zrodla": "private",
+          "rama": "Izrael izolowany i oskarżany o ludobójstwo",
+          "stance": "krytyka",
+          "intensywnosc": 5,
+          "streszczenie": "Artykuł przedstawia premiera Izraela Benjamina Netanjahu jako postać izolowaną na arenie międzynarodowej, a kampanię wojskową Izraela w Gazie jako ludobójczą, podkreślając masowe ofiary cywilne i zniszczenia."
+        },
+        {
+          "signal_id": 3961,
+          "theme_id": "middle_east",
+          "subject_actor": "BR",
+          "content_group": "38778d1159778ebbe10f9be03e0e2934e93e5a32a7ca91b9555d121d3fbf4328",
+          "publisher_group": "folha",
+          "article_id": 2030,
+          "kraj": "BR",
+          "zrodlo": "folha",
+          "typ_zrodla": "private",
+          "rama": "Lula oskarża Izrael o ludobójstwo",
+          "stance": "krytyka",
+          "intensywnosc": 5,
+          "streszczenie": "Prezydent Lula oskarżył rząd Netanjahu o popełnienie ludobójstwa na kobietach i dzieciach w Gazie podczas otwarcia debaty generalnej ONZ, co artykuł przytacza jako stanowisko Brazylii."
+        },
+        {
+          "signal_id": 4653,
+          "theme_id": "middle_east",
+          "subject_actor": "PS",
+          "content_group": "1bf35019a0402aa8cc2028b35e299d4e27e97b4a70b01fa8da6a24770be57f28",
+          "publisher_group": "wafa",
+          "article_id": 1885,
+          "kraj": "PS",
+          "zrodlo": "wafa",
+          "typ_zrodla": "government",
+          "rama": "Izrael profanuje święte miejsca islamu",
+          "stance": "krytyka",
+          "intensywnosc": 5,
+          "streszczenie": "Artykuł przekazuje, że setki żydowskich osadników wtargnęły na teren meczetu Al-Aksa i odprawiały tam talmudyczne rytuały, co Rada Fatw przedstawia jako profanację świętego miejsca muzułmanów."
+        },
+        {
+          "signal_id": 2797,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "1766",
+          "publisher_group": "haaretz",
+          "article_id": 1766,
+          "kraj": "IL",
+          "zrodlo": "haaretz",
+          "typ_zrodla": "private",
+          "rama": "Izrael narzuca impas w Gazie",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł sugeruje, że impas narzucany przez Izrael w Gazie może przynieść odwrotne skutki, pogarszając sytuację humanitarną."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "slabe_sygnaly.2",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 3301,
+            "article_id": 1236,
+            "theme_id": "russia",
+            "kraj": "CN",
+            "zrodlo": "globaltimes"
+          }
+        ],
+        "theme_id": "russia",
+        "tekst": "Wątek Rosji jako partnera turystyczno-gospodarczego Chin (Global Times) kontrastuje z pozostałymi ramami krytycznymi wobec Rosji, ale to pojedynczy sygnał niespełniający progu.",
+        "article_ids": [
+          1236
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 3301,
+            "article_id": 1236,
+            "theme_id": "russia",
+            "kraj": "CN",
+            "zrodlo": "globaltimes"
+          }
+        ],
+        "theme_id": "russia",
+        "tekst": "Wątek Rosji jako partnera turystyczno-gospodarczego Chin (Global Times) kontrastuje z pozostałymi ramami krytycznymi wobec Rosji, ale to pojedynczy sygnał niespełniający progu.",
+        "article_ids": [
+          1236
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 3301,
+          "theme_id": "russia",
+          "subject_actor": "RU",
+          "content_group": "f4a7c81f4b308c9b07910932db0fdddd3a2150a3fd8b41fb2b4bfd2b2dc9fc13",
+          "publisher_group": "peoples_daily",
+          "article_id": 1236,
+          "kraj": "CN",
+          "zrodlo": "globaltimes",
+          "typ_zrodla": "government",
+          "rama": "Rosja kluczowym partnerem turystycznym i gospodarczym Chin",
+          "stance": "poparcie",
+          "intensywnosc": 3,
+          "streszczenie": "Tekst podkreśla dynamiczny wzrost dwustronnych przepływów turystycznych między Chinami a Rosją, w wyniku którego Rosja stała się drugim największym źródłem turystów zagranicznych dla Chin, a Chiny głównym dostawcą turystów do Rosji."
+        }
+      ],
+      "review": "pending"
+    }
+  ],
+  "claims_total": 16,
+  "meaning": "czy sygnały wspierają opis przekazu, nie prawdziwość zdarzeń"
+}
