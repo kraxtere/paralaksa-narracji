@@ -1,4 +1,4 @@
-// Strona startowa: karty zdarzeń (z zapowiedzią dwóch nagłówków) i dni dziennika.
+// Strona startowa: historie dnia i dziennik u góry, pod nimi karty zdarzeń (z zapowiedzią dwóch nagłówków).
 const FORMA = { dwie_opowiesci: "dwie opowieści", kilka_perspektyw: "kilka perspektyw", os_czasu: "oś czasu" };
 const state = { rejected: false };
 const CAPS = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"];
@@ -31,13 +31,21 @@ function groups(evs) {
   return out;
 }
 
-function dayCard(d) {
-  return `<a class="day" href="dziennik/${esc(d.dzien)}.html">
-    <div class="meta"><span class="pill ${d.status === "inicjalny" ? "warn" : ""}">${esc(d.status)}</span>${d.raport ? "" : `<span class="pill warn">bez raportu</span>`}</div>
-    <div class="d">${fmtDay(d.dzien)}</div>
-    <div class="nums"><div><b>${d.artykuly}</b><span>artykułów w oknie</span></div><div><b>${d.kraje.length}</b><span>krajów</span></div><div><b>${d.sygnaly}</b><span>sygnałów</span></div></div>
-    <div class="small muted">${d.kraje.map(c => cc(c)).join(" ")}</div>
-    <div class="small muted" style="margin-top:6px">pobrano ${d.pobrane} · koszt ${d.koszt.toFixed(2)} $</div></a>`;
+const RECENT_DAYS = 7;
+
+function dayRow(d) {
+  return `<li><a href="dziennik/${esc(d.dzien)}.html" title="pobrano ${d.pobrane} · koszt ${d.koszt.toFixed(2)} $">
+    <span class="d">${fmtDay(d.dzien)}</span><span class="n">${d.artykuly} art. · ${d.kraje.length} krajów · ${d.sygnaly} sygnałów</span>
+    ${d.status === "inicjalny" ? `<span class="pill warn">inicjalny</span>` : ""}${d.raport ? "" : `<span class="pill warn">bez raportu</span>`}</a></li>`;
+}
+
+function daysPanel() {
+  // dziennik u góry obok historii dnia: ostatni tydzień, starsze dni po rozwinięciu
+  const head = `<div class="meta"><span>Dziennik</span><span>automatyczny przebieg dzienny</span></div>`;
+  if (!DATA.dni.length) return `<div class="days-panel" id="dziennik">${head}<p class="small muted">Brak bazy przy budowie strony.</p></div>`;
+  const older = DATA.dni.slice(RECENT_DAYS);
+  return `<div class="days-panel" id="dziennik">${head}<ul>${DATA.dni.slice(0, RECENT_DAYS).map(dayRow).join("")}</ul>
+    ${older.length ? `<details><summary class="small">starsze dni (${older.length})</summary><ul>${older.map(dayRow).join("")}</ul></details>` : ""}</div>`;
 }
 
 function latest() {
@@ -54,12 +62,10 @@ function render() {
   app.innerHTML = `<div class="intro"><h1>Paralaksa</h1>
     <p class="lede">Jedno zdarzenie, wiele opowieści. Zestawiamy nagłówki z różnych krajów i pokazujemy, od czego każda redakcja zaczyna.</p>
     <p class="small muted">Wersja wewnętrzna do oceny, zbudowana ${esc(DATA.zbudowano)}.</p></div>
-    ${latest()}
+    <div class="top-row ${latest() ? "" : "single"}">${latest()}${daysPanel()}</div>
     <h2 id="zdarzenia">Zdarzenia · ${DATA.zdarzenia.length - hidden}</h2>
     ${hidden ? `<div class="filters"><label><input type="checkbox" id="rej" ${state.rejected ? "checked" : ""}> pokaż odrzucone (${hidden})</label></div>` : ""}
-    ${groups(evs).map(g => `<div class="month">${esc(g.label)}</div><div class="list-events">${g.items.map(evCard).join("")}</div>`).join("")}
-    <h2 id="dziennik">Dziennik · automatyczny przebieg dzienny</h2>
-    ${DATA.dni.length ? `<div class="days-grid">${DATA.dni.map(dayCard).join("")}</div>` : `<p class="muted">Brak bazy przy budowie strony.</p>`}`;
+    ${groups(evs).map(g => `<div class="month">${esc(g.label)}</div><div class="list-events">${g.items.map(evCard).join("")}</div>`).join("")}`;
 }
 app.addEventListener("change", e => { if (e.target.id === "rej") { state.rejected = e.target.checked; render(); } });
 render();
