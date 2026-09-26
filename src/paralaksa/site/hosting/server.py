@@ -1,7 +1,8 @@
 """Password-protected static server for the internal site (Render web service, standard library only).
 
 Serves ./public behind HTTP Basic Auth. Credentials come from SITE_USER and SITE_PASSWORD; without them
-every request gets 503, so a misconfigured deploy never exposes the site."""
+every request gets 503, so a misconfigured deploy never exposes the site. Only the app manifest and icons are served
+without a password: browsers fetch them without credentials when offering to install the site as an app."""
 import base64
 import hmac
 import os
@@ -12,10 +13,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent / "public"
 USER = os.environ.get("SITE_USER", "")
 PASSWORD = os.environ.get("SITE_PASSWORD", "")
+PUBLIC = {"/manifest.webmanifest", "/icon-192.png", "/icon-512.png", "/icon-maskable-512.png", "/apple-touch-icon.png"}
 EXPECTED = b"Basic " + base64.b64encode(f"{USER}:{PASSWORD}".encode()) if USER and PASSWORD else None
 
 
 class Handler(SimpleHTTPRequestHandler):
+    extensions_map = {**SimpleHTTPRequestHandler.extensions_map, ".webmanifest": "application/manifest+json"}
+
     def end_headers(self) -> None:
         self.send_header("X-Robots-Tag", "noindex, nofollow")
         self.send_header("Cache-Control", "private, no-cache")
@@ -24,6 +28,8 @@ class Handler(SimpleHTTPRequestHandler):
         super().end_headers()
 
     def _allowed(self) -> bool:
+        if self.path.split("?", 1)[0] in PUBLIC:
+            return True
         if EXPECTED is None:
             self.send_error(503, "SITE_USER / SITE_PASSWORD not set")
             return False

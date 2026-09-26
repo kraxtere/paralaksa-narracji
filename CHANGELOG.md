@@ -1,3 +1,10 @@
+# Strona jako aplikacja — 2026-09-26
+
+- Przeglądarka proponuje instalację strony jako aplikacji (Chrome, Edge, Android; na iOS „Do ekranu początkowego”).
+  `site/icons.py`: manifest (`manifest.webmanifest`, okno bez paska adresu) i ikony PNG z logo, rysowane w czystym Pythonie.
+  Chrome przez DevTools: manifest bez błędów, brak przeszkód w instalacji (serwer lokalny z hasłem).
+- Serwer wydaje bez hasła tylko manifest i ikony, bo przeglądarka pobiera je bez logowania. Reszta nadal pod hasłem.
+
 # Strona: kliknięcia w trybie ciemnym, nagłówki po polsku — 2026-09-26
 
 - Błąd: w trybie ciemnym każde kliknięcie w dzienniku (odnośnik raportu, lista tematów, logo) przełączało na porównanie

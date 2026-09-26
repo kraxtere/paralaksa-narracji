@@ -114,7 +114,8 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
   Kolory tylko przez zmienne CSS (jest tryb ciemny `[data-theme="dark"]`); logo: `build.logo_mark`. Bez pełnych tekstów, leadów i `evidence_span`. Nie publikujemy otwarcie (decyzja 2026-09-25); od 2026-09-26 strona
   jest dostępna tylko pod hasłem: `plx site --publikuj` (`site/publish.py`) wypycha ją jednym commitem (force push) do prywatnego repo
   `SITE_REPO` (`kraxtere/paralaksa-strona`, odmawia, gdy repo nie jest prywatne), Render (darmowy Web Service) uruchamia `site/hosting/server.py`
-  z HTTP Basic Auth (`SITE_USER`/`SITE_PASSWORD` tylko w Renderze; bez nich 503). To repo zostaje publiczne (minuty Actions).
+  z HTTP Basic Auth (`SITE_USER`/`SITE_PASSWORD` tylko w Renderze; bez nich 503; bez hasła tylko manifest i ikony
+  z `site/icons.py`, do instalacji jako aplikacja). To repo zostaje publiczne (minuty Actions).
   `stories.py`: „historie dnia” w zakładce Najważniejsze (wydarzenia z ≥ 3 krajów, jeden przetłumaczony nagłówek na kraj). Dwa kroki
   modelu ekstrakcji: wyszukanie kandydatów, potem przypisanie każdego artykułu do wydarzenia albo odrzucenie (porcje po 60 artykułów). Tylko przy `plx site`, nigdy w daily;
   wynik w `data/stories/<dzień>.json` (ok. 0,03–0,04 $ na dzień, ponowna budowa za darmo). Pierwszy krok bez weryfikacji dokleja artykuły

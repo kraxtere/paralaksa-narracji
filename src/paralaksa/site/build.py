@@ -11,6 +11,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 from paralaksa.events.check import CardError, card_paths
+from paralaksa.site import icons
 from paralaksa.site.data import COUNTRY_NAMES, daily_days, daily_payload, daily_summary, event_payload, event_summary, load_report
 
 ASSETS = Path(__file__).parent / "assets"
@@ -57,6 +58,9 @@ def page(title: str, kind: str, payload: dict, root: str) -> str:
 <meta name="robots" content="noindex, nofollow">
 <title>{html.escape(title)} · Paralaksa</title>
 <link rel="icon" href="{FAVICON}">
+<link rel="manifest" href="{root}manifest.webmanifest">
+<link rel="apple-touch-icon" href="{root}apple-touch-icon.png">
+<meta name="theme-color" content="#1c1c1a">
 <script>{THEME_INIT}</script>
 <style>{_asset("site.css")}</style>
 </head>
@@ -118,6 +122,10 @@ def build_site(out_dir: Path, events_dir: Path, reports_dir: Path, conn: sqlite3
     (out_dir / "index.html").write_text(page("Przegląd", "index", index, ""), encoding="utf-8")
     (out_dir / "logo.svg").write_text(logo_svg(), encoding="utf-8")
     (out_dir / "logo-ciemne-tlo.svg").write_text(logo_svg("#fff", "#1c1c1a"), encoding="utf-8")
+    # instalacja jako aplikacja (Chrome, Edge, Android; iOS: „Do ekranu początkowego”)
+    (out_dir / "manifest.webmanifest").write_text(icons.manifest(), encoding="utf-8")
+    for name, spec in icons.ICONS.items():
+        (out_dir / name).write_bytes(icons.render_icon(*spec))
     return res
 
 

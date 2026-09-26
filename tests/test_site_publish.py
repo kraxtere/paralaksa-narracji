@@ -49,6 +49,25 @@ def test_server_requires_password(monkeypatch, tmp_path):
         srv.shutdown()
 
 
+def test_server_serves_only_app_manifest_and_icons_without_password(monkeypatch, tmp_path):
+    srv, base = _server(monkeypatch, tmp_path, "zespol", "tajne-haslo")
+    (tmp_path / "manifest.webmanifest").write_text('{"name": "Paralaksa"}', encoding="utf-8")
+    (tmp_path / "icon-192.png").write_bytes(b"png")
+    try:
+        status, body, headers = _get(base + "/manifest.webmanifest")
+        assert status == 200 and "Paralaksa" in body and headers["Content-Type"] == "application/manifest+json"
+        assert _get(base + "/icon-192.png")[0] == 200
+        assert _get(base + "/index.html")[0] == 401 and _get(base + "/manifest.webmanifest/../index.html")[0] == 401
+    finally:
+        srv.shutdown()
+
+
+def test_server_public_files_match_the_build():
+    from paralaksa.site.icons import PUBLIC_FILES
+    text = (publish.HOSTING / "server.py").read_text(encoding="utf-8")
+    assert all(f'"/{name}"' in text for name in PUBLIC_FILES)
+
+
 def test_server_without_credentials_serves_nothing(monkeypatch, tmp_path):
     srv, base = _server(monkeypatch, tmp_path, "", "")
     try:
