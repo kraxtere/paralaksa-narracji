@@ -1,3 +1,14 @@
+# Strona: kliknięcia w trybie ciemnym, nagłówki po polsku — 2026-09-26
+
+- Błąd: w trybie ciemnym każde kliknięcie w dzienniku (odnośnik raportu, lista tematów, logo) przełączało na porównanie
+  krajów. Tryb ciemny ustawia `data-theme` na `<html>`, a dziennik tym samym atrybutem oznaczał klikalne tematy, więc
+  `closest("[data-theme]")` łapał całą stronę. Temat ma teraz `data-topic`; test pilnuje, żeby skrypty nie wracały do `[data-theme]`.
+- Wszystkie nagłówki dnia po polsku (lista artykułów, porównanie krajów, panel artykułu, podpowiedzi odnośników), oryginał
+  mniejszy pod spodem. `site/titles.py`: model ekstrakcji, porcje po 120 nagłówków, 4 równolegle, tylko przy `plx site`.
+  Zapis w `data/tytuly/<dzień>.json` według id artykułu, kolejne budowy tłumaczą tylko nowe. Skopiowany oryginał nie liczy się
+  jako tłumaczenie. Pierwsze trzy dni (1531 nagłówków): 0,15 $. `--bez-historii` używa tylko zapisanych.
+- Strona budowana z gałęzi bez najnowszego `main` pokazywała 25.09 „bez raportu”; raporty dnia są w `main`.
+
 # Strona wewnętrzna pod hasłem (Render) — 2026-09-26
 
 - Strona z `plx site` jest dostępna w internecie tylko pod hasłem. `plx site --publikuj` wypycha zbudowaną stronę jednym commitem

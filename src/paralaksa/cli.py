@@ -271,8 +271,9 @@ def site(
     publish_site: bool = typer.Option(False, "--publikuj",
                                       help="Wypchnij stronę do prywatnego repo SITE_REPO (Render, pod hasłem)."),
     no_stories: bool = typer.Option(False, "--bez-historii",
-                                    help="Nie wywołuj modelu dla brakujących historii dnia (tylko zapisane w --historie-dir)."),
+                                    help="Nie wywołuj modelu: historie dnia i tłumaczenia nagłówków tylko z zapisanych."),
     stories_dir: Path = typer.Option(Path("data/stories"), "--historie-dir", help="Zapisane historie dnia (JSON)."),
+    titles_dir: Path = typer.Option(Path("data/tytuly"), "--tytuly-dir", help="Zapisane tłumaczenia nagłówków (JSON)."),
     config_dir: Path = ConfigDir,
     db_path: Optional[Path] = DbPath,
 ) -> None:
@@ -282,13 +283,14 @@ def site(
     Publiczne repo jest odrzucane.
 
     Historie dnia (wydarzenia opisywane w wielu krajach): jedno wywołanie modelu ekstrakcji na dzień, wynik zapisany
-    w --historie-dir i używany przy kolejnych budowach. Daily ich nie liczy."""
+    w --historie-dir i używany przy kolejnych budowach. Tłumaczenia wszystkich nagłówków dnia na polski: porcje po 120,
+    zapis w --tytuly-dir, przy kolejnych budowach tylko nowe artykuły. Daily ich nie liczy."""
     from paralaksa.config import load_themes
     from paralaksa.events.check import open_db_readonly
     import sqlite3
 
     from paralaksa.extract.llm_client import build_client
-    from paralaksa.site import stories
+    from paralaksa.site import stories, titles
     from paralaksa.site.build import build_site, zip_site
 
     settings = load_settings(config_dir)
@@ -321,16 +323,38 @@ def site(
                    f"{out['cost_usd']:.3f} $)")
         return out
 
+    def titles_for(day: str, ids: set[int]) -> dict[int, str]:
+        nonlocal client, spent
+        if no_stories:
+            return titles.cached(titles_dir, day)
+        items = titles.title_items(conn, ids)
+        known = titles.cached(titles_dir, day)
+        if all(i["id"] in known for i in items):
+            return known
+        try:
+            client = client or build_client(model, settings.pricing, settings.extract.batch_poll_interval_s,
+                                            settings.extract.batch_timeout_h)
+            out = titles.translate(client, model, day, items, titles_dir)
+        except RuntimeError as e:
+            typer.echo(f"OSTRZEŻENIE: {e}; nagłówki dnia {day} bez tłumaczenia", err=True)
+            return known
+        spent += out["run_cost"]
+        for err in out["errors"]:
+            typer.echo(f"OSTRZEŻENIE: tłumaczenia {day}: {err}", err=True)
+        typer.echo(f"Tłumaczenia nagłówków {day}: {out['translated']} nowych, bez tłumaczenia {out['missing']} "
+                   f"({out['run_cost']:.3f} $)")
+        return out["tytuly"]
+
     try:
         res = build_site(out_dir, events_dir, reports_dir, conn, {t.id: t.name_pl for t in load_themes(config_dir)},
-                         stories_for)
+                         stories_for, titles_for)
     finally:
         if conn is not None:
             conn.close()
     for err in res.errors:
         typer.echo(f"OSTRZEŻENIE: {err}", err=True)
     if spent:
-        typer.echo(f"Koszt historii dnia: {spent:.3f} $")
+        typer.echo(f"Koszt modelu (historie dnia, tłumaczenia nagłówków): {spent:.3f} $")
     typer.echo(f"Zdarzenia: {len(res.events)}, dni dziennika: {len(res.days)}. Start: {out_dir / 'index.html'}")
     if make_zip:
         typer.echo(f"Paczka: {zip_site(out_dir)}")

@@ -119,6 +119,8 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
   modelu ekstrakcji: wyszukanie kandydatów, potem przypisanie każdego artykułu do wydarzenia albo odrzucenie (porcje po 60 artykułów). Tylko przy `plx site`, nigdy w daily;
   wynik w `data/stories/<dzień>.json` (ok. 0,03–0,04 $ na dzień, ponowna budowa za darmo). Pierwszy krok bez weryfikacji dokleja artykuły
   nie na temat (sprawdzone 2026-09-25), więc drugiego kroku nie usuwać. „Co się wyróżnia” (`data.standouts`) liczy się bez modelu.
+  `titles.py`: wszystkie nagłówki dnia po polsku (oryginał pod spodem), model ekstrakcji tylko przy `plx site`, zapis w `data/tytuly/`
+  według id artykułu (ok. 0,05 $ na dzień). Nie używać `data-theme` na elementach klikanych: tryb ciemny trzyma go na `<html>`.
 - `src/paralaksa/gdelt/`: `plx gdelt`, lokalnie, nigdy w daily. `bq.py` (BigQuery z próbą na sucho i limitem bajtów, dekodowanie
   encji w nagłówkach GKG), `rezonans.py` (skok osób/organizacji względem 7 dni + model grupuje i tłumaczy), `szukaj.py` (frazy per język
   od modelu, wyszukiwanie w nagłówkach, sprawdzenie modelem). DOC API GDELT odrzucone (429). Wyniki w `data/gdelt/`.

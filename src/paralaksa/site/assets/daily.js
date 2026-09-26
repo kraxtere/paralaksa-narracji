@@ -5,6 +5,9 @@ const SRC = D.zrodla;
 const state = { tab: "najwazniejsze", theme: null, f: { kraj: "", src: "", th: "", st: "", q: "" } };
 const themeName = id => D.tematy[id] || id;
 const fixedTheme = t => !t.startsWith("emergent:");   // tematy spoza taksonomii (nazwane przez model) chowamy
+// nagłówek po polsku (tłumaczenie modelu), oryginał pod spodem; bez tłumaczenia tylko oryginał
+const plTitle = a => a.pl || a.tytul;
+const orig = a => a.pl ? `<div class="orig" dir="auto">${esc(a.tytul)}</div>` : "";
 
 const countryCounts = {};
 D.artykuly.forEach(a => { countryCounts[a.kraj] = (countryCounts[a.kraj] || 0) + 1; });
@@ -16,7 +19,7 @@ function artLine(a, withSignals = true) {
       <span>${esc(x.frame || "")}</span>${x.actor ? `<span class="muted">· aktor: ${esc(x.actor)}</span>` : ""}</div>`).join("") : "";
   return `<div class="art" id="a${a.id}"><div class="src">${cc(a.kraj)} <span>${esc(s.name || a.src)}</span> ${mediaTag(s.typ)}
       <span>· ${a.pub ? esc(a.pub.slice(0, 16).replace("T", " ")) + " UTC" : "bez daty"}</span>${a.lead ? `<span class="pill" title="ekstrakcja tylko z tytułu i leadu">tylko lead</span>` : ""}</div>
-    <div><a class="t" href="#" data-art="${a.id}">${esc(a.tytul)}</a> ${link(a.url, "↗")}</div>${sig}</div>`;
+    <div><a class="t" href="#" data-art="${a.id}">${esc(plTitle(a))}</a> ${link(a.url, "↗")}</div>${orig(a)}${sig}</div>`;
 }
 
 function openDrawer(html) {
@@ -40,7 +43,7 @@ function showArticle(id) {
   if (!a) { openDrawer(`<p>Artykuł #${esc(id)} nie należy do próbki tego dnia (poza oknem publikacji).</p>`); return; }
   const s = SRC[a.src] || {};
   openDrawer(`<div class="meta">${cc(a.kraj)} <span>${esc(s.name || a.src)}</span>${mediaTag(s.typ)}<span>#${a.id}</span></div>
-    <h2 style="margin-top:6px">${esc(a.tytul)}</h2>
+    <h2 style="margin-top:6px">${esc(plTitle(a))}</h2>${orig(a)}
     <div class="small muted">${a.pub ? esc(a.pub.replace("T", " ").slice(0, 16)) + " UTC" : "bez daty publikacji"}${a.lead ? " · ekstrakcja tylko z tytułu i leadu" : ""} · ${link(a.url, "otwórz artykuł")}</div>
     <h3>Sygnały (${a.s.length})</h3>
     ${a.s.map(x => `<div class="claim">${stanceDot(x.st)} <strong>${esc(themeName(x.th))}</strong> <span class="muted small">${esc(x.st)} · ${esc((x.typ || "").replace(/_/g, " "))} · intensywność ${esc(x.int)}</span>
@@ -58,7 +61,7 @@ function ref(id) {
   const a = ART.get(id);
   if (!a) return `<span class="ref" role="button" tabindex="0" data-art="${id}">#${id}</span>`;
   const s = SRC[a.src] || {};
-  return `<span class="ref" role="button" tabindex="0" data-art="${id}" title="${esc(a.tytul)}"><b>${esc(a.kraj)}</b> ${esc(s.name || a.src)}</span>`;
+  return `<span class="ref" role="button" tabindex="0" data-art="${id}" title="${esc(plTitle(a))}"><b>${esc(a.kraj)}</b> ${esc(s.name || a.src)}</span>`;
 }
 const CONF = { niski: "warn", "średni": "", wysoki: "ok" };
 
@@ -150,7 +153,7 @@ function viewMap() {
   const more = "";
   return `<p class="hint">Jaka część artykułów danego kraju z tego dnia dotyczy tematu. Kliknij komórkę, żeby zobaczyć artykuły, a temat, żeby porównać kraje.</p>
     <div style="overflow-x:auto"><table class="heat"><thead><tr><th class="theme"></th>${cols.map(c => `<th title="${esc(countryName(c))}">${cc(c)}<div class="muted">${countryCounts[c]} art.</div></th>`).join("")}</tr></thead>
-    <tbody>${shown.map(t => `<tr><th class="theme"><a href="#" data-theme="${esc(t)}">${esc(themeName(t))}</a></th>${cols.map(c => {
+    <tbody>${shown.map(t => `<tr><th class="theme"><a href="#" data-topic="${esc(t)}">${esc(themeName(t))}</a></th>${cols.map(c => {
       const m = M[t][c];
       if (!m) return `<td class="empty"></td>`;
       const a = Math.max(.06, Math.min(1, m.article_share * 2.2));
@@ -180,7 +183,7 @@ function viewCompare() {
       <div class="small muted">${arts.length} art. z ${countryCounts[c]} · źródła: ${[...srcs].map(s => esc((SRC[s] || {}).name || s)).join(", ")}${srcs.size < 2 ? " · <span style='color:var(--warn)'>jedno źródło</span>" : ""}</div>
       <div class="bar" title="${esc(STANCES.map(s => `${s}: ${st[s] || 0}`).join(", "))}">${STANCES.map(s => st[s] ? `<span class="st-${s}" style="width:${st[s] / sigs.length * 100}%"></span>` : "").join("")}</div>
       <div class="small muted">Najczęstsze ramy:</div><ul class="frames">${frames.map(([f, n]) => `<li>${esc(f)}${n > 1 ? ` <span class="muted">×${n}</span>` : ""}</li>`).join("")}</ul>
-      <div class="small muted">Nagłówki:</div><div class="heads">${arts.slice(0, 6).map(a => `<a href="#" data-art="${a.id}">${esc(a.tytul)}</a>`).join("")}</div>
+      <div class="small muted">Nagłówki:</div><div class="heads">${arts.slice(0, 6).map(a => `<a href="#" data-art="${a.id}">${esc(plTitle(a))}${a.pl ? `<span class="orig" dir="auto">${esc(a.tytul)}</span>` : ""}</a>`).join("")}</div>
       ${arts.length > 6 ? `<div class="small" style="margin-top:8px"><a href="#" data-cell="${esc(t)}|${esc(c)}">wszystkie ${arts.length} →</a></div>` : ""}</div>`;
   }).filter(Boolean);
   return sel + `<p class="hint">Kraje obok siebie w jednym temacie: rozkład tonu (${STANCES.map(s => `${stanceDot(s)}${s}`).join(" ")}), najczęstsze ramy i nagłówki.</p><div class="cmp">${cols.join("")}</div>`;
@@ -194,7 +197,7 @@ function viewArticles() {
   const srcIds = [...new Set(D.artykuly.map(a => a.src))].sort();
   const list = D.artykuly.filter(a => (!f.kraj || a.kraj === f.kraj) && (!f.src || a.src === f.src)
     && (!f.th || a.s.some(s => s.th === f.th)) && (!f.st || a.s.some(s => s.st === f.st && (!f.th || s.th === f.th)))
-    && (!f.q || (a.tytul + " " + a.s.map(s => s.frame + " " + s.sum).join(" ")).toLowerCase().includes(f.q.toLowerCase())));
+    && (!f.q || (a.tytul + " " + (a.pl || "") + " " + a.s.map(s => s.frame + " " + s.sum).join(" ")).toLowerCase().includes(f.q.toLowerCase())));
   return `<div class="filters">
       <select data-f="kraj">${opts(COUNTRIES.map(c => [c, `${c} ${countryName(c)} (${countryCounts[c]})`]), f.kraj, "wszystkie kraje")}</select>
       <select data-f="src">${opts(srcIds.map(s => [s, (SRC[s] || {}).name || s]), f.src, "wszystkie źródła")}</select>
@@ -230,14 +233,14 @@ function render() {
 }
 
 document.addEventListener("click", e => {
-  const el = e.target.closest("[data-tab],[data-art],[data-cell],[data-theme],[data-close],[data-story]");
+  const el = e.target.closest("[data-tab],[data-art],[data-cell],[data-topic],[data-close],[data-story]");
   if (!el) return;
   if (el.dataset.close !== undefined) { closeDrawer(); return; }
   e.preventDefault();
   if (el.dataset.story !== undefined) { const h = D.historie[+el.dataset.story]; showArticles(esc(h.tytul), storyArticles(h)); return; }
   if (el.dataset.tab) { state.tab = el.dataset.tab; history.replaceState(null, "", "#" + state.tab); render(); window.scrollTo(0, 0); }
   else if (el.dataset.art) showArticle(el.dataset.art);
-  else if (el.dataset.theme) { state.theme = el.dataset.theme; state.tab = "porownanie"; render(); }
+  else if (el.dataset.topic) { state.theme = el.dataset.topic; state.tab = "porownanie"; render(); }
   else if (el.dataset.cell) {
     const [t, c] = el.dataset.cell.split("|");
     showArticles(`${cc(c)} ${esc(countryName(c))} · ${esc(themeName(t))}`, D.artykuly.filter(a => a.kraj === c && a.s.some(s => s.th === t)));

@@ -183,7 +183,7 @@ def standouts(metrics: list[dict], country_counts: dict[str, int], country_sourc
 
 
 def daily_payload(conn: sqlite3.Connection, day: str, report: dict | None, theme_names: dict[str, str],
-                  events: list[dict], stories_for=None) -> dict:
+                  events: list[dict], stories_for=None, titles_for=None) -> dict:
     conn.row_factory = sqlite3.Row
     pub = publication_meta(conn, day)
     eligible = set(pub.pop("eligible_ids"))
@@ -229,6 +229,14 @@ def daily_payload(conn: sqlite3.Connection, day: str, report: dict | None, theme
         counts[a["kraj"]] = counts.get(a["kraj"], 0) + 1
         srcs.setdefault(a["kraj"], set()).add(a["src"])
     stories = stories_for(day, eligible) if stories_for and arts else None
+    polish = dict(titles_for(day, set(arts)) or {}) if titles_for and arts else {}
+    for st in (stories or {}).get("historie") or []:          # tłumaczenia z historii dnia uzupełniają braki
+        for k in st["kraje"]:
+            if k["article_id"] in arts and k["naglowek_pl"] != arts[k["article_id"]]["tytul"]:
+                polish.setdefault(k["article_id"], k["naglowek_pl"])
+    for aid, pl in polish.items():
+        if aid in arts and pl:
+            arts[aid]["pl"] = pl
     lo = (date.fromisoformat(day) - timedelta(days=1)).isoformat()
     related = [e for e in events if lo <= e["id"][:10] <= day]
     return {

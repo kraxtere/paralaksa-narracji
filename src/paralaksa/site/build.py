@@ -77,8 +77,9 @@ def page(title: str, kind: str, payload: dict, root: str) -> str:
 
 
 def build_site(out_dir: Path, events_dir: Path, reports_dir: Path, conn: sqlite3.Connection | None,
-               theme_names: dict[str, str], stories_for=None) -> SiteResult:
-    """`stories_for(day, eligible_ids)` returns the cached or freshly generated stories of the day (or None)."""
+               theme_names: dict[str, str], stories_for=None, titles_for=None) -> SiteResult:
+    """`stories_for(day, eligible_ids)` returns the cached or freshly generated stories of the day (or None),
+    `titles_for(day, article_ids)` Polish headlines by article id."""
     res = SiteResult(out_dir)
     if out_dir.exists():
         shutil.rmtree(out_dir)
@@ -99,7 +100,7 @@ def build_site(out_dir: Path, events_dir: Path, reports_dir: Path, conn: sqlite3
     days = []
     if conn is not None:
         for day in daily_days(conn):
-            p = daily_payload(conn, day, load_report(reports_dir, day), theme_names, summaries, stories_for)
+            p = daily_payload(conn, day, load_report(reports_dir, day), theme_names, summaries, stories_for, titles_for)
             (out_dir / "dziennik" / f"{day}.html").write_text(page(f"Dziennik {day}", "daily", p, "../"),
                                                              encoding="utf-8")
             days.append(daily_summary(p))
