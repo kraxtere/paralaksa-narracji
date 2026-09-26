@@ -67,7 +67,7 @@ def page(title: str, kind: str, payload: dict, root: str) -> str:
 <body data-kind="{kind}" data-root="{root}">
 <header class="top">
   <a class="brand" href="{root}index.html"><svg viewBox="0 0 32 32" aria-hidden="true">{logo_mark()}</svg>Paralaksa</a>
-  <nav><a href="{root}index.html#zdarzenia">Zdarzenia</a><a href="{root}index.html#dziennik">Dziennik</a></nav>
+  <nav><a href="{root}index.html#zdarzenia">Zdarzenia</a><a href="{root}index.html#dziennik">Dziennik</a><a href="{root}telewizja.html">Telewizja</a></nav>
   <span class="internal">wersja wewnętrzna, do oceny</span>
   <button class="theme" id="theme" type="button" title="Tryb jasny albo ciemny"><span aria-hidden="true">◐</span><span class="lbl">tryb</span></button>
 </header>
@@ -81,9 +81,10 @@ def page(title: str, kind: str, payload: dict, root: str) -> str:
 
 
 def build_site(out_dir: Path, events_dir: Path, reports_dir: Path, conn: sqlite3.Connection | None,
-               theme_names: dict[str, str], stories_for=None, titles_for=None) -> SiteResult:
+               theme_names: dict[str, str], stories_for=None, titles_for=None, tv_payload: dict | None = None) -> SiteResult:
     """`stories_for(day, eligible_ids)` returns the cached or freshly generated stories of the day (or None),
-    `titles_for(day, article_ids)` Polish headlines by article id."""
+    `titles_for(day, article_ids)` Polish headlines by article id, `tv_payload` the data of the Telewizja page
+    (`gdelt.tv_views.build`; without it the page says there is no data)."""
     res = SiteResult(out_dir)
     if out_dir.exists():
         shutil.rmtree(out_dir)
@@ -120,6 +121,8 @@ def build_site(out_dir: Path, events_dir: Path, reports_dir: Path, conn: sqlite3
     index = {"zdarzenia": summaries, "dni": days, "kraje": COUNTRY_NAMES,
              "zbudowano": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")}
     (out_dir / "index.html").write_text(page("Przegląd", "index", index, ""), encoding="utf-8")
+    tv = tv_payload if tv_payload and tv_payload.get("days") else {"channels": {}, "blocs": [], "days": [], "data": {}, "pdf": ""}
+    (out_dir / "telewizja.html").write_text(page("Telewizja", "tv", tv, ""), encoding="utf-8")
     (out_dir / "logo.svg").write_text(logo_svg(), encoding="utf-8")
     (out_dir / "logo-ciemne-tlo.svg").write_text(logo_svg("#fff", "#1c1c1a"), encoding="utf-8")
     # instalacja jako aplikacja (Chrome, Edge, Android; iOS: „Do ekranu początkowego”)

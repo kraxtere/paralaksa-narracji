@@ -17,6 +17,8 @@
   (`data/gdelt/tv-widoki.html`, niepublikowany): tablica dnia (nowe nazwy × stacje w regionach), jeden temat (zdanie z każdej
   stacji i lista stacji, w których raporcie nie pada), dwie stacje obok siebie (streszczenia i wspólne rzadkie nazwy, np. Kyivstar
   i ArcelorMittal w Rossiji 24 i Espreso 25.09), kanał w czasie (tytuły i nowe nazwy dzień po dniu), szukanie frazy we wszystkich zdaniach.
+- Te widoki są osobną zakładką „Telewizja” na stronie wewnętrznej (pod hasłem), w jej wyglądzie i trybie ciemnym. `plx site`
+  dociąga raporty z ostatnich 7 dni (`--tv-dni`), `--bez-tv` buduje z zapisanych.
 
 # Strona jako aplikacja — 2026-09-26
 

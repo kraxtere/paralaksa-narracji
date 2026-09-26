@@ -286,3 +286,37 @@ aside.side h2 { margin-top: 0; }
 .latest li a { font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--ink); text-decoration: none; }
 .latest li a:hover { color: var(--accent); text-decoration: underline; }
 @media (max-width: 700px) { .standout { grid-template-columns: 1fr; } }
+
+/* telewizja (widoki robocze z raportów GDELT) */
+.tv-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 16px; }
+.tv-tabs button, .tv-bar select, .tv-bar input { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 5px 11px; cursor: pointer; color: var(--ink); }
+.tv-tabs button.on { border-color: var(--ink); font-weight: 600; }
+.tv-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
+.tv-bar .hint { margin: 0; }
+.tv-scroll { overflow-x: auto; }
+.tv-board { border-collapse: collapse; font-size: 13px; }
+.tv-board th, .tv-board td { border-bottom: 1px solid var(--line); padding: 3px 5px; text-align: center; white-space: nowrap; }
+.tv-board .tv-topic { text-align: left; white-space: normal; min-width: 170px; max-width: 280px; }
+.tv-board .tv-bloc { font-size: 11px; color: var(--muted); font-weight: 500; border-bottom: none; }
+.tv-board .tv-ch { writing-mode: vertical-rl; transform: rotate(180deg); font-weight: 500; height: 104px; }
+.tv-dot { border: none; background: none; color: var(--st-alarm); font-size: 15px; cursor: pointer; padding: 0 3px; border-radius: 50%; }
+.tv-dot.sel { outline: 2px solid var(--accent); }
+.tv-no { color: var(--empty); }
+.tv-panel { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; margin: 12px 0; max-width: 900px; }
+.tv-bl { margin: 18px 0 6px; font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+.tv-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(290px, 100%), 1fr)); gap: 10px; }
+.tv-card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.tv-card > b { display: block; margin-bottom: 4px; }
+.tv-two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 760px) { .tv-two { grid-template-columns: 1fr; } }
+.tv-pair { border-collapse: collapse; }
+.tv-pair th { text-align: left; font-size: 13px; color: var(--muted); padding: 4px 6px; }
+.tv-pair td { vertical-align: top; border-top: 1px solid var(--line); padding: 8px 6px; font-size: 13.5px; min-width: 220px; }
+.tv-pair td.tv-k { font-weight: 600; min-width: 0; white-space: nowrap; }
+.tv-chip { display: inline-block; border: 1px solid var(--line); border-radius: 999px; padding: 1px 9px; margin: 2px 4px 2px 0; font-size: 12.5px; cursor: pointer; background: var(--card); color: var(--ink); }
+.tv-chip:hover { border-color: var(--hover-line); }
+.tv-day { border-left: 3px solid var(--line); padding-left: 12px; margin: 14px 0; max-width: 1000px; }
+.tv-t { font-weight: 600; font-size: 13.5px; }
+.tv-small { font-size: 12px; color: var(--muted); }
+.tv-hit { margin: 4px 0; }
+.tv-view mark { background: var(--hl); color: inherit; }

@@ -149,6 +149,7 @@ def test_build_site_self_contained(tmp_path, conn):
         assert 'content="noindex, nofollow"' in page
         assert 'rel="icon" href="data:image/svg+xml,' in page and 'id="theme"' in page   # logo i tryb ciemny bez plików obok
     assert (out / "logo.svg").read_text(encoding="utf-8").startswith("<svg")
+    assert (out / "telewizja.html").exists() and 'href="../telewizja.html">Telewizja</a>' in daily   # zakładka TV
     manifest = json.loads((out / "manifest.webmanifest").read_text(encoding="utf-8"))   # instalacja jako aplikacja
     assert manifest["display"] == "standalone" and {i["sizes"] for i in manifest["icons"]} == {"192x192", "512x512"}
     for icon in manifest["icons"]:

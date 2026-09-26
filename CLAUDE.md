@@ -72,7 +72,7 @@ py -3.12 -m venv .venv; .venv\Scripts\python -m pip install -e ".[dev]"   # uv n
 .venv\Scripts\plx run-daily [--skip-ingest] [--no-fulltext] [--limit N] [--out-dir DIR]
 .venv\Scripts\plx board events\<id>.yaml [-o data/boards] [--no-png]   # plansza 1080×1920, PNG przez Chrome/Edge
 .venv\Scripts\plx events check events\<karta>.md|events [--dni 2] [--max-fetch 12] [-o data/checks]   # podpowiedzi z Wayback, karty nie zmienia
-.venv\Scripts\plx site [--db data/prod.db] [-o data/site] [--zip] [--bez-historii] [--publikuj]   # strona wewnętrzna: zdarzenia + dziennik, statyczny HTML; --publikuj: prywatne repo SITE_REPO → Render pod hasłem
+.venv\Scripts\plx site [--db data/prod.db] [-o data/site] [--zip] [--bez-historii] [--bez-tv] [--publikuj]   # strona wewnętrzna: zdarzenia + dziennik + telewizja, statyczny HTML; --publikuj: prywatne repo SITE_REPO → Render pod hasłem
 .venv\Scripts\plx events archive events\<karta>.md|events [--na-sucho] [--bez-wpisu]   # wypełnia puste archiwum (Wayback / Save Page Now)
 .venv\Scripts\plx gdelt rezonans [--dzien D]   # kandydaci na karty z GDELT (BigQuery, GCP_PROJECT w .env)
 .venv\Scripts\plx gdelt szukaj events\<karta>.md [--fraza F ...] [--dni-po 3]   # brakujące relacje do karty, karty nie zmienia
@@ -130,6 +130,8 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
   `tv.py`: raporty „Today's Media Trends” (Gemini streszcza dzień wydań kanału z TV News Archive), bez modelu po naszej stronie;
   nazwy nowe w kilku stacjach ze zdaniem z każdej. To interpretacja modelu, nie przekaz stacji: przed kartą sprawdzić w transkrypcji
   (Visual Explorer, ręcznie). Transkrypcji nie pobierać automatycznie: są za podpisanym ciasteczkiem, w Internet Archive prywatne.
+  `tv_views.py` składa dane zakładki Telewizja na stronie (`telewizja.html`, skrypt `site/assets/tv.js`, klasy CSS `tv-*`):
+  `plx site` dociąga raporty z ostatnich 7 dni do `data/gdelt/tv/` (`--bez-tv`: tylko zapisane).
 - `.github/workflows/daily.yml`: cron 10:30 UTC (poza szczytem DeepSeek; GitHub opóźnia start nawet o 4–5 h), baza jako zaszyfrowany snapshot w Release `database-backup` (cache i artefakt to kopie), commit `reports/`. Kod 1 tylko przy ostrzeżeniach blokujących (synteza, ekstrakcja, brak >1/3 aktywnych źródeł); pojedynczy kanał/źródło to ostrzeżenie informacyjne.
 
 ## Konwencje

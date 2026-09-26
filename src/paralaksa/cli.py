@@ -274,6 +274,8 @@ def site(
                                     help="Nie wywołuj modelu: historie dnia i tłumaczenia nagłówków tylko z zapisanych."),
     stories_dir: Path = typer.Option(Path("data/stories"), "--historie-dir", help="Zapisane historie dnia (JSON)."),
     titles_dir: Path = typer.Option(Path("data/tytuly"), "--tytuly-dir", help="Zapisane tłumaczenia nagłówków (JSON)."),
+    no_tv: bool = typer.Option(False, "--bez-tv", help="Bez pobierania raportów TV; zakładka Telewizja z zapisanych."),
+    tv_days: int = typer.Option(7, "--tv-dni", min=1, max=31, help="Ile ostatnich dni w zakładce Telewizja."),
     config_dir: Path = ConfigDir,
     db_path: Optional[Path] = DbPath,
 ) -> None:
@@ -345,9 +347,10 @@ def site(
                    f"({out['run_cost']:.3f} $)")
         return out["tytuly"]
 
+    tv_payload = _tv_payload(tv_days, None, Path("data/gdelt/tv"), config_dir, download=not no_tv)
     try:
         res = build_site(out_dir, events_dir, reports_dir, conn, {t.id: t.name_pl for t in load_themes(config_dir)},
-                         stories_for, titles_for)
+                         stories_for, titles_for, tv_payload)
     finally:
         if conn is not None:
             conn.close()
@@ -355,7 +358,8 @@ def site(
         typer.echo(f"OSTRZEŻENIE: {err}", err=True)
     if spent:
         typer.echo(f"Koszt modelu (historie dnia, tłumaczenia nagłówków): {spent:.3f} $")
-    typer.echo(f"Zdarzenia: {len(res.events)}, dni dziennika: {len(res.days)}. Start: {out_dir / 'index.html'}")
+    typer.echo(f"Zdarzenia: {len(res.events)}, dni dziennika: {len(res.days)}, dni telewizji: {len(tv_payload['days'])}. "
+               f"Start: {out_dir / 'index.html'}")
     if make_zip:
         typer.echo(f"Paczka: {zip_site(out_dir)}")
     if publish_site:
@@ -602,14 +606,9 @@ def gdelt_tv(
     typer.echo(f"Kanały: {len(today)}/{len(codes)}, porównanie z {before_day}: {len(before)}. Wynik: {md}")
 
 
-@gdelt_app.command("tv-widoki")
-def gdelt_tv_views(
-    days: int = typer.Option(7, "--dni", min=1, max=31, help="Ile dni wstecz (brakujące raporty są pobierane)."),
-    last: Optional[str] = typer.Option(None, "--do", help="Ostatni dzień RRRR-MM-DD (domyślnie wczoraj)."),
-    out_dir: Path = GdeltOut, config_dir: Path = ConfigDir,
-) -> None:
-    """Robocze widoki tylko z telewizji: tablica dnia, jeden temat, dwie stacje, kanał w czasie, szukanie frazy.
-    Jeden plik HTML do otwarcia lokalnie; niczego nie publikuje."""
+def _tv_payload(days: int, last: Optional[str], cache: Path, config_dir: Path, download: bool = True) -> dict:
+    """Data of the Telewizja views for `days` days up to `last` (default yesterday); missing reports are downloaded
+    unless `download` is off. A network error only warns: the views use what is cached."""
     from datetime import datetime, timedelta, timezone
 
     import httpx
@@ -618,23 +617,35 @@ def gdelt_tv_views(
 
     end = date.fromisoformat(last) if last else datetime.now(timezone.utc).date() - timedelta(days=1)
     wanted = [(end - timedelta(days=n)).isoformat() for n in range(days, -1, -1)]   # plus dzień przed pierwszym
-    cfg = load_settings(config_dir).ingest
-    cache = out_dir / "tv"
-    with PoliteClient(cfg.user_agent, cfg.per_domain_delay_s, 60.0) as client:
-        def fetch(url: str) -> bytes | None:
+    if download:
+        cfg = load_settings(config_dir).ingest
+        with PoliteClient(cfg.user_agent, cfg.per_domain_delay_s, 60.0) as client:
+            def fetch(url: str) -> bytes | None:
+                try:
+                    return client.get(url).content
+                except httpx.HTTPStatusError as e:
+                    if e.response.status_code == 404:
+                        return None
+                    raise
             try:
-                return client.get(url).content
-            except httpx.HTTPStatusError as e:
-                if e.response.status_code == 404:
-                    return None
-                raise
-        try:
-            for d in wanted:
-                tv.load(d, tv.CHANNELS, cache, fetch)
-        except (httpx.HTTPError, ImportError) as e:
-            typer.echo(f"BŁĄD: {e}", err=True)
-            raise typer.Exit(code=1)
-    payload = tv_views.build(wanted[1:], cache)
+                for d in wanted:
+                    tv.load(d, tv.CHANNELS, cache, fetch)
+            except (httpx.HTTPError, ImportError) as e:
+                typer.echo(f"OSTRZEŻENIE: raporty TV: {e}; widoki z zapisanych", err=True)
+    return tv_views.build(wanted[1:], cache)
+
+
+@gdelt_app.command("tv-widoki")
+def gdelt_tv_views(
+    days: int = typer.Option(7, "--dni", min=1, max=31, help="Ile dni wstecz (brakujące raporty są pobierane)."),
+    last: Optional[str] = typer.Option(None, "--do", help="Ostatni dzień RRRR-MM-DD (domyślnie wczoraj)."),
+    out_dir: Path = GdeltOut, config_dir: Path = ConfigDir,
+) -> None:
+    """Robocze widoki tylko z telewizji (tablica dnia, jeden temat, dwie stacje, kanał w czasie, szukanie frazy) jako
+    osobny plik HTML. Na stronie wewnętrznej to zakładka Telewizja (plx site)."""
+    from paralaksa.gdelt import tv_views
+
+    payload = _tv_payload(days, last, out_dir / "tv", config_dir)
     if not payload["days"]:
         typer.echo("Brak raportów w tym zakresie.", err=True)
         raise typer.Exit(code=1)
