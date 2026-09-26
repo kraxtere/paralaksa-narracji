@@ -1,3 +1,19 @@
+# Telewizja: raporty GDELT „Today's Media Trends” — 2026-09-26
+
+- `plx gdelt tv [--dzien D] [--kanal KOD ...] [--fraza F ...]` (`gdelt/tv.py`): pobiera dzienne raporty PDF GDELT
+  (streszczenia wydań z TV News Archive robione przez Gemini) dla 17 kanałów: TVP Info, Espreso, Rossija 1 i 24, Pierwyj, NTV,
+  Belarus 24, Current Time, LRT, DR1, M1, BBC News, France 24, TRT World, Kan 11, Press TV, CCTV-13. Raport za dzień D wychodzi w D+1.
+- Bez modelu i bez kosztów. Wypisuje nazwy, które danego dnia padają w co najmniej 3 stacjach, a dzień wcześniej były
+  w najwyżej jednej (albo stacji przybyło co najmniej 3 i dwa razy więcej). Nazwa to słowo wielką literą zaraz po słowie małą literą
+  („the Firepoint”), więc tytuły sekcji raportów odpadają. Nazwy padające w tych samych zdaniach łączą się w jedną grupę.
+  Przy każdej grupie po jednym zdaniu z każdej stacji, obok siebie. Wynik w `data/gdelt/tv-<dzień>.md`, tekst i linki w `data/gdelt/tv/`.
+- Sprawdzone na 24–25.09: same wyszły Starlink, powitanie Xi na Andrews, Netanjahu i Abbas, OpenAI w Australii, a 25.09
+  Bucza („dossier” Ławrowa dla Guterresa), Superintelligence, ArcelorMittal, „SWO”.
+- Ograniczenia: raport to interpretacja modelu, nie przekaz stacji (ręczne sprawdzenie 24.09: fakty się zgadzały, ale np. słowa
+  gościa kryminologa stały się stanowiskiem „urzędników”). Link prowadzi do całego wydania, nie do minuty. Transkrypcje są tylko
+  w Visual Explorer (podpisane ciasteczko na wydanie, oryginały w Internet Archive prywatne), więc ich nie pobieramy.
+  Szczegół, który robi kartę (Nowa Poczta w Rossiji 24 i Espreso), był tylko w transkrypcjach.
+
 # Strona jako aplikacja — 2026-09-26
 
 - Przeglądarka proponuje instalację strony jako aplikacji (Chrome, Edge, Android; na iOS „Do ekranu początkowego”).

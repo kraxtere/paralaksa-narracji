@@ -76,6 +76,7 @@ py -3.12 -m venv .venv; .venv\Scripts\python -m pip install -e ".[dev]"   # uv n
 .venv\Scripts\plx events archive events\<karta>.md|events [--na-sucho] [--bez-wpisu]   # wypełnia puste archiwum (Wayback / Save Page Now)
 .venv\Scripts\plx gdelt rezonans [--dzien D]   # kandydaci na karty z GDELT (BigQuery, GCP_PROJECT w .env)
 .venv\Scripts\plx gdelt szukaj events\<karta>.md [--fraza F ...] [--dni-po 3]   # brakujące relacje do karty, karty nie zmienia
+.venv\Scripts\plx gdelt tv [--dzien D] [--kanal KOD ...] [--fraza F ...]   # raporty TV GDELT (PDF, D+1): nowe nazwy w kilku stacjach, bez modelu
 ```
 Pełny ingest z pełnymi tekstami trwa ok. 2–2,5 min (~310 artykułów przy pierwszym uruchomieniu).
 Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20 min na ~310 artykułów; przy 30 źródłach
@@ -125,6 +126,9 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
 - `src/paralaksa/gdelt/`: `plx gdelt`, lokalnie, nigdy w daily. `bq.py` (BigQuery z próbą na sucho i limitem bajtów, dekodowanie
   encji w nagłówkach GKG), `rezonans.py` (skok osób/organizacji względem 7 dni + model grupuje i tłumaczy), `szukaj.py` (frazy per język
   od modelu, wyszukiwanie w nagłówkach, sprawdzenie modelem). DOC API GDELT odrzucone (429). Wyniki w `data/gdelt/`.
+  `tv.py`: raporty „Today's Media Trends” (Gemini streszcza dzień wydań kanału z TV News Archive), bez modelu po naszej stronie;
+  nazwy nowe w kilku stacjach ze zdaniem z każdej. To interpretacja modelu, nie przekaz stacji: przed kartą sprawdzić w transkrypcji
+  (Visual Explorer, ręcznie). Transkrypcji nie pobierać automatycznie: są za podpisanym ciasteczkiem, w Internet Archive prywatne.
 - `.github/workflows/daily.yml`: cron 10:30 UTC (poza szczytem DeepSeek; GitHub opóźnia start nawet o 4–5 h), baza jako zaszyfrowany snapshot w Release `database-backup` (cache i artefakt to kopie), commit `reports/`. Kod 1 tylko przy ostrzeżeniach blokujących (synteza, ekstrakcja, brak >1/3 aktywnych źródeł); pojedynczy kanał/źródło to ostrzeżenie informacyjne.
 
 ## Konwencje

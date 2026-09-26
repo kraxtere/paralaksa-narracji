@@ -453,7 +453,8 @@ def events_archive(
         raise typer.Exit(code=1)
 
 
-gdelt_app = typer.Typer(help="GDELT przez BigQuery: kandydaci na karty i brakujące relacje (lokalnie, poza daily).",
+gdelt_app = typer.Typer(help="GDELT: kandydaci na karty i brakujące relacje (BigQuery), raporty telewizyjne "
+                        "(lokalnie, poza daily).",
                         no_args_is_help=True)
 app.add_typer(gdelt_app, name="gdelt")
 GdeltOut = typer.Option(Path("data/gdelt"), "--out-dir", "-o", help="Katalog wyników (Markdown i JSON).")
@@ -541,6 +542,64 @@ def gdelt_szukaj(
     typer.echo(f"{card['id']}: {len(out['nowe'])} relacji spoza karty w {len(langs)} językach ({', '.join(langs)}); "
                f"{len(out['w_karcie'])} z redakcji już w karcie")
     typer.echo(f"BigQuery {out['gb']} GB, model {out['cost_usd']:.3f} $. Wynik: {md}")
+
+
+@gdelt_app.command("tv")
+def gdelt_tv(
+    day: Optional[str] = typer.Option(None, "--dzien", help="Dzień RRRR-MM-DD (domyślnie wczoraj; raporty wychodzą dzień później)."),
+    channels: Optional[list[str]] = typer.Option(None, "--kanal", help="Kod kanału GDELT (można wiele; domyślnie stała lista)."),
+    phrases: Optional[list[str]] = typer.Option(None, "--fraza", help="Pokaż zdanie z każdej stacji o tej frazie (można wiele)."),
+    min_channels: int = typer.Option(3, "--min-kanalow", min=2, help="Nazwa musi paść w co najmniej tylu stacjach."),
+    out_dir: Path = GdeltOut, config_dir: Path = ConfigDir,
+) -> None:
+    """Telewizja: raporty GDELT „Today's Media Trends” (streszczenia dnia per kanał) i nazwy, które pojawiły się
+    naraz w kilku stacjach, ze zdaniem z każdej. Bez modelu i bez kosztów; transkrypcje tylko w Visual Explorer."""
+    from datetime import datetime, timedelta, timezone
+
+    import httpx
+
+    from paralaksa.gdelt import tv
+
+    day = day or (datetime.now(timezone.utc).date() - timedelta(days=1)).isoformat()
+    try:
+        date.fromisoformat(day)
+    except ValueError:
+        typer.echo(f"BŁĄD: zła data {day!r}", err=True)
+        raise typer.Exit(code=1)
+    codes = [c.upper() for c in channels] if channels else list(tv.CHANNELS)
+    cfg = load_settings(config_dir).ingest
+    cache = out_dir / "tv"
+    with PoliteClient(cfg.user_agent, cfg.per_domain_delay_s, 60.0) as client:
+        def fetch(url: str) -> bytes | None:
+            try:
+                return client.get(url).content
+            except httpx.HTTPStatusError as e:
+                if e.response.status_code == 404:
+                    return None
+                raise
+        try:
+            today = tv.load(day, codes, cache, fetch)
+            before_day = tv.previous_day(day)
+            before = tv.load(before_day, codes, cache, fetch) if today else {}
+        except (httpx.HTTPError, ImportError) as e:
+            typer.echo(f"BŁĄD: {e}", err=True)
+            raise typer.Exit(code=1)
+    if not today:
+        typer.echo(f"Raportów za {day} jeszcze nie ma (wychodzą dzień później).", err=True)
+        raise typer.Exit(code=1)
+    groups = tv.trends(today, before, min_channels)
+    found = {p: tv.phrase_snippets(today, p) for p in phrases or []}
+    missing = [c for c in codes if c not in today]
+    md = out_dir / f"tv-{day}.md"
+    md.write_text(tv.render(day, today, before_day, before, groups, found, missing), encoding="utf-8")
+    md.with_suffix(".json").write_text(json.dumps({"dzien": day, "grupy": groups, "frazy": found, "brak": missing},
+                                                  ensure_ascii=False, indent=1), encoding="utf-8")
+    for p, snips in found.items():
+        typer.echo(f"fraza {p!r}: {len(snips)} kanałów ({', '.join(snips)})")
+    for n, g in enumerate(groups, 1):
+        typer.echo(f"{n}. {g['label']}: {len(g['channels'])} kanałów ({', '.join(g['channels'])}), "
+                   f"dzień wcześniej {g['before']}")
+    typer.echo(f"Kanały: {len(today)}/{len(codes)}, porównanie z {before_day}: {len(before)}. Wynik: {md}")
 
 
 @app.command("run-daily")
