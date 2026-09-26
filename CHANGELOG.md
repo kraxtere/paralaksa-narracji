@@ -13,6 +13,10 @@
   gościa kryminologa stały się stanowiskiem „urzędników”). Link prowadzi do całego wydania, nie do minuty. Transkrypcje są tylko
   w Visual Explorer (podpisane ciasteczko na wydanie, oryginały w Internet Archive prywatne), więc ich nie pobieramy.
   Szczegół, który robi kartę (Nowa Poczta w Rossiji 24 i Espreso), był tylko w transkrypcjach.
+- `plx gdelt tv-widoki [--dni 7] [--do D]` (`gdelt/tv_views.py`): robocze widoki tylko z telewizji w jednym pliku HTML
+  (`data/gdelt/tv-widoki.html`, niepublikowany): tablica dnia (nowe nazwy × stacje w regionach), jeden temat (zdanie z każdej
+  stacji i lista stacji, w których raporcie nie pada), dwie stacje obok siebie (streszczenia i wspólne rzadkie nazwy, np. Kyivstar
+  i ArcelorMittal w Rossiji 24 i Espreso 25.09), kanał w czasie (tytuły i nowe nazwy dzień po dniu), szukanie frazy we wszystkich zdaniach.
 
 # Strona jako aplikacja — 2026-09-26
 

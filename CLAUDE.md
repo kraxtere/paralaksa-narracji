@@ -77,6 +77,7 @@ py -3.12 -m venv .venv; .venv\Scripts\python -m pip install -e ".[dev]"   # uv n
 .venv\Scripts\plx gdelt rezonans [--dzien D]   # kandydaci na karty z GDELT (BigQuery, GCP_PROJECT w .env)
 .venv\Scripts\plx gdelt szukaj events\<karta>.md [--fraza F ...] [--dni-po 3]   # brakujące relacje do karty, karty nie zmienia
 .venv\Scripts\plx gdelt tv [--dzien D] [--kanal KOD ...] [--fraza F ...]   # raporty TV GDELT (PDF, D+1): nowe nazwy w kilku stacjach, bez modelu
+.venv\Scripts\plx gdelt tv-widoki [--dni 7] [--do D]   # robocze widoki tylko z TV: data/gdelt/tv-widoki.html (lokalnie)
 ```
 Pełny ingest z pełnymi tekstami trwa ok. 2–2,5 min (~310 artykułów przy pierwszym uruchomieniu).
 Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20 min na ~310 artykułów; przy 30 źródłach

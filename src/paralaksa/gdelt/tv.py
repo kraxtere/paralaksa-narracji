@@ -164,7 +164,7 @@ def vocabulary(reports: Iterable[Report]) -> tuple[set[str], dict[str, Counter]]
 
 
 def sentences(text: str) -> list[str]:
-    return SENTENCE.split(text)
+    return SENTENCE.split(re.sub(r"^DAY-AT ?-A-GLANCE\s*", "", text))
 
 
 def _has(sentence: str, k: str) -> bool:

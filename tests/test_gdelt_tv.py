@@ -1,3 +1,5 @@
+import json
+
 from paralaksa.gdelt import tv
 
 RAW = """TODAY'S MEDIA TRENDSKAN11
@@ -75,3 +77,23 @@ def test_load_downloads_once_and_skips_missing(tmp_path):
     assert len(calls) == 2   # drugi raz z pamięci podręcznej
     md = tv.render("2026-09-24", out, "2026-09-23", {}, [], {"Netanyahu": {"KAN11": "x"}}, ["M1"])
     assert "brak raportu: M1" in md and "## Fraza: Netanyahu (1 kanałów)" in md and "Kan 11 (IL)" in md
+
+
+def test_views_build_from_cache_only(tmp_path):
+    from paralaksa.gdelt import tv_views
+
+    def save(day, code, text):
+        (tmp_path / day).mkdir(exist_ok=True)
+        (tmp_path / day / f"{code}.json").write_text(json.dumps(
+            {"code": code, "title": "T", "text": text, "shows": ["a", "a", "b"]}), encoding="utf-8")
+
+    for c in ("RUSSIA24", "ESPRESO", "1TV"):
+        save("2026-09-24", c, "DAY-AT -A-GLANCE The summit with Trump began. MAJOR DEVELOPMENTS More.")
+        save("2026-09-25", c, f"DAY-AT -A-GLANCE Strikes hit the Kyivstar office. {c} said the Trump summit ended.")
+    p = tv_views.build(["2026-09-25"], tmp_path)
+    d = p["data"]["2026-09-25"]
+    assert p["days"] == ["2026-09-25"] and d["reports"]["ESPRESO"]["shows"] == 2
+    assert d["reports"]["ESPRESO"]["sentences"][0] == "Strikes hit the Kyivstar office."   # bez nagłówka sekcji
+    assert [g["label"] for g in d["groups"]] == ["Kyivstar"] and d["df"]["kyivstar"] == 3
+    assert tv_views.glance("DAY-AT -A-GLANCE One. Two. MAJOR DEVELOPMENTS Three.") == "One. Two."
+    assert "</script><script>" not in tv_views.render(p).split('id="data">')[1].split("</script>")[0]

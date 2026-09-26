@@ -602,6 +602,47 @@ def gdelt_tv(
     typer.echo(f"Kanały: {len(today)}/{len(codes)}, porównanie z {before_day}: {len(before)}. Wynik: {md}")
 
 
+@gdelt_app.command("tv-widoki")
+def gdelt_tv_views(
+    days: int = typer.Option(7, "--dni", min=1, max=31, help="Ile dni wstecz (brakujące raporty są pobierane)."),
+    last: Optional[str] = typer.Option(None, "--do", help="Ostatni dzień RRRR-MM-DD (domyślnie wczoraj)."),
+    out_dir: Path = GdeltOut, config_dir: Path = ConfigDir,
+) -> None:
+    """Robocze widoki tylko z telewizji: tablica dnia, jeden temat, dwie stacje, kanał w czasie, szukanie frazy.
+    Jeden plik HTML do otwarcia lokalnie; niczego nie publikuje."""
+    from datetime import datetime, timedelta, timezone
+
+    import httpx
+
+    from paralaksa.gdelt import tv, tv_views
+
+    end = date.fromisoformat(last) if last else datetime.now(timezone.utc).date() - timedelta(days=1)
+    wanted = [(end - timedelta(days=n)).isoformat() for n in range(days, -1, -1)]   # plus dzień przed pierwszym
+    cfg = load_settings(config_dir).ingest
+    cache = out_dir / "tv"
+    with PoliteClient(cfg.user_agent, cfg.per_domain_delay_s, 60.0) as client:
+        def fetch(url: str) -> bytes | None:
+            try:
+                return client.get(url).content
+            except httpx.HTTPStatusError as e:
+                if e.response.status_code == 404:
+                    return None
+                raise
+        try:
+            for d in wanted:
+                tv.load(d, tv.CHANNELS, cache, fetch)
+        except (httpx.HTTPError, ImportError) as e:
+            typer.echo(f"BŁĄD: {e}", err=True)
+            raise typer.Exit(code=1)
+    payload = tv_views.build(wanted[1:], cache)
+    if not payload["days"]:
+        typer.echo("Brak raportów w tym zakresie.", err=True)
+        raise typer.Exit(code=1)
+    out = out_dir / "tv-widoki.html"
+    out.write_text(tv_views.render(payload), encoding="utf-8")
+    typer.echo(f"Dni: {', '.join(sorted(payload['days']))}. Wynik: {out}")
+
+
 @app.command("run-daily")
 def run_daily(
     no_fulltext: bool = typer.Option(False, "--no-fulltext", help="Nie pobieraj pełnych tekstów."),
