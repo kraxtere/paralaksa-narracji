@@ -97,3 +97,34 @@ def test_views_build_from_cache_only(tmp_path):
     assert [g["label"] for g in d["groups"]] == ["Kyivstar"] and d["df"]["kyivstar"] == 3
     assert tv_views.glance("DAY-AT -A-GLANCE One. Two. MAJOR DEVELOPMENTS Three.") == "One. Two."
     assert "</script><script>" not in tv_views.render(p).split('id="data">')[1].split("</script>")[0]
+
+
+class FakeClient:
+    def __init__(self):
+        self.prompts = []
+
+    def complete(self, req):
+        from types import SimpleNamespace
+        prompt = req.messages[0]["content"]
+        self.prompts.append(prompt)
+        ids = [int(line.split(" | ")[0]) for line in prompt.split("Zdania:\n")[1].splitlines() if " | " in line]
+        text = json.dumps({"t": [{"id": i, "pl": f"zdanie {i}"} for i in ids if i != 2]})   # 2: brak tłumaczenia
+        return SimpleNamespace(ok=True, text=text, cost_usd=0.001, input_tokens=1, output_tokens=1, error=None)
+
+
+def test_translation_aligned_cached_and_used_by_views(tmp_path, monkeypatch):
+    from paralaksa.gdelt import tv_pl, tv_views
+
+    monkeypatch.setattr(tv_pl, "CHUNK", 2)
+    text = "DAY-AT -A-GLANCE Strikes hit the Kyivstar office. Kyivstar said the Trump summit ended. MAJOR DEVELOPMENTS X."
+    r = tv.Report("ESPRESO", "DIGITAL SIEGE", text)
+    client = FakeClient()
+    out = tv_pl.translate(client, "deepseek-test", "2026-09-25", r, tmp_path)
+    assert out["title"] == "zdanie 0" and out["sentences"] == ["zdanie 1", None, "zdanie 3"] and len(client.prompts) == 2
+    assert tv_pl.cached(tmp_path, "2026-09-25", "ESPRESO", 3)["sentences"][0] == "zdanie 1"
+    assert tv_pl.cached(tmp_path, "2026-09-25", "ESPRESO", 4) is None   # raport się zmienił
+    assert tv_pl.parse(json.dumps({"t": [{"id": 1, "pl": "Strikes hit"}, {"id": 9, "pl": "x"}]}), [(1, "Strikes hit")]) == {}
+
+    rep = tv_views._pl_report(r, out)
+    assert rep["title_pl"] == "zdanie 0" and rep["glance_pl"] is None   # w wycinku brakuje zdania 2
+    assert tv_views._pl_report(r, None) == {}

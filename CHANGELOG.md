@@ -19,6 +19,11 @@
   i ArcelorMittal w Rossiji 24 i Espreso 25.09), kanał w czasie (tytuły i nowe nazwy dzień po dniu), szukanie frazy we wszystkich zdaniach.
 - Te widoki są osobną zakładką „Telewizja” na stronie wewnętrznej (pod hasłem), w jej wyglądzie i trybie ciemnym. `plx site`
   dociąga raporty z ostatnich 7 dni (`--tv-dni`), `--bez-tv` buduje z zapisanych.
+- Telewizja po polsku z przełącznikiem PL/EN (EN to oryginał raportu; wybór zapamiętany). `gdelt/tv_pl.py`: tytuł i każde
+  zdanie raportu tłumaczone modelem `deepseek-flash` (tłumaczenie, nie analiza; ok. 0,007 $ za raport, ok. 0,12 $ dziennie za 17 stacji),
+  porcje po 40 zdań, 6 raportów naraz, tylko przy `plx site`. Zapis obok raportu (`data/gdelt/tv/<dzień>/<KOD>.pl.json`), wyrównany
+  ze zdaniami oryginału; brak tłumaczenia zdania pokazuje angielskie. Szukanie frazy działa w obu językach (Bucza i Bucha).
+  `--bez-historii` używa tylko zapisanych tłumaczeń.
 
 # Strona jako aplikacja — 2026-09-26
 

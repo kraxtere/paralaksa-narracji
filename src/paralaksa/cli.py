@@ -347,7 +347,41 @@ def site(
                    f"({out['run_cost']:.3f} $)")
         return out["tytuly"]
 
-    tv_payload = _tv_payload(tv_days, None, Path("data/gdelt/tv"), config_dir, download=not no_tv)
+    import threading
+
+    from paralaksa.gdelt import tv as tvmod, tv_pl
+
+    tv_cache = Path("data/gdelt/tv")
+    tv_client = None
+    if not no_stories:
+        try:
+            tv_client = build_client(tv_pl.MODEL, settings.pricing, settings.extract.batch_poll_interval_s,
+                                     settings.extract.batch_timeout_h)
+        except RuntimeError as e:
+            typer.echo(f"OSTRZEŻENIE: {e}; Telewizja bez nowych tłumaczeń", err=True)
+    tv_spent: dict[str, float] = {}
+    tv_lock = threading.Lock()
+
+    def tv_pl_for(day: str, report) -> dict | None:   # wołane równolegle z tv_views.build
+        nonlocal spent
+        known = tv_pl.cached(tv_cache, day, report.code, len(tvmod.sentences(report.text)))
+        if known is not None or tv_client is None:
+            return known
+        try:
+            out = tv_pl.translate(tv_client, tv_pl.MODEL, day, report, tv_cache)
+        except RuntimeError as e:
+            typer.echo(f"OSTRZEŻENIE: tłumaczenie TV {day} {report.code}: {e}", err=True)
+            return None
+        for err in out["errors"]:
+            typer.echo(f"OSTRZEŻENIE: tłumaczenie TV {day} {report.code}: {err}", err=True)
+        with tv_lock:
+            spent += out["cost_usd"]
+            tv_spent[day] = tv_spent.get(day, 0.0) + out["cost_usd"]
+        return out
+
+    tv_payload = _tv_payload(tv_days, None, tv_cache, config_dir, download=not no_tv, pl_for=tv_pl_for)
+    for day, usd in sorted(tv_spent.items()):
+        typer.echo(f"Tłumaczenia TV {day}: {usd:.3f} $")
     try:
         res = build_site(out_dir, events_dir, reports_dir, conn, {t.id: t.name_pl for t in load_themes(config_dir)},
                          stories_for, titles_for, tv_payload)
@@ -357,7 +391,7 @@ def site(
     for err in res.errors:
         typer.echo(f"OSTRZEŻENIE: {err}", err=True)
     if spent:
-        typer.echo(f"Koszt modelu (historie dnia, tłumaczenia nagłówków): {spent:.3f} $")
+        typer.echo(f"Koszt modelu (historie dnia, tłumaczenia nagłówków i raportów TV): {spent:.3f} $")
     typer.echo(f"Zdarzenia: {len(res.events)}, dni dziennika: {len(res.days)}, dni telewizji: {len(tv_payload['days'])}. "
                f"Start: {out_dir / 'index.html'}")
     if make_zip:
@@ -606,7 +640,8 @@ def gdelt_tv(
     typer.echo(f"Kanały: {len(today)}/{len(codes)}, porównanie z {before_day}: {len(before)}. Wynik: {md}")
 
 
-def _tv_payload(days: int, last: Optional[str], cache: Path, config_dir: Path, download: bool = True) -> dict:
+def _tv_payload(days: int, last: Optional[str], cache: Path, config_dir: Path, download: bool = True,
+                pl_for=None) -> dict:
     """Data of the Telewizja views for `days` days up to `last` (default yesterday); missing reports are downloaded
     unless `download` is off. A network error only warns: the views use what is cached."""
     from datetime import datetime, timedelta, timezone
@@ -632,7 +667,12 @@ def _tv_payload(days: int, last: Optional[str], cache: Path, config_dir: Path, d
                     tv.load(d, tv.CHANNELS, cache, fetch)
             except (httpx.HTTPError, ImportError) as e:
                 typer.echo(f"OSTRZEŻENIE: raporty TV: {e}; widoki z zapisanych", err=True)
-    return tv_views.build(wanted[1:], cache)
+    if pl_for is None:   # bez modelu: tylko zapisane tłumaczenia
+        from paralaksa.gdelt import tv_pl
+
+        def pl_for(day, report):
+            return tv_pl.cached(cache, day, report.code, len(tv.sentences(report.text)))
+    return tv_views.build(wanted[1:], cache, pl_for)
 
 
 @gdelt_app.command("tv-widoki")

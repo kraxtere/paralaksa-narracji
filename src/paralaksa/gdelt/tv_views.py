@@ -6,6 +6,7 @@ the page is only on the password-protected internal site. Sentences are the repo
 from __future__ import annotations
 
 from collections import Counter
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from paralaksa.gdelt import tv
@@ -21,20 +22,36 @@ BLOCS: list[tuple[str, list[str]]] = [
 GLANCE = 520          # znaków streszczenia dnia w widokach
 DIARY_NAMES = 8       # nowych nazw kanału na dzień
 SHARED_MIN = 1        # nazwa w obu stacjach co najmniej tyle razy
+PL_WORKERS = 6        # raportów tłumaczonych naraz (każdy jeszcze w porcjach równolegle)
+
+
+def glance_count(text: str) -> int:
+    """How many first sentences make the 'Day at a glance' excerpt (the same count serves the translation)."""
+    part = text.split("MAJOR DEVELOPMENTS")[0]
+    n, size = 0, 0
+    for s in tv.sentences(part):
+        if n and size + len(s) > GLANCE:
+            break
+        n, size = n + 1, size + len(s) + 1
+    return n
 
 
 def glance(text: str) -> str:
     """The first sentences of 'Day at a glance'."""
-    part = text.split("MAJOR DEVELOPMENTS")[0].replace("DAY-AT -A-GLANCE", "").replace("DAY-AT-A-GLANCE", "").strip()
-    out = ""
-    for s in tv.sentences(part):
-        if out and len(out) + len(s) > GLANCE:
-            break
-        out = f"{out} {s}".strip()
-    return out
+    return " ".join(tv.sentences(text)[:glance_count(text)])
 
 
-def day_data(today: dict[str, tv.Report], before: dict[str, tv.Report]) -> dict:
+def _pl_report(r: tv.Report, pl: dict | None) -> dict:
+    """Polish fields of a report: title, excerpt and sentences aligned with the English ones (None where missing)."""
+    if not pl:
+        return {}
+    sents = pl["sentences"]
+    n = glance_count(r.text)
+    return {"title_pl": pl.get("title"), "sentences_pl": sents,
+            "glance_pl": " ".join(s for s in sents[:n] if s) if all(sents[:n]) else None}
+
+
+def day_data(today: dict[str, tv.Report], before: dict[str, tv.Report], pl: dict[str, dict] | None = None) -> dict:
     names, counts = tv.vocabulary(today.values())
     _, counts_before = tv.vocabulary(before.values())
     forms: dict[str, Counter] = {}
@@ -51,8 +68,8 @@ def day_data(today: dict[str, tv.Report], before: dict[str, tv.Report]) -> dict:
         diary[code] = [display[k] for n, k in sorted(fresh, key=lambda x: (-x[0], x[1]))[:DIARY_NAMES]]
     return {
         "reports": {c: {"title": r.title, "glance": glance(r.text), "sentences": tv.sentences(r.text),
-                        "shows": len(set(r.shows))} for c, r in today.items()},
-        "groups": [{k: g[k] for k in ("label", "keys", "channels", "before", "snippets")}
+                        "shows": len(set(r.shows)), **_pl_report(r, (pl or {}).get(c))} for c, r in today.items()},
+        "groups": [{k: g[k] for k in ("label", "keys", "channels", "before", "snippets", "snip_idx")}
                    for g in (tv.trends(today, before) if before else [])],
         "names": {c: {k: n for k, n in counts[c].items() if k in display and n >= SHARED_MIN} for c in today},
         "display": display,
@@ -61,13 +78,20 @@ def day_data(today: dict[str, tv.Report], before: dict[str, tv.Report]) -> dict:
     }
 
 
-def build(days: list[str], cache: Path) -> dict:
-    """Data for the views from cached reports; a day without cached reports is skipped."""
+def build(days: list[str], cache: Path, pl_for=None) -> dict:
+    """Data for the views from cached reports; a day without cached reports is skipped. `pl_for(day, report)` returns
+    the Polish translation of a report (or None: the views show the English original)."""
     load = {d: tv.load(d, tv.CHANNELS, cache, lambda url: None) for d in [tv.previous_day(days[0]), *days]}
+    pl: dict[tuple[str, str], dict | None] = {}
+    if pl_for:
+        pairs = [(d, r) for d in days for r in load[d].values()]
+        with ThreadPoolExecutor(PL_WORKERS) as pool:
+            for (d, r), res in zip(pairs, pool.map(lambda dr: pl_for(*dr), pairs)):
+                pl[(d, r.code)] = res
     out = {}
     for d in days:
         if load[d]:
-            out[d] = day_data(load[d], load[tv.previous_day(d)])
+            out[d] = day_data(load[d], load[tv.previous_day(d)], {c: pl.get((d, c)) for c in load[d]})
     return {
         "channels": {c: {"kraj": k, "nazwa": n} for c, (k, n) in tv.CHANNELS.items()},
         "blocs": [{"nazwa": b, "kanaly": cs} for b, cs in BLOCS],

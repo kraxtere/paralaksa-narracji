@@ -288,7 +288,11 @@ aside.side h2 { margin-top: 0; }
 @media (max-width: 700px) { .standout { grid-template-columns: 1fr; } }
 
 /* telewizja (widoki robocze z raportów GDELT) */
-.tv-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 16px; }
+.tv-top { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; margin: 14px 0 16px; }
+.tv-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.tv-lang { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.tv-lang button { border: none; background: var(--card); padding: 5px 12px; cursor: pointer; color: var(--muted); }
+.tv-lang button.on { background: var(--ink); color: var(--on-ink); font-weight: 600; }
 .tv-tabs button, .tv-bar select, .tv-bar input { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 5px 11px; cursor: pointer; color: var(--ink); }
 .tv-tabs button.on { border-color: var(--ink); font-weight: 600; }
 .tv-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }

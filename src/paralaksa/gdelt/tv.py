@@ -199,6 +199,7 @@ def trends(today: dict[str, Report], before: dict[str, Report], min_channels: in
             groups.append({"keys": [r["key"]], "channels": r["channels"], "before": r["before"]})
     for g in groups:
         g["label"] = ", ".join(_display(k, today) for k in g["keys"])
+        g["snip_idx"] = {c: _best(sents[c], g["keys"]) for c in g["channels"]}
         g["snippets"] = {c: _snippet(sents[c], g["keys"]) for c in g["channels"]}
     return [g for g in groups if g["label"][0].isupper()]   # zwykłe słowo, tylko czasem wielką literą
 
@@ -220,8 +221,13 @@ def _display(k: str, reports: dict[str, Report]) -> str:
     return forms.most_common(1)[0][0] if forms else k
 
 
+def _best(sents: list[str], keys: list[str]) -> int:
+    """Index of the sentence with the lead name and most of the group's other names."""
+    return max(range(len(sents)), key=lambda i: (_has(sents[i], keys[0]), sum(_has(sents[i], k) for k in keys), -i))
+
+
 def _snippet(sents: list[str], keys: list[str]) -> str:
-    best = max(sents, key=lambda s: (_has(s, keys[0]), sum(_has(s, k) for k in keys)))
+    best = sents[_best(sents, keys)]
     pos = next((m.start() for m in WORD.finditer(best) if key(m.group()) == keys[0]), 0)
     return _cut(best, pos)
 

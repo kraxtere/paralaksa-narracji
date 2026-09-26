@@ -132,6 +132,7 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
   (Visual Explorer, ręcznie). Transkrypcji nie pobierać automatycznie: są za podpisanym ciasteczkiem, w Internet Archive prywatne.
   `tv_views.py` składa dane zakładki Telewizja na stronie (`telewizja.html`, skrypt `site/assets/tv.js`, klasy CSS `tv-*`):
   `plx site` dociąga raporty z ostatnich 7 dni do `data/gdelt/tv/` (`--bez-tv`: tylko zapisane).
+  `tv_pl.py`: tłumaczenie raportów na polski (`deepseek-flash`, ok. 0,12 $ dziennie), tylko przy `plx site`, zapis `<KOD>.pl.json`.
 - `.github/workflows/daily.yml`: cron 10:30 UTC (poza szczytem DeepSeek; GitHub opóźnia start nawet o 4–5 h), baza jako zaszyfrowany snapshot w Release `database-backup` (cache i artefakt to kopie), commit `reports/`. Kod 1 tylko przy ostrzeżeniach blokujących (synteza, ekstrakcja, brak >1/3 aktywnych źródeł); pojedynczy kanał/źródło to ostrzeżenie informacyjne.
 
 ## Konwencje
