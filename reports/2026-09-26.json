@@ -1,0 +1,503 @@
+{
+  "report": {
+    "w_skrocie": [
+      {
+        "dowody": [
+          {
+            "signal_id": 5039,
+            "article_id": 2592,
+            "theme_id": "us_policy",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          },
+          {
+            "signal_id": 5196,
+            "article_id": 2143,
+            "theme_id": "us_policy",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          },
+          {
+            "signal_id": 5007,
+            "article_id": 2445,
+            "theme_id": "us_policy",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 4906,
+            "article_id": 2180,
+            "theme_id": "us_policy",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 5578,
+            "article_id": 2480,
+            "theme_id": "us_policy",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "theme_id": "us_policy",
+        "tekst": "Temat ograniczania dostępu mediów do Białego Domu (sprawa CNN/Politico/MS NOW) pojawia się zbieżnie w analizowanych źródłach folha (BR), tagesschau (DE), dailysabah (TR), bbc (UK) i pbs (US), niemal wyłącznie w ramie krytycznej wobec administracji Trumpa.",
+        "article_ids": [
+          2592,
+          2143,
+          2445,
+          2180,
+          2480
+        ],
+        "pewnosc": "niski"
+      },
+      {
+        "dowody": [
+          {
+            "signal_id": 4839,
+            "article_id": 2552,
+            "theme_id": "middle_east",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          },
+          {
+            "signal_id": 4697,
+            "article_id": 2555,
+            "theme_id": "middle_east",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          },
+          {
+            "signal_id": 5145,
+            "article_id": 2567,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          }
+        ],
+        "theme_id": "middle_east",
+        "tekst": "W temacie Bliskiego Wschodu analizowane źródło WAFA (PS) przedstawia Izrael jako stronę systematycznie łamiącą prawo (ataki na dziennikarzy, blokada), podczas gdy analizowane źródło jpost (IL) koncentruje się na wewnętrznych sporach izraelskich (atak Netanjahu na burmistrza Nowego Jorku) i nie porusza tych zarzutów.",
+        "article_ids": [
+          2552,
+          2555,
+          2567
+        ],
+        "pewnosc": "niski"
+      }
+    ],
+    "wzorce_zbieznosci": [],
+    "rozbieznosci": [
+      {
+        "temat": "middle_east",
+        "tekst": "Analizowane źródło WAFA (PS) opisuje Bliski Wschód niemal wyłącznie w kategoriach zbrodni Izraela wobec Palestyńczyków i dziennikarzy (krytyka 48%), podczas gdy analizowane źródła ukrinform i pravda_ua (UA) traktują ten sam temat jako dyplomatyczne rozgrywki wokół cieśniny Ormuz i Iranu, niemal wyłącznie neutralnie (100%). Ramy są wyraźnie odmienne (represje wobec Palestyńczyków vs. negocjacje o Ormuz).",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 4839,
+                "article_id": 2552,
+                "theme_id": "middle_east",
+                "kraj": "PS",
+                "zrodlo": "wafa"
+              },
+              {
+                "signal_id": 5565,
+                "article_id": 2536,
+                "theme_id": "middle_east",
+                "kraj": "PS",
+                "zrodlo": "wafa"
+              }
+            ],
+            "kraj": "PS",
+            "n_zrodel": 1,
+            "rama": "Izrael systematycznie ucisza palestyńskich dziennikarzy / buduje korytarz osadniczy",
+            "stance": "krytyka/neutralny (48%/52%)",
+            "article_ids": [
+              2552,
+              2536
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 5637,
+                "article_id": 2109,
+                "theme_id": "middle_east",
+                "kraj": "UA",
+                "zrodlo": "ukrinform"
+              },
+              {
+                "signal_id": 5534,
+                "article_id": 2131,
+                "theme_id": "middle_east",
+                "kraj": "UA",
+                "zrodlo": "pravda_ua"
+              },
+              {
+                "signal_id": 5168,
+                "article_id": 2096,
+                "theme_id": "middle_east",
+                "kraj": "UA",
+                "zrodlo": "ukrinform"
+              }
+            ],
+            "kraj": "UA",
+            "n_zrodel": 2,
+            "rama": "Iran stawia warunki USA / Iran zwiększa precyzję ataków dzięki pomocy zewnętrznej",
+            "stance": "neutralny (100%)",
+            "article_ids": [
+              2109,
+              2131,
+              2096
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "niski",
+          "uzasadnienie": "PS reprezentowane przez jedno źródło (wafa), poniżej progu 2 źródeł na kraj; para krajów (2) poniżej progu 3 krajów dla wzorca zbieżności; różnica ram opisana jakościowo, niezależnie od wartości JS."
+        }
+      }
+    ],
+    "autoobraz": [
+      {
+        "dowody": [
+          {
+            "signal_id": 4731,
+            "article_id": 2265,
+            "theme_id": "china_indo_pacific",
+            "kraj": "CN",
+            "zrodlo": "cgtn"
+          },
+          {
+            "signal_id": 5685,
+            "article_id": 2356,
+            "theme_id": "alliances",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          },
+          {
+            "signal_id": 5167,
+            "article_id": 2096,
+            "theme_id": "china_indo_pacific",
+            "kraj": "UA",
+            "zrodlo": "ukrinform"
+          },
+          {
+            "signal_id": 5779,
+            "article_id": 2435,
+            "theme_id": "china_indo_pacific",
+            "kraj": "IN",
+            "zrodlo": "thehindu"
+          },
+          {
+            "signal_id": 4777,
+            "article_id": 2365,
+            "theme_id": "china_indo_pacific",
+            "kraj": "HK",
+            "zrodlo": "scmp"
+          },
+          {
+            "signal_id": 4789,
+            "article_id": 2069,
+            "theme_id": "china_indo_pacific",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "CN",
+        "jak_opisuje_siebie": "Analizowane źródła własne CN (cgtn, chinanews, globaltimes) przedstawiają Chiny w ramach partnerstwa z USA, budowania globalnych partnerstw i przyjaźni międzyludzkiej, z dominującym stance poparcie (59%) i neutralny (38%).",
+        "jak_opisuja_go_inni": "Analizowane źródła zewnętrzne (scmp z HK, thehindu z IN, ukrinform z UA, onet z PL) opisujące Chiny robią to niemal wyłącznie neutralnie (100%), skupiając się na kwestiach nacisku na Tajwan, wsparcia dla Iranu czy ograniczeń dostępu do Arktyki - bez emocjonalnego zaangażowania widocznego w źródłach własnych.",
+        "komentarz": "Wyraźna asymetria: Chiny prezentują siebie jako aktywnego, pozytywnego partnera globalnego (JS=0,415 między autoobrazem a obrazem zewnętrznym), podczas gdy relacje zewnętrzne pozostają stonowane i transakcyjne, częściej wskazując na napięcia strategiczne (Tajwan, Iran, Arktyka).",
+        "article_ids": [
+          2265,
+          2356,
+          2096,
+          2435,
+          2365,
+          2069
+        ]
+      },
+      {
+        "dowody": [
+          {
+            "signal_id": 4839,
+            "article_id": 2552,
+            "theme_id": "middle_east",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          },
+          {
+            "signal_id": 4696,
+            "article_id": 2555,
+            "theme_id": "hybrid_info",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          },
+          {
+            "signal_id": 5233,
+            "article_id": 2203,
+            "theme_id": "middle_east",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 4796,
+            "article_id": 2441,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "PS",
+        "jak_opisuje_siebie": "Analizowane źródło WAFA przedstawia Palestyńczyków jako ofiary systematycznych zbrodni Izraela (represje wobec dziennikarzy, niszczenie upraw przez osadników, ludobójstwo), z dominującym stance krytyka wobec Izraela (50%).",
+        "jak_opisuja_go_inni": "Analizowane źródła zewnętrzne guardian (UK) i dailysabah (TR) opisujące sytuację Palestyńczyków częściowo podzielają ten ton krytyczny wobec Izraela (Guardian: 'Blokada pozbawia Gazę normalnego życia'), ale też przedstawiają codzienność mieszkańców Gazy z elementami uspokojenia (25%) - np. próby zachowania normalności.",
+        "komentarz": "Stosunkowo niska odległość JS (0,182) sugeruje częściową zgodność w ocenie sytuacji Palestyńczyków między autoobrazem a obrazem zewnętrznym, choć analizowane źródła zewnętrzne dodają wątki ludzkie/codzienne nieobecne w oficjalnym przekazie wafa.",
+        "article_ids": [
+          2552,
+          2555,
+          2203,
+          2441
+        ]
+      }
+    ],
+    "co_sie_przesuwa": [],
+    "nieobecne_w_polsce": [
+      {
+        "dowody": [
+          {
+            "signal_id": 5096,
+            "article_id": 2342,
+            "theme_id": "economy_sanctions",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          },
+          {
+            "signal_id": 5387,
+            "article_id": 2257,
+            "theme_id": "economy_sanctions",
+            "kraj": "CN",
+            "zrodlo": "cgtn"
+          },
+          {
+            "signal_id": 5550,
+            "article_id": 2305,
+            "theme_id": "economy_sanctions",
+            "kraj": "CN",
+            "zrodlo": "globaltimes"
+          },
+          {
+            "signal_id": 5630,
+            "article_id": 2424,
+            "theme_id": "economy_sanctions",
+            "kraj": "IN",
+            "zrodlo": "thehindu"
+          }
+        ],
+        "theme_id": "economy_sanctions",
+        "tekst": "Temat gospodarki i sankcji ma znikomy udział w próbce PL (2,6%) wobec znacznie wyższego udziału w IN (24,3%) i CN (14,7%). Analizowane źródła chinanews, cgtn, globaltimes (CN) i thehindu (IN) relacjonują np. porozumienia handlowe USA-Chiny czy protekcjonizm UE, co niemal nie pojawia się w analizowanych źródłach polskich.",
+        "article_ids": [
+          2342,
+          2257,
+          2305,
+          2424
+        ],
+        "temat": "economy_sanctions"
+      },
+      {
+        "dowody": [
+          {
+            "signal_id": 5182,
+            "article_id": 2470,
+            "theme_id": "china_indo_pacific",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          },
+          {
+            "signal_id": 5781,
+            "article_id": 2435,
+            "theme_id": "china_indo_pacific",
+            "kraj": "IN",
+            "zrodlo": "thehindu"
+          },
+          {
+            "signal_id": 4777,
+            "article_id": 2365,
+            "theme_id": "china_indo_pacific",
+            "kraj": "HK",
+            "zrodlo": "scmp"
+          },
+          {
+            "signal_id": 4813,
+            "article_id": 2492,
+            "theme_id": "china_indo_pacific",
+            "kraj": "US",
+            "zrodlo": "npr"
+          }
+        ],
+        "theme_id": "china_indo_pacific",
+        "tekst": "Temat Chin i Indo-Pacyfiku jest marginalny w próbce PL (2,6%) w porównaniu do HK (28,2%), IN (16,2%) czy US (11,8%). Analizowane źródła pbs, npr (US), thehindu (IN) i scmp (HK) szeroko relacjonują szczyt Xi-Trump i napięcia wokół Tajwanu, co w polskiej próbce pojawia się tylko incydentalnie.",
+        "article_ids": [
+          2470,
+          2435,
+          2365,
+          2492
+        ],
+        "temat": "china_indo_pacific"
+      },
+      {
+        "dowody": [
+          {
+            "signal_id": 5160,
+            "article_id": 2448,
+            "theme_id": "energy",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 5530,
+            "article_id": 2420,
+            "theme_id": "energy",
+            "kraj": "IN",
+            "zrodlo": "thehindu"
+          },
+          {
+            "signal_id": 4703,
+            "article_id": 2454,
+            "theme_id": "energy",
+            "kraj": "TR",
+            "zrodlo": "hurriyet"
+          }
+        ],
+        "theme_id": "energy",
+        "tekst": "Temat energii ma marginalny udział w próbce PL (2,6%) wobec TR (18,2%) i IN (16,2%). Analizowane źródła dailysabah, hurriyet (TR) i thehindu (IN) szeroko relacjonują kwestię blokady cieśniny Ormuz i jej wpływu na globalne ceny energii, co w polskiej próbce pojawia się tylko raz.",
+        "article_ids": [
+          2448,
+          2420,
+          2454
+        ],
+        "temat": "energy"
+      }
+    ],
+    "slabe_sygnaly": [
+      {
+        "dowody": [
+          {
+            "signal_id": 5685,
+            "article_id": 2356,
+            "theme_id": "alliances",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          },
+          {
+            "signal_id": 5689,
+            "article_id": 2284,
+            "theme_id": "alliances",
+            "kraj": "CN",
+            "zrodlo": "globaltimes"
+          },
+          {
+            "signal_id": 4975,
+            "article_id": 2489,
+            "theme_id": "alliances",
+            "kraj": "US",
+            "zrodlo": "fox"
+          }
+        ],
+        "theme_id": "alliances",
+        "tekst": "W temacie sojuszy analizowane źródła chinanews i globaltimes (CN) budują pozytywny obraz partnerstw globalnych (kolej, ONZ), podczas gdy jedyne dostępne analizowane źródło fox (US) w tym temacie chwali 'Shield of the Americas' - kierunek podobny, ale próbka US poniżej progu źródeł.",
+        "article_ids": [
+          2356,
+          2284,
+          2489
+        ]
+      },
+      {
+        "dowody": [
+          {
+            "signal_id": 4749,
+            "article_id": 2068,
+            "theme_id": "hybrid_info",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 4903,
+            "article_id": 2091,
+            "theme_id": "hybrid_info",
+            "kraj": "UA",
+            "zrodlo": "ukrinform"
+          },
+          {
+            "signal_id": 4709,
+            "article_id": 2113,
+            "theme_id": "hybrid_info",
+            "kraj": "UA",
+            "zrodlo": "pravda_ua"
+          }
+        ],
+        "theme_id": "hybrid_info",
+        "tekst": "Temat działań hybrydowych ma zbieżny kierunek alarmowy: analizowane źródła onet (PL) oraz ukrinform i pravda_ua (UA) alarmują o rosyjskich działaniach destabilizujących, ale próbka krajów z tym samym kierunkiem nie osiąga progu 3 krajów.",
+        "article_ids": [
+          2068,
+          2091,
+          2113
+        ]
+      },
+      {
+        "dowody": [
+          {
+            "signal_id": 4746,
+            "article_id": 2068,
+            "theme_id": "russia",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 5361,
+            "article_id": 2080,
+            "theme_id": "russia",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 5426,
+            "article_id": 2600,
+            "theme_id": "russia",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          }
+        ],
+        "theme_id": "russia",
+        "tekst": "W temacie Rosji krytyczny/alarmowy ton wobec Moskwy widoczny jest w analizowanym źródle onet (PL, 2 artykuły), a podobny pojedynczy sygnał krytyczny pojawia się w folha (BR), lecz brakuje trzeciego kraju spełniającego próg źródeł.",
+        "article_ids": [
+          2068,
+          2080,
+          2600
+        ]
+      }
+    ]
+  },
+  "publication": {
+    "status": "regularny",
+    "fetched_day_utc": "2026-09-26",
+    "publication_window_start": "2026-09-25T00:00:00+00:00",
+    "publication_window_end_exclusive": "2026-09-27T00:00:00+00:00",
+    "published_min": "2026-09-24T08:58:02+00:00",
+    "published_max": "2026-09-26T17:23:38+00:00",
+    "fetched_articles": 563,
+    "late_articles": 22,
+    "late_share": 0.03907637655417407,
+    "missing_publication": 0,
+    "future_publication": 12,
+    "older_than_24h": 50,
+    "older_than_48h": 15,
+    "today_language_allowed": false
+  },
+  "semantic_review": "pending",
+  "warnings": [
+    "walidacja po ponowieniu: 3 błędów; usunięto twierdzenia bez poprawnych odnośników. Błędy: w_skrocie.0: jeden niezależny głos w kraju wymaga niskiej pewności; rozbieznosci.1: opisz analizowane źródła, nie wszystkie media kraju; autoobraz.2: opisz analizowane źródła, nie wszystkie media kraju",
+    "brak materiałów z aktywnych źródeł: indianexpress, alquds_ps",
+    "błędy kanałów: alquds_ps, indianexpress"
+  ]
+}

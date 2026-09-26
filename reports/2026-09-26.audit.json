@@ -1,0 +1,1714 @@
+{
+  "seed": "2026-09-26",
+  "sample": [
+    {
+      "path": "slabe_sygnaly.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 5685,
+            "article_id": 2356,
+            "theme_id": "alliances",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          },
+          {
+            "signal_id": 5689,
+            "article_id": 2284,
+            "theme_id": "alliances",
+            "kraj": "CN",
+            "zrodlo": "globaltimes"
+          },
+          {
+            "signal_id": 4975,
+            "article_id": 2489,
+            "theme_id": "alliances",
+            "kraj": "US",
+            "zrodlo": "fox"
+          }
+        ],
+        "theme_id": "alliances",
+        "tekst": "W temacie sojuszy analizowane źródła chinanews i globaltimes (CN) budują pozytywny obraz partnerstw globalnych (kolej, ONZ), podczas gdy jedyne dostępne analizowane źródło fox (US) w tym temacie chwali 'Shield of the Americas' - kierunek podobny, ale próbka US poniżej progu źródeł.",
+        "article_ids": [
+          2356,
+          2284,
+          2489
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 5685,
+            "article_id": 2356,
+            "theme_id": "alliances",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          },
+          {
+            "signal_id": 5689,
+            "article_id": 2284,
+            "theme_id": "alliances",
+            "kraj": "CN",
+            "zrodlo": "globaltimes"
+          },
+          {
+            "signal_id": 4975,
+            "article_id": 2489,
+            "theme_id": "alliances",
+            "kraj": "US",
+            "zrodlo": "fox"
+          }
+        ],
+        "theme_id": "alliances",
+        "tekst": "W temacie sojuszy analizowane źródła chinanews i globaltimes (CN) budują pozytywny obraz partnerstw globalnych (kolej, ONZ), podczas gdy jedyne dostępne analizowane źródło fox (US) w tym temacie chwali 'Shield of the Americas' - kierunek podobny, ale próbka US poniżej progu źródeł.",
+        "article_ids": [
+          2356,
+          2284,
+          2489
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 5685,
+          "theme_id": "alliances",
+          "subject_actor": "CN",
+          "content_group": "e7b617a075177cd061b870be448a6c27ce4b37cd2acb64dc12abff48b5568121",
+          "publisher_group": "chinanews",
+          "article_id": 2356,
+          "kraj": "CN",
+          "zrodlo": "chinanews",
+          "typ_zrodla": "agency",
+          "rama": "Chiny budują globalne partnerstwa kolejowe",
+          "stance": "poparcie",
+          "intensywnosc": 3,
+          "streszczenie": "Podczas targów chiński przewoźnik kolejowy zorganizował międzynarodowe spotkania z przedstawicielami firm z Europy, Ameryki i Azji, co w tekście jest ujęte jako budowanie międzynarodowego konsensusu i współpracy."
+        },
+        {
+          "signal_id": 5689,
+          "theme_id": "alliances",
+          "subject_actor": "ONZ",
+          "content_group": "76423920c280bd3edcd8eb54faa911a538a998cf8fee43638e96bcaf4b8d8164",
+          "publisher_group": "peoples_daily",
+          "article_id": 2284,
+          "kraj": "CN",
+          "zrodlo": "globaltimes",
+          "typ_zrodla": "government",
+          "rama": "Chiny wzmacniają system ONZ",
+          "stance": "poparcie",
+          "intensywnosc": 3,
+          "streszczenie": "Tekst podkreśla rolę Chin we wspieraniu ONZ w realizacji Agendy 2030 na rzecz zrównoważonego rozwoju oraz propozycje rozszerzenia mechanizmów współpracy w ramach GDI, w tym Grupy Przyjaciół GDI i zespołu zadaniowego ONZ."
+        },
+        {
+          "signal_id": 4975,
+          "theme_id": "alliances",
+          "subject_actor": "US",
+          "content_group": "6c5151cab8ef419c9bf68c3e3c056acb495cc84cd402cd4b515e879041b78cae",
+          "publisher_group": "fox",
+          "article_id": 2489,
+          "kraj": "US",
+          "zrodlo": "fox",
+          "typ_zrodla": "private",
+          "rama": "Sojusz na rzecz bezpieczeństwa półkuli",
+          "stance": "poparcie",
+          "intensywnosc": 3,
+          "streszczenie": "Kolumbia pozytywnie ocenia inicjatywę Shield of the Americas jako narzędzie ochrony demokracji i wolnego rynku w regionie."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "autoobraz.1",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 4839,
+            "article_id": 2552,
+            "theme_id": "middle_east",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          },
+          {
+            "signal_id": 4696,
+            "article_id": 2555,
+            "theme_id": "hybrid_info",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          },
+          {
+            "signal_id": 5233,
+            "article_id": 2203,
+            "theme_id": "middle_east",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 4796,
+            "article_id": 2441,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "PS",
+        "jak_opisuje_siebie": "Analizowane źródło WAFA przedstawia Palestyńczyków jako ofiary systematycznych zbrodni Izraela (represje wobec dziennikarzy, niszczenie upraw przez osadników, ludobójstwo), z dominującym stance krytyka wobec Izraela (50%).",
+        "jak_opisuja_go_inni": "Analizowane źródła zewnętrzne guardian (UK) i dailysabah (TR) opisujące sytuację Palestyńczyków częściowo podzielają ten ton krytyczny wobec Izraela (Guardian: 'Blokada pozbawia Gazę normalnego życia'), ale też przedstawiają codzienność mieszkańców Gazy z elementami uspokojenia (25%) - np. próby zachowania normalności.",
+        "komentarz": "Stosunkowo niska odległość JS (0,182) sugeruje częściową zgodność w ocenie sytuacji Palestyńczyków między autoobrazem a obrazem zewnętrznym, choć analizowane źródła zewnętrzne dodają wątki ludzkie/codzienne nieobecne w oficjalnym przekazie wafa.",
+        "article_ids": [
+          2552,
+          2555,
+          2203,
+          2441
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 4839,
+            "article_id": 2552,
+            "theme_id": "middle_east",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          },
+          {
+            "signal_id": 4696,
+            "article_id": 2555,
+            "theme_id": "hybrid_info",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          },
+          {
+            "signal_id": 5233,
+            "article_id": 2203,
+            "theme_id": "middle_east",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 4796,
+            "article_id": 2441,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "PS",
+        "jak_opisuje_siebie": "Analizowane źródło WAFA przedstawia Palestyńczyków jako ofiary systematycznych zbrodni Izraela (represje wobec dziennikarzy, niszczenie upraw przez osadników, ludobójstwo), z dominującym stance krytyka wobec Izraela (50%).",
+        "jak_opisuja_go_inni": "Analizowane źródła zewnętrzne guardian (UK) i dailysabah (TR) opisujące sytuację Palestyńczyków częściowo podzielają ten ton krytyczny wobec Izraela (Guardian: 'Blokada pozbawia Gazę normalnego życia'), ale też przedstawiają codzienność mieszkańców Gazy z elementami uspokojenia (25%) - np. próby zachowania normalności.",
+        "komentarz": "Stosunkowo niska odległość JS (0,182) sugeruje częściową zgodność w ocenie sytuacji Palestyńczyków między autoobrazem a obrazem zewnętrznym, choć analizowane źródła zewnętrzne dodają wątki ludzkie/codzienne nieobecne w oficjalnym przekazie wafa.",
+        "article_ids": [
+          2552,
+          2555,
+          2203,
+          2441
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 4839,
+          "theme_id": "middle_east",
+          "subject_actor": "PS",
+          "content_group": "e40f9aceead9ea2c3bbba0c8a931c654c3a1433834d31c4107612b11f91e34eb",
+          "publisher_group": "wafa",
+          "article_id": 2552,
+          "kraj": "PS",
+          "zrodlo": "wafa",
+          "typ_zrodla": "government",
+          "rama": "Izrael systematycznie ucisza palestyńskich dziennikarzy",
+          "stance": "krytyka",
+          "intensywnosc": 5,
+          "streszczenie": "Artykuł przedstawia dane o masowym zabijaniu, aresztowaniach i innych represjach wobec palestyńskich dziennikarzy od października 2023 roku, określając to jako systematyczne ataki mające na celu uciszenie prawdy."
+        },
+        {
+          "signal_id": 4696,
+          "theme_id": "hybrid_info",
+          "subject_actor": "PS",
+          "content_group": "dcde46ec38e8edbfb9b1483ed5706becd744e105d76d19480b7e6885a27767a9",
+          "publisher_group": "wafa",
+          "article_id": 2555,
+          "kraj": "PS",
+          "zrodlo": "wafa",
+          "typ_zrodla": "government",
+          "rama": "Zabijanie dziennikarzy to zabijanie prawdy",
+          "stance": "poparcie",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia stanowisko Palestyńskiej Rady Narodowej, że ataki na dziennikarzy palestyńskich są próbą zabicia prawdy i wymazania palestyńskiej narracji. Tekst podkreśla, że zabójstwa, aresztowania i niszczenie mediów stanowią poważne naruszenia prawa międzynarodowego."
+        },
+        {
+          "signal_id": 5233,
+          "theme_id": "middle_east",
+          "subject_actor": "PS",
+          "content_group": "065cc5672cdb9d0e9bc5f641677e52743e51fa49ec933854504e930b8dbd6135",
+          "publisher_group": "guardian",
+          "article_id": 2203,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "Cicha tragedia codzienności w oblężonej Gazie",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł pokazuje codzienne życie pięciu Palestyńczyków w Gazie, koncentrując się na niedostatku podstawowych dóbr, takich jak gaz, woda i cukier, oraz na traumie po głodzie i śmierci bliskich."
+        },
+        {
+          "signal_id": 4796,
+          "theme_id": "middle_east",
+          "subject_actor": "PS",
+          "content_group": "cc18128340db84492a4aec2987e74b49e437cf44147af1ebcaeed89a8ec9bb1d",
+          "publisher_group": "turkuvaz",
+          "article_id": 2441,
+          "kraj": "TR",
+          "zrodlo": "dailysabah",
+          "typ_zrodla": "private",
+          "rama": "Izrael oskarżany o zbrodnie wojenne na dziennikarzach",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Hamas oskarża Izrael o zabijanie, przetrzymywanie i przymusowe wysiedlanie palestyńskich dziennikarzy, określając te działania jako zbrodnie wojenne i zbrodnie przeciwko ludzkości."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "slabe_sygnaly.2",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 4746,
+            "article_id": 2068,
+            "theme_id": "russia",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 5361,
+            "article_id": 2080,
+            "theme_id": "russia",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 5426,
+            "article_id": 2600,
+            "theme_id": "russia",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          }
+        ],
+        "theme_id": "russia",
+        "tekst": "W temacie Rosji krytyczny/alarmowy ton wobec Moskwy widoczny jest w analizowanym źródle onet (PL, 2 artykuły), a podobny pojedynczy sygnał krytyczny pojawia się w folha (BR), lecz brakuje trzeciego kraju spełniającego próg źródeł.",
+        "article_ids": [
+          2068,
+          2080,
+          2600
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 4746,
+            "article_id": 2068,
+            "theme_id": "russia",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 5361,
+            "article_id": 2080,
+            "theme_id": "russia",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 5426,
+            "article_id": 2600,
+            "theme_id": "russia",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          }
+        ],
+        "theme_id": "russia",
+        "tekst": "W temacie Rosji krytyczny/alarmowy ton wobec Moskwy widoczny jest w analizowanym źródle onet (PL, 2 artykuły), a podobny pojedynczy sygnał krytyczny pojawia się w folha (BR), lecz brakuje trzeciego kraju spełniającego próg źródeł.",
+        "article_ids": [
+          2068,
+          2080,
+          2600
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 4746,
+          "theme_id": "russia",
+          "subject_actor": "RU",
+          "content_group": "8079b1872e2ebf987b03d5faaa18fdc66393672d8404e4cb48798d73f5c40838",
+          "publisher_group": "onet",
+          "article_id": 2068,
+          "kraj": "PL",
+          "zrodlo": "onet",
+          "typ_zrodla": "private",
+          "rama": "Rosja szykuje spektakularny konflikt z NATO",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Ekspert cytowany przez Onet przewiduje, że Rosja może przygotowywać spektakularny incydent wobec państw NATO, np. atak pod fałszywą flagą powodujący masowe straty, aby wymusić negocjacje w warunkach groźby eskalacji nuklearnej."
+        },
+        {
+          "signal_id": 5361,
+          "theme_id": "russia",
+          "subject_actor": "RU",
+          "content_group": "583ab4a879b5f2ebf02433ed7250c58be3fac570da61dbb43aeb009e199af807",
+          "publisher_group": "onet",
+          "article_id": 2080,
+          "kraj": "PL",
+          "zrodlo": "onet",
+          "typ_zrodla": "private",
+          "rama": "Rosja motorem proliferacji atomowej",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł wskazuje, że Rosja Putina, obok Korei Północnej, jest jednym z głównych powodów, dla których wyścig nuklearny na świecie gwałtownie przyspiesza."
+        },
+        {
+          "signal_id": 5426,
+          "theme_id": "russia",
+          "subject_actor": "RU",
+          "content_group": "abbcd088203ca051c86857f31e679151102cc9caaff438402ad34e6eeab58e62",
+          "publisher_group": "folha",
+          "article_id": 2600,
+          "kraj": "BR",
+          "zrodlo": "folha",
+          "typ_zrodla": "private",
+          "rama": "System polityczny Putina skonsolidowany",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia wybory parlamentarne w Rosji jako najmniej wolne w historii poradzieckiej, z wykluczeniem opozycji, fałszerstwami i całkowitą konsolidacją systemu politycznego pod Putinem."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "rozbieznosci.0.kraje.PS",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 4839,
+            "article_id": 2552,
+            "theme_id": "middle_east",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          },
+          {
+            "signal_id": 5565,
+            "article_id": 2536,
+            "theme_id": "middle_east",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          }
+        ],
+        "kraj": "PS",
+        "n_zrodel": 1,
+        "rama": "Izrael systematycznie ucisza palestyńskich dziennikarzy / buduje korytarz osadniczy",
+        "stance": "krytyka/neutralny (48%/52%)",
+        "article_ids": [
+          2552,
+          2536
+        ]
+      },
+      "context": {
+        "temat": "middle_east",
+        "tekst": "Analizowane źródło WAFA (PS) opisuje Bliski Wschód niemal wyłącznie w kategoriach zbrodni Izraela wobec Palestyńczyków i dziennikarzy (krytyka 48%), podczas gdy analizowane źródła ukrinform i pravda_ua (UA) traktują ten sam temat jako dyplomatyczne rozgrywki wokół cieśniny Ormuz i Iranu, niemal wyłącznie neutralnie (100%). Ramy są wyraźnie odmienne (represje wobec Palestyńczyków vs. negocjacje o Ormuz).",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 4839,
+                "article_id": 2552,
+                "theme_id": "middle_east",
+                "kraj": "PS",
+                "zrodlo": "wafa"
+              },
+              {
+                "signal_id": 5565,
+                "article_id": 2536,
+                "theme_id": "middle_east",
+                "kraj": "PS",
+                "zrodlo": "wafa"
+              }
+            ],
+            "kraj": "PS",
+            "n_zrodel": 1,
+            "rama": "Izrael systematycznie ucisza palestyńskich dziennikarzy / buduje korytarz osadniczy",
+            "stance": "krytyka/neutralny (48%/52%)",
+            "article_ids": [
+              2552,
+              2536
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 5637,
+                "article_id": 2109,
+                "theme_id": "middle_east",
+                "kraj": "UA",
+                "zrodlo": "ukrinform"
+              },
+              {
+                "signal_id": 5534,
+                "article_id": 2131,
+                "theme_id": "middle_east",
+                "kraj": "UA",
+                "zrodlo": "pravda_ua"
+              },
+              {
+                "signal_id": 5168,
+                "article_id": 2096,
+                "theme_id": "middle_east",
+                "kraj": "UA",
+                "zrodlo": "ukrinform"
+              }
+            ],
+            "kraj": "UA",
+            "n_zrodel": 2,
+            "rama": "Iran stawia warunki USA / Iran zwiększa precyzję ataków dzięki pomocy zewnętrznej",
+            "stance": "neutralny (100%)",
+            "article_ids": [
+              2109,
+              2131,
+              2096
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "niski",
+          "uzasadnienie": "PS reprezentowane przez jedno źródło (wafa), poniżej progu 2 źródeł na kraj; para krajów (2) poniżej progu 3 krajów dla wzorca zbieżności; różnica ram opisana jakościowo, niezależnie od wartości JS."
+        }
+      },
+      "signals": [
+        {
+          "signal_id": 4839,
+          "theme_id": "middle_east",
+          "subject_actor": "PS",
+          "content_group": "e40f9aceead9ea2c3bbba0c8a931c654c3a1433834d31c4107612b11f91e34eb",
+          "publisher_group": "wafa",
+          "article_id": 2552,
+          "kraj": "PS",
+          "zrodlo": "wafa",
+          "typ_zrodla": "government",
+          "rama": "Izrael systematycznie ucisza palestyńskich dziennikarzy",
+          "stance": "krytyka",
+          "intensywnosc": 5,
+          "streszczenie": "Artykuł przedstawia dane o masowym zabijaniu, aresztowaniach i innych represjach wobec palestyńskich dziennikarzy od października 2023 roku, określając to jako systematyczne ataki mające na celu uciszenie prawdy."
+        },
+        {
+          "signal_id": 5565,
+          "theme_id": "middle_east",
+          "subject_actor": "PS",
+          "content_group": "4dc5f4917e34315c65dd8d0ebfe35482f7377c0fba4e86d05beac3c60654b191",
+          "publisher_group": "wafa",
+          "article_id": 2536,
+          "kraj": "PS",
+          "zrodlo": "wafa",
+          "typ_zrodla": "government",
+          "rama": "Izrael buduje korytarz osadniczy",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł opisuje izraelski plan utworzenia ciągłej korytarza osadniczego przecinającego Zachodni Brzeg, który ma oddzielić północ od centrum i południa oraz zamknąć palestyńskie miejscowości w izolowanych enklawach."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "nieobecne_w_polsce.2",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 5160,
+            "article_id": 2448,
+            "theme_id": "energy",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 5530,
+            "article_id": 2420,
+            "theme_id": "energy",
+            "kraj": "IN",
+            "zrodlo": "thehindu"
+          },
+          {
+            "signal_id": 4703,
+            "article_id": 2454,
+            "theme_id": "energy",
+            "kraj": "TR",
+            "zrodlo": "hurriyet"
+          }
+        ],
+        "theme_id": "energy",
+        "tekst": "Temat energii ma marginalny udział w próbce PL (2,6%) wobec TR (18,2%) i IN (16,2%). Analizowane źródła dailysabah, hurriyet (TR) i thehindu (IN) szeroko relacjonują kwestię blokady cieśniny Ormuz i jej wpływu na globalne ceny energii, co w polskiej próbce pojawia się tylko raz.",
+        "article_ids": [
+          2448,
+          2420,
+          2454
+        ],
+        "temat": "energy"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 5160,
+            "article_id": 2448,
+            "theme_id": "energy",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 5530,
+            "article_id": 2420,
+            "theme_id": "energy",
+            "kraj": "IN",
+            "zrodlo": "thehindu"
+          },
+          {
+            "signal_id": 4703,
+            "article_id": 2454,
+            "theme_id": "energy",
+            "kraj": "TR",
+            "zrodlo": "hurriyet"
+          }
+        ],
+        "theme_id": "energy",
+        "tekst": "Temat energii ma marginalny udział w próbce PL (2,6%) wobec TR (18,2%) i IN (16,2%). Analizowane źródła dailysabah, hurriyet (TR) i thehindu (IN) szeroko relacjonują kwestię blokady cieśniny Ormuz i jej wpływu na globalne ceny energii, co w polskiej próbce pojawia się tylko raz.",
+        "article_ids": [
+          2448,
+          2420,
+          2454
+        ],
+        "temat": "energy"
+      },
+      "signals": [
+        {
+          "signal_id": 5160,
+          "theme_id": "energy",
+          "subject_actor": "IR",
+          "content_group": "8385bb0748f3824ab4a949b6ee912483e42ec27dc19ab7256701ec0aa43608b9",
+          "publisher_group": "turkuvaz",
+          "article_id": 2448,
+          "kraj": "TR",
+          "zrodlo": "dailysabah",
+          "typ_zrodla": "private",
+          "rama": "Cieśnina Ormuz kartą przetargową w konflikcie",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Cieśnina Ormuz, przez którą przed wojną przepływało około jednej piątej światowych dostaw ropy i gazu, pozostaje zamknięta i jest wykorzystywana przez Iran jako dźwignia w negocjacjach z Waszyngtonem."
+        },
+        {
+          "signal_id": 5530,
+          "theme_id": "energy",
+          "subject_actor": "US",
+          "content_group": "9b1b104a52251a30aebc221f95da1a5070d286ed686b66a4e8b88eea9a60018f",
+          "publisher_group": "thehindu",
+          "article_id": 2420,
+          "kraj": "IN",
+          "zrodlo": "thehindu",
+          "typ_zrodla": "private",
+          "rama": "USA jako nowe źródło energii dla Indii",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Amerykański urzędnik Departamentu Stanu mówi, że USA chcą stać się dużym dostawcą energii dla Indii, które mają ogromne potrzeby energetyczne i od dawna dywersyfikują źródła."
+        },
+        {
+          "signal_id": 4703,
+          "theme_id": "energy",
+          "subject_actor": "IR",
+          "content_group": "0e85d1a8a74f22ef6fd6f836e5d9021e980acfc33e23f93620c8c4314df5797e",
+          "publisher_group": "demiroren",
+          "article_id": 2454,
+          "kraj": "TR",
+          "zrodlo": "hurriyet",
+          "typ_zrodla": "private",
+          "rama": "Cieśnina Ormuz kartą przetargową",
+          "stance": "neutralny",
+          "intensywnosc": 2,
+          "streszczenie": "Propozycja Teheranu zakładała ponowne otwarcie Cieśniny Ormuz i wznowienie rozmów nuklearnych w zamian za zniesienie blokady morskiej, odmrożenie aktywów i ulgę w sankcjach naftowych."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "autoobraz.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 4731,
+            "article_id": 2265,
+            "theme_id": "china_indo_pacific",
+            "kraj": "CN",
+            "zrodlo": "cgtn"
+          },
+          {
+            "signal_id": 5685,
+            "article_id": 2356,
+            "theme_id": "alliances",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          },
+          {
+            "signal_id": 5167,
+            "article_id": 2096,
+            "theme_id": "china_indo_pacific",
+            "kraj": "UA",
+            "zrodlo": "ukrinform"
+          },
+          {
+            "signal_id": 5779,
+            "article_id": 2435,
+            "theme_id": "china_indo_pacific",
+            "kraj": "IN",
+            "zrodlo": "thehindu"
+          },
+          {
+            "signal_id": 4777,
+            "article_id": 2365,
+            "theme_id": "china_indo_pacific",
+            "kraj": "HK",
+            "zrodlo": "scmp"
+          },
+          {
+            "signal_id": 4789,
+            "article_id": 2069,
+            "theme_id": "china_indo_pacific",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "CN",
+        "jak_opisuje_siebie": "Analizowane źródła własne CN (cgtn, chinanews, globaltimes) przedstawiają Chiny w ramach partnerstwa z USA, budowania globalnych partnerstw i przyjaźni międzyludzkiej, z dominującym stance poparcie (59%) i neutralny (38%).",
+        "jak_opisuja_go_inni": "Analizowane źródła zewnętrzne (scmp z HK, thehindu z IN, ukrinform z UA, onet z PL) opisujące Chiny robią to niemal wyłącznie neutralnie (100%), skupiając się na kwestiach nacisku na Tajwan, wsparcia dla Iranu czy ograniczeń dostępu do Arktyki - bez emocjonalnego zaangażowania widocznego w źródłach własnych.",
+        "komentarz": "Wyraźna asymetria: Chiny prezentują siebie jako aktywnego, pozytywnego partnera globalnego (JS=0,415 między autoobrazem a obrazem zewnętrznym), podczas gdy relacje zewnętrzne pozostają stonowane i transakcyjne, częściej wskazując na napięcia strategiczne (Tajwan, Iran, Arktyka).",
+        "article_ids": [
+          2265,
+          2356,
+          2096,
+          2435,
+          2365,
+          2069
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 4731,
+            "article_id": 2265,
+            "theme_id": "china_indo_pacific",
+            "kraj": "CN",
+            "zrodlo": "cgtn"
+          },
+          {
+            "signal_id": 5685,
+            "article_id": 2356,
+            "theme_id": "alliances",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          },
+          {
+            "signal_id": 5167,
+            "article_id": 2096,
+            "theme_id": "china_indo_pacific",
+            "kraj": "UA",
+            "zrodlo": "ukrinform"
+          },
+          {
+            "signal_id": 5779,
+            "article_id": 2435,
+            "theme_id": "china_indo_pacific",
+            "kraj": "IN",
+            "zrodlo": "thehindu"
+          },
+          {
+            "signal_id": 4777,
+            "article_id": 2365,
+            "theme_id": "china_indo_pacific",
+            "kraj": "HK",
+            "zrodlo": "scmp"
+          },
+          {
+            "signal_id": 4789,
+            "article_id": 2069,
+            "theme_id": "china_indo_pacific",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "CN",
+        "jak_opisuje_siebie": "Analizowane źródła własne CN (cgtn, chinanews, globaltimes) przedstawiają Chiny w ramach partnerstwa z USA, budowania globalnych partnerstw i przyjaźni międzyludzkiej, z dominującym stance poparcie (59%) i neutralny (38%).",
+        "jak_opisuja_go_inni": "Analizowane źródła zewnętrzne (scmp z HK, thehindu z IN, ukrinform z UA, onet z PL) opisujące Chiny robią to niemal wyłącznie neutralnie (100%), skupiając się na kwestiach nacisku na Tajwan, wsparcia dla Iranu czy ograniczeń dostępu do Arktyki - bez emocjonalnego zaangażowania widocznego w źródłach własnych.",
+        "komentarz": "Wyraźna asymetria: Chiny prezentują siebie jako aktywnego, pozytywnego partnera globalnego (JS=0,415 między autoobrazem a obrazem zewnętrznym), podczas gdy relacje zewnętrzne pozostają stonowane i transakcyjne, częściej wskazując na napięcia strategiczne (Tajwan, Iran, Arktyka).",
+        "article_ids": [
+          2265,
+          2356,
+          2096,
+          2435,
+          2365,
+          2069
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 4731,
+          "theme_id": "china_indo_pacific",
+          "subject_actor": "CN",
+          "content_group": "2265",
+          "publisher_group": "cgtn",
+          "article_id": 2265,
+          "kraj": "CN",
+          "zrodlo": "cgtn",
+          "typ_zrodla": "government",
+          "rama": "Partnerstwo zamiast rywalizacji Chin i USA",
+          "stance": "poparcie",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia wizytę prezydenta Xi Jinpinga w Białym Domu i spotkanie z Donaldem Trumpem jako dowód na partnerskie relacje między Chinami a USA, a nie rywalizację."
+        },
+        {
+          "signal_id": 5685,
+          "theme_id": "alliances",
+          "subject_actor": "CN",
+          "content_group": "e7b617a075177cd061b870be448a6c27ce4b37cd2acb64dc12abff48b5568121",
+          "publisher_group": "chinanews",
+          "article_id": 2356,
+          "kraj": "CN",
+          "zrodlo": "chinanews",
+          "typ_zrodla": "agency",
+          "rama": "Chiny budują globalne partnerstwa kolejowe",
+          "stance": "poparcie",
+          "intensywnosc": 3,
+          "streszczenie": "Podczas targów chiński przewoźnik kolejowy zorganizował międzynarodowe spotkania z przedstawicielami firm z Europy, Ameryki i Azji, co w tekście jest ujęte jako budowanie międzynarodowego konsensusu i współpracy."
+        },
+        {
+          "signal_id": 5167,
+          "theme_id": "china_indo_pacific",
+          "subject_actor": "CN",
+          "content_group": "b90ef79181aa439f072389a10926523b777556e2a3993c54d91ff4b7986aa8ad",
+          "publisher_group": "ukrinform",
+          "article_id": 2096,
+          "kraj": "UA",
+          "zrodlo": "ukrinform",
+          "typ_zrodla": "agency",
+          "rama": "Chiny wspierają militarnie Iran",
+          "stance": "neutralny",
+          "intensywnosc": 4,
+          "streszczenie": "Chińska rozpoznawcza pomoc satelitarna umożliwia Iranowi dokładniejsze ataki na amerykańskie bazy i statki w regionie. Artykuł opisuje to jako ustalenia amerykańskich źródeł wywiadowczych."
+        },
+        {
+          "signal_id": 5779,
+          "theme_id": "china_indo_pacific",
+          "subject_actor": "CN",
+          "content_group": "f530859f4d7ee529635fa3578c33b977730865a0e1f6602a4852f0861648e300",
+          "publisher_group": "thehindu",
+          "article_id": 2435,
+          "kraj": "IN",
+          "zrodlo": "thehindu",
+          "typ_zrodla": "private",
+          "rama": "Chiny naciskają na zmianę stanowiska USA wobec Tajwanu",
+          "stance": "neutralny",
+          "intensywnosc": 4,
+          "streszczenie": "Xi Jinping naciskał na Trumpa w sprawie Tajwanu, licząc na publiczne zadeklarowanie przez USA sprzeciwu wobec niepodległości Tajwanu oraz wstrzymanie sprzedaży broni wyspie."
+        },
+        {
+          "signal_id": 4777,
+          "theme_id": "china_indo_pacific",
+          "subject_actor": "CN",
+          "content_group": "11ba3e6dc0d7f606e867076ba16cf642c34df4986389fc3c7f4af3e365a3e1e1",
+          "publisher_group": "scmp",
+          "article_id": 2365,
+          "kraj": "HK",
+          "zrodlo": "scmp",
+          "typ_zrodla": "private",
+          "rama": "USA ograniczają Chinom dostęp do Arktyki",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Umowa bezpieczeństwa USA-Dania-Grenlandia może ograniczyć możliwości zaangażowania Chin w Arktyce, zwłaszcza w zasobnej w surowce Grenlandii, i potencjalnie zbliżyć Pekin do Rosji."
+        },
+        {
+          "signal_id": 4789,
+          "theme_id": "china_indo_pacific",
+          "subject_actor": "CN",
+          "content_group": "6630cb959c8373d482b171e38dd1b7458746cd42c67244885cce3f75852da498",
+          "publisher_group": "onet",
+          "article_id": 2069,
+          "kraj": "PL",
+          "zrodlo": "onet",
+          "typ_zrodla": "private",
+          "rama": "USA żądają od Chin zaprzestania pomocy Iranowi",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł przekazuje, że podczas wizyty Xi Jinpinga w USA Donald Trump zażądał od Chin zaprzestania wsparcia wojskowego i wywiadowczego dla Iranu, a ambasador USA w Pekinie ocenił, że Chińczycy słuchają z uwagą."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "nieobecne_w_polsce.1",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 5182,
+            "article_id": 2470,
+            "theme_id": "china_indo_pacific",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          },
+          {
+            "signal_id": 5781,
+            "article_id": 2435,
+            "theme_id": "china_indo_pacific",
+            "kraj": "IN",
+            "zrodlo": "thehindu"
+          },
+          {
+            "signal_id": 4777,
+            "article_id": 2365,
+            "theme_id": "china_indo_pacific",
+            "kraj": "HK",
+            "zrodlo": "scmp"
+          },
+          {
+            "signal_id": 4813,
+            "article_id": 2492,
+            "theme_id": "china_indo_pacific",
+            "kraj": "US",
+            "zrodlo": "npr"
+          }
+        ],
+        "theme_id": "china_indo_pacific",
+        "tekst": "Temat Chin i Indo-Pacyfiku jest marginalny w próbce PL (2,6%) w porównaniu do HK (28,2%), IN (16,2%) czy US (11,8%). Analizowane źródła pbs, npr (US), thehindu (IN) i scmp (HK) szeroko relacjonują szczyt Xi-Trump i napięcia wokół Tajwanu, co w polskiej próbce pojawia się tylko incydentalnie.",
+        "article_ids": [
+          2470,
+          2435,
+          2365,
+          2492
+        ],
+        "temat": "china_indo_pacific"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 5182,
+            "article_id": 2470,
+            "theme_id": "china_indo_pacific",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          },
+          {
+            "signal_id": 5781,
+            "article_id": 2435,
+            "theme_id": "china_indo_pacific",
+            "kraj": "IN",
+            "zrodlo": "thehindu"
+          },
+          {
+            "signal_id": 4777,
+            "article_id": 2365,
+            "theme_id": "china_indo_pacific",
+            "kraj": "HK",
+            "zrodlo": "scmp"
+          },
+          {
+            "signal_id": 4813,
+            "article_id": 2492,
+            "theme_id": "china_indo_pacific",
+            "kraj": "US",
+            "zrodlo": "npr"
+          }
+        ],
+        "theme_id": "china_indo_pacific",
+        "tekst": "Temat Chin i Indo-Pacyfiku jest marginalny w próbce PL (2,6%) w porównaniu do HK (28,2%), IN (16,2%) czy US (11,8%). Analizowane źródła pbs, npr (US), thehindu (IN) i scmp (HK) szeroko relacjonują szczyt Xi-Trump i napięcia wokół Tajwanu, co w polskiej próbce pojawia się tylko incydentalnie.",
+        "article_ids": [
+          2470,
+          2435,
+          2365,
+          2492
+        ],
+        "temat": "china_indo_pacific"
+      },
+      "signals": [
+        {
+          "signal_id": 5182,
+          "theme_id": "china_indo_pacific",
+          "subject_actor": "US",
+          "content_group": "e1a37dd0b4c4ca62fc7ed872727000e1cb4a32242ccb990ef444da62b0ecfe48",
+          "publisher_group": "pbs",
+          "article_id": 2470,
+          "kraj": "US",
+          "zrodlo": "pbs",
+          "typ_zrodla": "public",
+          "rama": "USA fetują Chiny kosztem sojuszników",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł sugeruje, że USA traktują Chiny lepiej niż własnych sojuszników, podkreślając przepych i ceremoniał podczas wizyty Xi Jinpinga oraz brak konkretnych rezultatów rozmów."
+        },
+        {
+          "signal_id": 5781,
+          "theme_id": "china_indo_pacific",
+          "subject_actor": "US",
+          "content_group": "f530859f4d7ee529635fa3578c33b977730865a0e1f6602a4852f0861648e300",
+          "publisher_group": "thehindu",
+          "article_id": 2435,
+          "kraj": "IN",
+          "zrodlo": "thehindu",
+          "typ_zrodla": "private",
+          "rama": "Demokraci krytykują ustępstwa wobec Chin",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Demokraci z Senatu skrytykowali szczyt, twierdząc, że Trump nie uzyskał od Chin istotnych ustępstw w sprawie handlu, bezpieczeństwa, AI ani praw człowieka i nie zajął publicznie stanowiska w sprawie presji militarnej na Tajwan."
+        },
+        {
+          "signal_id": 4777,
+          "theme_id": "china_indo_pacific",
+          "subject_actor": "CN",
+          "content_group": "11ba3e6dc0d7f606e867076ba16cf642c34df4986389fc3c7f4af3e365a3e1e1",
+          "publisher_group": "scmp",
+          "article_id": 2365,
+          "kraj": "HK",
+          "zrodlo": "scmp",
+          "typ_zrodla": "private",
+          "rama": "USA ograniczają Chinom dostęp do Arktyki",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Umowa bezpieczeństwa USA-Dania-Grenlandia może ograniczyć możliwości zaangażowania Chin w Arktyce, zwłaszcza w zasobnej w surowce Grenlandii, i potencjalnie zbliżyć Pekin do Rosji."
+        },
+        {
+          "signal_id": 4813,
+          "theme_id": "china_indo_pacific",
+          "subject_actor": "US",
+          "content_group": "c5eb6bc628cf5819f261018c5210ed0f8b66c7c21465fda13817641fb5938bf4",
+          "publisher_group": "npr",
+          "article_id": 2492,
+          "kraj": "US",
+          "zrodlo": "npr",
+          "typ_zrodla": "public",
+          "rama": "Wizyta pełna ceremoniału, mało konkretów",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł relacjonuje wizytę państwową Xi Jinpinga w USA, podkreślając, że dominowała oprawa ceremonialna i kurtuazyjne gesty, a nie konkretne ustalenia w sprawach handlowych i technologicznych."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "slabe_sygnaly.1",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 4749,
+            "article_id": 2068,
+            "theme_id": "hybrid_info",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 4903,
+            "article_id": 2091,
+            "theme_id": "hybrid_info",
+            "kraj": "UA",
+            "zrodlo": "ukrinform"
+          },
+          {
+            "signal_id": 4709,
+            "article_id": 2113,
+            "theme_id": "hybrid_info",
+            "kraj": "UA",
+            "zrodlo": "pravda_ua"
+          }
+        ],
+        "theme_id": "hybrid_info",
+        "tekst": "Temat działań hybrydowych ma zbieżny kierunek alarmowy: analizowane źródła onet (PL) oraz ukrinform i pravda_ua (UA) alarmują o rosyjskich działaniach destabilizujących, ale próbka krajów z tym samym kierunkiem nie osiąga progu 3 krajów.",
+        "article_ids": [
+          2068,
+          2091,
+          2113
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 4749,
+            "article_id": 2068,
+            "theme_id": "hybrid_info",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 4903,
+            "article_id": 2091,
+            "theme_id": "hybrid_info",
+            "kraj": "UA",
+            "zrodlo": "ukrinform"
+          },
+          {
+            "signal_id": 4709,
+            "article_id": 2113,
+            "theme_id": "hybrid_info",
+            "kraj": "UA",
+            "zrodlo": "pravda_ua"
+          }
+        ],
+        "theme_id": "hybrid_info",
+        "tekst": "Temat działań hybrydowych ma zbieżny kierunek alarmowy: analizowane źródła onet (PL) oraz ukrinform i pravda_ua (UA) alarmują o rosyjskich działaniach destabilizujących, ale próbka krajów z tym samym kierunkiem nie osiąga progu 3 krajów.",
+        "article_ids": [
+          2068,
+          2091,
+          2113
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 4749,
+          "theme_id": "hybrid_info",
+          "subject_actor": "RU",
+          "content_group": "8079b1872e2ebf987b03d5faaa18fdc66393672d8404e4cb48798d73f5c40838",
+          "publisher_group": "onet",
+          "article_id": 2068,
+          "kraj": "PL",
+          "zrodlo": "onet",
+          "typ_zrodla": "private",
+          "rama": "Rosja intensyfikuje ataki hybrydowe",
+          "stance": "alarm",
+          "intensywnosc": 3,
+          "streszczenie": "Ekspert przewiduje intensyfikację ataków hybrydowych wymierzonych w państwa wschodniej flanki NATO, zwłaszcza te z populacją rosyjskojęzyczną, jako narzędzie erozji odporności społecznej i odwracania uwagi od Ukrainy."
+        },
+        {
+          "signal_id": 4903,
+          "theme_id": "hybrid_info",
+          "subject_actor": "RU",
+          "content_group": "82e13f255e73c3c542b7034de0591a2c9a74f9190e521640c3401c7f20ac1d21",
+          "publisher_group": "ukrinform",
+          "article_id": 2091,
+          "kraj": "UA",
+          "zrodlo": "ukrinform",
+          "typ_zrodla": "agency",
+          "rama": "Rosja destabilizuje Ukrainę przez media społecznościowe",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Rosyjska propaganda prowadzi w mediach społecznościowych inspirowaną przez Rosję kampanię nawołującą Ukraińców do protestów, by zdestabilizować sytuację wewnętrzną i podważyć zdolności obronne Ukrainy."
+        },
+        {
+          "signal_id": 4709,
+          "theme_id": "hybrid_info",
+          "subject_actor": "RU",
+          "content_group": "6b89b12e711d9a0dcf17f97f361f2bf2d19dbb3479423751d961efde7e85b807",
+          "publisher_group": "pravda_ua",
+          "article_id": 2113,
+          "kraj": "UA",
+          "zrodlo": "pravda_ua",
+          "typ_zrodla": "private",
+          "rama": "Rosja nasila działania hybrydowe w Europie",
+          "stance": "alarm",
+          "intensywnosc": 3,
+          "streszczenie": "Tekst przypomina, że służby specjalne Czech, Łotwy i Szwecji oczekują nasilenia rosyjskich dywersji w Europie, a premier Polski mówił o rosyjskich planach hybrydowych uderzeń przeciwko krajom wspierającym Ukrainę."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "nieobecne_w_polsce.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 5096,
+            "article_id": 2342,
+            "theme_id": "economy_sanctions",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          },
+          {
+            "signal_id": 5387,
+            "article_id": 2257,
+            "theme_id": "economy_sanctions",
+            "kraj": "CN",
+            "zrodlo": "cgtn"
+          },
+          {
+            "signal_id": 5550,
+            "article_id": 2305,
+            "theme_id": "economy_sanctions",
+            "kraj": "CN",
+            "zrodlo": "globaltimes"
+          },
+          {
+            "signal_id": 5630,
+            "article_id": 2424,
+            "theme_id": "economy_sanctions",
+            "kraj": "IN",
+            "zrodlo": "thehindu"
+          }
+        ],
+        "theme_id": "economy_sanctions",
+        "tekst": "Temat gospodarki i sankcji ma znikomy udział w próbce PL (2,6%) wobec znacznie wyższego udziału w IN (24,3%) i CN (14,7%). Analizowane źródła chinanews, cgtn, globaltimes (CN) i thehindu (IN) relacjonują np. porozumienia handlowe USA-Chiny czy protekcjonizm UE, co niemal nie pojawia się w analizowanych źródłach polskich.",
+        "article_ids": [
+          2342,
+          2257,
+          2305,
+          2424
+        ],
+        "temat": "economy_sanctions"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 5096,
+            "article_id": 2342,
+            "theme_id": "economy_sanctions",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          },
+          {
+            "signal_id": 5387,
+            "article_id": 2257,
+            "theme_id": "economy_sanctions",
+            "kraj": "CN",
+            "zrodlo": "cgtn"
+          },
+          {
+            "signal_id": 5550,
+            "article_id": 2305,
+            "theme_id": "economy_sanctions",
+            "kraj": "CN",
+            "zrodlo": "globaltimes"
+          },
+          {
+            "signal_id": 5630,
+            "article_id": 2424,
+            "theme_id": "economy_sanctions",
+            "kraj": "IN",
+            "zrodlo": "thehindu"
+          }
+        ],
+        "theme_id": "economy_sanctions",
+        "tekst": "Temat gospodarki i sankcji ma znikomy udział w próbce PL (2,6%) wobec znacznie wyższego udziału w IN (24,3%) i CN (14,7%). Analizowane źródła chinanews, cgtn, globaltimes (CN) i thehindu (IN) relacjonują np. porozumienia handlowe USA-Chiny czy protekcjonizm UE, co niemal nie pojawia się w analizowanych źródłach polskich.",
+        "article_ids": [
+          2342,
+          2257,
+          2305,
+          2424
+        ],
+        "temat": "economy_sanctions"
+      },
+      "signals": [
+        {
+          "signal_id": 5096,
+          "theme_id": "economy_sanctions",
+          "subject_actor": "CN",
+          "content_group": "17a3b998ef9b8e0a673e94a659c49bcdb7ccb34639f40f7d75b19e61889534b8",
+          "publisher_group": "chinanews",
+          "article_id": 2342,
+          "kraj": "CN",
+          "zrodlo": "chinanews",
+          "typ_zrodla": "agency",
+          "rama": "Współpraca gospodarcza fundamentem relacji",
+          "stance": "poparcie",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł informuje o nowym porozumieniu gospodarczym między Chinami a USA, obejmującym obniżki ceł i utworzenie mechanizmów współpracy, co ma ustabilizować relacje handlowe i przynieść korzyści obu gospodarkom."
+        },
+        {
+          "signal_id": 5387,
+          "theme_id": "economy_sanctions",
+          "subject_actor": "CN",
+          "content_group": "5627334ecd109ec4c5a264052dca33aac5ce9e3f2d972fa8b05d43aa42a760b2",
+          "publisher_group": "cgtn",
+          "article_id": 2257,
+          "kraj": "CN",
+          "zrodlo": "cgtn",
+          "typ_zrodla": "government",
+          "rama": "Obustronne korzyści gospodarcze",
+          "stance": "poparcie",
+          "intensywnosc": 3,
+          "streszczenie": "Xi Jinping stwierdził, że obie strony osiągnęły wzajemnie korzystne rezultaty w dziedzinach gospodarczych i handlowych, co zostanie przyjęte z zadowoleniem przez oba narody i społeczność międzynarodową."
+        },
+        {
+          "signal_id": 5550,
+          "theme_id": "economy_sanctions",
+          "subject_actor": "UE",
+          "content_group": "595f6867673ba9ff00ea19cc720d7f7a0ec3657c44fe614f0e2e5b62028a7f05",
+          "publisher_group": "peoples_daily",
+          "article_id": 2305,
+          "kraj": "CN",
+          "zrodlo": "globaltimes",
+          "typ_zrodla": "government",
+          "rama": "Protekcjonizm szkodzi konkurencyjności Europy",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Chińscy eksperci ostrzegają, że protekcjonistyczne środki handlowe UE zwiększą koszty działalności firm, zakłócą łańcuchy dostaw i osłabią długoterminową konkurencyjność Europy."
+        },
+        {
+          "signal_id": 5630,
+          "theme_id": "economy_sanctions",
+          "subject_actor": "UE",
+          "content_group": "43ac27ad7cc7d561e93dd5ed210d88045be16554e6e257d1d8374b5a67569786",
+          "publisher_group": "thehindu",
+          "article_id": 2424,
+          "kraj": "IN",
+          "zrodlo": "thehindu",
+          "typ_zrodla": "private",
+          "rama": "Unijna polityka handlowa ma luki",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł wskazuje, że istniejąca polityka handlowa UE wobec produktów z izraelskich osiedli zawiera luki, które umożliwiają ich dalszy napływ na rynek europejski mimo formalnych ograniczeń."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "w_skrocie.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 5039,
+            "article_id": 2592,
+            "theme_id": "us_policy",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          },
+          {
+            "signal_id": 5196,
+            "article_id": 2143,
+            "theme_id": "us_policy",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          },
+          {
+            "signal_id": 5007,
+            "article_id": 2445,
+            "theme_id": "us_policy",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 4906,
+            "article_id": 2180,
+            "theme_id": "us_policy",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 5578,
+            "article_id": 2480,
+            "theme_id": "us_policy",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "theme_id": "us_policy",
+        "tekst": "Temat ograniczania dostępu mediów do Białego Domu (sprawa CNN/Politico/MS NOW) pojawia się zbieżnie w analizowanych źródłach folha (BR), tagesschau (DE), dailysabah (TR), bbc (UK) i pbs (US), niemal wyłącznie w ramie krytycznej wobec administracji Trumpa.",
+        "article_ids": [
+          2592,
+          2143,
+          2445,
+          2180,
+          2480
+        ],
+        "pewnosc": "niski"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 5039,
+            "article_id": 2592,
+            "theme_id": "us_policy",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          },
+          {
+            "signal_id": 5196,
+            "article_id": 2143,
+            "theme_id": "us_policy",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          },
+          {
+            "signal_id": 5007,
+            "article_id": 2445,
+            "theme_id": "us_policy",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 4906,
+            "article_id": 2180,
+            "theme_id": "us_policy",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 5578,
+            "article_id": 2480,
+            "theme_id": "us_policy",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "theme_id": "us_policy",
+        "tekst": "Temat ograniczania dostępu mediów do Białego Domu (sprawa CNN/Politico/MS NOW) pojawia się zbieżnie w analizowanych źródłach folha (BR), tagesschau (DE), dailysabah (TR), bbc (UK) i pbs (US), niemal wyłącznie w ramie krytycznej wobec administracji Trumpa.",
+        "article_ids": [
+          2592,
+          2143,
+          2445,
+          2180,
+          2480
+        ],
+        "pewnosc": "niski"
+      },
+      "signals": [
+        {
+          "signal_id": 5039,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "be1c0235d2c5a255f200affa6dd47bd4ea00df78ac78b9991c0503a6c7e33883",
+          "publisher_group": "folha",
+          "article_id": 2592,
+          "kraj": "BR",
+          "zrodlo": "folha",
+          "typ_zrodla": "private",
+          "rama": "Biały Dom ogranicza dostęp mediów",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Biały Dom uniemożliwił CNN podróżowanie z prezydentem Trumpem na pokładzie Air Force One, co zagraża rotacyjnemu systemowi obsługi prasowej, który dopiero co wznowiono po wcześniejszych zakazach dostępu dla trzech redakcji."
+        },
+        {
+          "signal_id": 5196,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "fadd3a82214ac148d4a6b53924b9f24353b6a3774e9a22f5f6b293594a5afc20",
+          "publisher_group": "tagesschau",
+          "article_id": 2143,
+          "kraj": "DE",
+          "zrodlo": "tagesschau",
+          "typ_zrodla": "public",
+          "rama": "Trump ogranicza dostęp mediów",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Prezydent USA Donald Trump wykluczył stację CNN z towarzyszenia mu w podróży do Tennessee, mimo wcześniejszego orzeczenia sądu przywracającego dostęp dziennikarzom do Białego Domu."
+        },
+        {
+          "signal_id": 5007,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "cfd550d3c9386f71e1856db977bc7b2a79a60c5f67708ffb9f8b7e64f107e0ef",
+          "publisher_group": "turkuvaz",
+          "article_id": 2445,
+          "kraj": "TR",
+          "zrodlo": "dailysabah",
+          "typ_zrodla": "private",
+          "rama": "Eskalacja ograniczeń dostępu mediów",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Biały Dom wykluczył CNN z puli medialnej na pokładzie Air Force One podczas podróży prezydenta Trumpa, zastępując ją konserwatywną stacją Real America's Voice News, co stanowi kolejną eskalację sporu administracji z mediami."
+        },
+        {
+          "signal_id": 4906,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "eac7378c1350c28fcf934c822fdd7349f22ec3fa90267cd21067d3180bca19c5",
+          "publisher_group": "bbc",
+          "article_id": 2180,
+          "kraj": "UK",
+          "zrodlo": "bbc",
+          "typ_zrodla": "public",
+          "rama": "Biały Dom walczy z mediami",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Biały Dom wykluczył CNN z podróży z prezydentem Trumpem na pokładzie Air Force One do Tennessee."
+        },
+        {
+          "signal_id": 5578,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "1f0741a709dc41a130457edf15846bf20d7e6f38ffac418423694e9e124aa1ef",
+          "publisher_group": "pbs",
+          "article_id": 2480,
+          "kraj": "US",
+          "zrodlo": "pbs",
+          "typ_zrodla": "public",
+          "rama": "Biały Dom ogranicza dostęp mediów",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł opisuje powrót telewizyjnego poolu Białego Domu do pracy po kilkudniowym bojkocie, który był odpowiedzią na zakaz wstępu dla CNN, MS NOW i Politico nałożony przez prezydenta Trumpa."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "rozbieznosci.0.kraje.UA",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 5637,
+            "article_id": 2109,
+            "theme_id": "middle_east",
+            "kraj": "UA",
+            "zrodlo": "ukrinform"
+          },
+          {
+            "signal_id": 5534,
+            "article_id": 2131,
+            "theme_id": "middle_east",
+            "kraj": "UA",
+            "zrodlo": "pravda_ua"
+          },
+          {
+            "signal_id": 5168,
+            "article_id": 2096,
+            "theme_id": "middle_east",
+            "kraj": "UA",
+            "zrodlo": "ukrinform"
+          }
+        ],
+        "kraj": "UA",
+        "n_zrodel": 2,
+        "rama": "Iran stawia warunki USA / Iran zwiększa precyzję ataków dzięki pomocy zewnętrznej",
+        "stance": "neutralny (100%)",
+        "article_ids": [
+          2109,
+          2131,
+          2096
+        ]
+      },
+      "context": {
+        "temat": "middle_east",
+        "tekst": "Analizowane źródło WAFA (PS) opisuje Bliski Wschód niemal wyłącznie w kategoriach zbrodni Izraela wobec Palestyńczyków i dziennikarzy (krytyka 48%), podczas gdy analizowane źródła ukrinform i pravda_ua (UA) traktują ten sam temat jako dyplomatyczne rozgrywki wokół cieśniny Ormuz i Iranu, niemal wyłącznie neutralnie (100%). Ramy są wyraźnie odmienne (represje wobec Palestyńczyków vs. negocjacje o Ormuz).",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 4839,
+                "article_id": 2552,
+                "theme_id": "middle_east",
+                "kraj": "PS",
+                "zrodlo": "wafa"
+              },
+              {
+                "signal_id": 5565,
+                "article_id": 2536,
+                "theme_id": "middle_east",
+                "kraj": "PS",
+                "zrodlo": "wafa"
+              }
+            ],
+            "kraj": "PS",
+            "n_zrodel": 1,
+            "rama": "Izrael systematycznie ucisza palestyńskich dziennikarzy / buduje korytarz osadniczy",
+            "stance": "krytyka/neutralny (48%/52%)",
+            "article_ids": [
+              2552,
+              2536
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 5637,
+                "article_id": 2109,
+                "theme_id": "middle_east",
+                "kraj": "UA",
+                "zrodlo": "ukrinform"
+              },
+              {
+                "signal_id": 5534,
+                "article_id": 2131,
+                "theme_id": "middle_east",
+                "kraj": "UA",
+                "zrodlo": "pravda_ua"
+              },
+              {
+                "signal_id": 5168,
+                "article_id": 2096,
+                "theme_id": "middle_east",
+                "kraj": "UA",
+                "zrodlo": "ukrinform"
+              }
+            ],
+            "kraj": "UA",
+            "n_zrodel": 2,
+            "rama": "Iran stawia warunki USA / Iran zwiększa precyzję ataków dzięki pomocy zewnętrznej",
+            "stance": "neutralny (100%)",
+            "article_ids": [
+              2109,
+              2131,
+              2096
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "niski",
+          "uzasadnienie": "PS reprezentowane przez jedno źródło (wafa), poniżej progu 2 źródeł na kraj; para krajów (2) poniżej progu 3 krajów dla wzorca zbieżności; różnica ram opisana jakościowo, niezależnie od wartości JS."
+        }
+      },
+      "signals": [
+        {
+          "signal_id": 5637,
+          "theme_id": "middle_east",
+          "subject_actor": "SA",
+          "content_group": "af2773be5ba12fa97c66c16ce070111c0522bbf039284219982b2e7580e0ed13",
+          "publisher_group": "ukrinform",
+          "article_id": 2109,
+          "kraj": "UA",
+          "zrodlo": "ukrinform",
+          "typ_zrodla": "agency",
+          "rama": "Ataki na Arabię Saudyjską",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł informuje o przechwyceniu przez koalicję saudyjską dwóch rakiet balistycznych i dwóch dronów wystrzelonych przez jemeńskich Huti w kierunku Arabii Saudyjskiej."
+        },
+        {
+          "signal_id": 5534,
+          "theme_id": "middle_east",
+          "subject_actor": "IR",
+          "content_group": "29daa3c7816928bd5fb0ffd361813c017caa55e61a028df94c8cd19f20fc3694",
+          "publisher_group": "pravda_ua",
+          "article_id": 2131,
+          "kraj": "UA",
+          "zrodlo": "pravda_ua",
+          "typ_zrodla": "private",
+          "rama": "Iran stawia warunki USA",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Szef MSZ Iranu oświadczył, że Teheran przekazał USA konkretny siedmiodniowy plan otwarcia cieśniny Ormuz, uzależniając to od zniesienia sankcji naftowych, zniesienia blokady morskiej i zawieszenia broni obejmującego Liban."
+        },
+        {
+          "signal_id": 5168,
+          "theme_id": "middle_east",
+          "subject_actor": "IR",
+          "content_group": "b90ef79181aa439f072389a10926523b777556e2a3993c54d91ff4b7986aa8ad",
+          "publisher_group": "ukrinform",
+          "article_id": 2096,
+          "kraj": "UA",
+          "zrodlo": "ukrinform",
+          "typ_zrodla": "agency",
+          "rama": "Iran zwiększa precyzję ataków dzięki pomocy zewnętrznej",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Iran stopniowo poprawiał celność uderzeń dzięki kombinacji chińskiego wsparcia rozpoznawczego, rosyjskiej pomocy technicznej i własnego doświadczenia bojowego."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "w_skrocie.1",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 4839,
+            "article_id": 2552,
+            "theme_id": "middle_east",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          },
+          {
+            "signal_id": 4697,
+            "article_id": 2555,
+            "theme_id": "middle_east",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          },
+          {
+            "signal_id": 5145,
+            "article_id": 2567,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          }
+        ],
+        "theme_id": "middle_east",
+        "tekst": "W temacie Bliskiego Wschodu analizowane źródło WAFA (PS) przedstawia Izrael jako stronę systematycznie łamiącą prawo (ataki na dziennikarzy, blokada), podczas gdy analizowane źródło jpost (IL) koncentruje się na wewnętrznych sporach izraelskich (atak Netanjahu na burmistrza Nowego Jorku) i nie porusza tych zarzutów.",
+        "article_ids": [
+          2552,
+          2555,
+          2567
+        ],
+        "pewnosc": "niski"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 4839,
+            "article_id": 2552,
+            "theme_id": "middle_east",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          },
+          {
+            "signal_id": 4697,
+            "article_id": 2555,
+            "theme_id": "middle_east",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          },
+          {
+            "signal_id": 5145,
+            "article_id": 2567,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          }
+        ],
+        "theme_id": "middle_east",
+        "tekst": "W temacie Bliskiego Wschodu analizowane źródło WAFA (PS) przedstawia Izrael jako stronę systematycznie łamiącą prawo (ataki na dziennikarzy, blokada), podczas gdy analizowane źródło jpost (IL) koncentruje się na wewnętrznych sporach izraelskich (atak Netanjahu na burmistrza Nowego Jorku) i nie porusza tych zarzutów.",
+        "article_ids": [
+          2552,
+          2555,
+          2567
+        ],
+        "pewnosc": "niski"
+      },
+      "signals": [
+        {
+          "signal_id": 4839,
+          "theme_id": "middle_east",
+          "subject_actor": "PS",
+          "content_group": "e40f9aceead9ea2c3bbba0c8a931c654c3a1433834d31c4107612b11f91e34eb",
+          "publisher_group": "wafa",
+          "article_id": 2552,
+          "kraj": "PS",
+          "zrodlo": "wafa",
+          "typ_zrodla": "government",
+          "rama": "Izrael systematycznie ucisza palestyńskich dziennikarzy",
+          "stance": "krytyka",
+          "intensywnosc": 5,
+          "streszczenie": "Artykuł przedstawia dane o masowym zabijaniu, aresztowaniach i innych represjach wobec palestyńskich dziennikarzy od października 2023 roku, określając to jako systematyczne ataki mające na celu uciszenie prawdy."
+        },
+        {
+          "signal_id": 4697,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "dcde46ec38e8edbfb9b1483ed5706becd744e105d76d19480b7e6885a27767a9",
+          "publisher_group": "wafa",
+          "article_id": 2555,
+          "kraj": "PS",
+          "zrodlo": "wafa",
+          "typ_zrodla": "government",
+          "rama": "Izrael niszczy media i zabija dziennikarzy",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł relacjonuje oświadczenie, że podczas wojny w Strefie Gazy zginęły setki dziennikarzy, dziesiątki zostało aresztowanych, a instytucje medialne były celowo niszczone. Tekst kieruje te oskarżenia pod adresem Izraela, opisując je jako naruszenia trwające mimo prawa międzynarodowego."
+        },
+        {
+          "signal_id": 5145,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "b71af5e4e800ca99467cefac0fbecb9848eec8a1f3739b7361888a8629de5f8b",
+          "publisher_group": "jpost",
+          "article_id": 2567,
+          "kraj": "IL",
+          "zrodlo": "jpost",
+          "typ_zrodla": "private",
+          "rama": "Netanjahu atakuje burmistrza Nowego Jorku",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Premier Izraela Benjamin Netanjahu podczas wystąpienia w ONZ nazwał burmistrza Nowego Jorku Zohrana Mamdaniego antysemitą i zwolennikiem Hamasu, co spotkało się z krytyką części nowojorskich polityków żydowskich jako niebezpieczne i niepomocne."
+        }
+      ],
+      "review": "pending"
+    }
+  ],
+  "claims_total": 12,
+  "meaning": "czy sygnały wspierają opis przekazu, nie prawdziwość zdarzeń"
+}
