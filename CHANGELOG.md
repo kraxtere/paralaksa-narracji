@@ -1,3 +1,23 @@
+# GDELT przez BigQuery: kandydaci na karty i brakujące relacje — 2026-09-26
+
+- DOC API GDELT nie nadaje się do pracy: większość zapytań kończy się 429, jedna karta ok. 15 min (próba 2026-09-26).
+  Strona www GDELT używa tego samego API. Działa publiczny zbiór `gdelt-bq.gdeltv2` w BigQuery (darmowy tryb piaskownicy,
+  1 TB zapytań miesięcznie): doba nagłówków ok. 0,2 GB, zapytanie w kilka sekund. Każde zapytanie najpierw na sucho, twardy
+  limit `--max-gb` (domyślnie 5). Logowanie: `gcloud auth application-default login`, projekt w `.env` jako `GCP_PROJECT`.
+- `plx gdelt rezonans --dzien D`: osoby i organizacje (GKG, nazwy po angielsku dla wszystkich języków), o których pisało wyraźnie
+  więcej redakcji niż średnio w 7 dniach wcześniej; ich nagłówki z wielu języków; jedno wywołanie modelu ekstrakcji grupuje je
+  w wydarzenia i tłumaczy. Powody pokazane osobno (redakcje, języki, wzrost), bez jednej liczby. Rozrywka i sport pominięte.
+  25.09: 5–6 kandydatów (Leon XIV we Francji, Netanjahu w ONZ, kolacja Trump–Xi, ataki dronów Rosja–Ukraina, lotnisko Berlusconiego),
+  0,2–0,5 GB i ok. 0,03 $. Ograniczenie: wydarzenie bez wyraźnej osoby (Kolumbia zrywa stosunki z Iranem) może nie wypłynąć.
+- `plx gdelt szukaj events/<karta>.md`: model podaje frazy w 13 językach i alfabetach, BigQuery szuka nagłówków od dnia przed
+  kartą do `--dni-po` dni po, model sprawdza każdy nagłówek (czy o tym zdarzeniu, także reakcje) i tłumaczy. Redakcje już w karcie
+  osobno, odrzucone w JSON. Karty nie zmienia. Fort Trump: 36 relacji spoza karty w 11 językach, w tym strona rosyjska, której
+  karta nie miała (Wiesti, RIA, Lenta, Wzgląd); Braniewo: 51 w 8 językach. Koszt ok. 0,8 GB i 0,01 $ na kartę.
+  Pierwsza wersja polecenia dawała prawie same frazy angielskie i model przepisywał oryginały zamiast tłumaczyć; stąd frazy per język
+  i kontrola przepisanych tłumaczeń. Sito nie jest pełne (Kommersant przy Fort Trump odpadł przez frazę z „Polską”).
+- Przy sprawach lokalnych GDELT nie pomaga (Kłodawa: 1 artykuł). Wyniki to podpowiedzi: nagłówek, godzinę i gatunek sprawdza się
+  na stronie redakcji. Nagłówki trafiają do DeepSeek (jak historie dnia). Zależność opcjonalna: `pip install -e ".[gdelt]"`.
+
 # Strona wewnętrzna: tryb ciemny i logo — 2026-09-25
 
 - Tryb ciemny: przy pierwszym wejściu według ustawień systemu, przełącznik w pasku, wybór zapamiętany w przeglądarce.

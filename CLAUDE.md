@@ -74,6 +74,8 @@ py -3.12 -m venv .venv; .venv\Scripts\python -m pip install -e ".[dev]"   # uv n
 .venv\Scripts\plx events check events\<karta>.md|events [--dni 2] [--max-fetch 12] [-o data/checks]   # podpowiedzi z Wayback, karty nie zmienia
 .venv\Scripts\plx site [--db data/prod.db] [-o data/site] [--zip] [--bez-historii]   # strona wewnętrzna: zdarzenia + dziennik, statyczny HTML
 .venv\Scripts\plx events archive events\<karta>.md|events [--na-sucho] [--bez-wpisu]   # wypełnia puste archiwum (Wayback / Save Page Now)
+.venv\Scripts\plx gdelt rezonans [--dzien D]   # kandydaci na karty z GDELT (BigQuery, GCP_PROJECT w .env)
+.venv\Scripts\plx gdelt szukaj events\<karta>.md [--fraza F ...] [--dni-po 3]   # brakujące relacje do karty, karty nie zmienia
 ```
 Pełny ingest z pełnymi tekstami trwa ok. 2–2,5 min (~310 artykułów przy pierwszym uruchomieniu).
 Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20 min na ~310 artykułów.
@@ -113,6 +115,9 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
   modelu ekstrakcji: wyszukanie kandydatów, potem przypisanie każdego artykułu do wydarzenia albo odrzucenie (porcje po 60 artykułów). Tylko przy `plx site`, nigdy w daily;
   wynik w `data/stories/<dzień>.json` (ok. 0,03–0,04 $ na dzień, ponowna budowa za darmo). Pierwszy krok bez weryfikacji dokleja artykuły
   nie na temat (sprawdzone 2026-09-25), więc drugiego kroku nie usuwać. „Co się wyróżnia” (`data.standouts`) liczy się bez modelu.
+- `src/paralaksa/gdelt/`: `plx gdelt`, lokalnie, nigdy w daily. `bq.py` (BigQuery z próbą na sucho i limitem bajtów, dekodowanie
+  encji w nagłówkach GKG), `rezonans.py` (skok osób/organizacji względem 7 dni + model grupuje i tłumaczy), `szukaj.py` (frazy per język
+  od modelu, wyszukiwanie w nagłówkach, sprawdzenie modelem). DOC API GDELT odrzucone (429). Wyniki w `data/gdelt/`.
 - `.github/workflows/daily.yml`: cron 10:30 UTC (poza szczytem DeepSeek; GitHub opóźnia start nawet o 4–5 h), baza jako zaszyfrowany snapshot w Release `database-backup` (cache i artefakt to kopie), commit `reports/`. Kod 1 tylko przy ostrzeżeniach blokujących (synteza, ekstrakcja, brak >1/3 aktywnych źródeł); pojedynczy kanał/źródło to ostrzeżenie informacyjne.
 
 ## Konwencje

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import logging
 from datetime import date
 from pathlib import Path
@@ -408,6 +409,96 @@ def events_archive(
                 failed |= ra.action == "błąd"
     if failed:
         raise typer.Exit(code=1)
+
+
+gdelt_app = typer.Typer(help="GDELT przez BigQuery: kandydaci na karty i brakujące relacje (lokalnie, poza daily).",
+                        no_args_is_help=True)
+app.add_typer(gdelt_app, name="gdelt")
+GdeltOut = typer.Option(Path("data/gdelt"), "--out-dir", "-o", help="Katalog wyników (Markdown i JSON).")
+GdeltProject = typer.Option(None, "--projekt", help="Projekt Google Cloud (domyślnie GCP_PROJECT z .env).")
+GdeltMaxGb = typer.Option(5.0, "--max-gb", help="Twardy limit przeszukanych danych na jedno zapytanie (GB).")
+
+
+def _gdelt_tools(config_dir: Path, project: Optional[str], max_gb: float):
+    from paralaksa.extract.llm_client import build_client
+    from paralaksa.gdelt.bq import BigQueryRunner
+
+    settings = load_settings(config_dir)
+    try:
+        runner = BigQueryRunner(project, max_gb)
+    except RuntimeError as e:
+        typer.echo(f"BŁĄD: {e}", err=True)
+        raise typer.Exit(code=1)
+    client = build_client(settings.models.extract, settings.pricing, settings.extract.batch_poll_interval_s,
+                          settings.extract.batch_timeout_h)
+    return runner, client, settings.models.extract
+
+
+@gdelt_app.command("rezonans")
+def gdelt_rezonans(
+    day: Optional[str] = typer.Option(None, "--dzien", help="Dzień UTC RRRR-MM-DD (domyślnie wczoraj)."),
+    out_dir: Path = GdeltOut, project: Optional[str] = GdeltProject, max_gb: float = GdeltMaxGb,
+    config_dir: Path = ConfigDir,
+) -> None:
+    """Kandydaci na karty: wydarzenia, o których danego dnia pisało wyraźnie więcej redakcji w wielu językach niż zwykle.
+
+    Osobno podane powody (redakcje, języki, wzrost względem tygodnia) i nagłówki z różnych krajów z tłumaczeniem."""
+    from datetime import datetime, timedelta, timezone
+
+    from paralaksa.gdelt import rezonans
+
+    day = day or (datetime.now(timezone.utc).date() - timedelta(days=1)).isoformat()
+    runner, client, model = _gdelt_tools(config_dir, project, max_gb)
+    try:
+        out = rezonans.find(runner, client, model, day)
+    except RuntimeError as e:
+        typer.echo(f"BŁĄD: {e}", err=True)
+        raise typer.Exit(code=1)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    md = out_dir / f"rezonans-{day}.md"
+    md.write_text(rezonans.render(out), encoding="utf-8")
+    md.with_suffix(".json").write_text(json.dumps(out, ensure_ascii=False, indent=1, default=str), encoding="utf-8")
+    for n, ev in enumerate(out["wydarzenia"], 1):
+        p = ev["powody"]
+        typer.echo(f"{n}. {ev['tytul']} ({p['redakcje']} redakcji, {p['jezyki']} języków, ×{p['wzrost']:g})")
+    typer.echo(f"BigQuery {out['gb']} GB, model {out['cost_usd']:.3f} $. Wynik: {md}")
+
+
+@gdelt_app.command("szukaj")
+def gdelt_szukaj(
+    card_path: Path = typer.Argument(..., exists=True, dir_okay=False, help="Karta events/<id>.md."),
+    phrases: Optional[list[str]] = typer.Option(None, "--fraza", help="Własne frazy zamiast podpowiedzi modelu "
+                                                "(można wiele; części połączone ' & ' muszą wystąpić razem)."),
+    days_after: int = typer.Option(3, "--dni-po", min=0, max=14, help="Ile dni po dniu karty przeszukać."),
+    no_check: bool = typer.Option(False, "--bez-sprawdzenia", help="Bez sprawdzania nagłówków modelem (więcej szumu)."),
+    out_dir: Path = GdeltOut, project: Optional[str] = GdeltProject, max_gb: float = GdeltMaxGb,
+    config_dir: Path = ConfigDir,
+) -> None:
+    """Brakujące relacje do karty: nagłówki z GDELT o tym zdarzeniu z redakcji, których w karcie jeszcze nie ma.
+
+    Karty nie zmienia. Wynik to podpowiedzi do otwarcia i sprawdzenia."""
+    from paralaksa.events.check import CardError, load_card
+    from paralaksa.gdelt import szukaj
+
+    try:
+        card = load_card(card_path)
+    except CardError as e:
+        typer.echo(f"BŁĄD: {e}", err=True)
+        raise typer.Exit(code=1)
+    runner, client, model = _gdelt_tools(config_dir, project, max_gb)
+    try:
+        out = szukaj.search(runner, client, model, card, days_after, phrases, not no_check)
+    except RuntimeError as e:
+        typer.echo(f"BŁĄD: {e}", err=True)
+        raise typer.Exit(code=1)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    md = out_dir / f"szukaj-{card['id']}.md"
+    md.write_text(szukaj.render(out), encoding="utf-8")
+    md.with_suffix(".json").write_text(szukaj.dump(out), encoding="utf-8")
+    langs = sorted({f["lang"] for f in out["nowe"]})
+    typer.echo(f"{card['id']}: {len(out['nowe'])} relacji spoza karty w {len(langs)} językach ({', '.join(langs)}); "
+               f"{len(out['w_karcie'])} z redakcji już w karcie")
+    typer.echo(f"BigQuery {out['gb']} GB, model {out['cost_usd']:.3f} $. Wynik: {md}")
 
 
 @app.command("run-daily")
