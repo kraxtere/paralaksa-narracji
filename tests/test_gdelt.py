@@ -21,7 +21,8 @@ def test_parse_phrases_per_language_and_filters():
     text = json.dumps({"frazy": {"en": ["Fort Trump", "x"], "ru": ["Форт Трамп", "вертол & Польш", "Ми & Польш"]}})
     assert parse_phrases(text) == ["Fort Trump", "Форт Трамп", "вертол & Польш"]   # za krótkie części odpadają
     sql = search_sql(["Fort Trump", "вертол & Польш"], date(2026, 9, 21), date(2026, 9, 25))
-    assert "(REGEXP_CONTAINS(LOWER(t), r'fort\\ trump')) OR (REGEXP_CONTAINS(LOWER(t), r'вертол') AND" in sql
+    assert "CAST((REGEXP_CONTAINS(LOWER(t), r'fort\\ trump')) AS INT64) + CAST((REGEXP_CONTAINS(LOWER(t), r'вертол') AND" in sql
+    assert "ORDER BY score DESC, DATE" in sql
     assert "TIMESTAMP('2026-09-21') AND TIMESTAMP('2026-09-25')" in sql
 
 

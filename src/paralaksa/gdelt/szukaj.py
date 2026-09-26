@@ -27,6 +27,8 @@ z tego kraju napisałaby nagłówek (nie tłumacz dosłownie polskich nagłówk�
 - nazwy własne w transkrypcji tego języka; przy odmianie używaj rdzenia („Польш”, „Braniew”, „Nawrock”);
 - gdy jedno słowo nie wystarcza, połącz 2 części znakiem " & " (obie muszą wystąpić), np. "вертол & Польш",
   "Hubschrauber & Polen"; nie łącz nazwy mało znanej miejscowości z innymi słowami, bo obce nagłówki rzadko ją podają;
+- każda część to 1–2 słowa albo rdzeń, nigdy całe wyrażenie: nagłówki odmieniają słowa i zmieniają szyk
+  (dobrze: "Нетаньяху & зал", "Netanyahu & walk"; źle: "выход из зала & Нетаньяху", "Netanyahu & UN General Assembly");
 - nie podawaj ogólnych słów samych w sobie („Trump”, „Polska”, „helicopter”).
 
 Odpowiedz wyłącznie obiektem JSON: {{"frazy": {{"en": ["..."], "ru": ["..."], ...}}}}
@@ -95,16 +97,19 @@ def search_sql(phrases: list[str], start: date, end: date) -> str:
         parts = [phrase_regex(x) for x in p.split("&") if x.strip()]
         conds.append("(" + " AND ".join(f"REGEXP_CONTAINS(LOWER(t), r'{x}')" for x in parts) + ")")
     return f"""{UNESCAPE_UDF}
-SELECT DATE, src, url, lang, t FROM (
-  SELECT DATE, SourceCommonName src, DocumentIdentifier url, {LANG} lang, {TITLE} t
-  FROM {GKG}
-  WHERE _PARTITIONTIME BETWEEN TIMESTAMP('{day_literal(start)}') AND TIMESTAMP('{day_literal(end)}'))
-WHERE t IS NOT NULL AND ({' OR '.join(conds)})
-ORDER BY DATE LIMIT {MAX_ROWS}"""
+SELECT DATE, src, url, lang, t, score FROM (
+  SELECT *, {' + '.join(f"CAST({c} AS INT64)" for c in conds)} score FROM (
+    SELECT DATE, SourceCommonName src, DocumentIdentifier url, {LANG} lang, {TITLE} t
+    FROM {GKG}
+    WHERE _PARTITIONTIME BETWEEN TIMESTAMP('{day_literal(start)}') AND TIMESTAMP('{day_literal(end)}'))
+  WHERE t IS NOT NULL)
+WHERE score > 0
+ORDER BY score DESC, DATE LIMIT {MAX_ROWS}"""
 
 
 def hit_items(rows: list[dict]) -> list[dict]:
-    """First article per outlet; then languages take turns, so a flood in one language does not crowd out the rest."""
+    """Rows come best first (more matched phrases, then earlier), so a generic phrase alone does not fill the queue.
+    One article per outlet; then languages take turns, so a flood in one language does not crowd out the rest."""
     first: dict[str, dict] = {}
     for r in rows:
         first.setdefault(r["src"], r)

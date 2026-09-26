@@ -15,6 +15,10 @@
   karta nie miała (Wiesti, RIA, Lenta, Wzgląd); Braniewo: 51 w 8 językach. Koszt ok. 0,8 GB i 0,01 $ na kartę.
   Pierwsza wersja polecenia dawała prawie same frazy angielskie i model przepisywał oryginały zamiast tłumaczyć; stąd frazy per język
   i kontrola przepisanych tłumaczeń. Sito nie jest pełne (Kommersant przy Fort Trump odpadł przez frazę z „Polską”).
+  Przy pierwszej karcie zrobionej z pomocą narzędzia (2026-09-24-netanjahu-abbas-onz) dwie kolejne poprawki: części fraz jako
+  rdzenie 1–2 słów (model podawał całe wyrażenia, np. „выход из зала”, a nagłówki piszą „покинули зал”) i kolejność trafień
+  według liczby pasujących fraz (ogólna fraza „UN General Assembly” zapychała kolejkę zapowiedziami innych wystąpień).
+  Wynik: 272 nagłówki w 18 językach zamiast 82 w 14; karta z 16 relacjami z 11 krajów w ok. 25 min.
 - Przy sprawach lokalnych GDELT nie pomaga (Kłodawa: 1 artykuł). Wyniki to podpowiedzi: nagłówek, godzinę i gatunek sprawdza się
   na stronie redakcji. Nagłówki trafiają do DeepSeek (jak historie dnia). Zależność opcjonalna: `pip install -e ".[gdelt]"`.
 
