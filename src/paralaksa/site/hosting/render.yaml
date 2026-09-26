@@ -1,0 +1,13 @@
+# Render Blueprint: strona wewnętrzna pod hasłem. Login i hasło podajesz w Renderze, nie w repo.
+services:
+  - type: web
+    name: paralaksa-strona
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python server.py
+    envVars:
+      - key: SITE_USER
+        sync: false
+      - key: SITE_PASSWORD
+        sync: false

@@ -1,3 +1,14 @@
+# Strona wewnętrzna pod hasłem (Render) — 2026-09-26
+
+- Strona z `plx site` jest dostępna w internecie tylko pod hasłem. `plx site --publikuj` wypycha zbudowaną stronę jednym commitem
+  (force push, repo nie puchnie od starych wersji) do osobnego prywatnego repo `SITE_REPO` (`kraxtere/paralaksa-strona`).
+  Przed pushem sprawdza przez `gh`, że repo jest prywatne; publiczne odrzuca.
+- Render (darmowy Web Service) uruchamia `server.py` z `src/paralaksa/site/hosting/`: tylko biblioteka standardowa, HTTP Basic Auth,
+  login i hasło wyłącznie w zmiennych Rendera (`SITE_USER`, `SITE_PASSWORD`), bez nich odpowiedź 503. Bez listingu katalogów,
+  `X-Robots-Tag: noindex`. Darmowy plan usypia usługę po 15 min bez ruchu (pierwsze wejście ok. minuty).
+- Osobne repo zamiast gałęzi w tym: `paralaksa-narracji` zostaje publiczne, więc minuty GitHub Actions są bez limitu
+  (daily 35–55 min dziennie przekroczyłby z czasem 2000 min miesięcznie dla repo prywatnego).
+
 # GDELT przez BigQuery: kandydaci na karty i brakujące relacje — 2026-09-26
 
 - DOC API GDELT nie nadaje się do pracy: większość zapytań kończy się 429, jedna karta ok. 15 min (próba 2026-09-26).

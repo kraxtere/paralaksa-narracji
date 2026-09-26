@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import logging
 from datetime import date
 from pathlib import Path
@@ -267,13 +268,18 @@ def site(
     events_dir: Path = typer.Option(Path("events"), "--events", help="Katalog kart zdarzeń."),
     reports_dir: Path = typer.Option(Path("reports"), "--reports", help="Katalog raportów dziennych (JSON)."),
     make_zip: bool = typer.Option(False, "--zip", help="Dodatkowo spakuj stronę do .zip (do przesłania)."),
+    publish_site: bool = typer.Option(False, "--publikuj",
+                                      help="Wypchnij stronę do prywatnego repo SITE_REPO (Render, pod hasłem)."),
     no_stories: bool = typer.Option(False, "--bez-historii",
                                     help="Nie wywołuj modelu dla brakujących historii dnia (tylko zapisane w --historie-dir)."),
     stories_dir: Path = typer.Option(Path("data/stories"), "--historie-dir", help="Zapisane historie dnia (JSON)."),
     config_dir: Path = ConfigDir,
     db_path: Optional[Path] = DbPath,
 ) -> None:
-    """Strona wewnętrzna: interaktywne karty zdarzeń i dziennik z bazy. Statyczne pliki HTML, bez publikacji.
+    """Strona wewnętrzna: interaktywne karty zdarzeń i dziennik z bazy. Statyczne pliki HTML.
+
+    --publikuj: jeden commit do prywatnego repo z SITE_REPO (właściciel/nazwa, w .env); Render wydaje stronę pod hasłem.
+    Publiczne repo jest odrzucane.
 
     Historie dnia (wydarzenia opisywane w wielu krajach): jedno wywołanie modelu ekstrakcji na dzień, wynik zapisany
     w --historie-dir i używany przy kolejnych budowach. Daily ich nie liczy."""
@@ -328,6 +334,18 @@ def site(
     typer.echo(f"Zdarzenia: {len(res.events)}, dni dziennika: {len(res.days)}. Start: {out_dir / 'index.html'}")
     if make_zip:
         typer.echo(f"Paczka: {zip_site(out_dir)}")
+    if publish_site:
+        from paralaksa.site.publish import publish
+
+        repo = os.environ.get("SITE_REPO", "")
+        if not repo:
+            typer.echo("BŁĄD: brak SITE_REPO w .env (np. kraxtere/paralaksa-strona)", err=True)
+            raise typer.Exit(1)
+        try:
+            typer.echo(f"Opublikowano w {repo}: {publish(out_dir, repo)}")
+        except RuntimeError as e:
+            typer.echo(f"BŁĄD publikacji: {e}", err=True)
+            raise typer.Exit(1)
 
 
 events_app = typer.Typer(help="Karty zdarzeń (events/*.md).", no_args_is_help=True)

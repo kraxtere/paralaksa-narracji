@@ -1,0 +1,1 @@
+# Serwer używa tylko biblioteki standardowej.
