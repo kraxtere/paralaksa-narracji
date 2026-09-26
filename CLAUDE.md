@@ -135,8 +135,9 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
 - Opisujemy przekaz medialny, nie fakty; bez prognoz jako faktów.
 - Pobieranie: respektuj robots.txt, nie obchodź paywalli ani ochrony antybotowej, identyfikujący UA.
 - Pełne teksty tylko lokalnie (`data/`, poza gitem), nigdy w raportach; cytaty maks. 15 słów.
-- Źródła rosyjskie, także objęte sankcjami UE (RT, RIA, Izwiestia), są dozwolone i w kartach zdarzeń wymagane
-  (decyzja właściciela 2026-09-25, zmienia wcześniejszy zakaz). Daily: lista źródeł bez zmian, dopóki właściciel nie zdecyduje.
+- Źródła rosyjskie, także objęte sankcjami UE (RT, RIA, Izwiestia), są dozwolone (decyzja właściciela 2026-09-25, zmienia
+  wcześniejszy zakaz). W kartach zdarzeń wymagane tylko przy zdarzeniach, które dotyczą Rosji albo do których Rosja się odnosi;
+  ogólnie: strony istotne dla zdarzenia, z zapisem gdzie szukano (2026-09-26). Daily: lista źródeł bez zmian, dopóki właściciel nie zdecyduje.
   Taksonomii tematów nie zmieniamy automatycznie.
 
 ## Decyzje modelowe (ekstrakcja sygnałów, KM2)

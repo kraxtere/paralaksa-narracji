@@ -19,9 +19,13 @@ i opisujemy, w którym momencie opowieść zaczyna budować spokój, lęk, oburz
 6. **Liczby**: przy każdej liczbie zapisz, czego dotyczy (np. pracownicy bezpośredni vs łańcuch dostaw).
 7. **`sprawdzil`**: kto otworzył link i przeczytał materiał, np. `GPT 2026-09-24` albo `człowiek 2026-09-24`.
    Do odcinka idą tylko relacje sprawdzone przez człowieka.
-8. **Strona rosyjska obowiązkowo, także ze źródeł objętych sankcjami UE** (RIA, Izwiestia, RT itd.; decyzja właściciela z 2026-09-25,
-   wcześniej ich nie używaliśmy). Podpisujemy typ: państwowe, prorządowe, prywatne, emigracyjne (np. Meduza).
-   Robots.txt nadal obowiązuje; gdy strona niedostępna, tytuł z wyszukiwarki lub kopii z adnotacją w `sprawdzil`.
+8. **Strony istotne dla zdarzenia.** Szukamy krajów i stron, których zdarzenie dotyczy albo które mają w nim interes;
+   w `jak_szukano` zapisujemy, gdzie szukano i czego nie znaleziono. Strona rosyjska jest obowiązkowa tylko wtedy, gdy zdarzenie
+   dotyczy Rosji albo Rosja się do niego odnosi (np. Braniewo, Fort Trump); przy sprawach bez związku z Rosją (np. Kłodawa)
+   jej nie szukamy na siłę (decyzja właściciela z 2026-09-26, łagodzi zasadę z 2026-09-25).
+   Źródła rosyjskie, także objęte sankcjami UE (RIA, Izwiestia, RT itd.), są dozwolone. Podpisujemy typ: państwowe, prorządowe,
+   prywatne, emigracyjne (np. Meduza). Robots.txt nadal obowiązuje; gdy strona niedostępna, tytuł z wyszukiwarki lub kopii
+   z adnotacją w `sprawdzil`. Brakujące strony podpowiada `plx gdelt szukaj`.
 9. **Odrzucone przypadki zostają** (`status: odrzucony` + `powod_odrzucenia`). To wiedza o granicy między kontrastem rzeczywistym a pozornym.
 10. **Nie przypisujemy redakcjom intencji.** Hipoteza odbioru jest hipotezą do oceny widza.
 11. **Wątki** (`watki` + `watek` przy relacji): opowieść, od której zaczyna nagłówek; jedna na relację. **`typ`** źródła:
