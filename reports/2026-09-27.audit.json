@@ -1,0 +1,1574 @@
+{
+  "seed": "2026-09-27",
+  "sample": [
+    {
+      "path": "rozbieznosci.1.kraje.US",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 6177,
+            "article_id": 3015,
+            "theme_id": "russia",
+            "kraj": "US",
+            "zrodlo": "fox"
+          }
+        ],
+        "kraj": "US",
+        "n_zrodel": 1,
+        "rama": "Kampania hybrydowa, nie inwazja — brak podstaw do paniki",
+        "stance": "uspokojenie",
+        "article_ids": [
+          3015
+        ]
+      },
+      "context": {
+        "temat": "russia",
+        "tekst": "Analizowane źródło Tagesschau (DE) przekazuje ostrzeżenia premiera Tuska o bezpośrednim zagrożeniu Polski atakami hybrydowymi (alarm), podczas gdy Fox News (US) cytuje prezydenta Finlandii mówiącego, że nie ma podstaw do obaw przed rosyjską inwazją, odróżniając kampanię hybrydową od wojny kinetycznej (uspokojenie).",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 6201,
+                "article_id": 2699,
+                "theme_id": "russia",
+                "kraj": "DE",
+                "zrodlo": "tagesschau"
+              }
+            ],
+            "kraj": "DE",
+            "n_zrodel": 1,
+            "rama": "Rosja planuje hybrydowe ataki na Polskę i inne kraje wspierające Ukrainę",
+            "stance": "alarm",
+            "article_ids": [
+              2699
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 6177,
+                "article_id": 3015,
+                "theme_id": "russia",
+                "kraj": "US",
+                "zrodlo": "fox"
+              }
+            ],
+            "kraj": "US",
+            "n_zrodel": 1,
+            "rama": "Kampania hybrydowa, nie inwazja — brak podstaw do paniki",
+            "stance": "uspokojenie",
+            "article_ids": [
+              3015
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "niski",
+          "uzasadnienie": "Tylko 2 kraje, po 1 niezależnym źródle każdy — poniżej progu 2 źródeł na kraj i 3 krajów wymaganych dla wyższej pewności"
+        }
+      },
+      "signals": [
+        {
+          "signal_id": 6177,
+          "theme_id": "russia",
+          "subject_actor": "RU",
+          "content_group": "62e03c7c23b38835653386d23f3a1940388de87d8c30351f1ebe17cb4f542f81",
+          "publisher_group": "fox",
+          "article_id": 3015,
+          "kraj": "US",
+          "zrodlo": "fox",
+          "typ_zrodla": "private",
+          "rama": "Rosja prowadzi kampanię hybrydową, nie inwazję",
+          "stance": "uspokojenie",
+          "intensywnosc": 3,
+          "streszczenie": "Stubb nie widzi podstaw faktycznych do obaw przed rosyjską inwazją na Finlandię, odróżniając wojnę kinetyczną w Ukrainie od kampanii hybrydowej w Europie obejmującej cyberataki i sabotaż."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "nieobecne_w_polsce.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 6004,
+            "article_id": 2979,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 5990,
+            "article_id": 3137,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          }
+        ],
+        "theme_id": "middle_east",
+        "tekst": "Temat Bliskiego Wschodu ma w polskiej próbce udział 5,3%, wobec znacznie wyższych udziałów w innych krajach — np. analizowane źródło Daily Sabah (TR) relacjonuje ofiary w Gazie mimo zawieszenia broni, a analizowane źródło Jerusalem Post (IL) opisuje działania wojskowe Izraela wobec terroryzmu — wątki nieobecne w polskiej próbce, która ogranicza się do cieśniny Ormuz.",
+        "article_ids": [
+          2979,
+          3137
+        ],
+        "temat": "middle_east"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 6004,
+            "article_id": 2979,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 5990,
+            "article_id": 3137,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          }
+        ],
+        "theme_id": "middle_east",
+        "tekst": "Temat Bliskiego Wschodu ma w polskiej próbce udział 5,3%, wobec znacznie wyższych udziałów w innych krajach — np. analizowane źródło Daily Sabah (TR) relacjonuje ofiary w Gazie mimo zawieszenia broni, a analizowane źródło Jerusalem Post (IL) opisuje działania wojskowe Izraela wobec terroryzmu — wątki nieobecne w polskiej próbce, która ogranicza się do cieśniny Ormuz.",
+        "article_ids": [
+          2979,
+          3137
+        ],
+        "temat": "middle_east"
+      },
+      "signals": [
+        {
+          "signal_id": 6004,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "b16d18f9c35707b10bbb8252364531b823866e9870c92e5989fabf97c39f1542",
+          "publisher_group": "turkuvaz",
+          "article_id": 2979,
+          "kraj": "TR",
+          "zrodlo": "dailysabah",
+          "typ_zrodla": "private",
+          "rama": "Izrael kontynuuje ludobójczą wojnę",
+          "stance": "krytyka",
+          "intensywnosc": 5,
+          "streszczenie": "Artykuł informuje, że liczba ofiar śmiertelnych w Strefie Gazy przekroczyła 74 000, a izraelskie ataki trwają pomimo zawieszenia broni, zabijając kolejne osoby i raniąc cywilów."
+        },
+        {
+          "signal_id": 5990,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "1949fcab010363bb06668c8ed6155c90a379ea718cc43fba2fc3df2515ea7615",
+          "publisher_group": "jpost",
+          "article_id": 3137,
+          "kraj": "IL",
+          "zrodlo": "jpost",
+          "typ_zrodla": "private",
+          "rama": "Izrael walczy z terroryzmem chroniąc cywilów",
+          "stance": "poparcie",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przekazuje, że izraelskie wojsko zidentyfikowało terrorystę wykorzystującego dziecko do przenoszenia broni w cywilnym domu w Gazie, co przedstawiono jako systematyczne łamanie prawa międzynarodowego przez organizacje terrorystyczne."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "autoobraz.3",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 6276,
+            "article_id": 3002,
+            "theme_id": "emergent:executive-power-congress",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          },
+          {
+            "signal_id": 6048,
+            "article_id": 2911,
+            "theme_id": "us_policy",
+            "kraj": "HK",
+            "zrodlo": "scmp"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "US",
+        "jak_opisuje_siebie": "Analizowane źródło PBS przedstawia działania administracji Trumpa krytycznie jako 'rozszerzanie kontroli władzy wykonawczej' i osłabianie pozycji Kongresu, powołując się na zwolnienia pracowników federalnych i rozpoczęcie wojny w Iranie bez zgody Kongresu.",
+        "jak_opisuja_go_inni": "Analizowane źródło SCMP (HK) opisuje USA w podobnie krytycznym tonie jako 'agresora na arenie ONZ', grożącego anihilacją Iranu, w kontekście oskarżeń o zbrodnie wojenne.",
+        "komentarz": "Mimo różnych kontekstów tematycznych (polityka wewnętrzna vs polityka zagraniczna), oba przekazy — własny i zewnętrzny — utrzymują krytyczny ton wobec administracji USA.",
+        "article_ids": [
+          3002,
+          2911
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 6276,
+            "article_id": 3002,
+            "theme_id": "emergent:executive-power-congress",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          },
+          {
+            "signal_id": 6048,
+            "article_id": 2911,
+            "theme_id": "us_policy",
+            "kraj": "HK",
+            "zrodlo": "scmp"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "US",
+        "jak_opisuje_siebie": "Analizowane źródło PBS przedstawia działania administracji Trumpa krytycznie jako 'rozszerzanie kontroli władzy wykonawczej' i osłabianie pozycji Kongresu, powołując się na zwolnienia pracowników federalnych i rozpoczęcie wojny w Iranie bez zgody Kongresu.",
+        "jak_opisuja_go_inni": "Analizowane źródło SCMP (HK) opisuje USA w podobnie krytycznym tonie jako 'agresora na arenie ONZ', grożącego anihilacją Iranu, w kontekście oskarżeń o zbrodnie wojenne.",
+        "komentarz": "Mimo różnych kontekstów tematycznych (polityka wewnętrzna vs polityka zagraniczna), oba przekazy — własny i zewnętrzny — utrzymują krytyczny ton wobec administracji USA.",
+        "article_ids": [
+          3002,
+          2911
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 6276,
+          "theme_id": "emergent:executive-power-congress",
+          "subject_actor": "US",
+          "content_group": "bc29f31ab15f8da91fa066ccb8751f2ac1cd65614618f1f8f43abda8c89f5a3c",
+          "publisher_group": "pbs",
+          "article_id": 3002,
+          "kraj": "US",
+          "zrodlo": "pbs",
+          "typ_zrodla": "public",
+          "rama": "prezydent podważa władzę Kongresu",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Administracja Trumpa wykorzystuje rzadką i kwestionowaną procedurę \"pocket rescission\", aby cofnąć prawie miliard dolarów wydatków zatwierdzonych wcześniej przez Kongres, co według relacjonowanej krytyki stanowi uzurpację konstytucyjnej władzy Kongresu nad budżetem."
+        },
+        {
+          "signal_id": 6048,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "dcbb519256512448a2d29df7310bb236f36ba2ca2c1e5cb40388ce83956dbfc0",
+          "publisher_group": "scmp",
+          "article_id": 2911,
+          "kraj": "HK",
+          "zrodlo": "scmp",
+          "typ_zrodla": "private",
+          "rama": "USA jako agresor na arenie ONZ",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Lead przedstawia prezydenta USA jako osobę grożącą anihilacją Iranu i roszczącą sobie prawa do wenezuelskiej ropy, zestawiając to z trwającą wojną i oskarżeniami o zbrodnie wojenne."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "slabe_sygnaly.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 6732,
+            "article_id": 2973,
+            "theme_id": "elections_politics",
+            "kraj": "IN",
+            "zrodlo": "thehindu"
+          },
+          {
+            "signal_id": 6463,
+            "article_id": 2744,
+            "theme_id": "elections_politics",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 6770,
+            "article_id": 2759,
+            "theme_id": "elections_politics",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          }
+        ],
+        "theme_id": "elections_politics",
+        "tekst": "Sygnał poniżej progów: temat wyborów i polityki jako 'zagrożonej demokracji' (Rosja jako 'zarządzana demokracja') pojawia się w źródle indyjskim The Hindu (1 źródło) oraz w źródłach brytyjskich BBC i Guardian (2 źródła), ale nie osiąga progu 3 krajów z co najmniej 2 źródłami każdy.",
+        "article_ids": [
+          2973,
+          2744,
+          2759
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 6732,
+            "article_id": 2973,
+            "theme_id": "elections_politics",
+            "kraj": "IN",
+            "zrodlo": "thehindu"
+          },
+          {
+            "signal_id": 6463,
+            "article_id": 2744,
+            "theme_id": "elections_politics",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 6770,
+            "article_id": 2759,
+            "theme_id": "elections_politics",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          }
+        ],
+        "theme_id": "elections_politics",
+        "tekst": "Sygnał poniżej progów: temat wyborów i polityki jako 'zagrożonej demokracji' (Rosja jako 'zarządzana demokracja') pojawia się w źródle indyjskim The Hindu (1 źródło) oraz w źródłach brytyjskich BBC i Guardian (2 źródła), ale nie osiąga progu 3 krajów z co najmniej 2 źródłami każdy.",
+        "article_ids": [
+          2973,
+          2744,
+          2759
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 6732,
+          "theme_id": "elections_politics",
+          "subject_actor": "RU",
+          "content_group": "0c4f22012b25ec81f9f17fb9a2abefea939d4f6fce87876a5c56adc070586a71",
+          "publisher_group": "thehindu",
+          "article_id": 2973,
+          "kraj": "IN",
+          "zrodlo": "thehindu",
+          "typ_zrodla": "private",
+          "rama": "Rosja jako zarządzana demokracja",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia system polityczny Rosji jako „zarządzaną demokrację”, w której Jedna Rosja wygrywa niemal wszystkie wybory, a mechanizmy wyborcze eliminują realną opozycję i zapewniają dominację partii Władimira Putina."
+        },
+        {
+          "signal_id": 6463,
+          "theme_id": "elections_politics",
+          "subject_actor": "DE",
+          "content_group": "4e3125228f090fdfc4576ce58b124427b3d9164f4cde1ac3eebf2fe6bbf8531f",
+          "publisher_group": "bbc",
+          "article_id": 2744,
+          "kraj": "UK",
+          "zrodlo": "bbc",
+          "typ_zrodla": "public",
+          "rama": "AfD i CDU zakazują pamięci w przestrzeni publicznej",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Radni z AfD i CDU w Heidenau przegłosowali zakaz umieszczania \"Stolpersteine\" w przestrzeni miejskiej, argumentując, że forma upamiętnienia jest nieodpowiednia, a pomniki powinny znaleźć się na cmentarzu."
+        },
+        {
+          "signal_id": 6770,
+          "theme_id": "elections_politics",
+          "subject_actor": "One Nation",
+          "content_group": "8be2062ceca359b8daa459df3a6cf7e214348b6df8dc928eb32b3d09a00f2da3",
+          "publisher_group": "guardian",
+          "article_id": 2759,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "Partia oskarżana o wyciąganie pieniędzy od kandydatów",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł opisuje, jak partia One Nation pobierała od potencjalnych kandydatów w wyborach stanowych w Wiktorii opłaty aplikacyjne, składki członkowskie i opłaty kampanijne, co zdaniem rozmówców Guardiana stanowiło działanie nastawione na zysk, a nie autentyczny proces wyboru kandydatów."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "rozbieznosci.0.kraje.CN",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 6237,
+            "article_id": 2812,
+            "theme_id": "us_policy",
+            "kraj": "CN",
+            "zrodlo": "cgtn"
+          },
+          {
+            "signal_id": 6091,
+            "article_id": 2887,
+            "theme_id": "us_policy",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          }
+        ],
+        "kraj": "CN",
+        "n_zrodel": 2,
+        "rama": "Chiny i USA budują nowy konstruktywny paradygmat relacji strategicznej stabilności",
+        "stance": "poparcie",
+        "article_ids": [
+          2812,
+          2887
+        ]
+      },
+      "context": {
+        "temat": "us_policy",
+        "tekst": "Analizowane źródła CGTN i Chinanews (CN) przedstawiają relacje USA-Chiny po wizycie Xi jako 'nowy paradygmat' i 'przełom strategiczny' (poparcie, intensywność 4), podczas gdy SCMP (HK) używa ram krytycznych ('ceremonia bez konkretów', 'USA jako agresor na arenie ONZ'), a Rzeczpospolita (PL) mówi o 'grze pozorów zamiast rozwiązań'.",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 6237,
+                "article_id": 2812,
+                "theme_id": "us_policy",
+                "kraj": "CN",
+                "zrodlo": "cgtn"
+              },
+              {
+                "signal_id": 6091,
+                "article_id": 2887,
+                "theme_id": "us_policy",
+                "kraj": "CN",
+                "zrodlo": "chinanews"
+              }
+            ],
+            "kraj": "CN",
+            "n_zrodel": 2,
+            "rama": "Chiny i USA budują nowy konstruktywny paradygmat relacji strategicznej stabilności",
+            "stance": "poparcie",
+            "article_ids": [
+              2812,
+              2887
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 6828,
+                "article_id": 2924,
+                "theme_id": "us_policy",
+                "kraj": "HK",
+                "zrodlo": "scmp"
+              },
+              {
+                "signal_id": 6048,
+                "article_id": 2911,
+                "theme_id": "us_policy",
+                "kraj": "HK",
+                "zrodlo": "scmp"
+              }
+            ],
+            "kraj": "HK",
+            "n_zrodel": 1,
+            "rama": "Wizyta bogata w oprawę, uboga w konkrety; USA jako strona agresywna na arenie ONZ",
+            "stance": "krytyka",
+            "article_ids": [
+              2924,
+              2911
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 6451,
+                "article_id": 2623,
+                "theme_id": "us_policy",
+                "kraj": "PL",
+                "zrodlo": "rp"
+              }
+            ],
+            "kraj": "PL",
+            "n_zrodel": 1,
+            "rama": "Gra pozorów zamiast realnych rozwiązań",
+            "stance": "krytyka",
+            "article_ids": [
+              2623
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "niski",
+          "uzasadnienie": "HK i PL reprezentowane przez pojedyncze niezależne źródła (SCMP, Rzeczpospolita) — poniżej progu 2 niezależnych źródeł na kraj, mimo że temat obejmuje 3 kraje"
+        }
+      },
+      "signals": [
+        {
+          "signal_id": 6237,
+          "theme_id": "us_policy",
+          "subject_actor": "CN",
+          "content_group": "e2599027f4cf1fb325b5b0eef5d39945ea8bb1ab58292a6113b12f397d1702f4",
+          "publisher_group": "cgtn",
+          "article_id": 2812,
+          "kraj": "CN",
+          "zrodlo": "cgtn",
+          "typ_zrodla": "government",
+          "rama": "Chiny i USA budują nowy paradygmat relacji",
+          "stance": "poparcie",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia wizytę prezydenta Xi w USA jako przełomowy akt dyplomacji, który ustanawia nowy konstruktywny paradygmat relacji chińsko-amerykańskich oparty na strategicznej stabilności."
+        },
+        {
+          "signal_id": 6091,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "ca34b0873424aabb9b0a98ac06ad8dbc5312854f31b77815cd9f4c4bded3d760",
+          "publisher_group": "chinanews",
+          "article_id": 2887,
+          "kraj": "CN",
+          "zrodlo": "chinanews",
+          "typ_zrodla": "agency",
+          "rama": "Przełom w relacjach USA-Chiny",
+          "stance": "poparcie",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia wizytę państwową Xi Jinpinga w USA jako historyczne wydarzenie, które owocuje nowym strategicznym kierunkiem w relacjach amerykańsko-chińskich i tworzy podstawy pod konstruktywną stabilność."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "rozbieznosci.0.kraje.HK",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 6828,
+            "article_id": 2924,
+            "theme_id": "us_policy",
+            "kraj": "HK",
+            "zrodlo": "scmp"
+          },
+          {
+            "signal_id": 6048,
+            "article_id": 2911,
+            "theme_id": "us_policy",
+            "kraj": "HK",
+            "zrodlo": "scmp"
+          }
+        ],
+        "kraj": "HK",
+        "n_zrodel": 1,
+        "rama": "Wizyta bogata w oprawę, uboga w konkrety; USA jako strona agresywna na arenie ONZ",
+        "stance": "krytyka",
+        "article_ids": [
+          2924,
+          2911
+        ]
+      },
+      "context": {
+        "temat": "us_policy",
+        "tekst": "Analizowane źródła CGTN i Chinanews (CN) przedstawiają relacje USA-Chiny po wizycie Xi jako 'nowy paradygmat' i 'przełom strategiczny' (poparcie, intensywność 4), podczas gdy SCMP (HK) używa ram krytycznych ('ceremonia bez konkretów', 'USA jako agresor na arenie ONZ'), a Rzeczpospolita (PL) mówi o 'grze pozorów zamiast rozwiązań'.",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 6237,
+                "article_id": 2812,
+                "theme_id": "us_policy",
+                "kraj": "CN",
+                "zrodlo": "cgtn"
+              },
+              {
+                "signal_id": 6091,
+                "article_id": 2887,
+                "theme_id": "us_policy",
+                "kraj": "CN",
+                "zrodlo": "chinanews"
+              }
+            ],
+            "kraj": "CN",
+            "n_zrodel": 2,
+            "rama": "Chiny i USA budują nowy konstruktywny paradygmat relacji strategicznej stabilności",
+            "stance": "poparcie",
+            "article_ids": [
+              2812,
+              2887
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 6828,
+                "article_id": 2924,
+                "theme_id": "us_policy",
+                "kraj": "HK",
+                "zrodlo": "scmp"
+              },
+              {
+                "signal_id": 6048,
+                "article_id": 2911,
+                "theme_id": "us_policy",
+                "kraj": "HK",
+                "zrodlo": "scmp"
+              }
+            ],
+            "kraj": "HK",
+            "n_zrodel": 1,
+            "rama": "Wizyta bogata w oprawę, uboga w konkrety; USA jako strona agresywna na arenie ONZ",
+            "stance": "krytyka",
+            "article_ids": [
+              2924,
+              2911
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 6451,
+                "article_id": 2623,
+                "theme_id": "us_policy",
+                "kraj": "PL",
+                "zrodlo": "rp"
+              }
+            ],
+            "kraj": "PL",
+            "n_zrodel": 1,
+            "rama": "Gra pozorów zamiast realnych rozwiązań",
+            "stance": "krytyka",
+            "article_ids": [
+              2623
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "niski",
+          "uzasadnienie": "HK i PL reprezentowane przez pojedyncze niezależne źródła (SCMP, Rzeczpospolita) — poniżej progu 2 niezależnych źródeł na kraj, mimo że temat obejmuje 3 kraje"
+        }
+      },
+      "signals": [
+        {
+          "signal_id": 6828,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "62f26655a6088aef26f14695b9c8e2eef96065ab2cafade634635bb1f7627a84",
+          "publisher_group": "scmp",
+          "article_id": 2924,
+          "kraj": "HK",
+          "zrodlo": "scmp",
+          "typ_zrodla": "private",
+          "rama": "Wizyta Xi w USA: ceremonia bez konkretów",
+          "stance": "krytyka",
+          "intensywnosc": 2,
+          "streszczenie": "Wizyta państwowa Xi w Waszyngtonie była zdaniem medium bogata w oprawę, ale uboga w konkretne ustalenia."
+        },
+        {
+          "signal_id": 6048,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "dcbb519256512448a2d29df7310bb236f36ba2ca2c1e5cb40388ce83956dbfc0",
+          "publisher_group": "scmp",
+          "article_id": 2911,
+          "kraj": "HK",
+          "zrodlo": "scmp",
+          "typ_zrodla": "private",
+          "rama": "USA jako agresor na arenie ONZ",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Lead przedstawia prezydenta USA jako osobę grożącą anihilacją Iranu i roszczącą sobie prawa do wenezuelskiej ropy, zestawiając to z trwającą wojną i oskarżeniami o zbrodnie wojenne."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "autoobraz.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 6889,
+            "article_id": 2822,
+            "theme_id": "china_indo_pacific",
+            "kraj": "CN",
+            "zrodlo": "globaltimes"
+          },
+          {
+            "signal_id": 6204,
+            "article_id": 2913,
+            "theme_id": "emergent:heritage-environment-destruction",
+            "kraj": "HK",
+            "zrodlo": "scmp"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "CN",
+        "jak_opisuje_siebie": "Analizowane źródło Global Times przedstawia Chiny jako stanowczego obrońcę suwerenności terytorialnej ('Chiny stanowczo bronią suwerenności', poparcie, intensywność 5) w kontekście ćwiczeń wokół Huangyan Dao.",
+        "jak_opisuja_go_inni": "Analizowane źródło SCMP (HK) opisuje Chiny w tonie krytycznym, wskazując na niszczenie dziedzictwa kulturowego (Wielki Mur wykorzystywany jako wysypisko odpadów węglowych przez prawie 20 lat).",
+        "komentarz": "Widoczna różnica jakościowa: własny przekaz akcentuje siłę i determinację w obronie suwerenności, zewnętrzny — zaniedbania środowiskowo-kulturowe pomijane w narracji krajowej.",
+        "article_ids": [
+          2822,
+          2913
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 6889,
+            "article_id": 2822,
+            "theme_id": "china_indo_pacific",
+            "kraj": "CN",
+            "zrodlo": "globaltimes"
+          },
+          {
+            "signal_id": 6204,
+            "article_id": 2913,
+            "theme_id": "emergent:heritage-environment-destruction",
+            "kraj": "HK",
+            "zrodlo": "scmp"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "CN",
+        "jak_opisuje_siebie": "Analizowane źródło Global Times przedstawia Chiny jako stanowczego obrońcę suwerenności terytorialnej ('Chiny stanowczo bronią suwerenności', poparcie, intensywność 5) w kontekście ćwiczeń wokół Huangyan Dao.",
+        "jak_opisuja_go_inni": "Analizowane źródło SCMP (HK) opisuje Chiny w tonie krytycznym, wskazując na niszczenie dziedzictwa kulturowego (Wielki Mur wykorzystywany jako wysypisko odpadów węglowych przez prawie 20 lat).",
+        "komentarz": "Widoczna różnica jakościowa: własny przekaz akcentuje siłę i determinację w obronie suwerenności, zewnętrzny — zaniedbania środowiskowo-kulturowe pomijane w narracji krajowej.",
+        "article_ids": [
+          2822,
+          2913
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 6889,
+          "theme_id": "china_indo_pacific",
+          "subject_actor": "CN",
+          "content_group": "bb42c1e46d40e1c56aa7cf6b6e3b9b9408727d389e5afa7e6f57ac5dace4d367",
+          "publisher_group": "peoples_daily",
+          "article_id": 2822,
+          "kraj": "CN",
+          "zrodlo": "globaltimes",
+          "typ_zrodla": "government",
+          "rama": "Chiny stanowczo bronią suwerenności",
+          "stance": "poparcie",
+          "intensywnosc": 5,
+          "streszczenie": "Chińska armia i straż przybrzeżna przeprowadziły wspólne ćwiczenia morsko-powietrzne wokół Huangyan Dao, aby zademonstrować determinację w obronie suwerenności terytorialnej i praw morskich Chin."
+        },
+        {
+          "signal_id": 6204,
+          "theme_id": "emergent:heritage-environment-destruction",
+          "subject_actor": "CN",
+          "content_group": "4d200b4c45e107bc39a55732fbcea2249ad40f901ab926e5cd98862a1026b1d3",
+          "publisher_group": "scmp",
+          "article_id": 2913,
+          "kraj": "HK",
+          "zrodlo": "scmp",
+          "typ_zrodla": "private",
+          "rama": "Dziedzictwo poświęcone dla taniego składowania odpadów",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł informuje, że odcinek Wielkiego Muru w prowincji Shanxi był przez prawie 20 lat wykorzystywany jako miejsce zrzutu odpadów z wydobycia węgla, mimo zgłoszeń sygnalistów."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "w_skrocie.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 6237,
+            "article_id": 2812,
+            "theme_id": "us_policy",
+            "kraj": "CN",
+            "zrodlo": "cgtn"
+          },
+          {
+            "signal_id": 6451,
+            "article_id": 2623,
+            "theme_id": "us_policy",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          }
+        ],
+        "theme_id": "us_policy",
+        "tekst": "Analizowane źródło CGTN (CN) przedstawia szczyt Xi-Trump jako budowę 'nowego paradygmatu' i 'strategicznej stabilności' (stance poparcie), podczas gdy Rzeczpospolita (PL) opisuje tę samą wizytę jako 'grę pozorów zamiast rozwiązań' (stance krytyka).",
+        "article_ids": [
+          2812,
+          2623
+        ],
+        "pewnosc": "niski"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 6237,
+            "article_id": 2812,
+            "theme_id": "us_policy",
+            "kraj": "CN",
+            "zrodlo": "cgtn"
+          },
+          {
+            "signal_id": 6451,
+            "article_id": 2623,
+            "theme_id": "us_policy",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          }
+        ],
+        "theme_id": "us_policy",
+        "tekst": "Analizowane źródło CGTN (CN) przedstawia szczyt Xi-Trump jako budowę 'nowego paradygmatu' i 'strategicznej stabilności' (stance poparcie), podczas gdy Rzeczpospolita (PL) opisuje tę samą wizytę jako 'grę pozorów zamiast rozwiązań' (stance krytyka).",
+        "article_ids": [
+          2812,
+          2623
+        ],
+        "pewnosc": "niski"
+      },
+      "signals": [
+        {
+          "signal_id": 6237,
+          "theme_id": "us_policy",
+          "subject_actor": "CN",
+          "content_group": "e2599027f4cf1fb325b5b0eef5d39945ea8bb1ab58292a6113b12f397d1702f4",
+          "publisher_group": "cgtn",
+          "article_id": 2812,
+          "kraj": "CN",
+          "zrodlo": "cgtn",
+          "typ_zrodla": "government",
+          "rama": "Chiny i USA budują nowy paradygmat relacji",
+          "stance": "poparcie",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia wizytę prezydenta Xi w USA jako przełomowy akt dyplomacji, który ustanawia nowy konstruktywny paradygmat relacji chińsko-amerykańskich oparty na strategicznej stabilności."
+        },
+        {
+          "signal_id": 6451,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "2623",
+          "publisher_group": "rp",
+          "article_id": 2623,
+          "kraj": "PL",
+          "zrodlo": "rp",
+          "typ_zrodla": "private",
+          "rama": "Gra pozorów zamiast rozwiązań",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Medium ocenia, że uściski dłoni i uśmiechy między liderami USA i Chin to gra pozorów, a żaden ważny problem w relacjach Waszyngton-Pekin nie został rozwiązany."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "slabe_sygnaly.2",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 6295,
+            "article_id": 3139,
+            "theme_id": "migration_borders",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          },
+          {
+            "signal_id": 6666,
+            "article_id": 3043,
+            "theme_id": "migration_borders",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          },
+          {
+            "signal_id": 6058,
+            "article_id": 2615,
+            "theme_id": "migration_borders",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          }
+        ],
+        "theme_id": "migration_borders",
+        "tekst": "Sygnał poniżej progów: krytyka brytyjskiego systemu azylowego jako furtki dla 'infiltracji terrorystycznej' pojawia się spójnie w źródłach izraelskich Haaretz i JPost (2 źródła) oraz w źródle Rzeczpospolita (PL, 1 źródło), ale nie osiąga progu 3 krajów.",
+        "article_ids": [
+          3139,
+          3043,
+          2615
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 6295,
+            "article_id": 3139,
+            "theme_id": "migration_borders",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          },
+          {
+            "signal_id": 6666,
+            "article_id": 3043,
+            "theme_id": "migration_borders",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          },
+          {
+            "signal_id": 6058,
+            "article_id": 2615,
+            "theme_id": "migration_borders",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          }
+        ],
+        "theme_id": "migration_borders",
+        "tekst": "Sygnał poniżej progów: krytyka brytyjskiego systemu azylowego jako furtki dla 'infiltracji terrorystycznej' pojawia się spójnie w źródłach izraelskich Haaretz i JPost (2 źródła) oraz w źródle Rzeczpospolita (PL, 1 źródło), ale nie osiąga progu 3 krajów.",
+        "article_ids": [
+          3139,
+          3043,
+          2615
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 6295,
+          "theme_id": "migration_borders",
+          "subject_actor": "UK",
+          "content_group": "fbf8535fcd91f0f0f6cffe0395f70c5fc78a34691e4881ff786ed8f3cb27624b",
+          "publisher_group": "jpost",
+          "article_id": 3139,
+          "kraj": "IL",
+          "zrodlo": "jpost",
+          "typ_zrodla": "private",
+          "rama": "azyl wykorzystany do infiltracji",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Tekst podkreśla, że mężczyzna otrzymał azyl i obywatelstwo brytyjskie mimo znanej służby w Hamasie i wcześniejszego aresztowania za przemyt broni, co stawia w negatywnym świetle procedury migracyjne Wielkiej Brytanii."
+        },
+        {
+          "signal_id": 6666,
+          "theme_id": "migration_borders",
+          "subject_actor": "UK",
+          "content_group": "75141eaa80747aa1e761e5e84bfc413ab8d4ca067ae926166b29b5a7d5f1ff8e",
+          "publisher_group": "haaretz",
+          "article_id": 3043,
+          "kraj": "IL",
+          "zrodlo": "haaretz",
+          "typ_zrodla": "private",
+          "rama": "Brytyjski system azylowy przepuścił terrorystę",
+          "stance": "krytyka",
+          "intensywnosc": 2,
+          "streszczenie": "Ochroniarz otrzymał brytyjskie obywatelstwo około dekadę temu, mimo że jego powiązania z Hamasem były znane."
+        },
+        {
+          "signal_id": 6058,
+          "theme_id": "migration_borders",
+          "subject_actor": "US",
+          "content_group": "2615",
+          "publisher_group": "rp",
+          "article_id": 2615,
+          "kraj": "PL",
+          "zrodlo": "rp",
+          "typ_zrodla": "private",
+          "rama": "Zatrzymania ICE budzą sprzeciw humanitarny",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł sugeruje, że praktyki zatrzymań przez ICE mogą oznaczać znęcanie się nad ludźmi, co stoi w sprzeczności z wartościami zachodniej cywilizacji."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "autoobraz.2",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 6627,
+            "article_id": 2628,
+            "theme_id": "security_defense",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          },
+          {
+            "signal_id": 6199,
+            "article_id": 2699,
+            "theme_id": "war_readiness",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "PL",
+        "jak_opisuje_siebie": "Analizowane źródło Rzeczpospolita opisuje Polskę w tonie alarmu, wskazując, że sama możliwość powtórzenia rosyjskiego naruszenia przestrzeni powietrznej zmusza kraj do kosztownych reakcji obronnych, stopniowo wyczerpujących system obronny.",
+        "jak_opisuja_go_inni": "Analizowane źródło Tagesschau (DE) opisuje przygotowania Polski na wojnę w tonie neutralnym, wskazując na konkretne inwestycje: 3500 schronów w woj. lubelskim, ponad pół miliarda złotych na ochronę ludności w ciągu dwóch lat oraz nową aplikację lokalizującą schrony.",
+        "komentarz": "Obraz własny (RP) jest bardziej alarmistyczny i skupiony na wyczerpywaniu zasobów, podczas gdy obraz zewnętrzny (Tagesschau) akcentuje konkretne działania przygotowawcze w tonie rzeczowym.",
+        "article_ids": [
+          2628,
+          2699
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 6627,
+            "article_id": 2628,
+            "theme_id": "security_defense",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          },
+          {
+            "signal_id": 6199,
+            "article_id": 2699,
+            "theme_id": "war_readiness",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "PL",
+        "jak_opisuje_siebie": "Analizowane źródło Rzeczpospolita opisuje Polskę w tonie alarmu, wskazując, że sama możliwość powtórzenia rosyjskiego naruszenia przestrzeni powietrznej zmusza kraj do kosztownych reakcji obronnych, stopniowo wyczerpujących system obronny.",
+        "jak_opisuja_go_inni": "Analizowane źródło Tagesschau (DE) opisuje przygotowania Polski na wojnę w tonie neutralnym, wskazując na konkretne inwestycje: 3500 schronów w woj. lubelskim, ponad pół miliarda złotych na ochronę ludności w ciągu dwóch lat oraz nową aplikację lokalizującą schrony.",
+        "komentarz": "Obraz własny (RP) jest bardziej alarmistyczny i skupiony na wyczerpywaniu zasobów, podczas gdy obraz zewnętrzny (Tagesschau) akcentuje konkretne działania przygotowawcze w tonie rzeczowym.",
+        "article_ids": [
+          2628,
+          2699
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 6627,
+          "theme_id": "security_defense",
+          "subject_actor": "PL",
+          "content_group": "810a01b1ab769f44b5c14e74c5cbefd66a7658006e278689287123ec2b558d62",
+          "publisher_group": "rp",
+          "article_id": 2628,
+          "kraj": "PL",
+          "zrodlo": "rp",
+          "typ_zrodla": "private",
+          "rama": "Rosja wyczerpuje polską obronę bez ataku",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przekazuje, że sama możliwość powtórzenia przez Rosję naruszenia polskiej przestrzeni powietrznej zmusza Polskę do kosztownych reakcji obronnych przy każdym ataku na Ukrainę, co stopniowo zużywa polski system obronny."
+        },
+        {
+          "signal_id": 6199,
+          "theme_id": "war_readiness",
+          "subject_actor": "PL",
+          "content_group": "6004703e52670eb5bc0962bf47b2d833e9787c33872089c7e44fd723faa5ad0f",
+          "publisher_group": "tagesschau",
+          "article_id": 2699,
+          "kraj": "DE",
+          "zrodlo": "tagesschau",
+          "typ_zrodla": "public",
+          "rama": "Polska przygotowuje się na wojnę",
+          "stance": "neutralny",
+          "intensywnosc": 4,
+          "streszczenie": "Polska wzmacnia systemy ochrony ludności: na terenie województwa lubelskiego są 3500 schronów, inwestycje w ochronę ludności wyniosły ponad pół miliarda złotych w ciągu dwóch lat, a wkrótce nowa aplikacja ma wskazywać najbliższy schron."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "rozbieznosci.1.kraje.DE",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 6201,
+            "article_id": 2699,
+            "theme_id": "russia",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          }
+        ],
+        "kraj": "DE",
+        "n_zrodel": 1,
+        "rama": "Rosja planuje hybrydowe ataki na Polskę i inne kraje wspierające Ukrainę",
+        "stance": "alarm",
+        "article_ids": [
+          2699
+        ]
+      },
+      "context": {
+        "temat": "russia",
+        "tekst": "Analizowane źródło Tagesschau (DE) przekazuje ostrzeżenia premiera Tuska o bezpośrednim zagrożeniu Polski atakami hybrydowymi (alarm), podczas gdy Fox News (US) cytuje prezydenta Finlandii mówiącego, że nie ma podstaw do obaw przed rosyjską inwazją, odróżniając kampanię hybrydową od wojny kinetycznej (uspokojenie).",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 6201,
+                "article_id": 2699,
+                "theme_id": "russia",
+                "kraj": "DE",
+                "zrodlo": "tagesschau"
+              }
+            ],
+            "kraj": "DE",
+            "n_zrodel": 1,
+            "rama": "Rosja planuje hybrydowe ataki na Polskę i inne kraje wspierające Ukrainę",
+            "stance": "alarm",
+            "article_ids": [
+              2699
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 6177,
+                "article_id": 3015,
+                "theme_id": "russia",
+                "kraj": "US",
+                "zrodlo": "fox"
+              }
+            ],
+            "kraj": "US",
+            "n_zrodel": 1,
+            "rama": "Kampania hybrydowa, nie inwazja — brak podstaw do paniki",
+            "stance": "uspokojenie",
+            "article_ids": [
+              3015
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "niski",
+          "uzasadnienie": "Tylko 2 kraje, po 1 niezależnym źródle każdy — poniżej progu 2 źródeł na kraj i 3 krajów wymaganych dla wyższej pewności"
+        }
+      },
+      "signals": [
+        {
+          "signal_id": 6201,
+          "theme_id": "russia",
+          "subject_actor": "RU",
+          "content_group": "6004703e52670eb5bc0962bf47b2d833e9787c33872089c7e44fd723faa5ad0f",
+          "publisher_group": "tagesschau",
+          "article_id": 2699,
+          "kraj": "DE",
+          "zrodlo": "tagesschau",
+          "typ_zrodla": "public",
+          "rama": "Rosja stanowi bezpośrednie zagrożenie dla Polski",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Według premiera Donalda Tuska i polskich służb Rosja planuje hybrydowe ataki dronowe i rakietowe na państwa wspierające Ukrainę, w tym Polskę, przedstawiając je jako przypadkowe incydenty, by uniknąć reakcji NATO."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "rozbieznosci.0.kraje.PL",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 6451,
+            "article_id": 2623,
+            "theme_id": "us_policy",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          }
+        ],
+        "kraj": "PL",
+        "n_zrodel": 1,
+        "rama": "Gra pozorów zamiast realnych rozwiązań",
+        "stance": "krytyka",
+        "article_ids": [
+          2623
+        ]
+      },
+      "context": {
+        "temat": "us_policy",
+        "tekst": "Analizowane źródła CGTN i Chinanews (CN) przedstawiają relacje USA-Chiny po wizycie Xi jako 'nowy paradygmat' i 'przełom strategiczny' (poparcie, intensywność 4), podczas gdy SCMP (HK) używa ram krytycznych ('ceremonia bez konkretów', 'USA jako agresor na arenie ONZ'), a Rzeczpospolita (PL) mówi o 'grze pozorów zamiast rozwiązań'.",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 6237,
+                "article_id": 2812,
+                "theme_id": "us_policy",
+                "kraj": "CN",
+                "zrodlo": "cgtn"
+              },
+              {
+                "signal_id": 6091,
+                "article_id": 2887,
+                "theme_id": "us_policy",
+                "kraj": "CN",
+                "zrodlo": "chinanews"
+              }
+            ],
+            "kraj": "CN",
+            "n_zrodel": 2,
+            "rama": "Chiny i USA budują nowy konstruktywny paradygmat relacji strategicznej stabilności",
+            "stance": "poparcie",
+            "article_ids": [
+              2812,
+              2887
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 6828,
+                "article_id": 2924,
+                "theme_id": "us_policy",
+                "kraj": "HK",
+                "zrodlo": "scmp"
+              },
+              {
+                "signal_id": 6048,
+                "article_id": 2911,
+                "theme_id": "us_policy",
+                "kraj": "HK",
+                "zrodlo": "scmp"
+              }
+            ],
+            "kraj": "HK",
+            "n_zrodel": 1,
+            "rama": "Wizyta bogata w oprawę, uboga w konkrety; USA jako strona agresywna na arenie ONZ",
+            "stance": "krytyka",
+            "article_ids": [
+              2924,
+              2911
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 6451,
+                "article_id": 2623,
+                "theme_id": "us_policy",
+                "kraj": "PL",
+                "zrodlo": "rp"
+              }
+            ],
+            "kraj": "PL",
+            "n_zrodel": 1,
+            "rama": "Gra pozorów zamiast realnych rozwiązań",
+            "stance": "krytyka",
+            "article_ids": [
+              2623
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "niski",
+          "uzasadnienie": "HK i PL reprezentowane przez pojedyncze niezależne źródła (SCMP, Rzeczpospolita) — poniżej progu 2 niezależnych źródeł na kraj, mimo że temat obejmuje 3 kraje"
+        }
+      },
+      "signals": [
+        {
+          "signal_id": 6451,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "2623",
+          "publisher_group": "rp",
+          "article_id": 2623,
+          "kraj": "PL",
+          "zrodlo": "rp",
+          "typ_zrodla": "private",
+          "rama": "Gra pozorów zamiast rozwiązań",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Medium ocenia, że uściski dłoni i uśmiechy między liderami USA i Chin to gra pozorów, a żaden ważny problem w relacjach Waszyngton-Pekin nie został rozwiązany."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "w_skrocie.1",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 6843,
+            "article_id": 2673,
+            "theme_id": "hybrid_info",
+            "kraj": "UA",
+            "zrodlo": "ukrinform"
+          },
+          {
+            "signal_id": 6224,
+            "article_id": 2767,
+            "theme_id": "hybrid_info",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          }
+        ],
+        "theme_id": "hybrid_info",
+        "tekst": "Analizowane źródło Ukrinform (UA) i Guardian (UK) opisują incydent przy bazie RAF Fairford w tonie neutralnym jako dochodzenie służb antyterrorystycznych, bez eskalacji retorycznej.",
+        "article_ids": [
+          2673,
+          2767
+        ],
+        "pewnosc": "niski"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 6843,
+            "article_id": 2673,
+            "theme_id": "hybrid_info",
+            "kraj": "UA",
+            "zrodlo": "ukrinform"
+          },
+          {
+            "signal_id": 6224,
+            "article_id": 2767,
+            "theme_id": "hybrid_info",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          }
+        ],
+        "theme_id": "hybrid_info",
+        "tekst": "Analizowane źródło Ukrinform (UA) i Guardian (UK) opisują incydent przy bazie RAF Fairford w tonie neutralnym jako dochodzenie służb antyterrorystycznych, bez eskalacji retorycznej.",
+        "article_ids": [
+          2673,
+          2767
+        ],
+        "pewnosc": "niski"
+      },
+      "signals": [
+        {
+          "signal_id": 6843,
+          "theme_id": "hybrid_info",
+          "subject_actor": "UK",
+          "content_group": "77a794d2705eda22297df68dc39faf924bb4cc1c239e24f88424eaabff7e833a",
+          "publisher_group": "ukrinform",
+          "article_id": 2673,
+          "kraj": "UA",
+          "zrodlo": "ukrinform",
+          "typ_zrodla": "agency",
+          "rama": "Służby neutralizują zagrożenie terrorystyczne",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Brytyjska policja zatrzymała pięciu mężczyzn podejrzanych o przygotowanie ataku terrorystycznego z użyciem materiałów wybuchowych w pobliżu bazy RAF Fairford używanej przez siły USA."
+        },
+        {
+          "signal_id": 6224,
+          "theme_id": "hybrid_info",
+          "subject_actor": "UK",
+          "content_group": "fa7b651a4fddc67a95eebb318d5acd5350dd8714034e740a68607c6775dab703",
+          "publisher_group": "guardian",
+          "article_id": 2767,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "Podejrzana aktywność i ewakuacja wokół bazy wojskowej",
+          "stance": "neutralny",
+          "intensywnosc": 4,
+          "streszczenie": "Mieszkańcy wsi Whelford zauważyli w nocy podejrzane furgonetki i grupę mężczyzn w kominiarkach, po czym policja aresztowała pięć osób pod zarzutem przestępstw związanych z materiałami wybuchowymi i terroryzmem, a 85 gospodarstw ewakuowano."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "slabe_sygnaly.1",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 5998,
+            "article_id": 2631,
+            "theme_id": "hybrid_info",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 6198,
+            "article_id": 2835,
+            "theme_id": "hybrid_info",
+            "kraj": "CN",
+            "zrodlo": "globaltimes"
+          },
+          {
+            "signal_id": 6029,
+            "article_id": 2819,
+            "theme_id": "hybrid_info",
+            "kraj": "CN",
+            "zrodlo": "cgtn"
+          }
+        ],
+        "theme_id": "hybrid_info",
+        "tekst": "Sygnał poniżej progów: rama 'wojna hybrydowa przeciwko Zachodowi' pojawia się w źródle Onet (PL, 1 źródło) oraz w źródłach Global Times i CGTN (CN, 2 źródła, dot. innych aktorów), ale nie osiąga progu 3 krajów.",
+        "article_ids": [
+          2631,
+          2835,
+          2819
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 5998,
+            "article_id": 2631,
+            "theme_id": "hybrid_info",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 6198,
+            "article_id": 2835,
+            "theme_id": "hybrid_info",
+            "kraj": "CN",
+            "zrodlo": "globaltimes"
+          },
+          {
+            "signal_id": 6029,
+            "article_id": 2819,
+            "theme_id": "hybrid_info",
+            "kraj": "CN",
+            "zrodlo": "cgtn"
+          }
+        ],
+        "theme_id": "hybrid_info",
+        "tekst": "Sygnał poniżej progów: rama 'wojna hybrydowa przeciwko Zachodowi' pojawia się w źródle Onet (PL, 1 źródło) oraz w źródłach Global Times i CGTN (CN, 2 źródła, dot. innych aktorów), ale nie osiąga progu 3 krajów.",
+        "article_ids": [
+          2631,
+          2835,
+          2819
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 5998,
+          "theme_id": "hybrid_info",
+          "subject_actor": "RU",
+          "content_group": "69d05de84a089982ee2f6c747870b5ccb0310ae1c4f891a11884f1853ae31d50",
+          "publisher_group": "onet",
+          "article_id": 2631,
+          "kraj": "PL",
+          "zrodlo": "onet",
+          "typ_zrodla": "private",
+          "rama": "Kreml eskaluje kampanię prowokacji i ataków",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Medium akcentuje rosyjskie działania hybrydowe — drony naruszające przestrzeń powietrzną Mołdawii, podejrzenia o ataki na obiekty NATO oraz plany uderzeń z morza na Europę Zachodnią — jako dowód celowej eskalacji rosyjskich prowokacji."
+        },
+        {
+          "signal_id": 6198,
+          "theme_id": "hybrid_info",
+          "subject_actor": "JP",
+          "content_group": "bc01d8c4ddbbd830b30dbb0f72eed0417cb798efb5e816d7995b261990b2274e",
+          "publisher_group": "peoples_daily",
+          "article_id": 2835,
+          "kraj": "CN",
+          "zrodlo": "globaltimes",
+          "typ_zrodla": "government",
+          "rama": "Japonia odradza militaryzm i fałszuje historię",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Tekst oskarża rząd Japonii o dążenie do rewizji historii i odradzanie militaryzmu, co spotyka się z krytyką ze strony Chin i USA."
+        },
+        {
+          "signal_id": 6029,
+          "theme_id": "hybrid_info",
+          "subject_actor": "CN",
+          "content_group": "4c1378223d77674a1597cb7010f66fa10f2d4956131c9947591f7a4db539e2a3",
+          "publisher_group": "cgtn",
+          "article_id": 2819,
+          "kraj": "CN",
+          "zrodlo": "cgtn",
+          "typ_zrodla": "government",
+          "rama": "Chiny pomagają USA w walce z fentanylem",
+          "stance": "neutralny",
+          "intensywnosc": 2,
+          "streszczenie": "Wang Yi podkreślił, że problem nadużywania fentanylu w USA nie jest spowodowany przez Chiny, ale Chiny mimo to działają z dobrą wolą i pomagają USA w zwalczaniu kryzysu fentanylowego."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "autoobraz.1",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 6121,
+            "article_id": 2765,
+            "theme_id": "security_defense",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 6015,
+            "article_id": 2756,
+            "theme_id": "emergent:ai-copyright-regulation",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 6295,
+            "article_id": 3139,
+            "theme_id": "migration_borders",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "UK",
+        "jak_opisuje_siebie": "Analizowane źródło Guardian pisze o Wielkiej Brytanii w kontekście wewnętrznych sporów politycznych: krytyki rządu Szkocji za brak wsparcia dla przemysłu obronnego oraz wycofania się rządu z reformy praw autorskich pod presją środowisk twórczych.",
+        "jak_opisuja_go_inni": "Analizowane źródło JPost (IL) koncentruje się na krytyce brytyjskiego systemu azylowego, który miał 'przepuścić terrorystę' — mężczyznę powiązanego z Hamasem, który otrzymał obywatelstwo mimo znanych powiązań.",
+        "komentarz": "Wyraźna różnica tematyczna: obraz zewnętrzny (IL) skupiony na bezpieczeństwie i migracji, obraz własny (Guardian) bardziej zróżnicowany wewnętrznie-politycznie, bez wątku azylowego.",
+        "article_ids": [
+          2765,
+          2756,
+          3139
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 6121,
+            "article_id": 2765,
+            "theme_id": "security_defense",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 6015,
+            "article_id": 2756,
+            "theme_id": "emergent:ai-copyright-regulation",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 6295,
+            "article_id": 3139,
+            "theme_id": "migration_borders",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "UK",
+        "jak_opisuje_siebie": "Analizowane źródło Guardian pisze o Wielkiej Brytanii w kontekście wewnętrznych sporów politycznych: krytyki rządu Szkocji za brak wsparcia dla przemysłu obronnego oraz wycofania się rządu z reformy praw autorskich pod presją środowisk twórczych.",
+        "jak_opisuja_go_inni": "Analizowane źródło JPost (IL) koncentruje się na krytyce brytyjskiego systemu azylowego, który miał 'przepuścić terrorystę' — mężczyznę powiązanego z Hamasem, który otrzymał obywatelstwo mimo znanych powiązań.",
+        "komentarz": "Wyraźna różnica tematyczna: obraz zewnętrzny (IL) skupiony na bezpieczeństwie i migracji, obraz własny (Guardian) bardziej zróżnicowany wewnętrznie-politycznie, bez wątku azylowego.",
+        "article_ids": [
+          2765,
+          2756,
+          3139
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 6121,
+          "theme_id": "security_defense",
+          "subject_actor": "UK",
+          "content_group": "5aed593c71d8456f39501ea32f282d5ad97f16bc766b5996c737d9b4996ac11c",
+          "publisher_group": "guardian",
+          "article_id": 2765,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "Szkocki rząd blokuje rozwój przemysłu obronnego",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Douglas Alexander zarzuca rządowi Szkocji brak wsparcia dla szkockiego przemysłu obronnego, w tym nieprzyznanie funduszy na program Defence Technical College."
+        },
+        {
+          "signal_id": 6015,
+          "theme_id": "emergent:ai-copyright-regulation",
+          "subject_actor": "UK",
+          "content_group": "c42b079bc4557b8a9398a3af3192a944615351ce325ba600129837e94c4fbd7a",
+          "publisher_group": "guardian",
+          "article_id": 2756,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "Celebryci powstrzymali reformę praw autorskich",
+          "stance": "poparcie",
+          "intensywnosc": 4,
+          "streszczenie": "Brytyjski rząd wycofał się z planów umożliwiających firmom AI korzystanie z utworów chronionych prawem autorskim bez zgody twórców, po skutecznej kampanii środowisk kreatywnych i celebrytów."
+        },
+        {
+          "signal_id": 6295,
+          "theme_id": "migration_borders",
+          "subject_actor": "UK",
+          "content_group": "fbf8535fcd91f0f0f6cffe0395f70c5fc78a34691e4881ff786ed8f3cb27624b",
+          "publisher_group": "jpost",
+          "article_id": 3139,
+          "kraj": "IL",
+          "zrodlo": "jpost",
+          "typ_zrodla": "private",
+          "rama": "azyl wykorzystany do infiltracji",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Tekst podkreśla, że mężczyzna otrzymał azyl i obywatelstwo brytyjskie mimo znanej służby w Hamasie i wcześniejszego aresztowania za przemyt broni, co stawia w negatywnym świetle procedury migracyjne Wielkiej Brytanii."
+        }
+      ],
+      "review": "pending"
+    }
+  ],
+  "claims_total": 15,
+  "meaning": "czy sygnały wspierają opis przekazu, nie prawdziwość zdarzeń"
+}
