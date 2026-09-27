@@ -324,3 +324,25 @@ aside.side h2 { margin-top: 0; }
 .tv-small { font-size: 12px; color: var(--muted); }
 .tv-hit { margin: 4px 0; }
 .tv-view mark { background: var(--hl); color: inherit; }
+.tv-story { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin: 0 0 14px; max-width: 1100px; }
+.tv-story h2 { font-family: var(--serif); font-size: 21px; margin: 6px 0 4px; text-transform: none; letter-spacing: 0; color: var(--ink); }
+.tv-sh { display: flex; gap: 10px; align-items: center; }
+.tv-type { background: var(--typ-bg); color: var(--typ); border-radius: 999px; padding: 1px 10px; font-size: 12px; font-weight: 600; }
+.tv-diff { margin: 4px 0 10px; }
+.tv-strip { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 0 0 12px; }
+.tv-sb { display: inline-flex; align-items: center; gap: 3px; }
+.tv-sbn { font-size: 11px; color: var(--muted); margin-right: 3px; }
+.tv-sd { display: inline-block; width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--empty); background: transparent; vertical-align: middle; }
+.tv-sd.v0 { background: var(--st-uspokojenie); border-color: var(--st-uspokojenie); }
+.tv-sd.v1 { background: var(--st-krytyka); border-color: var(--st-krytyka); }
+.tv-sd.v2 { background: var(--st-alarm); border-color: var(--st-alarm); }
+.tv-sd.m { background: var(--other); border-color: var(--other); }
+.tv-sd.x { border-style: dashed; opacity: .5; }
+.tv-legend { font-size: 12px; color: var(--muted); margin: 0 0 12px; }
+.tv-legend .tv-sd { margin-right: 2px; }
+.tv-vers { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 760px) { .tv-vers { grid-template-columns: 1fr; } }
+.tv-vh { font-weight: 600; margin-bottom: 6px; display: flex; gap: 6px; align-items: center; }
+.tv-vs { border-top: 1px solid var(--line); padding: 7px 0; font-size: 13.5px; }
+.tv-vs mark { background: var(--hl); color: inherit; }
+.tv-note { font-size: 12.5px; color: var(--warn); margin: 10px 0 0; }

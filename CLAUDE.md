@@ -78,6 +78,7 @@ py -3.12 -m venv .venv; .venv\Scripts\python -m pip install -e ".[dev]"   # uv n
 .venv\Scripts\plx gdelt szukaj events\<karta>.md [--fraza F ...] [--dni-po 3]   # brakujące relacje do karty, karty nie zmienia
 .venv\Scripts\plx gdelt tv [--dzien D] [--kanal KOD ...] [--fraza F ...]   # raporty TV GDELT (PDF, D+1): nowe nazwy w kilku stacjach, bez modelu
 .venv\Scripts\plx gdelt tv-widoki [--dni 7] [--do D]   # robocze widoki tylko z TV: data/gdelt/tv-widoki.html (lokalnie)
+.venv\Scripts\plx gdelt tv-historie [--dni 1] [--do D]   # historie dnia z TV: różne wersje w stacjach (flash + Pro + Haiku, ok. 0,07 $/dzień)
 ```
 Pełny ingest z pełnymi tekstami trwa ok. 2–2,5 min (~310 artykułów przy pierwszym uruchomieniu).
 Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20 min na ~310 artykułów; przy 30 źródłach
@@ -133,6 +134,9 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
   `tv_views.py` składa dane zakładki Telewizja na stronie (`telewizja.html`, skrypt `site/assets/tv.js`, klasy CSS `tv-*`):
   `plx site` dociąga raporty z ostatnich 7 dni do `data/gdelt/tv/` (`--bez-tv`: tylko zapisane).
   `tv_pl.py`: tłumaczenie raportów na polski (`deepseek-flash`, ok. 0,12 $ dziennie), tylko przy `plx site`, zapis `<KOD>.pl.json`.
+  `tv_stories.py`: „Historie dnia” (pierwsza zakładka Telewizji): tezy z raportów (flash, bez sekcji spekulacji Gemini), zdarzenia
+  z różnymi wersjami (DeepSeek Pro), weryfikacja (Haiku 4.5) z odrzuceniem decydowanym w kodzie (pytania kontrolne, liczby jako przedziały,
+  pisownia nazw). Każdy krok zapisany w `data/gdelt/tv/<dzień>/`; zmiana reguł bez nowych wywołań. Tylko przy `plx site`, nigdy w daily.
 - `.github/workflows/daily.yml`: cron 10:30 UTC (poza szczytem DeepSeek; GitHub opóźnia start nawet o 4–5 h), baza jako zaszyfrowany snapshot w Release `database-backup` (cache i artefakt to kopie), commit `reports/`. Kod 1 tylko przy ostrzeżeniach blokujących (synteza, ekstrakcja, brak >1/3 aktywnych źródeł); pojedynczy kanał/źródło to ostrzeżenie informacyjne.
 
 ## Konwencje

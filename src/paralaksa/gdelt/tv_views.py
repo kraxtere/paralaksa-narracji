@@ -51,7 +51,8 @@ def _pl_report(r: tv.Report, pl: dict | None) -> dict:
             "glance_pl": " ".join(s for s in sents[:n] if s) if all(sents[:n]) else None}
 
 
-def day_data(today: dict[str, tv.Report], before: dict[str, tv.Report], pl: dict[str, dict] | None = None) -> dict:
+def day_data(today: dict[str, tv.Report], before: dict[str, tv.Report], pl: dict[str, dict] | None = None,
+             stories: list[dict] | None = None) -> dict:
     names, counts = tv.vocabulary(today.values())
     _, counts_before = tv.vocabulary(before.values())
     forms: dict[str, Counter] = {}
@@ -75,12 +76,16 @@ def day_data(today: dict[str, tv.Report], before: dict[str, tv.Report], pl: dict
         "display": display,
         "df": {k: sum(1 for c in today if counts[c][k]) for k in display},
         "diary": diary,
+        "stories": stories,   # None: nie zbudowano (tv_stories), [] : brak różnic tego dnia
     }
 
 
-def build(days: list[str], cache: Path, pl_for=None) -> dict:
+def build(days: list[str], cache: Path, pl_for=None, stories_for=None) -> dict:
     """Data for the views from cached reports; a day without cached reports is skipped. `pl_for(day, report)` returns
-    the Polish translation of a report (or None: the views show the English original)."""
+    the Polish translation of a report (or None: the views show the English original); `stories_for(day, reports, pl)`
+    the stories of the day (default: only saved ones, `tv_stories.cached`)."""
+    from paralaksa.gdelt import tv_stories
+
     load = {d: tv.load(d, tv.CHANNELS, cache, lambda url: None) for d in [tv.previous_day(days[0]), *days]}
     pl: dict[tuple[str, str], dict | None] = {}
     if pl_for:
@@ -91,13 +96,18 @@ def build(days: list[str], cache: Path, pl_for=None) -> dict:
     out = {}
     for d in days:
         if load[d]:
-            out[d] = day_data(load[d], load[tv.previous_day(d)], {c: pl.get((d, c)) for c in load[d]})
+            day_pl = {c: pl.get((d, c)) for c in load[d]}
+            stories = (stories_for(d, load[d], day_pl) if stories_for
+                       else tv_stories.cached(cache, d, load[d]))
+            out[d] = day_data(load[d], load[tv.previous_day(d)], day_pl, stories)
     return {
         "channels": {c: {"kraj": k, "nazwa": n} for c, (k, n) in tv.CHANNELS.items()},
         "blocs": [{"nazwa": b, "kanaly": cs} for b, cs in BLOCS],
         "days": sorted(out, reverse=True),
         "data": out,
         "pdf": tv.URL,
+        "types": tv_stories.TYPES,
+        "top": tv_stories.MAX_STORIES,
     }
 
 

@@ -1,10 +1,10 @@
 // Telewizja: widoki robocze z raportów GDELT „Today's Media Trends” (dane: gdelt/tv_views.py)
 const TV = DATA;
 const TV_CH = TV.channels, TV_ORDER = TV.blocs.flatMap(b => b.kanaly);
-const TV_TABS = [["board", "Tablica dnia"], ["topic", "Jeden temat"], ["pair", "Dwie stacje"], ["diary", "Kanał w czasie"], ["search", "Szukaj frazy"]];
+const TV_TABS = [["stories", "Historie dnia"], ["board", "Tablica dnia"], ["topic", "Jeden temat"], ["pair", "Dwie stacje"], ["diary", "Kanał w czasie"], ["search", "Szukaj frazy"]];
 let tvLang = "pl";
 try { tvLang = localStorage.getItem("plx-tv-lang") || "pl"; } catch (e) { /* file:// bez localStorage */ }
-const tvS = { tab: "board", day: TV.days[0], topic: 0, cell: null, a: "RUSSIA24", b: "ESPRESO", ch: "TVPINFO", q: "" };
+const tvS = { tab: "stories", more: false, day: TV.days[0], topic: 0, cell: null, a: "RUSSIA24", b: "ESPRESO", ch: "TVPINFO", q: "" };
 { const hash = location.hash.slice(1); if (TV_TABS.some(t => t[0] === hash)) tvS.tab = hash; }
 const tvNorm = s => s.normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/ł/g, "l").replace(/Ł/g, "L").toLowerCase();
 const TV_WORD = /[A-Za-zÀ-ɏ][A-Za-zÀ-ɏ0-9'’]*/g;
@@ -41,6 +41,47 @@ function tvSentence(c, k) {
   return i < 0 ? "" : tvText(r, i);
 }
 function tvChip(name, extra = "") { return `<button class="tv-chip" data-q="${esc(name)}">${esc(name)}${extra}</button>`; }
+
+// zdanie stacji z podświetlonymi słowami różnicującymi (dosłowny fragment zdania, sprawdzony przy budowie)
+function tvMarkExact(s, part) {
+  const i = part ? s.indexOf(part) : -1;
+  return i < 0 ? esc(s) : esc(s.slice(0, i)) + "<mark>" + esc(part) + "</mark>" + esc(s.slice(i + part.length));
+}
+// model w opisach bywa, że używa kodów GDELT (RUSSIA1, BBCNEWS): na stronie nazwy stacji
+const TV_CODE = new RegExp("\\b(" + Object.keys(TV_CH).sort((a, b) => b.length - a.length).join("|") + ")\\b", "g");
+const tvNames = s => (s || "").replace(TV_CODE, c => TV_CH[c].nazwa);
+const TV_SILA = { 3: "wersje się wykluczają", 2: "wyraźna różnica", 1: "słaba różnica" };
+function tvStory(h, n) {
+  const d = tvDay(), ver = {};
+  h.wersje.forEach((v, k) => v.stacje.forEach(r => ver[r.stacja] = k));
+  const strip = TV.blocs.map(b => `<span class="tv-sb"><span class="tv-sbn">${esc(b.nazwa)}</span>` + b.kanaly.map(c => {
+    const k = ver[c], cls = k != null ? `v${k}` : h.wspomina.includes(c) ? "m" : d.reports[c] ? "" : "x";
+    const what = k != null ? h.wersje[k].etykieta : h.wspomina.includes(c) ? "wspomina, bez wyraźnej wersji" : d.reports[c] ? "nie znaleziono w streszczeniu" : "brak raportu";
+    return `<i class="tv-sd ${cls}" title="${esc(TV_CH[c].nazwa)}: ${esc(what)}"></i>`;
+  }).join("") + "</span>").join("");
+  const cols = h.wersje.map((v, k) => `<div class="tv-ver"><div class="tv-vh"><i class="tv-sd v${k}"></i>${esc(v.etykieta)}</div>` + v.stacje.map(r => {
+    const rep = d.reports[r.stacja];
+    const pl = tvPl() && rep.sentences_pl && rep.sentences_pl[r.zdanie];
+    const pdf = TV.pdf.replace("{day}", tvS.day.replaceAll("-", "")).replace("{code}", r.stacja);
+    return `<div class="tv-vs"><b>${tvLab(r.stacja)}</b> <a class="tv-small" href="${esc(pdf)}" target="_blank" rel="noopener">raport</a><div>${pl ? tvMarkExact(pl, r.pl) : tvMarkExact(rep.sentences[r.zdanie], r.en)}</div></div>`;
+  }).join("") + "</div>").join("");
+  return `<article class="tv-story"><div class="tv-sh"><span class="tv-type">${esc(TV.types[h.typ] || h.typ)}</span><span class="tv-small">${n}. · ${TV_SILA[h.sila] || ""}</span></div>
+<h2>${esc(h.tytul)}</h2><p class="tv-diff">${esc(tvNames(h.roznica))}</p><div class="tv-strip">${strip}</div>
+<div class="tv-vers" style="--n:${h.wersje.length}">${cols}</div>
+${h.uwaga ? `<p class="tv-note">Zastrzeżenie: ${esc(tvNames(h.uwaga))}</p>` : ""}</article>`;
+}
+function tvStories() {
+  const st = tvDay().stories;
+  let o = `<div class="tv-bar">${tvDaySel()}<span class="hint">Zdarzenia, w których streszczenia różnych stacji podają różne wersje: inną liczbę, status decyzji, przebieg, rolę aktora. Porównanie streszczeń GDELT (Gemini), nie słów z anteny: przed użyciem sprawdzić w wydaniu.</span></div>`;
+  if (st == null) return o + "<p>Historii dla tego dnia jeszcze nie zbudowano (plx site albo plx gdelt tv-historie).</p>";
+  if (!st.length) return o + "<p>Tego dnia model nie znalazł różnic, które przeszły sprawdzenie.</p>";
+  o += `<div class="tv-legend"><i class="tv-sd v0"></i><i class="tv-sd v1"></i><i class="tv-sd v2"></i> wersje · <i class="tv-sd m"></i> wspomina bez wyraźnej wersji · <i class="tv-sd"></i> nie znaleziono w streszczeniu · <i class="tv-sd x"></i> brak raportu</div>`;
+  const top = st.slice(0, TV.top), rest = st.slice(TV.top);
+  o += top.map((h, i) => tvStory(h, i + 1)).join("");
+  if (rest.length) o += tvS.more ? rest.map((h, i) => tvStory(h, TV.top + i + 1)).join("")
+    : `<button class="tv-chip" data-more="1">Pokaż pozostałe (${rest.length}), słabsze</button>`;
+  return o;
+}
 
 function tvBoard() {
   const g = tvDay().groups;
@@ -136,9 +177,9 @@ function tvDraw() {
     return;
   }
   history.replaceState(null, "", "#" + tvS.tab);
-  const view = { board: tvBoard, topic: tvTopic, pair: tvPair, diary: tvDiary, search: tvSearch }[tvS.tab]();
+  const view = { stories: tvStories, board: tvBoard, topic: tvTopic, pair: tvPair, diary: tvDiary, search: tvSearch }[tvS.tab]();
   app.innerHTML = `<h1>Telewizja</h1>
-<p class="lede">Widoki robocze z raportów GDELT „Today's Media Trends”: model (Gemini) streszcza po angielsku dzień wydań każdej stacji z archiwum TV News Archive. 17 stacji.</p>
+<p class="lede">Raporty GDELT „Today's Media Trends”: model (Gemini) streszcza po angielsku dzień wydań każdej z 17 stacji z archiwum TV News Archive. Na początek historie dnia, niżej widoki robocze.</p>
 <p class="hint">Zdanie to słowa raportu, nie stacji: przed użyciem sprawdzić w transkrypcji wydania (Visual Explorer). Brak wzmianki w raporcie nie dowodzi, że stacja milczała. Wersja polska to tłumaczenie maszynowe; EN pokazuje oryginał raportu.</p>
 <div class="tv-top"><nav class="tv-tabs">${TV_TABS.map(([k, n]) => `<button class="${tvS.tab === k ? "on" : ""}" data-tab="${k}">${n}</button>`).join("")}</nav>
 <div class="tv-lang" role="group" aria-label="Język">${[["pl", "PL"], ["en", "EN"]].map(([k, n]) => `<button class="${tvLang === k ? "on" : ""}" data-lang="${k}" title="${k === "pl" ? "tłumaczenie na polski" : "oryginał raportu (angielski)"}">${n}</button>`).join("")}</div></div>
@@ -151,7 +192,7 @@ function tvDraw() {
 }
 
 app.addEventListener("click", e => {
-  const t = e.target.closest("[data-tab],[data-cell],[data-topic-i],[data-q],[data-lang]");
+  const t = e.target.closest("[data-tab],[data-cell],[data-topic-i],[data-q],[data-lang],[data-more]");
   if (!t) return;
   e.preventDefault();
   if (t.dataset.lang) {
@@ -161,13 +202,14 @@ app.addEventListener("click", e => {
   else if (t.dataset.cell) { const [i, c] = t.dataset.cell.split("|"); tvS.cell = [+i, c]; }
   else if (t.dataset.topicI) { tvS.tab = "topic"; tvS.topic = +t.dataset.topicI; }
   else if (t.dataset.q) { tvS.tab = "search"; tvS.q = t.dataset.q; }
+  else if (t.dataset.more) tvS.more = true;
   tvDraw();
 });
 app.addEventListener("change", e => {
   const k = e.target.dataset.set;
   if (!k) return;
   tvS[k] = k === "topic" ? +e.target.value : e.target.value;
-  if (k === "day") { tvS.topic = 0; tvS.cell = null; }
+  if (k === "day") { tvS.topic = 0; tvS.cell = null; tvS.more = false; }
   tvDraw();
 });
 app.addEventListener("input", e => {

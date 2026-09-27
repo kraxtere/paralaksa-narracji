@@ -1,3 +1,30 @@
+# Telewizja: historie dnia — 2026-09-27
+
+Zamiast archiwum 17 raportów: do 3 zdarzeń dziennie, w których streszczenia stacji podają różne wersje. Kierunek z burzy mózgów
+GPT (zlecenie `docs/TV_BURZA_BRIEF.md`, wynik lokalnie w `data/gdelt/burza/`): jeden ekran, konkretna różnica, dowody pod spodem.
+
+- `gdelt/tv_stories.py`, `plx gdelt tv-historie [--dni N] [--do D]`, na stronie pierwsza zakładka Telewizji „Historie dnia”.
+  Trzy kroki: (1) `deepseek-flash` wypisuje z każdego raportu do 25 tez o konkretnych zdarzeniach z numerami zdań; sekcje, w których
+  Gemini przewiduje albo dopisuje hipotezy (HYPOTHESES, STRATEGIC FORESIGHT, RISK ASSESSMENT, BLIND SPOTS, CONTRARIAN/„red team”,
+  INFORMATION WARFARE), są odcinane wcześniej, bez modelu; (2) `deepseek-v4-pro` łączy tezy stacji w zdarzenia i proponuje do 8 różnic
+  (liczba, status, tożsamość, przebieg, przyczyna, rola, ocena) z wersjami; (3) `claude-haiku-4-5` sprawdza każdą na oryginalnych
+  zdaniach (EN i PL) przez pytania kontrolne, a o odrzuceniu decyduje kod: zaokrąglenie, dokładniejsza wersja, pisownia, akcent,
+  inna miara, to samo innymi słowami, stacja bez wersji wprost („nie wspomina”, „co sugeruje”). Dodatkowo reguły w kodzie: liczby
+  jako przedziały z precyzji zapisu („ponad 108” zgodne ze 110, 59,8 i 59,2 nie), nazwy prawie tak samo zapisane to pisownia.
+  Słowa różnicujące muszą być dosłownie w zdaniu (podświetlane na stronie).
+- Karta: rodzaj różnicy, jedno zdanie, pasek 17 stacji według regionów (kolor wersji / wspomina / nie znaleziono w streszczeniu /
+  brak raportu), wersje obok siebie ze zdaniem każdej stacji i linkiem do raportu, zastrzeżenie modelu. Etykieta: porównanie streszczeń
+  GDELT, nie słów z anteny, do sprawdzenia w wydaniu.
+- Wybór weryfikatora: ci sami kandydaci 19, 22, 25.09 sprawdzeni trzema modelami. DeepSeek Pro (0,01 $ dziennie) przepuszczał wnioski
+  i różne zakresy; Haiku (0,04) i Sonnet 5 (0,11) odrzucały podobnie. Flash w roli sędziego uznawał „do stycznia” i „do 10 stycznia”
+  za sprzeczność; weryfikator z myśleniem był 4× droższy, 4 min na dzień i nadal przepuszczał transliterację.
+- Koszt ok. 0,07 $ dziennie (tezy 0,02, zdarzenia 0,01, weryfikacja 0,04), tylko przy `plx site`. Zapis na każdym kroku
+  (`<KOD>.claims.json`, `historie-kandydaci.json`, `historie-weryfikacja.json` z surowymi odpowiedziami, `historie.json`), więc
+  zmiana reguł w kodzie nie wymaga nowych wywołań. Haiku zamyka polski cudzysłów prostym i psuje JSON: naprawiane przed odczytem.
+- Pilot 19–26.09: 1–4 historie dziennie. Dobre: Dobropole (okrążenie w stacjach rosyjskich, obrona w Current Time i Espreso),
+  licencja na Patrioty (obietnica czy przyznana), Starlink (sabotaż państwowy w TVP Info, „fałszywa flaga” w M1), Fridman i Usmanow
+  (Rada UE czy Sąd UE), frekwencja Dumy. Słabe, które przeszły: „naciskał” i „żądał” (21.09). Wynik zmienia się między przebiegami.
+
 # Telewizja: raporty GDELT „Today's Media Trends” — 2026-09-26
 
 - `plx gdelt tv [--dzien D] [--kanal KOD ...] [--fraza F ...]` (`gdelt/tv.py`): pobiera dzienne raporty PDF GDELT
