@@ -27,6 +27,9 @@ kluczem i ponownego zaszyfrowania nowym. Nie usuwać jedynej poprawnej kopii pod
 
 Runner najpierw pobiera aktualny Release. Przy jego niedostępności może wykorzystać cache
 z jawnym ostrzeżeniem; należy wtedy porównać historię. Brak obu kopii zatrzymuje przebieg.
+Harmonogram: 10:30 UTC, ale GitHub opóźnia start nawet o kilka godzin albo go pomija. Gdy daily nie ruszył, można
+uruchomić go ręcznie (Actions → daily → Run workflow): późniejszy przebieg z harmonogramu tego samego dnia (UTC) zobaczy
+`reports/<dzień>.json` i skończy się bez pracy.
 `initialize_empty=true` w ręcznym workflow jest wyłącznie świadomą inicjalizacją pierwszej bazy,
 nie mechanizmem naprawy. Domyślnie `false`. Po błędzie ekstrakcji/raportu snapshot zachowuje częściowy postęp,
 a workflow nadal kończy się błędem.

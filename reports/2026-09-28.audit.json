@@ -1,0 +1,1554 @@
+{
+  "seed": "2026-09-28",
+  "sample": [
+    {
+      "path": "rozbieznosci.1.kraje.UA",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 7283,
+            "article_id": 3247,
+            "theme_id": "us_policy",
+            "kraj": "UA",
+            "zrodlo": "pravda_ua"
+          },
+          {
+            "signal_id": 7698,
+            "article_id": 3255,
+            "theme_id": "us_policy",
+            "kraj": "UA",
+            "zrodlo": "pravda_ua"
+          }
+        ],
+        "kraj": "UA",
+        "n_zrodel": 1,
+        "rama": "USA jako pośrednik/kanał rozmów z Rosją, ocena instrumentalna",
+        "stance": "neutralny",
+        "article_ids": [
+          3247,
+          3255
+        ]
+      },
+      "context": {
+        "temat": "us_policy",
+        "tekst": "Analizowane źródła z UK (bbc, guardian) przedstawiają politykę USA częściowo krytycznie ('USA wybiera stabilność nad demokracją', 'radykalne wypowiedzi kandydata GOP'), ale równolegle podkreślają sojusz ('UK i USA razem przeciw zagrożeniom'), podczas gdy analizowane źródło z UA (pravda_ua) traktuje politykę USA głównie instrumentalnie – jako kanał rozmów z Rosją i grę dyplomatyczną (zaproszenie Putina na G20), bez wyraźnego wartościowania.",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 7903,
+                "article_id": 3320,
+                "theme_id": "us_policy",
+                "kraj": "UK",
+                "zrodlo": "bbc"
+              },
+              {
+                "signal_id": 7570,
+                "article_id": 3360,
+                "theme_id": "us_policy",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 7224,
+                "article_id": 3352,
+                "theme_id": "us_policy",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              }
+            ],
+            "kraj": "UK",
+            "n_zrodel": 2,
+            "rama": "krytyka wewnętrznej polityki USA połączona z podkreślaniem sojuszu",
+            "stance": "mieszany (krytyka/poparcie/neutralny)",
+            "article_ids": [
+              3320,
+              3360,
+              3352
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 7283,
+                "article_id": 3247,
+                "theme_id": "us_policy",
+                "kraj": "UA",
+                "zrodlo": "pravda_ua"
+              },
+              {
+                "signal_id": 7698,
+                "article_id": 3255,
+                "theme_id": "us_policy",
+                "kraj": "UA",
+                "zrodlo": "pravda_ua"
+              }
+            ],
+            "kraj": "UA",
+            "n_zrodel": 1,
+            "rama": "USA jako pośrednik/kanał rozmów z Rosją, ocena instrumentalna",
+            "stance": "neutralny",
+            "article_ids": [
+              3247,
+              3255
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "niski",
+          "uzasadnienie": "UA reprezentowana przez 1 niezależne źródło w tym zestawieniu (poniżej progu 2), max_js=0.396 dotyczy wyłącznie nacechowania, nie ram."
+        }
+      },
+      "signals": [
+        {
+          "signal_id": 7283,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "5bf73775a4dcb3faf4262aa1d8550a1d542af9eda8a3f0bc30f0a9f7c082b400",
+          "publisher_group": "pravda_ua",
+          "article_id": 3247,
+          "kraj": "UA",
+          "zrodlo": "pravda_ua",
+          "typ_zrodla": "private",
+          "rama": "USA zapraszają Putina na G20",
+          "stance": "neutralny",
+          "intensywnosc": 2,
+          "streszczenie": "Stany Zjednoczone, jako gospodarz szczytu G20 w Miami, zaprosiły Władimira Putina do udziału w grudniowym spotkaniu, co budzi sprzeciw Polski."
+        },
+        {
+          "signal_id": 7698,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "03b62f9b4b3dbcf019e28c57c47606f7087ff8cffbd5d511ea58643cd98fa676",
+          "publisher_group": "pravda_ua",
+          "article_id": 3255,
+          "kraj": "UA",
+          "zrodlo": "pravda_ua",
+          "typ_zrodla": "private",
+          "rama": "USA prowadzą własny kanał rozmów z Rosją",
+          "stance": "neutralny",
+          "intensywnosc": 2,
+          "streszczenie": "Artykuł odnotowuje, że sekretarz stanu USA Marco Rubio spotkał się z Ławrowem w Nowym Jorku 23 września."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "slabe_sygnaly.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 7156,
+            "article_id": 3662,
+            "theme_id": "emergent:housing-crisis",
+            "kraj": "US",
+            "zrodlo": "npr"
+          },
+          {
+            "signal_id": 7743,
+            "article_id": 3648,
+            "theme_id": "emergent:housing-crisis",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "theme_id": "emergent:housing-crisis",
+        "tekst": "Wątek kryzysu mieszkaniowego (protesty w Hiszpanii) pojawia się równolegle w dwóch niezależnych analizowanych źródłach amerykańskich (npr, pbs), ale dotyczy kraju trzeciego (Hiszpania) i nie spełnia progu 3 krajów – może być wczesnym sygnałem szerszego zainteresowania tematem mieszkalnictwa w mediach anglojęzycznych.",
+        "article_ids": [
+          3662,
+          3648
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 7156,
+            "article_id": 3662,
+            "theme_id": "emergent:housing-crisis",
+            "kraj": "US",
+            "zrodlo": "npr"
+          },
+          {
+            "signal_id": 7743,
+            "article_id": 3648,
+            "theme_id": "emergent:housing-crisis",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "theme_id": "emergent:housing-crisis",
+        "tekst": "Wątek kryzysu mieszkaniowego (protesty w Hiszpanii) pojawia się równolegle w dwóch niezależnych analizowanych źródłach amerykańskich (npr, pbs), ale dotyczy kraju trzeciego (Hiszpania) i nie spełnia progu 3 krajów – może być wczesnym sygnałem szerszego zainteresowania tematem mieszkalnictwa w mediach anglojęzycznych.",
+        "article_ids": [
+          3662,
+          3648
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 7156,
+          "theme_id": "emergent:housing-crisis",
+          "subject_actor": "ES",
+          "content_group": "e7c16e2b0fbaa6e47c5f17197d1c255f655fee53b549ca0b134eef839d4e44d7",
+          "publisher_group": "npr",
+          "article_id": 3662,
+          "kraj": "US",
+          "zrodlo": "npr",
+          "typ_zrodla": "public",
+          "rama": "Kryzys mieszkaniowy wybucha protestami",
+          "stance": "neutralny",
+          "intensywnosc": 4,
+          "streszczenie": "Dziesiątki tysięcy ludzi protestowały w Madrycie przeciwko kryzysowi mieszkaniowemu w Hiszpanii, domagając się silniejszej ochrony najemców i zakazu eksmisji, gdy brakuje alternatywnego zakwaterowania."
+        },
+        {
+          "signal_id": 7743,
+          "theme_id": "emergent:housing-crisis",
+          "subject_actor": "ES",
+          "content_group": "9a38f2fa7ba0a45c86c425d6db8e49e944b3a21fade30faff2bae2bc11541c4d",
+          "publisher_group": "pbs",
+          "article_id": 3648,
+          "kraj": "US",
+          "zrodlo": "pbs",
+          "typ_zrodla": "public",
+          "rama": "Kryzys mieszkaniowy wywołuje masowe protesty",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł opisuje masowe protesty w Madrycie wywołane eksmisją 87-letniej kobiety, które przerodziły się w ogólnokrajowy sprzeciw wobec kryzysu mieszkaniowego w Hiszpanii."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "rozbieznosci.0.kraje.BR",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 7237,
+            "article_id": 3826,
+            "theme_id": "china_indo_pacific",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          }
+        ],
+        "kraj": "BR",
+        "n_zrodel": 1,
+        "rama": "Rosnące wyzwanie militarne Chin / USA oferują broń Chinom jako coś bezprecedensowego",
+        "stance": "krytyka",
+        "article_ids": [
+          3826
+        ]
+      },
+      "context": {
+        "temat": "china_indo_pacific",
+        "tekst": "Analizowane źródło z BR (folha) przedstawia propozycję sprzedaży broni Chinom przez USA w ramie krytycznej ('rosnące wyzwanie militarne Chin', 'USA oferują broń Chinom' jako coś nadzwyczajnego i niepokojącego), podczas gdy analizowane źródła z CN (cgtn, globaltimes) eksponują wątek Tajwanu jako integralnej części Chin i budowania 'konstruktywnej stabilności strategicznej' z USA – z przewagą tonu wspierającego.",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 7237,
+                "article_id": 3826,
+                "theme_id": "china_indo_pacific",
+                "kraj": "BR",
+                "zrodlo": "folha"
+              }
+            ],
+            "kraj": "BR",
+            "n_zrodel": 1,
+            "rama": "Rosnące wyzwanie militarne Chin / USA oferują broń Chinom jako coś bezprecedensowego",
+            "stance": "krytyka",
+            "article_ids": [
+              3826
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 7793,
+                "article_id": 3437,
+                "theme_id": "china_indo_pacific",
+                "kraj": "CN",
+                "zrodlo": "globaltimes"
+              },
+              {
+                "signal_id": 7667,
+                "article_id": 3397,
+                "theme_id": "china_indo_pacific",
+                "kraj": "CN",
+                "zrodlo": "cgtn"
+              }
+            ],
+            "kraj": "CN",
+            "n_zrodel": 2,
+            "rama": "Chiny i USA budują konstruktywną stabilność strategiczną / Tajwan nieodłączną częścią Chin",
+            "stance": "poparcie/neutralny",
+            "article_ids": [
+              3397,
+              3437
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "niski",
+          "uzasadnienie": "BR reprezentowane przez 1 źródło (poniżej progu 2), max_js=0.459 wskazuje na dużą odległość rozkładów nacechowania między parą krajów, ale porównanie oparte na małej próbce BR."
+        }
+      },
+      "signals": [
+        {
+          "signal_id": 7237,
+          "theme_id": "china_indo_pacific",
+          "subject_actor": "US",
+          "content_group": "9bf4bf39bd6d2704109ce1fe2553dcb77b8abc25da249327a5400dd77fa827a6",
+          "publisher_group": "folha",
+          "article_id": 3826,
+          "kraj": "BR",
+          "zrodlo": "folha",
+          "typ_zrodla": "private",
+          "rama": "USA oferują broń Chinom",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Ambasador USA w Chinach ujawnił, że Donald Trump zapytał Xi Jinpinga, czy Chiny chciałyby kupić broń od Stanów Zjednoczonych, co media określają jako nadzwyczajne, biorąc pod uwagę traktowanie Chin jako głównego rywala USA."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "nieobecne_w_polsce.2",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 7033,
+            "article_id": 3665,
+            "theme_id": "us_policy",
+            "kraj": "US",
+            "zrodlo": "propublica"
+          },
+          {
+            "signal_id": 7095,
+            "article_id": 3636,
+            "theme_id": "us_policy",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          },
+          {
+            "signal_id": 7364,
+            "article_id": 3828,
+            "theme_id": "us_policy",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          },
+          {
+            "signal_id": 7570,
+            "article_id": 3360,
+            "theme_id": "us_policy",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          }
+        ],
+        "theme_id": "us_policy",
+        "tekst": "Polityka wewnętrzna USA (m.in. spory o głosowanie korespondencyjne, deportacje, kampanie z pieniędzy publicznych) jest w próbce polskiej marginalna (2,6%) wobec średniej 18,7% w US, BR i UK.",
+        "article_ids": [
+          3665,
+          3636,
+          3828,
+          3360
+        ],
+        "temat": "us_policy"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 7033,
+            "article_id": 3665,
+            "theme_id": "us_policy",
+            "kraj": "US",
+            "zrodlo": "propublica"
+          },
+          {
+            "signal_id": 7095,
+            "article_id": 3636,
+            "theme_id": "us_policy",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          },
+          {
+            "signal_id": 7364,
+            "article_id": 3828,
+            "theme_id": "us_policy",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          },
+          {
+            "signal_id": 7570,
+            "article_id": 3360,
+            "theme_id": "us_policy",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          }
+        ],
+        "theme_id": "us_policy",
+        "tekst": "Polityka wewnętrzna USA (m.in. spory o głosowanie korespondencyjne, deportacje, kampanie z pieniędzy publicznych) jest w próbce polskiej marginalna (2,6%) wobec średniej 18,7% w US, BR i UK.",
+        "article_ids": [
+          3665,
+          3636,
+          3828,
+          3360
+        ],
+        "temat": "us_policy"
+      },
+      "signals": [
+        {
+          "signal_id": 7033,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "526e3445f7aa7c029722eca03fc29d44be2c43ade65b6b92dbebd173d613d63b",
+          "publisher_group": "propublica",
+          "article_id": 3665,
+          "kraj": "US",
+          "zrodlo": "propublica",
+          "typ_zrodla": "private",
+          "rama": "Biały Dom próbuje ograniczyć głosowanie korespondencyjne",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Administracja Trumpa początkowo rozważała drastyczne ograniczenie głosowania korespondencyjnego, wymagając dostarczania kart wyborczych wyłącznie pocztą poleconą, co wymagałoby osobistego odbioru i podpisu."
+        },
+        {
+          "signal_id": 7095,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "44cd69425a31f62c2e4282440c367efee7ca724501e1ab275298b5e3e2b1468d",
+          "publisher_group": "pbs",
+          "article_id": 3636,
+          "kraj": "US",
+          "zrodlo": "pbs",
+          "typ_zrodla": "public",
+          "rama": "Administracja Trumpa finansuje kampanię z pieniędzy podatników",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł informuje, że administracja Trumpa wykorzystuje środki publiczne do emisji reklamy z kampanii prezydenckiej Trumpa z 2024 roku, co spotkało się z krytyką polityków obu partii."
+        },
+        {
+          "signal_id": 7364,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "5b0c6d881b5f3560afa8e441eb7daec885f3a106b031102602703c2fea2829f5",
+          "publisher_group": "folha",
+          "article_id": 3828,
+          "kraj": "BR",
+          "zrodlo": "folha",
+          "typ_zrodla": "private",
+          "rama": "Deportacje USA do krajów autorytarnych",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Administracja Trumpa deportuje imigrantów do krajów trzecich, takich jak Gwinea Równikowa, gdzie nie mają statusu prawnego i są przetrzymywani w warunkach więziennych mimo braku zarzutów."
+        },
+        {
+          "signal_id": 7570,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "b28ac8a1b0992bf86f2fc9f0eff1fcef2d99174f9f5773289c41e2e28c28da1d",
+          "publisher_group": "guardian",
+          "article_id": 3360,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "radykalne wypowiedzi kandydata GOP",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł opisuje historię kontrowersyjnych wypowiedzi Bo Frencha, kandydata republikańskiego w Teksasie, który wielokrotnie wzywał do publicznych egzekucji przywódców Partii Demokratycznej, w tym Baracka Obamy i Adama Schiffa."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "slabe_sygnaly.2",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 7972,
+            "article_id": 3386,
+            "theme_id": "emergent:panda-diplomacy",
+            "kraj": "CN",
+            "zrodlo": "cgtn"
+          },
+          {
+            "signal_id": 8161,
+            "article_id": 3536,
+            "theme_id": "emergent:panda-diplomacy",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          }
+        ],
+        "theme_id": "emergent:panda-diplomacy",
+        "tekst": "Dyplomacja pandy (Chiny–USA) pojawia się w dwóch niezależnych analizowanych źródłach chińskich (cgtn, chinanews) z jednolicie pozytywną ramą 'mostu przyjaźni', co przy braku porównania z krajem zewnętrznym pozostaje sygnałem jednostronnym.",
+        "article_ids": [
+          3386,
+          3536
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 7972,
+            "article_id": 3386,
+            "theme_id": "emergent:panda-diplomacy",
+            "kraj": "CN",
+            "zrodlo": "cgtn"
+          },
+          {
+            "signal_id": 8161,
+            "article_id": 3536,
+            "theme_id": "emergent:panda-diplomacy",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          }
+        ],
+        "theme_id": "emergent:panda-diplomacy",
+        "tekst": "Dyplomacja pandy (Chiny–USA) pojawia się w dwóch niezależnych analizowanych źródłach chińskich (cgtn, chinanews) z jednolicie pozytywną ramą 'mostu przyjaźni', co przy braku porównania z krajem zewnętrznym pozostaje sygnałem jednostronnym.",
+        "article_ids": [
+          3386,
+          3536
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 7972,
+          "theme_id": "emergent:panda-diplomacy",
+          "subject_actor": "CN",
+          "content_group": "fa009b8bfb691a09cc26e27ccf751a4910e6d51b7a130dd0e481c84bcff37db0",
+          "publisher_group": "cgtn",
+          "article_id": 3386,
+          "kraj": "CN",
+          "zrodlo": "cgtn",
+          "typ_zrodla": "government",
+          "rama": "Pandy budują mosty przyjaźni",
+          "stance": "poparcie",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł przedstawia wysłanie dwóch pand wielkich do USA jako element współpracy międzynarodowej, która buduje mosty przyjaźni między Chinami a światem oraz służy wymianie wiedzy i technologii w ochronie przyrody."
+        },
+        {
+          "signal_id": 8161,
+          "theme_id": "emergent:panda-diplomacy",
+          "subject_actor": "US",
+          "content_group": "ba8bd672bf03bfaae192f02717380e6abcb321f616f8e7c3482e684091a064cd",
+          "publisher_group": "chinanews",
+          "article_id": 3536,
+          "kraj": "CN",
+          "zrodlo": "chinanews",
+          "typ_zrodla": "agency",
+          "rama": "Pozytywny symbol relacji USA-Chiny",
+          "stance": "neutralny",
+          "intensywnosc": 2,
+          "streszczenie": "Artykuł opisuje przyjazd chińskich pand wielkich do zoo w Atlancie jako wydarzenie pozytywne i oczekiwane przez Amerykanów."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "autoobraz.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 7267,
+            "article_id": 3198,
+            "theme_id": "security_defense",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 7685,
+            "article_id": 3206,
+            "theme_id": "security_defense",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 7858,
+            "article_id": 3259,
+            "theme_id": "war_readiness",
+            "kraj": "UA",
+            "zrodlo": "pravda_ua"
+          },
+          {
+            "signal_id": 7589,
+            "article_id": 3272,
+            "theme_id": "security_defense",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          },
+          {
+            "signal_id": 7737,
+            "article_id": 3226,
+            "theme_id": "security_defense",
+            "kraj": "UA",
+            "zrodlo": "ukrinform"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "PL",
+        "jak_opisuje_siebie": "Analizowane źródło z PL (onet) przedstawia Polskę jako kraj w stanie gotowości obronnej, budujący pozycję 'bastionu' NATO, przy jednoczesnej krytyce niespójności komunikacyjnej instytucji wojskowych.",
+        "jak_opisuja_go_inni": "Analizowane źródła z UA (pravda_ua, ukrinform) i DE (tagesschau) opisują Polskę głównie jako kraj reagujący defensywnie na rosyjskie ataki dronowe blisko granicy (podrywanie lotnictwa) oraz budujący system SAN we współpracy z Norwegią – ton neutralny, bez krytyki wewnętrznej niespójności widocznej w narracji polskiej.",
+        "komentarz": "Autoobraz zawiera element samokrytyki (spór o jakość sprzętu wojskowego) nieobecny w opisie zewnętrznym, który skupia się wyłącznie na aspekcie defensywno-sojuszniczym Polski.",
+        "article_ids": [
+          3198,
+          3206,
+          3259,
+          3272,
+          3226
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 7267,
+            "article_id": 3198,
+            "theme_id": "security_defense",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 7685,
+            "article_id": 3206,
+            "theme_id": "security_defense",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 7858,
+            "article_id": 3259,
+            "theme_id": "war_readiness",
+            "kraj": "UA",
+            "zrodlo": "pravda_ua"
+          },
+          {
+            "signal_id": 7589,
+            "article_id": 3272,
+            "theme_id": "security_defense",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          },
+          {
+            "signal_id": 7737,
+            "article_id": 3226,
+            "theme_id": "security_defense",
+            "kraj": "UA",
+            "zrodlo": "ukrinform"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "PL",
+        "jak_opisuje_siebie": "Analizowane źródło z PL (onet) przedstawia Polskę jako kraj w stanie gotowości obronnej, budujący pozycję 'bastionu' NATO, przy jednoczesnej krytyce niespójności komunikacyjnej instytucji wojskowych.",
+        "jak_opisuja_go_inni": "Analizowane źródła z UA (pravda_ua, ukrinform) i DE (tagesschau) opisują Polskę głównie jako kraj reagujący defensywnie na rosyjskie ataki dronowe blisko granicy (podrywanie lotnictwa) oraz budujący system SAN we współpracy z Norwegią – ton neutralny, bez krytyki wewnętrznej niespójności widocznej w narracji polskiej.",
+        "komentarz": "Autoobraz zawiera element samokrytyki (spór o jakość sprzętu wojskowego) nieobecny w opisie zewnętrznym, który skupia się wyłącznie na aspekcie defensywno-sojuszniczym Polski.",
+        "article_ids": [
+          3198,
+          3206,
+          3259,
+          3272,
+          3226
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 7267,
+          "theme_id": "security_defense",
+          "subject_actor": "PL",
+          "content_group": "2bdc091c7874c2aa234600487deddd8f9c93f1d810c4215e8209f6976a8d0f3d",
+          "publisher_group": "onet",
+          "article_id": 3198,
+          "kraj": "PL",
+          "zrodlo": "onet",
+          "typ_zrodla": "private",
+          "rama": "Instytucje wojskowe zaprzeczają własnym dokumentom",
+          "stance": "krytyka",
+          "intensywnosc": 5,
+          "streszczenie": "Inspektorat Wsparcia opublikował sprostowanie, w którym zaprzecza wadliwości kurtek i oskarża redakcję o oparcie się na nieprawdziwych informacjach, podczas gdy redakcja wykazuje, że opierała się na oficjalnych pismach samego Inspektoratu."
+        },
+        {
+          "signal_id": 7685,
+          "theme_id": "security_defense",
+          "subject_actor": "PL",
+          "content_group": "5b73b652f4dd13691845c6903091bcb4d2252dfcbb04531493ccc5abb95d6275",
+          "publisher_group": "onet",
+          "article_id": 3206,
+          "kraj": "PL",
+          "zrodlo": "onet",
+          "typ_zrodla": "private",
+          "rama": "Polska szykuje się na rolę bastionu",
+          "stance": "poparcie",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia Polskę jako państwo, które masowo inwestuje w zbrojenia, rozbudowuje armię i staje się kluczowym elementem obrony wschodniej flanki NATO, wysyłając tym samym jasny sygnał odstraszania do Rosji."
+        },
+        {
+          "signal_id": 7858,
+          "theme_id": "war_readiness",
+          "subject_actor": "PL",
+          "content_group": "631086d212be35aaf36ab8114a58257bb7de357bb0de43ada349664495b4a6c7",
+          "publisher_group": "pravda_ua",
+          "article_id": 3259,
+          "kraj": "UA",
+          "zrodlo": "pravda_ua",
+          "typ_zrodla": "private",
+          "rama": "Polska wzmacnia gotowość obronną",
+          "stance": "uspokojenie",
+          "intensywnosc": 2,
+          "streszczenie": "Działania polskiego wojska mają charakter prewencyjny i służą ochronie przestrzeni powietrznej, zwłaszcza w rejonach przygranicznych zagrożonych rosyjskimi atakami."
+        },
+        {
+          "signal_id": 7589,
+          "theme_id": "security_defense",
+          "subject_actor": "PL",
+          "content_group": "c792c5fb9bbe87a1b7892319acc94cb4d34e816c550cc5f35a6538a3eba592c8",
+          "publisher_group": "tagesschau",
+          "article_id": 3272,
+          "kraj": "DE",
+          "zrodlo": "tagesschau",
+          "typ_zrodla": "public",
+          "rama": "Polska zbroi się w obronie przeciw dronom",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Polska buduje w przyspieszonym tempie kompleksowy system obrony przeciw dronom i lotnictwu (SAN) we współpracy z Norwegią, częściowo finansowany ze środków UE."
+        },
+        {
+          "signal_id": 7737,
+          "theme_id": "security_defense",
+          "subject_actor": "PL",
+          "content_group": "1bcff9a8b35e20fb9a51c8bbc850ef12b908626407673ca627bc80ac73555f87",
+          "publisher_group": "ukrinform",
+          "article_id": 3226,
+          "kraj": "UA",
+          "zrodlo": "ukrinform",
+          "typ_zrodla": "agency",
+          "rama": "Polska reaguje militarnie na rosyjskie ataki",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Polska poderwała wojskowe lotnictwo i postawiła w stan gotowości naziemne systemy obrony powietrznej w związku z rosyjskim atakiem na zachodnią Ukrainę."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "rozbieznosci.1.kraje.UK",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 7903,
+            "article_id": 3320,
+            "theme_id": "us_policy",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 7570,
+            "article_id": 3360,
+            "theme_id": "us_policy",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 7224,
+            "article_id": 3352,
+            "theme_id": "us_policy",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          }
+        ],
+        "kraj": "UK",
+        "n_zrodel": 2,
+        "rama": "krytyka wewnętrznej polityki USA połączona z podkreślaniem sojuszu",
+        "stance": "mieszany (krytyka/poparcie/neutralny)",
+        "article_ids": [
+          3320,
+          3360,
+          3352
+        ]
+      },
+      "context": {
+        "temat": "us_policy",
+        "tekst": "Analizowane źródła z UK (bbc, guardian) przedstawiają politykę USA częściowo krytycznie ('USA wybiera stabilność nad demokracją', 'radykalne wypowiedzi kandydata GOP'), ale równolegle podkreślają sojusz ('UK i USA razem przeciw zagrożeniom'), podczas gdy analizowane źródło z UA (pravda_ua) traktuje politykę USA głównie instrumentalnie – jako kanał rozmów z Rosją i grę dyplomatyczną (zaproszenie Putina na G20), bez wyraźnego wartościowania.",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 7903,
+                "article_id": 3320,
+                "theme_id": "us_policy",
+                "kraj": "UK",
+                "zrodlo": "bbc"
+              },
+              {
+                "signal_id": 7570,
+                "article_id": 3360,
+                "theme_id": "us_policy",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 7224,
+                "article_id": 3352,
+                "theme_id": "us_policy",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              }
+            ],
+            "kraj": "UK",
+            "n_zrodel": 2,
+            "rama": "krytyka wewnętrznej polityki USA połączona z podkreślaniem sojuszu",
+            "stance": "mieszany (krytyka/poparcie/neutralny)",
+            "article_ids": [
+              3320,
+              3360,
+              3352
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 7283,
+                "article_id": 3247,
+                "theme_id": "us_policy",
+                "kraj": "UA",
+                "zrodlo": "pravda_ua"
+              },
+              {
+                "signal_id": 7698,
+                "article_id": 3255,
+                "theme_id": "us_policy",
+                "kraj": "UA",
+                "zrodlo": "pravda_ua"
+              }
+            ],
+            "kraj": "UA",
+            "n_zrodel": 1,
+            "rama": "USA jako pośrednik/kanał rozmów z Rosją, ocena instrumentalna",
+            "stance": "neutralny",
+            "article_ids": [
+              3247,
+              3255
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "niski",
+          "uzasadnienie": "UA reprezentowana przez 1 niezależne źródło w tym zestawieniu (poniżej progu 2), max_js=0.396 dotyczy wyłącznie nacechowania, nie ram."
+        }
+      },
+      "signals": [
+        {
+          "signal_id": 7903,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "d1e713fe488f91eaa57895c862003a787afd1b63730d0775f41a32a471b1056b",
+          "publisher_group": "bbc",
+          "article_id": 3320,
+          "kraj": "UK",
+          "zrodlo": "bbc",
+          "typ_zrodla": "public",
+          "rama": "USA wybiera stabilność nad demokracją",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł sugeruje, że administracja Trumpa postawiła na krótkoterminową stabilność, popierając Rodríguez zamiast liderki opozycji Machado po zatrzymaniu Maduro."
+        },
+        {
+          "signal_id": 7570,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "b28ac8a1b0992bf86f2fc9f0eff1fcef2d99174f9f5773289c41e2e28c28da1d",
+          "publisher_group": "guardian",
+          "article_id": 3360,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "radykalne wypowiedzi kandydata GOP",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł opisuje historię kontrowersyjnych wypowiedzi Bo Frencha, kandydata republikańskiego w Teksasie, który wielokrotnie wzywał do publicznych egzekucji przywódców Partii Demokratycznej, w tym Baracka Obamy i Adama Schiffa."
+        },
+        {
+          "signal_id": 7224,
+          "theme_id": "us_policy",
+          "subject_actor": "UK",
+          "content_group": "60c76170919334e3109055f5d3982b631e0b7fa1d80fa12cce8d96f17527d659",
+          "publisher_group": "guardian",
+          "article_id": 3352,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "UK i USA razem przeciw zagrożeniom",
+          "stance": "poparcie",
+          "intensywnosc": 2,
+          "streszczenie": "Minister obrony Wes Streeting podkreślił, że relacja brytyjsko-amerykańska to najbliższy sojusz na świecie, a oba kraje zawsze będą stać razem przeciwko tym, którzy chcą wyrządzić krzywdę."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "w_skrocie.1",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 7469,
+            "article_id": 3314,
+            "theme_id": "china_indo_pacific",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 7793,
+            "article_id": 3437,
+            "theme_id": "china_indo_pacific",
+            "kraj": "CN",
+            "zrodlo": "globaltimes"
+          }
+        ],
+        "theme_id": "china_indo_pacific",
+        "tekst": "Wątek relacji USA–Chiny po szczycie Xi-Trump pokazuje rozjazd: analizowane źródło z UK (bbc) podkreśla 'ostrożne zbliżenie bez przełomu', podczas gdy analizowane źródło z CN (globaltimes) utrzymuje ramę budowania Tajwanu jako integralnej części Chin i konstruktywnej stabilności strategicznej.",
+        "article_ids": [
+          3314,
+          3437
+        ],
+        "pewnosc": "niski"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 7469,
+            "article_id": 3314,
+            "theme_id": "china_indo_pacific",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 7793,
+            "article_id": 3437,
+            "theme_id": "china_indo_pacific",
+            "kraj": "CN",
+            "zrodlo": "globaltimes"
+          }
+        ],
+        "theme_id": "china_indo_pacific",
+        "tekst": "Wątek relacji USA–Chiny po szczycie Xi-Trump pokazuje rozjazd: analizowane źródło z UK (bbc) podkreśla 'ostrożne zbliżenie bez przełomu', podczas gdy analizowane źródło z CN (globaltimes) utrzymuje ramę budowania Tajwanu jako integralnej części Chin i konstruktywnej stabilności strategicznej.",
+        "article_ids": [
+          3314,
+          3437
+        ],
+        "pewnosc": "niski"
+      },
+      "signals": [
+        {
+          "signal_id": 7469,
+          "theme_id": "china_indo_pacific",
+          "subject_actor": "US",
+          "content_group": "8cbda477b55306992d3b836c6c0939fd4ca8e576f7afc3e4f2baf703af52d4e0",
+          "publisher_group": "bbc",
+          "article_id": 3314,
+          "kraj": "UK",
+          "zrodlo": "bbc",
+          "typ_zrodla": "public",
+          "rama": "Ostrożne zbliżenie bez przełomu",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Szczyt Trump-Xi zakończył się bez wspólnego oświadczenia, a obie strony wydały odrębne komunikaty, co wskazuje na utrzymującą się wzajemną nieufność mimo deklaracji ocieplenia relacji."
+        },
+        {
+          "signal_id": 7793,
+          "theme_id": "china_indo_pacific",
+          "subject_actor": "CN",
+          "content_group": "9fd17dc74cc5b45e7f3ad181578ce4caecf54ff1f80a79a740b4bbe016eee391",
+          "publisher_group": "peoples_daily",
+          "article_id": 3437,
+          "kraj": "CN",
+          "zrodlo": "globaltimes",
+          "typ_zrodla": "government",
+          "rama": "Tajwan nieodłączną częścią Chin",
+          "stance": "poparcie",
+          "intensywnosc": 5,
+          "streszczenie": "Chińskie MSZ opublikowało dwujęzyczne wideo przedstawiające historyczne i prawne podstawy statusu Tajwanu jako integralnej części Chin, powołując się na Deklarację Kairską, Proklamację Poczdamską i rezolucję ONZ nr 2758."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "rozbieznosci.0.kraje.CN",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 7793,
+            "article_id": 3437,
+            "theme_id": "china_indo_pacific",
+            "kraj": "CN",
+            "zrodlo": "globaltimes"
+          },
+          {
+            "signal_id": 7667,
+            "article_id": 3397,
+            "theme_id": "china_indo_pacific",
+            "kraj": "CN",
+            "zrodlo": "cgtn"
+          }
+        ],
+        "kraj": "CN",
+        "n_zrodel": 2,
+        "rama": "Chiny i USA budują konstruktywną stabilność strategiczną / Tajwan nieodłączną częścią Chin",
+        "stance": "poparcie/neutralny",
+        "article_ids": [
+          3397,
+          3437
+        ]
+      },
+      "context": {
+        "temat": "china_indo_pacific",
+        "tekst": "Analizowane źródło z BR (folha) przedstawia propozycję sprzedaży broni Chinom przez USA w ramie krytycznej ('rosnące wyzwanie militarne Chin', 'USA oferują broń Chinom' jako coś nadzwyczajnego i niepokojącego), podczas gdy analizowane źródła z CN (cgtn, globaltimes) eksponują wątek Tajwanu jako integralnej części Chin i budowania 'konstruktywnej stabilności strategicznej' z USA – z przewagą tonu wspierającego.",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 7237,
+                "article_id": 3826,
+                "theme_id": "china_indo_pacific",
+                "kraj": "BR",
+                "zrodlo": "folha"
+              }
+            ],
+            "kraj": "BR",
+            "n_zrodel": 1,
+            "rama": "Rosnące wyzwanie militarne Chin / USA oferują broń Chinom jako coś bezprecedensowego",
+            "stance": "krytyka",
+            "article_ids": [
+              3826
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 7793,
+                "article_id": 3437,
+                "theme_id": "china_indo_pacific",
+                "kraj": "CN",
+                "zrodlo": "globaltimes"
+              },
+              {
+                "signal_id": 7667,
+                "article_id": 3397,
+                "theme_id": "china_indo_pacific",
+                "kraj": "CN",
+                "zrodlo": "cgtn"
+              }
+            ],
+            "kraj": "CN",
+            "n_zrodel": 2,
+            "rama": "Chiny i USA budują konstruktywną stabilność strategiczną / Tajwan nieodłączną częścią Chin",
+            "stance": "poparcie/neutralny",
+            "article_ids": [
+              3397,
+              3437
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "niski",
+          "uzasadnienie": "BR reprezentowane przez 1 źródło (poniżej progu 2), max_js=0.459 wskazuje na dużą odległość rozkładów nacechowania między parą krajów, ale porównanie oparte na małej próbce BR."
+        }
+      },
+      "signals": [
+        {
+          "signal_id": 7793,
+          "theme_id": "china_indo_pacific",
+          "subject_actor": "CN",
+          "content_group": "9fd17dc74cc5b45e7f3ad181578ce4caecf54ff1f80a79a740b4bbe016eee391",
+          "publisher_group": "peoples_daily",
+          "article_id": 3437,
+          "kraj": "CN",
+          "zrodlo": "globaltimes",
+          "typ_zrodla": "government",
+          "rama": "Tajwan nieodłączną częścią Chin",
+          "stance": "poparcie",
+          "intensywnosc": 5,
+          "streszczenie": "Chińskie MSZ opublikowało dwujęzyczne wideo przedstawiające historyczne i prawne podstawy statusu Tajwanu jako integralnej części Chin, powołując się na Deklarację Kairską, Proklamację Poczdamską i rezolucję ONZ nr 2758."
+        },
+        {
+          "signal_id": 7667,
+          "theme_id": "china_indo_pacific",
+          "subject_actor": "CN",
+          "content_group": "3e34e90887791b04feeb27cf5a374608e8ee5bd6495846f3aa5a0d09db494407",
+          "publisher_group": "cgtn",
+          "article_id": 3397,
+          "kraj": "CN",
+          "zrodlo": "cgtn",
+          "typ_zrodla": "government",
+          "rama": "Chiny i USA budują konstruktywną stabilność strategiczną",
+          "stance": "poparcie",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia relacje chińsko-amerykańskie jako pozytywnie rozwijające się w oparciu o zasady szacunku, sprawiedliwości i wzajemności, które nadają nowy wymiar konstruktywnej stabilności strategicznej."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "slabe_sygnaly.1",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 7845,
+            "article_id": 3684,
+            "theme_id": "emergent:settler-violence-west-bank",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          },
+          {
+            "signal_id": 8367,
+            "article_id": 3710,
+            "theme_id": "emergent:settler-violence-west-bank",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          }
+        ],
+        "theme_id": "emergent:settler-violence-west-bank",
+        "tekst": "Temat przemocy osadników na Zachodnim Brzegu pojawia się w analizowanych źródłach z IL (haaretz) i PS (wafa) z przeciwstawnymi ramami (IL: pojedynczy incydent; PS: systemowa eskalacja), ale przy tylko 1 źródle na kraj nie spełnia progu do zaklasyfikowania jako pełna rozbieżność.",
+        "article_ids": [
+          3684,
+          3710
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 7845,
+            "article_id": 3684,
+            "theme_id": "emergent:settler-violence-west-bank",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          },
+          {
+            "signal_id": 8367,
+            "article_id": 3710,
+            "theme_id": "emergent:settler-violence-west-bank",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          }
+        ],
+        "theme_id": "emergent:settler-violence-west-bank",
+        "tekst": "Temat przemocy osadników na Zachodnim Brzegu pojawia się w analizowanych źródłach z IL (haaretz) i PS (wafa) z przeciwstawnymi ramami (IL: pojedynczy incydent; PS: systemowa eskalacja), ale przy tylko 1 źródle na kraj nie spełnia progu do zaklasyfikowania jako pełna rozbieżność.",
+        "article_ids": [
+          3684,
+          3710
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 7845,
+          "theme_id": "emergent:settler-violence-west-bank",
+          "subject_actor": "IL",
+          "content_group": "3684",
+          "publisher_group": "haaretz",
+          "article_id": 3684,
+          "kraj": "IL",
+          "zrodlo": "haaretz",
+          "typ_zrodla": "private",
+          "rama": "Osadnicy atakują palestyńskie wioski",
+          "stance": "neutralny",
+          "intensywnosc": 2,
+          "streszczenie": "Palestyńskie doniesienia mówią o podpaleniach samochodów i graffiti w okolicach Ramallah na Zachodnim Brzegu, a graffiti nawiązywało do niedawnych ataków na Izraelczyków."
+        },
+        {
+          "signal_id": 8367,
+          "theme_id": "emergent:settler-violence-west-bank",
+          "subject_actor": "PS",
+          "content_group": "3710",
+          "publisher_group": "wafa",
+          "article_id": 3710,
+          "kraj": "PS",
+          "zrodlo": "wafa",
+          "typ_zrodla": "government",
+          "rama": "Osadnicy niszczą palestyńskie mienie",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł informuje, że osadnicy wycięli drzewa oliwne należące do palestyńskich właścicieli w rejonie Khallat al-Lawz na południowy wschód od Betlejem."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "w_skrocie.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 8101,
+            "article_id": 3729,
+            "theme_id": "middle_east",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          },
+          {
+            "signal_id": 8303,
+            "article_id": 3724,
+            "theme_id": "middle_east",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          },
+          {
+            "signal_id": 8339,
+            "article_id": 3718,
+            "theme_id": "middle_east",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          },
+          {
+            "signal_id": 7243,
+            "article_id": 3483,
+            "theme_id": "middle_east",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          }
+        ],
+        "theme_id": "middle_east",
+        "tekst": "Temat Bliskiego Wschodu ujawnia rozbieżność ram: analizowane źródło z PS (Wafa) przedstawia Izrael niemal wyłącznie w ramie krytycznej/oskarżycielskiej (prowokacje, eskalacja przemocy), podczas gdy analizowane źródło z CN (chinanews) utrzymuje ton neutralny, koncentrując się na deklaracjach Iranu i równowadze regionalnej.",
+        "article_ids": [
+          3729,
+          3724,
+          3718,
+          3483
+        ],
+        "pewnosc": "niski"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 8101,
+            "article_id": 3729,
+            "theme_id": "middle_east",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          },
+          {
+            "signal_id": 8303,
+            "article_id": 3724,
+            "theme_id": "middle_east",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          },
+          {
+            "signal_id": 8339,
+            "article_id": 3718,
+            "theme_id": "middle_east",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          },
+          {
+            "signal_id": 7243,
+            "article_id": 3483,
+            "theme_id": "middle_east",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          }
+        ],
+        "theme_id": "middle_east",
+        "tekst": "Temat Bliskiego Wschodu ujawnia rozbieżność ram: analizowane źródło z PS (Wafa) przedstawia Izrael niemal wyłącznie w ramie krytycznej/oskarżycielskiej (prowokacje, eskalacja przemocy), podczas gdy analizowane źródło z CN (chinanews) utrzymuje ton neutralny, koncentrując się na deklaracjach Iranu i równowadze regionalnej.",
+        "article_ids": [
+          3729,
+          3724,
+          3718,
+          3483
+        ],
+        "pewnosc": "niski"
+      },
+      "signals": [
+        {
+          "signal_id": 8101,
+          "theme_id": "middle_east",
+          "subject_actor": "PS",
+          "content_group": "9bd624620cb616524536c68e0118c771c95b7c7ad4394a6660f666fa88a7e908",
+          "publisher_group": "wafa",
+          "article_id": 3729,
+          "kraj": "PS",
+          "zrodlo": "wafa",
+          "typ_zrodla": "government",
+          "rama": "Izrael prowokuje i narusza status quo",
+          "stance": "krytyka",
+          "intensywnosc": 5,
+          "streszczenie": "Artykuł opisuje masowe wkraczanie izraelskich osadników na teren meczetu Al-Aksa w Jerozolimie, podczas którego odprawiają oni żydowskie rytuały i modlitwy talmudyczne. Tekst przedstawia te działania jako celową prowokację i naruszenie historyczno-prawnego statusu świętego miejsca muzułmanów."
+        },
+        {
+          "signal_id": 8303,
+          "theme_id": "middle_east",
+          "subject_actor": "PS",
+          "content_group": "3316387de312b3070f10bed8b950644962b42ea150e1f9673e5153a0c95788d1",
+          "publisher_group": "wafa",
+          "article_id": 3724,
+          "kraj": "PS",
+          "zrodlo": "wafa",
+          "typ_zrodla": "government",
+          "rama": "Izraelska eskalacja przemocy wobec Palestyńczyków",
+          "stance": "krytyka",
+          "intensywnosc": 5,
+          "streszczenie": "Artykuł opisuje intensyfikację izraelskich działań zbrojnych w Strefie Gazy i na Zachodnim Brzegu, w tym zabójstwa, ostrzał cywilów, naloty dronów oraz ofiary śmiertelne i rannych po stronie palestyńskiej."
+        },
+        {
+          "signal_id": 8339,
+          "theme_id": "middle_east",
+          "subject_actor": "PS",
+          "content_group": "a142a5000e3fe569f767a66bee5a5420a4b6797ba42a9fe91fdc8ca0038bcf6c",
+          "publisher_group": "wafa",
+          "article_id": 3718,
+          "kraj": "PS",
+          "zrodlo": "wafa",
+          "typ_zrodla": "government",
+          "rama": "Wojna eksterminacyjna trwa mimo zawieszenia broni",
+          "stance": "krytyka",
+          "intensywnosc": 5,
+          "streszczenie": "Tekst określa działania Izraela jako wojnę eksterminacyjną i podkreśla, że ofiary wciąż przybywają mimo formalnego zawieszenia broni, co sugeruje nieskuteczność rozejmu."
+        },
+        {
+          "signal_id": 7243,
+          "theme_id": "middle_east",
+          "subject_actor": "IR",
+          "content_group": "c644727bae36bb63e2e0e89aeef4d60788065b721d0814e690e668ecc8cf8210",
+          "publisher_group": "chinanews",
+          "article_id": 3483,
+          "kraj": "CN",
+          "zrodlo": "chinanews",
+          "typ_zrodla": "agency",
+          "rama": "Iran zmienia równowagę sił w regionie",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł przytacza oświadczenie najwyższego przywódcy Iranu, według którego irańska obronność zasadniczo zmieniła równowagę regionalną, a Iran i \"oś oporu\" nadal będą odnosić zwycięstwa."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "nieobecne_w_polsce.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 7205,
+            "article_id": 3620,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 8101,
+            "article_id": 3729,
+            "theme_id": "middle_east",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          },
+          {
+            "signal_id": 7119,
+            "article_id": 3670,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          }
+        ],
+        "theme_id": "middle_east",
+        "tekst": "Temat Bliskiego Wschodu jest w próbce polskiej niemal nieobecny (udział 2,6% vs średnia 24,4% w innych krajach), podczas gdy w analizowanych źródłach z TR, PS, IL zajmuje on od kilkunastu do ponad 50% próbki.",
+        "article_ids": [
+          3620,
+          3729,
+          3670
+        ],
+        "temat": "middle_east"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 7205,
+            "article_id": 3620,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 8101,
+            "article_id": 3729,
+            "theme_id": "middle_east",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          },
+          {
+            "signal_id": 7119,
+            "article_id": 3670,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          }
+        ],
+        "theme_id": "middle_east",
+        "tekst": "Temat Bliskiego Wschodu jest w próbce polskiej niemal nieobecny (udział 2,6% vs średnia 24,4% w innych krajach), podczas gdy w analizowanych źródłach z TR, PS, IL zajmuje on od kilkunastu do ponad 50% próbki.",
+        "article_ids": [
+          3620,
+          3729,
+          3670
+        ],
+        "temat": "middle_east"
+      },
+      "signals": [
+        {
+          "signal_id": 7205,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "12a0fd94a71616109162cd0612e34149dbb4d31809e9392449065289f980b7b0",
+          "publisher_group": "turkuvaz",
+          "article_id": 3620,
+          "kraj": "TR",
+          "zrodlo": "dailysabah",
+          "typ_zrodla": "private",
+          "rama": "Ludobójcza wojna Izraela w Gazie",
+          "stance": "krytyka",
+          "intensywnosc": 5,
+          "streszczenie": "Artykuł podaje, że w izraelskiej wojnie w Gazie zginęło ponad 74 tysiące Palestyńczyków, a około 90% infrastruktury enklawy zostało zniszczone, określając działania Izraela mianem ludobójczych."
+        },
+        {
+          "signal_id": 8101,
+          "theme_id": "middle_east",
+          "subject_actor": "PS",
+          "content_group": "9bd624620cb616524536c68e0118c771c95b7c7ad4394a6660f666fa88a7e908",
+          "publisher_group": "wafa",
+          "article_id": 3729,
+          "kraj": "PS",
+          "zrodlo": "wafa",
+          "typ_zrodla": "government",
+          "rama": "Izrael prowokuje i narusza status quo",
+          "stance": "krytyka",
+          "intensywnosc": 5,
+          "streszczenie": "Artykuł opisuje masowe wkraczanie izraelskich osadników na teren meczetu Al-Aksa w Jerozolimie, podczas którego odprawiają oni żydowskie rytuały i modlitwy talmudyczne. Tekst przedstawia te działania jako celową prowokację i naruszenie historyczno-prawnego statusu świętego miejsca muzułmanów."
+        },
+        {
+          "signal_id": 7119,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "3670",
+          "publisher_group": "haaretz",
+          "article_id": 3670,
+          "kraj": "IL",
+          "zrodlo": "haaretz",
+          "typ_zrodla": "private",
+          "rama": "Krytyka cierpienia zadanego przez rząd Netanjahu",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Miliband stwierdza, że ataki z 7 października nie mogą usprawiedliwiać cierpienia, jakie rząd Netanjahu zadał w Gazie i na Zachodnim Brzegu."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "nieobecne_w_polsce.1",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 7075,
+            "article_id": 3244,
+            "theme_id": "alliances",
+            "kraj": "UA",
+            "zrodlo": "pravda_ua"
+          },
+          {
+            "signal_id": 7209,
+            "article_id": 3628,
+            "theme_id": "alliances",
+            "kraj": "TR",
+            "zrodlo": "hurriyet"
+          },
+          {
+            "signal_id": 6982,
+            "article_id": 3822,
+            "theme_id": "alliances",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          }
+        ],
+        "theme_id": "alliances",
+        "tekst": "Wątek sojuszy (m.in. wsparcie dla Ukrainy, koordynacja UE-NATO, napięcia Seul-Kijów) ma w próbce polskiej udział 5,1% wobec średniej 21,5% w porównywanych krajach, w tym UA, TR i BR.",
+        "article_ids": [
+          3244,
+          3628,
+          3822
+        ],
+        "temat": "alliances"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 7075,
+            "article_id": 3244,
+            "theme_id": "alliances",
+            "kraj": "UA",
+            "zrodlo": "pravda_ua"
+          },
+          {
+            "signal_id": 7209,
+            "article_id": 3628,
+            "theme_id": "alliances",
+            "kraj": "TR",
+            "zrodlo": "hurriyet"
+          },
+          {
+            "signal_id": 6982,
+            "article_id": 3822,
+            "theme_id": "alliances",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          }
+        ],
+        "theme_id": "alliances",
+        "tekst": "Wątek sojuszy (m.in. wsparcie dla Ukrainy, koordynacja UE-NATO, napięcia Seul-Kijów) ma w próbce polskiej udział 5,1% wobec średniej 21,5% w porównywanych krajach, w tym UA, TR i BR.",
+        "article_ids": [
+          3244,
+          3628,
+          3822
+        ],
+        "temat": "alliances"
+      },
+      "signals": [
+        {
+          "signal_id": 7075,
+          "theme_id": "alliances",
+          "subject_actor": "Rada Europy",
+          "content_group": "d9b5cee103c20e2749434ca2410097f710cb72397e7fbc45ac2923c8a2b4b227",
+          "publisher_group": "pravda_ua",
+          "article_id": 3244,
+          "kraj": "UA",
+          "zrodlo": "pravda_ua",
+          "typ_zrodla": "private",
+          "rama": "Międzynarodowe potępienie rosyjskich zbrodni",
+          "stance": "poparcie",
+          "intensywnosc": 3,
+          "streszczenie": "Sekretarz generalny Rady Europy Alain Berset potępia rosyjskie ataki i zapowiada dążenie do pociągnięcia Rosji do odpowiedzialności, deklarując, że bezkarność nie zwycięży."
+        },
+        {
+          "signal_id": 7209,
+          "theme_id": "alliances",
+          "subject_actor": "UE",
+          "content_group": "ced27b1765bb198ca63a0d3587a1f79c157ddd4065416ac912bda6d63534cc1a",
+          "publisher_group": "demiroren",
+          "article_id": 3628,
+          "kraj": "TR",
+          "zrodlo": "hurriyet",
+          "typ_zrodla": "private",
+          "rama": "Państwa UE chcą silniejszej odpowiedzi na zagrożenie z Moskwy",
+          "stance": "poparcie",
+          "intensywnosc": 2,
+          "streszczenie": "Ministrowie UE szeroko poparli dążenie do wzmocnienia reakcji bloku na postrzegane zagrożenie ze strony Moskwy, wyrażając gotowość do dalszych prac nad mechanizmem."
+        },
+        {
+          "signal_id": 6982,
+          "theme_id": "alliances",
+          "subject_actor": "KR",
+          "content_group": "c45c693dda40cc50ccb9e285b8febec70e64b4dbd580c9aa7d158e64a33de4ce",
+          "publisher_group": "folha",
+          "article_id": 3822,
+          "kraj": "BR",
+          "zrodlo": "folha",
+          "typ_zrodla": "private",
+          "rama": "Napięcie mimo wspólnego interesu",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Mimo wspólnego interesu w powstrzymywaniu partnerstwa wojskowego Korei Północnej z Rosją doszło do rozłamu między Koreą Południową a Ukrainą; Kijów zabiegał o broń z Seulu, ale ten odmówił, powołując się na politykę udzielania wyłącznie pomocy humanitarnej."
+        }
+      ],
+      "review": "pending"
+    }
+  ],
+  "claims_total": 13,
+  "meaning": "czy sygnały wspierają opis przekazu, nie prawdziwość zdarzeń"
+}
