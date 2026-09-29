@@ -1,0 +1,673 @@
+{
+  "report": {
+    "w_skrocie": [
+      {
+        "dowody": [
+          {
+            "signal_id": 8577,
+            "article_id": 3866,
+            "theme_id": "ukraine_war",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 8770,
+            "article_id": 3849,
+            "theme_id": "ukraine_war",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          },
+          {
+            "signal_id": 9058,
+            "article_id": 4320,
+            "theme_id": "ukraine_war",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 8725,
+            "article_id": 4330,
+            "theme_id": "ukraine_war",
+            "kraj": "TR",
+            "zrodlo": "hurriyet"
+          }
+        ],
+        "theme_id": "ukraine_war",
+        "tekst": "Analizowane źródła z PL (onet, rp) i TR (dailysabah, hurriyet) pokazują wyraźnie różne nasycenie wojny w Ukrainie: PL koncentruje się na krytycznych ramach ataków na cywilów i fałszowania danych przez Rosję, TR – bardziej neutralnie, z akcentem na przegraną Rosji i sabotaż w Europie.",
+        "article_ids": [
+          3866,
+          3849,
+          4320,
+          4330
+        ],
+        "pewnosc": "średni"
+      }
+    ],
+    "wzorce_zbieznosci": [
+      {
+        "temat": "hybrid_info",
+        "kierunek": "negatywny",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 9443,
+                "article_id": 4113,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "globaltimes"
+              },
+              {
+                "signal_id": 9736,
+                "article_id": 4146,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "chinanews"
+              },
+              {
+                "signal_id": 9513,
+                "article_id": 4080,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "cgtn"
+              },
+              {
+                "signal_id": 9863,
+                "article_id": 4095,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "globaltimes"
+              }
+            ],
+            "kraj": "CN",
+            "n_zrodel": 3,
+            "rama": "Ramy krytyczne wobec Japonii jako fabrykującej zagrożenia oraz neutralne wobec sabotażu/AI, m.in. 'Atak na bazę USA możliwą operacją obcego państwa'",
+            "stance": "mieszany (krytyka/neutralny)",
+            "article_ids": [
+              4113,
+              4146,
+              4080,
+              4095
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 8923,
+                "article_id": 4275,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "hongkongfp"
+              },
+              {
+                "signal_id": 9271,
+                "article_id": 4256,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "rthk"
+              },
+              {
+                "signal_id": 8762,
+                "article_id": 4222,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "scmp"
+              },
+              {
+                "signal_id": 9719,
+                "article_id": 4266,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "rthk"
+              }
+            ],
+            "kraj": "HK",
+            "n_zrodel": 3,
+            "rama": "AI agent i sabotaż jako zagrożenia dla rządów i instytucji, np. 'AI agent zagraża rządom', 'Dziennikarstwo walczy z dezinformacją'",
+            "stance": "mieszany (alarm/krytyka/neutralny)",
+            "article_ids": [
+              4256,
+              4275,
+              4222,
+              4266
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 8985,
+                "article_id": 3873,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "onet"
+              },
+              {
+                "signal_id": 9091,
+                "article_id": 3855,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "rp"
+              },
+              {
+                "signal_id": 9090,
+                "article_id": 3875,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "onet"
+              }
+            ],
+            "kraj": "PL",
+            "n_zrodel": 2,
+            "rama": "Dezinformacja i eskalacja presji Rosji na Europę",
+            "stance": "krytyka/alarm",
+            "article_ids": [
+              3873,
+              3855,
+              3875
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 9056,
+                "article_id": 4320,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "dailysabah"
+              },
+              {
+                "signal_id": 8591,
+                "article_id": 4328,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "hurriyet"
+              },
+              {
+                "signal_id": 8828,
+                "article_id": 4316,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "dailysabah"
+              },
+              {
+                "signal_id": 8724,
+                "article_id": 4330,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "hurriyet"
+              }
+            ],
+            "kraj": "TR",
+            "n_zrodel": 2,
+            "rama": "Sabotaż Rosji i naruszenia porozumień przez Iran jako zagrożenia dla Europy",
+            "stance": "alarm/krytyka",
+            "article_ids": [
+              4320,
+              4328,
+              4316,
+              4330
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 8469,
+                "article_id": 4337,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              },
+              {
+                "signal_id": 9382,
+                "article_id": 4381,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "fox"
+              },
+              {
+                "signal_id": 8606,
+                "article_id": 4384,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "npr"
+              },
+              {
+                "signal_id": 8851,
+                "article_id": 4343,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              }
+            ],
+            "kraj": "US",
+            "n_zrodel": 3,
+            "rama": "Iran/obce państwa podejrzewane o spiski terrorystyczne, AI pod kontrolą polityczną",
+            "stance": "alarm/krytyka",
+            "article_ids": [
+              4337,
+              4381,
+              4384,
+              4343
+            ]
+          }
+        ],
+        "wspolny_kierunek": "Negatywny/alarmistyczny: różne kraje różnymi słowami (Rosja sabotuje, Iran spiskuje, Japonia fabrykuje zagrożenia, AI wymyka się spod kontroli) przedstawiają narastające zagrożenie działaniami hybrydowymi i dezinformacją.",
+        "sygnaly_przeciwne": {
+          "dowody": [
+            {
+              "signal_id": 9011,
+              "article_id": 4033,
+              "theme_id": "hybrid_info",
+              "kraj": "UK",
+              "zrodlo": "guardian"
+            },
+            {
+              "signal_id": 9871,
+              "article_id": 4128,
+              "theme_id": "hybrid_info",
+              "kraj": "CN",
+              "zrodlo": "globaltimes"
+            }
+          ],
+          "tekst": "Część sygnałów w tym samym temacie ma stance neutralny lub uspokajający, np. litewski premier kwestionujący ostrzeżenia o zagrożeniu ze strony Rosji, lub chińska narracja pozytywna o własnym postępie technologicznym.",
+          "article_ids": [
+            4033,
+            4128
+          ]
+        },
+        "pewnosc": {
+          "poziom": "wysoki",
+          "uzasadnienie": "5 krajów (CN, HK, PL, TR, US) spełnia próg min. 2 źródeł na kraj (odpowiednio 3,3,2,2,3 źródła), łącznie 19 artykułów przywołanych jako dowody; zgodność kierunku (negatywny/alarmistyczny) przy różnych ramach i aktorach."
+        },
+        "trend": "brak linii bazowej"
+      }
+    ],
+    "rozbieznosci": [
+      {
+        "temat": "ukraine_war",
+        "tekst": "Analizowane źródła z PL przedstawiają wojnę głównie przez pryzmat krytyki Rosji (ataki na cywilów, fałszowanie danych) z wysokim udziałem stance krytycznego, podczas gdy źródła z TR utrzymują ton głównie neutralny, akcentując przegraną Rosji na froncie i kampanię sabotażu bez silnego potępienia moralnego.",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 8577,
+                "article_id": 3866,
+                "theme_id": "ukraine_war",
+                "kraj": "PL",
+                "zrodlo": "onet"
+              },
+              {
+                "signal_id": 8770,
+                "article_id": 3849,
+                "theme_id": "ukraine_war",
+                "kraj": "PL",
+                "zrodlo": "rp"
+              }
+            ],
+            "kraj": "PL",
+            "n_zrodel": 2,
+            "rama": "Rosja atakuje cywilów i dzieci; Rosja ukrywa sukcesy terytorialne Ukrainy",
+            "stance": "krytyka (67%)",
+            "article_ids": [
+              3866,
+              3849
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 9058,
+                "article_id": 4320,
+                "theme_id": "ukraine_war",
+                "kraj": "TR",
+                "zrodlo": "dailysabah"
+              },
+              {
+                "signal_id": 8725,
+                "article_id": 4330,
+                "theme_id": "ukraine_war",
+                "kraj": "TR",
+                "zrodlo": "hurriyet"
+              }
+            ],
+            "kraj": "TR",
+            "n_zrodel": 2,
+            "rama": "Rosja chce zniechęcić Zachód do pomocy Ukrainie; Rosja przegrywa na polu bitwy",
+            "stance": "neutralny (67%), alarm (33%)",
+            "article_ids": [
+              4320,
+              4330
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "średni",
+          "uzasadnienie": "2 kraje spełniają próg 2 źródeł, JS=0.541 wskazuje na wyraźną różnicę rozkładu nacechowania; przy 2 krajach pewność ograniczona do 'średni'."
+        }
+      },
+      {
+        "temat": "us_policy",
+        "tekst": "Analizowane źródła z CN (cgtn, chinanews) przedstawiają relacje USA-Chiny głównie przez ramę poparcia i stabilizacji ('Chiny i USA stabilizują relacje', 'Nowe pozycjonowanie relacji chińsko-amerykańskich'), podczas gdy źródła z HK (hongkongfp, rthk) utrzymują ton wyłącznie neutralny wobec podobnych wydarzeń (polityka wobec Tajwanu, standardy emisji).",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 9511,
+                "article_id": 4080,
+                "theme_id": "us_policy",
+                "kraj": "CN",
+                "zrodlo": "cgtn"
+              },
+              {
+                "signal_id": 9622,
+                "article_id": 4199,
+                "theme_id": "us_policy",
+                "kraj": "CN",
+                "zrodlo": "chinanews"
+              }
+            ],
+            "kraj": "CN",
+            "n_zrodel": 2,
+            "rama": "Chiny i USA stabilizują relacje; nowe pozycjonowanie relacji chińsko-amerykańskich",
+            "stance": "poparcie",
+            "article_ids": [
+              4080,
+              4199
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 8696,
+                "article_id": 4271,
+                "theme_id": "us_policy",
+                "kraj": "HK",
+                "zrodlo": "hongkongfp"
+              },
+              {
+                "signal_id": 9633,
+                "article_id": 4263,
+                "theme_id": "us_policy",
+                "kraj": "HK",
+                "zrodlo": "rthk"
+              }
+            ],
+            "kraj": "HK",
+            "n_zrodel": 2,
+            "rama": "Niespójność amerykańskiej polityki wobec Tajwanu; Trump wycofuje standardy emisji",
+            "stance": "neutralny (100%)",
+            "article_ids": [
+              4271,
+              4263
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "średni",
+          "uzasadnienie": "Oba kraje mają po 2 niezależne źródła przywołane w dowodach (spełniony próg minimalny), max_js=0.549 wskazuje wyraźną różnicę nacechowania; przy 2 krajach pewność ograniczona do 'średni'."
+        }
+      }
+    ],
+    "autoobraz": [
+      {
+        "dowody": [
+          {
+            "signal_id": 9707,
+            "article_id": 4023,
+            "theme_id": "hybrid_info",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 8461,
+            "article_id": 4038,
+            "theme_id": "emergent:domestic-policy-social-care",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 9383,
+            "article_id": 4381,
+            "theme_id": "alliances",
+            "kraj": "US",
+            "zrodlo": "fox"
+          },
+          {
+            "signal_id": 8851,
+            "article_id": 4343,
+            "theme_id": "hybrid_info",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "pewnosc": "średni",
+        "kraj": "UK",
+        "jak_opisuje_siebie": "Własne sygnały UK (bbc, guardian) o UK dotyczą głównie ochrony baz wojskowych, napięć z Argentyną i wewnętrznej debaty politycznej (opieka społeczna, Brexit) – ton przeważnie neutralny z elementami poparcia dla własnych reform.",
+        "jak_opisuja_go_inni": "Źródła z US (fox, pbs) opisują UK w ramach krytycznych – 'Brytyjski rząd słaby i ugodowy', 'Możliwy spisek przeciwko bazie USA' – z alarmem i krytyką wobec brytyjskiej odpowiedzi na zagrożenia terrorystyczne.",
+        "komentarz": "JS=0.124 jest niskie, ale jakościowo rama zewnętrzna (US) jest wyraźnie bardziej krytyczna/alarmistyczna wobec brytyjskiej polityki bezpieczeństwa niż autoopis UK, który utrzymuje ton stonowany.",
+        "article_ids": [
+          4023,
+          4038,
+          4381,
+          4343
+        ]
+      },
+      {
+        "dowody": [
+          {
+            "signal_id": 9725,
+            "article_id": 4414,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          },
+          {
+            "signal_id": 9769,
+            "article_id": 4417,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          },
+          {
+            "signal_id": 8719,
+            "article_id": 4314,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "IL",
+        "jak_opisuje_siebie": "Własne sygnały IL (haaretz) obejmują krytykę wewnętrzną (Netanjahu rządzi iluzją, izolacja Izraela na arenie międzynarodowej).",
+        "jak_opisuja_go_inni": "Źródło z TR (dailysabah) opisuje Izrael w silnie krytycznej ramie - 'Izrael łamie rozejm, zabija i eskaluje przemoc', określając działania jako kontynuację 'ludobójczej wojny'.",
+        "komentarz": "Oba głosy są krytyczne wobec Izraela, ale różnią się intensywnością i słownictwem: autoopis IL (haaretz) krytykuje politykę Netanjahu i izolację dyplomatyczną, podczas gdy zewnętrzne źródło TR używa dosadniejszych określeń jak 'ludobójcza wojna'.",
+        "article_ids": [
+          4414,
+          4417,
+          4314
+        ]
+      }
+    ],
+    "co_sie_przesuwa": [],
+    "nieobecne_w_polsce": [
+      {
+        "dowody": [
+          {
+            "signal_id": 9183,
+            "article_id": 3877,
+            "theme_id": "middle_east",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 8719,
+            "article_id": 4314,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 8446,
+            "article_id": 4326,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "hurriyet"
+          }
+        ],
+        "theme_id": "middle_east",
+        "tekst": "Bliski Wschód stanowi znaczący udział przekazu w analizowanych źródłach z TR (dailysabah, hurriyet), gdzie udział tematu sięga 50%, podczas gdy w analizowanej próbce z PL (onet) udział wynosi jedynie 2,6%. W PL temat pojawia się głównie przez pryzmat incydentu na Al-Aksa.",
+        "article_ids": [
+          3877,
+          4314,
+          4326
+        ],
+        "temat": "middle_east"
+      },
+      {
+        "dowody": [
+          {
+            "signal_id": 8936,
+            "article_id": 3872,
+            "theme_id": "us_policy",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 8668,
+            "article_id": 4365,
+            "theme_id": "us_policy",
+            "kraj": "US",
+            "zrodlo": "fox"
+          },
+          {
+            "signal_id": 8470,
+            "article_id": 4337,
+            "theme_id": "us_policy",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "theme_id": "us_policy",
+        "tekst": "Polityka wewnętrzna USA jest istotnym tematem w analizowanych źródłach z US (fox, pbs) sięgając 28,6% udziału, a w analizowanej próbce z PL (onet) zajmuje tylko 2,6%, pojawiając się wyłącznie przy okazji relacji z podróżą prezydenta Trumpa po stanach republikańskich.",
+        "article_ids": [
+          3872,
+          4365,
+          4337
+        ],
+        "temat": "us_policy"
+      }
+    ],
+    "slabe_sygnaly": [
+      {
+        "dowody": [
+          {
+            "signal_id": 8783,
+            "article_id": 4331,
+            "theme_id": "migration_borders",
+            "kraj": "TR",
+            "zrodlo": "hurriyet"
+          },
+          {
+            "signal_id": 9371,
+            "article_id": 3900,
+            "theme_id": "migration_borders",
+            "kraj": "UA",
+            "zrodlo": "ukrinform"
+          },
+          {
+            "signal_id": 8896,
+            "article_id": 4005,
+            "theme_id": "migration_borders",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          }
+        ],
+        "theme_id": "migration_borders",
+        "tekst": "Temat migracji i granic pojawia się w wielu krajach (TR, UA, UK) z przewagą ram negatywnych (kryzys humanitarny, zagrożenie demograficzne, przymusowe repatriacje), ale nie spełnia progu 3 krajów z co najmniej 2 źródłami, więc nie kwalifikuje się jako pełny wzorzec zbieżności.",
+        "article_ids": [
+          4331,
+          3900,
+          4005
+        ]
+      },
+      {
+        "dowody": [
+          {
+            "signal_id": 9899,
+            "article_id": 4161,
+            "theme_id": "ukraine_war",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          },
+          {
+            "signal_id": 8852,
+            "article_id": 4343,
+            "theme_id": "ukraine_war",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "theme_id": "ukraine_war",
+        "tekst": "Temat wojny w Ukrainie z krytycznym wydźwiękiem wobec Rosji pojawia się także w analizowanych źródłach z CN (chinanews) i US (pbs), ale każdy z tych krajów reprezentowany jest tylko przez 1 źródło w tym wątku, więc nie spełnia progu do pełnego wzorca zbieżności.",
+        "article_ids": [
+          4161,
+          4343
+        ]
+      },
+      {
+        "dowody": [
+          {
+            "signal_id": 8747,
+            "article_id": 4528,
+            "theme_id": "us_policy",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          },
+          {
+            "signal_id": 8800,
+            "article_id": 4529,
+            "theme_id": "us_policy",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          },
+          {
+            "signal_id": 8905,
+            "article_id": 4531,
+            "theme_id": "us_policy",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          }
+        ],
+        "theme_id": "us_policy",
+        "tekst": "Krytyka polityki USA (cięcia pomocy, ingerencja w sojusze, erozja niezależności instytucji) pojawia się w analizowanym źródle z BR (folha), ale reprezentowana jest tylko przez jedno źródło, co nie spełnia progu 2 źródeł na kraj.",
+        "article_ids": [
+          4528,
+          4529,
+          4531
+        ]
+      }
+    ]
+  },
+  "publication": {
+    "status": "regularny",
+    "fetched_day_utc": "2026-09-29",
+    "publication_window_start": "2026-09-28T00:00:00+00:00",
+    "publication_window_end_exclusive": "2026-09-30T00:00:00+00:00",
+    "published_min": "2026-09-27T05:04:12+00:00",
+    "published_max": "2026-09-29T19:33:49+00:00",
+    "fetched_articles": 712,
+    "late_articles": 4,
+    "late_share": 0.0056179775280898875,
+    "missing_publication": 0,
+    "future_publication": 24,
+    "older_than_24h": 33,
+    "older_than_48h": 2,
+    "today_language_allowed": false
+  },
+  "semantic_review": "pending",
+  "warnings": [
+    "walidacja po ponowieniu: 5 błędów; usunięto twierdzenia bez poprawnych odnośników. Błędy: w_skrocie.0: jeden niezależny głos w kraju wymaga niskiej pewności; w_skrocie.2: wysoka pewność wymaga progu krajów; autoobraz.2: jeden niezależny głos w kraju wymaga niskiej pewności; autoobraz.2: opisz analizowane źródła, nie wszystkie media kraju; w_skrocie.0: tekst przypisuje przekaz krajowi CN, ale żaden dowód nie pochodzi z CN",
+    "brak materiałów z aktywnych źródeł: indianexpress, alquds_ps",
+    "błędy kanałów: alquds_ps, indianexpress"
+  ]
+}
