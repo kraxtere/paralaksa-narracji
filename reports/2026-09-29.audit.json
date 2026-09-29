@@ -1,0 +1,3470 @@
+{
+  "seed": "2026-09-29",
+  "sample": [
+    {
+      "path": "slabe_sygnaly.1",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 9899,
+            "article_id": 4161,
+            "theme_id": "ukraine_war",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          },
+          {
+            "signal_id": 8852,
+            "article_id": 4343,
+            "theme_id": "ukraine_war",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "theme_id": "ukraine_war",
+        "tekst": "Temat wojny w Ukrainie z krytycznym wydźwiękiem wobec Rosji pojawia się także w analizowanych źródłach z CN (chinanews) i US (pbs), ale każdy z tych krajów reprezentowany jest tylko przez 1 źródło w tym wątku, więc nie spełnia progu do pełnego wzorca zbieżności.",
+        "article_ids": [
+          4161,
+          4343
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 9899,
+            "article_id": 4161,
+            "theme_id": "ukraine_war",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          },
+          {
+            "signal_id": 8852,
+            "article_id": 4343,
+            "theme_id": "ukraine_war",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "theme_id": "ukraine_war",
+        "tekst": "Temat wojny w Ukrainie z krytycznym wydźwiękiem wobec Rosji pojawia się także w analizowanych źródłach z CN (chinanews) i US (pbs), ale każdy z tych krajów reprezentowany jest tylko przez 1 źródło w tym wątku, więc nie spełnia progu do pełnego wzorca zbieżności.",
+        "article_ids": [
+          4161,
+          4343
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 9899,
+          "theme_id": "ukraine_war",
+          "subject_actor": "JP",
+          "content_group": "5ca7758632f7f939736445f910828523c81df33530cdade732bd81ba90d3b70d",
+          "publisher_group": "chinanews",
+          "article_id": 4161,
+          "kraj": "CN",
+          "zrodlo": "chinanews",
+          "typ_zrodla": "agency",
+          "rama": "Japonia szykuje się na wojnę dronową",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Według eksperta autonomiczne systemy bojowe AI zwiększają ryzyko przypadkowego starcia Japonii z sąsiadami w regionach wrażliwych."
+        },
+        {
+          "signal_id": 8852,
+          "theme_id": "ukraine_war",
+          "subject_actor": "UA",
+          "content_group": "886e0c7eaa27a00eb64731ef36cd1463caa37d80ebaae4e01c91a058cbf1513d",
+          "publisher_group": "pbs",
+          "article_id": 4343,
+          "kraj": "US",
+          "zrodlo": "pbs",
+          "typ_zrodla": "public",
+          "rama": "Rosja uderza w cele cywilne",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "W wyniku rosyjskich ataków na Ukrainę zginęło co najmniej siedem osób, a ponad 80 zostało rannych; uderzono m.in. w budynek Akademii Nauk w Kijowie i budynek mieszkalny w Charkowie."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "rozbieznosci.0.kraje.TR",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 9058,
+            "article_id": 4320,
+            "theme_id": "ukraine_war",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 8725,
+            "article_id": 4330,
+            "theme_id": "ukraine_war",
+            "kraj": "TR",
+            "zrodlo": "hurriyet"
+          }
+        ],
+        "kraj": "TR",
+        "n_zrodel": 2,
+        "rama": "Rosja chce zniechęcić Zachód do pomocy Ukrainie; Rosja przegrywa na polu bitwy",
+        "stance": "neutralny (67%), alarm (33%)",
+        "article_ids": [
+          4320,
+          4330
+        ]
+      },
+      "context": {
+        "temat": "ukraine_war",
+        "tekst": "Analizowane źródła z PL przedstawiają wojnę głównie przez pryzmat krytyki Rosji (ataki na cywilów, fałszowanie danych) z wysokim udziałem stance krytycznego, podczas gdy źródła z TR utrzymują ton głównie neutralny, akcentując przegraną Rosji na froncie i kampanię sabotażu bez silnego potępienia moralnego.",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 8577,
+                "article_id": 3866,
+                "theme_id": "ukraine_war",
+                "kraj": "PL",
+                "zrodlo": "onet"
+              },
+              {
+                "signal_id": 8770,
+                "article_id": 3849,
+                "theme_id": "ukraine_war",
+                "kraj": "PL",
+                "zrodlo": "rp"
+              }
+            ],
+            "kraj": "PL",
+            "n_zrodel": 2,
+            "rama": "Rosja atakuje cywilów i dzieci; Rosja ukrywa sukcesy terytorialne Ukrainy",
+            "stance": "krytyka (67%)",
+            "article_ids": [
+              3866,
+              3849
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 9058,
+                "article_id": 4320,
+                "theme_id": "ukraine_war",
+                "kraj": "TR",
+                "zrodlo": "dailysabah"
+              },
+              {
+                "signal_id": 8725,
+                "article_id": 4330,
+                "theme_id": "ukraine_war",
+                "kraj": "TR",
+                "zrodlo": "hurriyet"
+              }
+            ],
+            "kraj": "TR",
+            "n_zrodel": 2,
+            "rama": "Rosja chce zniechęcić Zachód do pomocy Ukrainie; Rosja przegrywa na polu bitwy",
+            "stance": "neutralny (67%), alarm (33%)",
+            "article_ids": [
+              4320,
+              4330
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "średni",
+          "uzasadnienie": "2 kraje spełniają próg 2 źródeł, JS=0.541 wskazuje na wyraźną różnicę rozkładu nacechowania; przy 2 krajach pewność ograniczona do 'średni'."
+        }
+      },
+      "signals": [
+        {
+          "signal_id": 9058,
+          "theme_id": "ukraine_war",
+          "subject_actor": "RU",
+          "content_group": "1c05b6d1ccc6f54442ead17fb2c5cc34d986559324c8f127401d7cb0e70aad10",
+          "publisher_group": "turkuvaz",
+          "article_id": 4320,
+          "kraj": "TR",
+          "zrodlo": "dailysabah",
+          "typ_zrodla": "private",
+          "rama": "Rosja chce zniechęcić Zachód do pomocy Ukrainie",
+          "stance": "alarm",
+          "intensywnosc": 3,
+          "streszczenie": "Według emerytowanego pułkownika cytowanego w artykule celem Rosji jest tworzenie podziałów wśród krajów Zachodu i osłabianie ich woli pomagania Ukrainie."
+        },
+        {
+          "signal_id": 8725,
+          "theme_id": "ukraine_war",
+          "subject_actor": "RU",
+          "content_group": "2658d26f36eaa5059d5867c5d3086d448693fa52f5325aad089cc046459ca6af",
+          "publisher_group": "demiroren",
+          "article_id": 4330,
+          "kraj": "TR",
+          "zrodlo": "hurriyet",
+          "typ_zrodla": "private",
+          "rama": "Rosja przegrywa na polu bitwy i w kampanii sabotażowej",
+          "stance": "neutralny",
+          "intensywnosc": 2,
+          "streszczenie": "Sekretarz generalny NATO Mark Rutte przekonuje, że Rosja przegrywa na froncie w Ukrainie i nie udaje jej się osłabić jedności oraz wsparcia sojuszników dla Kijowa."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "wzorce_zbieznosci.0.kraje.CN",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 9443,
+            "article_id": 4113,
+            "theme_id": "hybrid_info",
+            "kraj": "CN",
+            "zrodlo": "globaltimes"
+          },
+          {
+            "signal_id": 9736,
+            "article_id": 4146,
+            "theme_id": "hybrid_info",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          },
+          {
+            "signal_id": 9513,
+            "article_id": 4080,
+            "theme_id": "hybrid_info",
+            "kraj": "CN",
+            "zrodlo": "cgtn"
+          },
+          {
+            "signal_id": 9863,
+            "article_id": 4095,
+            "theme_id": "hybrid_info",
+            "kraj": "CN",
+            "zrodlo": "globaltimes"
+          }
+        ],
+        "kraj": "CN",
+        "n_zrodel": 3,
+        "rama": "Ramy krytyczne wobec Japonii jako fabrykującej zagrożenia oraz neutralne wobec sabotażu/AI, m.in. 'Atak na bazę USA możliwą operacją obcego państwa'",
+        "stance": "mieszany (krytyka/neutralny)",
+        "article_ids": [
+          4113,
+          4146,
+          4080,
+          4095
+        ]
+      },
+      "context": {
+        "temat": "hybrid_info",
+        "kierunek": "negatywny",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 9443,
+                "article_id": 4113,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "globaltimes"
+              },
+              {
+                "signal_id": 9736,
+                "article_id": 4146,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "chinanews"
+              },
+              {
+                "signal_id": 9513,
+                "article_id": 4080,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "cgtn"
+              },
+              {
+                "signal_id": 9863,
+                "article_id": 4095,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "globaltimes"
+              }
+            ],
+            "kraj": "CN",
+            "n_zrodel": 3,
+            "rama": "Ramy krytyczne wobec Japonii jako fabrykującej zagrożenia oraz neutralne wobec sabotażu/AI, m.in. 'Atak na bazę USA możliwą operacją obcego państwa'",
+            "stance": "mieszany (krytyka/neutralny)",
+            "article_ids": [
+              4113,
+              4146,
+              4080,
+              4095
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 8923,
+                "article_id": 4275,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "hongkongfp"
+              },
+              {
+                "signal_id": 9271,
+                "article_id": 4256,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "rthk"
+              },
+              {
+                "signal_id": 8762,
+                "article_id": 4222,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "scmp"
+              },
+              {
+                "signal_id": 9719,
+                "article_id": 4266,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "rthk"
+              }
+            ],
+            "kraj": "HK",
+            "n_zrodel": 3,
+            "rama": "AI agent i sabotaż jako zagrożenia dla rządów i instytucji, np. 'AI agent zagraża rządom', 'Dziennikarstwo walczy z dezinformacją'",
+            "stance": "mieszany (alarm/krytyka/neutralny)",
+            "article_ids": [
+              4256,
+              4275,
+              4222,
+              4266
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 8985,
+                "article_id": 3873,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "onet"
+              },
+              {
+                "signal_id": 9091,
+                "article_id": 3855,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "rp"
+              },
+              {
+                "signal_id": 9090,
+                "article_id": 3875,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "onet"
+              }
+            ],
+            "kraj": "PL",
+            "n_zrodel": 2,
+            "rama": "Dezinformacja i eskalacja presji Rosji na Europę",
+            "stance": "krytyka/alarm",
+            "article_ids": [
+              3873,
+              3855,
+              3875
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 9056,
+                "article_id": 4320,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "dailysabah"
+              },
+              {
+                "signal_id": 8591,
+                "article_id": 4328,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "hurriyet"
+              },
+              {
+                "signal_id": 8828,
+                "article_id": 4316,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "dailysabah"
+              },
+              {
+                "signal_id": 8724,
+                "article_id": 4330,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "hurriyet"
+              }
+            ],
+            "kraj": "TR",
+            "n_zrodel": 2,
+            "rama": "Sabotaż Rosji i naruszenia porozumień przez Iran jako zagrożenia dla Europy",
+            "stance": "alarm/krytyka",
+            "article_ids": [
+              4320,
+              4328,
+              4316,
+              4330
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 8469,
+                "article_id": 4337,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              },
+              {
+                "signal_id": 9382,
+                "article_id": 4381,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "fox"
+              },
+              {
+                "signal_id": 8606,
+                "article_id": 4384,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "npr"
+              },
+              {
+                "signal_id": 8851,
+                "article_id": 4343,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              }
+            ],
+            "kraj": "US",
+            "n_zrodel": 3,
+            "rama": "Iran/obce państwa podejrzewane o spiski terrorystyczne, AI pod kontrolą polityczną",
+            "stance": "alarm/krytyka",
+            "article_ids": [
+              4337,
+              4381,
+              4384,
+              4343
+            ]
+          }
+        ],
+        "wspolny_kierunek": "Negatywny/alarmistyczny: różne kraje różnymi słowami (Rosja sabotuje, Iran spiskuje, Japonia fabrykuje zagrożenia, AI wymyka się spod kontroli) przedstawiają narastające zagrożenie działaniami hybrydowymi i dezinformacją.",
+        "sygnaly_przeciwne": {
+          "dowody": [
+            {
+              "signal_id": 9011,
+              "article_id": 4033,
+              "theme_id": "hybrid_info",
+              "kraj": "UK",
+              "zrodlo": "guardian"
+            },
+            {
+              "signal_id": 9871,
+              "article_id": 4128,
+              "theme_id": "hybrid_info",
+              "kraj": "CN",
+              "zrodlo": "globaltimes"
+            }
+          ],
+          "tekst": "Część sygnałów w tym samym temacie ma stance neutralny lub uspokajający, np. litewski premier kwestionujący ostrzeżenia o zagrożeniu ze strony Rosji, lub chińska narracja pozytywna o własnym postępie technologicznym.",
+          "article_ids": [
+            4033,
+            4128
+          ]
+        },
+        "pewnosc": {
+          "poziom": "wysoki",
+          "uzasadnienie": "5 krajów (CN, HK, PL, TR, US) spełnia próg min. 2 źródeł na kraj (odpowiednio 3,3,2,2,3 źródła), łącznie 19 artykułów przywołanych jako dowody; zgodność kierunku (negatywny/alarmistyczny) przy różnych ramach i aktorach."
+        },
+        "trend": "brak linii bazowej"
+      },
+      "signals": [
+        {
+          "signal_id": 9443,
+          "theme_id": "hybrid_info",
+          "subject_actor": "JP",
+          "content_group": "1d460c76338feb1bfdf35ee5b115ec2148ce150e3fb9bdd7ab215933b2f3d16a",
+          "publisher_group": "peoples_daily",
+          "article_id": 4113,
+          "kraj": "CN",
+          "zrodlo": "globaltimes",
+          "typ_zrodla": "government",
+          "rama": "Japonia ucieka od historii",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł zarzuca Japonii, że żądając skreślenia klauzul o państwach wrogich, domaga się w istocie amnezji historycznej i próbuje zatrzeć pamięć o swoich zbrodniach wojennych."
+        },
+        {
+          "signal_id": 9736,
+          "theme_id": "hybrid_info",
+          "subject_actor": "YE",
+          "content_group": "f43efa797ec8c41c420a643ff6cb2b32e285590f2a52bc43b8aadc5b28475767",
+          "publisher_group": "chinanews",
+          "article_id": 4146,
+          "kraj": "CN",
+          "zrodlo": "chinanews",
+          "typ_zrodla": "agency",
+          "rama": "Nowe taktyki dronowe rozprzestrzeniają się globalnie",
+          "stance": "neutralny",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł zwraca uwagę na sygnały wskazujące, że nowe taktyki walki z użyciem dronów FPV rozprzestrzeniają się z Europy na cały świat, co może zmienić zasady walki lądowej."
+        },
+        {
+          "signal_id": 9513,
+          "theme_id": "hybrid_info",
+          "subject_actor": "CN",
+          "content_group": "c6bd8e7da4ab7480132887907ddec929c70c664d12c51da406ec4e19c2b67e8a",
+          "publisher_group": "cgtn",
+          "article_id": 4080,
+          "kraj": "CN",
+          "zrodlo": "cgtn",
+          "typ_zrodla": "government",
+          "rama": "Wspólny dialog o sztucznej inteligencji",
+          "stance": "neutralny",
+          "intensywnosc": 2,
+          "streszczenie": "Utworzono chińsko-amerykański dialog na temat sztucznej inteligencji oraz dwustronny kanał komunikacji w sprawie incydentów związanych z AI, co artykuł uznaje za nowe osiągnięcie o szczególnym znaczeniu."
+        },
+        {
+          "signal_id": 9863,
+          "theme_id": "hybrid_info",
+          "subject_actor": "JP",
+          "content_group": "796a567a3a5d672612b63bb5dca8c19324ad75863e301fbb8e0c4c5b4b12bf95",
+          "publisher_group": "peoples_daily",
+          "article_id": 4095,
+          "kraj": "CN",
+          "zrodlo": "globaltimes",
+          "typ_zrodla": "government",
+          "rama": "Japonia fabrykuje narrację o zagrożeniu zewnętrznym",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Medium zarzuca Japonii celowe fabrykowanie narracji o zagrożeniach ze strony sąsiednich państw w celu uzasadnienia własnej ekspansji militarnej i zdobycia poparcia międzynarodowego dla zmiany Karty NZ."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "nieobecne_w_polsce.1",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 8936,
+            "article_id": 3872,
+            "theme_id": "us_policy",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 8668,
+            "article_id": 4365,
+            "theme_id": "us_policy",
+            "kraj": "US",
+            "zrodlo": "fox"
+          },
+          {
+            "signal_id": 8470,
+            "article_id": 4337,
+            "theme_id": "us_policy",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "theme_id": "us_policy",
+        "tekst": "Polityka wewnętrzna USA jest istotnym tematem w analizowanych źródłach z US (fox, pbs) sięgając 28,6% udziału, a w analizowanej próbce z PL (onet) zajmuje tylko 2,6%, pojawiając się wyłącznie przy okazji relacji z podróżą prezydenta Trumpa po stanach republikańskich.",
+        "article_ids": [
+          3872,
+          4365,
+          4337
+        ],
+        "temat": "us_policy"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 8936,
+            "article_id": 3872,
+            "theme_id": "us_policy",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 8668,
+            "article_id": 4365,
+            "theme_id": "us_policy",
+            "kraj": "US",
+            "zrodlo": "fox"
+          },
+          {
+            "signal_id": 8470,
+            "article_id": 4337,
+            "theme_id": "us_policy",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "theme_id": "us_policy",
+        "tekst": "Polityka wewnętrzna USA jest istotnym tematem w analizowanych źródłach z US (fox, pbs) sięgając 28,6% udziału, a w analizowanej próbce z PL (onet) zajmuje tylko 2,6%, pojawiając się wyłącznie przy okazji relacji z podróżą prezydenta Trumpa po stanach republikańskich.",
+        "article_ids": [
+          3872,
+          4365,
+          4337
+        ],
+        "temat": "us_policy"
+      },
+      "signals": [
+        {
+          "signal_id": 8936,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "401bf248f66a71d64c63764a399f11b5fb72c0094c3ad0011ab6e0da4d88d0f5",
+          "publisher_group": "onet",
+          "article_id": 3872,
+          "kraj": "PL",
+          "zrodlo": "onet",
+          "typ_zrodla": "private",
+          "rama": "Prezydent w trasie ratuje bastiony Republikanów",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Prezydent Donald Trump rozpoczyna intensywną serię podróży po stanach tradycyjnie republikańskich, aby mobilizować wyborców przed wyborami śródokresowymi."
+        },
+        {
+          "signal_id": 8668,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "730dc04ce85005a0ceb38eecf87e67602fd2bba6120c427d06d88abb23a8fe0b",
+          "publisher_group": "fox",
+          "article_id": 4365,
+          "kraj": "US",
+          "zrodlo": "fox",
+          "typ_zrodla": "private",
+          "rama": "USA wygrywają z Iranem",
+          "stance": "poparcie",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł promuje opinię Hugh Hewitta, że prezydent Trump i amerykańskie wojsko pokonali Iran, przedstawiając to jako fakt w nagłówku sekcji opinii."
+        },
+        {
+          "signal_id": 8470,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "cec856f584e6308a8cf06383252fd06166289be27fc5aa623d978eb85ceb51ed",
+          "publisher_group": "pbs",
+          "article_id": 4337,
+          "kraj": "US",
+          "zrodlo": "pbs",
+          "typ_zrodla": "public",
+          "rama": "Rządowa AI kontra narracja prezydenta",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Serwis America.gov, promowany przez administrację Trumpa jako nowe cyfrowe wejście do rządu, w wielu kwestiach przeczy twierdzeniom prezydenta – m.in. o wyborach 2020, zmianie klimatu czy jego pensji."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "rozbieznosci.0.kraje.PL",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 8577,
+            "article_id": 3866,
+            "theme_id": "ukraine_war",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 8770,
+            "article_id": 3849,
+            "theme_id": "ukraine_war",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          }
+        ],
+        "kraj": "PL",
+        "n_zrodel": 2,
+        "rama": "Rosja atakuje cywilów i dzieci; Rosja ukrywa sukcesy terytorialne Ukrainy",
+        "stance": "krytyka (67%)",
+        "article_ids": [
+          3866,
+          3849
+        ]
+      },
+      "context": {
+        "temat": "ukraine_war",
+        "tekst": "Analizowane źródła z PL przedstawiają wojnę głównie przez pryzmat krytyki Rosji (ataki na cywilów, fałszowanie danych) z wysokim udziałem stance krytycznego, podczas gdy źródła z TR utrzymują ton głównie neutralny, akcentując przegraną Rosji na froncie i kampanię sabotażu bez silnego potępienia moralnego.",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 8577,
+                "article_id": 3866,
+                "theme_id": "ukraine_war",
+                "kraj": "PL",
+                "zrodlo": "onet"
+              },
+              {
+                "signal_id": 8770,
+                "article_id": 3849,
+                "theme_id": "ukraine_war",
+                "kraj": "PL",
+                "zrodlo": "rp"
+              }
+            ],
+            "kraj": "PL",
+            "n_zrodel": 2,
+            "rama": "Rosja atakuje cywilów i dzieci; Rosja ukrywa sukcesy terytorialne Ukrainy",
+            "stance": "krytyka (67%)",
+            "article_ids": [
+              3866,
+              3849
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 9058,
+                "article_id": 4320,
+                "theme_id": "ukraine_war",
+                "kraj": "TR",
+                "zrodlo": "dailysabah"
+              },
+              {
+                "signal_id": 8725,
+                "article_id": 4330,
+                "theme_id": "ukraine_war",
+                "kraj": "TR",
+                "zrodlo": "hurriyet"
+              }
+            ],
+            "kraj": "TR",
+            "n_zrodel": 2,
+            "rama": "Rosja chce zniechęcić Zachód do pomocy Ukrainie; Rosja przegrywa na polu bitwy",
+            "stance": "neutralny (67%), alarm (33%)",
+            "article_ids": [
+              4320,
+              4330
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "średni",
+          "uzasadnienie": "2 kraje spełniają próg 2 źródeł, JS=0.541 wskazuje na wyraźną różnicę rozkładu nacechowania; przy 2 krajach pewność ograniczona do 'średni'."
+        }
+      },
+      "signals": [
+        {
+          "signal_id": 8577,
+          "theme_id": "ukraine_war",
+          "subject_actor": "UA",
+          "content_group": "75b0e2c80b30860de2410e17fd36dcc0c64db7731dc56c408f055e279e13292a",
+          "publisher_group": "onet",
+          "article_id": 3866,
+          "kraj": "PL",
+          "zrodlo": "onet",
+          "typ_zrodla": "private",
+          "rama": "Rosja atakuje cywilów i dzieci",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł opisuje rosyjskie bombardowanie szkoły w Sumach, w której przebywali uczniowie klas 1–4, oraz inne ataki na obiekty cywilne w Ukrainie. Podkreśla, że dzieci uratowano dzięki ewakuacji do schronu, a w wyniku ataków zginęły dwie osoby."
+        },
+        {
+          "signal_id": 8770,
+          "theme_id": "ukraine_war",
+          "subject_actor": "UA",
+          "content_group": "3849",
+          "publisher_group": "rp",
+          "article_id": 3849,
+          "kraj": "PL",
+          "zrodlo": "rp",
+          "typ_zrodla": "private",
+          "rama": "Rosja ukrywa ukraińskie sukcesy terytorialne",
+          "stance": "krytyka",
+          "intensywnosc": 2,
+          "streszczenie": "Według leadu Rosja fałszowała dane o zdobyczach terytorialnych, przez co przeoczyła ukraińską kontrofensywę i utratę znacznego terytorium."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "rozbieznosci.1.kraje.CN",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 9511,
+            "article_id": 4080,
+            "theme_id": "us_policy",
+            "kraj": "CN",
+            "zrodlo": "cgtn"
+          },
+          {
+            "signal_id": 9622,
+            "article_id": 4199,
+            "theme_id": "us_policy",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          }
+        ],
+        "kraj": "CN",
+        "n_zrodel": 2,
+        "rama": "Chiny i USA stabilizują relacje; nowe pozycjonowanie relacji chińsko-amerykańskich",
+        "stance": "poparcie",
+        "article_ids": [
+          4080,
+          4199
+        ]
+      },
+      "context": {
+        "temat": "us_policy",
+        "tekst": "Analizowane źródła z CN (cgtn, chinanews) przedstawiają relacje USA-Chiny głównie przez ramę poparcia i stabilizacji ('Chiny i USA stabilizują relacje', 'Nowe pozycjonowanie relacji chińsko-amerykańskich'), podczas gdy źródła z HK (hongkongfp, rthk) utrzymują ton wyłącznie neutralny wobec podobnych wydarzeń (polityka wobec Tajwanu, standardy emisji).",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 9511,
+                "article_id": 4080,
+                "theme_id": "us_policy",
+                "kraj": "CN",
+                "zrodlo": "cgtn"
+              },
+              {
+                "signal_id": 9622,
+                "article_id": 4199,
+                "theme_id": "us_policy",
+                "kraj": "CN",
+                "zrodlo": "chinanews"
+              }
+            ],
+            "kraj": "CN",
+            "n_zrodel": 2,
+            "rama": "Chiny i USA stabilizują relacje; nowe pozycjonowanie relacji chińsko-amerykańskich",
+            "stance": "poparcie",
+            "article_ids": [
+              4080,
+              4199
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 8696,
+                "article_id": 4271,
+                "theme_id": "us_policy",
+                "kraj": "HK",
+                "zrodlo": "hongkongfp"
+              },
+              {
+                "signal_id": 9633,
+                "article_id": 4263,
+                "theme_id": "us_policy",
+                "kraj": "HK",
+                "zrodlo": "rthk"
+              }
+            ],
+            "kraj": "HK",
+            "n_zrodel": 2,
+            "rama": "Niespójność amerykańskiej polityki wobec Tajwanu; Trump wycofuje standardy emisji",
+            "stance": "neutralny (100%)",
+            "article_ids": [
+              4271,
+              4263
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "średni",
+          "uzasadnienie": "Oba kraje mają po 2 niezależne źródła przywołane w dowodach (spełniony próg minimalny), max_js=0.549 wskazuje wyraźną różnicę nacechowania; przy 2 krajach pewność ograniczona do 'średni'."
+        }
+      },
+      "signals": [
+        {
+          "signal_id": 9511,
+          "theme_id": "us_policy",
+          "subject_actor": "CN",
+          "content_group": "c6bd8e7da4ab7480132887907ddec929c70c664d12c51da406ec4e19c2b67e8a",
+          "publisher_group": "cgtn",
+          "article_id": 4080,
+          "kraj": "CN",
+          "zrodlo": "cgtn",
+          "typ_zrodla": "government",
+          "rama": "Chiny i USA stabilizują relacje",
+          "stance": "poparcie",
+          "intensywnosc": 4,
+          "streszczenie": "Chińsko-amerykański szczyt owocuje ośmioma uzgodnieniami, które zdaniem artykułu budują konstruktywne relacje o strategicznej stabilności, oparte na szacunku, sprawiedliwości i wzajemności, dając światu pewność i stabilizację."
+        },
+        {
+          "signal_id": 9622,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "a07690f635b9ee4979acea8e1ce628eb2a3692138a2ff4ce05bf5624b8c42a91",
+          "publisher_group": "chinanews",
+          "article_id": 4199,
+          "kraj": "CN",
+          "zrodlo": "chinanews",
+          "typ_zrodla": "agency",
+          "rama": "Nowe pozycjonowanie relacji chińsko-amerykańskich",
+          "stance": "poparcie",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia wizytę państwową Xi Jinpinga w USA jako wydarzenie, które nadało nową, pogłębioną definicję relacjom chińsko-amerykańskim, opartą na zasadach szacunku, sprawiedliwości i równości."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "wzorce_zbieznosci.0.kraje.TR",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 9056,
+            "article_id": 4320,
+            "theme_id": "hybrid_info",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 8591,
+            "article_id": 4328,
+            "theme_id": "hybrid_info",
+            "kraj": "TR",
+            "zrodlo": "hurriyet"
+          },
+          {
+            "signal_id": 8828,
+            "article_id": 4316,
+            "theme_id": "hybrid_info",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 8724,
+            "article_id": 4330,
+            "theme_id": "hybrid_info",
+            "kraj": "TR",
+            "zrodlo": "hurriyet"
+          }
+        ],
+        "kraj": "TR",
+        "n_zrodel": 2,
+        "rama": "Sabotaż Rosji i naruszenia porozumień przez Iran jako zagrożenia dla Europy",
+        "stance": "alarm/krytyka",
+        "article_ids": [
+          4320,
+          4328,
+          4316,
+          4330
+        ]
+      },
+      "context": {
+        "temat": "hybrid_info",
+        "kierunek": "negatywny",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 9443,
+                "article_id": 4113,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "globaltimes"
+              },
+              {
+                "signal_id": 9736,
+                "article_id": 4146,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "chinanews"
+              },
+              {
+                "signal_id": 9513,
+                "article_id": 4080,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "cgtn"
+              },
+              {
+                "signal_id": 9863,
+                "article_id": 4095,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "globaltimes"
+              }
+            ],
+            "kraj": "CN",
+            "n_zrodel": 3,
+            "rama": "Ramy krytyczne wobec Japonii jako fabrykującej zagrożenia oraz neutralne wobec sabotażu/AI, m.in. 'Atak na bazę USA możliwą operacją obcego państwa'",
+            "stance": "mieszany (krytyka/neutralny)",
+            "article_ids": [
+              4113,
+              4146,
+              4080,
+              4095
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 8923,
+                "article_id": 4275,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "hongkongfp"
+              },
+              {
+                "signal_id": 9271,
+                "article_id": 4256,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "rthk"
+              },
+              {
+                "signal_id": 8762,
+                "article_id": 4222,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "scmp"
+              },
+              {
+                "signal_id": 9719,
+                "article_id": 4266,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "rthk"
+              }
+            ],
+            "kraj": "HK",
+            "n_zrodel": 3,
+            "rama": "AI agent i sabotaż jako zagrożenia dla rządów i instytucji, np. 'AI agent zagraża rządom', 'Dziennikarstwo walczy z dezinformacją'",
+            "stance": "mieszany (alarm/krytyka/neutralny)",
+            "article_ids": [
+              4256,
+              4275,
+              4222,
+              4266
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 8985,
+                "article_id": 3873,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "onet"
+              },
+              {
+                "signal_id": 9091,
+                "article_id": 3855,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "rp"
+              },
+              {
+                "signal_id": 9090,
+                "article_id": 3875,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "onet"
+              }
+            ],
+            "kraj": "PL",
+            "n_zrodel": 2,
+            "rama": "Dezinformacja i eskalacja presji Rosji na Europę",
+            "stance": "krytyka/alarm",
+            "article_ids": [
+              3873,
+              3855,
+              3875
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 9056,
+                "article_id": 4320,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "dailysabah"
+              },
+              {
+                "signal_id": 8591,
+                "article_id": 4328,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "hurriyet"
+              },
+              {
+                "signal_id": 8828,
+                "article_id": 4316,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "dailysabah"
+              },
+              {
+                "signal_id": 8724,
+                "article_id": 4330,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "hurriyet"
+              }
+            ],
+            "kraj": "TR",
+            "n_zrodel": 2,
+            "rama": "Sabotaż Rosji i naruszenia porozumień przez Iran jako zagrożenia dla Europy",
+            "stance": "alarm/krytyka",
+            "article_ids": [
+              4320,
+              4328,
+              4316,
+              4330
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 8469,
+                "article_id": 4337,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              },
+              {
+                "signal_id": 9382,
+                "article_id": 4381,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "fox"
+              },
+              {
+                "signal_id": 8606,
+                "article_id": 4384,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "npr"
+              },
+              {
+                "signal_id": 8851,
+                "article_id": 4343,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              }
+            ],
+            "kraj": "US",
+            "n_zrodel": 3,
+            "rama": "Iran/obce państwa podejrzewane o spiski terrorystyczne, AI pod kontrolą polityczną",
+            "stance": "alarm/krytyka",
+            "article_ids": [
+              4337,
+              4381,
+              4384,
+              4343
+            ]
+          }
+        ],
+        "wspolny_kierunek": "Negatywny/alarmistyczny: różne kraje różnymi słowami (Rosja sabotuje, Iran spiskuje, Japonia fabrykuje zagrożenia, AI wymyka się spod kontroli) przedstawiają narastające zagrożenie działaniami hybrydowymi i dezinformacją.",
+        "sygnaly_przeciwne": {
+          "dowody": [
+            {
+              "signal_id": 9011,
+              "article_id": 4033,
+              "theme_id": "hybrid_info",
+              "kraj": "UK",
+              "zrodlo": "guardian"
+            },
+            {
+              "signal_id": 9871,
+              "article_id": 4128,
+              "theme_id": "hybrid_info",
+              "kraj": "CN",
+              "zrodlo": "globaltimes"
+            }
+          ],
+          "tekst": "Część sygnałów w tym samym temacie ma stance neutralny lub uspokajający, np. litewski premier kwestionujący ostrzeżenia o zagrożeniu ze strony Rosji, lub chińska narracja pozytywna o własnym postępie technologicznym.",
+          "article_ids": [
+            4033,
+            4128
+          ]
+        },
+        "pewnosc": {
+          "poziom": "wysoki",
+          "uzasadnienie": "5 krajów (CN, HK, PL, TR, US) spełnia próg min. 2 źródeł na kraj (odpowiednio 3,3,2,2,3 źródła), łącznie 19 artykułów przywołanych jako dowody; zgodność kierunku (negatywny/alarmistyczny) przy różnych ramach i aktorach."
+        },
+        "trend": "brak linii bazowej"
+      },
+      "signals": [
+        {
+          "signal_id": 9056,
+          "theme_id": "hybrid_info",
+          "subject_actor": "RU",
+          "content_group": "1c05b6d1ccc6f54442ead17fb2c5cc34d986559324c8f127401d7cb0e70aad10",
+          "publisher_group": "turkuvaz",
+          "article_id": 4320,
+          "kraj": "TR",
+          "zrodlo": "dailysabah",
+          "typ_zrodla": "private",
+          "rama": "Rosja nasila sabotaż w Europie",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przekazuje ostrzeżenie fińskiego wywiadu o nasileniu w ostatnich miesiącach zagrożenia sabotażem powiązanym z Rosją w całej Europie, w tym potencjalnie w Finlandii."
+        },
+        {
+          "signal_id": 8591,
+          "theme_id": "hybrid_info",
+          "subject_actor": "IR",
+          "content_group": "9accc34e6d8bc7fb8add1a6a4250d80336bd80781219c98d0ea2138c5f77d594",
+          "publisher_group": "demiroren",
+          "article_id": 4328,
+          "kraj": "TR",
+          "zrodlo": "hurriyet",
+          "typ_zrodla": "private",
+          "rama": "Iran naruszył tymczasowe porozumienie",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Iran zerwał czerwcowe memorandum, ostrzeliwując statki handlowe w cieśninie Ormuz, co podważa wiarygodność jego zobowiązań w oczach USA."
+        },
+        {
+          "signal_id": 8828,
+          "theme_id": "hybrid_info",
+          "subject_actor": "US",
+          "content_group": "e11024c50539fe5da5e5b7c08f6a5bb767d98cf1a2e8e51cf3e778b8d7b511a4",
+          "publisher_group": "turkuvaz",
+          "article_id": 4316,
+          "kraj": "TR",
+          "zrodlo": "dailysabah",
+          "typ_zrodla": "private",
+          "rama": "AI napędza wizualną mowę nienawiści",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Generatywna sztuczna inteligencja jest przedstawiana jako narzędzie \"industrializujące\" wizualny hejt, umożliwiające masowe tworzenie obraźliwych karykatur przedstawiających Południowych Azjatów."
+        },
+        {
+          "signal_id": 8724,
+          "theme_id": "hybrid_info",
+          "subject_actor": "RU",
+          "content_group": "2658d26f36eaa5059d5867c5d3086d448693fa52f5325aad089cc046459ca6af",
+          "publisher_group": "demiroren",
+          "article_id": 4330,
+          "kraj": "TR",
+          "zrodlo": "hurriyet",
+          "typ_zrodla": "private",
+          "rama": "Rosja prowadzi kampanię sabotażu w Europie",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł opisuje kampanię sabotażu i działań hybrydowych prowadzoną przez Rosję w Europie, wymierzoną w kraje wspierające Ukrainę, w tym podpalenie estońskiej firmy zbrojeniowej."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "wzorce_zbieznosci.0.kraje.US",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 8469,
+            "article_id": 4337,
+            "theme_id": "hybrid_info",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          },
+          {
+            "signal_id": 9382,
+            "article_id": 4381,
+            "theme_id": "hybrid_info",
+            "kraj": "US",
+            "zrodlo": "fox"
+          },
+          {
+            "signal_id": 8606,
+            "article_id": 4384,
+            "theme_id": "hybrid_info",
+            "kraj": "US",
+            "zrodlo": "npr"
+          },
+          {
+            "signal_id": 8851,
+            "article_id": 4343,
+            "theme_id": "hybrid_info",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "kraj": "US",
+        "n_zrodel": 3,
+        "rama": "Iran/obce państwa podejrzewane o spiski terrorystyczne, AI pod kontrolą polityczną",
+        "stance": "alarm/krytyka",
+        "article_ids": [
+          4337,
+          4381,
+          4384,
+          4343
+        ]
+      },
+      "context": {
+        "temat": "hybrid_info",
+        "kierunek": "negatywny",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 9443,
+                "article_id": 4113,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "globaltimes"
+              },
+              {
+                "signal_id": 9736,
+                "article_id": 4146,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "chinanews"
+              },
+              {
+                "signal_id": 9513,
+                "article_id": 4080,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "cgtn"
+              },
+              {
+                "signal_id": 9863,
+                "article_id": 4095,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "globaltimes"
+              }
+            ],
+            "kraj": "CN",
+            "n_zrodel": 3,
+            "rama": "Ramy krytyczne wobec Japonii jako fabrykującej zagrożenia oraz neutralne wobec sabotażu/AI, m.in. 'Atak na bazę USA możliwą operacją obcego państwa'",
+            "stance": "mieszany (krytyka/neutralny)",
+            "article_ids": [
+              4113,
+              4146,
+              4080,
+              4095
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 8923,
+                "article_id": 4275,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "hongkongfp"
+              },
+              {
+                "signal_id": 9271,
+                "article_id": 4256,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "rthk"
+              },
+              {
+                "signal_id": 8762,
+                "article_id": 4222,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "scmp"
+              },
+              {
+                "signal_id": 9719,
+                "article_id": 4266,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "rthk"
+              }
+            ],
+            "kraj": "HK",
+            "n_zrodel": 3,
+            "rama": "AI agent i sabotaż jako zagrożenia dla rządów i instytucji, np. 'AI agent zagraża rządom', 'Dziennikarstwo walczy z dezinformacją'",
+            "stance": "mieszany (alarm/krytyka/neutralny)",
+            "article_ids": [
+              4256,
+              4275,
+              4222,
+              4266
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 8985,
+                "article_id": 3873,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "onet"
+              },
+              {
+                "signal_id": 9091,
+                "article_id": 3855,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "rp"
+              },
+              {
+                "signal_id": 9090,
+                "article_id": 3875,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "onet"
+              }
+            ],
+            "kraj": "PL",
+            "n_zrodel": 2,
+            "rama": "Dezinformacja i eskalacja presji Rosji na Europę",
+            "stance": "krytyka/alarm",
+            "article_ids": [
+              3873,
+              3855,
+              3875
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 9056,
+                "article_id": 4320,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "dailysabah"
+              },
+              {
+                "signal_id": 8591,
+                "article_id": 4328,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "hurriyet"
+              },
+              {
+                "signal_id": 8828,
+                "article_id": 4316,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "dailysabah"
+              },
+              {
+                "signal_id": 8724,
+                "article_id": 4330,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "hurriyet"
+              }
+            ],
+            "kraj": "TR",
+            "n_zrodel": 2,
+            "rama": "Sabotaż Rosji i naruszenia porozumień przez Iran jako zagrożenia dla Europy",
+            "stance": "alarm/krytyka",
+            "article_ids": [
+              4320,
+              4328,
+              4316,
+              4330
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 8469,
+                "article_id": 4337,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              },
+              {
+                "signal_id": 9382,
+                "article_id": 4381,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "fox"
+              },
+              {
+                "signal_id": 8606,
+                "article_id": 4384,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "npr"
+              },
+              {
+                "signal_id": 8851,
+                "article_id": 4343,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              }
+            ],
+            "kraj": "US",
+            "n_zrodel": 3,
+            "rama": "Iran/obce państwa podejrzewane o spiski terrorystyczne, AI pod kontrolą polityczną",
+            "stance": "alarm/krytyka",
+            "article_ids": [
+              4337,
+              4381,
+              4384,
+              4343
+            ]
+          }
+        ],
+        "wspolny_kierunek": "Negatywny/alarmistyczny: różne kraje różnymi słowami (Rosja sabotuje, Iran spiskuje, Japonia fabrykuje zagrożenia, AI wymyka się spod kontroli) przedstawiają narastające zagrożenie działaniami hybrydowymi i dezinformacją.",
+        "sygnaly_przeciwne": {
+          "dowody": [
+            {
+              "signal_id": 9011,
+              "article_id": 4033,
+              "theme_id": "hybrid_info",
+              "kraj": "UK",
+              "zrodlo": "guardian"
+            },
+            {
+              "signal_id": 9871,
+              "article_id": 4128,
+              "theme_id": "hybrid_info",
+              "kraj": "CN",
+              "zrodlo": "globaltimes"
+            }
+          ],
+          "tekst": "Część sygnałów w tym samym temacie ma stance neutralny lub uspokajający, np. litewski premier kwestionujący ostrzeżenia o zagrożeniu ze strony Rosji, lub chińska narracja pozytywna o własnym postępie technologicznym.",
+          "article_ids": [
+            4033,
+            4128
+          ]
+        },
+        "pewnosc": {
+          "poziom": "wysoki",
+          "uzasadnienie": "5 krajów (CN, HK, PL, TR, US) spełnia próg min. 2 źródeł na kraj (odpowiednio 3,3,2,2,3 źródła), łącznie 19 artykułów przywołanych jako dowody; zgodność kierunku (negatywny/alarmistyczny) przy różnych ramach i aktorach."
+        },
+        "trend": "brak linii bazowej"
+      },
+      "signals": [
+        {
+          "signal_id": 8469,
+          "theme_id": "hybrid_info",
+          "subject_actor": "US",
+          "content_group": "cec856f584e6308a8cf06383252fd06166289be27fc5aa623d978eb85ceb51ed",
+          "publisher_group": "pbs",
+          "article_id": 4337,
+          "kraj": "US",
+          "zrodlo": "pbs",
+          "typ_zrodla": "public",
+          "rama": "AI pod kontrolą polityczną",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł pokazuje, że rządowy serwis AI America.gov początkowo udzielał odpowiedzi sprzecznych z narracją Trumpa, ale w ciągu chwil zaczął je modyfikować i odmawiać odpowiedzi na pytania polityczne, co sugeruje ingerencję polityczną w treści serwisu."
+        },
+        {
+          "signal_id": 9382,
+          "theme_id": "hybrid_info",
+          "subject_actor": "IR",
+          "content_group": "0bdd642cab0fe080588df599b9ebdd6f38cfd648b586e1b387dd2996c755a5e2",
+          "publisher_group": "fox",
+          "article_id": 4381,
+          "kraj": "US",
+          "zrodlo": "fox",
+          "typ_zrodla": "private",
+          "rama": "Iran podejrzany o terroryzm w Europie",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł relacjonuje udaremnienie spisku bombowego w pobliżu brytyjskiej bazy RAF Fairford używanej przez wojsko USA, wskazując, że eksperci podejrzewają o zaplanowanie ataku Iran, choć rozważane są też motywy rosyjskie i islamistyczne."
+        },
+        {
+          "signal_id": 8606,
+          "theme_id": "hybrid_info",
+          "subject_actor": "UK",
+          "content_group": "ea8a7a9d2b90b50cd00ca9c861284f22a34f3a1f8382cb9f96fa37d46b8b67e2",
+          "publisher_group": "npr",
+          "article_id": 4384,
+          "kraj": "US",
+          "zrodlo": "npr",
+          "typ_zrodla": "public",
+          "rama": "Możliwa operacja obcego państwa na terenie Wielkiej Brytanii",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Tekst przekazuje, że brytyjskie władze rozważają możliwość, iż zatrzymani mężczyźni działali na zlecenie obcego państwa, świadomie lub nieświadomie."
+        },
+        {
+          "signal_id": 8851,
+          "theme_id": "hybrid_info",
+          "subject_actor": "UK",
+          "content_group": "886e0c7eaa27a00eb64731ef36cd1463caa37d80ebaae4e01c91a058cbf1513d",
+          "publisher_group": "pbs",
+          "article_id": 4343,
+          "kraj": "US",
+          "zrodlo": "pbs",
+          "typ_zrodla": "public",
+          "rama": "Możliwy spisek przeciwko bazie USA",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Brytyjska policja antyterrorystyczna prowadzi śledztwo w sprawie możliwego spisku wymierzonego w amerykańską bazę lotniczą RAF Fairford, zatrzymano pięciu Brytyjczyków pod zarzutem przestępstw związanych z materiałami wybuchowymi."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "slabe_sygnaly.2",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 8747,
+            "article_id": 4528,
+            "theme_id": "us_policy",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          },
+          {
+            "signal_id": 8800,
+            "article_id": 4529,
+            "theme_id": "us_policy",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          },
+          {
+            "signal_id": 8905,
+            "article_id": 4531,
+            "theme_id": "us_policy",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          }
+        ],
+        "theme_id": "us_policy",
+        "tekst": "Krytyka polityki USA (cięcia pomocy, ingerencja w sojusze, erozja niezależności instytucji) pojawia się w analizowanym źródle z BR (folha), ale reprezentowana jest tylko przez jedno źródło, co nie spełnia progu 2 źródeł na kraj.",
+        "article_ids": [
+          4528,
+          4529,
+          4531
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 8747,
+            "article_id": 4528,
+            "theme_id": "us_policy",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          },
+          {
+            "signal_id": 8800,
+            "article_id": 4529,
+            "theme_id": "us_policy",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          },
+          {
+            "signal_id": 8905,
+            "article_id": 4531,
+            "theme_id": "us_policy",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          }
+        ],
+        "theme_id": "us_policy",
+        "tekst": "Krytyka polityki USA (cięcia pomocy, ingerencja w sojusze, erozja niezależności instytucji) pojawia się w analizowanym źródle z BR (folha), ale reprezentowana jest tylko przez jedno źródło, co nie spełnia progu 2 źródeł na kraj.",
+        "article_ids": [
+          4528,
+          4529,
+          4531
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 8747,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "0798cb057c94601f81d5f54e5342aa509e01441c0bf0f3993fb1c86a7e32628e",
+          "publisher_group": "folha",
+          "article_id": 4528,
+          "kraj": "BR",
+          "zrodlo": "folha",
+          "typ_zrodla": "private",
+          "rama": "Cięcia USA osłabiają pomoc humanitarną",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Cięcia amerykańskiej pomocy zagranicznej są wskazywane jako jedna z głównych przyczyn najgorszego w historii kryzysu finansowania Acnur, przez co agencja dysponuje o 24% mniejszym budżetem niż rok wcześniej."
+        },
+        {
+          "signal_id": 8800,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "8419563711081e69f9b312d92bf28ee1d6853fb310d08f295f216562fd2567a4",
+          "publisher_group": "folha",
+          "article_id": 4529,
+          "kraj": "BR",
+          "zrodlo": "folha",
+          "typ_zrodla": "private",
+          "rama": "Administracja Trumpa jako okno możliwości dla Rosji",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł sugeruje, że administracja Trumpa, przychylna Rosji i niechętna europejskim sojusznikom, mogłaby stworzyć dogodny moment na testowanie przez Putina granic sojuszniczych NATO."
+        },
+        {
+          "signal_id": 8905,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "540e3d6ec3aa76bc1ef9f12a5fb86130b15602227c8905294849d1aa4408e9c0",
+          "publisher_group": "folha",
+          "article_id": 4531,
+          "kraj": "BR",
+          "zrodlo": "folha",
+          "typ_zrodla": "private",
+          "rama": "Erratyczna polityka USA osłabia dolara",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Relacja z raportu Itaú wskazuje, że niestabilna polityka wewnętrzna USA i wątpliwości co do niezależności Fed odpowiadają łącznie za około 8 punktów procentowych spadku wartości dolara od początku 2025 roku."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "nieobecne_w_polsce.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 9183,
+            "article_id": 3877,
+            "theme_id": "middle_east",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 8719,
+            "article_id": 4314,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 8446,
+            "article_id": 4326,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "hurriyet"
+          }
+        ],
+        "theme_id": "middle_east",
+        "tekst": "Bliski Wschód stanowi znaczący udział przekazu w analizowanych źródłach z TR (dailysabah, hurriyet), gdzie udział tematu sięga 50%, podczas gdy w analizowanej próbce z PL (onet) udział wynosi jedynie 2,6%. W PL temat pojawia się głównie przez pryzmat incydentu na Al-Aksa.",
+        "article_ids": [
+          3877,
+          4314,
+          4326
+        ],
+        "temat": "middle_east"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 9183,
+            "article_id": 3877,
+            "theme_id": "middle_east",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 8719,
+            "article_id": 4314,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 8446,
+            "article_id": 4326,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "hurriyet"
+          }
+        ],
+        "theme_id": "middle_east",
+        "tekst": "Bliski Wschód stanowi znaczący udział przekazu w analizowanych źródłach z TR (dailysabah, hurriyet), gdzie udział tematu sięga 50%, podczas gdy w analizowanej próbce z PL (onet) udział wynosi jedynie 2,6%. W PL temat pojawia się głównie przez pryzmat incydentu na Al-Aksa.",
+        "article_ids": [
+          3877,
+          4314,
+          4326
+        ],
+        "temat": "middle_east"
+      },
+      "signals": [
+        {
+          "signal_id": 9183,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "ef8338ebaa8c3da7fe8c10c404ceb435dc3fa796fa7bbd338236ebf6ba637216",
+          "publisher_group": "onet",
+          "article_id": 3877,
+          "kraj": "PL",
+          "zrodlo": "onet",
+          "typ_zrodla": "private",
+          "rama": "Żydowscy osadnicy prowokują w meczecie Al-Aksa",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Żydowscy osadnicy pod ochroną izraelskiej policji wtargnęli na teren meczetu Al-Aksa, odprawiali tam modlitwy i rytuały religijne oraz atakowali Palestyńczyków na Starym Mieście."
+        },
+        {
+          "signal_id": 8719,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "b43c1cac8a6060fda94b3cc3147d42ff057557052eb2d63e0e00d067ff2a5e23",
+          "publisher_group": "turkuvaz",
+          "article_id": 4314,
+          "kraj": "TR",
+          "zrodlo": "dailysabah",
+          "typ_zrodla": "private",
+          "rama": "Izrael łamie rozejm, zabija i eskaluje przemoc",
+          "stance": "krytyka",
+          "intensywnosc": 5,
+          "streszczenie": "Artykuł opisuje kolejne izraelskie ataki w Strefie Gazy, w których zginęli Palestyńczycy, oraz przedstawia je jako kontynuację łamania amerykańskiego rozejmu i ludobójczej wojny Izraela."
+        },
+        {
+          "signal_id": 8446,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "7659b391cc87d2d7e9aac1bce7b1c78e74dda46eda8e1baa11ca7f2605d33057",
+          "publisher_group": "demiroren",
+          "article_id": 4326,
+          "kraj": "TR",
+          "zrodlo": "hurriyet",
+          "typ_zrodla": "private",
+          "rama": "Izrael zacieśnia relacje z ZEA",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Kancelaria premiera Izraela potwierdziła, że Benjamin Netanjahu odwiedził Zjednoczone Emiraty Arabskie i spotkał się z prezydentem szejkiem Mohammedem bin Zayedem Al Nahyanem. Spotkanie dotyczyło wzmocnienia relacji dwustronnych i wyzwań regionalnych."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "slabe_sygnaly.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 8783,
+            "article_id": 4331,
+            "theme_id": "migration_borders",
+            "kraj": "TR",
+            "zrodlo": "hurriyet"
+          },
+          {
+            "signal_id": 9371,
+            "article_id": 3900,
+            "theme_id": "migration_borders",
+            "kraj": "UA",
+            "zrodlo": "ukrinform"
+          },
+          {
+            "signal_id": 8896,
+            "article_id": 4005,
+            "theme_id": "migration_borders",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          }
+        ],
+        "theme_id": "migration_borders",
+        "tekst": "Temat migracji i granic pojawia się w wielu krajach (TR, UA, UK) z przewagą ram negatywnych (kryzys humanitarny, zagrożenie demograficzne, przymusowe repatriacje), ale nie spełnia progu 3 krajów z co najmniej 2 źródłami, więc nie kwalifikuje się jako pełny wzorzec zbieżności.",
+        "article_ids": [
+          4331,
+          3900,
+          4005
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 8783,
+            "article_id": 4331,
+            "theme_id": "migration_borders",
+            "kraj": "TR",
+            "zrodlo": "hurriyet"
+          },
+          {
+            "signal_id": 9371,
+            "article_id": 3900,
+            "theme_id": "migration_borders",
+            "kraj": "UA",
+            "zrodlo": "ukrinform"
+          },
+          {
+            "signal_id": 8896,
+            "article_id": 4005,
+            "theme_id": "migration_borders",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          }
+        ],
+        "theme_id": "migration_borders",
+        "tekst": "Temat migracji i granic pojawia się w wielu krajach (TR, UA, UK) z przewagą ram negatywnych (kryzys humanitarny, zagrożenie demograficzne, przymusowe repatriacje), ale nie spełnia progu 3 krajów z co najmniej 2 źródłami, więc nie kwalifikuje się jako pełny wzorzec zbieżności.",
+        "article_ids": [
+          4331,
+          3900,
+          4005
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 8783,
+          "theme_id": "migration_borders",
+          "subject_actor": "MM",
+          "content_group": "86102d68d20c86262825513c16868864a2d5d6fc60b368a09bde1065c372e18a",
+          "publisher_group": "demiroren",
+          "article_id": 4331,
+          "kraj": "TR",
+          "zrodlo": "hurriyet",
+          "typ_zrodla": "private",
+          "rama": "Rohingjowie wracają do kraju prześladowań",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Istnieją obawy, że Rohingjowie mogą zostać odesłani do Mjanmy, gdzie zdaniem organizacji praw człowieka grożą im prześladowania o znamionach ludobójstwa."
+        },
+        {
+          "signal_id": 9371,
+          "theme_id": "migration_borders",
+          "subject_actor": "UA",
+          "content_group": "693568290dbe9073d535ef3790e20bcf0a0e139e8050518140c47e39caf846c2",
+          "publisher_group": "ukrinform",
+          "article_id": 3900,
+          "kraj": "UA",
+          "zrodlo": "ukrinform",
+          "typ_zrodla": "agency",
+          "rama": "Kryzys humanitarny na terenach okupowanych",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Na okupowanych Oleszkach panuje dotkliwy brak żywności, wody i leków, co zmusza mieszkańców do desperackich prób ucieczki."
+        },
+        {
+          "signal_id": 8896,
+          "theme_id": "migration_borders",
+          "subject_actor": "MY",
+          "content_group": "cdb6759361af374590676909ca49de5576596af20abd2fb429587a8d7782712b",
+          "publisher_group": "bbc",
+          "article_id": 4005,
+          "kraj": "UK",
+          "zrodlo": "bbc",
+          "typ_zrodla": "public",
+          "rama": "Kontrowersyjna repatriacja pod presją polityczną",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Malezja rozpoczęła deportację około 5000 azylantów z Mjanmy na podstawie porozumienia z juntą wojskową, mimo ostrzeżeń organizacji praw człowieka, że powracający mogą zostać poddani przemocy, prześladowaniom i przymusowemu poborowi."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "autoobraz.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 9707,
+            "article_id": 4023,
+            "theme_id": "hybrid_info",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 8461,
+            "article_id": 4038,
+            "theme_id": "emergent:domestic-policy-social-care",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 9383,
+            "article_id": 4381,
+            "theme_id": "alliances",
+            "kraj": "US",
+            "zrodlo": "fox"
+          },
+          {
+            "signal_id": 8851,
+            "article_id": 4343,
+            "theme_id": "hybrid_info",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "pewnosc": "średni",
+        "kraj": "UK",
+        "jak_opisuje_siebie": "Własne sygnały UK (bbc, guardian) o UK dotyczą głównie ochrony baz wojskowych, napięć z Argentyną i wewnętrznej debaty politycznej (opieka społeczna, Brexit) – ton przeważnie neutralny z elementami poparcia dla własnych reform.",
+        "jak_opisuja_go_inni": "Źródła z US (fox, pbs) opisują UK w ramach krytycznych – 'Brytyjski rząd słaby i ugodowy', 'Możliwy spisek przeciwko bazie USA' – z alarmem i krytyką wobec brytyjskiej odpowiedzi na zagrożenia terrorystyczne.",
+        "komentarz": "JS=0.124 jest niskie, ale jakościowo rama zewnętrzna (US) jest wyraźnie bardziej krytyczna/alarmistyczna wobec brytyjskiej polityki bezpieczeństwa niż autoopis UK, który utrzymuje ton stonowany.",
+        "article_ids": [
+          4023,
+          4038,
+          4381,
+          4343
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 9707,
+            "article_id": 4023,
+            "theme_id": "hybrid_info",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 8461,
+            "article_id": 4038,
+            "theme_id": "emergent:domestic-policy-social-care",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 9383,
+            "article_id": 4381,
+            "theme_id": "alliances",
+            "kraj": "US",
+            "zrodlo": "fox"
+          },
+          {
+            "signal_id": 8851,
+            "article_id": 4343,
+            "theme_id": "hybrid_info",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "pewnosc": "średni",
+        "kraj": "UK",
+        "jak_opisuje_siebie": "Własne sygnały UK (bbc, guardian) o UK dotyczą głównie ochrony baz wojskowych, napięć z Argentyną i wewnętrznej debaty politycznej (opieka społeczna, Brexit) – ton przeważnie neutralny z elementami poparcia dla własnych reform.",
+        "jak_opisuja_go_inni": "Źródła z US (fox, pbs) opisują UK w ramach krytycznych – 'Brytyjski rząd słaby i ugodowy', 'Możliwy spisek przeciwko bazie USA' – z alarmem i krytyką wobec brytyjskiej odpowiedzi na zagrożenia terrorystyczne.",
+        "komentarz": "JS=0.124 jest niskie, ale jakościowo rama zewnętrzna (US) jest wyraźnie bardziej krytyczna/alarmistyczna wobec brytyjskiej polityki bezpieczeństwa niż autoopis UK, który utrzymuje ton stonowany.",
+        "article_ids": [
+          4023,
+          4038,
+          4381,
+          4343
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 9707,
+          "theme_id": "hybrid_info",
+          "subject_actor": "UK",
+          "content_group": "12fe2ff839dfb3fd0704159b6f9f68c6126f3c984c2dc61e5518f211bfdc52fb",
+          "publisher_group": "bbc",
+          "article_id": 4023,
+          "kraj": "UK",
+          "zrodlo": "bbc",
+          "typ_zrodla": "public",
+          "rama": "Możliwy udział obcego państwa",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Szef brytyjskiego kontrterroryzmu Laurence Taylor poinformował, że policja bada różne tropy, w tym możliwość, że zatrzymani działali jako pośrednicy obcego państwa."
+        },
+        {
+          "signal_id": 8461,
+          "theme_id": "emergent:domestic-policy-social-care",
+          "subject_actor": "UK",
+          "content_group": "157c9b04e60080e7bcf1bf3594b6023d2ae2f5942913437d835fd5b8f6fca9a1",
+          "publisher_group": "guardian",
+          "article_id": 4038,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "Burnham stawia na odważną reformę opieki społecznej",
+          "stance": "poparcie",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia propozycję Andy'ego Burnhama dotyczącą stworzenia narodowej służby opieki finansowanej m.in. poprzez zmianę systemu 'triple lock', oceniając ją jako odważną i potencjalnie transformacyjną, choć jeszcze nieprzesądzoną."
+        },
+        {
+          "signal_id": 9383,
+          "theme_id": "alliances",
+          "subject_actor": "UK",
+          "content_group": "0bdd642cab0fe080588df599b9ebdd6f38cfd648b586e1b387dd2996c755a5e2",
+          "publisher_group": "fox",
+          "article_id": 4381,
+          "kraj": "US",
+          "zrodlo": "fox",
+          "typ_zrodla": "private",
+          "rama": "Brytyjski rząd słaby i ugodowy",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Medium przytacza ekspertów i komentatorów, którzy krytycznie oceniają brytyjski rząd jako słaby w dziedzinie obronności i bezpieczeństwa narodowego oraz prowadzący politykę ustępstw wobec Iranu, co ma tworzyć środowisko umożliwiające takie incydenty."
+        },
+        {
+          "signal_id": 8851,
+          "theme_id": "hybrid_info",
+          "subject_actor": "UK",
+          "content_group": "886e0c7eaa27a00eb64731ef36cd1463caa37d80ebaae4e01c91a058cbf1513d",
+          "publisher_group": "pbs",
+          "article_id": 4343,
+          "kraj": "US",
+          "zrodlo": "pbs",
+          "typ_zrodla": "public",
+          "rama": "Możliwy spisek przeciwko bazie USA",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Brytyjska policja antyterrorystyczna prowadzi śledztwo w sprawie możliwego spisku wymierzonego w amerykańską bazę lotniczą RAF Fairford, zatrzymano pięciu Brytyjczyków pod zarzutem przestępstw związanych z materiałami wybuchowymi."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "wzorce_zbieznosci.0.sygnaly_przeciwne",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 9011,
+            "article_id": 4033,
+            "theme_id": "hybrid_info",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 9871,
+            "article_id": 4128,
+            "theme_id": "hybrid_info",
+            "kraj": "CN",
+            "zrodlo": "globaltimes"
+          }
+        ],
+        "tekst": "Część sygnałów w tym samym temacie ma stance neutralny lub uspokajający, np. litewski premier kwestionujący ostrzeżenia o zagrożeniu ze strony Rosji, lub chińska narracja pozytywna o własnym postępie technologicznym.",
+        "article_ids": [
+          4033,
+          4128
+        ]
+      },
+      "context": {
+        "temat": "hybrid_info",
+        "kierunek": "negatywny",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 9443,
+                "article_id": 4113,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "globaltimes"
+              },
+              {
+                "signal_id": 9736,
+                "article_id": 4146,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "chinanews"
+              },
+              {
+                "signal_id": 9513,
+                "article_id": 4080,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "cgtn"
+              },
+              {
+                "signal_id": 9863,
+                "article_id": 4095,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "globaltimes"
+              }
+            ],
+            "kraj": "CN",
+            "n_zrodel": 3,
+            "rama": "Ramy krytyczne wobec Japonii jako fabrykującej zagrożenia oraz neutralne wobec sabotażu/AI, m.in. 'Atak na bazę USA możliwą operacją obcego państwa'",
+            "stance": "mieszany (krytyka/neutralny)",
+            "article_ids": [
+              4113,
+              4146,
+              4080,
+              4095
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 8923,
+                "article_id": 4275,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "hongkongfp"
+              },
+              {
+                "signal_id": 9271,
+                "article_id": 4256,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "rthk"
+              },
+              {
+                "signal_id": 8762,
+                "article_id": 4222,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "scmp"
+              },
+              {
+                "signal_id": 9719,
+                "article_id": 4266,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "rthk"
+              }
+            ],
+            "kraj": "HK",
+            "n_zrodel": 3,
+            "rama": "AI agent i sabotaż jako zagrożenia dla rządów i instytucji, np. 'AI agent zagraża rządom', 'Dziennikarstwo walczy z dezinformacją'",
+            "stance": "mieszany (alarm/krytyka/neutralny)",
+            "article_ids": [
+              4256,
+              4275,
+              4222,
+              4266
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 8985,
+                "article_id": 3873,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "onet"
+              },
+              {
+                "signal_id": 9091,
+                "article_id": 3855,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "rp"
+              },
+              {
+                "signal_id": 9090,
+                "article_id": 3875,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "onet"
+              }
+            ],
+            "kraj": "PL",
+            "n_zrodel": 2,
+            "rama": "Dezinformacja i eskalacja presji Rosji na Europę",
+            "stance": "krytyka/alarm",
+            "article_ids": [
+              3873,
+              3855,
+              3875
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 9056,
+                "article_id": 4320,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "dailysabah"
+              },
+              {
+                "signal_id": 8591,
+                "article_id": 4328,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "hurriyet"
+              },
+              {
+                "signal_id": 8828,
+                "article_id": 4316,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "dailysabah"
+              },
+              {
+                "signal_id": 8724,
+                "article_id": 4330,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "hurriyet"
+              }
+            ],
+            "kraj": "TR",
+            "n_zrodel": 2,
+            "rama": "Sabotaż Rosji i naruszenia porozumień przez Iran jako zagrożenia dla Europy",
+            "stance": "alarm/krytyka",
+            "article_ids": [
+              4320,
+              4328,
+              4316,
+              4330
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 8469,
+                "article_id": 4337,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              },
+              {
+                "signal_id": 9382,
+                "article_id": 4381,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "fox"
+              },
+              {
+                "signal_id": 8606,
+                "article_id": 4384,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "npr"
+              },
+              {
+                "signal_id": 8851,
+                "article_id": 4343,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              }
+            ],
+            "kraj": "US",
+            "n_zrodel": 3,
+            "rama": "Iran/obce państwa podejrzewane o spiski terrorystyczne, AI pod kontrolą polityczną",
+            "stance": "alarm/krytyka",
+            "article_ids": [
+              4337,
+              4381,
+              4384,
+              4343
+            ]
+          }
+        ],
+        "wspolny_kierunek": "Negatywny/alarmistyczny: różne kraje różnymi słowami (Rosja sabotuje, Iran spiskuje, Japonia fabrykuje zagrożenia, AI wymyka się spod kontroli) przedstawiają narastające zagrożenie działaniami hybrydowymi i dezinformacją.",
+        "sygnaly_przeciwne": {
+          "dowody": [
+            {
+              "signal_id": 9011,
+              "article_id": 4033,
+              "theme_id": "hybrid_info",
+              "kraj": "UK",
+              "zrodlo": "guardian"
+            },
+            {
+              "signal_id": 9871,
+              "article_id": 4128,
+              "theme_id": "hybrid_info",
+              "kraj": "CN",
+              "zrodlo": "globaltimes"
+            }
+          ],
+          "tekst": "Część sygnałów w tym samym temacie ma stance neutralny lub uspokajający, np. litewski premier kwestionujący ostrzeżenia o zagrożeniu ze strony Rosji, lub chińska narracja pozytywna o własnym postępie technologicznym.",
+          "article_ids": [
+            4033,
+            4128
+          ]
+        },
+        "pewnosc": {
+          "poziom": "wysoki",
+          "uzasadnienie": "5 krajów (CN, HK, PL, TR, US) spełnia próg min. 2 źródeł na kraj (odpowiednio 3,3,2,2,3 źródła), łącznie 19 artykułów przywołanych jako dowody; zgodność kierunku (negatywny/alarmistyczny) przy różnych ramach i aktorach."
+        },
+        "trend": "brak linii bazowej"
+      },
+      "signals": [
+        {
+          "signal_id": 9011,
+          "theme_id": "hybrid_info",
+          "subject_actor": "LT",
+          "content_group": "5ef987683eac9ab36d6bc2248c362911335246c581fe9ffc4eed5f41401d8f51",
+          "publisher_group": "guardian",
+          "article_id": 4033,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "Brak dowodów na gotowość Rosji do ataku",
+          "stance": "uspokojenie",
+          "intensywnosc": 2,
+          "streszczenie": "Premier Litwy Mindaugas Sinkevičius zakwestionował ostrzeżenia Danii, Polski i Niemiec o potencjalnym bezpośrednim zagrożeniu, twierdząc, że nie ma dowodów na to, że Rosja przygotowuje się do działań przeciwko regionowi."
+        },
+        {
+          "signal_id": 9871,
+          "theme_id": "hybrid_info",
+          "subject_actor": "CN",
+          "content_group": "8994333ceb09e237597386926303b3d344661f61a682cf5f993a09f086198e1f",
+          "publisher_group": "peoples_daily",
+          "article_id": 4128,
+          "kraj": "CN",
+          "zrodlo": "globaltimes",
+          "typ_zrodla": "government",
+          "rama": "Chińska narracja o postępie technologicznym",
+          "stance": "poparcie",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł cytuje ekspertów, którzy chwalą decyzję CXMT jako \"mądrą i rozważną\", co wzmacnia przekaz o dojrzałości chińskiego przemysłu pamięci i jego zdolności do konkurowania na rynku globalnym."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "wzorce_zbieznosci.0.kraje.PL",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 8985,
+            "article_id": 3873,
+            "theme_id": "hybrid_info",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 9091,
+            "article_id": 3855,
+            "theme_id": "hybrid_info",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          },
+          {
+            "signal_id": 9090,
+            "article_id": 3875,
+            "theme_id": "hybrid_info",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          }
+        ],
+        "kraj": "PL",
+        "n_zrodel": 2,
+        "rama": "Dezinformacja i eskalacja presji Rosji na Europę",
+        "stance": "krytyka/alarm",
+        "article_ids": [
+          3873,
+          3855,
+          3875
+        ]
+      },
+      "context": {
+        "temat": "hybrid_info",
+        "kierunek": "negatywny",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 9443,
+                "article_id": 4113,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "globaltimes"
+              },
+              {
+                "signal_id": 9736,
+                "article_id": 4146,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "chinanews"
+              },
+              {
+                "signal_id": 9513,
+                "article_id": 4080,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "cgtn"
+              },
+              {
+                "signal_id": 9863,
+                "article_id": 4095,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "globaltimes"
+              }
+            ],
+            "kraj": "CN",
+            "n_zrodel": 3,
+            "rama": "Ramy krytyczne wobec Japonii jako fabrykującej zagrożenia oraz neutralne wobec sabotażu/AI, m.in. 'Atak na bazę USA możliwą operacją obcego państwa'",
+            "stance": "mieszany (krytyka/neutralny)",
+            "article_ids": [
+              4113,
+              4146,
+              4080,
+              4095
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 8923,
+                "article_id": 4275,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "hongkongfp"
+              },
+              {
+                "signal_id": 9271,
+                "article_id": 4256,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "rthk"
+              },
+              {
+                "signal_id": 8762,
+                "article_id": 4222,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "scmp"
+              },
+              {
+                "signal_id": 9719,
+                "article_id": 4266,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "rthk"
+              }
+            ],
+            "kraj": "HK",
+            "n_zrodel": 3,
+            "rama": "AI agent i sabotaż jako zagrożenia dla rządów i instytucji, np. 'AI agent zagraża rządom', 'Dziennikarstwo walczy z dezinformacją'",
+            "stance": "mieszany (alarm/krytyka/neutralny)",
+            "article_ids": [
+              4256,
+              4275,
+              4222,
+              4266
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 8985,
+                "article_id": 3873,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "onet"
+              },
+              {
+                "signal_id": 9091,
+                "article_id": 3855,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "rp"
+              },
+              {
+                "signal_id": 9090,
+                "article_id": 3875,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "onet"
+              }
+            ],
+            "kraj": "PL",
+            "n_zrodel": 2,
+            "rama": "Dezinformacja i eskalacja presji Rosji na Europę",
+            "stance": "krytyka/alarm",
+            "article_ids": [
+              3873,
+              3855,
+              3875
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 9056,
+                "article_id": 4320,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "dailysabah"
+              },
+              {
+                "signal_id": 8591,
+                "article_id": 4328,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "hurriyet"
+              },
+              {
+                "signal_id": 8828,
+                "article_id": 4316,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "dailysabah"
+              },
+              {
+                "signal_id": 8724,
+                "article_id": 4330,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "hurriyet"
+              }
+            ],
+            "kraj": "TR",
+            "n_zrodel": 2,
+            "rama": "Sabotaż Rosji i naruszenia porozumień przez Iran jako zagrożenia dla Europy",
+            "stance": "alarm/krytyka",
+            "article_ids": [
+              4320,
+              4328,
+              4316,
+              4330
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 8469,
+                "article_id": 4337,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              },
+              {
+                "signal_id": 9382,
+                "article_id": 4381,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "fox"
+              },
+              {
+                "signal_id": 8606,
+                "article_id": 4384,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "npr"
+              },
+              {
+                "signal_id": 8851,
+                "article_id": 4343,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              }
+            ],
+            "kraj": "US",
+            "n_zrodel": 3,
+            "rama": "Iran/obce państwa podejrzewane o spiski terrorystyczne, AI pod kontrolą polityczną",
+            "stance": "alarm/krytyka",
+            "article_ids": [
+              4337,
+              4381,
+              4384,
+              4343
+            ]
+          }
+        ],
+        "wspolny_kierunek": "Negatywny/alarmistyczny: różne kraje różnymi słowami (Rosja sabotuje, Iran spiskuje, Japonia fabrykuje zagrożenia, AI wymyka się spod kontroli) przedstawiają narastające zagrożenie działaniami hybrydowymi i dezinformacją.",
+        "sygnaly_przeciwne": {
+          "dowody": [
+            {
+              "signal_id": 9011,
+              "article_id": 4033,
+              "theme_id": "hybrid_info",
+              "kraj": "UK",
+              "zrodlo": "guardian"
+            },
+            {
+              "signal_id": 9871,
+              "article_id": 4128,
+              "theme_id": "hybrid_info",
+              "kraj": "CN",
+              "zrodlo": "globaltimes"
+            }
+          ],
+          "tekst": "Część sygnałów w tym samym temacie ma stance neutralny lub uspokajający, np. litewski premier kwestionujący ostrzeżenia o zagrożeniu ze strony Rosji, lub chińska narracja pozytywna o własnym postępie technologicznym.",
+          "article_ids": [
+            4033,
+            4128
+          ]
+        },
+        "pewnosc": {
+          "poziom": "wysoki",
+          "uzasadnienie": "5 krajów (CN, HK, PL, TR, US) spełnia próg min. 2 źródeł na kraj (odpowiednio 3,3,2,2,3 źródła), łącznie 19 artykułów przywołanych jako dowody; zgodność kierunku (negatywny/alarmistyczny) przy różnych ramach i aktorach."
+        },
+        "trend": "brak linii bazowej"
+      },
+      "signals": [
+        {
+          "signal_id": 8985,
+          "theme_id": "hybrid_info",
+          "subject_actor": "PL",
+          "content_group": "bd3281632b89026610932ba14fd6dd576a0551484615da7dddbcaca9b41b9298",
+          "publisher_group": "onet",
+          "article_id": 3873,
+          "kraj": "PL",
+          "zrodlo": "onet",
+          "typ_zrodla": "private",
+          "rama": "Dezinformacja utrudnia dialog o OZE",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Tekst wskazuje, że dezinformacja podsyca lokalne obawy i utrudnia rzeczową rozmowę o inwestycjach w energetykę wiatrową."
+        },
+        {
+          "signal_id": 9091,
+          "theme_id": "hybrid_info",
+          "subject_actor": "RU",
+          "content_group": "3855",
+          "publisher_group": "rp",
+          "article_id": 3855,
+          "kraj": "PL",
+          "zrodlo": "rp",
+          "typ_zrodla": "private",
+          "rama": "Rosja eskaluje presję na Europę",
+          "stance": "alarm",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł wskazuje, że Rosja zwiększa presję na Europę, a państwa NATO mierzą się z dronami, sabotażem i cyberatakami."
+        },
+        {
+          "signal_id": 9090,
+          "theme_id": "hybrid_info",
+          "subject_actor": "PL",
+          "content_group": "23ac09965e33ecb27e180c331658bbadfa8564fcd76b8466771fb23a22fd633d",
+          "publisher_group": "onet",
+          "article_id": 3875,
+          "kraj": "PL",
+          "zrodlo": "onet",
+          "typ_zrodla": "private",
+          "rama": "Lokowanie produktu w TV Republika",
+          "stance": "neutralny",
+          "intensywnosc": 2,
+          "streszczenie": "Artykuł przypomina, że zegarek Nowrocky był promowany na antenie TV Republika w programie informacyjnym, co według skargi do KRRiT mogło stanowić złamanie przepisów o zakazie lokowania produktów."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "autoobraz.1",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 9725,
+            "article_id": 4414,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          },
+          {
+            "signal_id": 9769,
+            "article_id": 4417,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          },
+          {
+            "signal_id": 8719,
+            "article_id": 4314,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "IL",
+        "jak_opisuje_siebie": "Własne sygnały IL (haaretz) obejmują krytykę wewnętrzną (Netanjahu rządzi iluzją, izolacja Izraela na arenie międzynarodowej).",
+        "jak_opisuja_go_inni": "Źródło z TR (dailysabah) opisuje Izrael w silnie krytycznej ramie - 'Izrael łamie rozejm, zabija i eskaluje przemoc', określając działania jako kontynuację 'ludobójczej wojny'.",
+        "komentarz": "Oba głosy są krytyczne wobec Izraela, ale różnią się intensywnością i słownictwem: autoopis IL (haaretz) krytykuje politykę Netanjahu i izolację dyplomatyczną, podczas gdy zewnętrzne źródło TR używa dosadniejszych określeń jak 'ludobójcza wojna'.",
+        "article_ids": [
+          4414,
+          4417,
+          4314
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 9725,
+            "article_id": 4414,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          },
+          {
+            "signal_id": 9769,
+            "article_id": 4417,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          },
+          {
+            "signal_id": 8719,
+            "article_id": 4314,
+            "theme_id": "middle_east",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "IL",
+        "jak_opisuje_siebie": "Własne sygnały IL (haaretz) obejmują krytykę wewnętrzną (Netanjahu rządzi iluzją, izolacja Izraela na arenie międzynarodowej).",
+        "jak_opisuja_go_inni": "Źródło z TR (dailysabah) opisuje Izrael w silnie krytycznej ramie - 'Izrael łamie rozejm, zabija i eskaluje przemoc', określając działania jako kontynuację 'ludobójczej wojny'.",
+        "komentarz": "Oba głosy są krytyczne wobec Izraela, ale różnią się intensywnością i słownictwem: autoopis IL (haaretz) krytykuje politykę Netanjahu i izolację dyplomatyczną, podczas gdy zewnętrzne źródło TR używa dosadniejszych określeń jak 'ludobójcza wojna'.",
+        "article_ids": [
+          4414,
+          4417,
+          4314
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 9725,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "4414",
+          "publisher_group": "haaretz",
+          "article_id": 4414,
+          "kraj": "IL",
+          "zrodlo": "haaretz",
+          "typ_zrodla": "private",
+          "rama": "Netanjahu rządzi iluzją",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł krytykuje premiera Netanjahu, twierdząc, że rządzi za pomocą iluzji i naraża bezpieczeństwo Izraelczyków. Zabijanie kolejnych terrorystów nie zmienia sytuacji, a bez dyplomacji Izrael pozostanie w impasie."
+        },
+        {
+          "signal_id": 9769,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "4417",
+          "publisher_group": "haaretz",
+          "article_id": 4417,
+          "kraj": "IL",
+          "zrodlo": "haaretz",
+          "typ_zrodla": "private",
+          "rama": "Izrael w izolacji na arenie światowej",
+          "stance": "krytyka",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł sugeruje, że świat zaczyna postrzegać Izrael negatywnie, a pustoszejąca sala podczas przemówienia Netanjahu w ONZ jest tego dowodem."
+        },
+        {
+          "signal_id": 8719,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "b43c1cac8a6060fda94b3cc3147d42ff057557052eb2d63e0e00d067ff2a5e23",
+          "publisher_group": "turkuvaz",
+          "article_id": 4314,
+          "kraj": "TR",
+          "zrodlo": "dailysabah",
+          "typ_zrodla": "private",
+          "rama": "Izrael łamie rozejm, zabija i eskaluje przemoc",
+          "stance": "krytyka",
+          "intensywnosc": 5,
+          "streszczenie": "Artykuł opisuje kolejne izraelskie ataki w Strefie Gazy, w których zginęli Palestyńczycy, oraz przedstawia je jako kontynuację łamania amerykańskiego rozejmu i ludobójczej wojny Izraela."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "w_skrocie.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 8577,
+            "article_id": 3866,
+            "theme_id": "ukraine_war",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 8770,
+            "article_id": 3849,
+            "theme_id": "ukraine_war",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          },
+          {
+            "signal_id": 9058,
+            "article_id": 4320,
+            "theme_id": "ukraine_war",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 8725,
+            "article_id": 4330,
+            "theme_id": "ukraine_war",
+            "kraj": "TR",
+            "zrodlo": "hurriyet"
+          }
+        ],
+        "theme_id": "ukraine_war",
+        "tekst": "Analizowane źródła z PL (onet, rp) i TR (dailysabah, hurriyet) pokazują wyraźnie różne nasycenie wojny w Ukrainie: PL koncentruje się na krytycznych ramach ataków na cywilów i fałszowania danych przez Rosję, TR – bardziej neutralnie, z akcentem na przegraną Rosji i sabotaż w Europie.",
+        "article_ids": [
+          3866,
+          3849,
+          4320,
+          4330
+        ],
+        "pewnosc": "średni"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 8577,
+            "article_id": 3866,
+            "theme_id": "ukraine_war",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 8770,
+            "article_id": 3849,
+            "theme_id": "ukraine_war",
+            "kraj": "PL",
+            "zrodlo": "rp"
+          },
+          {
+            "signal_id": 9058,
+            "article_id": 4320,
+            "theme_id": "ukraine_war",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 8725,
+            "article_id": 4330,
+            "theme_id": "ukraine_war",
+            "kraj": "TR",
+            "zrodlo": "hurriyet"
+          }
+        ],
+        "theme_id": "ukraine_war",
+        "tekst": "Analizowane źródła z PL (onet, rp) i TR (dailysabah, hurriyet) pokazują wyraźnie różne nasycenie wojny w Ukrainie: PL koncentruje się na krytycznych ramach ataków na cywilów i fałszowania danych przez Rosję, TR – bardziej neutralnie, z akcentem na przegraną Rosji i sabotaż w Europie.",
+        "article_ids": [
+          3866,
+          3849,
+          4320,
+          4330
+        ],
+        "pewnosc": "średni"
+      },
+      "signals": [
+        {
+          "signal_id": 8577,
+          "theme_id": "ukraine_war",
+          "subject_actor": "UA",
+          "content_group": "75b0e2c80b30860de2410e17fd36dcc0c64db7731dc56c408f055e279e13292a",
+          "publisher_group": "onet",
+          "article_id": 3866,
+          "kraj": "PL",
+          "zrodlo": "onet",
+          "typ_zrodla": "private",
+          "rama": "Rosja atakuje cywilów i dzieci",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł opisuje rosyjskie bombardowanie szkoły w Sumach, w której przebywali uczniowie klas 1–4, oraz inne ataki na obiekty cywilne w Ukrainie. Podkreśla, że dzieci uratowano dzięki ewakuacji do schronu, a w wyniku ataków zginęły dwie osoby."
+        },
+        {
+          "signal_id": 8770,
+          "theme_id": "ukraine_war",
+          "subject_actor": "UA",
+          "content_group": "3849",
+          "publisher_group": "rp",
+          "article_id": 3849,
+          "kraj": "PL",
+          "zrodlo": "rp",
+          "typ_zrodla": "private",
+          "rama": "Rosja ukrywa ukraińskie sukcesy terytorialne",
+          "stance": "krytyka",
+          "intensywnosc": 2,
+          "streszczenie": "Według leadu Rosja fałszowała dane o zdobyczach terytorialnych, przez co przeoczyła ukraińską kontrofensywę i utratę znacznego terytorium."
+        },
+        {
+          "signal_id": 9058,
+          "theme_id": "ukraine_war",
+          "subject_actor": "RU",
+          "content_group": "1c05b6d1ccc6f54442ead17fb2c5cc34d986559324c8f127401d7cb0e70aad10",
+          "publisher_group": "turkuvaz",
+          "article_id": 4320,
+          "kraj": "TR",
+          "zrodlo": "dailysabah",
+          "typ_zrodla": "private",
+          "rama": "Rosja chce zniechęcić Zachód do pomocy Ukrainie",
+          "stance": "alarm",
+          "intensywnosc": 3,
+          "streszczenie": "Według emerytowanego pułkownika cytowanego w artykule celem Rosji jest tworzenie podziałów wśród krajów Zachodu i osłabianie ich woli pomagania Ukrainie."
+        },
+        {
+          "signal_id": 8725,
+          "theme_id": "ukraine_war",
+          "subject_actor": "RU",
+          "content_group": "2658d26f36eaa5059d5867c5d3086d448693fa52f5325aad089cc046459ca6af",
+          "publisher_group": "demiroren",
+          "article_id": 4330,
+          "kraj": "TR",
+          "zrodlo": "hurriyet",
+          "typ_zrodla": "private",
+          "rama": "Rosja przegrywa na polu bitwy i w kampanii sabotażowej",
+          "stance": "neutralny",
+          "intensywnosc": 2,
+          "streszczenie": "Sekretarz generalny NATO Mark Rutte przekonuje, że Rosja przegrywa na froncie w Ukrainie i nie udaje jej się osłabić jedności oraz wsparcia sojuszników dla Kijowa."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "wzorce_zbieznosci.0.kraje.HK",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 8923,
+            "article_id": 4275,
+            "theme_id": "hybrid_info",
+            "kraj": "HK",
+            "zrodlo": "hongkongfp"
+          },
+          {
+            "signal_id": 9271,
+            "article_id": 4256,
+            "theme_id": "hybrid_info",
+            "kraj": "HK",
+            "zrodlo": "rthk"
+          },
+          {
+            "signal_id": 8762,
+            "article_id": 4222,
+            "theme_id": "hybrid_info",
+            "kraj": "HK",
+            "zrodlo": "scmp"
+          },
+          {
+            "signal_id": 9719,
+            "article_id": 4266,
+            "theme_id": "hybrid_info",
+            "kraj": "HK",
+            "zrodlo": "rthk"
+          }
+        ],
+        "kraj": "HK",
+        "n_zrodel": 3,
+        "rama": "AI agent i sabotaż jako zagrożenia dla rządów i instytucji, np. 'AI agent zagraża rządom', 'Dziennikarstwo walczy z dezinformacją'",
+        "stance": "mieszany (alarm/krytyka/neutralny)",
+        "article_ids": [
+          4256,
+          4275,
+          4222,
+          4266
+        ]
+      },
+      "context": {
+        "temat": "hybrid_info",
+        "kierunek": "negatywny",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 9443,
+                "article_id": 4113,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "globaltimes"
+              },
+              {
+                "signal_id": 9736,
+                "article_id": 4146,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "chinanews"
+              },
+              {
+                "signal_id": 9513,
+                "article_id": 4080,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "cgtn"
+              },
+              {
+                "signal_id": 9863,
+                "article_id": 4095,
+                "theme_id": "hybrid_info",
+                "kraj": "CN",
+                "zrodlo": "globaltimes"
+              }
+            ],
+            "kraj": "CN",
+            "n_zrodel": 3,
+            "rama": "Ramy krytyczne wobec Japonii jako fabrykującej zagrożenia oraz neutralne wobec sabotażu/AI, m.in. 'Atak na bazę USA możliwą operacją obcego państwa'",
+            "stance": "mieszany (krytyka/neutralny)",
+            "article_ids": [
+              4113,
+              4146,
+              4080,
+              4095
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 8923,
+                "article_id": 4275,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "hongkongfp"
+              },
+              {
+                "signal_id": 9271,
+                "article_id": 4256,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "rthk"
+              },
+              {
+                "signal_id": 8762,
+                "article_id": 4222,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "scmp"
+              },
+              {
+                "signal_id": 9719,
+                "article_id": 4266,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "rthk"
+              }
+            ],
+            "kraj": "HK",
+            "n_zrodel": 3,
+            "rama": "AI agent i sabotaż jako zagrożenia dla rządów i instytucji, np. 'AI agent zagraża rządom', 'Dziennikarstwo walczy z dezinformacją'",
+            "stance": "mieszany (alarm/krytyka/neutralny)",
+            "article_ids": [
+              4256,
+              4275,
+              4222,
+              4266
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 8985,
+                "article_id": 3873,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "onet"
+              },
+              {
+                "signal_id": 9091,
+                "article_id": 3855,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "rp"
+              },
+              {
+                "signal_id": 9090,
+                "article_id": 3875,
+                "theme_id": "hybrid_info",
+                "kraj": "PL",
+                "zrodlo": "onet"
+              }
+            ],
+            "kraj": "PL",
+            "n_zrodel": 2,
+            "rama": "Dezinformacja i eskalacja presji Rosji na Europę",
+            "stance": "krytyka/alarm",
+            "article_ids": [
+              3873,
+              3855,
+              3875
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 9056,
+                "article_id": 4320,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "dailysabah"
+              },
+              {
+                "signal_id": 8591,
+                "article_id": 4328,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "hurriyet"
+              },
+              {
+                "signal_id": 8828,
+                "article_id": 4316,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "dailysabah"
+              },
+              {
+                "signal_id": 8724,
+                "article_id": 4330,
+                "theme_id": "hybrid_info",
+                "kraj": "TR",
+                "zrodlo": "hurriyet"
+              }
+            ],
+            "kraj": "TR",
+            "n_zrodel": 2,
+            "rama": "Sabotaż Rosji i naruszenia porozumień przez Iran jako zagrożenia dla Europy",
+            "stance": "alarm/krytyka",
+            "article_ids": [
+              4320,
+              4328,
+              4316,
+              4330
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 8469,
+                "article_id": 4337,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              },
+              {
+                "signal_id": 9382,
+                "article_id": 4381,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "fox"
+              },
+              {
+                "signal_id": 8606,
+                "article_id": 4384,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "npr"
+              },
+              {
+                "signal_id": 8851,
+                "article_id": 4343,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              }
+            ],
+            "kraj": "US",
+            "n_zrodel": 3,
+            "rama": "Iran/obce państwa podejrzewane o spiski terrorystyczne, AI pod kontrolą polityczną",
+            "stance": "alarm/krytyka",
+            "article_ids": [
+              4337,
+              4381,
+              4384,
+              4343
+            ]
+          }
+        ],
+        "wspolny_kierunek": "Negatywny/alarmistyczny: różne kraje różnymi słowami (Rosja sabotuje, Iran spiskuje, Japonia fabrykuje zagrożenia, AI wymyka się spod kontroli) przedstawiają narastające zagrożenie działaniami hybrydowymi i dezinformacją.",
+        "sygnaly_przeciwne": {
+          "dowody": [
+            {
+              "signal_id": 9011,
+              "article_id": 4033,
+              "theme_id": "hybrid_info",
+              "kraj": "UK",
+              "zrodlo": "guardian"
+            },
+            {
+              "signal_id": 9871,
+              "article_id": 4128,
+              "theme_id": "hybrid_info",
+              "kraj": "CN",
+              "zrodlo": "globaltimes"
+            }
+          ],
+          "tekst": "Część sygnałów w tym samym temacie ma stance neutralny lub uspokajający, np. litewski premier kwestionujący ostrzeżenia o zagrożeniu ze strony Rosji, lub chińska narracja pozytywna o własnym postępie technologicznym.",
+          "article_ids": [
+            4033,
+            4128
+          ]
+        },
+        "pewnosc": {
+          "poziom": "wysoki",
+          "uzasadnienie": "5 krajów (CN, HK, PL, TR, US) spełnia próg min. 2 źródeł na kraj (odpowiednio 3,3,2,2,3 źródła), łącznie 19 artykułów przywołanych jako dowody; zgodność kierunku (negatywny/alarmistyczny) przy różnych ramach i aktorach."
+        },
+        "trend": "brak linii bazowej"
+      },
+      "signals": [
+        {
+          "signal_id": 8923,
+          "theme_id": "hybrid_info",
+          "subject_actor": "CN",
+          "content_group": "4276ff59d4abaa4b08146d32b425218387d6124f93ab89974aa3bd6d36f7fb25",
+          "publisher_group": "hongkongfp",
+          "article_id": 4275,
+          "kraj": "HK",
+          "zrodlo": "hongkongfp",
+          "typ_zrodla": "private",
+          "rama": "Dziennikarstwo walczy z dezinformacją",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia niezależne dziennikarstwo jako kluczową odpowiedź na dezinformację, która jest globalnym ryzykiem i kosztuje społeczeństwa setki miliardów dolarów rocznie, co jest ramą ustawiającą niezależne media jako przeciwwagę dla działań hybrydowych i dezinformacyjnych."
+        },
+        {
+          "signal_id": 9271,
+          "theme_id": "hybrid_info",
+          "subject_actor": "AU",
+          "content_group": "1df7ca47312fed0a29c5dbc156e3a1c189ddcb5c16d5ded2916d436ff9bc856d",
+          "publisher_group": "rthk",
+          "article_id": 4256,
+          "kraj": "HK",
+          "zrodlo": "rthk",
+          "typ_zrodla": "public",
+          "rama": "AI agent zagraża rządom",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia pierwszy znany przypadek, w którym agent AI zhakował rządową stronę internetową w Australii, alarmując opinię publiczną i wywołując potępienie premiera."
+        },
+        {
+          "signal_id": 8762,
+          "theme_id": "hybrid_info",
+          "subject_actor": "RU",
+          "content_group": "331edc62155e4851479e0060a0b6b0a93d99febbd3c784b64ef62980b0ac1e16",
+          "publisher_group": "scmp",
+          "article_id": 4222,
+          "kraj": "HK",
+          "zrodlo": "scmp",
+          "typ_zrodla": "private",
+          "rama": "Rosja zleca sabotaż w Estonii",
+          "stance": "neutralny",
+          "intensywnosc": 2,
+          "streszczenie": "Estońskie władze uznały pożar w siedzibie Milrem Robotics za sabotaż zlecony przez rosyjskie służby specjalne."
+        },
+        {
+          "signal_id": 9719,
+          "theme_id": "hybrid_info",
+          "subject_actor": "UK",
+          "content_group": "a4e9f0e622988d5dc02dc22ac86af954aeb6ca9f3d9e8ed55c8c35f7103dc46e",
+          "publisher_group": "rthk",
+          "article_id": 4266,
+          "kraj": "HK",
+          "zrodlo": "rthk",
+          "typ_zrodla": "public",
+          "rama": "Możliwy udział obcego państwa",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Brytyjscy śledczy rozważają hipotezę, że zatrzymani mogli działać jako pośrednicy lub nieświadomi wykonawcy na zlecenie obcego państwa."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "rozbieznosci.1.kraje.HK",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 8696,
+            "article_id": 4271,
+            "theme_id": "us_policy",
+            "kraj": "HK",
+            "zrodlo": "hongkongfp"
+          },
+          {
+            "signal_id": 9633,
+            "article_id": 4263,
+            "theme_id": "us_policy",
+            "kraj": "HK",
+            "zrodlo": "rthk"
+          }
+        ],
+        "kraj": "HK",
+        "n_zrodel": 2,
+        "rama": "Niespójność amerykańskiej polityki wobec Tajwanu; Trump wycofuje standardy emisji",
+        "stance": "neutralny (100%)",
+        "article_ids": [
+          4271,
+          4263
+        ]
+      },
+      "context": {
+        "temat": "us_policy",
+        "tekst": "Analizowane źródła z CN (cgtn, chinanews) przedstawiają relacje USA-Chiny głównie przez ramę poparcia i stabilizacji ('Chiny i USA stabilizują relacje', 'Nowe pozycjonowanie relacji chińsko-amerykańskich'), podczas gdy źródła z HK (hongkongfp, rthk) utrzymują ton wyłącznie neutralny wobec podobnych wydarzeń (polityka wobec Tajwanu, standardy emisji).",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 9511,
+                "article_id": 4080,
+                "theme_id": "us_policy",
+                "kraj": "CN",
+                "zrodlo": "cgtn"
+              },
+              {
+                "signal_id": 9622,
+                "article_id": 4199,
+                "theme_id": "us_policy",
+                "kraj": "CN",
+                "zrodlo": "chinanews"
+              }
+            ],
+            "kraj": "CN",
+            "n_zrodel": 2,
+            "rama": "Chiny i USA stabilizują relacje; nowe pozycjonowanie relacji chińsko-amerykańskich",
+            "stance": "poparcie",
+            "article_ids": [
+              4080,
+              4199
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 8696,
+                "article_id": 4271,
+                "theme_id": "us_policy",
+                "kraj": "HK",
+                "zrodlo": "hongkongfp"
+              },
+              {
+                "signal_id": 9633,
+                "article_id": 4263,
+                "theme_id": "us_policy",
+                "kraj": "HK",
+                "zrodlo": "rthk"
+              }
+            ],
+            "kraj": "HK",
+            "n_zrodel": 2,
+            "rama": "Niespójność amerykańskiej polityki wobec Tajwanu; Trump wycofuje standardy emisji",
+            "stance": "neutralny (100%)",
+            "article_ids": [
+              4271,
+              4263
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "średni",
+          "uzasadnienie": "Oba kraje mają po 2 niezależne źródła przywołane w dowodach (spełniony próg minimalny), max_js=0.549 wskazuje wyraźną różnicę nacechowania; przy 2 krajach pewność ograniczona do 'średni'."
+        }
+      },
+      "signals": [
+        {
+          "signal_id": 8696,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "a2fab178ade2e51548e1dd62d211f0db116d0a60976fbf1edd19ffc9e3fc980f",
+          "publisher_group": "hongkongfp",
+          "article_id": 4271,
+          "kraj": "HK",
+          "zrodlo": "hongkongfp",
+          "typ_zrodla": "private",
+          "rama": "Trump stawia na dobre relacje z Xi",
+          "stance": "neutralny",
+          "intensywnosc": 2,
+          "streszczenie": "Artykuł podkreśla, że Trump unika bezpośrednich deklaracji w sprawie Tajwanu, akcentując dobre relacje z chińskim przywódcą oraz planowane kolejne spotkania na szczytach APEC i G20."
+        },
+        {
+          "signal_id": 9633,
+          "theme_id": "us_policy",
+          "subject_actor": "US",
+          "content_group": "498673d7b7a244b21c07dd69295beedbfff181324b578fe5b9df5a3c2bee9776",
+          "publisher_group": "rthk",
+          "article_id": 4263,
+          "kraj": "HK",
+          "zrodlo": "rthk",
+          "typ_zrodla": "public",
+          "rama": "Trump wycofuje standardy emisji",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Administracja Trumpa sfinalizowała wycofanie amerykańskich standardów oszczędności paliwa, które miały przyspieszyć przejście na pojazdy elektryczne i ograniczyć emisje z transportu."
+        }
+      ],
+      "review": "pending"
+    }
+  ],
+  "claims_total": 18,
+  "meaning": "czy sygnały wspierają opis przekazu, nie prawdziwość zdarzeń"
+}
