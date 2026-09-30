@@ -1,0 +1,643 @@
+{
+  "report": {
+    "w_skrocie": [
+      {
+        "dowody": [
+          {
+            "signal_id": 10384,
+            "article_id": 5241,
+            "theme_id": "hybrid_info",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          },
+          {
+            "signal_id": 10035,
+            "article_id": 5256,
+            "theme_id": "hybrid_info",
+            "kraj": "BR",
+            "zrodlo": "agenciabrasil"
+          },
+          {
+            "signal_id": 10402,
+            "article_id": 5209,
+            "theme_id": "hybrid_info",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          },
+          {
+            "signal_id": 9987,
+            "article_id": 5225,
+            "theme_id": "hybrid_info",
+            "kraj": "IL",
+            "zrodlo": "israelhayom"
+          },
+          {
+            "signal_id": 10310,
+            "article_id": 5057,
+            "theme_id": "hybrid_info",
+            "kraj": "US",
+            "zrodlo": "fox"
+          },
+          {
+            "signal_id": 11107,
+            "article_id": 5037,
+            "theme_id": "hybrid_info",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "theme_id": "hybrid_info",
+        "tekst": "W temacie działań hybrydowych analizowane źródła z Brazylii (folha, agenciabrasil), Izraela (jpost, israelhayom, haaretz) i USA (fox, pbs) zgodnie łączą AI, dezinformację i sabotaż z narracją rosnącego zagrożenia, niezależnie od aktora oskarżanego (Rosja, Iran, USA), co sugeruje wspólny kierunek alarmistyczny.",
+        "article_ids": [
+          5241,
+          5256,
+          5209,
+          5225,
+          5057,
+          5037
+        ],
+        "pewnosc": "średni"
+      },
+      {
+        "dowody": [
+          {
+            "signal_id": 10339,
+            "article_id": 5218,
+            "theme_id": "elections_politics",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          },
+          {
+            "signal_id": 10831,
+            "article_id": 5084,
+            "theme_id": "elections_politics",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          },
+          {
+            "signal_id": 10794,
+            "article_id": 5002,
+            "theme_id": "elections_politics",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 10295,
+            "article_id": 5008,
+            "theme_id": "elections_politics",
+            "kraj": "TR",
+            "zrodlo": "hurriyet"
+          }
+        ],
+        "theme_id": "elections_politics",
+        "tekst": "Wokół tematu elections_politics analizowane źródła izraelskie (haaretz, jpost) przedstawiają Netanjahu jako polityka wykorzystującego incydent lotniczy i napięcia bezpieczeństwa dla celów kampanii wyborczej, podczas gdy źródła z Turcji (dailysabah, hurriyet) opisują ten sam incydent neutralnie, bez ramy instrumentalizacji politycznej.",
+        "article_ids": [
+          5218,
+          5084,
+          5002,
+          5008
+        ],
+        "pewnosc": "średni"
+      }
+    ],
+    "wzorce_zbieznosci": [
+      {
+        "temat": "hybrid_info",
+        "kierunek": "negatywny",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 10384,
+                "article_id": 5241,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "folha"
+              },
+              {
+                "signal_id": 10035,
+                "article_id": 5256,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "agenciabrasil"
+              },
+              {
+                "signal_id": 10117,
+                "article_id": 5237,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "folha"
+              },
+              {
+                "signal_id": 10452,
+                "article_id": 5242,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "folha"
+              }
+            ],
+            "kraj": "BR",
+            "n_zrodel": 2,
+            "rama": "AI i dezinformacja jako zagrożenie dla demokracji i bezpieczeństwa (agenciabrasil, folha)",
+            "stance": "alarm/neutralny",
+            "article_ids": [
+              5241,
+              5256,
+              5237,
+              5242
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 10135,
+                "article_id": 4955,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "hongkongfp"
+              },
+              {
+                "signal_id": 11258,
+                "article_id": 4931,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "scmp"
+              }
+            ],
+            "kraj": "HK",
+            "n_zrodel": 2,
+            "rama": "Nierówna ochrona wolności prasy i niejasne incydenty bezpieczeństwa (hongkongfp, scmp)",
+            "stance": "krytyka/neutralny",
+            "article_ids": [
+              4955,
+              4931
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 9987,
+                "article_id": 5225,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "israelhayom"
+              },
+              {
+                "signal_id": 10402,
+                "article_id": 5209,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              },
+              {
+                "signal_id": 10274,
+                "article_id": 5074,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "haaretz"
+              },
+              {
+                "signal_id": 10145,
+                "article_id": 5220,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              }
+            ],
+            "kraj": "IL",
+            "n_zrodel": 3,
+            "rama": "Atak terrorystyczny/hybrydowy na Izrael lub jego obywateli (jpost, israelhayom, haaretz)",
+            "stance": "alarm",
+            "article_ids": [
+              5225,
+              5209,
+              5074,
+              5220
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 11169,
+                "article_id": 4731,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 11022,
+                "article_id": 4706,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "bbc"
+              },
+              {
+                "signal_id": 10759,
+                "article_id": 4753,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 10100,
+                "article_id": 4745,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              }
+            ],
+            "kraj": "UK",
+            "n_zrodel": 2,
+            "rama": "Zagrożenia hybrydowe (chiński wywiad, chińska AI, cyberzagrożenia dla finansów) wymagające reakcji instytucjonalnej (guardian, bbc)",
+            "stance": "alarm",
+            "article_ids": [
+              4731,
+              4706,
+              4753,
+              4745
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 10310,
+                "article_id": 5057,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "fox"
+              },
+              {
+                "signal_id": 11107,
+                "article_id": 5037,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              },
+              {
+                "signal_id": 10372,
+                "article_id": 5045,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "fox"
+              },
+              {
+                "signal_id": 10719,
+                "article_id": 5026,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              }
+            ],
+            "kraj": "US",
+            "n_zrodel": 2,
+            "rama": "Propaganda państwowa i zagrożenia hybrydowe (Iran, Rosja) (fox, pbs)",
+            "stance": "alarm/krytyka",
+            "article_ids": [
+              5057,
+              5037,
+              5045,
+              5026
+            ]
+          }
+        ],
+        "wspolny_kierunek": "Niezależnie od aktora oskarżanego (Chiny, Rosja, Iran, własne rządy) i różnych słów, przekaz w pięciu krajach buduje ramę rosnącego zagrożenia hybrydowego – ataków informacyjnych, cybernetycznych i propagandowych – łączącego bezpieczeństwo narodowe z technologią AI.",
+        "sygnaly_przeciwne": {
+          "dowody": [
+            {
+              "signal_id": 10298,
+              "article_id": 4628,
+              "theme_id": "hybrid_info",
+              "kraj": "UA",
+              "zrodlo": "pravda_ua"
+            },
+            {
+              "signal_id": 11378,
+              "article_id": 4864,
+              "theme_id": "hybrid_info",
+              "kraj": "CN",
+              "zrodlo": "chinanews"
+            }
+          ],
+          "tekst": "W danych są sygnały łagodzące: ukraińska Prawda przedstawia incydent kolejowy jako 'niepotwierdzone zagrożenie' złagodzone przez służby, a chińska agencja chinanews relacjonuje oskarżenia Korei Północnej o sfabrykowanie incydentu jako element sporu, nie jako potwierdzone zagrożenie.",
+          "article_ids": [
+            4628,
+            4864
+          ]
+        },
+        "pewnosc": {
+          "poziom": "wysoki",
+          "uzasadnienie": "5 krajów spełnia próg 2 niezależnych źródeł (BR, HK, IL, UK, US), łącznie 34 artykuły w temacie, zgodny kierunek alarmistyczny mimo różnych aktorów i redakcji o odmiennym profilu (publiczne, prywatne, rządowe)."
+        },
+        "trend": "brak linii bazowej"
+      }
+    ],
+    "rozbieznosci": [
+      {
+        "temat": "middle_east",
+        "tekst": "WAFA (jedyne analizowane źródło z PS) przedstawia Izrael jako stronę systematycznie eskalującą przemoc i osadnictwo ('Izrael eskaluje przemoc i osadnictwo', 'Izrael narzuca nowy status quo'), podczas gdy analizowane źródła izraelskie (jpost, haaretz) w tym samym temacie prezentują ramę obronną i wewnętrzną krytykę rządu, bez ramy systematycznej eskalacji wobec Palestyńczyków.",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 11462,
+                "article_id": 5113,
+                "theme_id": "middle_east",
+                "kraj": "PS",
+                "zrodlo": "wafa"
+              },
+              {
+                "signal_id": 10533,
+                "article_id": 5166,
+                "theme_id": "middle_east",
+                "kraj": "PS",
+                "zrodlo": "wafa"
+              }
+            ],
+            "kraj": "PS",
+            "n_zrodel": 1,
+            "rama": "Izrael eskaluje przemoc, osadnictwo i narusza status quo świętych miejsc (WAFA)",
+            "stance": "krytyka",
+            "article_ids": [
+              5113,
+              5166
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 10147,
+                "article_id": 5220,
+                "theme_id": "middle_east",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              },
+              {
+                "signal_id": 10987,
+                "article_id": 5088,
+                "theme_id": "middle_east",
+                "kraj": "IL",
+                "zrodlo": "haaretz"
+              }
+            ],
+            "kraj": "IL",
+            "n_zrodel": 2,
+            "rama": "Cele wojenne bez zmian, konieczność demilitaryzacji, wewnętrzna krytyka zaniedbań rządu (jpost, haaretz)",
+            "stance": "mieszany (poparcie/alarm/krytyka wewnętrzna)",
+            "article_ids": [
+              5220,
+              5088
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "niski",
+          "uzasadnienie": "PS reprezentowany wyłącznie przez WAFA (1 źródło, agencja rządowa Autonomii Palestyńskiej) – poniżej progu 2 źródeł; IL spełnia próg 2 źródeł w tym zestawieniu, ale asymetria źródeł między krajami obniża pewność do niskiej."
+        }
+      }
+    ],
+    "autoobraz": [
+      {
+        "dowody": [
+          {
+            "signal_id": 10153,
+            "article_id": 4577,
+            "theme_id": "hybrid_info",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 10409,
+            "article_id": 4581,
+            "theme_id": "emergent:rule-of-law-judiciary",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 10988,
+            "article_id": 4593,
+            "theme_id": "elections_politics",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 10298,
+            "article_id": 4628,
+            "theme_id": "hybrid_info",
+            "kraj": "UA",
+            "zrodlo": "pravda_ua"
+          },
+          {
+            "signal_id": 10115,
+            "article_id": 5237,
+            "theme_id": "security_defense",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          },
+          {
+            "signal_id": 10721,
+            "article_id": 5026,
+            "theme_id": "security_defense",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "PL",
+        "jak_opisuje_siebie": "Analizowane źródła polskie (onet) przedstawiają Polskę poprzez pryzmat krytyki wewnętrznej – kryzys praworządności, spory o list żelazny, krytyka systemu sądów ('PiS-owski system sądów chroni swoich').",
+        "jak_opisuja_go_inni": "Zewnętrzne źródła (pravda_ua, folha, pbs) opisują Polskę głównie w kontekście bezpieczeństwa i gotowości obronnej – incydent kolejowy w Białymstoku, Kaliningrad jako punkt zapalny, armia gotowa na konfrontację z Rosją – w tonie neutralnym/uspokajającym.",
+        "komentarz": "Wyraźny rozjazd tematyczny: autoobraz koncentruje się na politycznym kryzysie wewnętrznym, obraz zewnętrzny – na roli obronnej Polski wobec Rosji, bez odniesień do sporów sądowych.",
+        "article_ids": [
+          4577,
+          4581,
+          4593,
+          4628,
+          5237,
+          5026
+        ]
+      },
+      {
+        "dowody": [
+          {
+            "signal_id": 10049,
+            "article_id": 4819,
+            "theme_id": "emergent:belt-and-road-initiative",
+            "kraj": "CN",
+            "zrodlo": "globaltimes"
+          },
+          {
+            "signal_id": 10620,
+            "article_id": 4847,
+            "theme_id": "emergent:china-multilateralism-un",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          },
+          {
+            "signal_id": 10729,
+            "article_id": 4802,
+            "theme_id": "us_policy",
+            "kraj": "CN",
+            "zrodlo": "cgtn"
+          },
+          {
+            "signal_id": 11169,
+            "article_id": 4731,
+            "theme_id": "hybrid_info",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 11022,
+            "article_id": 4706,
+            "theme_id": "hybrid_info",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          }
+        ],
+        "pewnosc": "średni",
+        "kraj": "CN",
+        "jak_opisuje_siebie": "Analizowane źródła chińskie (cgtn, globaltimes, chinanews) budują autoobraz Chin jako filaru multilateralizmu ONZ, partnera w Arktyce, strażnika porządku powojennego oraz źródła przełomowych osiągnięć technologicznych – dominuje stance poparcie/neutralny.",
+        "jak_opisuja_go_inni": "Źródła brytyjskie (guardian, bbc) przedstawiają Chiny głównie w ramie zagrożenia – szpiegostwo wywiadowcze na uczelniach, niebezpieczne modele AI łamiące zabezpieczenia – ze stance alarm.",
+        "komentarz": "Wyraźna rozbieżność: Chiny przedstawiają siebie jako konstruktywnego, stabilizującego aktora, podczas gdy źródła brytyjskie akcentują zagrożenie bezpieczeństwa ze strony Chin (JS=0.266 dla tej pary, choć JS mierzy tylko rozkład nacechowania, nie ramy).",
+        "article_ids": [
+          4819,
+          4847,
+          4802,
+          4731,
+          4706
+        ]
+      }
+    ],
+    "co_sie_przesuwa": [],
+    "nieobecne_w_polsce": [
+      {
+        "dowody": [
+          {
+            "signal_id": 10131,
+            "article_id": 4646,
+            "theme_id": "middle_east",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          },
+          {
+            "signal_id": 10507,
+            "article_id": 4691,
+            "theme_id": "middle_east",
+            "kraj": "DE",
+            "zrodlo": "spiegel"
+          },
+          {
+            "signal_id": 10366,
+            "article_id": 4705,
+            "theme_id": "middle_east",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 10803,
+            "article_id": 4707,
+            "theme_id": "middle_east",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          }
+        ],
+        "theme_id": "middle_east",
+        "tekst": "Temat Bliskiego Wschodu ma niski udział w próbce polskiej (5,3%) w porównaniu ze średnią pozostałych analizowanych krajów (23%) – analizowane źródła niemieckie (tagesschau, spiegel) i brytyjskie (bbc) rozwijają wątki np. zagrożenia powrotem Państwa Islamskiego czy cierpienia cywilów w Gazie, nieobecne w tej próbce polskich mediów.",
+        "article_ids": [
+          4646,
+          4691,
+          4705,
+          4707
+        ],
+        "temat": "middle_east"
+      }
+    ],
+    "slabe_sygnaly": [
+      {
+        "dowody": [
+          {
+            "signal_id": 10512,
+            "article_id": 4650,
+            "theme_id": "civil_preparedness",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          },
+          {
+            "signal_id": 11284,
+            "article_id": 4734,
+            "theme_id": "civil_preparedness",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          }
+        ],
+        "theme_id": "civil_preparedness",
+        "tekst": "Temat civil_preparedness pojawia się w DE i UK, ale każdy kraj reprezentowany jest tylko przez jedno niezależne źródło (poniżej progu 2), co uniemożliwia uznanie zbieżności za potwierdzoną – niemieckie źródło krytykuje niedostateczne przygotowanie sieci komunikacji kryzysowej, brytyjskie krytykuje repatriację migrantów mimo ryzyka prześladowań.",
+        "article_ids": [
+          4650,
+          4734
+        ]
+      },
+      {
+        "dowody": [
+          {
+            "signal_id": 10136,
+            "article_id": 4955,
+            "theme_id": "elections_politics",
+            "kraj": "HK",
+            "zrodlo": "hongkongfp"
+          },
+          {
+            "signal_id": 10984,
+            "article_id": 4952,
+            "theme_id": "elections_politics",
+            "kraj": "HK",
+            "zrodlo": "rthk"
+          },
+          {
+            "signal_id": 10339,
+            "article_id": 5218,
+            "theme_id": "elections_politics",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          },
+          {
+            "signal_id": 10831,
+            "article_id": 5084,
+            "theme_id": "elections_politics",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          }
+        ],
+        "theme_id": "elections_politics",
+        "tekst": "Wątek instrumentalizacji bezpieczeństwa w kampanii wyborczej w Izraelu (elections_politics) spełnia próg źródeł tylko w 2 krajach (HK, IL) z 3 wymaganych, więc nie może być zaliczony do potwierdzonych wzorców zbieżności mimo spójnego kierunku krytycznego.",
+        "article_ids": [
+          4955,
+          4952,
+          5218,
+          5084
+        ]
+      }
+    ]
+  },
+  "publication": {
+    "status": "regularny",
+    "fetched_day_utc": "2026-09-30",
+    "publication_window_start": "2026-09-29T00:00:00+00:00",
+    "publication_window_end_exclusive": "2026-10-01T00:00:00+00:00",
+    "published_min": "2026-09-28T10:06:00+00:00",
+    "published_max": "2026-09-30T19:24:29+00:00",
+    "fetched_articles": 709,
+    "late_articles": 4,
+    "late_share": 0.005641748942172073,
+    "missing_publication": 0,
+    "future_publication": 20,
+    "older_than_24h": 53,
+    "older_than_48h": 2,
+    "today_language_allowed": false
+  },
+  "semantic_review": "pending",
+  "warnings": [
+    "walidacja po ponowieniu: 4 błędów; usunięto twierdzenia bez poprawnych odnośników. Błędy: w_skrocie.0: jeden niezależny głos w kraju wymaga niskiej pewności; nieobecne_w_polsce.1: article_ids nie odpowiadają dowodom; rozbieznosci.0: JS mierzy rozkłady nacechowania, nie podobieństwo ram; autoobraz.2: opisz analizowane źródła, nie wszystkie media kraju",
+    "brak materiałów z aktywnych źródeł: indianexpress, alquds_ps",
+    "błędy kanałów: alquds_ps, indianexpress"
+  ]
+}
