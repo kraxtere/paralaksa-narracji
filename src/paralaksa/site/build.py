@@ -145,7 +145,8 @@ def copy_v2(src: Path | None, dest: Path) -> list[str]:
             if f.is_file() and not f.name.startswith("_") and f.suffix in (".html", ".png"):
                 shutil.copy2(f, dest / day / f.name)
     if days:
-        links = "".join(f'<li><a href="{d}/index.html">{d}</a></li>' for d in days)
+        (dest / "dni.json").write_text(json.dumps(days), encoding="utf-8")   # przełącznik dni na stronach dnia
+        links ="".join(f'<li><a href="{d}/index.html">{d}</a></li>' for d in days)
         (dest / "index.html").write_text(
             f'<!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="robots" content="noindex">'
             f'<meta http-equiv="refresh" content="0; url={days[0]}/index.html"><title>Paralaksa 2.0</title></head>'

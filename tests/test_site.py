@@ -1,4 +1,5 @@
 import json
+import json
 import re
 
 from paralaksa.aggregate.metrics import compute_daily_metrics
@@ -216,4 +217,5 @@ def test_v2_copies_finished_views_without_work_files(tmp_path):
     assert copy_v2(tmp_path / "widok", tmp_path / "v2") == ["2026-09-29"]
     assert sorted(p.name for p in (tmp_path / "v2" / "2026-09-29").iterdir()) == ["index.html", "start.png", "temat-x.html"]
     assert "2026-09-29/index.html" in (tmp_path / "v2" / "index.html").read_text(encoding="utf-8")
+    assert json.loads((tmp_path / "v2" / "dni.json").read_text(encoding="utf-8")) == ["2026-09-29"]
     assert copy_v2(None, tmp_path / "brak") == []
