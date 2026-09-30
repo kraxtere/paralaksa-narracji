@@ -1,3 +1,16 @@
+# Rosja w daily — 2026-09-30
+
+Decyzja właściciela: rosyjskie źródła w codziennym przebiegu, sankcje UE nie są przeszkodą (dotąd Rosja była tylko w kartach
+zdarzeń i w telewizji GDELT).
+- Aktywne: `izvestia` (Izwiestia, prokremlowska, pod sankcjami UE) i `rg` (Rossijskaja Gazieta, dziennik rządowy), po rosyjsku,
+  z pełnymi tekstami. Razem 32 aktywne źródła, 14 krajów.
+- Nieaktywne z opisem: `tass` (robots.txt i artykuły zwracają 403 dla naszego UA), `rt_ru` (serwer zrywa połączenie z naszym UA).
+  Z innym UA oba działają, ale UA nie zmieniamy (to byłoby obchodzenie blokady). RIA nie rozwiązuje się w DNS w PL, Kommersant
+  bez odpowiedzi, RBC 401 na artykułach, Interfax pusty kanał.
+- Próba ekstrakcji (DeepSeek V4-Pro) na 5 + 5 artykułach: 12 sygnałów, trafne tematy i stanowiska (np. Zacharowa o języku
+  rosyjskim na Ukrainie jako krytyka), bez ponowień, 0,009 $. RG ma dużo spraw krajowych i poradników, które nie dają sygnałów.
+- Niewiadoma: z GitHub Actions (IP poza Rosją) źródła mogą odmawiać; błąd jednego źródła to tylko ostrzeżenie informacyjne.
+
 # Ekstrakcja: 8 równoległych wywołań — 2026-09-25
 
 - Pierwszy przebieg z 30 źródłami (25.09, 1094 nowe artykuły, 862 w oknie publikacji) doszedł do `max_runtime_s` 2400 s:

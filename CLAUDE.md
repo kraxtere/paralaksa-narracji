@@ -107,7 +107,11 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
 - Opisujemy przekaz medialny, nie fakty; bez prognoz jako faktów.
 - Pobieranie: respektuj robots.txt, nie obchodź paywalli ani ochrony antybotowej, identyfikujący UA.
 - Pełne teksty tylko lokalnie (`data/`, poza gitem), nigdy w raportach; cytaty maks. 15 słów.
-- Bez źródeł objętych sankcjami UE (RT, Sputnik). Taksonomii tematów nie zmieniamy automatycznie.
+- Źródła rosyjskie, także objęte sankcjami UE (RT, RIA, Izwiestia), są dozwolone (decyzja właściciela 2026-09-25, zmienia
+  wcześniejszy zakaz). W kartach zdarzeń wymagane tylko przy zdarzeniach, które dotyczą Rosji albo do których Rosja się odnosi;
+  ogólnie: strony istotne dla zdarzenia, z zapisem gdzie szukano (2026-09-26). Daily: od 2026-09-30 (decyzja właściciela) RU: izvestia, rg;
+  TASS i RT odmawiają naszemu UA (robots.txt 403 / zerwane połączenie), RIA zablokowana w DNS w PL; UA nie zmieniamy.
+  Taksonomii tematów nie zmieniamy automatycznie.
 
 ## Decyzje modelowe (ekstrakcja sygnałów, KM2)
 
@@ -195,5 +199,6 @@ tekst CJK przycinany w znakach), scmp (HK, tylko lead). Razem 21 aktywnych; CN m
 2026-09-25, dwa źródła na kraj (po audycie jakości): thehindu, indianexpress (IN), dailysabah, hurriyet (TR), rthk, hongkongfp (HK),
 israelhayom, haaretz (IL, tylko lead), wafa (PS, dzienna mapa strony `{yyyy}/{mm}/{dd}`). Razem 30 aktywnych, 13 krajów; tylko QA ma
 jednego wydawcę. Al-Quds z GitHub Actions dostaje 403 (z domowego łącza działa), nie obchodzimy.
+2026-09-30 (decyzja właściciela): RU izvestia, rg (pełne teksty). Razem 32 aktywne, 14 krajów. TASS, RT po rosyjsku: nieaktywne (blokada naszego UA).
 Nieaktywne, bo nie działa RSS: PAP (Incapsula), Polskie Radio, Suspilne (403), Telegraph (402). People's Daily RSS stoi od 06.2025.
 Nieaktywne, ale zweryfikowane, do włączenia w KM4: wp, gazeta (to nie Wyborcza), kyivindependent, dw, faz, skynews. Martwe: Xinhua RSS (2018), China Daily RSS (404). Reuters/AP/AFP bez publicznego RSS.
