@@ -203,3 +203,17 @@ def test_stories_verification_moves_and_drops_articles():
     assert [k["kraj"] for k in a["kraje"]] == ["PL", "DE", "US"] and a["pozostale"] == [5]
     assert a["kraje"][0]["naglowek_pl"] == "Nagłówek 1" and a["kraje"][1]["naglowek_pl"] == "t2"   # brak tłumaczenia: oryginał
     assert a["odrzucone"] == [3]
+
+
+def test_v2_copies_finished_views_without_work_files(tmp_path):
+    from paralaksa.site.build import copy_v2
+
+    day = tmp_path / "widok" / "2026-09-29"
+    day.mkdir(parents=True)
+    for name in ("index.html", "start.png", "temat-x.html", "_podglad-index.html", "tematy.json"):
+        (day / name).write_text("x", encoding="utf-8")
+    (tmp_path / "widok" / "2026-09-30").mkdir()          # bez index.html: pominięty
+    assert copy_v2(tmp_path / "widok", tmp_path / "v2") == ["2026-09-29"]
+    assert sorted(p.name for p in (tmp_path / "v2" / "2026-09-29").iterdir()) == ["index.html", "start.png", "temat-x.html"]
+    assert "2026-09-29/index.html" in (tmp_path / "v2" / "index.html").read_text(encoding="utf-8")
+    assert copy_v2(None, tmp_path / "brak") == []

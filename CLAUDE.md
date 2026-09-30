@@ -137,6 +137,12 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
   `tv_stories.py`: „Historie dnia” (pierwsza zakładka Telewizji): tezy z raportów (flash, bez sekcji spekulacji Gemini), zdarzenia
   z różnymi wersjami (DeepSeek Pro), weryfikacja (Haiku 4.5) z odrzuceniem decydowanym w kodzie (pytania kontrolne, liczby jako przedziały,
   pisownia nazw). Każdy krok zapisany w `data/gdelt/tv/<dzień>/`; zmiana reguł bez nowych wywołań. Tylko przy `plx site`, nigdy w daily.
+- `src/paralaksa/extract/codex_client.py`: model `codex[:low|medium|high]` w `build_client`, czyli Codex CLI z limitu konta Pro
+  właściciela (decyzja 2026-09-30: eksperymenty i kroki lokalne przez Codex zamiast płatnych API).
+  Tylko lokalnie: w CI odmawia działania. Codex pracuje read-only w pustym folderze tymczasowym. Nigdy „ultra”.
+- Wersja 2.0 strony (prototyp obrazkowy): `data/widok_obrazkowy.py` (poza gitem) generuje przez Codex infografikę dnia 2×3
+  i plakaty tematów. Panele wykrywa po ramkach i nakłada jako linki. Wynik trafia do `data/widok/<dzień>/`,
+  a `plx site` kopiuje go do `v2/` (`build.copy_v2`, pliki od „_” pomija). Link „2.0” jest w menu.
 - `.github/workflows/daily.yml`: cron 10:30 UTC (poza szczytem DeepSeek; GitHub opóźnia start nawet o 4–5 h), baza jako zaszyfrowany snapshot w Release `database-backup` (cache i artefakt to kopie), commit `reports/`. Kod 1 tylko przy ostrzeżeniach blokujących (synteza, ekstrakcja, brak >1/3 aktywnych źródeł); pojedynczy kanał/źródło to ostrzeżenie informacyjne.
 
 ## Konwencje

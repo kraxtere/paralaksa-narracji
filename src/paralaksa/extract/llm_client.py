@@ -45,7 +45,7 @@ def model_extra_params(model: str, thinking: str, effort: str | None) -> dict[st
         if effort:
             params["reasoning_effort"] = effort
         return params
-    if model.startswith("claude-haiku-4-5"):
+    if model.startswith("claude-haiku-4-5") or model.startswith("codex"):
         return {}
     extra: dict[str, Any] = {"thinking": {"type": thinking}}
     if effort:
@@ -247,7 +247,11 @@ class DeepSeekClient:
 def build_client(
     model: str, pricing: Pricing, poll_interval_s: float, batch_timeout_h: float
 ) -> LLMClient | DeepSeekClient:
-    """Wybór klienta po prefiksie modelu. DeepSeek: klucz z DEEPSEEK_API_KEY (brak Batches API)."""
+    """Wybór klienta po prefiksie modelu. DeepSeek: klucz z DEEPSEEK_API_KEY (brak Batches API).
+    "codex[:effort]": Codex CLI z limitu konta właściciela, tylko lokalnie (codex_client.py)."""
+    if model.startswith("codex"):
+        from paralaksa.extract.codex_client import CodexClient
+        return CodexClient()
     if model.startswith("deepseek"):
         api_key = os.environ.get("DEEPSEEK_API_KEY")
         if not api_key:

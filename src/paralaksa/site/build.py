@@ -67,7 +67,7 @@ def page(title: str, kind: str, payload: dict, root: str) -> str:
 <body data-kind="{kind}" data-root="{root}">
 <header class="top">
   <a class="brand" href="{root}index.html"><svg viewBox="0 0 32 32" aria-hidden="true">{logo_mark()}</svg>Paralaksa</a>
-  <nav><a href="{root}index.html#zdarzenia">Zdarzenia</a><a href="{root}index.html#dziennik">Dziennik</a><a href="{root}telewizja.html">Telewizja</a></nav>
+  <nav><a href="{root}index.html#zdarzenia">Zdarzenia</a><a href="{root}index.html#dziennik">Dziennik</a><a href="{root}telewizja.html">Telewizja</a><a href="{root}v2/index.html">2.0</a></nav>
   <span class="internal">wersja wewnętrzna, do oceny</span>
   <button class="theme" id="theme" type="button" title="Tryb jasny albo ciemny"><span aria-hidden="true">◐</span><span class="lbl">tryb</span></button>
 </header>
@@ -81,7 +81,8 @@ def page(title: str, kind: str, payload: dict, root: str) -> str:
 
 
 def build_site(out_dir: Path, events_dir: Path, reports_dir: Path, conn: sqlite3.Connection | None,
-               theme_names: dict[str, str], stories_for=None, titles_for=None, tv_payload: dict | None = None) -> SiteResult:
+               theme_names: dict[str, str], stories_for=None, titles_for=None, tv_payload: dict | None = None,
+               v2_dir: Path | None = None) -> SiteResult:
     """`stories_for(day, eligible_ids)` returns the cached or freshly generated stories of the day (or None),
     `titles_for(day, article_ids)` Polish headlines by article id, `tv_payload` the data of the Telewizja page
     (`gdelt.tv_views.build`; without it the page says there is no data)."""
@@ -129,7 +130,28 @@ def build_site(out_dir: Path, events_dir: Path, reports_dir: Path, conn: sqlite3
     (out_dir / "manifest.webmanifest").write_text(icons.manifest(), encoding="utf-8")
     for name, spec in icons.ICONS.items():
         (out_dir / name).write_bytes(icons.render_icon(*spec))
+    copy_v2(v2_dir, out_dir / "v2")
     return res
+
+
+def copy_v2(src: Path | None, dest: Path) -> list[str]:
+    """Wersja 2.0 (prototyp obrazkowy, data/widok/<dzień>/ z data/widok_obrazkowy.py): kopiuje gotowe strony i obrazy,
+    bez plików roboczych (nazwy od „_”), i dopisuje v2/index.html z listą dni (najnowszy otwiera się od razu)."""
+    days = sorted((d.name for d in src.iterdir() if d.is_dir() and (d / "index.html").exists()), reverse=True) \
+        if src and src.exists() else []
+    for day in days:
+        (dest / day).mkdir(parents=True, exist_ok=True)
+        for f in (src / day).iterdir():
+            if f.is_file() and not f.name.startswith("_") and f.suffix in (".html", ".png"):
+                shutil.copy2(f, dest / day / f.name)
+    if days:
+        links = "".join(f'<li><a href="{d}/index.html">{d}</a></li>' for d in days)
+        (dest / "index.html").write_text(
+            f'<!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="robots" content="noindex">'
+            f'<meta http-equiv="refresh" content="0; url={days[0]}/index.html"><title>Paralaksa 2.0</title></head>'
+            f'<body><p>Paralaksa 2.0 (prototyp): <a href="{days[0]}/index.html">najnowszy dzień</a></p><ul>{links}</ul>'
+            f'<p><a href="../index.html">Stara wersja</a></p></body></html>', encoding="utf-8")
+    return days
 
 
 def zip_site(out_dir: Path) -> Path:

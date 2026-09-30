@@ -407,7 +407,7 @@ def site(
         typer.echo(f"Tłumaczenia TV {day}: {usd:.3f} $")
     try:
         res = build_site(out_dir, events_dir, reports_dir, conn, {t.id: t.name_pl for t in load_themes(config_dir)},
-                         stories_for, titles_for, tv_payload)
+                         stories_for, titles_for, tv_payload, v2_dir=out_dir.parent / "widok")
     finally:
         if conn is not None:
             conn.close()
