@@ -963,3 +963,88 @@
   note: Świeży RSS. Reprodukcja dziennikarska z atrybucją; zastosowania komercyjne
     kierowane do licencjonowania, treści partnerów mają odrębne prawa. Brak audytu
     sygnałów PT.
+# Rosja: decyzja właściciela 2026-09-30 (rosyjskie źródła w daily, sankcje UE nie są przeszkodą; SPEC/CLAUDE.md 2026-09-25).
+# Test 2026-09-30 z łącza domowego: RIA nie rozwiązuje się w DNS (blokada w PL), Kommersant bez odpowiedzi, RBC 401 na artykułach,
+# Interfax pusty kanał. Z GitHub Actions (IP poza RU) mogą zwracać błędy; pojedyncze źródło to tylko ostrzeżenie informacyjne.
+- id: tass
+  name: TASS
+  aliases:
+  - 'TASS'
+  - 'ТАСС'
+  country: RU
+  editorial_country: RU
+  language: ru
+  type: agency
+  feeds:
+  - url: https://tass.ru/rss/v2.xml
+    section: all
+  fulltext: false
+  active: false
+  ownership: państwowa agencja informacyjna Federacji Rosyjskiej
+  publisher_group: tass
+  channel_scope: all
+  activated_at: '2026-09-30'
+  license_note: Decyzja właściciela 2026-09-30. Strony artykułów zwracają 403 (ochrona antybotowa, nie obchodzimy),
+    więc tylko tytuł i lead z RSS. Praw wydawcy nie weryfikowano.
+  note: Nieaktywne. robots.txt zwraca 403 dla naszego UA (ingest traktuje to jako zakaz), strony artykułów też 403;
+    z innym UA kanał działa, ale zmiany UA nie robimy (antybot). Test 2026-09-30.
+- id: izvestia
+  name: Izwiestia
+  aliases:
+  - 'Izvestia'
+  - 'Известия'
+  country: RU
+  editorial_country: RU
+  language: ru
+  type: private
+  feeds:
+  - url: https://iz.ru/xml/rss/all.xml
+    section: all
+  fulltext: true
+  active: true
+  ownership: National Media Group (prokremlowska); objęta sankcjami UE
+  publisher_group: izvestia
+  channel_scope: all
+  activated_at: '2026-09-30'
+  license_note: Decyzja właściciela 2026-09-30, sankcje UE świadomie pominięte. Praw wydawcy nie weryfikowano.
+  note: Kanał świeży (50/50 < 48 h), robots.txt dopuszcza, pełny tekst pobiera się.
+- id: rt_ru
+  name: RT (po rosyjsku)
+  aliases:
+  - 'RT'
+  - 'Russia Today'
+  country: RU
+  editorial_country: RU
+  language: ru
+  type: government
+  feeds:
+  - url: https://russian.rt.com/rss
+    section: all
+  fulltext: true
+  active: false
+  ownership: TV-Novosti, finansowanie z budżetu państwa rosyjskiego; objęta sankcjami UE
+  publisher_group: rt
+  channel_scope: all
+  activated_at: '2026-09-30'
+  license_note: Decyzja właściciela 2026-09-30, sankcje UE świadomie pominięte. Praw wydawcy nie weryfikowano.
+  note: Nieaktywne. Z naszym UA serwer zrywa połączenie (także robots.txt), z innym działa; zmiany UA nie robimy (antybot). Test 2026-09-30.
+- id: rg
+  name: Rossijskaja Gazieta
+  aliases:
+  - 'Российская газета'
+  - 'RG'
+  country: RU
+  editorial_country: RU
+  language: ru
+  type: government
+  feeds:
+  - url: https://rg.ru/xml/index.xml
+    section: all
+  fulltext: true
+  active: true
+  ownership: rządowy dziennik Federacji Rosyjskiej (publikuje akty prawne)
+  publisher_group: rg
+  channel_scope: all
+  activated_at: '2026-09-30'
+  license_note: Decyzja właściciela 2026-09-30. Praw wydawcy nie weryfikowano.
+  note: Kanał świeży (100/100 < 48 h), robots.txt dopuszcza nasz UA, pełny tekst pobiera się.
