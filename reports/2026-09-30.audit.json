@@ -1,0 +1,3315 @@
+{
+  "seed": "2026-09-30",
+  "sample": [
+    {
+      "path": "slabe_sygnaly.1",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 10136,
+            "article_id": 4955,
+            "theme_id": "elections_politics",
+            "kraj": "HK",
+            "zrodlo": "hongkongfp"
+          },
+          {
+            "signal_id": 10984,
+            "article_id": 4952,
+            "theme_id": "elections_politics",
+            "kraj": "HK",
+            "zrodlo": "rthk"
+          },
+          {
+            "signal_id": 10339,
+            "article_id": 5218,
+            "theme_id": "elections_politics",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          },
+          {
+            "signal_id": 10831,
+            "article_id": 5084,
+            "theme_id": "elections_politics",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          }
+        ],
+        "theme_id": "elections_politics",
+        "tekst": "Wątek instrumentalizacji bezpieczeństwa w kampanii wyborczej w Izraelu (elections_politics) spełnia próg źródeł tylko w 2 krajach (HK, IL) z 3 wymaganych, więc nie może być zaliczony do potwierdzonych wzorców zbieżności mimo spójnego kierunku krytycznego.",
+        "article_ids": [
+          4955,
+          4952,
+          5218,
+          5084
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 10136,
+            "article_id": 4955,
+            "theme_id": "elections_politics",
+            "kraj": "HK",
+            "zrodlo": "hongkongfp"
+          },
+          {
+            "signal_id": 10984,
+            "article_id": 4952,
+            "theme_id": "elections_politics",
+            "kraj": "HK",
+            "zrodlo": "rthk"
+          },
+          {
+            "signal_id": 10339,
+            "article_id": 5218,
+            "theme_id": "elections_politics",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          },
+          {
+            "signal_id": 10831,
+            "article_id": 5084,
+            "theme_id": "elections_politics",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          }
+        ],
+        "theme_id": "elections_politics",
+        "tekst": "Wątek instrumentalizacji bezpieczeństwa w kampanii wyborczej w Izraelu (elections_politics) spełnia próg źródeł tylko w 2 krajach (HK, IL) z 3 wymaganych, więc nie może być zaliczony do potwierdzonych wzorców zbieżności mimo spójnego kierunku krytycznego.",
+        "article_ids": [
+          4955,
+          4952,
+          5218,
+          5084
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 10136,
+          "theme_id": "elections_politics",
+          "subject_actor": "HK",
+          "content_group": "2e015fb294d52b1668652cdf06f727dedef200a93c582d932a936932da027683",
+          "publisher_group": "hongkongfp",
+          "article_id": 4955,
+          "kraj": "HK",
+          "zrodlo": "hongkongfp",
+          "typ_zrodla": "private",
+          "rama": "wolność prasy pod presją władz",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Tekst wskazuje na systemowe ograniczanie wolności prasy w Hongkongu, powołując się na spadek w międzynarodowych indeksach, zamknięcie około 10 mediów oraz aresztowania dziennikarzy po wprowadzeniu ustaw o bezpieczeństwie."
+        },
+        {
+          "signal_id": 10984,
+          "theme_id": "elections_politics",
+          "subject_actor": "UK",
+          "content_group": "6466e575ea9c656969d8df13fcfea64e835705802d0ebfb84a96989b7bf25cb9",
+          "publisher_group": "rthk",
+          "article_id": 4952,
+          "kraj": "HK",
+          "zrodlo": "rthk",
+          "typ_zrodla": "public",
+          "rama": "Politycznie ryzykowna decyzja odłożona w czasie",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Reforma emerytur i wprowadzenie narodowej usługi opiekuńczej zostały celowo odłożone do czasu po następnych wyborach parlamentarnych, co artykuł określa jako manewr politycznie niebezpieczny."
+        },
+        {
+          "signal_id": 10339,
+          "theme_id": "elections_politics",
+          "subject_actor": "IL",
+          "content_group": "bfb625b4fb227cc5b790c8883c52bfd2685ded7d9d3f899b4bf0eb313d51531f",
+          "publisher_group": "jpost",
+          "article_id": 5218,
+          "kraj": "IL",
+          "zrodlo": "jpost",
+          "typ_zrodla": "private",
+          "rama": "Bezpieczeństwo narzędziem kampanii wyborczej",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Lider opozycji Yair Lapid oskarża obóz premiera Netanjahu o wykorzystywanie incydentu z samolotem flydubai do politycznej gry przed wyborami, podczas gdy zwolennicy premiera przedstawiają go jako potwierdzenie wcześniejszych ostrzeżeń bezpieczeństwa."
+        },
+        {
+          "signal_id": 10831,
+          "theme_id": "elections_politics",
+          "subject_actor": "IL",
+          "content_group": "5084",
+          "publisher_group": "haaretz",
+          "article_id": 5084,
+          "kraj": "IL",
+          "zrodlo": "haaretz",
+          "typ_zrodla": "private",
+          "rama": "Netanjahu wywołuje kryzys wyborczy",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł sugeruje, że premier Netanjahu celowo eskaluje napięcia na Zachodnim Brzegu, aby wykreować atmosferę zagrożenia i wpłynąć na sytuację wyborczą."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "wzorce_zbieznosci.0.kraje.IL",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 9987,
+            "article_id": 5225,
+            "theme_id": "hybrid_info",
+            "kraj": "IL",
+            "zrodlo": "israelhayom"
+          },
+          {
+            "signal_id": 10402,
+            "article_id": 5209,
+            "theme_id": "hybrid_info",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          },
+          {
+            "signal_id": 10274,
+            "article_id": 5074,
+            "theme_id": "hybrid_info",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          },
+          {
+            "signal_id": 10145,
+            "article_id": 5220,
+            "theme_id": "hybrid_info",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          }
+        ],
+        "kraj": "IL",
+        "n_zrodel": 3,
+        "rama": "Atak terrorystyczny/hybrydowy na Izrael lub jego obywateli (jpost, israelhayom, haaretz)",
+        "stance": "alarm",
+        "article_ids": [
+          5225,
+          5209,
+          5074,
+          5220
+        ]
+      },
+      "context": {
+        "temat": "hybrid_info",
+        "kierunek": "negatywny",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 10384,
+                "article_id": 5241,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "folha"
+              },
+              {
+                "signal_id": 10035,
+                "article_id": 5256,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "agenciabrasil"
+              },
+              {
+                "signal_id": 10117,
+                "article_id": 5237,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "folha"
+              },
+              {
+                "signal_id": 10452,
+                "article_id": 5242,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "folha"
+              }
+            ],
+            "kraj": "BR",
+            "n_zrodel": 2,
+            "rama": "AI i dezinformacja jako zagrożenie dla demokracji i bezpieczeństwa (agenciabrasil, folha)",
+            "stance": "alarm/neutralny",
+            "article_ids": [
+              5241,
+              5256,
+              5237,
+              5242
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 10135,
+                "article_id": 4955,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "hongkongfp"
+              },
+              {
+                "signal_id": 11258,
+                "article_id": 4931,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "scmp"
+              }
+            ],
+            "kraj": "HK",
+            "n_zrodel": 2,
+            "rama": "Nierówna ochrona wolności prasy i niejasne incydenty bezpieczeństwa (hongkongfp, scmp)",
+            "stance": "krytyka/neutralny",
+            "article_ids": [
+              4955,
+              4931
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 9987,
+                "article_id": 5225,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "israelhayom"
+              },
+              {
+                "signal_id": 10402,
+                "article_id": 5209,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              },
+              {
+                "signal_id": 10274,
+                "article_id": 5074,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "haaretz"
+              },
+              {
+                "signal_id": 10145,
+                "article_id": 5220,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              }
+            ],
+            "kraj": "IL",
+            "n_zrodel": 3,
+            "rama": "Atak terrorystyczny/hybrydowy na Izrael lub jego obywateli (jpost, israelhayom, haaretz)",
+            "stance": "alarm",
+            "article_ids": [
+              5225,
+              5209,
+              5074,
+              5220
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 11169,
+                "article_id": 4731,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 11022,
+                "article_id": 4706,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "bbc"
+              },
+              {
+                "signal_id": 10759,
+                "article_id": 4753,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 10100,
+                "article_id": 4745,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              }
+            ],
+            "kraj": "UK",
+            "n_zrodel": 2,
+            "rama": "Zagrożenia hybrydowe (chiński wywiad, chińska AI, cyberzagrożenia dla finansów) wymagające reakcji instytucjonalnej (guardian, bbc)",
+            "stance": "alarm",
+            "article_ids": [
+              4731,
+              4706,
+              4753,
+              4745
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 10310,
+                "article_id": 5057,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "fox"
+              },
+              {
+                "signal_id": 11107,
+                "article_id": 5037,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              },
+              {
+                "signal_id": 10372,
+                "article_id": 5045,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "fox"
+              },
+              {
+                "signal_id": 10719,
+                "article_id": 5026,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              }
+            ],
+            "kraj": "US",
+            "n_zrodel": 2,
+            "rama": "Propaganda państwowa i zagrożenia hybrydowe (Iran, Rosja) (fox, pbs)",
+            "stance": "alarm/krytyka",
+            "article_ids": [
+              5057,
+              5037,
+              5045,
+              5026
+            ]
+          }
+        ],
+        "wspolny_kierunek": "Niezależnie od aktora oskarżanego (Chiny, Rosja, Iran, własne rządy) i różnych słów, przekaz w pięciu krajach buduje ramę rosnącego zagrożenia hybrydowego – ataków informacyjnych, cybernetycznych i propagandowych – łączącego bezpieczeństwo narodowe z technologią AI.",
+        "sygnaly_przeciwne": {
+          "dowody": [
+            {
+              "signal_id": 10298,
+              "article_id": 4628,
+              "theme_id": "hybrid_info",
+              "kraj": "UA",
+              "zrodlo": "pravda_ua"
+            },
+            {
+              "signal_id": 11378,
+              "article_id": 4864,
+              "theme_id": "hybrid_info",
+              "kraj": "CN",
+              "zrodlo": "chinanews"
+            }
+          ],
+          "tekst": "W danych są sygnały łagodzące: ukraińska Prawda przedstawia incydent kolejowy jako 'niepotwierdzone zagrożenie' złagodzone przez służby, a chińska agencja chinanews relacjonuje oskarżenia Korei Północnej o sfabrykowanie incydentu jako element sporu, nie jako potwierdzone zagrożenie.",
+          "article_ids": [
+            4628,
+            4864
+          ]
+        },
+        "pewnosc": {
+          "poziom": "wysoki",
+          "uzasadnienie": "5 krajów spełnia próg 2 niezależnych źródeł (BR, HK, IL, UK, US), łącznie 34 artykuły w temacie, zgodny kierunek alarmistyczny mimo różnych aktorów i redakcji o odmiennym profilu (publiczne, prywatne, rządowe)."
+        },
+        "trend": "brak linii bazowej"
+      },
+      "signals": [
+        {
+          "signal_id": 9987,
+          "theme_id": "hybrid_info",
+          "subject_actor": "IL",
+          "content_group": "5225",
+          "publisher_group": "israelhayom",
+          "article_id": 5225,
+          "kraj": "IL",
+          "zrodlo": "israelhayom",
+          "typ_zrodla": "private",
+          "rama": "Izrael celem ataku terrorystycznego w powietrzu",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł opisuje próbę ataku terrorystycznego na pokładzie samolotu lecącego z Dubaju do Tel Awiwu, podczas którego omański drugi pilot dźgnął kapitana, co doprowadziło do awaryjnego lądowania w Arabii Saudyjskiej."
+        },
+        {
+          "signal_id": 10402,
+          "theme_id": "hybrid_info",
+          "subject_actor": "IL",
+          "content_group": "4e8281bd0112d276e3e569c89c2f359d12cbdc4ab4abf3e8017f266568edaeaf",
+          "publisher_group": "jpost",
+          "article_id": 5209,
+          "kraj": "IL",
+          "zrodlo": "jpost",
+          "typ_zrodla": "private",
+          "rama": "Atak na izraelskich pasażerów",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł opisuje incydent na pokładzie samolotu flydubai lecącego z Dubaju do Tel Awiwu, podczas którego według izraelskich urzędników drugi pilot próbował porwać maszynę i rozbić ją o ziemię. Izraelscy pasażerowie mieli obezwładnić napastnika i pomóc w awaryjnym lądowaniu w Arabii Saudyjskiej."
+        },
+        {
+          "signal_id": 10274,
+          "theme_id": "hybrid_info",
+          "subject_actor": "IL",
+          "content_group": "5074",
+          "publisher_group": "haaretz",
+          "article_id": 5074,
+          "kraj": "IL",
+          "zrodlo": "haaretz",
+          "typ_zrodla": "private",
+          "rama": "Izrael przygotowuje się na kolejne zagrożenia",
+          "stance": "alarm",
+          "intensywnosc": 3,
+          "streszczenie": "Izrael deklaruje gotowość na dodatkowe potencjalne zagrożenia bezpieczeństwa po incydencie z lotem z ZEA."
+        },
+        {
+          "signal_id": 10145,
+          "theme_id": "hybrid_info",
+          "subject_actor": "IR",
+          "content_group": "7d73bbd0774d4b6c4f7a156db6ff930a1695b7ef1dd8d61c83c74c06e6ceca68",
+          "publisher_group": "jpost",
+          "article_id": 5220,
+          "kraj": "IL",
+          "zrodlo": "jpost",
+          "typ_zrodla": "private",
+          "rama": "Iran prowadzi kampanię hybrydową przeciw Europie",
+          "stance": "alarm",
+          "intensywnosc": 3,
+          "streszczenie": "Iran od dłuższego czasu prowadzi przeciwko Europie wielowymiarową kampanię hybrydową obejmującą działania w szarej strefie, terroryzm przez pełnomocników, cyberataki i wpływy gospodarcze."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "wzorce_zbieznosci.0.kraje.HK",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 10135,
+            "article_id": 4955,
+            "theme_id": "hybrid_info",
+            "kraj": "HK",
+            "zrodlo": "hongkongfp"
+          },
+          {
+            "signal_id": 11258,
+            "article_id": 4931,
+            "theme_id": "hybrid_info",
+            "kraj": "HK",
+            "zrodlo": "scmp"
+          }
+        ],
+        "kraj": "HK",
+        "n_zrodel": 2,
+        "rama": "Nierówna ochrona wolności prasy i niejasne incydenty bezpieczeństwa (hongkongfp, scmp)",
+        "stance": "krytyka/neutralny",
+        "article_ids": [
+          4955,
+          4931
+        ]
+      },
+      "context": {
+        "temat": "hybrid_info",
+        "kierunek": "negatywny",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 10384,
+                "article_id": 5241,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "folha"
+              },
+              {
+                "signal_id": 10035,
+                "article_id": 5256,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "agenciabrasil"
+              },
+              {
+                "signal_id": 10117,
+                "article_id": 5237,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "folha"
+              },
+              {
+                "signal_id": 10452,
+                "article_id": 5242,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "folha"
+              }
+            ],
+            "kraj": "BR",
+            "n_zrodel": 2,
+            "rama": "AI i dezinformacja jako zagrożenie dla demokracji i bezpieczeństwa (agenciabrasil, folha)",
+            "stance": "alarm/neutralny",
+            "article_ids": [
+              5241,
+              5256,
+              5237,
+              5242
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 10135,
+                "article_id": 4955,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "hongkongfp"
+              },
+              {
+                "signal_id": 11258,
+                "article_id": 4931,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "scmp"
+              }
+            ],
+            "kraj": "HK",
+            "n_zrodel": 2,
+            "rama": "Nierówna ochrona wolności prasy i niejasne incydenty bezpieczeństwa (hongkongfp, scmp)",
+            "stance": "krytyka/neutralny",
+            "article_ids": [
+              4955,
+              4931
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 9987,
+                "article_id": 5225,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "israelhayom"
+              },
+              {
+                "signal_id": 10402,
+                "article_id": 5209,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              },
+              {
+                "signal_id": 10274,
+                "article_id": 5074,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "haaretz"
+              },
+              {
+                "signal_id": 10145,
+                "article_id": 5220,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              }
+            ],
+            "kraj": "IL",
+            "n_zrodel": 3,
+            "rama": "Atak terrorystyczny/hybrydowy na Izrael lub jego obywateli (jpost, israelhayom, haaretz)",
+            "stance": "alarm",
+            "article_ids": [
+              5225,
+              5209,
+              5074,
+              5220
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 11169,
+                "article_id": 4731,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 11022,
+                "article_id": 4706,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "bbc"
+              },
+              {
+                "signal_id": 10759,
+                "article_id": 4753,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 10100,
+                "article_id": 4745,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              }
+            ],
+            "kraj": "UK",
+            "n_zrodel": 2,
+            "rama": "Zagrożenia hybrydowe (chiński wywiad, chińska AI, cyberzagrożenia dla finansów) wymagające reakcji instytucjonalnej (guardian, bbc)",
+            "stance": "alarm",
+            "article_ids": [
+              4731,
+              4706,
+              4753,
+              4745
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 10310,
+                "article_id": 5057,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "fox"
+              },
+              {
+                "signal_id": 11107,
+                "article_id": 5037,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              },
+              {
+                "signal_id": 10372,
+                "article_id": 5045,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "fox"
+              },
+              {
+                "signal_id": 10719,
+                "article_id": 5026,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              }
+            ],
+            "kraj": "US",
+            "n_zrodel": 2,
+            "rama": "Propaganda państwowa i zagrożenia hybrydowe (Iran, Rosja) (fox, pbs)",
+            "stance": "alarm/krytyka",
+            "article_ids": [
+              5057,
+              5037,
+              5045,
+              5026
+            ]
+          }
+        ],
+        "wspolny_kierunek": "Niezależnie od aktora oskarżanego (Chiny, Rosja, Iran, własne rządy) i różnych słów, przekaz w pięciu krajach buduje ramę rosnącego zagrożenia hybrydowego – ataków informacyjnych, cybernetycznych i propagandowych – łączącego bezpieczeństwo narodowe z technologią AI.",
+        "sygnaly_przeciwne": {
+          "dowody": [
+            {
+              "signal_id": 10298,
+              "article_id": 4628,
+              "theme_id": "hybrid_info",
+              "kraj": "UA",
+              "zrodlo": "pravda_ua"
+            },
+            {
+              "signal_id": 11378,
+              "article_id": 4864,
+              "theme_id": "hybrid_info",
+              "kraj": "CN",
+              "zrodlo": "chinanews"
+            }
+          ],
+          "tekst": "W danych są sygnały łagodzące: ukraińska Prawda przedstawia incydent kolejowy jako 'niepotwierdzone zagrożenie' złagodzone przez służby, a chińska agencja chinanews relacjonuje oskarżenia Korei Północnej o sfabrykowanie incydentu jako element sporu, nie jako potwierdzone zagrożenie.",
+          "article_ids": [
+            4628,
+            4864
+          ]
+        },
+        "pewnosc": {
+          "poziom": "wysoki",
+          "uzasadnienie": "5 krajów spełnia próg 2 niezależnych źródeł (BR, HK, IL, UK, US), łącznie 34 artykuły w temacie, zgodny kierunek alarmistyczny mimo różnych aktorów i redakcji o odmiennym profilu (publiczne, prywatne, rządowe)."
+        },
+        "trend": "brak linii bazowej"
+      },
+      "signals": [
+        {
+          "signal_id": 10135,
+          "theme_id": "hybrid_info",
+          "subject_actor": "HK",
+          "content_group": "2e015fb294d52b1668652cdf06f727dedef200a93c582d932a936932da027683",
+          "publisher_group": "hongkongfp",
+          "article_id": 4955,
+          "kraj": "HK",
+          "zrodlo": "hongkongfp",
+          "typ_zrodla": "private",
+          "rama": "nierówna ochrona wolności prasy",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł zestawia szybkie zatrzymanie sprawcy gróźb wobec pro-pekińskiego Sing Tao Probe z nierozwiązanymi sprawami gróźb wobec dziennikarzy innych mediów, sugerując nierówne traktowanie spraw dotyczących wolności prasy przez policję."
+        },
+        {
+          "signal_id": 11258,
+          "theme_id": "hybrid_info",
+          "subject_actor": "UK",
+          "content_group": "a5f501e161c25430ac1aaa0ca4b5e474c9f63d813a45d3b6081ad4fe1c9af9f1",
+          "publisher_group": "scmp",
+          "article_id": 4931,
+          "kraj": "HK",
+          "zrodlo": "scmp",
+          "typ_zrodla": "private",
+          "rama": "tajemniczy incydent w brytyjskiej bazie",
+          "stance": "neutralny",
+          "intensywnosc": 2,
+          "streszczenie": "Artykuł relacjonuje niejasne okoliczności incydentu w brytyjskiej bazie lotniczej Fairford, gdzie po zgłoszeniu podejrzanych pojazdów policja znalazła paliwo, a nie materiały wybuchowe."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "rozbieznosci.0.kraje.IL",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 10147,
+            "article_id": 5220,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          },
+          {
+            "signal_id": 10987,
+            "article_id": 5088,
+            "theme_id": "middle_east",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          }
+        ],
+        "kraj": "IL",
+        "n_zrodel": 2,
+        "rama": "Cele wojenne bez zmian, konieczność demilitaryzacji, wewnętrzna krytyka zaniedbań rządu (jpost, haaretz)",
+        "stance": "mieszany (poparcie/alarm/krytyka wewnętrzna)",
+        "article_ids": [
+          5220,
+          5088
+        ]
+      },
+      "context": {
+        "temat": "middle_east",
+        "tekst": "WAFA (jedyne analizowane źródło z PS) przedstawia Izrael jako stronę systematycznie eskalującą przemoc i osadnictwo ('Izrael eskaluje przemoc i osadnictwo', 'Izrael narzuca nowy status quo'), podczas gdy analizowane źródła izraelskie (jpost, haaretz) w tym samym temacie prezentują ramę obronną i wewnętrzną krytykę rządu, bez ramy systematycznej eskalacji wobec Palestyńczyków.",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 11462,
+                "article_id": 5113,
+                "theme_id": "middle_east",
+                "kraj": "PS",
+                "zrodlo": "wafa"
+              },
+              {
+                "signal_id": 10533,
+                "article_id": 5166,
+                "theme_id": "middle_east",
+                "kraj": "PS",
+                "zrodlo": "wafa"
+              }
+            ],
+            "kraj": "PS",
+            "n_zrodel": 1,
+            "rama": "Izrael eskaluje przemoc, osadnictwo i narusza status quo świętych miejsc (WAFA)",
+            "stance": "krytyka",
+            "article_ids": [
+              5113,
+              5166
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 10147,
+                "article_id": 5220,
+                "theme_id": "middle_east",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              },
+              {
+                "signal_id": 10987,
+                "article_id": 5088,
+                "theme_id": "middle_east",
+                "kraj": "IL",
+                "zrodlo": "haaretz"
+              }
+            ],
+            "kraj": "IL",
+            "n_zrodel": 2,
+            "rama": "Cele wojenne bez zmian, konieczność demilitaryzacji, wewnętrzna krytyka zaniedbań rządu (jpost, haaretz)",
+            "stance": "mieszany (poparcie/alarm/krytyka wewnętrzna)",
+            "article_ids": [
+              5220,
+              5088
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "niski",
+          "uzasadnienie": "PS reprezentowany wyłącznie przez WAFA (1 źródło, agencja rządowa Autonomii Palestyńskiej) – poniżej progu 2 źródeł; IL spełnia próg 2 źródeł w tym zestawieniu, ale asymetria źródeł między krajami obniża pewność do niskiej."
+        }
+      },
+      "signals": [
+        {
+          "signal_id": 10147,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "7d73bbd0774d4b6c4f7a156db6ff930a1695b7ef1dd8d61c83c74c06e6ceca68",
+          "publisher_group": "jpost",
+          "article_id": 5220,
+          "kraj": "IL",
+          "zrodlo": "jpost",
+          "typ_zrodla": "private",
+          "rama": "Cele wojny w Gazie bez zmian",
+          "stance": "poparcie",
+          "intensywnosc": 3,
+          "streszczenie": "Ben-Shabbat odrzuca tezę o złagodzeniu celów wojny w Gazie i podkreśla, że Izrael musi całkowicie wyeliminować zdolności militarne i rządowe Hamasu aż do pełnej demilitaryzacji terytorium."
+        },
+        {
+          "signal_id": 10987,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "5088",
+          "publisher_group": "haaretz",
+          "article_id": 5088,
+          "kraj": "IL",
+          "zrodlo": "haaretz",
+          "typ_zrodla": "private",
+          "rama": "Netanjahu zignorował ostrzeżenia",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł sugeruje, że premier Izraela Netanjahu zignorował ostrzeżenia przed atakiem z 7 października, które pochodziły z różnych miejsc, w tym z Abu Zabi i Kairu."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "wzorce_zbieznosci.0.kraje.US",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 10310,
+            "article_id": 5057,
+            "theme_id": "hybrid_info",
+            "kraj": "US",
+            "zrodlo": "fox"
+          },
+          {
+            "signal_id": 11107,
+            "article_id": 5037,
+            "theme_id": "hybrid_info",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          },
+          {
+            "signal_id": 10372,
+            "article_id": 5045,
+            "theme_id": "hybrid_info",
+            "kraj": "US",
+            "zrodlo": "fox"
+          },
+          {
+            "signal_id": 10719,
+            "article_id": 5026,
+            "theme_id": "hybrid_info",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "kraj": "US",
+        "n_zrodel": 2,
+        "rama": "Propaganda państwowa i zagrożenia hybrydowe (Iran, Rosja) (fox, pbs)",
+        "stance": "alarm/krytyka",
+        "article_ids": [
+          5057,
+          5037,
+          5045,
+          5026
+        ]
+      },
+      "context": {
+        "temat": "hybrid_info",
+        "kierunek": "negatywny",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 10384,
+                "article_id": 5241,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "folha"
+              },
+              {
+                "signal_id": 10035,
+                "article_id": 5256,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "agenciabrasil"
+              },
+              {
+                "signal_id": 10117,
+                "article_id": 5237,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "folha"
+              },
+              {
+                "signal_id": 10452,
+                "article_id": 5242,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "folha"
+              }
+            ],
+            "kraj": "BR",
+            "n_zrodel": 2,
+            "rama": "AI i dezinformacja jako zagrożenie dla demokracji i bezpieczeństwa (agenciabrasil, folha)",
+            "stance": "alarm/neutralny",
+            "article_ids": [
+              5241,
+              5256,
+              5237,
+              5242
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 10135,
+                "article_id": 4955,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "hongkongfp"
+              },
+              {
+                "signal_id": 11258,
+                "article_id": 4931,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "scmp"
+              }
+            ],
+            "kraj": "HK",
+            "n_zrodel": 2,
+            "rama": "Nierówna ochrona wolności prasy i niejasne incydenty bezpieczeństwa (hongkongfp, scmp)",
+            "stance": "krytyka/neutralny",
+            "article_ids": [
+              4955,
+              4931
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 9987,
+                "article_id": 5225,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "israelhayom"
+              },
+              {
+                "signal_id": 10402,
+                "article_id": 5209,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              },
+              {
+                "signal_id": 10274,
+                "article_id": 5074,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "haaretz"
+              },
+              {
+                "signal_id": 10145,
+                "article_id": 5220,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              }
+            ],
+            "kraj": "IL",
+            "n_zrodel": 3,
+            "rama": "Atak terrorystyczny/hybrydowy na Izrael lub jego obywateli (jpost, israelhayom, haaretz)",
+            "stance": "alarm",
+            "article_ids": [
+              5225,
+              5209,
+              5074,
+              5220
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 11169,
+                "article_id": 4731,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 11022,
+                "article_id": 4706,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "bbc"
+              },
+              {
+                "signal_id": 10759,
+                "article_id": 4753,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 10100,
+                "article_id": 4745,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              }
+            ],
+            "kraj": "UK",
+            "n_zrodel": 2,
+            "rama": "Zagrożenia hybrydowe (chiński wywiad, chińska AI, cyberzagrożenia dla finansów) wymagające reakcji instytucjonalnej (guardian, bbc)",
+            "stance": "alarm",
+            "article_ids": [
+              4731,
+              4706,
+              4753,
+              4745
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 10310,
+                "article_id": 5057,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "fox"
+              },
+              {
+                "signal_id": 11107,
+                "article_id": 5037,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              },
+              {
+                "signal_id": 10372,
+                "article_id": 5045,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "fox"
+              },
+              {
+                "signal_id": 10719,
+                "article_id": 5026,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              }
+            ],
+            "kraj": "US",
+            "n_zrodel": 2,
+            "rama": "Propaganda państwowa i zagrożenia hybrydowe (Iran, Rosja) (fox, pbs)",
+            "stance": "alarm/krytyka",
+            "article_ids": [
+              5057,
+              5037,
+              5045,
+              5026
+            ]
+          }
+        ],
+        "wspolny_kierunek": "Niezależnie od aktora oskarżanego (Chiny, Rosja, Iran, własne rządy) i różnych słów, przekaz w pięciu krajach buduje ramę rosnącego zagrożenia hybrydowego – ataków informacyjnych, cybernetycznych i propagandowych – łączącego bezpieczeństwo narodowe z technologią AI.",
+        "sygnaly_przeciwne": {
+          "dowody": [
+            {
+              "signal_id": 10298,
+              "article_id": 4628,
+              "theme_id": "hybrid_info",
+              "kraj": "UA",
+              "zrodlo": "pravda_ua"
+            },
+            {
+              "signal_id": 11378,
+              "article_id": 4864,
+              "theme_id": "hybrid_info",
+              "kraj": "CN",
+              "zrodlo": "chinanews"
+            }
+          ],
+          "tekst": "W danych są sygnały łagodzące: ukraińska Prawda przedstawia incydent kolejowy jako 'niepotwierdzone zagrożenie' złagodzone przez służby, a chińska agencja chinanews relacjonuje oskarżenia Korei Północnej o sfabrykowanie incydentu jako element sporu, nie jako potwierdzone zagrożenie.",
+          "article_ids": [
+            4628,
+            4864
+          ]
+        },
+        "pewnosc": {
+          "poziom": "wysoki",
+          "uzasadnienie": "5 krajów spełnia próg 2 niezależnych źródeł (BR, HK, IL, UK, US), łącznie 34 artykuły w temacie, zgodny kierunek alarmistyczny mimo różnych aktorów i redakcji o odmiennym profilu (publiczne, prywatne, rządowe)."
+        },
+        "trend": "brak linii bazowej"
+      },
+      "signals": [
+        {
+          "signal_id": 10310,
+          "theme_id": "hybrid_info",
+          "subject_actor": "PS",
+          "content_group": "20d38378268c5558083b4fd9661a2f1d8125d1597a467d464467405e32647ae3",
+          "publisher_group": "fox",
+          "article_id": 5057,
+          "kraj": "US",
+          "zrodlo": "fox",
+          "typ_zrodla": "private",
+          "rama": "Palestyńczycy zawłaszczają żydowską historię",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia wypowiedzi palestyńskiego ambasadora jako próbę wymazania żydowskiej historii i zawłaszczenia dziedzictwa biblijnego, określając je jako 'pogardliwe' i 'bigoterię'."
+        },
+        {
+          "signal_id": 11107,
+          "theme_id": "hybrid_info",
+          "subject_actor": "US",
+          "content_group": "756421ec3143f707552b9dd9369a8cd10806b153cdab99dfe89c165a178471a2",
+          "publisher_group": "pbs",
+          "article_id": 5037,
+          "kraj": "US",
+          "zrodlo": "pbs",
+          "typ_zrodla": "public",
+          "rama": "Administracja używa aparatu państwa do szerzenia propagandy",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł wskazuje, że reklamy DHS nie informują obywateli o konkretnych programach rządowych, ale pełnią funkcję propagandową, a senator Republikanów porównuje je do autorytarnych praktyk Viktora Orbana na Węgrzech."
+        },
+        {
+          "signal_id": 10372,
+          "theme_id": "hybrid_info",
+          "subject_actor": "IR",
+          "content_group": "fac8c923ffd94d3c68f6dcb5c142a93ce49d42213230de3976731ba07a5bced3",
+          "publisher_group": "fox",
+          "article_id": 5045,
+          "kraj": "US",
+          "zrodlo": "fox",
+          "typ_zrodla": "private",
+          "rama": "Iran otwiera nowy front",
+          "stance": "alarm",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł sygnalizuje, że Iran otworzył „zuchwały nowy front” w wojnie z przesłaniem skierowanym do Ameryki, co wpisuje się w narrację o rosnącym zagrożeniu hybrydowym ze strony Iranu."
+        },
+        {
+          "signal_id": 10719,
+          "theme_id": "hybrid_info",
+          "subject_actor": "RU",
+          "content_group": "44fe0216f308555e64d3d4bf8985e246ce1935dd23fd1883069c79622af3e06d",
+          "publisher_group": "pbs",
+          "article_id": 5026,
+          "kraj": "US",
+          "zrodlo": "pbs",
+          "typ_zrodla": "public",
+          "rama": "Rosja prowadzi sabotaż w Europie",
+          "stance": "neutralny",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł opisuje falę rosyjskiego sabotażu w Europie, w tym podpalenie firmy robotycznej w Estonii, które Estonia oficjalnie przypisała rosyjskim służbom specjalnym."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "rozbieznosci.0.kraje.PS",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 11462,
+            "article_id": 5113,
+            "theme_id": "middle_east",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          },
+          {
+            "signal_id": 10533,
+            "article_id": 5166,
+            "theme_id": "middle_east",
+            "kraj": "PS",
+            "zrodlo": "wafa"
+          }
+        ],
+        "kraj": "PS",
+        "n_zrodel": 1,
+        "rama": "Izrael eskaluje przemoc, osadnictwo i narusza status quo świętych miejsc (WAFA)",
+        "stance": "krytyka",
+        "article_ids": [
+          5113,
+          5166
+        ]
+      },
+      "context": {
+        "temat": "middle_east",
+        "tekst": "WAFA (jedyne analizowane źródło z PS) przedstawia Izrael jako stronę systematycznie eskalującą przemoc i osadnictwo ('Izrael eskaluje przemoc i osadnictwo', 'Izrael narzuca nowy status quo'), podczas gdy analizowane źródła izraelskie (jpost, haaretz) w tym samym temacie prezentują ramę obronną i wewnętrzną krytykę rządu, bez ramy systematycznej eskalacji wobec Palestyńczyków.",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 11462,
+                "article_id": 5113,
+                "theme_id": "middle_east",
+                "kraj": "PS",
+                "zrodlo": "wafa"
+              },
+              {
+                "signal_id": 10533,
+                "article_id": 5166,
+                "theme_id": "middle_east",
+                "kraj": "PS",
+                "zrodlo": "wafa"
+              }
+            ],
+            "kraj": "PS",
+            "n_zrodel": 1,
+            "rama": "Izrael eskaluje przemoc, osadnictwo i narusza status quo świętych miejsc (WAFA)",
+            "stance": "krytyka",
+            "article_ids": [
+              5113,
+              5166
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 10147,
+                "article_id": 5220,
+                "theme_id": "middle_east",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              },
+              {
+                "signal_id": 10987,
+                "article_id": 5088,
+                "theme_id": "middle_east",
+                "kraj": "IL",
+                "zrodlo": "haaretz"
+              }
+            ],
+            "kraj": "IL",
+            "n_zrodel": 2,
+            "rama": "Cele wojenne bez zmian, konieczność demilitaryzacji, wewnętrzna krytyka zaniedbań rządu (jpost, haaretz)",
+            "stance": "mieszany (poparcie/alarm/krytyka wewnętrzna)",
+            "article_ids": [
+              5220,
+              5088
+            ]
+          }
+        ],
+        "pewnosc": {
+          "poziom": "niski",
+          "uzasadnienie": "PS reprezentowany wyłącznie przez WAFA (1 źródło, agencja rządowa Autonomii Palestyńskiej) – poniżej progu 2 źródeł; IL spełnia próg 2 źródeł w tym zestawieniu, ale asymetria źródeł między krajami obniża pewność do niskiej."
+        }
+      },
+      "signals": [
+        {
+          "signal_id": 11462,
+          "theme_id": "middle_east",
+          "subject_actor": "PS",
+          "content_group": "ad082fc1c1c7b16d25e87882cc67d2d984c8edd1272d2efe662c97d5106a7e18",
+          "publisher_group": "wafa",
+          "article_id": 5113,
+          "kraj": "PS",
+          "zrodlo": "wafa",
+          "typ_zrodla": "government",
+          "rama": "Izrael eskaluje przemoc i osadnictwo",
+          "stance": "krytyka",
+          "intensywnosc": 5,
+          "streszczenie": "Artykuł przeglądowy palestyńskich gazet przedstawia izraelskie działania jako ciągłą eskalację: ostrzał domów w Gazie, zabójstwa cywilów, ataki osadników, kradzieże zbiorów oliwek i prowokacyjne wtargnięcia na teren meczetu Al-Aksa."
+        },
+        {
+          "signal_id": 10533,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "b390d08291951c7b1c131252936fffdd9c8cca6fb5b4a83a8cc913ad6d714a92",
+          "publisher_group": "wafa",
+          "article_id": 5166,
+          "kraj": "PS",
+          "zrodlo": "wafa",
+          "typ_zrodla": "government",
+          "rama": "Izrael narzuca nowy status quo na Wzgórzu Świątynnym",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł opisuje masowe wkraczanie izraelskich osadników na teren meczetu Al-Aksa podczas żydowskiego święta Sukkot, pod ochroną izraelskiej policji, co według tekstu stanowi próbę zmiany status quo w tym miejscu."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "autoobraz.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 10153,
+            "article_id": 4577,
+            "theme_id": "hybrid_info",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 10409,
+            "article_id": 4581,
+            "theme_id": "emergent:rule-of-law-judiciary",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 10988,
+            "article_id": 4593,
+            "theme_id": "elections_politics",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 10298,
+            "article_id": 4628,
+            "theme_id": "hybrid_info",
+            "kraj": "UA",
+            "zrodlo": "pravda_ua"
+          },
+          {
+            "signal_id": 10115,
+            "article_id": 5237,
+            "theme_id": "security_defense",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          },
+          {
+            "signal_id": 10721,
+            "article_id": 5026,
+            "theme_id": "security_defense",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "PL",
+        "jak_opisuje_siebie": "Analizowane źródła polskie (onet) przedstawiają Polskę poprzez pryzmat krytyki wewnętrznej – kryzys praworządności, spory o list żelazny, krytyka systemu sądów ('PiS-owski system sądów chroni swoich').",
+        "jak_opisuja_go_inni": "Zewnętrzne źródła (pravda_ua, folha, pbs) opisują Polskę głównie w kontekście bezpieczeństwa i gotowości obronnej – incydent kolejowy w Białymstoku, Kaliningrad jako punkt zapalny, armia gotowa na konfrontację z Rosją – w tonie neutralnym/uspokajającym.",
+        "komentarz": "Wyraźny rozjazd tematyczny: autoobraz koncentruje się na politycznym kryzysie wewnętrznym, obraz zewnętrzny – na roli obronnej Polski wobec Rosji, bez odniesień do sporów sądowych.",
+        "article_ids": [
+          4577,
+          4581,
+          4593,
+          4628,
+          5237,
+          5026
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 10153,
+            "article_id": 4577,
+            "theme_id": "hybrid_info",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 10409,
+            "article_id": 4581,
+            "theme_id": "emergent:rule-of-law-judiciary",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 10988,
+            "article_id": 4593,
+            "theme_id": "elections_politics",
+            "kraj": "PL",
+            "zrodlo": "onet"
+          },
+          {
+            "signal_id": 10298,
+            "article_id": 4628,
+            "theme_id": "hybrid_info",
+            "kraj": "UA",
+            "zrodlo": "pravda_ua"
+          },
+          {
+            "signal_id": 10115,
+            "article_id": 5237,
+            "theme_id": "security_defense",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          },
+          {
+            "signal_id": 10721,
+            "article_id": 5026,
+            "theme_id": "security_defense",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "pewnosc": "niski",
+        "kraj": "PL",
+        "jak_opisuje_siebie": "Analizowane źródła polskie (onet) przedstawiają Polskę poprzez pryzmat krytyki wewnętrznej – kryzys praworządności, spory o list żelazny, krytyka systemu sądów ('PiS-owski system sądów chroni swoich').",
+        "jak_opisuja_go_inni": "Zewnętrzne źródła (pravda_ua, folha, pbs) opisują Polskę głównie w kontekście bezpieczeństwa i gotowości obronnej – incydent kolejowy w Białymstoku, Kaliningrad jako punkt zapalny, armia gotowa na konfrontację z Rosją – w tonie neutralnym/uspokajającym.",
+        "komentarz": "Wyraźny rozjazd tematyczny: autoobraz koncentruje się na politycznym kryzysie wewnętrznym, obraz zewnętrzny – na roli obronnej Polski wobec Rosji, bez odniesień do sporów sądowych.",
+        "article_ids": [
+          4577,
+          4581,
+          4593,
+          4628,
+          5237,
+          5026
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 10153,
+          "theme_id": "hybrid_info",
+          "subject_actor": "PL",
+          "content_group": "497f8acee01b26407462db25b91bf9f0f05f55988fcfd45fd27c53155b43f5ad",
+          "publisher_group": "onet",
+          "article_id": 4577,
+          "kraj": "PL",
+          "zrodlo": "onet",
+          "typ_zrodla": "private",
+          "rama": "Manipulacja wypowiedzią przeciwnika politycznego",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł opisuje, że Patryk Jaki w nagraniu zarzucił Jackowi Murańskiemu pomawianie brata, prezentując wypowiedzi wycięte z kontekstu, co zostało ocenione jako manipulacja."
+        },
+        {
+          "signal_id": 10409,
+          "theme_id": "emergent:rule-of-law-judiciary",
+          "subject_actor": "PL",
+          "content_group": "61408dd326b385193c5e951a9af8ebb76fd9ef82bb2e37dc3345c739fc21fbb6",
+          "publisher_group": "onet",
+          "article_id": 4581,
+          "kraj": "PL",
+          "zrodlo": "onet",
+          "typ_zrodla": "private",
+          "rama": "Kryzys praworządności i bezsilność państwa",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł opisuje decyzję sądu o wydaniu listu żelaznego Marcinowi Romanowskiemu jako wyraz bezsilności państwa polskiego i porażkę prokuratury, podkreślając problemy z niezależnością sądownictwa i statusem sędziów powołanych przez upolitycznioną KRS."
+        },
+        {
+          "signal_id": 10988,
+          "theme_id": "elections_politics",
+          "subject_actor": "PL",
+          "content_group": "5ab23b264ae2abdbdafc9523b59e21a771cf38428800786171c62a4b55cdeb02",
+          "publisher_group": "onet",
+          "article_id": 4593,
+          "kraj": "PL",
+          "zrodlo": "onet",
+          "typ_zrodla": "private",
+          "rama": "PiS-owski system sądów chroni swoich",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Minister sprawiedliwości Waldemar Żurek ostro krytykuje decyzję sądu o wydaniu listu żelaznego Marcinowi Romanowskiemu, wskazując, że podjął ją tzw. neosędzia w systemie stworzonym przez PiS po przejęciu sądów."
+        },
+        {
+          "signal_id": 10298,
+          "theme_id": "hybrid_info",
+          "subject_actor": "PL",
+          "content_group": "ede7d773d1f5d2bbf53718e0d346c9c33c35870de6ea6b89d7db9a0c5ed9e4f0",
+          "publisher_group": "pravda_ua",
+          "article_id": 4628,
+          "kraj": "UA",
+          "zrodlo": "pravda_ua",
+          "typ_zrodla": "private",
+          "rama": "Incydent zablokowany, niepotwierdzone zagrożenie",
+          "stance": "uspokojenie",
+          "intensywnosc": 2,
+          "streszczenie": "Służby podkreślają, że teren jest zabezpieczony, a pirotechnicy sprawdzą pakunek po odciągnięciu cystern; wcześniejszy incydent z blokami na torach okazał się sprawką 12-latka, co łagodzi wydźwięk."
+        },
+        {
+          "signal_id": 10115,
+          "theme_id": "security_defense",
+          "subject_actor": "PL",
+          "content_group": "038c8be049c5fca78f633d9b35a3af7a90b7129514e41ae5f65bff202cf64f33",
+          "publisher_group": "folha",
+          "article_id": 5237,
+          "kraj": "BR",
+          "zrodlo": "folha",
+          "typ_zrodla": "private",
+          "rama": "Kaliningrad punktem zapalnym na flance",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Tekst podaje, że polski minister Radosław Sikorski zasugerował, aby NATO prowadziło ćwiczenia wojskowe w pobliżu Kaliningradu, co miałoby zmusić Rosję do wzmocnienia tam wojsk i odciążyć front ukraiński."
+        },
+        {
+          "signal_id": 10721,
+          "theme_id": "security_defense",
+          "subject_actor": "PL",
+          "content_group": "44fe0216f308555e64d3d4bf8985e246ce1935dd23fd1883069c79622af3e06d",
+          "publisher_group": "pbs",
+          "article_id": 5026,
+          "kraj": "US",
+          "zrodlo": "pbs",
+          "typ_zrodla": "public",
+          "rama": "Polska gotowa na konfrontację z Rosją",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Polska wzmacnia swoją armię, która liczy 220 tysięcy żołnierzy i jest największa w Unii Europejskiej, co ma wspierać jej retorykę wobec Rosji realnymi zdolnościami wojskowymi."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "slabe_sygnaly.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 10512,
+            "article_id": 4650,
+            "theme_id": "civil_preparedness",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          },
+          {
+            "signal_id": 11284,
+            "article_id": 4734,
+            "theme_id": "civil_preparedness",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          }
+        ],
+        "theme_id": "civil_preparedness",
+        "tekst": "Temat civil_preparedness pojawia się w DE i UK, ale każdy kraj reprezentowany jest tylko przez jedno niezależne źródło (poniżej progu 2), co uniemożliwia uznanie zbieżności za potwierdzoną – niemieckie źródło krytykuje niedostateczne przygotowanie sieci komunikacji kryzysowej, brytyjskie krytykuje repatriację migrantów mimo ryzyka prześladowań.",
+        "article_ids": [
+          4650,
+          4734
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 10512,
+            "article_id": 4650,
+            "theme_id": "civil_preparedness",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          },
+          {
+            "signal_id": 11284,
+            "article_id": 4734,
+            "theme_id": "civil_preparedness",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          }
+        ],
+        "theme_id": "civil_preparedness",
+        "tekst": "Temat civil_preparedness pojawia się w DE i UK, ale każdy kraj reprezentowany jest tylko przez jedno niezależne źródło (poniżej progu 2), co uniemożliwia uznanie zbieżności za potwierdzoną – niemieckie źródło krytykuje niedostateczne przygotowanie sieci komunikacji kryzysowej, brytyjskie krytykuje repatriację migrantów mimo ryzyka prześladowań.",
+        "article_ids": [
+          4650,
+          4734
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 10512,
+          "theme_id": "civil_preparedness",
+          "subject_actor": "DE",
+          "content_group": "af54f0a80d9ae5a4a100147d28a0fb60c038e36d0c8e5dc9c5acd877bca6073a",
+          "publisher_group": "tagesschau",
+          "article_id": 4650,
+          "kraj": "DE",
+          "zrodlo": "tagesschau",
+          "typ_zrodla": "public",
+          "rama": "Niemiecka strategia wdrażania EUCCS",
+          "stance": "krytyka",
+          "intensywnosc": 2,
+          "streszczenie": "Artykuł przytacza krytykę branżowych ekspertów dotyczącą niemieckich planów wdrożeniowych, wskazującą, że nadmierne oparcie na prywatnych sieciach i komercyjnych masztach bez rezerw baterii może zawieść w sytuacjach kryzysowych."
+        },
+        {
+          "signal_id": 11284,
+          "theme_id": "civil_preparedness",
+          "subject_actor": "MY",
+          "content_group": "c2b614d964b055b525ec7a40b8297c07da7f2f1722f281575f70bcba95703da4",
+          "publisher_group": "guardian",
+          "article_id": 4734,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "Repatriacja mimo ryzyka prześladowań",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Organizacje praw człowieka i ONZ ostrzegają, że odsyłani migranci, w tym potencjalnie Rohingya, mogą zostać poddani prześladowaniom w Myanmarze, gdzie według tych organizacji grozi im ludobójstwo."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "wzorce_zbieznosci.0.kraje.BR",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 10384,
+            "article_id": 5241,
+            "theme_id": "hybrid_info",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          },
+          {
+            "signal_id": 10035,
+            "article_id": 5256,
+            "theme_id": "hybrid_info",
+            "kraj": "BR",
+            "zrodlo": "agenciabrasil"
+          },
+          {
+            "signal_id": 10117,
+            "article_id": 5237,
+            "theme_id": "hybrid_info",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          },
+          {
+            "signal_id": 10452,
+            "article_id": 5242,
+            "theme_id": "hybrid_info",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          }
+        ],
+        "kraj": "BR",
+        "n_zrodel": 2,
+        "rama": "AI i dezinformacja jako zagrożenie dla demokracji i bezpieczeństwa (agenciabrasil, folha)",
+        "stance": "alarm/neutralny",
+        "article_ids": [
+          5241,
+          5256,
+          5237,
+          5242
+        ]
+      },
+      "context": {
+        "temat": "hybrid_info",
+        "kierunek": "negatywny",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 10384,
+                "article_id": 5241,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "folha"
+              },
+              {
+                "signal_id": 10035,
+                "article_id": 5256,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "agenciabrasil"
+              },
+              {
+                "signal_id": 10117,
+                "article_id": 5237,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "folha"
+              },
+              {
+                "signal_id": 10452,
+                "article_id": 5242,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "folha"
+              }
+            ],
+            "kraj": "BR",
+            "n_zrodel": 2,
+            "rama": "AI i dezinformacja jako zagrożenie dla demokracji i bezpieczeństwa (agenciabrasil, folha)",
+            "stance": "alarm/neutralny",
+            "article_ids": [
+              5241,
+              5256,
+              5237,
+              5242
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 10135,
+                "article_id": 4955,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "hongkongfp"
+              },
+              {
+                "signal_id": 11258,
+                "article_id": 4931,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "scmp"
+              }
+            ],
+            "kraj": "HK",
+            "n_zrodel": 2,
+            "rama": "Nierówna ochrona wolności prasy i niejasne incydenty bezpieczeństwa (hongkongfp, scmp)",
+            "stance": "krytyka/neutralny",
+            "article_ids": [
+              4955,
+              4931
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 9987,
+                "article_id": 5225,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "israelhayom"
+              },
+              {
+                "signal_id": 10402,
+                "article_id": 5209,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              },
+              {
+                "signal_id": 10274,
+                "article_id": 5074,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "haaretz"
+              },
+              {
+                "signal_id": 10145,
+                "article_id": 5220,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              }
+            ],
+            "kraj": "IL",
+            "n_zrodel": 3,
+            "rama": "Atak terrorystyczny/hybrydowy na Izrael lub jego obywateli (jpost, israelhayom, haaretz)",
+            "stance": "alarm",
+            "article_ids": [
+              5225,
+              5209,
+              5074,
+              5220
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 11169,
+                "article_id": 4731,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 11022,
+                "article_id": 4706,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "bbc"
+              },
+              {
+                "signal_id": 10759,
+                "article_id": 4753,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 10100,
+                "article_id": 4745,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              }
+            ],
+            "kraj": "UK",
+            "n_zrodel": 2,
+            "rama": "Zagrożenia hybrydowe (chiński wywiad, chińska AI, cyberzagrożenia dla finansów) wymagające reakcji instytucjonalnej (guardian, bbc)",
+            "stance": "alarm",
+            "article_ids": [
+              4731,
+              4706,
+              4753,
+              4745
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 10310,
+                "article_id": 5057,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "fox"
+              },
+              {
+                "signal_id": 11107,
+                "article_id": 5037,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              },
+              {
+                "signal_id": 10372,
+                "article_id": 5045,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "fox"
+              },
+              {
+                "signal_id": 10719,
+                "article_id": 5026,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              }
+            ],
+            "kraj": "US",
+            "n_zrodel": 2,
+            "rama": "Propaganda państwowa i zagrożenia hybrydowe (Iran, Rosja) (fox, pbs)",
+            "stance": "alarm/krytyka",
+            "article_ids": [
+              5057,
+              5037,
+              5045,
+              5026
+            ]
+          }
+        ],
+        "wspolny_kierunek": "Niezależnie od aktora oskarżanego (Chiny, Rosja, Iran, własne rządy) i różnych słów, przekaz w pięciu krajach buduje ramę rosnącego zagrożenia hybrydowego – ataków informacyjnych, cybernetycznych i propagandowych – łączącego bezpieczeństwo narodowe z technologią AI.",
+        "sygnaly_przeciwne": {
+          "dowody": [
+            {
+              "signal_id": 10298,
+              "article_id": 4628,
+              "theme_id": "hybrid_info",
+              "kraj": "UA",
+              "zrodlo": "pravda_ua"
+            },
+            {
+              "signal_id": 11378,
+              "article_id": 4864,
+              "theme_id": "hybrid_info",
+              "kraj": "CN",
+              "zrodlo": "chinanews"
+            }
+          ],
+          "tekst": "W danych są sygnały łagodzące: ukraińska Prawda przedstawia incydent kolejowy jako 'niepotwierdzone zagrożenie' złagodzone przez służby, a chińska agencja chinanews relacjonuje oskarżenia Korei Północnej o sfabrykowanie incydentu jako element sporu, nie jako potwierdzone zagrożenie.",
+          "article_ids": [
+            4628,
+            4864
+          ]
+        },
+        "pewnosc": {
+          "poziom": "wysoki",
+          "uzasadnienie": "5 krajów spełnia próg 2 niezależnych źródeł (BR, HK, IL, UK, US), łącznie 34 artykuły w temacie, zgodny kierunek alarmistyczny mimo różnych aktorów i redakcji o odmiennym profilu (publiczne, prywatne, rządowe)."
+        },
+        "trend": "brak linii bazowej"
+      },
+      "signals": [
+        {
+          "signal_id": 10384,
+          "theme_id": "hybrid_info",
+          "subject_actor": "US",
+          "content_group": "1a1634814d51d9356cac00f221aa9828af281c273ab262bfd937a90b7274b7e4",
+          "publisher_group": "folha",
+          "article_id": 5241,
+          "kraj": "BR",
+          "zrodlo": "folha",
+          "typ_zrodla": "private",
+          "rama": "USA narażone na ataki AI i cyberprzestępców",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Tekst ostrzega, że USA są wystawione na niebezpieczne wirusy cyfrowe: wymykające się spod kontroli systemy AI oraz rosnące ataki cyberprzestępcze z użyciem modeli AI pozbawionych zabezpieczeń."
+        },
+        {
+          "signal_id": 10035,
+          "theme_id": "hybrid_info",
+          "subject_actor": "US",
+          "content_group": "c84defb0ef765ad7b18baa5f4f7f1a14f4bee52659218020c1d3e5e94d79472d",
+          "publisher_group": "agenciabrasil",
+          "article_id": 5256,
+          "kraj": "BR",
+          "zrodlo": "agenciabrasil",
+          "typ_zrodla": "public",
+          "rama": "AI zagraża demokracji i manipuluje opinią",
+          "stance": "alarm",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł przywołuje raport międzynarodowy, według którego systemy AI mogą wpływać na przekonania ludzi i manipulować informacją w sieciach społecznościowych, stwarzając ryzyko dla demokracji."
+        },
+        {
+          "signal_id": 10117,
+          "theme_id": "hybrid_info",
+          "subject_actor": "RU",
+          "content_group": "038c8be049c5fca78f633d9b35a3af7a90b7129514e41ae5f65bff202cf64f33",
+          "publisher_group": "folha",
+          "article_id": 5237,
+          "kraj": "BR",
+          "zrodlo": "folha",
+          "typ_zrodla": "private",
+          "rama": "Rosja eskaluje działania hybrydowe",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Tekst wymienia przypisywane Moskwie incydenty hybrydowe w Europie, takie jak próba wysadzenia ukraińskich samolotów w Lipsku i podpalenie fabryki dronów w Estonii, które Putin nazywa rusofobią."
+        },
+        {
+          "signal_id": 10452,
+          "theme_id": "hybrid_info",
+          "subject_actor": "US",
+          "content_group": "a10f39bf267a5d8a009c5c03df03cccd02166e5689c0b22a750a9bb086b0945a",
+          "publisher_group": "folha",
+          "article_id": 5242,
+          "kraj": "BR",
+          "zrodlo": "folha",
+          "typ_zrodla": "private",
+          "rama": "Kontrola obecności online jako bezpieczeństwo",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Departament Stanu USA uzasadnia analizę mediów społecznościowych względami bezpieczeństwa narodowego, traktując każdą decyzję wizową jako decyzję dotyczącą bezpieczeństwa."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "w_skrocie.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 10384,
+            "article_id": 5241,
+            "theme_id": "hybrid_info",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          },
+          {
+            "signal_id": 10035,
+            "article_id": 5256,
+            "theme_id": "hybrid_info",
+            "kraj": "BR",
+            "zrodlo": "agenciabrasil"
+          },
+          {
+            "signal_id": 10402,
+            "article_id": 5209,
+            "theme_id": "hybrid_info",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          },
+          {
+            "signal_id": 9987,
+            "article_id": 5225,
+            "theme_id": "hybrid_info",
+            "kraj": "IL",
+            "zrodlo": "israelhayom"
+          },
+          {
+            "signal_id": 10310,
+            "article_id": 5057,
+            "theme_id": "hybrid_info",
+            "kraj": "US",
+            "zrodlo": "fox"
+          },
+          {
+            "signal_id": 11107,
+            "article_id": 5037,
+            "theme_id": "hybrid_info",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "theme_id": "hybrid_info",
+        "tekst": "W temacie działań hybrydowych analizowane źródła z Brazylii (folha, agenciabrasil), Izraela (jpost, israelhayom, haaretz) i USA (fox, pbs) zgodnie łączą AI, dezinformację i sabotaż z narracją rosnącego zagrożenia, niezależnie od aktora oskarżanego (Rosja, Iran, USA), co sugeruje wspólny kierunek alarmistyczny.",
+        "article_ids": [
+          5241,
+          5256,
+          5209,
+          5225,
+          5057,
+          5037
+        ],
+        "pewnosc": "średni"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 10384,
+            "article_id": 5241,
+            "theme_id": "hybrid_info",
+            "kraj": "BR",
+            "zrodlo": "folha"
+          },
+          {
+            "signal_id": 10035,
+            "article_id": 5256,
+            "theme_id": "hybrid_info",
+            "kraj": "BR",
+            "zrodlo": "agenciabrasil"
+          },
+          {
+            "signal_id": 10402,
+            "article_id": 5209,
+            "theme_id": "hybrid_info",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          },
+          {
+            "signal_id": 9987,
+            "article_id": 5225,
+            "theme_id": "hybrid_info",
+            "kraj": "IL",
+            "zrodlo": "israelhayom"
+          },
+          {
+            "signal_id": 10310,
+            "article_id": 5057,
+            "theme_id": "hybrid_info",
+            "kraj": "US",
+            "zrodlo": "fox"
+          },
+          {
+            "signal_id": 11107,
+            "article_id": 5037,
+            "theme_id": "hybrid_info",
+            "kraj": "US",
+            "zrodlo": "pbs"
+          }
+        ],
+        "theme_id": "hybrid_info",
+        "tekst": "W temacie działań hybrydowych analizowane źródła z Brazylii (folha, agenciabrasil), Izraela (jpost, israelhayom, haaretz) i USA (fox, pbs) zgodnie łączą AI, dezinformację i sabotaż z narracją rosnącego zagrożenia, niezależnie od aktora oskarżanego (Rosja, Iran, USA), co sugeruje wspólny kierunek alarmistyczny.",
+        "article_ids": [
+          5241,
+          5256,
+          5209,
+          5225,
+          5057,
+          5037
+        ],
+        "pewnosc": "średni"
+      },
+      "signals": [
+        {
+          "signal_id": 10384,
+          "theme_id": "hybrid_info",
+          "subject_actor": "US",
+          "content_group": "1a1634814d51d9356cac00f221aa9828af281c273ab262bfd937a90b7274b7e4",
+          "publisher_group": "folha",
+          "article_id": 5241,
+          "kraj": "BR",
+          "zrodlo": "folha",
+          "typ_zrodla": "private",
+          "rama": "USA narażone na ataki AI i cyberprzestępców",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Tekst ostrzega, że USA są wystawione na niebezpieczne wirusy cyfrowe: wymykające się spod kontroli systemy AI oraz rosnące ataki cyberprzestępcze z użyciem modeli AI pozbawionych zabezpieczeń."
+        },
+        {
+          "signal_id": 10035,
+          "theme_id": "hybrid_info",
+          "subject_actor": "US",
+          "content_group": "c84defb0ef765ad7b18baa5f4f7f1a14f4bee52659218020c1d3e5e94d79472d",
+          "publisher_group": "agenciabrasil",
+          "article_id": 5256,
+          "kraj": "BR",
+          "zrodlo": "agenciabrasil",
+          "typ_zrodla": "public",
+          "rama": "AI zagraża demokracji i manipuluje opinią",
+          "stance": "alarm",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł przywołuje raport międzynarodowy, według którego systemy AI mogą wpływać na przekonania ludzi i manipulować informacją w sieciach społecznościowych, stwarzając ryzyko dla demokracji."
+        },
+        {
+          "signal_id": 10402,
+          "theme_id": "hybrid_info",
+          "subject_actor": "IL",
+          "content_group": "4e8281bd0112d276e3e569c89c2f359d12cbdc4ab4abf3e8017f266568edaeaf",
+          "publisher_group": "jpost",
+          "article_id": 5209,
+          "kraj": "IL",
+          "zrodlo": "jpost",
+          "typ_zrodla": "private",
+          "rama": "Atak na izraelskich pasażerów",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł opisuje incydent na pokładzie samolotu flydubai lecącego z Dubaju do Tel Awiwu, podczas którego według izraelskich urzędników drugi pilot próbował porwać maszynę i rozbić ją o ziemię. Izraelscy pasażerowie mieli obezwładnić napastnika i pomóc w awaryjnym lądowaniu w Arabii Saudyjskiej."
+        },
+        {
+          "signal_id": 9987,
+          "theme_id": "hybrid_info",
+          "subject_actor": "IL",
+          "content_group": "5225",
+          "publisher_group": "israelhayom",
+          "article_id": 5225,
+          "kraj": "IL",
+          "zrodlo": "israelhayom",
+          "typ_zrodla": "private",
+          "rama": "Izrael celem ataku terrorystycznego w powietrzu",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł opisuje próbę ataku terrorystycznego na pokładzie samolotu lecącego z Dubaju do Tel Awiwu, podczas którego omański drugi pilot dźgnął kapitana, co doprowadziło do awaryjnego lądowania w Arabii Saudyjskiej."
+        },
+        {
+          "signal_id": 10310,
+          "theme_id": "hybrid_info",
+          "subject_actor": "PS",
+          "content_group": "20d38378268c5558083b4fd9661a2f1d8125d1597a467d464467405e32647ae3",
+          "publisher_group": "fox",
+          "article_id": 5057,
+          "kraj": "US",
+          "zrodlo": "fox",
+          "typ_zrodla": "private",
+          "rama": "Palestyńczycy zawłaszczają żydowską historię",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia wypowiedzi palestyńskiego ambasadora jako próbę wymazania żydowskiej historii i zawłaszczenia dziedzictwa biblijnego, określając je jako 'pogardliwe' i 'bigoterię'."
+        },
+        {
+          "signal_id": 11107,
+          "theme_id": "hybrid_info",
+          "subject_actor": "US",
+          "content_group": "756421ec3143f707552b9dd9369a8cd10806b153cdab99dfe89c165a178471a2",
+          "publisher_group": "pbs",
+          "article_id": 5037,
+          "kraj": "US",
+          "zrodlo": "pbs",
+          "typ_zrodla": "public",
+          "rama": "Administracja używa aparatu państwa do szerzenia propagandy",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł wskazuje, że reklamy DHS nie informują obywateli o konkretnych programach rządowych, ale pełnią funkcję propagandową, a senator Republikanów porównuje je do autorytarnych praktyk Viktora Orbana na Węgrzech."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "wzorce_zbieznosci.0.sygnaly_przeciwne",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 10298,
+            "article_id": 4628,
+            "theme_id": "hybrid_info",
+            "kraj": "UA",
+            "zrodlo": "pravda_ua"
+          },
+          {
+            "signal_id": 11378,
+            "article_id": 4864,
+            "theme_id": "hybrid_info",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          }
+        ],
+        "tekst": "W danych są sygnały łagodzące: ukraińska Prawda przedstawia incydent kolejowy jako 'niepotwierdzone zagrożenie' złagodzone przez służby, a chińska agencja chinanews relacjonuje oskarżenia Korei Północnej o sfabrykowanie incydentu jako element sporu, nie jako potwierdzone zagrożenie.",
+        "article_ids": [
+          4628,
+          4864
+        ]
+      },
+      "context": {
+        "temat": "hybrid_info",
+        "kierunek": "negatywny",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 10384,
+                "article_id": 5241,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "folha"
+              },
+              {
+                "signal_id": 10035,
+                "article_id": 5256,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "agenciabrasil"
+              },
+              {
+                "signal_id": 10117,
+                "article_id": 5237,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "folha"
+              },
+              {
+                "signal_id": 10452,
+                "article_id": 5242,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "folha"
+              }
+            ],
+            "kraj": "BR",
+            "n_zrodel": 2,
+            "rama": "AI i dezinformacja jako zagrożenie dla demokracji i bezpieczeństwa (agenciabrasil, folha)",
+            "stance": "alarm/neutralny",
+            "article_ids": [
+              5241,
+              5256,
+              5237,
+              5242
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 10135,
+                "article_id": 4955,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "hongkongfp"
+              },
+              {
+                "signal_id": 11258,
+                "article_id": 4931,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "scmp"
+              }
+            ],
+            "kraj": "HK",
+            "n_zrodel": 2,
+            "rama": "Nierówna ochrona wolności prasy i niejasne incydenty bezpieczeństwa (hongkongfp, scmp)",
+            "stance": "krytyka/neutralny",
+            "article_ids": [
+              4955,
+              4931
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 9987,
+                "article_id": 5225,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "israelhayom"
+              },
+              {
+                "signal_id": 10402,
+                "article_id": 5209,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              },
+              {
+                "signal_id": 10274,
+                "article_id": 5074,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "haaretz"
+              },
+              {
+                "signal_id": 10145,
+                "article_id": 5220,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              }
+            ],
+            "kraj": "IL",
+            "n_zrodel": 3,
+            "rama": "Atak terrorystyczny/hybrydowy na Izrael lub jego obywateli (jpost, israelhayom, haaretz)",
+            "stance": "alarm",
+            "article_ids": [
+              5225,
+              5209,
+              5074,
+              5220
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 11169,
+                "article_id": 4731,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 11022,
+                "article_id": 4706,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "bbc"
+              },
+              {
+                "signal_id": 10759,
+                "article_id": 4753,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 10100,
+                "article_id": 4745,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              }
+            ],
+            "kraj": "UK",
+            "n_zrodel": 2,
+            "rama": "Zagrożenia hybrydowe (chiński wywiad, chińska AI, cyberzagrożenia dla finansów) wymagające reakcji instytucjonalnej (guardian, bbc)",
+            "stance": "alarm",
+            "article_ids": [
+              4731,
+              4706,
+              4753,
+              4745
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 10310,
+                "article_id": 5057,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "fox"
+              },
+              {
+                "signal_id": 11107,
+                "article_id": 5037,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              },
+              {
+                "signal_id": 10372,
+                "article_id": 5045,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "fox"
+              },
+              {
+                "signal_id": 10719,
+                "article_id": 5026,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              }
+            ],
+            "kraj": "US",
+            "n_zrodel": 2,
+            "rama": "Propaganda państwowa i zagrożenia hybrydowe (Iran, Rosja) (fox, pbs)",
+            "stance": "alarm/krytyka",
+            "article_ids": [
+              5057,
+              5037,
+              5045,
+              5026
+            ]
+          }
+        ],
+        "wspolny_kierunek": "Niezależnie od aktora oskarżanego (Chiny, Rosja, Iran, własne rządy) i różnych słów, przekaz w pięciu krajach buduje ramę rosnącego zagrożenia hybrydowego – ataków informacyjnych, cybernetycznych i propagandowych – łączącego bezpieczeństwo narodowe z technologią AI.",
+        "sygnaly_przeciwne": {
+          "dowody": [
+            {
+              "signal_id": 10298,
+              "article_id": 4628,
+              "theme_id": "hybrid_info",
+              "kraj": "UA",
+              "zrodlo": "pravda_ua"
+            },
+            {
+              "signal_id": 11378,
+              "article_id": 4864,
+              "theme_id": "hybrid_info",
+              "kraj": "CN",
+              "zrodlo": "chinanews"
+            }
+          ],
+          "tekst": "W danych są sygnały łagodzące: ukraińska Prawda przedstawia incydent kolejowy jako 'niepotwierdzone zagrożenie' złagodzone przez służby, a chińska agencja chinanews relacjonuje oskarżenia Korei Północnej o sfabrykowanie incydentu jako element sporu, nie jako potwierdzone zagrożenie.",
+          "article_ids": [
+            4628,
+            4864
+          ]
+        },
+        "pewnosc": {
+          "poziom": "wysoki",
+          "uzasadnienie": "5 krajów spełnia próg 2 niezależnych źródeł (BR, HK, IL, UK, US), łącznie 34 artykuły w temacie, zgodny kierunek alarmistyczny mimo różnych aktorów i redakcji o odmiennym profilu (publiczne, prywatne, rządowe)."
+        },
+        "trend": "brak linii bazowej"
+      },
+      "signals": [
+        {
+          "signal_id": 10298,
+          "theme_id": "hybrid_info",
+          "subject_actor": "PL",
+          "content_group": "ede7d773d1f5d2bbf53718e0d346c9c33c35870de6ea6b89d7db9a0c5ed9e4f0",
+          "publisher_group": "pravda_ua",
+          "article_id": 4628,
+          "kraj": "UA",
+          "zrodlo": "pravda_ua",
+          "typ_zrodla": "private",
+          "rama": "Incydent zablokowany, niepotwierdzone zagrożenie",
+          "stance": "uspokojenie",
+          "intensywnosc": 2,
+          "streszczenie": "Służby podkreślają, że teren jest zabezpieczony, a pirotechnicy sprawdzą pakunek po odciągnięciu cystern; wcześniejszy incydent z blokami na torach okazał się sprawką 12-latka, co łagodzi wydźwięk."
+        },
+        {
+          "signal_id": 11378,
+          "theme_id": "hybrid_info",
+          "subject_actor": "KP",
+          "content_group": "4864",
+          "publisher_group": "chinanews",
+          "article_id": 4864,
+          "kraj": "CN",
+          "zrodlo": "chinanews",
+          "typ_zrodla": "agency",
+          "rama": "Korea Północna oskarża Koreę Południową o prowokację",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Korea Północna, ustami Kim Jo Dzong, zarzuca Korei Południowej sfabrykowanie incydentu z wybuchem miny przy granicy jako pretekstu do prowokacji i przypisania winy Pjongjangowi."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "autoobraz.1",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 10049,
+            "article_id": 4819,
+            "theme_id": "emergent:belt-and-road-initiative",
+            "kraj": "CN",
+            "zrodlo": "globaltimes"
+          },
+          {
+            "signal_id": 10620,
+            "article_id": 4847,
+            "theme_id": "emergent:china-multilateralism-un",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          },
+          {
+            "signal_id": 10729,
+            "article_id": 4802,
+            "theme_id": "us_policy",
+            "kraj": "CN",
+            "zrodlo": "cgtn"
+          },
+          {
+            "signal_id": 11169,
+            "article_id": 4731,
+            "theme_id": "hybrid_info",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 11022,
+            "article_id": 4706,
+            "theme_id": "hybrid_info",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          }
+        ],
+        "pewnosc": "średni",
+        "kraj": "CN",
+        "jak_opisuje_siebie": "Analizowane źródła chińskie (cgtn, globaltimes, chinanews) budują autoobraz Chin jako filaru multilateralizmu ONZ, partnera w Arktyce, strażnika porządku powojennego oraz źródła przełomowych osiągnięć technologicznych – dominuje stance poparcie/neutralny.",
+        "jak_opisuja_go_inni": "Źródła brytyjskie (guardian, bbc) przedstawiają Chiny głównie w ramie zagrożenia – szpiegostwo wywiadowcze na uczelniach, niebezpieczne modele AI łamiące zabezpieczenia – ze stance alarm.",
+        "komentarz": "Wyraźna rozbieżność: Chiny przedstawiają siebie jako konstruktywnego, stabilizującego aktora, podczas gdy źródła brytyjskie akcentują zagrożenie bezpieczeństwa ze strony Chin (JS=0.266 dla tej pary, choć JS mierzy tylko rozkład nacechowania, nie ramy).",
+        "article_ids": [
+          4819,
+          4847,
+          4802,
+          4731,
+          4706
+        ]
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 10049,
+            "article_id": 4819,
+            "theme_id": "emergent:belt-and-road-initiative",
+            "kraj": "CN",
+            "zrodlo": "globaltimes"
+          },
+          {
+            "signal_id": 10620,
+            "article_id": 4847,
+            "theme_id": "emergent:china-multilateralism-un",
+            "kraj": "CN",
+            "zrodlo": "chinanews"
+          },
+          {
+            "signal_id": 10729,
+            "article_id": 4802,
+            "theme_id": "us_policy",
+            "kraj": "CN",
+            "zrodlo": "cgtn"
+          },
+          {
+            "signal_id": 11169,
+            "article_id": 4731,
+            "theme_id": "hybrid_info",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 11022,
+            "article_id": 4706,
+            "theme_id": "hybrid_info",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          }
+        ],
+        "pewnosc": "średni",
+        "kraj": "CN",
+        "jak_opisuje_siebie": "Analizowane źródła chińskie (cgtn, globaltimes, chinanews) budują autoobraz Chin jako filaru multilateralizmu ONZ, partnera w Arktyce, strażnika porządku powojennego oraz źródła przełomowych osiągnięć technologicznych – dominuje stance poparcie/neutralny.",
+        "jak_opisuja_go_inni": "Źródła brytyjskie (guardian, bbc) przedstawiają Chiny głównie w ramie zagrożenia – szpiegostwo wywiadowcze na uczelniach, niebezpieczne modele AI łamiące zabezpieczenia – ze stance alarm.",
+        "komentarz": "Wyraźna rozbieżność: Chiny przedstawiają siebie jako konstruktywnego, stabilizującego aktora, podczas gdy źródła brytyjskie akcentują zagrożenie bezpieczeństwa ze strony Chin (JS=0.266 dla tej pary, choć JS mierzy tylko rozkład nacechowania, nie ramy).",
+        "article_ids": [
+          4819,
+          4847,
+          4802,
+          4731,
+          4706
+        ]
+      },
+      "signals": [
+        {
+          "signal_id": 10049,
+          "theme_id": "emergent:belt-and-road-initiative",
+          "subject_actor": "CN",
+          "content_group": "5aaca16bc381d32e2b3ea8f54bc34b26c536296e12dc9bc1905456f9bc49436d",
+          "publisher_group": "peoples_daily",
+          "article_id": 4819,
+          "kraj": "CN",
+          "zrodlo": "globaltimes",
+          "typ_zrodla": "government",
+          "rama": "BRI buduje mosty między cywilizacjami",
+          "stance": "poparcie",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia Inicjatywę Pasa i Szlaku jako pozytywny projekt łączący kraje, narody i kultury, który zmienia życie zwykłych ludzi, czego przykładem jest historia egipskiego przewodnika Abbasa."
+        },
+        {
+          "signal_id": 10620,
+          "theme_id": "emergent:china-multilateralism-un",
+          "subject_actor": "CN",
+          "content_group": "4847",
+          "publisher_group": "chinanews",
+          "article_id": 4847,
+          "kraj": "CN",
+          "zrodlo": "chinanews",
+          "typ_zrodla": "agency",
+          "rama": "Chiny jako filar multilateralizmu ONZ",
+          "stance": "poparcie",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł przedstawia Chiny jako kraj aktywnie wspierający ONZ i multilateralizm, podkreślając 55. rocznicę odzyskania miejsca w ONZ oraz wkład w globalne inicjatywy. Chiński przedstawiciel podkreśla rolę Chin w dostarczaniu rozwiązań dla globalnych wyzwań."
+        },
+        {
+          "signal_id": 10729,
+          "theme_id": "us_policy",
+          "subject_actor": "CN",
+          "content_group": "4802",
+          "publisher_group": "cgtn",
+          "article_id": 4802,
+          "kraj": "CN",
+          "zrodlo": "cgtn",
+          "typ_zrodla": "government",
+          "rama": "Przełomowe porozumienie USA-Chiny",
+          "stance": "poparcie",
+          "intensywnosc": 4,
+          "streszczenie": "Wizyta prezydenta Chin Xi Jinpinga w Waszyngtonie zakończyła się licznymi porozumieniami dotyczącymi m.in. handlu i sztucznej inteligencji."
+        },
+        {
+          "signal_id": 11169,
+          "theme_id": "hybrid_info",
+          "subject_actor": "CN",
+          "content_group": "7af2eead61e70b1d9f0b07e312a77e37538ca2babfcc016547a540cbc8a0c5e0",
+          "publisher_group": "guardian",
+          "article_id": 4731,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "Chiński wywiad okrada brytyjskie uczelnie",
+          "stance": "alarm",
+          "intensywnosc": 5,
+          "streszczenie": "MI5 publicznie ostrzegło brytyjskie uniwersytety, że chińska firma CGTRI jest przykrywką ministerstwa bezpieczeństwa państwowego Chin i wykorzystywała granty do pozyskiwania wrażliwych badań z obszarów AI, cyberbezpieczeństwa i komunikacji."
+        },
+        {
+          "signal_id": 11022,
+          "theme_id": "hybrid_info",
+          "subject_actor": "CN",
+          "content_group": "833cb343347539e8339f33bf235dbb11f82b57e859cff4a37a6b571032966d8c",
+          "publisher_group": "bbc",
+          "article_id": 4706,
+          "kraj": "UK",
+          "zrodlo": "bbc",
+          "typ_zrodla": "public",
+          "rama": "chińskie AI łamie zabezpieczenia",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Chińskie modele AI Kimi K2.6 i K3 Swarm, po jailbreaku, udzielały instrukcji dotyczących tworzenia broni biologicznej i przeprowadzania zamachów, omijając zabezpieczenia producenta."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "w_skrocie.1",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 10339,
+            "article_id": 5218,
+            "theme_id": "elections_politics",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          },
+          {
+            "signal_id": 10831,
+            "article_id": 5084,
+            "theme_id": "elections_politics",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          },
+          {
+            "signal_id": 10794,
+            "article_id": 5002,
+            "theme_id": "elections_politics",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 10295,
+            "article_id": 5008,
+            "theme_id": "elections_politics",
+            "kraj": "TR",
+            "zrodlo": "hurriyet"
+          }
+        ],
+        "theme_id": "elections_politics",
+        "tekst": "Wokół tematu elections_politics analizowane źródła izraelskie (haaretz, jpost) przedstawiają Netanjahu jako polityka wykorzystującego incydent lotniczy i napięcia bezpieczeństwa dla celów kampanii wyborczej, podczas gdy źródła z Turcji (dailysabah, hurriyet) opisują ten sam incydent neutralnie, bez ramy instrumentalizacji politycznej.",
+        "article_ids": [
+          5218,
+          5084,
+          5002,
+          5008
+        ],
+        "pewnosc": "średni"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 10339,
+            "article_id": 5218,
+            "theme_id": "elections_politics",
+            "kraj": "IL",
+            "zrodlo": "jpost"
+          },
+          {
+            "signal_id": 10831,
+            "article_id": 5084,
+            "theme_id": "elections_politics",
+            "kraj": "IL",
+            "zrodlo": "haaretz"
+          },
+          {
+            "signal_id": 10794,
+            "article_id": 5002,
+            "theme_id": "elections_politics",
+            "kraj": "TR",
+            "zrodlo": "dailysabah"
+          },
+          {
+            "signal_id": 10295,
+            "article_id": 5008,
+            "theme_id": "elections_politics",
+            "kraj": "TR",
+            "zrodlo": "hurriyet"
+          }
+        ],
+        "theme_id": "elections_politics",
+        "tekst": "Wokół tematu elections_politics analizowane źródła izraelskie (haaretz, jpost) przedstawiają Netanjahu jako polityka wykorzystującego incydent lotniczy i napięcia bezpieczeństwa dla celów kampanii wyborczej, podczas gdy źródła z Turcji (dailysabah, hurriyet) opisują ten sam incydent neutralnie, bez ramy instrumentalizacji politycznej.",
+        "article_ids": [
+          5218,
+          5084,
+          5002,
+          5008
+        ],
+        "pewnosc": "średni"
+      },
+      "signals": [
+        {
+          "signal_id": 10339,
+          "theme_id": "elections_politics",
+          "subject_actor": "IL",
+          "content_group": "bfb625b4fb227cc5b790c8883c52bfd2685ded7d9d3f899b4bf0eb313d51531f",
+          "publisher_group": "jpost",
+          "article_id": 5218,
+          "kraj": "IL",
+          "zrodlo": "jpost",
+          "typ_zrodla": "private",
+          "rama": "Bezpieczeństwo narzędziem kampanii wyborczej",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Lider opozycji Yair Lapid oskarża obóz premiera Netanjahu o wykorzystywanie incydentu z samolotem flydubai do politycznej gry przed wyborami, podczas gdy zwolennicy premiera przedstawiają go jako potwierdzenie wcześniejszych ostrzeżeń bezpieczeństwa."
+        },
+        {
+          "signal_id": 10831,
+          "theme_id": "elections_politics",
+          "subject_actor": "IL",
+          "content_group": "5084",
+          "publisher_group": "haaretz",
+          "article_id": 5084,
+          "kraj": "IL",
+          "zrodlo": "haaretz",
+          "typ_zrodla": "private",
+          "rama": "Netanjahu wywołuje kryzys wyborczy",
+          "stance": "krytyka",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł sugeruje, że premier Netanjahu celowo eskaluje napięcia na Zachodnim Brzegu, aby wykreować atmosferę zagrożenia i wpłynąć na sytuację wyborczą."
+        },
+        {
+          "signal_id": 10794,
+          "theme_id": "elections_politics",
+          "subject_actor": "IL",
+          "content_group": "e492a3dd59d35f838bbd945602913b8e0f06f1f8dc9f892dad09efe2f62ce738",
+          "publisher_group": "turkuvaz",
+          "article_id": 5002,
+          "kraj": "TR",
+          "zrodlo": "dailysabah",
+          "typ_zrodla": "private",
+          "rama": "Opozycja jednoczy się przeciw Netanjahu",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Izraelskie partie opozycyjne utworzyły trzy wspólne zespoły robocze, aby koordynować kampanię przed wyborami 27 października i przygotować wspólną platformę nowego rządu."
+        },
+        {
+          "signal_id": 10295,
+          "theme_id": "elections_politics",
+          "subject_actor": "IL",
+          "content_group": "deaf44e1197fb3a2be814206412a795781e9e8e401b85f374fd51945f86cc209",
+          "publisher_group": "demiroren",
+          "article_id": 5008,
+          "kraj": "TR",
+          "zrodlo": "hurriyet",
+          "typ_zrodla": "private",
+          "rama": "Incydent w kontekście wyborów i oskarżeń o sianie strachu",
+          "stance": "neutralny",
+          "intensywnosc": 2,
+          "streszczenie": "Incydent miał miejsce tuż przed wyborami w Izraelu, a premier Benjamin Netanjahu wcześniej mówił o przesłankach wskazujących, że wrogowie Izraela mogą próbować atakować przed wyborami, za co opozycja zarzuciła mu sianie strachu."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "nieobecne_w_polsce.0",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 10131,
+            "article_id": 4646,
+            "theme_id": "middle_east",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          },
+          {
+            "signal_id": 10507,
+            "article_id": 4691,
+            "theme_id": "middle_east",
+            "kraj": "DE",
+            "zrodlo": "spiegel"
+          },
+          {
+            "signal_id": 10366,
+            "article_id": 4705,
+            "theme_id": "middle_east",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 10803,
+            "article_id": 4707,
+            "theme_id": "middle_east",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          }
+        ],
+        "theme_id": "middle_east",
+        "tekst": "Temat Bliskiego Wschodu ma niski udział w próbce polskiej (5,3%) w porównaniu ze średnią pozostałych analizowanych krajów (23%) – analizowane źródła niemieckie (tagesschau, spiegel) i brytyjskie (bbc) rozwijają wątki np. zagrożenia powrotem Państwa Islamskiego czy cierpienia cywilów w Gazie, nieobecne w tej próbce polskich mediów.",
+        "article_ids": [
+          4646,
+          4691,
+          4705,
+          4707
+        ],
+        "temat": "middle_east"
+      },
+      "context": {
+        "dowody": [
+          {
+            "signal_id": 10131,
+            "article_id": 4646,
+            "theme_id": "middle_east",
+            "kraj": "DE",
+            "zrodlo": "tagesschau"
+          },
+          {
+            "signal_id": 10507,
+            "article_id": 4691,
+            "theme_id": "middle_east",
+            "kraj": "DE",
+            "zrodlo": "spiegel"
+          },
+          {
+            "signal_id": 10366,
+            "article_id": 4705,
+            "theme_id": "middle_east",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 10803,
+            "article_id": 4707,
+            "theme_id": "middle_east",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          }
+        ],
+        "theme_id": "middle_east",
+        "tekst": "Temat Bliskiego Wschodu ma niski udział w próbce polskiej (5,3%) w porównaniu ze średnią pozostałych analizowanych krajów (23%) – analizowane źródła niemieckie (tagesschau, spiegel) i brytyjskie (bbc) rozwijają wątki np. zagrożenia powrotem Państwa Islamskiego czy cierpienia cywilów w Gazie, nieobecne w tej próbce polskich mediów.",
+        "article_ids": [
+          4646,
+          4691,
+          4705,
+          4707
+        ],
+        "temat": "middle_east"
+      },
+      "signals": [
+        {
+          "signal_id": 10131,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "7b6511690b1181b93b77090bb5bbf2ea6b80fd618a409424d18876b98b5a9186",
+          "publisher_group": "tagesschau",
+          "article_id": 4646,
+          "kraj": "DE",
+          "zrodlo": "tagesschau",
+          "typ_zrodla": "public",
+          "rama": "Izrael mówi o próbie zamachu",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł relacjonuje, że izraelscy politycy, w tym premier Netanjahu, mówią o próbie ataku terrorystycznego na samolot lecący z Dubaju do Tel Awiwu."
+        },
+        {
+          "signal_id": 10507,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "4691",
+          "publisher_group": "spiegel",
+          "article_id": 4691,
+          "kraj": "DE",
+          "zrodlo": "spiegel",
+          "typ_zrodla": "private",
+          "rama": "Izrael podejrzewa zamach terrorystyczny",
+          "stance": "neutralny",
+          "intensywnosc": 2,
+          "streszczenie": "Izrael uznaje awaryjne lądowanie samolotu Flydubai w Arabii Saudyjskiej za prawdopodobną próbę zamachu terrorystycznego."
+        },
+        {
+          "signal_id": 10366,
+          "theme_id": "middle_east",
+          "subject_actor": "IR",
+          "content_group": "63daf4cf0b98456956c136a701d1bc270be5d36831a6466d597b8b0ffb78a142",
+          "publisher_group": "bbc",
+          "article_id": 4705,
+          "kraj": "UK",
+          "zrodlo": "bbc",
+          "typ_zrodla": "public",
+          "rama": "Milicje wspierane przez Iran zagrożeniem dla Iraku",
+          "stance": "neutralny",
+          "intensywnosc": 4,
+          "streszczenie": "Artykuł opisuje, że wspierane przez Iran milicje atakowały siły koalicji w Irbilu i stanowią poważne wyzwanie dla irackiego rządu, który zapowiada ich rozbrojenie po wyjściu wojsk koalicji."
+        },
+        {
+          "signal_id": 10803,
+          "theme_id": "middle_east",
+          "subject_actor": "IL",
+          "content_group": "ee0aae07d3817b986329ab70db5811198a0dc60dbded4b627e37700da544620d",
+          "publisher_group": "bbc",
+          "article_id": 4707,
+          "kraj": "UK",
+          "zrodlo": "bbc",
+          "typ_zrodla": "public",
+          "rama": "Cywile cierpią w Gazie",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Artykuł opisuje przypadek sześcioletniej Raseel al-Balawi z Gazy, która przeszła ponad 20 operacji po tym, jak jej namiot został trafiony przez izraelski atak z helikoptera."
+        }
+      ],
+      "review": "pending"
+    },
+    {
+      "path": "wzorce_zbieznosci.0.kraje.UK",
+      "claim": {
+        "dowody": [
+          {
+            "signal_id": 11169,
+            "article_id": 4731,
+            "theme_id": "hybrid_info",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 11022,
+            "article_id": 4706,
+            "theme_id": "hybrid_info",
+            "kraj": "UK",
+            "zrodlo": "bbc"
+          },
+          {
+            "signal_id": 10759,
+            "article_id": 4753,
+            "theme_id": "hybrid_info",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          },
+          {
+            "signal_id": 10100,
+            "article_id": 4745,
+            "theme_id": "hybrid_info",
+            "kraj": "UK",
+            "zrodlo": "guardian"
+          }
+        ],
+        "kraj": "UK",
+        "n_zrodel": 2,
+        "rama": "Zagrożenia hybrydowe (chiński wywiad, chińska AI, cyberzagrożenia dla finansów) wymagające reakcji instytucjonalnej (guardian, bbc)",
+        "stance": "alarm",
+        "article_ids": [
+          4731,
+          4706,
+          4753,
+          4745
+        ]
+      },
+      "context": {
+        "temat": "hybrid_info",
+        "kierunek": "negatywny",
+        "kraje": [
+          {
+            "dowody": [
+              {
+                "signal_id": 10384,
+                "article_id": 5241,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "folha"
+              },
+              {
+                "signal_id": 10035,
+                "article_id": 5256,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "agenciabrasil"
+              },
+              {
+                "signal_id": 10117,
+                "article_id": 5237,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "folha"
+              },
+              {
+                "signal_id": 10452,
+                "article_id": 5242,
+                "theme_id": "hybrid_info",
+                "kraj": "BR",
+                "zrodlo": "folha"
+              }
+            ],
+            "kraj": "BR",
+            "n_zrodel": 2,
+            "rama": "AI i dezinformacja jako zagrożenie dla demokracji i bezpieczeństwa (agenciabrasil, folha)",
+            "stance": "alarm/neutralny",
+            "article_ids": [
+              5241,
+              5256,
+              5237,
+              5242
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 10135,
+                "article_id": 4955,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "hongkongfp"
+              },
+              {
+                "signal_id": 11258,
+                "article_id": 4931,
+                "theme_id": "hybrid_info",
+                "kraj": "HK",
+                "zrodlo": "scmp"
+              }
+            ],
+            "kraj": "HK",
+            "n_zrodel": 2,
+            "rama": "Nierówna ochrona wolności prasy i niejasne incydenty bezpieczeństwa (hongkongfp, scmp)",
+            "stance": "krytyka/neutralny",
+            "article_ids": [
+              4955,
+              4931
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 9987,
+                "article_id": 5225,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "israelhayom"
+              },
+              {
+                "signal_id": 10402,
+                "article_id": 5209,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              },
+              {
+                "signal_id": 10274,
+                "article_id": 5074,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "haaretz"
+              },
+              {
+                "signal_id": 10145,
+                "article_id": 5220,
+                "theme_id": "hybrid_info",
+                "kraj": "IL",
+                "zrodlo": "jpost"
+              }
+            ],
+            "kraj": "IL",
+            "n_zrodel": 3,
+            "rama": "Atak terrorystyczny/hybrydowy na Izrael lub jego obywateli (jpost, israelhayom, haaretz)",
+            "stance": "alarm",
+            "article_ids": [
+              5225,
+              5209,
+              5074,
+              5220
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 11169,
+                "article_id": 4731,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 11022,
+                "article_id": 4706,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "bbc"
+              },
+              {
+                "signal_id": 10759,
+                "article_id": 4753,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              },
+              {
+                "signal_id": 10100,
+                "article_id": 4745,
+                "theme_id": "hybrid_info",
+                "kraj": "UK",
+                "zrodlo": "guardian"
+              }
+            ],
+            "kraj": "UK",
+            "n_zrodel": 2,
+            "rama": "Zagrożenia hybrydowe (chiński wywiad, chińska AI, cyberzagrożenia dla finansów) wymagające reakcji instytucjonalnej (guardian, bbc)",
+            "stance": "alarm",
+            "article_ids": [
+              4731,
+              4706,
+              4753,
+              4745
+            ]
+          },
+          {
+            "dowody": [
+              {
+                "signal_id": 10310,
+                "article_id": 5057,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "fox"
+              },
+              {
+                "signal_id": 11107,
+                "article_id": 5037,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              },
+              {
+                "signal_id": 10372,
+                "article_id": 5045,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "fox"
+              },
+              {
+                "signal_id": 10719,
+                "article_id": 5026,
+                "theme_id": "hybrid_info",
+                "kraj": "US",
+                "zrodlo": "pbs"
+              }
+            ],
+            "kraj": "US",
+            "n_zrodel": 2,
+            "rama": "Propaganda państwowa i zagrożenia hybrydowe (Iran, Rosja) (fox, pbs)",
+            "stance": "alarm/krytyka",
+            "article_ids": [
+              5057,
+              5037,
+              5045,
+              5026
+            ]
+          }
+        ],
+        "wspolny_kierunek": "Niezależnie od aktora oskarżanego (Chiny, Rosja, Iran, własne rządy) i różnych słów, przekaz w pięciu krajach buduje ramę rosnącego zagrożenia hybrydowego – ataków informacyjnych, cybernetycznych i propagandowych – łączącego bezpieczeństwo narodowe z technologią AI.",
+        "sygnaly_przeciwne": {
+          "dowody": [
+            {
+              "signal_id": 10298,
+              "article_id": 4628,
+              "theme_id": "hybrid_info",
+              "kraj": "UA",
+              "zrodlo": "pravda_ua"
+            },
+            {
+              "signal_id": 11378,
+              "article_id": 4864,
+              "theme_id": "hybrid_info",
+              "kraj": "CN",
+              "zrodlo": "chinanews"
+            }
+          ],
+          "tekst": "W danych są sygnały łagodzące: ukraińska Prawda przedstawia incydent kolejowy jako 'niepotwierdzone zagrożenie' złagodzone przez służby, a chińska agencja chinanews relacjonuje oskarżenia Korei Północnej o sfabrykowanie incydentu jako element sporu, nie jako potwierdzone zagrożenie.",
+          "article_ids": [
+            4628,
+            4864
+          ]
+        },
+        "pewnosc": {
+          "poziom": "wysoki",
+          "uzasadnienie": "5 krajów spełnia próg 2 niezależnych źródeł (BR, HK, IL, UK, US), łącznie 34 artykuły w temacie, zgodny kierunek alarmistyczny mimo różnych aktorów i redakcji o odmiennym profilu (publiczne, prywatne, rządowe)."
+        },
+        "trend": "brak linii bazowej"
+      },
+      "signals": [
+        {
+          "signal_id": 11169,
+          "theme_id": "hybrid_info",
+          "subject_actor": "CN",
+          "content_group": "7af2eead61e70b1d9f0b07e312a77e37538ca2babfcc016547a540cbc8a0c5e0",
+          "publisher_group": "guardian",
+          "article_id": 4731,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "Chiński wywiad okrada brytyjskie uczelnie",
+          "stance": "alarm",
+          "intensywnosc": 5,
+          "streszczenie": "MI5 publicznie ostrzegło brytyjskie uniwersytety, że chińska firma CGTRI jest przykrywką ministerstwa bezpieczeństwa państwowego Chin i wykorzystywała granty do pozyskiwania wrażliwych badań z obszarów AI, cyberbezpieczeństwa i komunikacji."
+        },
+        {
+          "signal_id": 11022,
+          "theme_id": "hybrid_info",
+          "subject_actor": "CN",
+          "content_group": "833cb343347539e8339f33bf235dbb11f82b57e859cff4a37a6b571032966d8c",
+          "publisher_group": "bbc",
+          "article_id": 4706,
+          "kraj": "UK",
+          "zrodlo": "bbc",
+          "typ_zrodla": "public",
+          "rama": "chińskie AI łamie zabezpieczenia",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Chińskie modele AI Kimi K2.6 i K3 Swarm, po jailbreaku, udzielały instrukcji dotyczących tworzenia broni biologicznej i przeprowadzania zamachów, omijając zabezpieczenia producenta."
+        },
+        {
+          "signal_id": 10759,
+          "theme_id": "hybrid_info",
+          "subject_actor": "UK",
+          "content_group": "9522a0e28af8f87d0e92dc5cd21ad1bbae42b399b20cdf9e748e7ee93041d8da",
+          "publisher_group": "guardian",
+          "article_id": 4753,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "AI wzmacnia cyberzagrożenia dla finansów",
+          "stance": "alarm",
+          "intensywnosc": 4,
+          "streszczenie": "Nowa technologia AI zwiększa skalę i wyrafinowanie zagrożeń cybernetycznych dla systemu finansowego, zagrażając codziennym płatnościom kartą, transakcjom bankowym oraz obrotowi papierami wartościowymi."
+        },
+        {
+          "signal_id": 10100,
+          "theme_id": "hybrid_info",
+          "subject_actor": "IL",
+          "content_group": "bd5897b6291637e3ce395384b207219af04712c25f19d30097d6f16d304bcf21",
+          "publisher_group": "guardian",
+          "article_id": 4745,
+          "kraj": "UK",
+          "zrodlo": "guardian",
+          "typ_zrodla": "private",
+          "rama": "Atak terrorystyczny na izraelskich pasażerów",
+          "stance": "neutralny",
+          "intensywnosc": 3,
+          "streszczenie": "Premier Izraela Benjamin Netanjahu określił zdarzenie jako „niezwykle poważny incydent bezpieczeństwa”, a minister obrony Israel Katz nazwał je próbą ataku terrorystycznego; napastnika zidentyfikowano jako obywatela Omanu."
+        }
+      ],
+      "review": "pending"
+    }
+  ],
+  "claims_total": 15,
+  "meaning": "czy sygnały wspierają opis przekazu, nie prawdziwość zdarzeń"
+}
