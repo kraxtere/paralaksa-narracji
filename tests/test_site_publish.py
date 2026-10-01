@@ -109,7 +109,7 @@ def test_publish_stages_site_and_force_pushes(tmp_path, monkeypatch):
         return subprocess.CompletedProcess(args, 0, stdout="PRIVATE\n", stderr="")
 
     publish.publish(site, "kraxtere/paralaksa-strona", run=run)
-    assert seen["files"] == ["README.md", "public/index.html", "public/zdarzenia/a.html", "render.yaml",
+    assert seen["files"] == ["README.md", "konta.py", "public/index.html", "public/zdarzenia/a.html", "render.yaml",
                              "requirements.txt", "server.py"]
     assert seen["push"][-2:] == ["https://github.com/kraxtere/paralaksa-strona.git", "main"] and "--force" in seen["push"]
     with pytest.raises(RuntimeError, match="najpierw plx site"):

@@ -1,3 +1,17 @@
+# Strona: konta osób i czas na stronie — 2026-10-01
+
+Decyzja właściciela: pokazać stronę kilku osobom i wiedzieć, kto ile na niej siedzi; wersja darmowa (bez płatnego dysku Rendera).
+- Właściciel (SITE_USER/SITE_PASSWORD) dodaje osoby na `/osoby`; każda dostaje jednorazowy link `/zaproszenie/...` (7 dni)
+  i sama ustawia hasło (min. 10 znaków, zapisany tylko skrót PBKDF2). Logowanie dalej przez okienko przeglądarki (Basic Auth),
+  bez formularza i sesji. Przyciski: nowy link (też reset hasła), zablokuj/odblokuj.
+- Czas: serwer dokleja do stron HTML sygnał co minutę, gdy karta jest widoczna (`/_ping`); wejście na stronę też się liczy.
+  Sesja kończy się po 10 min ciszy. Zestawienie (kto, od–do, minuty, strony; 7 i 30 dni) jest na `/osoby`.
+- Zapis: darmowy Render kasuje dysk przy uśpieniu i każdym wdrożeniu, więc osoby i aktywność trafiają do prywatnego repo
+  `kraxtere/paralaksa-aktywnosc` przez API GitHuba (`hosting/konta.py`, bez `git` i `ssh`, których serwer nie potrzebuje).
+  Aktywność co 3 min i przy SIGTERM (usypianie), zmiany osób od razu. Wymaga `ACTIVITY_TOKEN` w Renderze (token fine-grained
+  tylko do tego repo, Contents: zapis); bez niego działa jak dotąd, tylko konto właściciela.
+- Próba na prawdziwym repo (zaproszenie, hasło, logowanie, zapis i odczyt aktywności) przeszła; dane próby usunięte.
+
 # Rosja w daily — 2026-09-30
 
 Decyzja właściciela: rosyjskie źródła w codziennym przebiegu, sankcje UE nie są przeszkodą (dotąd Rosja była tylko w kartach

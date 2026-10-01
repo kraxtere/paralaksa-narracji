@@ -119,6 +119,9 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
   `SITE_REPO` (`kraxtere/paralaksa-strona`, odmawia, gdy repo nie jest prywatne), Render (darmowy Web Service) uruchamia `site/hosting/server.py`
   z HTTP Basic Auth (`SITE_USER`/`SITE_PASSWORD` tylko w Renderze; bez nich 503; bez hasła tylko manifest i ikony
   z `site/icons.py`, do instalacji jako aplikacja). To repo zostaje publiczne (minuty Actions).
+  Od 2026-10-01 inne osoby mają własne loginy (`site/hosting/konta.py`): właściciel dodaje je na `/osoby` (link z zaproszeniem,
+  osoba sama ustawia hasło), strony co minutę zgłaszają czas czytania; osoby i aktywność w prywatnym repo `kraxtere/paralaksa-aktywnosc`
+  przez API GitHuba (`ACTIVITY_TOKEN` w Renderze), bo dysk darmowego Rendera znika przy uśpieniu. Serwer: tylko biblioteka standardowa.
   `stories.py`: „historie dnia” w zakładce Najważniejsze (wydarzenia z ≥ 3 krajów, jeden przetłumaczony nagłówek na kraj). Dwa kroki
   modelu ekstrakcji: wyszukanie kandydatów, potem przypisanie każdego artykułu do wydarzenia albo odrzucenie (porcje po 60 artykułów). Tylko przy `plx site`, nigdy w daily;
   wynik w `data/stories/<dzień>.json` (ok. 0,03–0,04 $ na dzień, ponowna budowa za darmo). Pierwszy krok bez weryfikacji dokleja artykuły

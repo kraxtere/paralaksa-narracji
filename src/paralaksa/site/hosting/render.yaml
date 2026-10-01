@@ -1,4 +1,4 @@
-# Render Blueprint: strona wewnętrzna pod hasłem. Login i hasło podajesz w Renderze, nie w repo.
+# Render Blueprint: strona wewnętrzna pod hasłem. Login, hasło i token podajesz w Renderze, nie w repo.
 services:
   - type: web
     name: paralaksa-strona
@@ -11,3 +11,8 @@ services:
         sync: false
       - key: SITE_PASSWORD
         sync: false
+      # konta innych osób i czas na stronie: token fine-grained z dostępem tylko do repo z ACTIVITY_REPO (Contents: zapis)
+      - key: ACTIVITY_TOKEN
+        sync: false
+      - key: ACTIVITY_REPO
+        value: kraxtere/paralaksa-aktywnosc
