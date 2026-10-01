@@ -69,10 +69,10 @@ py -3.12 -m venv .venv; .venv\Scripts\python -m pip install -e ".[dev]"   # uv n
 .venv\Scripts\plx extract [--dry-run] [--limit N] [--no-batch] [--db PATH]   # wymaga DEEPSEEK_API_KEY w .env
 .venv\Scripts\plx aggregate [--date D] [--db PATH]
 .venv\Scripts\plx report [--date D] [--out-dir DIR] [--db PATH]
-.venv\Scripts\plx run-daily [--skip-ingest] [--no-fulltext] [--limit N] [--out-dir DIR]
+.venv\Scripts\plx run-daily [--skip-ingest] [--no-fulltext] [--limit N] [--bez-raportu] [--out-dir DIR]   # Actions: --bez-raportu
 .venv\Scripts\plx board events\<id>.yaml [-o data/boards] [--no-png]   # plansza 1080×1920, PNG przez Chrome/Edge
 .venv\Scripts\plx events check events\<karta>.md|events [--dni 2] [--max-fetch 12] [-o data/checks]   # podpowiedzi z Wayback, karty nie zmienia
-.venv\Scripts\plx site [--db data/prod.db] [-o data/site] [--zip] [--bez-historii] [--bez-tv] [--publikuj]   # strona wewnętrzna: zdarzenia + dziennik + telewizja, statyczny HTML; --publikuj: prywatne repo SITE_REPO → Render pod hasłem
+.venv\Scripts\plx site [--db data/prod.db] [-o data/site] [--zip] [--bez-historii] [--z-tv] [--publikuj]   # strona wewnętrzna: zdarzenia + dziennik (+ telewizja z --z-tv), statyczny HTML; --publikuj: prywatne repo SITE_REPO → Render pod hasłem
 .venv\Scripts\plx events archive events\<karta>.md|events [--na-sucho] [--bez-wpisu]   # wypełnia puste archiwum (Wayback / Save Page Now)
 .venv\Scripts\plx gdelt rezonans [--dzien D]   # kandydaci na karty z GDELT (BigQuery, GCP_PROJECT w .env)
 .venv\Scripts\plx gdelt szukaj events\<karta>.md [--fraza F ...] [--dni-po 3]   # brakujące relacje do karty, karty nie zmienia
@@ -137,12 +137,13 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
   nazwy nowe w kilku stacjach ze zdaniem z każdej. To interpretacja modelu, nie przekaz stacji: przed kartą sprawdzić w transkrypcji
   (Visual Explorer, ręcznie). Transkrypcji nie pobierać automatycznie: są za podpisanym ciasteczkiem, w Internet Archive prywatne.
   `tv_views.py` składa dane zakładki Telewizja na stronie (`telewizja.html`, skrypt `site/assets/tv.js`, klasy CSS `tv-*`):
-  `plx site` dociąga raporty z ostatnich 7 dni do `data/gdelt/tv/` (`--bez-tv`: tylko zapisane).
+  Od 2026-10-01 zakładka jest wyłączona (decyzja właściciela: skupiamy się na prasie, ok. 0,2 $ dziennie mniej);
+  `plx site --z-tv` ją przywraca i dociąga raporty z ostatnich 7 dni do `data/gdelt/tv/`.
   `tv_pl.py`: tłumaczenie raportów na polski (`deepseek-flash`, ok. 0,12 $ dziennie), tylko przy `plx site`, zapis `<KOD>.pl.json`.
   `tv_stories.py`: „Historie dnia” (pierwsza zakładka Telewizji): tezy z raportów (flash, bez sekcji spekulacji Gemini), zdarzenia
   z różnymi wersjami (DeepSeek Pro), weryfikacja (Haiku 4.5) z odrzuceniem decydowanym w kodzie (pytania kontrolne, liczby jako przedziały,
   pisownia nazw). Każdy krok zapisany w `data/gdelt/tv/<dzień>/`; zmiana reguł bez nowych wywołań. Tylko przy `plx site`, nigdy w daily.
-- `src/paralaksa/extract/codex_client.py`: model `codex[:low|medium|high]` w `build_client`, czyli Codex CLI z limitu konta Pro
+- `src/paralaksa/extract/codex_client.py`: model `codex[:model][:low|medium|high]` w `build_client` (np. `codex:gpt-6.1-sol:medium`), czyli Codex CLI z limitu konta Pro
   właściciela (decyzja 2026-09-30: eksperymenty i kroki lokalne przez Codex zamiast płatnych API).
   Tylko lokalnie: w CI odmawia działania. Codex pracuje read-only w pustym folderze tymczasowym. Nigdy „ultra”.
 - Wersja 2.0 strony (prototyp obrazkowy): `data/widok_obrazkowy.py` (poza gitem) generuje przez Codex infografikę dnia 2×3
@@ -152,10 +153,14 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
   stara wersja zostaje pod `/index.html` (link „Stara wersja” na stronach 2.0); `start_url` aplikacji to `./`.
   Pasek i stopka 2.0 są wspólne: `site/assets/pasek.js` (logo, wybór dnia, „Stara wersja” w stopce) trafia do `v2/pasek.js`,
   strony mają tylko `<div id="pasek">`; zmiana paska = zmiana tego pliku i `plx site`, bez przebudowy stron dni.
-  Tytuł okładki nowych dni: „Przegląd prasy · DD.MM” (`data/widok_powitanie.py`). Panel `/osoby` liczy czas według części
+  Tytuł okładki nowych dni: „Przegląd prasy · DD.MM” (`data/widok_powitanie.py`).
+  Oś tygodnia (prototyp 2026-10-01): `data/os_tygodnia.py` (poza gitem) układa przez Codex Sprawy dnia z 7 dni w 14–20 zdarzeń
+  z wątkami (filtr), kadr bez napisów na zdarzenie; godzina to pierwszy pokazany nagłówek w naszych źródłach, nie godzina
+  zdarzenia. Wynik `data/widok/tydzien/<ostatni dzień>/` → `v2/tydzien/`, wejście z miniaturami pod paskiem stron dnia
+  (`v2/tydzien.json`), w panelu `/osoby` część „Oś tygodnia”. Panel `/osoby` liczy czas według części
   strony (`server.section_of`: okładka, sprawy, różnice, obraz kraju, tematy, stara wersja); strona dnia oznacza okładkę
   i siatkę tematów `data-sekcja`.
-- `.github/workflows/daily.yml`: cron 10:30 UTC (poza szczytem DeepSeek; GitHub opóźnia start nawet o 4–5 h), baza jako zaszyfrowany snapshot w Release `database-backup` (cache i artefakt to kopie), commit `reports/`. Kod 1 tylko przy ostrzeżeniach blokujących (synteza, ekstrakcja, brak >1/3 aktywnych źródeł); pojedynczy kanał/źródło to ostrzeżenie informacyjne.
+- `.github/workflows/daily.yml`: cron 10:30 UTC (poza szczytem DeepSeek; GitHub opóźnia start nawet o 4–5 h), baza jako zaszyfrowany snapshot w Release `database-backup` (cache i artefakt to kopie), commit `reports/<dzień>.status.json`. Od 2026-10-01 bez syntezy (`run-daily --bez-raportu`; raport lokalnie przez Codex). Kod 1 tylko przy ostrzeżeniach blokujących (ekstrakcja, brak >1/3 aktywnych źródeł); pojedynczy kanał/źródło to ostrzeżenie informacyjne.
 
 ## Konwencje
 - Identyfikatory i docstringi po angielsku; komunikaty CLI, komentarze w YAML i raporty po polsku.
@@ -206,6 +211,27 @@ pod kątem testu neutralności wobec dostawcy z siedzibą w Chinach):
 - Cennik DeepSeek zależy od pory dnia (szczyt/poza szczytem, `is_deepseek_peak`); przebiegi nie są
   automatycznie planowane pod tańsze okna.
 - Narzędzie do przyszłych porównań: `data/compare_models.py` (poza gitem, jednorazowe/ad-hoc użycie).
+
+## Decyzje modelowe (raport okładkowy, 2026-10-01)
+
+Wersja 2.0 bierze z raportu tylko 2 różnice i obraz kraju, a pełny raport Sonneta kosztował ok. 1,2 $ dziennie (połowa kosztów
+projektu): paczka urosła do ok. 250 tys. tokenów przy 32 źródłach, a pierwsza odpowiedź co dzień nie przechodziła walidacji.
+Teraz `report.form: okladka` (`prompts/synthesize_cover.md`, `synthesize.cover_package`: tylko różnice i autoobraz, rejestr
+dowodów z pokazanych sygnałów, ok. 3,5× krótszy prompt), model `codex:gpt-6.1-sol:medium`, lokalnie (Actions bez syntezy).
+Test 2026-09-30 na tej samej paczce i walidatorze (`data/test_raport/`, poza gitem), ocena ręczna:
+
+| model | 1. odpowiedź | koszt | czas | ocena |
+|---|---|---|---|---|
+| Sonnet 5 | 14 błędów, po ponowieniu OK | 0,41 $ | 63 s | autoobraz szeroki; 1 z 3 różnic porównuje różne sprawy |
+| DeepSeek V4-Pro | 5 błędów, po ponowieniu OK | 0,05 $ | 44 s | obie różnice porównują różne sprawy |
+| DeepSeek V4-Pro, myślenie high | 2 błędy, po ponowieniu OK | 0,09 $ | 230 s | dobre: 3 różnice o tych samych zdarzeniach |
+| DeepSeek flash | 2 błędy, po sanityzacji 1 różnica | 0,01 $ | 10 s | słabe |
+| Codex GPT-6.1-Sol medium | bez błędów | 0 $ | 68 s | dobre, ostrożne komentarze; autoobraz węższy |
+| Codex GPT-6.1-Sol high | bez błędów | 0 $ | 91 s | jak medium |
+| Codex GPT-6-Astra medium | bez błędów | 0 $ | 66 s | jak Sol |
+| Codex GPT-6-Luna medium | 3 błędy, po ponowieniu OK | 0 $ | 52 s | 1 różnica |
+
+Zapas bez Codexa: DeepSeek V4-Pro z myśleniem high. Codex zużywa ok. 1–2% okna 5 h na raport.
 
 ## Decyzje modelowe (synteza raportu, KM3)
 

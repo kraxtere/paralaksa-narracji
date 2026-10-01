@@ -1,3 +1,20 @@
+# Koszty po przeglądzie, raport okładkowy przez Codex, oś tygodnia — 2026-10-01
+
+Przegląd kosztów 24–30.09 (decyzja właściciela: zostawić to, czego używa wersja 2.0): ekstrakcja DeepSeek ok. 0,90 $ dziennie,
+synteza Sonnet ok. 1,20 $, Sprawy dnia ok. 0,05 $, nagłówki po polsku ok. 0,06 $, telewizja ok. 0,22 $; razem ok. 2,5 $
+dziennie. Codex (obrazki i teksty 2.0) z abonamentu. Pełne teksty: mediana 414 słów, limit 1500 słów ucina 3% artykułów,
+więc limitu nie ruszamy.
+- Daily w Actions bez syntezy (`run-daily --bez-raportu`): pobranie, ekstrakcja, metryki, status dnia. Zmiana trafia na `main`
+  osobną gałęzią `daily-bez-syntezy` (Actions chodzi z `main`).
+- Raport okładkowy lokalnie przez Codex (`report.form: okladka`, `codex:gpt-6.1-sol:medium`): tylko różnice i obraz kraju,
+  czyli to, co bierze okładka 2.0. Test 8 modeli na 30.09 (tabela w CLAUDE.md): Codex Sol/Astra bez błędów walidacji za
+  pierwszym razem i z różnicami o tych samych sprawach; Sonnet i DeepSeek bez myślenia porównywały różne sprawy. Pełny
+  przebieg `plx report` przez Codex na kopii bazy: jedno wywołanie, bez ponowienia.
+- Telewizja wyłączona (`plx site --z-tv` przywraca). Po zmianach koszt ok. 1 $ dziennie.
+- Oś tygodnia (prototyp, `data/os_tygodnia.py` poza gitem): Codex układa Sprawy dnia z 7 dni w 20 zdarzeń i 6 wątków
+  (filtr), każde zdarzenie ma kadr bez napisów; przesuwanie w bok. Godzina na osi to pierwszy pokazany nagłówek w naszych
+  źródłach, nie godzina zdarzenia. Daty zdarzeń z treści artykułów i z GDELT: następny krok.
+
 # Strona: nowe logo, pasek 2.0, czas według części strony — 2026-10-01
 
 - Logo „Gazeta w kadrze” (E1 z trzeciej rundy propozycji z GPT, wybór właściciela): znak to gazeta wychodząca poza drugą ramę,
