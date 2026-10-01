@@ -153,8 +153,8 @@ def build_site(out_dir: Path, events_dir: Path, reports_dir: Path, conn: sqlite3
 def copy_v2(src: Path | None, dest: Path) -> list[str]:
     """Wersja 2.0 (prototyp obrazkowy, data/widok/<dzień>/ z data/widok_obrazkowy.py): kopiuje gotowe strony i obrazy,
     bez plików roboczych (nazwy od „_”), i dopisuje v2/index.html z listą dni (najnowszy otwiera się od razu),
-    v2/dni.json i wspólny pasek v2/pasek.js. Oś tygodnia (data/os_tygodnia.py, widok/tydzien/<ostatni dzień>/) trafia
-    do v2/tydzien/, a jej lista z miniaturami do v2/tydzien.json (pasek pokazuje z niej wejście na stronach dnia)."""
+    v2/dni.json i wspólny pasek v2/pasek.js. Ciągła oś wydarzeń (data/os_czasu.py, widok/os/) trafia do v2/os/,
+    a jej skrót (zakres dni, miniatury) do v2/os.json: z niego pasek pokazuje wejście na stronach dnia."""
     def found(root: Path) -> list[str]:
         return sorted((d.name for d in root.iterdir() if d.is_dir() and re.fullmatch(r"\d{4}-\d{2}-\d{2}", d.name)
                        and (d / "index.html").exists()), reverse=True) if root.exists() else []
@@ -166,17 +166,12 @@ def copy_v2(src: Path | None, dest: Path) -> list[str]:
                 shutil.copy2(f, to / f.name)
 
     days = found(src) if src else []
-    weeks = found(src / "tydzien") if days else []
     for day in days:
         copy(src / day, dest / day)
-    for week in weeks:
-        copy(src / "tydzien" / week, dest / "tydzien" / week)
-    if weeks:
-        first = {w: json.loads((src / "tydzien" / w / "plan.json").read_text(encoding="utf-8"))["dni"][0] for w in weeks}
-        (dest / "tydzien.json").write_text(json.dumps(
-            [{"koniec": w, "od": first[w], "obrazki": sorted((f.name for f in (dest / "tydzien" / w).glob("ev-*.png")),
-                                                            key=lambda n: int(n[3:-4]))[:6]} for w in weeks]),
-            encoding="utf-8")
+    axis = src / "os" if days else None
+    if axis and (axis / "index.html").exists() and (axis / "skrot.json").exists():
+        copy(axis, dest / "os")
+        shutil.copy2(axis / "skrot.json", dest / "os.json")
     if days:
         (dest / "dni.json").write_text(json.dumps(days), encoding="utf-8")   # przełącznik dni na stronach dnia
         # wspólny pasek i stopka wszystkich stron 2.0 (strony mają tylko <div id="pasek"> i ten skrypt)

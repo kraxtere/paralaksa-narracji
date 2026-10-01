@@ -219,19 +219,18 @@ def test_v2_copies_finished_views_without_work_files(tmp_path):
     for name in ("index.html", "start.png", "temat-x.html", "_podglad-index.html", "tematy.json"):
         (day / name).write_text("x", encoding="utf-8")
     (tmp_path / "widok" / "2026-09-30").mkdir()          # bez index.html: pominięty
-    week = tmp_path / "widok" / "tydzien" / "2026-09-29"  # oś tygodnia: osobny folder, nie dzień
-    week.mkdir(parents=True)
-    for name in ("index.html", "ev-2.png", "ev-10.png", "ev-1.png", "_obrazki.log"):
-        (week / name).write_text("x", encoding="utf-8")
-    (week / "plan.json").write_text(json.dumps({"dni": ["2026-09-23", "2026-09-29"]}), encoding="utf-8")
+    axis = tmp_path / "widok" / "os"                      # ciągła oś wydarzeń: osobny folder, nie dzień
+    axis.mkdir(parents=True)
+    for name in ("index.html", "ev-2.png", "ev-1.png", "_obrazki.log", "plan.json"):
+        (axis / name).write_text("x", encoding="utf-8")
+    (axis / "skrot.json").write_text(json.dumps({"od": "2026-09-23", "do": "2026-09-29", "obrazki": ["ev-2.png"]}),
+                                     encoding="utf-8")
     assert copy_v2(tmp_path / "widok", tmp_path / "v2") == ["2026-09-29"]
     assert sorted(p.name for p in (tmp_path / "v2" / "2026-09-29").iterdir()) == ["index.html", "start.png", "temat-x.html"]
     assert "2026-09-29/index.html" in (tmp_path / "v2" / "index.html").read_text(encoding="utf-8")
     assert json.loads((tmp_path / "v2" / "dni.json").read_text(encoding="utf-8")) == ["2026-09-29"]
-    assert sorted(p.name for p in (tmp_path / "v2" / "tydzien" / "2026-09-29").iterdir()) == [
-        "ev-1.png", "ev-10.png", "ev-2.png", "index.html"]
-    assert json.loads((tmp_path / "v2" / "tydzien.json").read_text(encoding="utf-8")) == [
-        {"koniec": "2026-09-29", "od": "2026-09-23", "obrazki": ["ev-1.png", "ev-2.png", "ev-10.png"]}]
+    assert sorted(p.name for p in (tmp_path / "v2" / "os").iterdir()) == ["ev-1.png", "ev-2.png", "index.html"]
+    assert json.loads((tmp_path / "v2" / "os.json").read_text(encoding="utf-8"))["od"] == "2026-09-23"
     bar = (tmp_path / "v2" / "pasek.js").read_text(encoding="utf-8")                  # wspólny pasek z logo w środku
     assert "__LOGO__" not in bar and "<svg" in bar and "dni.json" in bar and "Stara wersja" in bar
     assert copy_v2(None, tmp_path / "brak") == []

@@ -154,10 +154,12 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
   Pasek i stopka 2.0 są wspólne: `site/assets/pasek.js` (logo, wybór dnia, „Stara wersja” w stopce) trafia do `v2/pasek.js`,
   strony mają tylko `<div id="pasek">`; zmiana paska = zmiana tego pliku i `plx site`, bez przebudowy stron dni.
   Tytuł okładki nowych dni: „Przegląd prasy · DD.MM” (`data/widok_powitanie.py`).
-  Oś tygodnia (prototyp 2026-10-01): `data/os_tygodnia.py` (poza gitem) układa przez Codex Sprawy dnia z 7 dni w 14–20 zdarzeń
-  z wątkami (filtr), kadr bez napisów na zdarzenie; godzina to pierwszy pokazany nagłówek w naszych źródłach, nie godzina
-  zdarzenia. Wynik `data/widok/tydzien/<ostatni dzień>/` → `v2/tydzien/`, wejście z miniaturami pod paskiem stron dnia
-  (`v2/tydzien.json`), w panelu `/osoby` część „Oś tygodnia”. Panel `/osoby` liczy czas według części
+  Oś wydarzeń (prototyp 2026-10-01, decyzja właściciela: jedna ciągła oś przez wszystkie dni): `data/os_czasu.py` (poza gitem)
+  dopisuje każdy nowy dzień (`dzien D`: Codex dzieli Sprawy dnia na nowe zdarzenia (1–4), dalszy ciąg istniejących
+  i pominięte, przypisuje wątki), `obrazki` (kadr bez napisów na zdarzenie), `strona`. Godzina to pierwszy pokazany nagłówek
+  w naszych źródłach, nie godzina zdarzenia, więc dni na osi to daty tych nagłówków. Wynik `data/widok/os/` → `v2/os/`
+  i `v2/os.json` (wejście z miniaturami pod paskiem stron dnia, otwiera oś na tym dniu), w panelu `/osoby` część „Oś wydarzeń”.
+  Nowy dzień 2.0: po stronach dnia `os_czasu.py dzien D`, `obrazki`, `strona`, potem `plx site`. Panel `/osoby` liczy czas według części
   strony (`server.section_of`: okładka, sprawy, różnice, obraz kraju, tematy, stara wersja); strona dnia oznacza okładkę
   i siatkę tematów `data-sekcja`.
 - `.github/workflows/daily.yml`: cron 10:30 UTC (poza szczytem DeepSeek; GitHub opóźnia start nawet o 4–5 h), baza jako zaszyfrowany snapshot w Release `database-backup` (cache i artefakt to kopie), commit `reports/<dzień>.status.json`. Od 2026-10-01 bez syntezy (`run-daily --bez-raportu`; raport lokalnie przez Codex). Kod 1 tylko przy ostrzeżeniach blokujących (ekstrakcja, brak >1/3 aktywnych źródeł); pojedynczy kanał/źródło to ostrzeżenie informacyjne.

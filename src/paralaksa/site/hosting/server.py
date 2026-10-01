@@ -112,7 +112,7 @@ SECTIONS = {
     "roznice": ("Gdzie prasa się różni", "#c47f2c"),
     "obraz": ("Obraz kraju", "#3f6f8a"),
     "tematy": ("Tematy dnia", "#4f7a4a"),
-    "tydzien": ("Oś tygodnia", "#7a5a8a"),
+    "os": ("Oś wydarzeń", "#7a5a8a"),
     "stara": ("Stara wersja", "#b3ada2"),
 }
 V2_PAGE = re.compile(r"^/v2/(\d{4}-\d{2}-\d{2})/(.*)$")
@@ -125,8 +125,8 @@ def section_of(place: str) -> str:
     path = base.partition("#")[0]
     if not path.startswith("/v2/"):
         return "stara"
-    if path.startswith("/v2/tydzien/"):
-        return "tydzien"
+    if path.startswith("/v2/os/"):
+        return "os"
     found = V2_PAGE.match(path)
     name = found.group(2) if found else ""
     for prefix, key in (("sprawa-", "sprawy"), ("roznica-", "roznice"), ("obraz-kraju", "obraz"), ("temat-", "tematy")):

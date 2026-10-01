@@ -11,9 +11,12 @@ więc limitu nie ruszamy.
   pierwszym razem i z różnicami o tych samych sprawach; Sonnet i DeepSeek bez myślenia porównywały różne sprawy. Pełny
   przebieg `plx report` przez Codex na kopii bazy: jedno wywołanie, bez ponowienia.
 - Telewizja wyłączona (`plx site --z-tv` przywraca). Po zmianach koszt ok. 1 $ dziennie.
-- Oś tygodnia (prototyp, `data/os_tygodnia.py` poza gitem): Codex układa Sprawy dnia z 7 dni w 20 zdarzeń i 6 wątków
-  (filtr), każde zdarzenie ma kadr bez napisów; przesuwanie w bok. Godzina na osi to pierwszy pokazany nagłówek w naszych
-  źródłach, nie godzina zdarzenia. Daty zdarzeń z treści artykułów i z GDELT: następny krok.
+- Oś wydarzeń (prototyp, `data/os_czasu.py` poza gitem): jedna ciągła oś przez wszystkie dni (najpierw był tydzień 24–30.09;
+  właściciel wolał całość z przeskakiwaniem dni). Każdy dzień dopisuje Codex: 1–4 nowe zdarzenia, dalszy ciąg istniejących
+  albo pominięcie, wątki do filtra; każde zdarzenie ma kadr bez napisów. Wybór dnia (lista i strzałki, przyklejona u góry),
+  przesuwanie w bok, filtr wątku, nagłówki z linkami. Godzina na osi to pierwszy pokazany nagłówek w naszych źródłach, nie
+  godzina zdarzenia. Na start 24 zdarzenia z 23–30.09; trzy kadry poprawione (prezydent Iranu narysowany jako duchowny,
+  stereotypowo narysowani zatrzymani). Daty zdarzeń z treści artykułów i z GDELT: następny krok.
 
 # Strona: nowe logo, pasek 2.0, czas według części strony — 2026-10-01
 

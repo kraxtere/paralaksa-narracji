@@ -53,27 +53,26 @@
     }).catch(() => {});
   }
 
-  // Wejście na oś tygodnia (v2/tydzien.json, gdy jest): pasek z miniaturami pod paskiem strony dnia; tydzień,
-  // który obejmuje ten dzień, a gdy żaden: najnowszy
+  // Wejście na ciągłą oś wydarzeń (v2/os.json, gdy jest): pasek z miniaturami pod paskiem strony dnia; otwiera oś
+  // na tym dniu (#d=), a dzień spoza osi na jej końcu
   if (!("wstecz" in box.dataset)) {
-    fetch(new URL("tydzien.json", base), { cache: "no-store" }).then(r => r.ok ? r.json() : []).then(weeks => {
-      const w = weeks.find(x => x.od <= day && day <= x.koniec) || weeks[0];
-      if (!w) return;
-      const dir = new URL("tydzien/" + w.koniec + "/", base).href;
+    fetch(new URL("os.json", base), { cache: "no-store" }).then(r => r.ok ? r.json() : null).then(w => {
+      if (!w || !w.obrazki) return;
+      const dir = new URL("os/", base).href;
       const st = document.createElement("style");
       st.textContent =
-        ".tydz{display:flex;align-items:center;gap:12px;max-width:720px;margin:10px auto 0;padding:8px 12px;box-sizing:border-box;" +
+        ".wejscie-os{display:flex;align-items:center;gap:12px;max-width:720px;margin:10px auto 0;padding:8px 12px;box-sizing:border-box;" +
         "background:#fbf8f2;border:1px solid #ddd5c7;border-radius:12px;text-decoration:none;color:#1d1b18;font:14px Segoe UI,sans-serif}" +
-        ".tydz .mini{display:flex;flex:none}.tydz .mini img{width:44px;height:44px;border-radius:8px;object-fit:cover;" +
-        "border:2px solid #fbf8f2;margin-left:-14px;background:#ebe4d6}.tydz .mini img:first-child{margin-left:0}" +
-        ".tydz b{display:block;color:#8a3b2a}.tydz span{color:#7a746a;font-size:.9em}.tydz i{margin-left:auto;font-style:normal;" +
-        "color:#8a3b2a;font-size:1.3em}@media(max-width:740px){.tydz{margin:10px 10px 0}}";
+        ".wejscie-os .mini{display:flex;flex:none}.wejscie-os .mini img{width:44px;height:44px;border-radius:8px;object-fit:cover;" +
+        "border:2px solid #fbf8f2;margin-left:-14px;background:#ebe4d6}.wejscie-os .mini img:first-child{margin-left:0}" +
+        ".wejscie-os b{display:block;color:#8a3b2a}.wejscie-os span{color:#7a746a;font-size:.9em}.wejscie-os i{margin-left:auto;font-style:normal;" +
+        "color:#8a3b2a;font-size:1.3em}@media(max-width:740px){.wejscie-os{margin:10px 10px 0}}";
       document.head.append(st);
       const a = document.createElement("a");
-      a.className = "tydz";
-      a.href = dir + "index.html";
+      a.className = "wejscie-os";
+      a.href = dir + "index.html" + (w.od <= day && day <= w.do ? "#d=" + day : "");
       a.innerHTML = `<span class="mini">${w.obrazki.slice(0, 4).map(f => `<img src="${dir + f}" alt="">`).join("")}</span>` +
-        `<span><b>Tydzień w prasie · ${w.od.slice(5, 7) === w.koniec.slice(5, 7) ? w.od.slice(8, 10) : short(w.od)}–${short(w.koniec)}</b><span>Najważniejsze sprawy po kolei</span></span><i>›</i>`;
+        `<span><b>Oś wydarzeń · ${short(w.od)}–${short(w.do)}</b><span>Najważniejsze sprawy dzień po dniu</span></span><i>›</i>`;
       box.after(a);
     }).catch(() => {});
   }
