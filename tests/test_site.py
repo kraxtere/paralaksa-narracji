@@ -218,4 +218,6 @@ def test_v2_copies_finished_views_without_work_files(tmp_path):
     assert sorted(p.name for p in (tmp_path / "v2" / "2026-09-29").iterdir()) == ["index.html", "start.png", "temat-x.html"]
     assert "2026-09-29/index.html" in (tmp_path / "v2" / "index.html").read_text(encoding="utf-8")
     assert json.loads((tmp_path / "v2" / "dni.json").read_text(encoding="utf-8")) == ["2026-09-29"]
+    bar = (tmp_path / "v2" / "pasek.js").read_text(encoding="utf-8")                  # wspólny pasek z logo w środku
+    assert "__LOGO__" not in bar and "<svg" in bar and "dni.json" in bar and "Stara wersja" in bar
     assert copy_v2(None, tmp_path / "brak") == []

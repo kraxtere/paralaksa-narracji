@@ -150,6 +150,8 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
   a `plx site` kopiuje go do `v2/` (`build.copy_v2`, pliki od „_” pomija). Link „2.0” jest w menu.
   Od 2026-10-01 wersja 2.0 jest podstawowa: serwer pod `/` przekierowuje do najnowszego dnia z `v2/dni.json`,
   stara wersja zostaje pod `/index.html` (link „Stara wersja” na stronach 2.0); `start_url` aplikacji to `./`.
+  Pasek i stopka 2.0 są wspólne: `site/assets/pasek.js` (logo, wybór dnia, „Stara wersja” w stopce) trafia do `v2/pasek.js`,
+  strony mają tylko `<div id="pasek">`; zmiana paska = zmiana tego pliku i `plx site`, bez przebudowy stron dni.
   Tytuł okładki nowych dni: „Przegląd prasy · DD.MM” (`data/widok_powitanie.py`). Panel `/osoby` liczy czas według części
   strony (`server.section_of`: okładka, sprawy, różnice, obraz kraju, tematy, stara wersja); strona dnia oznacza okładkę
   i siatkę tematów `data-sekcja`.

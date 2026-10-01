@@ -4,7 +4,9 @@
   czyli ta sama sprawa z dwóch miejsc; napis kapitalikami z większym P, podział kolorem PARA / LAKSA. SVG z literami jako
   krzywymi w `site/assets/logo/`, ikony aplikacji PNG wyrenderowane raz przez Chrome do `site/assets/icons/` (wcześniej
   rysowane w kodzie, bo znak był z dwóch kół). Logo w nagłówku starej wersji, favicon i ikony aplikacji.
-- Wersja 2.0: grubszy pasek z logo (na telefonie w osobnym wierszu), przełącznikiem dni i linkiem „Stara wersja”; na komputerze
+- Wersja 2.0: wspólny pasek i stopka w jednym pliku (`site/assets/pasek.js` → `v2/pasek.js`); strony dni mają tylko
+  `<div id="pasek">` i ten skrypt, więc zmiana paska nie wymaga już przebudowy stron. Pasek grubszy, logo po lewej, po prawej
+  wybór dnia ze strzałkami (na stronach tematów i spraw powrót do strony dnia); „Stara wersja” w stopce. Na komputerze pasek
   wyrównany do kolumny treści. Strony 2.0 mają favicon i manifest. Przebudowa 25–30.09 tylko z pamięci podręcznej, bez Codex.
 - Tytuł okładki dla nowych dni: „Przegląd prasy · DD.MM” zamiast „Świat w prasie” (decyzja właściciela); okładek 25–30.09
   nie poprawiamy.

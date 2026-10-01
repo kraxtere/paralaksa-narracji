@@ -149,7 +149,8 @@ def build_site(out_dir: Path, events_dir: Path, reports_dir: Path, conn: sqlite3
 
 def copy_v2(src: Path | None, dest: Path) -> list[str]:
     """Wersja 2.0 (prototyp obrazkowy, data/widok/<dzień>/ z data/widok_obrazkowy.py): kopiuje gotowe strony i obrazy,
-    bez plików roboczych (nazwy od „_”), i dopisuje v2/index.html z listą dni (najnowszy otwiera się od razu)."""
+    bez plików roboczych (nazwy od „_”), i dopisuje v2/index.html z listą dni (najnowszy otwiera się od razu),
+    v2/dni.json i wspólny pasek v2/pasek.js."""
     days = sorted((d.name for d in src.iterdir() if d.is_dir() and (d / "index.html").exists()), reverse=True) \
         if src and src.exists() else []
     for day in days:
@@ -159,6 +160,9 @@ def copy_v2(src: Path | None, dest: Path) -> list[str]:
                 shutil.copy2(f, dest / day / f.name)
     if days:
         (dest / "dni.json").write_text(json.dumps(days), encoding="utf-8")   # przełącznik dni na stronach dnia
+        # wspólny pasek i stopka wszystkich stron 2.0 (strony mają tylko <div id="pasek"> i ten skrypt)
+        (dest / "pasek.js").write_text(_asset("pasek.js").replace('"__LOGO__"', json.dumps(logo_inline("logo-ciemne-tlo", "plx"))),
+                                       encoding="utf-8")
         links ="".join(f'<li><a href="{d}/index.html">{d}</a></li>' for d in days)
         (dest / "index.html").write_text(
             f'<!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="robots" content="noindex">'
