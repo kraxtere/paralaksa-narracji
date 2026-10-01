@@ -11,6 +11,9 @@
 - Czas na stronie: pingi tylko wtedy, gdy ktoś w ostatnich 5 min ruszał stroną (przewijanie, dotyk, mysz, klawisz); potem
   jedno „h” i cisza, pierwszy ruch wznawia (`server.IDLE_S`). Karta zostawiona na ekranie pingowała bez końca: zawyżała czas
   czytania i nie dawała darmowemu Renderowi zasnąć. Sprawdzone w Chrome z przyspieszonym zegarem.
+- Wersja 2.0 dla 23 i 24.09 (komplet od pierwszego dnia, decyzja właściciela). 24.09 ma okładkę z samymi sprawami dnia:
+  raport tego dnia nie ma różnic ani autoobrazu (za mało źródeł). Plakat polityki USA z 24.09 dwa razy zablokowany przez
+  moderację, strona tematu używa kafelka z siatki. Literówka na plakacie poprawiona ręcznie na pikselach (edycja przez Codex jej nie usunęła).
 - Tytuł okładki dla nowych dni: „Przegląd prasy · DD.MM” zamiast „Świat w prasie” (decyzja właściciela); okładek 25–30.09
   nie poprawiamy.
 - Panel `/osoby`: każda osoba to rozwijany wiersz na całą szerokość: czas w częściach strony (okładka, sprawy dnia, różnice,
