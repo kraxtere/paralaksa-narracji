@@ -8,6 +8,9 @@
   `<div id="pasek">` i ten skrypt, więc zmiana paska nie wymaga już przebudowy stron. Pasek grubszy, logo po lewej, po prawej
   wybór dnia ze strzałkami (na stronach tematów i spraw powrót do strony dnia); „Stara wersja” w stopce. Na komputerze pasek
   wyrównany do kolumny treści. Strony 2.0 mają favicon i manifest. Przebudowa 25–30.09 tylko z pamięci podręcznej, bez Codex.
+- Czas na stronie: pingi tylko wtedy, gdy ktoś w ostatnich 5 min ruszał stroną (przewijanie, dotyk, mysz, klawisz); potem
+  jedno „h” i cisza, pierwszy ruch wznawia (`server.IDLE_S`). Karta zostawiona na ekranie pingowała bez końca: zawyżała czas
+  czytania i nie dawała darmowemu Renderowi zasnąć. Sprawdzone w Chrome z przyspieszonym zegarem.
 - Tytuł okładki dla nowych dni: „Przegląd prasy · DD.MM” zamiast „Świat w prasie” (decyzja właściciela); okładek 25–30.09
   nie poprawiamy.
 - Panel `/osoby`: każda osoba to rozwijany wiersz na całą szerokość: czas w częściach strony (okładka, sprawy dnia, różnice,

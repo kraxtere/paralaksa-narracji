@@ -13,7 +13,8 @@ Bez nich serwer odpowiada 503 i niczego nie pokazuje.
 
 Konta innych osób: właściciel otwiera `/osoby`, dodaje osobę i wysyła jej jednorazowy link `/zaproszenie/...`
 (ważny 7 dni), pod którym osoba sama ustawia hasło i zostaje zalogowana. Strony co minutę zgłaszają, co jest czytane,
-gdy karta jest widoczna, i od razu, gdy karta zostanie schowana. „Usuń” kasuje konto, historia zostaje.
+gdy karta jest widoczna i ktoś jej używał w ostatnich 5 minutach (przewijanie, dotyk, mysz, klawisz), oraz od razu,
+gdy karta zostanie schowana. Karta zostawiona bez ruchu milknie, więc serwer może zasnąć po 15 minutach. „Usuń” kasuje konto, historia zostaje.
 Dysk darmowego Rendera znika przy każdym uśpieniu i wdrożeniu, więc osoby i aktywność trafiają do prywatnego repo
 `ACTIVITY_REPO` (domyślnie `kraxtere/paralaksa-aktywnosc`) przez API GitHuba; wymagany `ACTIVITY_TOKEN`: token
 fine-grained z dostępem tylko do tego repo, uprawnienie Contents: Read and write. Bez tokenu działa tylko konto właściciela.

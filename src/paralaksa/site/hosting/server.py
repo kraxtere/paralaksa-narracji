@@ -49,16 +49,25 @@ FAILS: dict[str, list[float]] = {}
 FAIL_LOCK = threading.Lock()
 TITLES: dict[str, str] = {}                 # ścieżka strony -> <title>, do listy czytanych stron
 
-# sygnał co minutę, gdy karta jest widoczna; „h” od razu po schowaniu; strona z #zakładką i @sekcją (data-sekcja na
-# stronie dnia 2.0: okładka albo tematy, sprawdzane po kliknięciu i po przewinięciu)
-HEARTBEAT = (b'<script>(()=>{let last="",t;const sek=()=>{const e=document.elementFromPoint(innerWidth/2,innerHeight/2),'
-             b's=e&&e.closest("[data-sekcja]");return s?"@"+s.dataset.sekcja:""},cur=()=>location.pathname+location.hash+sek(),'
+IDLE_S = 300                                # bez ruchu na stronie (przewijanie, dotyk, mysz, klawisz) pingi ustają
+# sygnał co minutę, gdy karta jest widoczna i ktoś jej używał w ostatnich IDLE_S; „h” od razu po schowaniu albo przy
+# wygaszeniu, pierwszy ruch wznawia. Bez tego karta zostawiona na ekranie pingowałaby bez końca: zawyżony czas czytania
+# i serwer, który nigdy nie zasypia. Strona z #zakładką i @sekcją (data-sekcja na stronie dnia 2.0: okładka albo tematy,
+# sprawdzane po kliknięciu i po przewinięciu)
+HEARTBEAT = (b'<script>(()=>{let last="",t,act=Date.now(),idle=false;const sek=()=>{const e=document.elementFromPoint('
+             b'innerWidth/2,innerHeight/2),s=e&&e.closest("[data-sekcja]");return s?"@"+s.dataset.sekcja:""},'
+             b'cur=()=>location.pathname+location.hash+sek(),'
              b'send=k=>fetch("/_ping?k="+k+"&p="+encodeURIComponent(cur()),{cache:"no-store",credentials:"same-origin",'
-             b'keepalive:true}).catch(()=>{}),ping=()=>{if(document.visibilityState==="visible"){last=cur();send("p")}},'
+             b'keepalive:true}).catch(()=>{}),'
+             b'ping=()=>{if(document.visibilityState!=="visible")return;if(Date.now()-act>' + str(IDLE_S * 1000).encode() +
+             b'){if(!idle){idle=true;send("h")}return}last=cur();send("p")},'
+             b'poke=()=>{act=Date.now();if(idle){idle=false;ping()}},'
              b'check=()=>{if(cur()!==last)ping()};setInterval(ping,' + str(konta.PING_S * 1000).encode() + b');'
-             b'document.addEventListener("visibilitychange",()=>document.visibilityState==="visible"?ping():send("h"));'
+             b'for(const e of["pointerdown","pointermove","keydown","touchstart","wheel"])addEventListener(e,poke,{passive:true});'
+             b'document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"){act=Date.now();'
+             b'idle=false;ping()}else send("h")});'
              b'addEventListener("click",()=>setTimeout(check,300));'
-             b'addEventListener("scroll",()=>{clearTimeout(t);t=setTimeout(check,1500)},{passive:true});'
+             b'addEventListener("scroll",()=>{poke();clearTimeout(t);t=setTimeout(check,1500)},{passive:true});'
              b'addEventListener("load",check);last=location.pathname;check()})()</script>')
 OWNER_LINK = (b'<a href="/osoby" style="position:fixed;right:10px;bottom:10px;z-index:99;padding:6px 10px;'
               b'background:#1d1b18;color:#f4f0e8;border-radius:8px;font:13px Segoe UI,sans-serif;text-decoration:none">'
