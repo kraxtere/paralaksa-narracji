@@ -56,7 +56,8 @@
   document.addEventListener("DOMContentLoaded", () => {
     const foot = document.createElement("footer");
     foot.className = "stopka";
-    foot.innerHTML = `<span>Paralaksa · wersja wewnętrzna</span><a href="${new URL("../index.html", base).href}">Stara wersja</a>`;
+    foot.innerHTML = `<span>Paralaksa · wersja wewnętrzna · nowy dzień codziennie około 19:00</span>` +
+      `<a href="${new URL("../index.html", base).href}">Stara wersja</a>`;
     document.body.append(foot);
   });
 })();
