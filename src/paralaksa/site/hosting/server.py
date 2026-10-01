@@ -407,7 +407,10 @@ class Handler(SimpleHTTPRequestHandler):
             return
         if route != "/osoby" or who != USER:
             return self.send_error(403)
+        # przy Referrer-Policy: no-referrer przeglądarka wysyła formularz z „Origin: null”; wtedy rozstrzyga sam token
         origin = self.headers.get("Origin")
+        if origin == "null":
+            origin = None
         if form.get("csrf") != CSRF or (origin and urllib.parse.urlsplit(origin).netloc != self.headers.get("Host")):
             return self.send_error(403, "Formularz z innej strony")
         self._admin(who, form=form)

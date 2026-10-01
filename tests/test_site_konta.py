@@ -356,6 +356,21 @@ def test_server_invite_logs_in_new_password_logs_out_and_delete(monkeypatch, tmp
         srv.shutdown()
 
 
+def test_server_admin_form_accepts_origin_null_but_not_foreign(monkeypatch, tmp_path):
+    """Referrer-Policy: no-referrer makes browsers send „Origin: null” with the form (seen on a phone, 2026-10-01)."""
+    mod, srv, base = _server(monkeypatch, tmp_path, _store())
+    try:
+        owner = _cookie(_raw(base, "POST", "/logowanie", data={"login": "wlasciciel", "haslo": "tajne-haslo"})[3])
+        form = {"akcja": "dodaj", "imie": "Ala", "csrf": mod.CSRF}
+        status, body, _, _ = _raw(base, "POST", "/osoby", {**owner, "Origin": "null"}, form)
+        assert status == 200 and "/zaproszenie/" in body
+        assert _raw(base, "POST", "/osoby", {**owner, "Origin": base}, {**form, "imie": "Ola"})[0] == 200
+        assert _raw(base, "POST", "/osoby", {**owner, "Origin": "https://obca.example"}, form)[0] == 403
+        assert _raw(base, "POST", "/osoby", {**owner, "Origin": "null"}, {**form, "csrf": "zly"})[0] == 403
+    finally:
+        srv.shutdown()
+
+
 def test_server_root_opens_newest_v2_day(monkeypatch, tmp_path):
     mod, srv, base = _server(monkeypatch, tmp_path, None)
     try:
