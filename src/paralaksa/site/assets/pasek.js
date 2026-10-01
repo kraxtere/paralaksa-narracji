@@ -73,7 +73,7 @@
       a.className = "tydz";
       a.href = dir + "index.html";
       a.innerHTML = `<span class="mini">${w.obrazki.slice(0, 4).map(f => `<img src="${dir + f}" alt="">`).join("")}</span>` +
-        `<span><b>Tydzień w prasie · ${short(w.od)}–${short(w.koniec)}</b><span>Najważniejsze sprawy po kolei</span></span><i>›</i>`;
+        `<span><b>Tydzień w prasie · ${w.od.slice(5, 7) === w.koniec.slice(5, 7) ? w.od.slice(8, 10) : short(w.od)}–${short(w.koniec)}</b><span>Najważniejsze sprawy po kolei</span></span><i>›</i>`;
       box.after(a);
     }).catch(() => {});
   }
