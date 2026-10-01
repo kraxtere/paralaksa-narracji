@@ -1,7 +1,9 @@
 /* Wspólny pasek i stopka wersji 2.0 (plx site zapisuje go jako v2/pasek.js, z logo w środku).
    Strona dnia ma tylko <div id="pasek" data-dzien="RRRR-MM-DD" [data-wstecz]> i ten skrypt zaraz za nim, więc zmiana
    paska to zmiana jednego pliku, bez przebudowy stron. Po lewej logo, po prawej wybór dnia (lista z v2/dni.json) albo,
-   na stronach tematów i spraw, powrót do strony dnia. W stopce link do starej wersji. */
+   na stronach tematów i spraw, powrót do strony dnia. W stopce link do starej wersji.
+   Na serwerze (window.plxJa, wstawiane przez hosting/server.py) dochodzi menu osoby: imię, powiadomienia o nowym wydaniu,
+   instalacja aplikacji, wylogowanie; oraz service worker /sw.js (bez niego Chrome nie proponuje instalacji). */
 (() => {
   const LOGO = "__LOGO__";
   const box = document.getElementById("pasek");
@@ -53,7 +55,7 @@
     }).catch(() => {});
   }
 
-  // Kafelek „Dzień po dniu” (v2/os.json, gdy jest) zaraz pod okładką strony dnia, w stylu jej sekcji, niższy od nich:
+  // Kafelek „Dzień po dniu” (v2/os.json, gdy jest) na samej górze strony dnia, zaraz pod paskiem (od 01.10), w stylu sekcji okładki:
   // oś ostatnich dni z okrągłymi kadrami na zakładkę; otwiera oś na tym dniu (#d=), a dzień spoza osi na jej końcu
   if (!("wstecz" in box.dataset)) {
     fetch(new URL("os.json", base), { cache: "no-store" }).then(r => r.ok ? r.json() : null).then(w => {
@@ -61,7 +63,7 @@
       const dir = new URL("os/", base).href;
       const st = document.createElement("style");
       st.textContent =
-        ".kafel-os{display:block;max-width:720px;margin:14px auto 0;box-sizing:border-box;background:#f4f0e8;border:2px solid #1d1b18;" +
+        ".kafel-os{display:block;max-width:720px;margin:10px auto;box-sizing:border-box;background:#f4f0e8;border:2px solid #1d1b18;" +
         "border-radius:6px;overflow:hidden;text-decoration:none;color:#1d1b18;font:14px Segoe UI,sans-serif}" +
         ".kafel-os:hover{box-shadow:0 0 0 3px rgba(138,59,42,.25)}.kafel-os .gl{display:flex;align-items:center;justify-content:space-between}" +
         ".kafel-os .et{background:#8a3b2a;color:#fff;font:700 1.3em Georgia,serif;padding:4px 16px 4px 10px;" +
@@ -73,7 +75,7 @@
         "margin-left:-22px;box-shadow:0 1px 3px rgba(0,0,0,.25)}.kafel-os .st img:first-child{margin-left:0}" +
         ".kafel-os .kr{width:9px;height:9px;border-radius:50%;background:#8a3b2a;border:2px solid #f4f0e8;margin-top:5px;z-index:1}" +
         "@media(min-width:640px){.kafel-os .st{height:62px}.kafel-os .st img{width:58px;height:58px;margin-left:-30px}.kafel-os .os:before{top:78px}" +
-        ".kafel-os .d b{font-size:13px}}@media(max-width:740px){.kafel-os{margin:12px 6px 0}}";
+        ".kafel-os .d b{font-size:13px}}@media(max-width:740px){.kafel-os{margin:8px 6px}}";
       document.head.append(st);
       const a = document.createElement("a");
       a.className = "kafel-os";
@@ -82,10 +84,136 @@
       const days = w.dni.map(x => `<span class="d"><span class="st">${x.obrazki.map(f => `<img src="${dir + f}" alt="" loading="lazy">`).join("")}` +
         `</span><span class="kr"></span><b>${short(x.d)}</b></span>`).join("");
       a.innerHTML = `<span class="gl"><span class="et">Dzień po dniu</span><i>Oś czasu ›</i></span><span class="os">${days}</span>`;
-      const put = () => (document.querySelector('[data-sekcja="okladka"]') || box).after(a);
+      const put = () => box.after(a);
       document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", put) : put();
     }).catch(() => {});
   }
+
+  // --- menu osoby, instalacja i powiadomienia (tylko na serwerze: window.plxJa) ------------------------------------
+  const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+  let installEvent = null;
+  const later = (k, v) => { try { return v === undefined ? localStorage.getItem(k) : localStorage.setItem(k, v); } catch (e) { return null; } };
+  addEventListener("beforeinstallprompt", e => { e.preventDefault(); installEvent = e; document.dispatchEvent(new Event("plx-instalacja")); });
+  if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "127.0.0.1" || location.hostname === "localhost")) navigator.serviceWorker.register("/sw.js").catch(() => {});
+
+  const key = s => { const b = atob((s + "===".slice((s.length + 3) % 4)).replace(/-/g, "+").replace(/_/g, "/"));
+    return Uint8Array.from(b, c => c.charCodeAt(0)); };
+  const post = body => fetch("/_push", { method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body) }).then(r => { if (!r.ok) throw new Error(r.status); });
+  const pushReady = () => "serviceWorker" in navigator && "PushManager" in window && "Notification" in window;
+  const currentSub = () => navigator.serviceWorker.ready.then(r => r.pushManager.getSubscription());
+  const pushOn = ja => Notification.requestPermission().then(p => {
+    if (p !== "granted") throw new Error("odmowa");
+    return navigator.serviceWorker.ready;
+  }).then(r => r.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: key(ja.push) }))
+    .then(sub => post({ sub: sub.toJSON() })).then(() => later("plx-push-sync", String(Date.now())));
+  const pushOff = () => currentSub().then(sub => sub ? post({ usun: sub.endpoint }).catch(() => {}).then(() => sub.unsubscribe()) : null);
+
+  const ui = document.createElement("style");
+  ui.textContent =
+    ".bar2 .ja{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid #5a554c;background:#2c2924;color:#f4f0e8;" +
+    "font:700 14px Segoe UI,sans-serif;cursor:pointer;margin-left:8px;padding:0}.bar2 .prawa{display:flex;align-items:center}" +
+    ".menu-ja{position:absolute;right:max(8px,calc(50% - 352px));z-index:50;width:min(300px,calc(100vw - 16px));box-sizing:border-box;" +
+    "background:#fbf8f2;color:#1d1b18;border:1px solid #ddd5c7;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.18);" +
+    "padding:12px 14px;font:14px/1.45 Segoe UI,sans-serif}.menu-ja p{margin:0 0 10px}.menu-ja .s{color:#7a746a;font-size:.85em}" +
+    ".menu-ja button,.baner-ja button{font:inherit;border:0;border-radius:6px;padding:6px 12px;background:#8a3b2a;color:#fff;cursor:pointer}" +
+    ".menu-ja button.l{background:#5a554c}.menu-ja a{color:#8a3b2a}.menu-ja .r{display:flex;justify-content:space-between;gap:8px;margin-top:6px}" +
+    ".baner-ja{position:fixed;left:8px;right:8px;bottom:8px;z-index:60;max-width:560px;margin:auto;display:flex;gap:10px;align-items:center;" +
+    "background:#1d1b18;color:#f4f0e8;border-radius:10px;padding:10px 12px;font:14px/1.4 Segoe UI,sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.25)}" +
+    ".baner-ja span{flex:1}.baner-ja .x{background:none;color:#bdb6a8;padding:4px 6px}";
+
+  const banner = (id, text, action) => {
+    if (later(id) || document.querySelector(".baner-ja")) return;
+    const b = document.createElement("div");
+    b.className = "baner-ja";
+    b.innerHTML = `<span></span>` + (action ? `<button class="tak"></button>` : "") + `<button class="x" aria-label="Zamknij">✕</button>`;
+    b.querySelector("span").textContent = text;
+    b.querySelector(".x").onclick = () => { later(id, "1"); b.remove(); };
+    if (action) {
+      b.querySelector(".tak").textContent = action[0];
+      b.querySelector(".tak").onclick = () => { later(id, "1"); b.remove(); action[1](); };
+    }
+    document.body.append(b);
+  };
+  const install = () => {
+    if (!installEvent) return;
+    installEvent.prompt();
+    installEvent.userChoice.finally(() => { installEvent = null; });
+  };
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const ja = window.plxJa;
+    if (!ja) return;
+    document.head.append(ui);
+    const btn = document.createElement("button");
+    btn.className = "ja";
+    btn.title = ja.imie;
+    btn.setAttribute("aria-label", "Menu: " + ja.imie);
+    btn.textContent = (ja.imie || "?").trim().charAt(0).toUpperCase();
+    const wrap = document.createElement("span");
+    wrap.className = "prawa";
+    right.replaceWith(wrap);
+    wrap.append(right, btn);
+
+    const menu = document.createElement("div");
+    menu.className = "menu-ja";
+    menu.hidden = true;
+    document.body.append(menu);
+    const render = () => {
+      let push = "";
+      if (ja.push && pushReady()) {
+        push = `<p><b>Powiadomienia</b> o nowym wydaniu<br><span class="s" id="push-stan">sprawdzam…</span></p>`;
+      } else if (ja.push && ios && !standalone) {
+        push = `<p><b>Powiadomienia</b><br><span class="s">Na iPhonie działają w aplikacji: Udostępnij → „Do ekranu początkowego”, ` +
+          `potem otwórz Paralaksę z ikony.</span></p>`;
+      }
+      let inst = "";
+      if (!standalone && installEvent) inst = `<p><button class="inst">Zainstaluj aplikację</button></p>`;
+      else if (!standalone && ios) inst = `<p class="s">Aplikacja na iPhonie: Udostępnij → „Do ekranu początkowego”.</p>`;
+      menu.innerHTML = `<p>Zalogowano: <b class="kto"></b></p>${push}${inst}<div class="r">` +
+        (ja.wlasciciel ? `<a href="/osoby">Osoby</a>` : "<span></span>") + `<a href="/wyloguj">Wyloguj</a></div>`;
+      menu.querySelector(".kto").textContent = ja.imie;
+      const ib = menu.querySelector(".inst");
+      if (ib) ib.onclick = () => { menu.hidden = true; install(); };
+      const st = menu.querySelector("#push-stan");
+      if (!st) return;
+      const show = sub => {
+        if (Notification.permission === "denied") {
+          st.textContent = "zablokowane w ustawieniach przeglądarki dla tej strony";
+          return;
+        }
+        st.innerHTML = (sub ? "włączone na tym urządzeniu " : "wyłączone na tym urządzeniu ") +
+          `<button class="${sub ? "l" : ""}">${sub ? "Wyłącz" : "Włącz"}</button>`;
+        st.querySelector("button").onclick = () => {
+          st.textContent = "chwila…";
+          (sub ? pushOff() : pushOn(ja)).then(currentSub).then(show)
+            .catch(() => { st.textContent = "nie udało się, spróbuj jeszcze raz"; setTimeout(() => currentSub().then(show), 2500); });
+        };
+      };
+      currentSub().then(show).catch(() => { st.textContent = "niedostępne w tej przeglądarce"; });
+    };
+    btn.onclick = e => {
+      e.stopPropagation();
+      if (menu.hidden) { render(); menu.style.top = (btn.getBoundingClientRect().bottom + scrollY + 10) + "px"; }
+      menu.hidden = !menu.hidden;
+    };
+    document.addEventListener("click", e => { if (!menu.hidden && !menu.contains(e.target)) menu.hidden = true; });
+    document.addEventListener("plx-instalacja", () => { if (!menu.hidden) render(); });
+
+    // subskrypcja raz na dobę jeszcze raz do serwera (gdyby ją zgubił), bez pytania o zgodę
+    if (ja.push && pushReady() && Notification.permission === "granted" && Date.now() - Number(later("plx-push-sync") || 0) > 86400000) {
+      currentSub().then(sub => sub && post({ sub: sub.toJSON() }).then(() => later("plx-push-sync", String(Date.now())))).catch(() => {});
+    }
+    // propozycje (raz, z zamknięciem na stałe): instalacja, a w zainstalowanej aplikacji powiadomienia
+    const offerInstall = () => banner("plx-baner-instalacja", "Paralaksa jako aplikacja: ikona na ekranie, bez paska przeglądarki.",
+      ["Zainstaluj", install]);
+    if (installEvent) offerInstall(); else document.addEventListener("plx-instalacja", offerInstall, { once: true });
+    if (!standalone && ios) banner("plx-baner-ios", "Paralaksa jako aplikacja: Udostępnij → „Do ekranu początkowego”.");
+    if (standalone && ja.push && pushReady() && Notification.permission === "default") {
+      banner("plx-baner-push", "Powiadomić Cię, gdy będzie nowe wydanie (raz dziennie)?", ["Tak", () => pushOn(ja).catch(() => {})]);
+    }
+  });
 
   document.addEventListener("DOMContentLoaded", () => {
     const foot = document.createElement("footer");

@@ -28,6 +28,8 @@ from paralaksa.site.build import FAVICON  # noqa: E402
 
 DAY = os.environ.get("DZIEN", "2026-09-29")   # DZIEN=2026-09-30 python scripts/v2/widok_obrazkowy.py ...
 OUT = Path("data/widok") / DAY
+# nazwa sekcji spraw na okładce: od 02.10 „Wydarzenia dnia” (decyzja właściciela), wcześniejsze okładki zostają jak są
+EVENTS_HEADER = "Wydarzenia dnia" if DAY >= "2026-10-02" else "Sprawy dnia"
 OPISY = Path("data/dzien_prasy") / DAY / "opisy.json"
 SOURCES = {x.id: x.name for x in load_sources()}
 LOGOS = Path("data/logos")          # scripts/v2/loga.py
@@ -459,7 +461,7 @@ def welcome_regions() -> dict[str, list[float]]:
     prompt_text = (
         "The attached image is an infographic poster. Find these regions and return their bounding boxes as fractions of "
         "the image width and height [x0, y0, x1, y1] (0..1, top-left origin):\n"
-        "sprawa-1, sprawa-2, sprawa-3: the three stacked event panels under the header 'Sprawy dnia', top to bottom "
+        "sprawa-1, sprawa-2, sprawa-3: the three stacked event panels under the header '" + EVENTS_HEADER + "', top to bottom "
         "(whole panel: label, flags and picture);\n"
         "roznica-1, roznica-2: the boxes under 'Gdzie prasa się różni', left and right (whole box; if there is only "
         "one box, return only roznica-1);\n"
@@ -612,7 +614,7 @@ def index_page(ts: list[dict], rects, debug: bool = False) -> str:
         cards = inputs["karty"]
         summaries = welcome_summaries(inputs)
         reg = card_regions(cards)
-        welcome = overlay("powitanie.png", f"Przegląd prasy {DAY}: sprawy dnia i różnice",
+        welcome = overlay("powitanie.png", f"Przegląd prasy {DAY}: {EVENTS_HEADER.lower()} i różnice",
                           [(f"{k}.html", summaries[k].get("tytul") or cards[k]["tytul"]) for k in WELCOME_KEYS if k in reg],
                           [reg[k] for k in WELCOME_KEYS if k in reg], "okladka")
     body = bar(None) + welcome + overlay("start.png", f"Czym żyła prasa {DAY}: " + ", ".join(t["nazwa"] for t in ts),
@@ -659,6 +661,10 @@ def main():
         print(f"plakat-{t['temat']}.png")
         return
     rects = detect_panels(OUT / "start.png")
+    if cmd == "indeks":                      # tylko strona dnia (np. nowy układ okładki), bez stron tematów i spraw
+        (OUT / "index.html").write_text(index_page(ts, rects), encoding="utf-8")
+        print("index.html")
+        return
     for t in ts:
         saved = OUT / f"plakat-{t['temat']}.json"      # kraje i nagłówki dokładnie jak na narysowanym plakacie
         cs = json.loads(saved.read_text(encoding="utf-8")) if saved.exists() else poster_countries(t, opisy, pl)

@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Callable
 
 HOSTING = Path(__file__).resolve().parent / "hosting"
-HOSTING_FILES = ("server.py", "konta.py", "render.yaml", "requirements.txt", "README.md")
+HOSTING_FILES = ("server.py", "konta.py", "powiadomienia.py", "render.yaml", "requirements.txt", "README.md")
 REPO_RE = re.compile(r"^[A-Za-z0-9-]+/[A-Za-z0-9._-]+$")
 
 Runner = Callable[..., subprocess.CompletedProcess]

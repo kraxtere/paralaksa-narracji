@@ -16,3 +16,6 @@ services:
         sync: false
       - key: ACTIVITY_REPO
         value: kraxtere/paralaksa-aktywnosc
+      # powiadomienia o nowym wydaniu (Web Push): klucz prywatny VAPID z lokalnego .env; bez niego strona działa bez powiadomień
+      - key: VAPID_PRIVATE_KEY
+        sync: false

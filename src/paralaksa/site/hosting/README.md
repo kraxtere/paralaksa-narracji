@@ -5,8 +5,9 @@ zastępuje całą zawartość jednym commitem.
 
 - `public/`: zbudowana strona (nagłówki do 15 słów, tłumaczenia, linki; bez pełnych tekstów).
 - `server.py`: serwer z logowaniem (formularz i podpisane ciasteczko na 90 dni; HTTP Basic Auth dla skryptów),
-  tylko biblioteka standardowa.
+  biblioteka standardowa (poza powiadomieniami).
 - `konta.py`: konta innych osób (zaproszenia, hasła jako skróty PBKDF2) i czas na stronie.
+- `powiadomienia.py`: powiadomienia push o nowym wydaniu (Web Push, `pywebpush` z `requirements.txt`).
 
 Render: Web Service z tego repo, start `python server.py`, zmienne `SITE_USER` i `SITE_PASSWORD` (konto właściciela).
 Bez nich serwer odpowiada 503 i niczego nie pokazuje.
@@ -18,3 +19,8 @@ gdy karta zostanie schowana. Karta zostawiona bez ruchu milknie, więc serwer mo
 Dysk darmowego Rendera znika przy każdym uśpieniu i wdrożeniu, więc osoby i aktywność trafiają do prywatnego repo
 `ACTIVITY_REPO` (domyślnie `kraxtere/paralaksa-aktywnosc`) przez API GitHuba; wymagany `ACTIVITY_TOKEN`: token
 fine-grained z dostępem tylko do tego repo, uprawnienie Contents: Read and write. Bez tokenu działa tylko konto właściciela.
+
+Powiadomienia: osoba włącza je w menu w pasku (iPhone: tylko w zainstalowanej aplikacji). Subskrypcje trafiają do
+`powiadomienia.json` w repo aktywności. Po każdym wdrożeniu serwer przy starcie wysyła jedno powiadomienie o najnowszym dniu
+(`public/v2/powiadomienie.json`), jeśli ten dzień nie był jeszcze ogłoszony. Wymaga `VAPID_PRIVATE_KEY` (klucz P-256 w base64url,
+ten sam co w lokalnym `.env` repo źródłowego); bez niego menu nie pokazuje powiadomień.

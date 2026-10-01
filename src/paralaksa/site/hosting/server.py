@@ -9,7 +9,11 @@ HTTP Basic Auth still works for scripts.
 Other people get their own logins (konta.py): the owner adds them on /osoby, each gets a one-time invite link and sets
 a password. Pages report reading time (a heartbeat every minute while the tab is visible, "h" when it is hidden); people,
 invites and activity are kept in a private GitHub repo (ACTIVITY_TOKEN), because Render's free disk is wiped on every
-sleep and deploy."""
+sleep and deploy.
+
+Notifications about a new edition (powiadomienia.py, Web Push): the page menu subscribes, the server keeps the
+subscriptions in the same repo and sends once per new day on startup after a deploy (VAPID_PRIVATE_KEY, pywebpush).
+That is the only part outside the standard library; without it the site works the same, just without notifications."""
 from __future__ import annotations
 
 import base64
@@ -31,11 +35,13 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import konta  # noqa: E402
+import powiadomienia  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent / "public"
 USER = os.environ.get("SITE_USER", "")
 PASSWORD = os.environ.get("SITE_PASSWORD", "")
-PUBLIC = {"/manifest.webmanifest", "/icon-192.png", "/icon-512.png", "/icon-maskable-512.png", "/apple-touch-icon.png"}
+PUBLIC = {"/manifest.webmanifest", "/icon-192.png", "/icon-512.png", "/icon-maskable-512.png", "/apple-touch-icon.png",
+          "/sw.js"}                                 # service worker: instalacja aplikacji i powiadomienia, bez treści strony
 EXPECTED = b"Basic " + base64.b64encode(f"{USER}:{PASSWORD}".encode()) if USER and PASSWORD else None
 CSRF = hmac.new(PASSWORD.encode(), b"paralaksa-osoby", "sha256").hexdigest()[:32]
 SECRET = hmac.new(PASSWORD.encode(), b"paralaksa-sesja", "sha256").digest()     # podpis ciasteczek logowania
@@ -43,6 +49,8 @@ OWNER_FP = hashlib.sha256(f"{USER}\0{PASSWORD}".encode()).hexdigest()           
 COOKIE, COOKIE_DAYS = "plx", 90
 STORE: "konta.Store | None" = None          # ustawiane w __main__ (konta.from_env) albo w testach
 STORE_ERROR = "zapis kont nie został uruchomiony"
+PUSH: "powiadomienia.Subscriptions | None" = None   # subskrypcje powiadomień (main, testy)
+PUSH_KEY = ""                                       # klucz publiczny VAPID dla strony; pusty = bez powiadomień
 FLUSH_S = 180
 FAIL_MAX, FAIL_WINDOW_S = 20, 900           # nieudane logowania z jednego adresu na kwadrans
 FAILS: dict[str, list[float]] = {}
@@ -118,7 +126,7 @@ def local(dt) -> str:
 # część strony -> (nazwa, kolor): wersja 2.0 według rodzaju strony, stara wersja w całości
 SECTIONS = {
     "okladka": ("Okładka", "#6b655b"),
-    "sprawy": ("Sprawy dnia", "#8a3b2a"),
+    "sprawy": ("Wydarzenia dnia", "#8a3b2a"),
     "roznice": ("Gdzie prasa się różni", "#c47f2c"),
     "obraz": ("Obraz kraju", "#3f6f8a"),
     "tematy": ("Tematy dnia", "#4f7a4a"),
@@ -428,7 +436,8 @@ class Handler(SimpleHTTPRequestHandler):
     def do_POST(self) -> None:
         route = self.route
         length = min(int(self.headers.get("Content-Length") or 0), 10_000)
-        form = {k: v[0] for k, v in urllib.parse.parse_qs(self.rfile.read(length).decode("utf-8", "replace")).items()}
+        raw = self.rfile.read(length)
+        form = {k: v[0] for k, v in urllib.parse.parse_qs(raw.decode("utf-8", "replace")).items()}
         if route.startswith("/zaproszenie/"):
             return self._invite(route.removeprefix("/zaproszenie/"), form=form)
         if route == "/logowanie":
@@ -436,6 +445,8 @@ class Handler(SimpleHTTPRequestHandler):
         who = self._login_or_refuse()
         if who is None:
             return
+        if route == "/_push":
+            return self._push(who, raw)
         if route != "/osoby" or who != USER:
             return self.send_error(403)
         # przy Referrer-Policy: no-referrer przeglądarka wysyła formularz z „Origin: null”; wtedy rozstrzyga sam token
@@ -449,7 +460,8 @@ class Handler(SimpleHTTPRequestHandler):
     def _html(self, target: Path, who: str, head: bool) -> None:
         """Static page plus the reading-time heartbeat (and the owner's link to /osoby); keeps the login cookie fresh."""
         body = target.read_bytes()
-        extra = HEARTBEAT + (OWNER_LINK if who == USER else b"")
+        # strony 2.0 mają menu osoby w pasku (z linkiem do /osoby), stara wersja pływający przycisk
+        extra = self._me(who) + HEARTBEAT + (OWNER_LINK if who == USER and b'id="pasek"' not in body else b"")
         i = body.rfind(b"</body>")
         body = body[:i] + extra + body[i:] if i >= 0 else body + extra
         if STORE is not None and not head:
@@ -457,6 +469,36 @@ class Handler(SimpleHTTPRequestHandler):
         exp = getattr(self, "session_exp", None)
         fresh = exp is not None and exp - time.time() > (COOKIE_DAYS - 1) * 86400
         self._send(body, head=head, headers=[] if fresh else [self._session_cookie(who)])
+
+    def _me(self, who: str) -> bytes:
+        """Who is reading, for the menu in the 2.0 bar (pasek.js): name, logout, owner panel, notification key."""
+        name = who
+        if who == USER:
+            name = "Ty (właściciel)"
+        elif STORE is not None:
+            name = STORE.people().get(who, {}).get("imie") or who
+        me = {"login": who, "imie": name, "wlasciciel": who == USER, "push": PUSH_KEY if PUSH is not None else ""}
+        return ("<script>window.plxJa=" + json.dumps(me, ensure_ascii=False).replace("</", "<\\/") + "</script>").encode()
+
+    def _push(self, who: str, raw: bytes) -> None:
+        """Turn notifications on ({"sub": PushSubscription}) or off ({"usun": endpoint}) for the logged-in person."""
+        origin = self.headers.get("Origin")
+        if not origin or urllib.parse.urlsplit(origin).netloc != self.headers.get("Host"):
+            return self.send_error(403, "Cross-origin", "Żądanie z innej strony")
+        if PUSH is None:
+            return self.send_error(404)
+        try:
+            data = json.loads(raw.decode("utf-8"))
+            if isinstance(data.get("usun"), str):
+                PUSH.remove(data["usun"], who)
+            else:
+                PUSH.add(who, data.get("sub"))
+        except (ValueError, AttributeError) as e:
+            return self.send_error(400, "Bad request", str(e))
+        except Exception as e:                      # GitHub niedostępny: strona pokaże, że się nie udało
+            return self.send_error(502, "Bad gateway", str(e)[:200])
+        self.send_response(204)
+        self.end_headers()
 
     # --- logowanie i zaproszenia (bez hasła) ---------------------------------------------------------------------------
     def _login_form(self, form: dict | None = None, head: bool = False) -> None:
@@ -557,12 +599,38 @@ class Handler(SimpleHTTPRequestHandler):
                     f'type="hidden" name="akcja" value="{action}"><input type="hidden" name="login" '
                     f'value="{html.escape(login)}"><button class="{cls}">{label}</button></form>')
 
+        def per_page(seconds_by_place: dict[str, float]) -> dict[str, float]:
+            """Time summed per page (its title), without #tabs and @sections, longest first."""
+            out: dict[str, float] = {}
+            for p, sec in seconds_by_place.items():
+                label = self._title(p.partition("@")[0].partition("#")[0])
+                out[label] = out.get(label, 0.0) + sec
+            return dict(sorted(out.items(), key=lambda kv: -kv[1]))
+
+        def pages_line(seconds_by_place: dict[str, float], limit: int = 12) -> str:
+            return " · ".join(f'{html.escape(label)} <span class="s">{minutes(sec)}</span>'
+                              for label, sec in list(per_page(seconds_by_place).items())[:limit] if sec >= 1)
+
         def places(s):
-            seen = s["miejsca"]                      # bez pustego wejścia, gdy strona od razu ustawia zakładkę (#...)
-            return " · ".join(f'{html.escape(self._title(p))} <span class="s">{minutes(sec)}</span>'
-                              for p, sec in seen.items()
-                              if "#" in p or "@" in p or sec >= 5 or not any(q.startswith(p + "#") or q.startswith(p + "@")
-                                                                             for q in seen))
+            return pages_line(s["miejsca"])
+
+        def where(ivs_: list[dict]) -> dict[str, float]:
+            out: dict[str, float] = {}
+            for iv in ivs_:
+                out[iv["p"]] = out.get(iv["p"], 0.0) + (iv["do"] - iv["od"]).total_seconds()
+            return out
+
+        today = warsaw(now).replace(hour=0, minute=0, second=0, microsecond=0)
+
+        def summary(ivs_: list[dict]) -> str:
+            """Where the time went today and in 7 days: parts of the site and the pages read longest."""
+            out = ""
+            for label, since in (("Dziś", today), ("7 dni", now - timedelta(days=7))):
+                part = [iv for iv in ivs_ if iv["do"] > since]
+                pages = pages_line(where(part), 8)
+                out += (f"<h3>{label}</h3>" + (mix_bar(by_section(part)) + (f'<p class="s">Najdłużej: {pages}</p>' if pages else "")
+                                                if part else '<p class="s">Brak zapisanego czasu.</p>'))
+            return out
 
         def person(login, name, status, actions=""):
             mine = [iv for iv in ivs if iv["u"] == login]
@@ -573,7 +641,7 @@ class Handler(SimpleHTTPRequestHandler):
                           for x in own)
             themes = " · ".join(f'{html.escape(self._theme_name(k))} <span class="s">{minutes(v)}</span>'
                                 for k, v in by_theme(mine).items())
-            more = (f'<h3>Gdzie (30 dni)</h3>{mix_bar(by_section(mine))}'
+            more = (summary(mine)
                     + (f"<h3>Tematy (30 dni)</h3><p>{themes}</p>" if themes else "")
                     + (f"<h3>Oś czasu</h3>{timeline(mine)}" if mine else "")
                     + (f'<h3>Wizyty</h3><ol class="ses">{ses}</ol>' if ses else "")
@@ -601,6 +669,8 @@ class Handler(SimpleHTTPRequestHandler):
                 f'<form method="post" class="box"><input type="hidden" name="csrf" value="{CSRF}"><input type="hidden" '
                 'name="akcja" value="dodaj"><label>Imię nowej osoby <input name="imie" maxlength="60" required></label> '
                 '<button>Dodaj i utwórz link</button></form>'
+                f'<details class="box" open><summary>Gdzie czytają (wszyscy oprócz Ciebie)</summary>'
+                f'{summary([iv for iv in ivs if iv["u"] != USER])}</details>'
                 f'<div class="leg">{legend}</div>'
                 '<div class="hd"><span>Osoba</span><span>Ostatnio</span><span>7 dni</span><span>30 dni</span></div>'
                 + ("".join(blocks) if len(blocks) > 1 else '<p class="s">Nikogo jeszcze nie dodano.</p>' + blocks[0])
@@ -677,12 +747,60 @@ def _flush_loop() -> None:
             STORE.flush()
 
 
+def announce(root: Path, send) -> str:
+    """After a deploy: one notification about the newest day, if it was not announced yet (v2/powiadomienie.json)."""
+    try:
+        note = json.loads((root / "v2" / "powiadomienie.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return "brak v2/powiadomienie.json"
+    day = note.get("dzien", "")
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", day) or not (root / "v2" / day / "index.html").is_file():
+        return "brak dnia w powiadomieniu"
+
+    def active(login: str) -> bool:
+        if login == USER:
+            return True
+        person = STORE.people().get(login) if STORE is not None else None
+        return bool(person and person.get("hash") and not person.get("zablokowana") and not person.get("usunieta"))
+
+    payload = {"title": note.get("tytul") or "Paralaksa", "body": note.get("tresc") or "Nowe wydanie",
+               "url": f"/v2/{day}/index.html", "tag": "wydanie"}
+    sent, gone = PUSH.announce(day, payload, send, active)
+    return f"{day}: wysłane {sent}, usunięte {gone}"
+
+
+def setup_push() -> str:
+    """Subscriptions in the activity repo and the VAPID key; any missing piece just turns notifications off."""
+    global PUSH, PUSH_KEY
+    key = os.environ.get("VAPID_PRIVATE_KEY", "").strip()
+    if not key:
+        return "brak VAPID_PRIVATE_KEY"
+    if STORE is None:
+        return "bez repo aktywności"
+    try:
+        PUSH_KEY = powiadomienia.public_key(key)
+        send = powiadomienia.sender(key, os.environ.get("RENDER_EXTERNAL_URL") or "https://paralaksa.onrender.com")
+    except Exception as e:                          # brak cryptography/pywebpush albo zły klucz
+        return f"wyłączone ({type(e).__name__}: {e})"
+    PUSH = powiadomienia.Subscriptions(STORE.files)
+
+    def run():
+        try:
+            print("powiadomienia:", announce(ROOT, send), flush=True)
+        except Exception as e:
+            print("powiadomienia: błąd", e, flush=True)
+
+    threading.Thread(target=run, daemon=True).start()
+    return "włączone"
+
+
 def main() -> None:
     global STORE, STORE_ERROR
     STORE, STORE_ERROR = konta.from_env(os.environ)
     if STORE is not None:
         STORE.reserved = {USER}                     # nikt nie dostanie loginu właściciela
     print("konta:", "zapis w repo" if STORE else STORE_ERROR, flush=True)
+    print("powiadomienia:", setup_push(), flush=True)
     port = int(os.environ.get("PORT", "10000"))
     srv = ThreadingHTTPServer(("0.0.0.0", port), partial(Handler, directory=str(ROOT)))
 

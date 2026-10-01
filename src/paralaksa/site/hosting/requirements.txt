@@ -1,1 +1,2 @@
-# Serwer używa tylko biblioteki standardowej.
+# Serwer używa biblioteki standardowej; pywebpush tylko do powiadomień o nowym wydaniu (powiadomienia.py).
+pywebpush==2.5.0

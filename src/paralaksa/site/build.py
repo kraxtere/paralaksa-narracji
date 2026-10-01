@@ -146,8 +146,21 @@ def build_site(out_dir: Path, events_dir: Path, reports_dir: Path, conn: sqlite3
     (out_dir / "manifest.webmanifest").write_text(icons.manifest(), encoding="utf-8")
     for name in icons.ICONS:
         (out_dir / name).write_bytes(icons.icon_png(name))
+    (out_dir / "sw.js").write_text(_asset("sw.js"), encoding="utf-8")     # instalacja i powiadomienia, zakres „/”
     copy_v2(v2_dir, out_dir / "v2")
     return res
+
+
+def edition_note(day: str, stories_dir: Path) -> dict:
+    """Push notification text about the newest day (sent by the server after the deploy, hosting/powiadomienia.py):
+    the day and the first three Wydarzenia dnia."""
+    titles: list[str] = []
+    try:
+        titles = [h["tytul"] for h in json.loads((stories_dir / f"{day}.json").read_text(encoding="utf-8"))["historie"][:3]]
+    except (OSError, ValueError, KeyError, TypeError):
+        pass
+    return {"dzien": day, "tytul": f"Paralaksa · przegląd prasy {day[8:10]}.{day[5:7]}",
+            "tresc": "; ".join(titles) if titles else "Nowe wydanie jest gotowe."}
 
 
 def copy_v2(src: Path | None, dest: Path) -> list[str]:
@@ -174,6 +187,8 @@ def copy_v2(src: Path | None, dest: Path) -> list[str]:
         shutil.copy2(axis / "skrot.json", dest / "os.json")
     if days:
         (dest / "dni.json").write_text(json.dumps(days), encoding="utf-8")   # przełącznik dni na stronach dnia
+        (dest / "powiadomienie.json").write_text(json.dumps(edition_note(days[0], src.parent / "stories"), ensure_ascii=False),
+                                                 encoding="utf-8")
         # wspólny pasek i stopka wszystkich stron 2.0 (strony mają tylko <div id="pasek"> i ten skrypt)
         (dest / "pasek.js").write_text(_asset("pasek.js").replace('"__LOGO__"', json.dumps(logo_inline("logo-ciemne-tlo", "plx"))),
                                        encoding="utf-8")

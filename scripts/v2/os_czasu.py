@@ -549,7 +549,7 @@ def page() -> str:
                         f'{esc(h["naglowek"])}</a> <span class="s">{esc(src_name(h["zrodlo"]))}, '
                         f'{h["czas"]:%d.%m %H:%M}</span></li>' for h in e["naglowki"])
         img = f'<img src="ev-{e["nr"]}.png" alt="" loading="lazy">' if (OUT / f"ev-{e['nr']}.png").exists() else ""
-        more = f' · {len(e["dni"])} dni w Sprawach dnia' if len(e["dni"]) > 1 else ""
+        more = f' · {len(e["dni"])} dni w Wydarzeniach dnia' if len(e["dni"]) > 1 else ""
         tag = f'<button class="watek" data-w="{esc(w)}">{esc(names[w])}</button>' if w else ""
         cards.append(
             f'<article class="ev" data-d="{d.isoformat()}" data-w="{esc(w)}"><div class="data"><b>{d:%d.%m}</b>'
@@ -559,7 +559,7 @@ def page() -> str:
             + f'<div class="kraje">{n_kraje(len(e["kraje"]))}: '
             f'{esc(", ".join(NAMES.get(k, k) for k in e["kraje"]))}{more}</div>'
             f'<details><summary>Nagłówki ({len(e["naglowki"])})</summary><ul>{heads}</ul></details>'
-            + (f'<a class="wiecej" href="{esc(e["strona"])}">Sprawa dnia →</a>' if e["strona"] else "")
+            + (f'<a class="wiecej" href="{esc(e["strona"])}">Wydarzenie dnia →</a>' if e["strona"] else "")
             + '</div></div></article>')
     last = max(plan["dni"])
     body = (f'<div id="pasek" data-dzien="{last}" data-wstecz></div><script src="../pasek.js"></script>'

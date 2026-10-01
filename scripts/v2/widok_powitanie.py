@@ -5,7 +5,7 @@ Sprawy dnia: data/stories/<dzień>.json (historie z plx site); różnice i autoo
 import json, re, sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
-from widok_obrazkowy import DAY, OUT, NAMES, FLAGS, PEOPLE_STYLE, run_codex, OPISY, n_kraje, continued  # noqa: E402
+from widok_obrazkowy import DAY, OUT, NAMES, FLAGS, PEOPLE_STYLE, run_codex, OPISY, n_kraje, continued, EVENTS_HEADER  # noqa: E402
 
 from paralaksa.config import load_themes  # noqa: E402
 THEME = {t.id: t.name_pl for t in load_themes()}   # nazwa sporu = nazwa tematu raportu
@@ -69,7 +69,7 @@ def main():
         "appear only as small friendly cartoon mascots (a folded newspaper with a face wearing a scarf in the country's flag "
         "colours). Mascots stand for the PRESS of a country: they only watch, point at or comment on events from the side; they never act IN the events (never as police, soldiers, attackers, victims or arsonists). " + PEOPLE_STYLE + " Only these countries may appear as mascots: the ones named with a scarf below; no other country (e.g. a country only mentioned in an event) gets a mascot. Big title, exactly: \"Przegląd prasy · "
         f"{DAY[8:10]}.{DAY[5:7]}\". Subtitle, exactly: \"Jeden dzień, wiele perspektyw\".\n"
-        "Section header, exactly: \"Sprawy dnia\" — three wide panels stacked, one per event:\n" + "\n".join(events) +
+        f"Section header, exactly: \"{EVENTS_HEADER}\" — three wide panels stacked, one per event:\n" + "\n".join(events) +
         diff_section + ("\n" + self_box if self_box else "") +
         f"\nFooter small text, exactly: \"{n_countries} krajów · Niżej: tematy dnia · Opis przekazu analizowanych źródeł, nie faktów · Paralaksa\". "
         "Use correct Polish diacritics. No other text anywhere. No forecasts or risk sections.")

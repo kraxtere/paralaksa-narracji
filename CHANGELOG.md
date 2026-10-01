@@ -53,6 +53,22 @@ więc limitu nie ruszamy.
 - Oś grupuje karty według dnia przeglądu, w którym sprawa weszła, nie według daty pierwszego nagłówka (decyzja właściciela):
   sprawy z wieczornymi nagłówkami D-1 lądowały na D-1, przez co 01.10 miał 4 karty, a 30.09 osiem. Godzina pierwszego
   nagłówka zostaje na karcie („1. nagłówek 30.09 18:49”). Teraz każdy dzień 23.09–01.10 ma 4–8 kart.
+- Strona 2.0 (decyzje właściciela): kafelek „Dzień po dniu” na samej górze strony dnia, pod paskiem (był pod okładką i znikał
+  poza pierwszym ekranem; próba wstawienia go między Wydarzenia dnia a resztę okładki odrzucona). Sprawy dnia nazywają się
+  od 02.10 „Wydarzenia dnia” (nagłówek okładki, oś, panel); starsze okładki zostają.
+- Menu osoby w pasku (litera imienia): kto jest zalogowany, powiadomienia, instalacja aplikacji, „Osoby” dla właściciela,
+  „Wyloguj”. Imię i klucz powiadomień wstawia serwer (`window.plxJa`), więc strony dni się nie zmieniają.
+- Instalacja jako aplikacja: na innym telefonie przeglądarka nie proponowała instalacji. Strona nie miała service workera
+  (Chrome go wymaga do propozycji); teraz `/sw.js` (bez pamięci podręcznej, bez sieci krótki komunikat) i własna propozycja
+  „Zainstaluj” (zdarzenie `beforeinstallprompt`), na iPhonie wskazówka „Udostępnij → Do ekranu początkowego”.
+- Powiadomienia push o nowym wydaniu (Web Push, `hosting/powiadomienia.py`): włączane w menu, subskrypcje w repo aktywności
+  (`powiadomienia.json`). Serwer wysyła raz na nowy dzień przy starcie po wdrożeniu (`v2/powiadomienie.json` z `plx site`:
+  dzień i trzy Wydarzenia dnia); dzień zaznaczony przed wysyłką, więc restart nie powtarza; wygasłe subskrypcje (404/410)
+  usuwane. Pierwsza zależność serwera spoza biblioteki standardowej: `pywebpush` (tylko do tego; bez niej i bez
+  `VAPID_PRIVATE_KEY` w Renderze strona działa bez powiadomień). iPhone: tylko w zainstalowanej aplikacji (iOS 16.4+).
+- Panel `/osoby`: na górze „Gdzie czytają” (wszyscy oprócz właściciela) dziś i 7 dni: części strony i strony czytane
+  najdłużej; u osoby to samo zamiast 30 dni. Wizyty sumują czas według strony (np. „Oś czasu 6 min” zamiast osobnego wpisu
+  dla każdego dnia osi).
 
 # Strona: nowe logo, pasek 2.0, czas według części strony — 2026-10-01
 

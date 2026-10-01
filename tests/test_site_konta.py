@@ -413,3 +413,94 @@ def test_sections_and_timeline_for_the_owner_panel(monkeypatch, tmp_path):
     assert mod.by_section(ivs) == {"tematy": 120.0, "stara": 180.0}
     assert mod.by_theme(ivs + [{"u": "ala", "od": t(7, 0), "do": t(7, 3), "p": "/v2/2026-09-30/temat-middle_east.html@x"}])         == {"middle_east": 180.0, "russia": 60.0}
     assert "Stara wersja 3 min" in mod.mix_bar(mod.by_section(ivs))
+
+
+# --- powiadomienia o nowym wydaniu ---------------------------------------------------------------------------------------
+
+def _push_module():
+    pspec = importlib.util.spec_from_file_location("powiadomienia", publish.HOSTING / "powiadomienia.py")
+    mod = importlib.util.module_from_spec(pspec)
+    pspec.loader.exec_module(mod)
+    return mod
+
+
+def _sub(n):
+    return {"endpoint": f"https://push.example/{n}", "keys": {"p256dh": f"klucz{n}", "auth": f"auth{n}"}}
+
+
+def test_push_subscriptions_announce_each_day_once_and_drop_gone():
+    push = _push_module()
+    files = konta.MemoryFiles()
+    subs = push.Subscriptions(files, Clock())
+    with pytest.raises(ValueError):
+        subs.add("ala", {"endpoint": "http://zly", "keys": {}})
+    subs.add("ala", _sub(1))
+    subs.add("ala", _sub(1))                                                   # ta sama: bez nowego zapisu
+    subs.add("ola", _sub(2))
+    subs.add("zablokowana", _sub(3))
+    subs.remove(_sub(2)["endpoint"], "ala")                                   # cudza subskrypcja: bez zmian
+    sent = []
+
+    def send(sub, data):
+        sent.append((sub["endpoint"], json.loads(data)["title"]))
+        return 410 if sub["endpoint"].endswith("/2") else 201
+
+    active = lambda login: login != "zablokowana"
+    assert subs.announce("2026-10-02", {"title": "Nowe"}, send, active) == (1, 1)
+    assert sorted(sent) == [("https://push.example/1", "Nowe"), ("https://push.example/2", "Nowe")]
+    assert subs.announce("2026-10-02", {"title": "Nowe"}, send, active) == (0, 0)     # restart po wdrożeniu: nic
+    assert subs.announce("2026-10-01", {"title": "Stare"}, send, active) == (0, 0)
+    stored = json.loads(files.get(push.PATH)[0])
+    assert stored["ostatni_dzien"] == "2026-10-02" and len(stored["subskrypcje"]) == 2   # 410 usunięta
+
+
+def test_push_public_key_matches_private_key():
+    push = _push_module()
+    key = push.new_private_key()
+    pub = push.public_key(key)
+    raw = base64.urlsafe_b64decode(pub + "=" * (-len(pub) % 4))
+    assert len(raw) == 65 and raw[0] == 4 and pub == push.public_key(key)
+
+
+def test_server_menu_data_service_worker_and_push_endpoint(monkeypatch, tmp_path):
+    store = _store()
+    mod, srv, base = _server(monkeypatch, tmp_path, store)
+    try:
+        mod.PUSH = mod.powiadomienia.Subscriptions(store.files, Clock())
+        mod.PUSH_KEY = "KLUCZ"
+        (tmp_path / "sw.js").write_text("self.addEventListener('push',()=>{})", encoding="utf-8")
+        (tmp_path / "v2" / "2026-10-02").mkdir(parents=True)
+        (tmp_path / "v2" / "2026-10-02" / "index.html").write_text(
+            '<html><body><div id="pasek"></div></body></html>', encoding="utf-8")
+        owner = {"Authorization": "Basic " + base64.b64encode(b"wlasciciel:tajne-haslo").decode()}
+        assert _raw(base, "GET", "/sw.js")[0] == 200                                       # bez logowania
+        body = _raw(base, "GET", "/v2/2026-10-02/index.html", owner)[1]
+        assert 'window.plxJa={"login": "wlasciciel"' in body and '"push": "KLUCZ"' in body
+        assert 'href="/osoby"' not in body                                               # menu w pasku zamiast przycisku
+        assert 'href="/osoby"' in _raw(base, "GET", "/index.html", owner)[1]
+
+        def post(payload, origin=True):
+            conn = http.client.HTTPConnection(base.removeprefix("http://"), timeout=5)
+            hdrs = {**owner, "Content-Type": "application/json"}
+            if origin:
+                hdrs["Origin"] = base
+            conn.request("POST", "/_push", body=json.dumps(payload).encode(), headers=hdrs)
+            status = conn.getresponse().status
+            conn.close()
+            return status
+
+        assert post({"sub": _sub(1)}, origin=False) == 403
+        assert post({"sub": {"endpoint": "zly"}}) == 400
+        assert post({"sub": _sub(1)}) == 204
+        assert list(json.loads(store.files.get("powiadomienia.json")[0])["subskrypcje"].values())[0]["login"] == "wlasciciel"
+        assert _raw(base, "POST", "/_push", data={"sub": "x"})[0] == 401                  # bez logowania
+
+        (tmp_path / "v2" / "powiadomienie.json").write_text(
+            json.dumps({"dzien": "2026-10-02", "tytul": "Paralaksa · 02.10", "tresc": "A; B"}), encoding="utf-8")
+        got = []
+        assert mod.announce(tmp_path, lambda sub, data: got.append(json.loads(data)) or 201) == "2026-10-02: wysłane 1, usunięte 0"
+        assert got == [{"title": "Paralaksa · 02.10", "body": "A; B", "url": "/v2/2026-10-02/index.html", "tag": "wydanie"}]
+        assert post({"usun": _sub(1)["endpoint"]}) == 204
+        assert json.loads(store.files.get("powiadomienia.json")[0])["subskrypcje"] == {}
+    finally:
+        srv.shutdown()

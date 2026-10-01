@@ -123,7 +123,11 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
   Od 2026-10-01 inne osoby mają własne loginy (`site/hosting/konta.py`): właściciel dodaje je na `/osoby` (link z zaproszeniem,
   osoba sama ustawia hasło), logowanie formularzem z podpisanym ciasteczkiem na 90 dni (Basic Auth tylko dla skryptów),
   pomiar czasu czytania (`server.HEARTBEAT`) trwa, gdy karta jest widoczna, okno ma fokus i od ostatniej interakcji minęło < 90 s (ruch myszy się nie liczy); sygnały start/punkt kontrolny co minutę/koniec z powodem niosą sekundy od poprzedniego sygnału i identyfikator karty, panel liczy tylko zgłoszone sekundy (dwie karty naraz raz), czas według tematów i diagnostykę (od 2026-10-01; bez informacji o tym dla osób, decyzja właściciela);
-  osoby i aktywność w prywatnym repo `kraxtere/paralaksa-aktywnosc` przez API GitHuba (`ACTIVITY_TOKEN` w Renderze), bo dysk darmowego Rendera znika przy uśpieniu. Serwer: tylko biblioteka standardowa.
+  osoby i aktywność w prywatnym repo `kraxtere/paralaksa-aktywnosc` przez API GitHuba (`ACTIVITY_TOKEN` w Renderze), bo dysk darmowego Rendera znika przy uśpieniu. Serwer: biblioteka standardowa, wyjątek `pywebpush` w `hosting/powiadomienia.py`.
+  Od 2026-10-01 menu osoby w pasku 2.0 (imię z `window.plxJa` od serwera, powiadomienia, instalacja, Wyloguj), `/sw.js`
+  (bez niego Chrome nie proponuje instalacji) i powiadomienia push o nowym wydaniu: subskrypcje w `powiadomienia.json`
+  w repo aktywności, wysyłka przez serwer raz na nowy dzień przy starcie po wdrożeniu (`v2/powiadomienie.json` z `plx site`),
+  klucz `VAPID_PRIVATE_KEY` (lokalnie w `.env`, w Renderze ręcznie); bez klucza strona działa bez powiadomień.
   `stories.py`: „historie dnia” w zakładce Najważniejsze (wydarzenia z ≥ 3 krajów, jeden przetłumaczony nagłówek na kraj). Dwa kroki
   modelu ekstrakcji: wyszukanie kandydatów, potem przypisanie każdego artykułu do wydarzenia albo odrzucenie (porcje po 60 artykułów). Tylko przy `plx site`, nigdy w daily;
   wynik w `data/stories/<dzień>.json` (ok. 0,03–0,04 $ na dzień, ponowna budowa za darmo). Pierwszy krok bez weryfikacji dokleja artykuły
@@ -153,12 +157,13 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
   stara wersja zostaje pod `/index.html` (link „Stara wersja” na stronach 2.0); `start_url` aplikacji to `./`.
   Pasek i stopka 2.0 są wspólne: `site/assets/pasek.js` (logo, wybór dnia, „Stara wersja” w stopce) trafia do `v2/pasek.js`,
   strony mają tylko `<div id="pasek">`; zmiana paska = zmiana tego pliku i `plx site`, bez przebudowy stron dni.
-  Tytuł okładki nowych dni: „Przegląd prasy · DD.MM” (`scripts/v2/widok_powitanie.py`).
+  Tytuł okładki nowych dni: „Przegląd prasy · DD.MM” (`scripts/v2/widok_powitanie.py`); od 02.10 sekcja spraw nazywa się
+  „Wydarzenia dnia” (`widok_obrazkowy.EVENTS_HEADER`, starsze okładki „Sprawy dnia”). `widok_obrazkowy.py indeks`: tylko strona dnia.
   Oś wydarzeń (prototyp 2026-10-01, decyzja właściciela: jedna ciągła oś przez wszystkie dni): `scripts/v2/os_czasu.py`
   dopisuje każdy nowy dzień (`dzien D`: Codex dzieli Sprawy dnia na nowe zdarzenia i dalszy ciąg istniejących,
   bez pomijania (limit 1–4 zgubił 28.09), przypisuje wątki), `obrazki` (kadr bez napisów na zdarzenie), `strona`. Godzina to pierwszy pokazany nagłówek
   w naszych źródłach, nie godzina zdarzenia; od 2026-10-01 dzień na osi to dzień przeglądu, w którym sprawa weszła (wcześniej data pierwszego nagłówka). Wynik `data/widok/os/` → `v2/os/`
-  i `v2/os.json` (wejście z miniaturami pod paskiem stron dnia, otwiera oś na tym dniu), w panelu `/osoby` część „Oś wydarzeń”.
+  i `v2/os.json` (kafelek „Dzień po dniu” na samej górze strony dnia, pod paskiem, otwiera oś na tym dniu), w panelu `/osoby` część „Oś wydarzeń”.
   Od 2026-10-01 (decyzja właściciela) oś bierze nie tylko Sprawy dnia (najwyżej 6), ale też dalsze zdarzenia dnia z ≥ 2 krajów
   (`dzien D` szuka ich tymi samymi dwoma krokami co `site/stories.py`, ale przez Codex, `data/widok/os/dodatkowe/`, numery spraw od 101,
   bez strony sprawy) i składa 4–8 nowych zdarzeń na dzień; mniej ważne dalsze pomija (`plan.pominiete`). `ciag D` rozpoznaje, które
