@@ -159,7 +159,11 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
   bez pomijania (limit 1–4 zgubił 28.09), przypisuje wątki), `obrazki` (kadr bez napisów na zdarzenie), `strona`. Godzina to pierwszy pokazany nagłówek
   w naszych źródłach, nie godzina zdarzenia, więc dni na osi to daty tych nagłówków. Wynik `data/widok/os/` → `v2/os/`
   i `v2/os.json` (wejście z miniaturami pod paskiem stron dnia, otwiera oś na tym dniu), w panelu `/osoby` część „Oś wydarzeń”.
-  Nowy dzień 2.0: po stronach dnia `os_czasu.py dzien D`, `opisy`, `obrazki`, `strona`, potem `plx site`. Panel `/osoby` liczy czas według części
+  Od 2026-10-01 (decyzja właściciela) oś bierze nie tylko Sprawy dnia (najwyżej 6), ale też dalsze zdarzenia dnia z ≥ 2 krajów
+  (`dzien D` szuka ich tymi samymi dwoma krokami co `site/stories.py`, ale przez Codex, `data/widok/os/dodatkowe/`, numery spraw od 101,
+  bez strony sprawy) i składa 4–8 nowych zdarzeń na dzień; mniej ważne dalsze pomija (`plan.pominiete`). `ciag D` rozpoznaje, które
+  Sprawy dnia 1–3 to ciąg dalszy wcześniejszych dni (01.10: wszystkie trzy z 30.09), i pisze zdanie „co nowego”: etykieta na okładce,
+  ramka z linkiem na oś na stronie sprawy. Kolejność dnia (`scripts/v2/README.md`): `dzien`, `ciag`, strony dnia, potem `opisy`, `obrazki`, `strona`, `plx site`. Panel `/osoby` liczy czas według części
   strony (`server.section_of`: okładka, sprawy, różnice, obraz kraju, tematy, stara wersja); strona dnia oznacza okładkę
   i siatkę tematów `data-sekcja`.
 - `.github/workflows/daily.yml`: cron 10:30 UTC (poza szczytem DeepSeek; GitHub opóźnia start nawet o 4–5 h), baza jako zaszyfrowany snapshot w Release `database-backup` (cache i artefakt to kopie), commit `reports/<dzień>.status.json`. Od 2026-10-01 bez syntezy (`run-daily --bez-raportu`; raport lokalnie przez Codex). Kod 1 tylko przy ostrzeżeniach blokujących (ekstrakcja, brak >1/3 aktywnych źródeł); pojedynczy kanał/źródło to ostrzeżenie informacyjne.

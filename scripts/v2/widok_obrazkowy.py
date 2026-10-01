@@ -216,7 +216,8 @@ def shell(title: str, body: str, debug: bool = False) -> str:
             f'border:1px solid #ddd5c7;border-radius:12px;padding:10px 14px;margin:12px 0}}.s{{color:#7a746a;font-size:.8em;'
             f'font-weight:400}}.list a{{color:#1d1b18}}.src{{display:inline-flex;align-items:center;gap:4px;margin-left:8px;'
             f'color:#7a746a;font-size:.8em;font-weight:400;white-space:nowrap}}.src img{{width:16px;height:16px;border-radius:3px}}'
-            f'.list p{{line-height:1.5}}.list li{{line-height:1.4;margin:4px 0}}'
+            f'.list p{{line-height:1.5}}.list li{{line-height:1.4;margin:4px 0}}.list .ciag{{border-left:4px solid #8a3b2a;'
+            f'background:#fbf8f2;padding:8px 12px;border-radius:0 8px 8px 0}}.ciag b{{color:#8a3b2a}}.list .ciag a{{color:#8a3b2a}}'
             f'h2 .src{{font-size:.55em}}.il{{width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:3px}}</style></head><body>{body}</body></html>')
 
 
@@ -555,12 +556,25 @@ def article_list(ids: list[int], pl: dict) -> str:
                             f'{src_html(info[a]["src"])}</li>' for a in dict.fromkeys(ids) if a in info) + "</ul>"
 
 
+def continued() -> dict:
+    """Stories of the day that continue a case from earlier days (scripts/v2/os_czasu.py ciag)."""
+    path = Path("data/widok/os/ciag") / f"{DAY}.json"
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+
+
+def continued_note(c: dict) -> str:
+    target = f"../os/index.html#d={c['od']}" + (f"&w={c['watek']}" if c.get("watek") else "")
+    return (f'<p class="ciag"><b>Ciąg dalszy</b> sprawy z {c["od"][8:10]}.{c["od"][5:7]}. Co nowego: {esc(c["nowe"])} '
+            f'<a href="{esc(target)}">Cała sprawa na osi czasu →</a></p>')
+
+
 def welcome_pages(pl: dict) -> None:
     """Detail pages with the matching image panel and descriptions grounded in article references."""
     inputs = welcome_cards(pl)
     cards = inputs["karty"]
     regions = card_regions(cards)
     summaries = welcome_summaries(inputs)
+    cont = continued()
     note = ('<p class="s">Opis przekazu analizowanych źródeł, nie faktów. '
             'Nagłówki w tłumaczeniu roboczym; dłuższe skrócone do 15 słów.</p>')
     for key, card in cards.items():
@@ -584,6 +598,7 @@ def welcome_pages(pl: dict) -> None:
             confidence = f'<p class="s">Pewność porównania: {esc(level)}. {esc(reason)}</p>'
         title = summary.get("tytul") or card["tytul"]
         body = (bar("index.html") + card_image(title, regions[key]) + f'<div class="list"><h1>{esc(title)}</h1>'
+                + (continued_note(cont[key]) if key in cont else "") +
                 f'<p>{esc(summary["opis"])}</p><p>{len(summary["kraje"])} krajów w tym zestawieniu.</p>'
                 + note + confidence + "".join(blocks) + '</div>')
         (OUT / f"{key}.html").write_text(shell(title, body), encoding="utf-8")

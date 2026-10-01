@@ -129,10 +129,12 @@ def build_verify_prompt(cands: list[dict], items: list[dict], ids: list[int] | N
     return VERIFY_PROMPT.format(events=events, articles=articles)
 
 
-def parse_stories(cands: list[dict], verify_texts: list[str], items: list[dict]) -> list[dict]:
+def parse_stories(cands: list[dict], verify_texts: list[str], items: list[dict], min_countries: int = MIN_COUNTRIES,
+                  limit: int = MAX_STORIES) -> list[dict]:
     """Second step decides: each candidate article goes to the event it directly concerns (possibly another one than
-    the first call guessed) or nowhere. One article per country (in candidate order), >= MIN_COUNTRIES countries.
-    The step may be split into several calls (VERIFY_CHUNK); their answers are merged."""
+    the first call guessed) or nowhere. One article per country (in candidate order), >= min_countries countries.
+    The step may be split into several calls (VERIFY_CHUNK); their answers are merged. The axis of events
+    (scripts/v2/os_czasu.py) uses it for further events of the day with a lower threshold."""
     by_id = {i["id"]: i for i in items}
     pool = [i for c in cands for i in c["ids"]]
     assigned: dict[int, tuple[int, str]] = {}
@@ -153,11 +155,11 @@ def parse_stories(cands: list[dict], verify_texts: list[str], items: list[dict])
                 continue
             seen.add(art["kraj"])
             countries.append({"kraj": art["kraj"], "article_id": i, "naglowek_pl": assigned[i][1] or art["tytul"]})
-        if len(countries) >= MIN_COUNTRIES:
+        if len(countries) >= min_countries:
             stories.append({"tytul": c["tytul"], "opis": c["opis"], "kraje": countries, "pozostale": rest,
                             "odrzucone": [i for i in c["ids"] if i not in assigned]})
     stories.sort(key=lambda s: -len(s["kraje"]))
-    return stories[:MAX_STORIES]
+    return stories[:limit]
 
 
 def load_cached(cache_dir: Path, day: str, items: list[dict]) -> dict | None:

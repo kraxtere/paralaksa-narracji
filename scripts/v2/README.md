@@ -11,13 +11,19 @@ robi Codex z limitu konta (`codex_limit.py` pokazuje zużycie). Nigdy w Actions.
 3. `plx report --date D --db data/prod.db`: raport okładkowy (różnice i obraz kraju) przez Codex.
 4. `python scripts/v2/dzien_prasy.py D --bez-opisow`: dane krajów i tematów dnia (`data/dzien_prasy/D/opisy.json`),
    bez modelu (od 30.09; z opisami krajów przez DeepSeek ok. 0,04 $).
-5. Strona dnia (`DZIEN=D` w środowisku):
+5. Oś wydarzeń, część tekstowa (przed okładką, bo okładka oznacza ciąg dalszy):
+   - `python scripts/v2/os_czasu.py dzien D`: dalsze zdarzenia dnia (≥ 2 kraje, `data/widok/os/dodatkowe/D.json`),
+     potem Sprawy dnia i dalsze zdarzenia → nowe zdarzenia albo dalszy ciąg, razem 4–8 nowych na dzień;
+   - `python scripts/v2/os_czasu.py ciag D`: które Sprawy dnia 1–3 to ciąg dalszy wcześniejszych dni i co nowego
+     (`data/widok/os/ciag/D.json`; okładka dostaje etykietę „Ciąg dalszy · od DD.MM”, strona sprawy ramkę z linkiem na oś).
+6. Strona dnia (`DZIEN=D` w środowisku):
    - `python scripts/v2/widok_obrazkowy.py obraz`: siatka tematów `start.png`;
    - `python scripts/v2/widok_obrazkowy.py plakat TEMAT` dla każdego tematu z `tematy.json`;
    - `python scripts/v2/widok_powitanie.py`: okładka `powitanie.png`;
    - `python scripts/v2/widok_obrazkowy.py strona`: HTML okładki, spraw, różnic, obrazu kraju i tematów.
-6. Oś wydarzeń: `python scripts/v2/os_czasu.py dzien D`, potem `opisy`, `obrazki`, `strona`.
-7. `plx site --db data/prod.db --publikuj`.
+   Obrazki można puszczać równolegle (8 procesów Codex naraz działało 01.10).
+7. Oś wydarzeń, reszta: `python scripts/v2/os_czasu.py opisy`, `obrazki`, `strona`.
+8. `plx site --db data/prod.db --publikuj`.
 
 Po każdym obrazku z ludźmi: obejrzeć (bez stereotypów, bez napisów na kadrach osi). Przy blokadzie moderacji plakatu:
 `widok_warianty.py`.

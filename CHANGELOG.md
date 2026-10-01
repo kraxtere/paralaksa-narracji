@@ -35,6 +35,19 @@ więc limitu nie ruszamy.
 - Karty osi mają 2–3 zdania opisu pod nagłówkiem (`os_czasu.py opisy`, Codex, z opisów i nagłówków wszystkich dni
   zdarzenia; ponownie, gdy zdarzenie dostanie nowy dzień). Bez dat dziennych (daty przy Sprawach to dni przeglądu, nie
   zdarzeń; pierwsza wersja je podawała), liczby ofiar przypisane źródłu.
+- Strona dnia 2.0: kafelek „Dzień po dniu” pod okładką (wariant C z trzech, wybór właściciela): oś ostatnich 5 dni, po
+  2 okrągłe kadry na zakładkę, link „Oś czasu ›”. Nazwa strony osi: „Oś czasu”. Kadry osi po 6 naraz.
+- 01.10: Sprawy dnia prawie takie same jak 30.09 (flydubai, Pike, Irak). Sprawdzone, to nie błąd: pod sprawami 01.10 nie ma
+  żadnego artykułu z 30.09, pokazane nagłówki są prawie wszystkie z 01.10, a sprawy się rozwinęły (Pike: 30.09 sąd wstrzymał
+  egzekucję, 01.10 przeżyła dwie dawki).
+- Ciąg dalszy (`os_czasu.py ciag D`, przed okładką): Codex sprawdza, czy Sprawa dnia 1–3 to ta sama sprawa co zdarzenie
+  z wcześniejszych dni (to samo zdarzenie na osi albo wątek, ale nie sam szeroki temat), i pisze zdanie „co nowego”. Okładka
+  dostaje etykietę „Ciąg dalszy · od DD.MM”, strona sprawy ramkę z tym zdaniem i linkiem na oś. 01.10: wszystkie trzy.
+- Oś szerzej (decyzja właściciela): oprócz Spraw dnia dalsze zdarzenia z ≥ 2 krajów (te same dwa kroki co Sprawy dnia, ale
+  Codex; `data/widok/os/dodatkowe/`), 4–8 nowych zdarzeń na dzień, mniej ważne dalsze pominięte. 01.10: 12 kandydatów,
+  4 dodane (Fairford, Hegseth, naloty Pakistanu, irańska delegacja), razem 8.
+- Obrazki Codex mają osobny dobowy limit (429 `usage_limit_reached`, okno 1440 min), którego `codex_limit.py` nie pokazuje:
+  01.10 skończył się po ok. 25 obrazkach przy 30% okna 5 h. 8 procesów obrazków naraz działało bez problemu.
 
 # Strona: nowe logo, pasek 2.0, czas według części strony — 2026-10-01
 

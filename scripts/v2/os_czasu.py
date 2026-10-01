@@ -1,11 +1,15 @@
 ﻿"""Ad hoc PROTOTYP (2026-10-01): ciągła oś wydarzeń przez wszystkie dni, dopisywana dzień po dniu, z przeskakiwaniem dni
 i filtrem wątków (zastępuje osobne tygodnie z data/os_tygodnia.py).
 
-Dane: Sprawy dnia z data/stories/<dzień>.json (plx site), godziny publikacji z data/prod.db (tylko do odczytu).
+Dane: Sprawy dnia z data/stories/<dzień>.json (plx site) i dalsze zdarzenia dnia z data/widok/os/dodatkowe/<dzień>.json,
+godziny publikacji z data/prod.db (tylko do odczytu).
 Godzina na osi = najwcześniejszy pokazany nagłówek w analizowanych źródłach, nie godzina samego zdarzenia.
   python scripts/v2/os_czasu.py z-tygodnia 2026-09-30   # jednorazowo: start z planu i kadrów tygodnia 24–30.09
-  python scripts/v2/os_czasu.py dzien 2026-10-01        # Codex (tekst): Sprawy nowego dnia -> nowe zdarzenia / dalszy ciąg
-  python scripts/v2/os_czasu.py pominiete               # jednorazowo: sprawy pominięte przed 01.10 też na oś
+  python scripts/v2/os_czasu.py dzien 2026-10-01        # Codex (tekst): dalsze zdarzenia dnia (>= 2 kraje), potem Sprawy dnia
+                                                        # i dalsze -> nowe zdarzenia / dalszy ciąg, 4–8 nowych na dzień;
+                                                        # dzień już na osi: tylko sprawy jeszcze nierozstrzygnięte
+  python scripts/v2/os_czasu.py ciag 2026-10-01         # Codex (tekst): czy Sprawy dnia 1–3 to ciąg dalszy wcześniejszych dni
+                                                        # i co nowego (okładka i strony spraw); przed widok_powitanie.py
   python scripts/v2/os_czasu.py opisy                   # Codex (tekst): 2–3 zdania pod nagłówkiem karty (nowe i rozszerzone)
   python scripts/v2/os_czasu.py obrazki                 # Codex (obraz): kadr bez tekstu dla zdarzeń bez obrazka
   python scripts/v2/os_czasu.py strona                  # index.html + skrot.json (wejście z paska stron dnia)
@@ -29,6 +33,12 @@ from paralaksa.extract.llm_client import LLMRequest, build_client  # noqa: E402
 
 OUT = Path("data/widok/os")
 PLAN = OUT / "plan.json"
+EXTRA = OUT / "dodatkowe"     # dalsze zdarzenia dnia (poza Sprawami dnia), tylko na osi
+CIAG = OUT / "ciag"           # Sprawy dnia 1–3 jako ciąg dalszy wcześniejszych dni (okładka, strony spraw)
+EXTRA_FROM = 101              # numery dalszych zdarzeń w dniu: po Sprawach dnia, bez strony sprawy
+EXTRA_MAX = 12
+EXTRA_MIN_COUNTRIES = 2
+NEW_PER_DAY = (4, 8)          # nowych zdarzeń na dzień (decyzja właściciela 2026-10-01)
 TEXT_MODEL = "codex:gpt-6.1-sol:medium"
 WAW = ZoneInfo("Europe/Warsaw")
 DAY_NAMES = ["pon.", "wt.", "śr.", "czw.", "pt.", "sob.", "niedz."]
@@ -45,8 +55,55 @@ def day_stories(day: str) -> dict[str, dict]:
     path = Path(f"data/stories/{day}.json")
     if not path.exists():
         raise SystemExit(f"brak {path}: najpierw plx site dla tego dnia (Sprawy dnia)")
-    return {f"{day}#{n}": {**h, "dzien": day, "n": n}
-            for n, h in enumerate(json.loads(path.read_text(encoding="utf-8"))["historie"], 1)}
+    out = {f"{day}#{n}": {**h, "dzien": day, "n": n}
+           for n, h in enumerate(json.loads(path.read_text(encoding="utf-8"))["historie"], 1)}
+    extra = EXTRA / f"{day}.json"
+    if extra.exists():
+        out.update({f"{day}#{n}": {**h, "dzien": day, "n": n, "dodatkowa": True}
+                    for n, h in enumerate(json.loads(extra.read_text(encoding="utf-8"))["historie"], EXTRA_FROM)})
+    return out
+
+
+def extra_events(day: str) -> None:
+    """Further events of the day for the axis (>= 2 countries) beyond the Stories of the day, by the same two steps as
+    paralaksa.site.stories (candidates, then every article checked and its headline translated), on Codex."""
+    from paralaksa.aggregate.sample import publication_meta
+    from paralaksa.site import stories as S
+    path = EXTRA / f"{day}.json"
+    if path.exists():
+        return
+    conn = sqlite3.connect("file:data/prod.db?mode=ro", uri=True)
+    conn.row_factory = sqlite3.Row
+    eligible = set(publication_meta(conn, day)["eligible_ids"])
+    main = json.loads(Path(f"data/stories/{day}.json").read_text(encoding="utf-8"))["historie"]
+    taken = {k["article_id"] for h in main for k in h["kraje"]} | {i for h in main for i in h.get("pozostale", [])}
+    items = [i for i in S.story_items(conn, day, eligible) if i["id"] not in taken]
+    conn.close()
+    lines = "\n".join(f"#{i['id']} | {i['kraj']} | {i['zrodlo']} | {' '.join(i['tytul'].split())} | "
+                      f"{' '.join(i['streszczenie'].split())}" for i in items)
+    skip = "\n".join(f"- {h['tytul']}" for h in main)
+    client = build_client(TEXT_MODEL, None, 1, 1)
+
+    def call(cid: str, prompt: str) -> str:
+        res = client.complete(LLMRequest(custom_id=cid, model=TEXT_MODEL, max_tokens=16000,
+                                         messages=[{"role": "user", "content": prompt}]))
+        if not res.ok:
+            raise SystemExit(f"{cid}: {res.error}")
+        return res.text
+
+    first = call(f"os-dodatkowe-{day}", f"Te wydarzenia są już opisane osobno, pomiń je:\n{skip}\n\n"
+                 + S.PROMPT.format(max_stories=EXTRA_MAX, min_countries=EXTRA_MIN_COUNTRIES, items=lines))
+    cands = S.parse_candidates(first, items)
+    pool = [i for c in cands for i in c["ids"]]
+    checks = [call(f"os-dodatkowe-weryfikacja-{day}-{k}", S.build_verify_prompt(cands, items, pool[k:k + S.VERIFY_CHUNK]))
+              for k in range(0, len(pool), S.VERIFY_CHUNK)]
+    found = S.parse_stories(cands, checks, items, min_countries=EXTRA_MIN_COUNTRIES, limit=EXTRA_MAX)
+    EXTRA.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps({"day": day, "model": TEXT_MODEL, "kandydaci": cands, "historie": found},
+                               ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"dalsze zdarzenia {day}: {len(found)} z {len(cands)} kandydatów")
+    for h in found:
+        print(f"  {len(h['kraje'])} krajów | {h['tytul']}")
 
 
 def all_stories(days: list[str]) -> dict[str, dict]:
@@ -84,16 +141,21 @@ def day_prompt(plan: dict, new: dict[str, dict]) -> str:
     events = "\n".join(f"#{e['nr']} | {st[e['historie'][0]]['dzien'][8:10]}.{st[e['historie'][0]]['dzien'][5:7]} | "
                        f"wątek: {e['watek'] or '-'} | {e['tytul']}" for e in plan["zdarzenia"])
     threads = "\n".join(f"{w['id']}: {w['nazwa']}" for w in plan["watki"]) or "(brak)"
-    stories = "\n".join(f"[{sid}] {len(s['kraje'])} krajów | {s['tytul']} — {s['opis']}" for sid, s in new.items())
+    stories = "\n".join(f"[{sid}] {'DALSZE' if s.get('dodatkowa') else 'SPRAWA DNIA'} | {len(s['kraje'])} krajów | "
+                        f"{s['tytul']} — {s['opis']}" for sid, s in new.items())
+    lo, hi = NEW_PER_DAY
     return (
         "Prowadzimy oś wydarzeń z przeglądu prasy: najważniejsze sprawy dzień po dniu, połączone w wątki. Dochodzą "
-        "„Sprawy dnia” z kolejnego dnia (wydarzenia opisywane jednocześnie przez redakcje z co najmniej 3 krajów). "
-        "Dla KAŻDEJ nowej sprawy zdecyduj:\n"
-        "- \"nowe\": nowe zdarzenie na osi. Każda sprawa trafia na oś (wszystkie są opisywane w kilku krajach), "
-        "więc jeśli nie jest dalszym ciągiem, to jest nowym zdarzeniem.\n"
+        "sprawy z kolejnego dnia: SPRAWA DNIA (opisywana jednocześnie przez redakcje z co najmniej 3 krajów) i DALSZE "
+        "(co najmniej 2 kraje). Dla KAŻDEJ nowej sprawy zdecyduj:\n"
+        "- \"nowe\": nowe zdarzenie na osi.\n"
         "- \"dalszy_ciag\": ta sama rzecz co istniejące zdarzenie, bez nowego rozwoju (np. kolejny dzień tej samej wizyty) "
         "-> podaj \"zdarzenie\": numer. Nowy rozwój tej samej sprawy (np. propozycja, potem odrzucenie) to \"nowe\" "
         "w tym samym wątku.\n"
+        "- \"pomin\": tylko dla DALSZE: drobne, lokalne, sportowe, rozrywkowe albo mniej ważne od pozostałych.\n"
+        f"Każda SPRAWA DNIA trafia na oś (\"nowe\" albo \"dalszy_ciag\"). Z DALSZYCH wybierz najważniejsze tak, żeby z tego "
+        f"dnia razem było od {lo} do {hi} nowych zdarzeń (jeśli wszystkich spraw jest mniej, wszystkie, które nie są "
+        "dalszym ciągiem). Liczą się konkretne zdarzenia (decyzja, atak, głosowanie, katastrofa, wystąpienie), nie tematy.\n"
         "Dla \"nowe\": \"tytul\" do 8 słów po polsku, co się stało, neutralnie, sprawy sporne przypisane stronie "
         "(„Estonia oskarża Rosję…”); \"watek\": id istniejącego wątku, nowego wątku albo null; \"scena\": jedno zdanie po "
         "angielsku, co narysować (miejsce, ludzie, przedmioty), bez napisów, liter, liczb i logo; prawdziwe osoby jako "
@@ -103,7 +165,7 @@ def day_prompt(plan: dict, new: dict[str, dict]) -> str:
         "Nie wymyślaj zdarzeń spoza listy. Zwróć wyłącznie JSON:\n"
         '{"nowe_watki":[{"id":"...","nazwa":"..."}],"przypisz":[{"zdarzenie":3,"watek":"..."}],'
         '"decyzje":[{"historia":"2026-10-01#1","typ":"nowe","tytul":"...","watek":null,"scena":"..."},'
-        '{"historia":"2026-10-01#2","typ":"dalszy_ciag","zdarzenie":5}]}\n\n'
+        '{"historia":"2026-10-01#2","typ":"dalszy_ciag","zdarzenie":5},{"historia":"2026-10-01#103","typ":"pomin"}]}\n\n'
         f"WĄTKI:\n{threads}\n\nZDARZENIA NA OSI:\n{events}\n\nNOWE SPRAWY:\n{stories}")
 
 
@@ -115,10 +177,11 @@ def validate(plan: dict, new: dict[str, dict], ans: dict) -> list[str]:
     errors += [f"brak decyzji dla {s}" for s in new if s not in seen]
     errors += [f"nieznana sprawa {s}" for s in seen if s not in new]
     errors += [f"sprawa {s} dwa razy" for s in set(seen) if seen.count(s) > 1]
-    n_new = 0
     for d in ans.get("decyzje", []):
-        if d.get("typ") == "nowe":
-            n_new += 1
+        if d.get("typ") == "pomin":
+            if not new.get(d.get("historia"), {}).get("dodatkowa"):
+                errors.append(f"{d.get('historia')}: Sprawy dnia nie pomijamy")
+        elif d.get("typ") == "nowe":
             if not d.get("tytul") or len(d["tytul"].split()) > 10:
                 errors.append(f"{d.get('historia')}: tytuł pusty albo dłuższy niż 10 słów")
             if d.get("watek") not in threads | {None}:
@@ -133,24 +196,33 @@ def validate(plan: dict, new: dict[str, dict], ans: dict) -> list[str]:
     for p in ans.get("przypisz", []):
         if p.get("zdarzenie") not in nrs or p.get("watek") not in threads:
             errors.append(f"przypisanie {p}: nieznane zdarzenie albo wątek")
+    # 4–8 nowych na dzień: liczą się też zdarzenia z tego dnia, które już są na osi (dzień uzupełniany)
+    days = {s.split("#")[0] for s in new}
+    kinds = {d.get("historia"): d.get("typ") for d in ans.get("decyzje", [])}
+    lo, hi = NEW_PER_DAY
+    for day in days:
+        before = sum(e["historie"][0].startswith(day + "#") for e in plan["zdarzenia"])
+        n_new = before + sum(t == "nowe" for s, t in kinds.items() if s and s.startswith(day + "#"))
+        extra_new = sum(t == "nowe" for s, t in kinds.items() if s in new and new[s].get("dodatkowa") and s.startswith(day + "#"))
+        skipped = sum(t == "pomin" for s, t in kinds.items() if s and s.startswith(day + "#"))
+        if n_new > hi and extra_new:
+            errors.append(f"{day}: {n_new} nowych zdarzeń, ma być najwyżej {hi} (pomiń mniej ważne DALSZE)")
+        if n_new < lo and skipped:
+            errors.append(f"{day}: {n_new} nowych zdarzeń, ma być co najmniej {lo} (dodaj pominięte DALSZE)")
     return errors
 
 
 def add_day(day: str) -> None:
+    """New day, or a day already on the axis with stories not yet decided (e.g. further events added later)."""
+    extra_events(day)
     plan = load()
-    if day in plan["dni"]:
-        raise SystemExit(f"{day} już jest na osi")
-    plan["dni"].append(day)
-    decide(plan, day_stories(day), day)
-
-
-def add_skipped() -> None:
-    """Once: stories skipped before 2026-10-01 (then 1–4 new events a day) go onto the axis as well."""
-    plan = load()
-    st = all_stories(plan["dni"])
-    todo = {s: st[s] for s in sorted(plan.pop("pominiete", []))}
-    if todo:
-        decide(plan, todo, "pominiete")
+    if day not in plan["dni"]:
+        plan["dni"].append(day)
+    placed = {s for e in plan["zdarzenia"] for s in e["historie"]} | set(plan.get("pominiete", []))
+    todo = {s: h for s, h in day_stories(day).items() if s not in placed}
+    if not todo:
+        raise SystemExit(f"{day}: wszystkie sprawy już rozstrzygnięte")
+    decide(plan, todo, day)
 
 
 def decide(plan: dict, new: dict[str, dict], label: str) -> None:
@@ -182,11 +254,87 @@ def decide(plan: dict, new: dict[str, dict], label: str) -> None:
             nr += 1
             plan["zdarzenia"].append({"nr": nr, "historie": [d["historia"]], "tytul": d["tytul"], "watek": d["watek"],
                                       "scena": d["scena"]})
+        elif d["typ"] == "pomin":
+            plan.setdefault("pominiete", []).append(d["historia"])
         else:
             by_nr[d["zdarzenie"]]["historie"].append(d["historia"])
     save(plan)
     for d in ans["decyzje"]:
         print(d["historia"], d["typ"], d.get("tytul") or d.get("zdarzenie") or "", f"[{d.get('watek') or ''}]")
+
+
+def continuation(day: str) -> None:
+    """Stories 1–3 of the day (cover, story pages) that continue a case from earlier days: the same event on the axis,
+    or an event of the same thread (Codex decides, a broad thread like a war holds different cases) and what is new
+    today. data/widok/os/ciag/<day>.json: {"sprawa-1": {"od": day, "zdarzenie": nr, "watek": id, "nowe": "..."}}."""
+    plan = load()
+    st = all_stories(plan["dni"])
+
+    def lines(sids):
+        return "\n".join(f"  {st[s]['dzien'][8:10]}.{st[s]['dzien'][5:7]}: {st[s]['opis']} | nagłówki: "
+                         + "; ".join(k.get("naglowek_pl", "") for k in st[s]["kraje"]) for s in sids)
+
+    cases, blocks = {}, []
+    for n in (1, 2, 3):
+        sid = f"{day}#{n}"
+        ev = next((e for e in plan["zdarzenia"] if sid in e["historie"]), None)
+        if ev is None:
+            continue
+        earlier = {e["nr"]: [s for s in e["historie"] if st[s]["dzien"] < day] for e in plan["zdarzenia"]
+                   if e is ev or (ev["watek"] and e["watek"] == ev["watek"])}
+        earlier = {nr: ss for nr, ss in earlier.items() if ss}
+        if not earlier:
+            continue
+        cases[f"sprawa-{n}"] = (ev, earlier)
+        blocks.append(f"[sprawa-{n}] DZIŚ: {st[sid]['tytul']}\n{lines([sid])}\nWCZEŚNIEJ:\n"
+                      + "\n".join(f" #{nr}:\n{lines(ss)}" for nr, ss in earlier.items()))
+    CIAG.mkdir(parents=True, exist_ok=True)
+    out = {}
+    if cases:
+        prompt = (
+            "Przegląd prasy dzień po dniu. Dla każdej dzisiejszej sprawy masz zdarzenia z wcześniejszych dni z tej samej "
+            "osi lub wątku. Zdecyduj, czy dzisiejsza sprawa to ciąg dalszy tej samej konkretnej sprawy (ta sama osoba, "
+            "ten sam incydent, ta sama decyzja i jej skutki), a nie tylko ten sam szeroki temat (inny atak w tej samej "
+            "wojnie to NIE ciąg dalszy). Jeśli tak, podaj numer zdarzenia, którego to ciąg dalszy, i \"nowe\": jedno "
+            "zdanie po polsku, 8–22 słowa, co dzisiejsze nagłówki dodają względem wcześniejszych dni (nowy rozwój, nowe "
+            "ustalenia, reakcje). Wyłącznie na podstawie podanych opisów i nagłówków, bez ocen i prognoz; sprawy sporne "
+            "przypisz stronie; bez dat dziennych i bez nazw redakcji. Jeśli dziś nie ma nic nowego, napisz, co redakcje "
+            "dalej opisują. Zwróć wyłącznie JSON: {\"sprawa-1\":{\"ciag\":true,\"zdarzenie\":17,\"nowe\":\"...\"},"
+            "\"sprawa-2\":{\"ciag\":false}}\n\n" + "\n\n".join(blocks))
+        client = build_client(TEXT_MODEL, None, 1, 1)
+        messages = [{"role": "user", "content": prompt}]
+        for _ in range(2):
+            res = client.complete(LLMRequest(custom_id=f"os-ciag-{day}", model=TEXT_MODEL, max_tokens=4000, messages=messages))
+            if not res.ok:
+                raise SystemExit(res.error)
+            try:
+                ans = json.loads(res.text[res.text.find("{"): res.text.rfind("}") + 1])
+                errors = [f"brak {k}" for k in cases if not isinstance(ans.get(k), dict)]
+                for k, (ev, earlier) in cases.items():
+                    a = ans.get(k) or {}
+                    if a.get("ciag") and (a.get("zdarzenie") not in earlier or not isinstance(a.get("nowe"), str)
+                                          or not 6 <= len(a["nowe"].split()) <= 26):
+                        errors.append(f"{k}: zdarzenie spoza listy albo zdanie „nowe” puste lub nie 8–22 słowa")
+            except (json.JSONDecodeError, AttributeError) as e:
+                ans, errors = {}, [f"niepoprawny JSON: {e}"]
+            if not errors:
+                break
+            print("błędy:", errors)
+            messages += [{"role": "assistant", "content": res.text},
+                         {"role": "user", "content": "Popraw te błędy i zwróć cały JSON jeszcze raz:\n" + "\n".join(errors)}]
+        else:
+            raise SystemExit(f"ciag {day}: odpowiedź nie przeszła kontroli po ponowieniu")
+        by_nr = {e["nr"]: e for e in plan["zdarzenia"]}
+        for k, (ev, earlier) in cases.items():
+            a = ans[k]
+            if a.get("ciag"):
+                prev = by_nr[a["zdarzenie"]]
+                out[k] = {"od": min(st[s]["dzien"] for s in earlier[a["zdarzenie"]]), "zdarzenie": a["zdarzenie"],
+                          "watek": prev["watek"] or ev["watek"], "nowe": a["nowe"].strip()}
+    (CIAG / f"{day}.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+    for k, v in out.items():
+        print(f"{k}: ciąg dalszy od {v['od']} (#{v['zdarzenie']}): {v['nowe']}")
+    print(f"ciąg dalszy {day}: {len(out)} z 3 spraw")
 
 
 def first_seen(ids: list[int]) -> dict[int, tuple[str, str, str]]:
@@ -431,8 +579,9 @@ if __name__ == "__main__":
     elif cmd == "dzien":
         date.fromisoformat(arg)
         add_day(arg)
-    elif cmd == "pominiete":
-        add_skipped()
+    elif cmd == "ciag":
+        date.fromisoformat(arg)
+        continuation(arg)
     elif cmd == "opisy":
         describe()
     elif cmd == "obrazki":

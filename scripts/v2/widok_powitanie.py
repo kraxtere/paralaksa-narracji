@@ -5,7 +5,7 @@ Sprawy dnia: data/stories/<dzień>.json (historie z plx site); różnice i autoo
 import json, re, sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
-from widok_obrazkowy import DAY, OUT, NAMES, FLAGS, PEOPLE_STYLE, run_codex, OPISY, n_kraje  # noqa: E402
+from widok_obrazkowy import DAY, OUT, NAMES, FLAGS, PEOPLE_STYLE, run_codex, OPISY, n_kraje, continued  # noqa: E402
 
 from paralaksa.config import load_themes  # noqa: E402
 THEME = {t.id: t.name_pl for t in load_themes()}   # nazwa sporu = nazwa tematu raportu
@@ -33,10 +33,14 @@ def main():
     stories = json.loads(Path(f"data/stories/{DAY}.json").read_text(encoding="utf-8"))["historie"][:3]
     rep = json.loads(Path(f"reports/{DAY}.json").read_text(encoding="utf-8"))["report"]
     n_countries = len(json.loads(OPISY.read_text(encoding="utf-8"))["dane"])
+    cont = continued()                # os_czasu.py ciag: sprawa ciągnie się od wcześniejszego dnia
     events = []
     for i, h in enumerate(stories, 1):
         cs = [k["kraj"] for k in h["kraje"]]
-        events.append(f"Event panel {i}: a scene illustrating: \"{h['tytul']}\". Label, exactly: \"{h['tytul']}\". Under it, "
+        c = cont.get(f"sprawa-{i}")
+        tag = (f"Above the label a small brick-red tag, exactly: \"Ciąg dalszy · od {c['od'][8:10]}.{c['od'][5:7]}\". "
+               if c else "")
+        events.append(f"Event panel {i}: a scene illustrating: \"{h['tytul']}\". {tag}Label, exactly: \"{h['tytul']}\". Under it, "
                       f"exactly: \"{n_kraje(len(cs))}\" and a row of small round flag badges: "
                       + ", ".join(FLAGS.get(c, c) for c in cs[:8]) + ".")
     diffs = []
