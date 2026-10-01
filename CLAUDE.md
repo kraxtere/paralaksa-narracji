@@ -155,8 +155,8 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
   strony mają tylko `<div id="pasek">`; zmiana paska = zmiana tego pliku i `plx site`, bez przebudowy stron dni.
   Tytuł okładki nowych dni: „Przegląd prasy · DD.MM” (`data/widok_powitanie.py`).
   Oś wydarzeń (prototyp 2026-10-01, decyzja właściciela: jedna ciągła oś przez wszystkie dni): `data/os_czasu.py` (poza gitem)
-  dopisuje każdy nowy dzień (`dzien D`: Codex dzieli Sprawy dnia na nowe zdarzenia (1–4), dalszy ciąg istniejących
-  i pominięte, przypisuje wątki), `obrazki` (kadr bez napisów na zdarzenie), `strona`. Godzina to pierwszy pokazany nagłówek
+  dopisuje każdy nowy dzień (`dzien D`: Codex dzieli Sprawy dnia na nowe zdarzenia i dalszy ciąg istniejących,
+  bez pomijania (limit 1–4 zgubił 28.09), przypisuje wątki), `obrazki` (kadr bez napisów na zdarzenie), `strona`. Godzina to pierwszy pokazany nagłówek
   w naszych źródłach, nie godzina zdarzenia, więc dni na osi to daty tych nagłówków. Wynik `data/widok/os/` → `v2/os/`
   i `v2/os.json` (wejście z miniaturami pod paskiem stron dnia, otwiera oś na tym dniu), w panelu `/osoby` część „Oś wydarzeń”.
   Nowy dzień 2.0: po stronach dnia `os_czasu.py dzien D`, `obrazki`, `strona`, potem `plx site`. Panel `/osoby` liczy czas według części

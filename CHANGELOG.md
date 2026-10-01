@@ -12,6 +12,8 @@ więc limitu nie ruszamy.
   przebieg `plx report` przez Codex na kopii bazy: jedno wywołanie, bez ponowienia.
 - Raport okładkowy, obraz kraju: każda strona z co najmniej dwóch redakcji, zewnętrzna najlepiej z dwóch krajów (Codex wybierał
   jedną redakcję po stronie). Dwa przebiegi na 30.09: oba bez błędów walidacji, oba IL z 2 + 2 redakcjami (TR i PS z zewnątrz).
+  Potem lekka zachęta do dwóch obrazów kraju (dla różnych krajów, drugi tylko na tych samych warunkach): przebieg na 30.09
+  dał CN i UA, oba 2 + 2 redakcje. Strona 2.0 pokazuje na razie tylko pierwszy.
 - Telewizja wyłączona (`plx site --z-tv` przywraca). Po zmianach koszt ok. 1 $ dziennie.
 - Oś wydarzeń (prototyp, `data/os_czasu.py` poza gitem): jedna ciągła oś przez wszystkie dni (najpierw był tydzień 24–30.09;
   właściciel wolał całość z przeskakiwaniem dni). Każdy dzień dopisuje Codex: 1–4 nowe zdarzenia, dalszy ciąg istniejących
@@ -19,6 +21,10 @@ więc limitu nie ruszamy.
   przesuwanie w bok, filtr wątku, nagłówki z linkami. Godzina na osi to pierwszy pokazany nagłówek w naszych źródłach, nie
   godzina zdarzenia. Na start 24 zdarzenia z 23–30.09; trzy kadry poprawione (prezydent Iranu narysowany jako duchowny,
   stereotypowo narysowani zatrzymani). Daty zdarzeń z treści artykułów i z GDELT: następny krok.
+- Oś bez pomijania: limit 1–4 nowych zdarzeń dziennie wyrzucił 18 spraw (m.in. orbita Starshipa, rezygnacja Vučicia,
+  strzelaniny w RPA), przez co 28.09 zniknął z osi. Teraz każda Sprawa dnia jest nowym zdarzeniem albo dalszym ciągiem
+  istniejącego; pominięte dopisane (`os_czasu.py pominiete`, 42 zdarzenia). Wybór dni pokazuje każdy dzień kalendarza
+  z zakresu, dzień bez zdarzeń jest wyszarzony.
 
 # Strona: nowe logo, pasek 2.0, czas według części strony — 2026-10-01
 
