@@ -101,6 +101,17 @@ def test_generate_report_end_to_end(conn, settings, seeded, tmp_path):
     assert conn.execute("SELECT COUNT(*) FROM daily_metrics WHERE date = ?", (DAY,)).fetchone()[0] == 4
 
 
+def test_cover_report_uses_cover_prompt_and_slim_package(conn, settings, seeded, tmp_path):
+    """report.form = okladka (od 2026-10-01): tylko różnice i obraz kraju, bez porównań wewnątrz krajów i tematów."""
+    sources, _ = seeded
+    seen = []
+    fake = FakeAnthropic(lambda p: seen.append(p["messages"][0]["content"]) or message(json.dumps({"rozbieznosci": []})))
+    settings.report.form = "okladka"
+    generate_report(conn, LLMClient(settings.pricing, client=fake), settings, sources, THEMES, DAY, tmp_path, now=NOW)
+    assert "materiał na okładkę dnia" in seen[0] and '"rozbieznosci"' in seen[0]
+    assert "porownania_wewnatrz_krajow" not in seen[0] and '"tematy"' not in seen[0]
+
+
 def test_material_status_without_synthesis(conn, settings, seeded, tmp_path):
     """run-daily --bez-raportu (Actions od 2026-10-01): metryki i status dnia, bez modelu i bez raportu."""
     sources, _ = seeded

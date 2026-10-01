@@ -1,7 +1,8 @@
 """Codex CLI as a local text/vision model (the owner's ChatGPT Pro limit instead of paid API; decision 2026-09-30).
 
 Local steps and experiments only: the CLI is tied to the owner's login on this machine, so it refuses to run in CI.
-Model names: "codex" (effort medium), "codex:low", "codex:medium", "codex:high". Never "ultra" (eats the limit).
+Model names: "codex" (account default model, effort medium), "codex:low|medium|high", or with a Codex model:
+"codex:gpt-6.1-sol:medium". Never "ultra" (eats the limit), nor "xhigh"/"max".
 Codex runs read-only in an empty temporary folder, without session files; it only answers, it never touches the repo.
 """
 
@@ -29,12 +30,24 @@ def find_codex() -> str | None:
     return found[-1] if found else None
 
 
+REFUSED = {"ultra", "xhigh", "max"}
+
+
+def parse_model(model: str) -> tuple[str | None, str]:
+    """"codex[:model][:effort]" -> (Codex model or None for the account default, effort)."""
+    codex_model, effort = None, "medium"
+    for part in model.split(":")[1:]:
+        if part in EFFORTS:
+            effort = part
+        elif part in REFUSED or not part:
+            raise ValueError(f"nieznany poziom rozumowania Codex '{part}' (dozwolone: {', '.join(sorted(EFFORTS))})")
+        else:
+            codex_model = part
+    return codex_model, effort
+
+
 def effort_of(model: str) -> str:
-    _, _, effort = model.partition(":")
-    effort = effort or "medium"
-    if effort not in EFFORTS:
-        raise ValueError(f"nieznany poziom rozumowania Codex '{effort}' (dozwolone: {', '.join(sorted(EFFORTS))})")
-    return effort
+    return parse_model(model)[1]
 
 
 def _prompt_and_images(messages: list[dict[str, Any]], folder: Path) -> tuple[str, list[Path]]:
@@ -73,8 +86,10 @@ class CodexClient:
             folder = Path(tmp)
             prompt, images = _prompt_and_images(req.messages, folder)
             out = folder / "odpowiedz.txt"
+            codex_model, effort = parse_model(req.model)
             args = [self.exe, "exec", "--skip-git-repo-check", "--ephemeral", "--sandbox", "read-only", "-C", str(folder),
-                    "-c", f'model_reasoning_effort="{effort_of(req.model)}"', "-o", str(out)]
+                    *(["-m", codex_model] if codex_model else []),
+                    "-c", f'model_reasoning_effort="{effort}"', "-o", str(out)]
             for img in images:
                 args += ["-i", str(img)]
             try:

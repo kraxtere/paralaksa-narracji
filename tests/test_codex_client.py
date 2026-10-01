@@ -50,6 +50,18 @@ def test_refuses_ci_and_ultra(monkeypatch):
         C.CodexClient(exe="codex.exe")
     with pytest.raises(ValueError):
         C.effort_of("codex:ultra")
+    with pytest.raises(ValueError):
+        C.parse_model("codex:gpt-6.1-sol:xhigh")
+
+
+def test_model_and_effort_in_name(monkeypatch):
+    monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
+    monkeypatch.delenv("CI", raising=False)
+    assert C.parse_model("codex") == (None, "medium") and C.parse_model("codex:high") == (None, "high")
+    assert C.parse_model("codex:gpt-6.1-sol:low") == ("gpt-6.1-sol", "low")
+    seen = {}
+    C.CodexClient(exe="codex.exe", run=fake_run(seen=seen)).complete(req("x", model="codex:gpt-6.1-sol"))
+    assert seen["args"][seen["args"].index("-m") + 1] == "gpt-6.1-sol" and 'model_reasoning_effort="medium"' in seen["args"]
 
 
 def test_build_client_routes_codex(monkeypatch):

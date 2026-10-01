@@ -5,8 +5,10 @@ models:
   # Ekstrakcja na DeepSeek V4-Pro zamiast Sonnet 5/Haiku ze SPEC: porównanie 2026-09-23 na 26 artykułach,
   # ~7,7x taniej przy tej samej liczbie sygnałów (decyzja i metodologia w CLAUDE.md). Wymaga DEEPSEEK_API_KEY.
   extract: deepseek-v4-pro
-  # Synteza: Sonnet 5 bez myślenia – porównanie 2026-09-23 z DeepSeek V4-Pro (z/bez myślenia), CLAUDE.md.
-  synthesize: claude-sonnet-5
+  # Synteza: od 2026-10-01 raport okładkowy lokalnie przez Codex (limit abonamentu, 0 $; w CI odmawia, Actions
+  # liczy tylko ekstrakcję). Test 8 modeli na 30.09 w CHANGELOG. Zapas bez Codexa: deepseek-v4-pro z thinking: enabled,
+  # effort: high (ok. 0,09 $). Do 30.09: claude-sonnet-5 bez myślenia, pełny raport (CLAUDE.md).
+  synthesize: codex:gpt-6.1-sol:medium
   curiosities: claude-haiku-4-5-20251001
 
 thresholds:
@@ -48,6 +50,7 @@ report:
   thinking: disabled        # wynik porównania 2026-09-23: myślenie u Sonnet 5 nie poprawiło jakości wyraźnie
   effort: null
   est_output_tokens: 6000   # szacunek do kontroli budżetu (zmierzone: ~3–4 tys. na wywołanie)
+  form: okladka             # okladka: tylko różnice i obraz kraju (okładka 2.0); pelny: wszystkie sekcje (do 30.09)
 
 # Cennik USD za 1M tokenów (stan 2026-09); Batches API: batch_discount.
 pricing:

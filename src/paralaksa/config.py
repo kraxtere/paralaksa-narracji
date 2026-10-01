@@ -68,6 +68,9 @@ class ReportSettings(BaseModel):
     thinking: Literal["disabled", "adaptive", "enabled"] = "disabled"
     effort: Literal["low", "medium", "high", "max"] | None = None
     est_output_tokens: int = 6000
+    # "okladka": tylko różnice i obraz kraju na okładkę 2.0, z odchudzoną paczką (decyzja 2026-10-01, test modeli
+    # w CHANGELOG); "pelny": wszystkie sekcje SPEC §10 z pełnej paczki (raporty do 30.09)
+    form: Literal["okladka", "pelny"] = "pelny"
 
     def resolved_output_dir(self, root: Path | None = None) -> Path:
         return self.output_dir if self.output_dir.is_absolute() else (root or PROJECT_ROOT) / self.output_dir
@@ -133,6 +136,8 @@ class Pricing(BaseModel):
     def cost(self, model: str, input_tokens: int, output_tokens: int, batch: bool = False, at=None) -> float:
         if model.startswith("deepseek"):
             return self.deepseek.cost(model, input_tokens, output_tokens, at=at)
+        if model.split(":")[0] == "codex":   # limit abonamentu, nie płatne API (codex_client)
+            return 0.0
         price = self.models.get(model)
         if price is None:
             raise ValueError(f"brak cennika dla modelu '{model}' w settings.yaml (pricing.models)")

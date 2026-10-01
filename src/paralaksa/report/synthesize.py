@@ -25,6 +25,11 @@ from paralaksa.report.validate import sanitize_report, validate_report
 log = logging.getLogger(__name__)
 
 DEFAULT_PROMPT = PROJECT_ROOT / "prompts" / "synthesize_report.md"
+COVER_PROMPT = PROJECT_ROOT / "prompts" / "synthesize_cover.md"
+# Okładka 2.0 bierze z raportu tylko różnice i obraz kraju; reszta paczki (porównania wewnątrz krajów, tematy,
+# zbieżności) to ok. 70% tokenów. Test 2026-09-30: 155 tys. znaków promptu zamiast 530 tys.
+COVER_KEYS = ("data", "publikacje", "progi", "linia_bazowa", "kraje", "metryka_js", "mianowniki_zrodel",
+              "rozbieznosci", "autoobraz", "autoobraz_pominiete")
 
 
 @dataclass
@@ -62,6 +67,17 @@ def _strip(value):
     if isinstance(value, list):
         return [_strip(v) for v in value]
     return value
+
+
+def cover_package(package: dict) -> dict:
+    """Package of the cover report: divergences and self-image only; the evidence registry keeps just the signals shown
+    there, so the validator rejects citations of anything the model could not see."""
+    out = {k: package[k] for k in COVER_KEYS if k in package}
+    shown = {s["signal_id"] for item in package.get("rozbieznosci", []) for c in item["kraje"] for s in c.get("sygnaly", [])}
+    shown |= {s["signal_id"] for item in package.get("autoobraz", [])
+              for key in ("sygnaly_wlasne", "sygnaly_zewnetrzne") for s in item.get(key, [])}
+    out["dowody"] = [s for s in package.get("dowody", []) if s["signal_id"] in shown]
+    return out
 
 
 def llm_payload(package: dict) -> dict:

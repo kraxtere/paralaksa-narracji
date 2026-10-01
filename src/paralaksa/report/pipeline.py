@@ -15,7 +15,7 @@ from paralaksa.aggregate.package import build_data_package, known_article_ids
 from paralaksa.config import Settings, Source, Theme
 from paralaksa.report.render import collect_meta, render_markdown
 from paralaksa.report.schema import ReportOutput
-from paralaksa.report.synthesize import SynthStats, load_prompt, run_synthesis
+from paralaksa.report.synthesize import COVER_PROMPT, DEFAULT_PROMPT, SynthStats, cover_package, load_prompt, run_synthesis
 
 
 # Brak więcej niż 1/3 aktywnych źródeł blokuje przebieg; mniej to ostrzeżenie informacyjne.
@@ -90,7 +90,10 @@ def generate_report(
         stats = SynthStats(model=settings.models.synthesize, prompt_version=load_prompt()[1],
                            warnings=["brak sygnałów z tego dnia – synteza pominięta"])
     else:
-        report, stats = run_synthesis(conn, llm, settings, package, known_article_ids(conn, day), now=now)
+        cover = settings.report.form == "okladka"
+        report, stats = run_synthesis(conn, llm, settings, cover_package(package) if cover else package,
+                                      known_article_ids(conn, day), now=now,
+                                      prompt_path=COVER_PROMPT if cover else DEFAULT_PROMPT)
 
     if not any(report.model_dump().values()):
         stats.warnings.append("synteza nie dostarczyła żadnych tez; raport jest niepełny")
