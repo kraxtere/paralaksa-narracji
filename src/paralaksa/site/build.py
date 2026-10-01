@@ -60,8 +60,9 @@ THEME_INIT = ('try{document.documentElement.dataset.theme=localStorage.getItem("
               '(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch(e){}')
 
 
-def page(title: str, kind: str, payload: dict, root: str) -> str:
-    """HTML shell; `kind` picks the page script (event, daily, index)."""
+def page(title: str, kind: str, payload: dict, root: str, tv: bool = False) -> str:
+    """HTML shell; `kind` picks the page script (event, daily, index); `tv` adds the Telewizja tab."""
+    tv_link = f'<a href="{root}telewizja.html">Telewizja</a>' if tv else ""
     data = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     return f"""<!doctype html>
 <html lang="pl">
@@ -80,7 +81,7 @@ def page(title: str, kind: str, payload: dict, root: str) -> str:
 <body data-kind="{kind}" data-root="{root}">
 <header class="top">
   <a class="brand" href="{root}index.html" aria-label="Paralaksa">{logo_inline()}</a>
-  <nav><a href="{root}index.html#zdarzenia">Zdarzenia</a><a href="{root}index.html#dziennik">Dziennik</a><a href="{root}telewizja.html">Telewizja</a><a href="{root}v2/index.html">2.0</a></nav>
+  <nav><a href="{root}index.html#zdarzenia">Zdarzenia</a><a href="{root}index.html#dziennik">Dziennik</a>{tv_link}<a href="{root}v2/index.html">2.0</a></nav>
   <span class="internal">wersja wewnętrzna, do oceny</span>
   <button class="theme" id="theme" type="button" title="Tryb jasny albo ciemny"><span aria-hidden="true">◐</span><span class="lbl">tryb</span></button>
 </header>
@@ -98,7 +99,8 @@ def build_site(out_dir: Path, events_dir: Path, reports_dir: Path, conn: sqlite3
                v2_dir: Path | None = None) -> SiteResult:
     """`stories_for(day, eligible_ids)` returns the cached or freshly generated stories of the day (or None),
     `titles_for(day, article_ids)` Polish headlines by article id, `tv_payload` the data of the Telewizja page
-    (`gdelt.tv_views.build`; without it the page says there is no data)."""
+    (`gdelt.tv_views.build`; None: no Telewizja page and no tab, the default since 2026-10-01)."""
+    tv_on = tv_payload is not None
     res = SiteResult(out_dir)
     if out_dir.exists():
         shutil.rmtree(out_dir)
@@ -120,7 +122,7 @@ def build_site(out_dir: Path, events_dir: Path, reports_dir: Path, conn: sqlite3
     if conn is not None:
         for day in daily_days(conn):
             p = daily_payload(conn, day, load_report(reports_dir, day), theme_names, summaries, stories_for, titles_for)
-            (out_dir / "dziennik" / f"{day}.html").write_text(page(f"Dziennik {day}", "daily", p, "../"),
+            (out_dir / "dziennik" / f"{day}.html").write_text(page(f"Dziennik {day}", "daily", p, "../", tv_on),
                                                              encoding="utf-8")
             days.append(daily_summary(p))
             res.days.append(day)
@@ -128,15 +130,16 @@ def build_site(out_dir: Path, events_dir: Path, reports_dir: Path, conn: sqlite3
 
     for ev in events:
         ev["dni_bazy"] = res.days
-        (out_dir / "zdarzenia" / f"{ev['id']}.html").write_text(page(ev["tytul"] or ev["id"], "event", ev, "../"),
+        (out_dir / "zdarzenia" / f"{ev['id']}.html").write_text(page(ev["tytul"] or ev["id"], "event", ev, "../", tv_on),
                                                                encoding="utf-8")
         res.events.append(ev["id"])
 
     index = {"zdarzenia": summaries, "dni": days, "kraje": COUNTRY_NAMES,
              "zbudowano": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")}
-    (out_dir / "index.html").write_text(page("Przegląd", "index", index, ""), encoding="utf-8")
-    tv = tv_payload if tv_payload and tv_payload.get("days") else {"channels": {}, "blocs": [], "days": [], "data": {}, "pdf": ""}
-    (out_dir / "telewizja.html").write_text(page("Telewizja", "tv", tv, ""), encoding="utf-8")
+    (out_dir / "index.html").write_text(page("Przegląd", "index", index, "", tv_on), encoding="utf-8")
+    if tv_on:
+        tv = tv_payload if tv_payload.get("days") else {"channels": {}, "blocs": [], "days": [], "data": {}, "pdf": ""}
+        (out_dir / "telewizja.html").write_text(page("Telewizja", "tv", tv, "", True), encoding="utf-8")
     (out_dir / "logo.svg").write_text(logo_file("logo-jasne-tlo"), encoding="utf-8")
     (out_dir / "logo-ciemne-tlo.svg").write_text(logo_file("logo-ciemne-tlo"), encoding="utf-8")
     # instalacja jako aplikacja (Chrome, Edge, Android; iOS: „Do ekranu początkowego”)
@@ -150,14 +153,30 @@ def build_site(out_dir: Path, events_dir: Path, reports_dir: Path, conn: sqlite3
 def copy_v2(src: Path | None, dest: Path) -> list[str]:
     """Wersja 2.0 (prototyp obrazkowy, data/widok/<dzień>/ z data/widok_obrazkowy.py): kopiuje gotowe strony i obrazy,
     bez plików roboczych (nazwy od „_”), i dopisuje v2/index.html z listą dni (najnowszy otwiera się od razu),
-    v2/dni.json i wspólny pasek v2/pasek.js."""
-    days = sorted((d.name for d in src.iterdir() if d.is_dir() and (d / "index.html").exists()), reverse=True) \
-        if src and src.exists() else []
-    for day in days:
-        (dest / day).mkdir(parents=True, exist_ok=True)
-        for f in (src / day).iterdir():
+    v2/dni.json i wspólny pasek v2/pasek.js. Oś tygodnia (data/os_tygodnia.py, widok/tydzien/<ostatni dzień>/) trafia
+    do v2/tydzien/, a jej lista z miniaturami do v2/tydzien.json (pasek pokazuje z niej wejście na stronach dnia)."""
+    def found(root: Path) -> list[str]:
+        return sorted((d.name for d in root.iterdir() if d.is_dir() and re.fullmatch(r"\d{4}-\d{2}-\d{2}", d.name)
+                       and (d / "index.html").exists()), reverse=True) if root.exists() else []
+
+    def copy(folder: Path, to: Path) -> None:
+        to.mkdir(parents=True, exist_ok=True)
+        for f in folder.iterdir():
             if f.is_file() and not f.name.startswith("_") and f.suffix in (".html", ".png"):
-                shutil.copy2(f, dest / day / f.name)
+                shutil.copy2(f, to / f.name)
+
+    days = found(src) if src else []
+    weeks = found(src / "tydzien") if days else []
+    for day in days:
+        copy(src / day, dest / day)
+    for week in weeks:
+        copy(src / "tydzien" / week, dest / "tydzien" / week)
+    if weeks:
+        first = {w: json.loads((src / "tydzien" / w / "plan.json").read_text(encoding="utf-8"))["dni"][0] for w in weeks}
+        (dest / "tydzien.json").write_text(json.dumps(
+            [{"koniec": w, "od": first[w], "obrazki": sorted((f.name for f in (dest / "tydzien" / w).glob("ev-*.png")),
+                                                            key=lambda n: int(n[3:-4]))[:6]} for w in weeks]),
+            encoding="utf-8")
     if days:
         (dest / "dni.json").write_text(json.dumps(days), encoding="utf-8")   # przełącznik dni na stronach dnia
         # wspólny pasek i stopka wszystkich stron 2.0 (strony mają tylko <div id="pasek"> i ten skrypt)

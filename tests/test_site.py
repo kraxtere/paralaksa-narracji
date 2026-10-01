@@ -150,7 +150,7 @@ def test_build_site_self_contained(tmp_path, conn):
         assert 'content="noindex, nofollow"' in page
         assert 'rel="icon" href="data:image/svg+xml,' in page and 'id="theme"' in page   # logo i tryb ciemny bez plików obok
     assert (out / "logo.svg").read_text(encoding="utf-8").startswith("<svg")
-    assert (out / "telewizja.html").exists() and 'href="../telewizja.html">Telewizja</a>' in daily   # zakładka TV
+    assert not (out / "telewizja.html").exists() and "telewizja.html" not in daily   # TV domyślnie wyłączona (2026-10-01)
     manifest = json.loads((out / "manifest.webmanifest").read_text(encoding="utf-8"))   # instalacja jako aplikacja
     assert manifest["display"] == "standalone" and {i["sizes"] for i in manifest["icons"]} == {"192x192", "512x512"}
     for icon in manifest["icons"]:
@@ -164,6 +164,11 @@ def test_build_site_self_contained(tmp_path, conn):
     assert data["zdarzenia"] == [{"id": "2026-09-23-test", "tytul": "Zdarzenie testowe"}]
     # bez pełnych tekstów, leadów i cytatów dowodowych
     assert "Lead." not in daily and "dowód" not in daily
+
+    with_tv = tmp_path / "site-tv"   # plx site --z-tv: zakładka i strona Telewizji wracają
+    build_site(with_tv, events, reports, conn, {t.id: t.name_pl for t in load_themes()}, tv_payload={})
+    daily_tv = (with_tv / "dziennik" / f"{DAY}.html").read_text(encoding="utf-8")
+    assert (with_tv / "telewizja.html").exists() and 'href="../telewizja.html">Telewizja</a>' in daily_tv
 
 
 def test_standouts_more_and_less():
@@ -214,10 +219,19 @@ def test_v2_copies_finished_views_without_work_files(tmp_path):
     for name in ("index.html", "start.png", "temat-x.html", "_podglad-index.html", "tematy.json"):
         (day / name).write_text("x", encoding="utf-8")
     (tmp_path / "widok" / "2026-09-30").mkdir()          # bez index.html: pominięty
+    week = tmp_path / "widok" / "tydzien" / "2026-09-29"  # oś tygodnia: osobny folder, nie dzień
+    week.mkdir(parents=True)
+    for name in ("index.html", "ev-2.png", "ev-10.png", "ev-1.png", "_obrazki.log"):
+        (week / name).write_text("x", encoding="utf-8")
+    (week / "plan.json").write_text(json.dumps({"dni": ["2026-09-23", "2026-09-29"]}), encoding="utf-8")
     assert copy_v2(tmp_path / "widok", tmp_path / "v2") == ["2026-09-29"]
     assert sorted(p.name for p in (tmp_path / "v2" / "2026-09-29").iterdir()) == ["index.html", "start.png", "temat-x.html"]
     assert "2026-09-29/index.html" in (tmp_path / "v2" / "index.html").read_text(encoding="utf-8")
     assert json.loads((tmp_path / "v2" / "dni.json").read_text(encoding="utf-8")) == ["2026-09-29"]
+    assert sorted(p.name for p in (tmp_path / "v2" / "tydzien" / "2026-09-29").iterdir()) == [
+        "ev-1.png", "ev-10.png", "ev-2.png", "index.html"]
+    assert json.loads((tmp_path / "v2" / "tydzien.json").read_text(encoding="utf-8")) == [
+        {"koniec": "2026-09-29", "od": "2026-09-23", "obrazki": ["ev-1.png", "ev-2.png", "ev-10.png"]}]
     bar = (tmp_path / "v2" / "pasek.js").read_text(encoding="utf-8")                  # wspólny pasek z logo w środku
     assert "__LOGO__" not in bar and "<svg" in bar and "dni.json" in bar and "Stara wersja" in bar
     assert copy_v2(None, tmp_path / "brak") == []

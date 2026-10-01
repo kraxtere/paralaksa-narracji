@@ -53,6 +53,31 @@
     }).catch(() => {});
   }
 
+  // Wejście na oś tygodnia (v2/tydzien.json, gdy jest): pasek z miniaturami pod paskiem strony dnia; tydzień,
+  // który obejmuje ten dzień, a gdy żaden: najnowszy
+  if (!("wstecz" in box.dataset)) {
+    fetch(new URL("tydzien.json", base), { cache: "no-store" }).then(r => r.ok ? r.json() : []).then(weeks => {
+      const w = weeks.find(x => x.od <= day && day <= x.koniec) || weeks[0];
+      if (!w) return;
+      const dir = new URL("tydzien/" + w.koniec + "/", base).href;
+      const st = document.createElement("style");
+      st.textContent =
+        ".tydz{display:flex;align-items:center;gap:12px;max-width:720px;margin:10px auto 0;padding:8px 12px;box-sizing:border-box;" +
+        "background:#fbf8f2;border:1px solid #ddd5c7;border-radius:12px;text-decoration:none;color:#1d1b18;font:14px Segoe UI,sans-serif}" +
+        ".tydz .mini{display:flex;flex:none}.tydz .mini img{width:44px;height:44px;border-radius:8px;object-fit:cover;" +
+        "border:2px solid #fbf8f2;margin-left:-14px;background:#ebe4d6}.tydz .mini img:first-child{margin-left:0}" +
+        ".tydz b{display:block;color:#8a3b2a}.tydz span{color:#7a746a;font-size:.9em}.tydz i{margin-left:auto;font-style:normal;" +
+        "color:#8a3b2a;font-size:1.3em}@media(max-width:740px){.tydz{margin:10px 10px 0}}";
+      document.head.append(st);
+      const a = document.createElement("a");
+      a.className = "tydz";
+      a.href = dir + "index.html";
+      a.innerHTML = `<span class="mini">${w.obrazki.slice(0, 4).map(f => `<img src="${dir + f}" alt="">`).join("")}</span>` +
+        `<span><b>Tydzień w prasie · ${short(w.od)}–${short(w.koniec)}</b><span>Najważniejsze sprawy po kolei</span></span><i>›</i>`;
+      box.after(a);
+    }).catch(() => {});
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     const foot = document.createElement("footer");
     foot.className = "stopka";

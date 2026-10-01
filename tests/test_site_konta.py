@@ -396,6 +396,7 @@ def test_sections_and_timeline_for_the_owner_panel(monkeypatch, tmp_path):
     assert sec("/v2/2026-09-30/index.html@tematy") == "tematy" and sec("/v2/2026-09-30/index.html@okladka") == "okladka"
     assert sec("/v2/2026-09-30/index.html") == "okladka" and sec("/v2/index.html") == "okladka"
     assert sec("/dziennik/2026-09-30.html#raport") == "stara" and sec("/index.html") == "stara"
+    assert sec("/v2/tydzien/2026-09-30/index.html#fairford") == "tydzien"
     t = lambda h, m: konta.parse_iso(f"2026-10-01T{h:02d}:{m:02d}:00Z")
     ivs = [{"u": "ala", "od": t(6, 0), "do": t(6, 1), "p": "/v2/2026-10-01/temat-russia.html"},
            {"u": "ala", "od": t(6, 1), "do": t(6, 2), "p": "/v2/2026-10-01/index.html@tematy"},   # sklejone z poprzednim

@@ -274,7 +274,8 @@ def site(
                                     help="Nie wywołuj modelu: historie dnia i tłumaczenia nagłówków tylko z zapisanych."),
     stories_dir: Path = typer.Option(Path("data/stories"), "--historie-dir", help="Zapisane historie dnia (JSON)."),
     titles_dir: Path = typer.Option(Path("data/tytuly"), "--tytuly-dir", help="Zapisane tłumaczenia nagłówków (JSON)."),
-    no_tv: bool = typer.Option(False, "--bez-tv", help="Bez pobierania raportów TV; zakładka Telewizja z zapisanych."),
+    with_tv: bool = typer.Option(False, "--z-tv", help="Z zakładką Telewizja (raporty TV GDELT, tłumaczenia i historie, "
+                                 "ok. 0,2 $ dziennie). Domyślnie bez (decyzja 2026-10-01: skupiamy się na prasie)."),
     tv_days: int = typer.Option(7, "--tv-dni", min=1, max=31, help="Ile ostatnich dni w zakładce Telewizja."),
     config_dir: Path = ConfigDir,
     db_path: Optional[Path] = DbPath,
@@ -354,7 +355,7 @@ def site(
     tv_cache = Path("data/gdelt/tv")
     tv_client = None
     tv_clients: dict = {}
-    if not no_stories:
+    if with_tv and not no_stories:
         try:
             tv_client = build_client(tv_pl.MODEL, settings.pricing, settings.extract.batch_poll_interval_s,
                                      settings.extract.batch_timeout_h)
@@ -401,8 +402,8 @@ def site(
             typer.echo(f"Historie TV {day}: {len(out['historie'])} ({out['cost_usd']:.3f} $)")
         return out["historie"] if not out["errors"] else None
 
-    tv_payload = _tv_payload(tv_days, None, tv_cache, config_dir, download=not no_tv, pl_for=tv_pl_for,
-                             stories_for=tv_stories_for)
+    tv_payload = _tv_payload(tv_days, None, tv_cache, config_dir, pl_for=tv_pl_for,
+                             stories_for=tv_stories_for) if with_tv else None
     for day, usd in sorted(tv_spent.items()):
         typer.echo(f"Tłumaczenia TV {day}: {usd:.3f} $")
     try:
@@ -415,7 +416,7 @@ def site(
         typer.echo(f"OSTRZEŻENIE: {err}", err=True)
     if spent:
         typer.echo(f"Koszt modelu (historie dnia, tłumaczenia nagłówków, raporty i historie TV): {spent:.3f} $")
-    typer.echo(f"Zdarzenia: {len(res.events)}, dni dziennika: {len(res.days)}, dni telewizji: {len(tv_payload['days'])}. "
+    typer.echo(f"Zdarzenia: {len(res.events)}, dni dziennika: {len(res.days)}, dni telewizji: {len(tv_payload['days']) if tv_payload else 'bez zakładki'}. "
                f"Start: {out_dir / 'index.html'}")
     if make_zip:
         typer.echo(f"Paczka: {zip_site(out_dir)}")
