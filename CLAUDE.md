@@ -114,7 +114,8 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
 - `src/paralaksa/site/`: `plx site`. `data.py` składa dane stron (karty: wątki, typ, oś czasu, link do naszej bazy;
   dzień: próbka z okna publikacji, sygnały, metryki, raport), `build.py` pisze samowystarczalne HTML (CSS, JS i dane w pliku,
   działa z file://), `assets/*.js` renderuje widoki.
-  Kolory tylko przez zmienne CSS (jest tryb ciemny `[data-theme="dark"]`); logo: `build.logo_mark`. Bez pełnych tekstów, leadów i `evidence_span`. Nie publikujemy otwarcie (decyzja 2026-09-25); od 2026-09-26 strona
+  Kolory tylko przez zmienne CSS (jest tryb ciemny `[data-theme="dark"]`); logo (od 2026-10-01 „Gazeta w kadrze”):
+  SVG w `site/assets/logo/` (`build.logo_file`, `logo_inline`), ikony aplikacji PNG gotowe w `site/assets/icons/`. Bez pełnych tekstów, leadów i `evidence_span`. Nie publikujemy otwarcie (decyzja 2026-09-25); od 2026-09-26 strona
   jest dostępna tylko pod hasłem: `plx site --publikuj` (`site/publish.py`) wypycha ją jednym commitem (force push) do prywatnego repo
   `SITE_REPO` (`kraxtere/paralaksa-strona`, odmawia, gdy repo nie jest prywatne), Render (darmowy Web Service) uruchamia `site/hosting/server.py`
   z HTTP Basic Auth (`SITE_USER`/`SITE_PASSWORD` tylko w Renderze; bez nich 503; bez hasła tylko manifest i ikony
@@ -149,6 +150,9 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
   a `plx site` kopiuje go do `v2/` (`build.copy_v2`, pliki od „_” pomija). Link „2.0” jest w menu.
   Od 2026-10-01 wersja 2.0 jest podstawowa: serwer pod `/` przekierowuje do najnowszego dnia z `v2/dni.json`,
   stara wersja zostaje pod `/index.html` (link „Stara wersja” na stronach 2.0); `start_url` aplikacji to `./`.
+  Tytuł okładki nowych dni: „Przegląd prasy · DD.MM” (`data/widok_powitanie.py`). Panel `/osoby` liczy czas według części
+  strony (`server.section_of`: okładka, sprawy, różnice, obraz kraju, tematy, stara wersja); strona dnia oznacza okładkę
+  i siatkę tematów `data-sekcja`.
 - `.github/workflows/daily.yml`: cron 10:30 UTC (poza szczytem DeepSeek; GitHub opóźnia start nawet o 4–5 h), baza jako zaszyfrowany snapshot w Release `database-backup` (cache i artefakt to kopie), commit `reports/`. Kod 1 tylko przy ostrzeżeniach blokujących (synteza, ekstrakcja, brak >1/3 aktywnych źródeł); pojedynczy kanał/źródło to ostrzeżenie informacyjne.
 
 ## Konwencje

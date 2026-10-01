@@ -49,13 +49,17 @@ FAILS: dict[str, list[float]] = {}
 FAIL_LOCK = threading.Lock()
 TITLES: dict[str, str] = {}                 # ścieżka strony -> <title>, do listy czytanych stron
 
-HEARTBEAT = (b'<script>(()=>{let last="";const cur=()=>location.pathname+location.hash,send=k=>fetch("/_ping?k="+k+'
-             b'"&p="+encodeURIComponent(cur()),{cache:"no-store",credentials:"same-origin",keepalive:true}).catch(()=>{}),'
-             b'ping=()=>{if(document.visibilityState==="visible"){last=cur();send("p")}};'
-             b'setInterval(ping,' + str(konta.PING_S * 1000).encode() + b');'
+# sygnał co minutę, gdy karta jest widoczna; „h” od razu po schowaniu; strona z #zakładką i @sekcją (data-sekcja na
+# stronie dnia 2.0: okładka albo tematy, sprawdzane po kliknięciu i po przewinięciu)
+HEARTBEAT = (b'<script>(()=>{let last="",t;const sek=()=>{const e=document.elementFromPoint(innerWidth/2,innerHeight/2),'
+             b's=e&&e.closest("[data-sekcja]");return s?"@"+s.dataset.sekcja:""},cur=()=>location.pathname+location.hash+sek(),'
+             b'send=k=>fetch("/_ping?k="+k+"&p="+encodeURIComponent(cur()),{cache:"no-store",credentials:"same-origin",'
+             b'keepalive:true}).catch(()=>{}),ping=()=>{if(document.visibilityState==="visible"){last=cur();send("p")}},'
+             b'check=()=>{if(cur()!==last)ping()};setInterval(ping,' + str(konta.PING_S * 1000).encode() + b');'
              b'document.addEventListener("visibilitychange",()=>document.visibilityState==="visible"?ping():send("h"));'
-             b'addEventListener("click",()=>setTimeout(()=>{if(cur()!==last)ping()},300));'
-             b'if(location.hash)ping();else last=cur()})()</script>')
+             b'addEventListener("click",()=>setTimeout(check,300));'
+             b'addEventListener("scroll",()=>{clearTimeout(t);t=setTimeout(check,1500)},{passive:true});'
+             b'addEventListener("load",check);last=location.pathname;check()})()</script>')
 OWNER_LINK = (b'<a href="/osoby" style="position:fixed;right:10px;bottom:10px;z-index:99;padding:6px 10px;'
               b'background:#1d1b18;color:#f4f0e8;border-radius:8px;font:13px Segoe UI,sans-serif;text-decoration:none">'
               b'Osoby</a>')
@@ -66,7 +70,22 @@ CSS = ("body{margin:0;background:#f4f0e8;color:#1d1b18;font:15px/1.5 Segoe UI,sa
        "6px 8px;border:1px solid #bdb6a8;border-radius:6px}button{font:inherit;padding:6px 12px;border:0;border-radius:6px;"
        "background:#8a3b2a;color:#fff;cursor:pointer}button.l{background:#5a554c;padding:4px 8px;font-size:.85em;margin:2px 0}form.i{display:inline}code{word-break:break-all;"
        "background:#efe8da;padding:2px 4px;border-radius:4px}a{color:#8a3b2a}summary{cursor:pointer;color:#8a3b2a}"
-       "ol{margin:4px 0;padding-left:20px}.t{overflow-x:auto}")
+       "ol{margin:4px 0;padding-left:20px}.t{overflow-x:auto}"
+       # panel /osoby: wiersz osoby rozwijany na całą szerokość, udział części strony, oś czasu dnia
+       ".hd,.os>summary{display:grid;grid-template-columns:minmax(0,1fr) 96px 58px 58px;gap:8px;align-items:center;"
+       "padding:8px 6px}.hd{font-weight:600;border-bottom:1px solid #ddd5c7;font-size:.9em}.os{border-bottom:1px solid #ddd5c7}"
+       ".os>summary{list-style:none;color:inherit}.os>summary::-webkit-details-marker{display:none}"
+       ".os>summary .n::before{content:'▸ ';color:#8a3b2a}.os[open]>summary .n::before{content:'▾ '}"
+       ".os[open]>summary{background:#fbf8f2}.more{padding:2px 6px 16px}.more h3{font-size:.95em;margin:14px 0 4px}"
+       ".mix{display:flex;height:14px;border-radius:7px;overflow:hidden;background:#e6dfd2;margin:6px 0}"
+       ".leg{display:flex;flex-wrap:wrap;gap:2px 14px;font-size:.85em}.leg i{display:inline-block;width:10px;height:10px;"
+       "border-radius:2px;margin-right:5px}.tl{display:grid;grid-template-columns:62px minmax(0,1fr) 52px;gap:8px;"
+       "align-items:center;font-size:.85em;margin:3px 0}.tr{position:relative;height:16px;border-radius:3px;background:"
+       "#e9e2d5 repeating-linear-gradient(90deg,transparent 0 calc(var(--h,4.1667%) - 1px),#ddd4c4 calc(var(--h,4.1667%) - 1px) "
+       "var(--h,4.1667%))}.tr i{position:absolute;"
+       "top:0;bottom:0;min-width:2px}.sc .tr{background:none;height:14px}.sc b{position:absolute;transform:translateX(-50%);"
+       "font-weight:400;color:#7a746a;font-size:.85em}.ses{margin:4px 0;padding-left:18px}.ses li{margin:4px 0}"
+       ".acts{margin-top:12px}")
 
 
 def local(dt) -> str:
@@ -75,6 +94,109 @@ def local(dt) -> str:
         return dt.astimezone(ZoneInfo("Europe/Warsaw")).strftime("%d.%m %H:%M")
     except Exception:
         return dt.strftime("%d.%m %H:%M UTC")
+
+
+# część strony -> (nazwa, kolor): wersja 2.0 według rodzaju strony, stara wersja w całości
+SECTIONS = {
+    "okladka": ("Okładka", "#6b655b"),
+    "sprawy": ("Sprawy dnia", "#8a3b2a"),
+    "roznice": ("Gdzie prasa się różni", "#c47f2c"),
+    "obraz": ("Obraz kraju", "#3f6f8a"),
+    "tematy": ("Tematy dnia", "#4f7a4a"),
+    "stara": ("Stara wersja", "#b3ada2"),
+}
+V2_PAGE = re.compile(r"^/v2/(\d{4}-\d{2}-\d{2})/(.*)$")
+WEEKDAYS = ("pn", "wt", "śr", "cz", "pt", "sb", "nd")
+
+
+def section_of(place: str) -> str:
+    """Part of the site of a visited place ("/v2/<dzień>/temat-x.html", "/index.html#dziennik", "...index.html@tematy")."""
+    base, _, part = place.partition("@")
+    path = base.partition("#")[0]
+    if not path.startswith("/v2/"):
+        return "stara"
+    found = V2_PAGE.match(path)
+    name = found.group(2) if found else ""
+    for prefix, key in (("sprawa-", "sprawy"), ("roznica-", "roznice"), ("obraz-kraju", "obraz"), ("temat-", "tematy")):
+        if name.startswith(prefix):
+            return key
+    return "tematy" if part == "tematy" else "okladka"      # strona dnia: okładka u góry, siatka tematów niżej
+
+
+def warsaw(dt):
+    try:
+        from zoneinfo import ZoneInfo
+        return dt.astimezone(ZoneInfo("Europe/Warsaw"))
+    except Exception:
+        return dt
+
+
+def by_section(ivs: list[dict]) -> dict[str, float]:
+    out: dict[str, float] = {}
+    for iv in ivs:
+        key = section_of(iv["p"])
+        out[key] = out.get(key, 0.0) + (iv["do"] - iv["od"]).total_seconds()
+    return out
+
+
+def mix_bar(seconds: dict[str, float]) -> str:
+    """Stacked bar and legend: how the time splits between the parts of the site."""
+    total = sum(seconds.values())
+    if not total:
+        return '<p class="s">Brak zapisanego czasu.</p>'
+    keys = [k for k in SECTIONS if seconds.get(k)]
+    bar = "".join(f'<i style="width:{seconds[k] / total * 100:.2f}%;background:{SECTIONS[k][1]}" '
+                  f'title="{SECTIONS[k][0]}: {minutes(seconds[k])}"></i>' for k in keys)
+    legend = "".join(f'<span><i style="background:{SECTIONS[k][1]}"></i>{SECTIONS[k][0]} {minutes(seconds[k])}</span>'
+                     for k in keys)
+    return f'<div class="mix">{bar}</div><div class="leg">{legend}</div>'
+
+
+def timeline(ivs: list[dict], days: int = 7) -> str:
+    """One strip per day (Polish time, newest first): when the person read and which part of the site. All strips share
+    one scale, cut to the hours with reading (at least 6), so a 20-minute visit is not a hairline on a phone."""
+    per_day: dict = {}
+    for iv in ivs:
+        a, b, key = warsaw(iv["od"]), warsaw(iv["do"]), section_of(iv["p"])
+        while a < b:
+            end = min(b, (a + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0))
+            per_day.setdefault(a.date(), []).append([a, end, key])
+            a = end
+    shown = sorted(per_day, reverse=True)[:days]
+    if not shown:
+        return ""
+
+    def hours(t) -> float:
+        return t.hour + t.minute / 60 + t.second / 3600
+
+    first = min(hours(a) for d in shown for a, _, _ in per_day[d])
+    last = max(hours(b) if b.date() == d else 24.0 for d in shown for _, b, _ in per_day[d])
+    lo, hi = max(0, int(first) - 1), min(24, int(last) + 2)
+    if hi - lo < 6:                                     # co najmniej 6 godzin, w miarę możności wcześniej niż później
+        lo = max(0, min(lo, hi - 6))
+        hi = min(24, max(hi, lo + 6))
+    span = hi - lo
+
+    def x(h: float) -> float:
+        return (h - lo) / span * 100
+
+    rows = []
+    for day in shown:
+        merged: list[list] = []
+        for a, b, key in sorted(per_day[day], key=lambda x: x[0]):
+            if merged and merged[-1][2] == key and (a - merged[-1][1]).total_seconds() <= 5:
+                merged[-1][1] = max(merged[-1][1], b)
+            else:
+                merged.append([a, b, key])
+        total = sum((b - a).total_seconds() for a, b, _ in per_day[day])
+        bars = "".join(
+            f'<i style="left:{x(hours(a)):.3f}%;width:{(b - a).total_seconds() / 36 / span:.3f}%;'
+            f'background:{SECTIONS[key][1]}" title="{a:%H:%M}–{b:%H:%M} · {SECTIONS[key][0]}"></i>' for a, b, key in merged)
+        rows.append(f'<div class="tl"><span>{WEEKDAYS[day.weekday()]} {day:%d.%m}</span><div class="tr" '
+                    f'style="--h:{100 / span:.4f}%">{bars}</div><span>{minutes(total)}</span></div>')
+    step = 1 if span <= 8 else 2 if span <= 14 else 3
+    scale = "".join(f'<b style="left:{x(h):.2f}%">{h}</b>' for h in range(lo, hi + 1, step))
+    return "".join(rows) + f'<div class="tl sc"><span></span><div class="tr">{scale}</div><span></span></div>'
 
 
 def page(title: str, body: str) -> bytes:
@@ -383,11 +505,8 @@ class Handler(SimpleHTTPRequestHandler):
             events = []
         people = STORE.people()
         sess = konta.sessions(events)
+        ivs = konta.intervals(events)
         now = STORE.clock()
-        week = [s for s in sess if s["od"] >= now - timedelta(days=7)]
-
-        def total(rows, u):
-            return sum(s["minuty"] for s in rows if s["u"] == u)
 
         def btn(action, login, label, cls="", ask=""):
             confirm = f' data-q="{html.escape(ask)}" onsubmit="return confirm(this.dataset.q)"' if ask else ""
@@ -397,46 +516,59 @@ class Handler(SimpleHTTPRequestHandler):
 
         def places(s):
             seen = s["miejsca"]                      # bez pustego wejścia, gdy strona od razu ustawia zakładkę (#...)
-            items = "".join(f'<li>{html.escape(self._title(p))} <span class="s">{minutes(sec)}</span></li>'
-                            for p, sec in seen.items()
-                            if "#" in p or sec >= 5 or not any(q.startswith(p + "#") for q in seen))
-            return f"<details><summary>{s['strony']}</summary><ol>{items}</ol></details>" if items else str(s["strony"])
+            return " · ".join(f'{html.escape(self._title(p))} <span class="s">{minutes(sec)}</span>'
+                              for p, sec in seen.items()
+                              if "#" in p or "@" in p or sec >= 5 or not any(q.startswith(p + "#") or q.startswith(p + "@")
+                                                                             for q in seen))
 
-        rows = []
+        def person(login, name, status, actions=""):
+            mine = [iv for iv in ivs if iv["u"] == login]
+            week = sum((iv["do"] - iv["od"]).total_seconds() for iv in mine if iv["od"] >= now - timedelta(days=7))
+            last = next((x["do"] for x in sess if x["u"] == login), None)
+            own = [x for x in sess if x["u"] == login][:40]
+            ses = "".join(f'<li><b>{local(x["od"])}–{warsaw(x["do"]):%H:%M}</b> · {x["minuty"]} min<br>{places(x)}</li>'
+                          for x in own)
+            more = (f'<h3>Gdzie (30 dni)</h3>{mix_bar(by_section(mine))}'
+                    + (f"<h3>Oś czasu</h3>{timeline(mine)}" if mine else "")
+                    + (f'<h3>Wizyty</h3><ol class="ses">{ses}</ol>' if ses else "")
+                    + (f'<div class="acts">{actions}</div>' if actions else ""))
+            total = sum((iv["do"] - iv["od"]).total_seconds() for iv in mine)
+            return (f'<details class="os"><summary><span class="n">{html.escape(name)}<br><span class="s">'
+                    f'{html.escape(login)} · {status}</span></span><span>{local(last) if last else "–"}</span>'
+                    f"<span>{minutes(week) if week else '–'}</span><span>{minutes(total) if total else '–'}</span>"
+                    f'</summary><div class="more">{more}</div></details>')
+
+        blocks, gone = [], []
         for login, p in sorted(people.items(), key=lambda kv: kv[1]["imie"].lower()):
             if p.get("usunieta"):
+                gone.append(person(login, p["imie"], "usunięta"))
                 continue
-            status = "zablokowana" if p.get("zablokowana") else ("aktywna" if p.get("hash") else "czeka na ustawienie hasła")
-            last = next((s["do"] for s in sess if s["u"] == login), None)
-            rows.append(f"<tr><td>{html.escape(p['imie'])}<br><span class=\"s\">{html.escape(login)}</span></td>"
-                        f"<td>{status}</td><td>{local(last) if last else '–'}</td><td>{total(week, login)} min</td>"
-                        f"<td>{total(sess, login)} min</td><td>{btn('link', login, 'Nowy link', 'l')} "
-                        + (btn("odblokuj", login, "Odblokuj", "l") if p.get("zablokowana") else btn("zablokuj", login, "Zablokuj", "l"))
-                        + " " + btn("usun", login, "Usuń", "l", f"Usunąć konto: {p['imie']}? Historia wizyt zostanie.")
-                        + "</td></tr>")
-        names = {**{k: v["imie"] + (" (usunięta)" if v.get("usunieta") else "") for k, v in people.items()},
-                 USER: f"{USER} (Ty)"}
-        srows = "".join(f"<tr><td>{html.escape(names.get(s['u'], s['u']))}</td><td>{local(s['od'])}</td>"
-                        f"<td>{local(s['do'])}</td><td>{s['minuty']}</td><td>{places(s)}</td></tr>" for s in sess[:200])
+            status = "zablokowana" if p.get("zablokowana") else ("aktywna" if p.get("hash") else "czeka na hasło")
+            actions = (btn("link", login, "Nowy link", "l") + " "
+                       + (btn("odblokuj", login, "Odblokuj", "l") if p.get("zablokowana")
+                          else btn("zablokuj", login, "Zablokuj", "l"))
+                       + " " + btn("usun", login, "Usuń", "l", f"Usunąć konto: {p['imie']}? Historia wizyt zostanie."))
+            blocks.append(person(login, p["imie"], status, actions))
+        blocks += gone + [person(USER, "Ty", "właściciel")]
+        legend = "".join(f'<span><i style="background:{color}"></i>{label}</span>' for label, color in SECTIONS.values())
         body = (f'<p><a href="/">← Paralaksa</a> · <a href="/wyloguj">Wyloguj</a></p><h1>Osoby</h1>{notice}'
                 f'<form method="post" class="box"><input type="hidden" name="csrf" value="{CSRF}"><input type="hidden" '
                 'name="akcja" value="dodaj"><label>Imię nowej osoby <input name="imie" maxlength="60" required></label> '
                 '<button>Dodaj i utwórz link</button></form>'
-                '<div class="t"><table><tr><th>Osoba</th><th>Status</th><th>Ostatnio</th><th>7 dni</th><th>30 dni</th>'
-                "<th></th></tr>"
-                + ("".join(rows) or '<tr><td colspan="6" class="s">Nikogo jeszcze nie dodano.</td></tr>') + "</table></div>"
-                '<h2>Sesje (30 dni)</h2><div class="t"><table><tr><th>Osoba</th><th>Od</th><th>Do</th><th>Minuty</th>'
-                "<th>Strony</th></tr>"
-                + (srows or '<tr><td colspan="5" class="s">Brak zapisanych wizyt.</td></tr>') + "</table></div>"
-                f'<p class="s">Czas liczony, gdy karta ze stroną jest otwarta i widoczna (sygnał co minutę, koniec od razu '
-                f"po schowaniu karty albo aplikacji); przerwa ponad {konta.SESSION_GAP_S // 60} min zaczyna nową sesję. "
-                "Kliknij liczbę stron, żeby zobaczyć, co było czytane. Godziny polskie."
+                f'<div class="leg">{legend}</div>'
+                '<div class="hd"><span>Osoba</span><span>Ostatnio</span><span>7 dni</span><span>30 dni</span></div>'
+                + ("".join(blocks) if len(blocks) > 1 else '<p class="s">Nikogo jeszcze nie dodano.</p>' + blocks[0])
+                + f'<p class="s">Kliknij osobę, żeby zobaczyć, gdzie i kiedy czytała. Czas liczony, gdy karta ze stroną jest '
+                f"otwarta i widoczna (sygnał co minutę, koniec od razu po schowaniu karty albo aplikacji); przerwa ponad "
+                f"{konta.SESSION_GAP_S // 60} min zaczyna nową wizytę. Strona dnia 2.0: okładka i siatka tematów liczone "
+                "osobno, zależnie od tego, co jest na środku ekranu. Godziny polskie."
                 + (f" Uwaga: {html.escape(STORE.error)}" if STORE.error else "") + "</p>")
         self._send(page("Osoby", body), head=head)
 
     def _title(self, place: str) -> str:
-        """Readable name of a visited page: its <title> from the built site, plus the #tab."""
-        path, _, tab = place.partition("#")
+        """Readable name of a visited page: its <title> from the built site (2.0 pages with their day), plus the #tab."""
+        base, _, part = place.partition("@")
+        path, _, tab = base.partition("#")
         if path not in TITLES:
             name = path
             try:
@@ -450,8 +582,14 @@ class Handler(SimpleHTTPRequestHandler):
                         name = html.unescape(found.group(1).decode("utf-8", "replace")).replace(" · Paralaksa", "").strip()
             except OSError:
                 pass
+            day = V2_PAGE.match(path)
+            if day:
+                dd = f"{day.group(1)[8:10]}.{day.group(1)[5:7]}"
+                name = name.replace(f" · {day.group(1)}", "")
+                name = f"Strona dnia {dd}" if day.group(2) in ("", "index.html") else f"{name} ({dd})"
             TITLES[path] = name or path
-        return TITLES[path] + (f" » {urllib.parse.unquote(tab)}" if tab else "")
+        label = TITLES[path] + (f" » {urllib.parse.unquote(tab)}" if tab else "")
+        return label + (f" » {SECTIONS[part][0].lower()}" if part in SECTIONS else "")
 
     def list_directory(self, path):
         self.send_error(404)

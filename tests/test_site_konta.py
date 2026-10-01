@@ -126,6 +126,16 @@ def test_sessions_hidden_tab_stops_the_clock_and_lists_pages():
     assert s[0]["miejsca"] == {"/index.html": 1.0, "/index.html#kraje": 90.0, "/zdarzenia/a.html": 60.0}
 
 
+def test_late_hidden_signal_of_the_previous_page_is_ignored():
+    ev = [("08:00:00.0", "v", "/a"), ("08:00:30.0", "v", "/b"), ("08:00:30.5", "h", "/a"), ("08:01:30.0", "p", "/b"),
+          ("08:01:40.0", "h", "/b")]
+    evs = [{"t": f"2026-10-01T{t[:8]}Z", "u": "ala", "p": p, "k": k} for t, k, p in ev]
+    evs[2]["t"] = "2026-10-01T08:00:31Z"                                           # „h” strony A po wejściu na B
+    s = konta.sessions(evs)
+    assert s[0]["miejsca"] == {"/a": 30.0, "/b": 70.0}                              # 60 + 10 s na B, nie 1 s
+    assert sum((iv["do"] - iv["od"]).total_seconds() for iv in konta.intervals(evs)) == 100.0
+
+
 def test_session_cookie_signature_expiry_and_password_change():
     secret, fp = b"s" * 32, {"ala": "hash-1"}
     value = konta.sign_session(secret, "ala", 2000, "hash-1")
@@ -151,6 +161,12 @@ def test_delete_keeps_name_but_ends_the_account():
     st.set_blocked(login, False)
     assert st.fingerprint(login) is None
     assert st.invite("Ala")[0] == "ala-2"                                            # login nie wraca do obiegu
+
+
+def test_intervals_match_session_counting():
+    ev = [("08:00:00", "v", "/a"), ("08:00:20", "p", "/b"), ("08:01:20", "h", "/b"), ("09:00:00", "v", "/c")]
+    ivs = konta.intervals([{"t": f"2026-10-01T{t}Z", "u": "ala", "p": p, "k": k} for t, k, p in ev])
+    assert [(iv["p"], (iv["do"] - iv["od"]).total_seconds()) for iv in ivs] == [("/a", 20), ("/b", 60), ("/c", 60)]
 
 
 def _http_error(code):
@@ -333,7 +349,7 @@ def test_server_invite_logs_in_new_password_logs_out_and_delete(monkeypatch, tmp
         body = _raw(base, "GET", "/osoby", owner)[1]
         assert "Usuń" in body and "Zdarzenie X" in body
         body = _raw(base, "POST", "/osoby", owner, {"akcja": "usun", "login": login, "csrf": mod.CSRF})[1]
-        assert "Usunięto konto: Ala" in body and "Ala (usunięta)" in body and "Nowy link" not in body
+        assert "Usunięto konto: Ala" in body and "ala · usunięta" in body and "Nowy link" not in body
         assert _raw(base, "GET", "/", ala)[0] == 303
         assert _req(base + "/", "ala:inne-haslo-123")[0] == 401
     finally:
@@ -354,3 +370,26 @@ def test_server_root_opens_newest_v2_day(monkeypatch, tmp_path):
         assert _raw(base, "GET", "/")[2].startswith("/logowanie")             # bez logowania nic nie zdradza
     finally:
         srv.shutdown()
+
+
+def test_sections_and_timeline_for_the_owner_panel(monkeypatch, tmp_path):
+    mod, srv, base = _server(monkeypatch, tmp_path, None)
+    srv.shutdown()
+    sec = mod.section_of
+    assert sec("/v2/2026-09-30/sprawa-2.html") == "sprawy" and sec("/v2/2026-09-30/roznica-1.html") == "roznice"
+    assert sec("/v2/2026-09-30/obraz-kraju.html") == "obraz" and sec("/v2/2026-09-30/temat-russia.html") == "tematy"
+    assert sec("/v2/2026-09-30/index.html@tematy") == "tematy" and sec("/v2/2026-09-30/index.html@okladka") == "okladka"
+    assert sec("/v2/2026-09-30/index.html") == "okladka" and sec("/v2/index.html") == "okladka"
+    assert sec("/dziennik/2026-09-30.html#raport") == "stara" and sec("/index.html") == "stara"
+    t = lambda h, m: konta.parse_iso(f"2026-10-01T{h:02d}:{m:02d}:00Z")
+    ivs = [{"u": "ala", "od": t(6, 0), "do": t(6, 1), "p": "/v2/2026-10-01/temat-russia.html"},
+           {"u": "ala", "od": t(6, 1), "do": t(6, 2), "p": "/v2/2026-10-01/index.html@tematy"},   # sklejone z poprzednim
+           {"u": "ala", "od": t(6, 2), "do": t(6, 3), "p": "/index.html"},
+           {"u": "ala", "od": t(21, 59), "do": t(22, 1), "p": "/index.html"}]                   # 23:59–00:01 w Polsce
+    html_ = mod.timeline(ivs)
+    assert html_.count('class="tl"') == 2 and "cz 01.10" in html_ and "pt 02.10" in html_
+    morning = mod.timeline(ivs[:3])                                                    # skala tylko 4–10, nie cała doba
+    assert ">4<" in morning and ">10<" in morning and ">11<" not in morning
+    assert html_.count("Tematy dnia") == 1 and "08:00–08:02 · Tematy dnia" in html_
+    assert mod.by_section(ivs) == {"tematy": 120.0, "stara": 180.0}
+    assert "Stara wersja 3 min" in mod.mix_bar(mod.by_section(ivs))

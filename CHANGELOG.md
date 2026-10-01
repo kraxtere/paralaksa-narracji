@@ -1,3 +1,20 @@
+# Strona: nowe logo, pasek 2.0, czas według części strony — 2026-10-01
+
+- Logo „Gazeta w kadrze” (E1 z trzeciej rundy propozycji z GPT, wybór właściciela): znak to gazeta wychodząca poza drugą ramę,
+  czyli ta sama sprawa z dwóch miejsc; napis kapitalikami z większym P, podział kolorem PARA / LAKSA. SVG z literami jako
+  krzywymi w `site/assets/logo/`, ikony aplikacji PNG wyrenderowane raz przez Chrome do `site/assets/icons/` (wcześniej
+  rysowane w kodzie, bo znak był z dwóch kół). Logo w nagłówku starej wersji, favicon i ikony aplikacji.
+- Wersja 2.0: grubszy pasek z logo (na telefonie w osobnym wierszu), przełącznikiem dni i linkiem „Stara wersja”; na komputerze
+  wyrównany do kolumny treści. Strony 2.0 mają favicon i manifest. Przebudowa 25–30.09 tylko z pamięci podręcznej, bez Codex.
+- Tytuł okładki dla nowych dni: „Przegląd prasy · DD.MM” zamiast „Świat w prasie” (decyzja właściciela); okładek 25–30.09
+  nie poprawiamy.
+- Panel `/osoby`: każda osoba to rozwijany wiersz na całą szerokość: czas w częściach strony (okładka, sprawy dnia, różnice,
+  obraz kraju, tematy dnia, stara wersja w całości), oś czasu dni (wspólna skala ucięta do godzin czytania) i wizyty z listą
+  stron. Na stronie dnia 2.0 okładka i siatka tematów liczą się osobno: sygnał podaje, która część (`data-sekcja`) jest na
+  środku ekranu, także po przewinięciu.
+- Poprawka liczenia: sygnał „h” poprzedniej strony dochodzi często po wejściu na następną i ucinał jej pierwszą minutę;
+  teraz zatrzymuje tylko stronę, z której przyszedł.
+
 # Strona: konta osób i czas na stronie — 2026-10-01
 
 Decyzja właściciela: pokazać stronę kilku osobom i wiedzieć, kto ile na niej siedzi; wersja darmowa (bez płatnego dysku Rendera).

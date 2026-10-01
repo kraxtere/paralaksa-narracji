@@ -360,6 +360,23 @@ class Store:
         return out
 
 
+def _page(place: str | None) -> str:
+    return (place or "/").partition("#")[0].partition("@")[0]
+
+
+def _live(evs: list[dict]) -> list[dict]:
+    """Drop "h" signals of a page that is no longer open: leaving a page sends its "h" while the next page loads, and it
+    often arrives after the next page's view; it must not stop the clock of the new page."""
+    out, current = [], None
+    for e in evs:
+        if e["k"] == "h" and current is not None and _page(e.get("p")) != current:
+            continue
+        if e["k"] != "h":
+            current = _page(e.get("p"))
+        out.append(e)
+    return out
+
+
 def sessions(events: list[dict], gap_s: int = SESSION_GAP_S, ping_s: int = PING_S) -> list[dict]:
     """Per person: runs of activity without a gap longer than `gap_s`.
 
@@ -370,7 +387,7 @@ def sessions(events: list[dict], gap_s: int = SESSION_GAP_S, ping_s: int = PING_
         by_user.setdefault(e["u"], []).append(e)
     out = []
     for user, evs in by_user.items():
-        evs.sort(key=lambda e: e["t"])
+        evs = _live(sorted(evs, key=lambda e: e["t"]))
         times = [parse_iso(e["t"]) for e in evs]
         cur = None
         for i, (e, t) in enumerate(zip(evs, times)):
@@ -389,6 +406,27 @@ def sessions(events: list[dict], gap_s: int = SESSION_GAP_S, ping_s: int = PING_
     for s in out:
         s["minuty"] = max(1, round(s.pop("sekundy") / 60))
     return sorted(out, key=lambda s: s["od"], reverse=True)
+
+
+def intervals(events: list[dict], ping_s: int = PING_S) -> list[dict]:
+    """Reading time as intervals ({"u", "od", "do", "p"}), counted like in `sessions`: a view or heartbeat lasts until the
+    next signal, at most `ping_s`; "h" adds nothing. For the timeline and the time per part of the site."""
+    by_user: dict[str, list[dict]] = {}
+    for e in events:
+        by_user.setdefault(e["u"], []).append(e)
+    out = []
+    for user, evs in by_user.items():
+        evs = _live(sorted(evs, key=lambda e: e["t"]))
+        times = [parse_iso(e["t"]) for e in evs]
+        for i, (e, t) in enumerate(zip(evs, times)):
+            if e["k"] == "h":
+                continue
+            end = t + timedelta(seconds=ping_s)
+            if i + 1 < len(evs):
+                end = min(end, times[i + 1])
+            if end > t:
+                out.append({"u": user, "od": t, "do": end, "p": e.get("p") or "/"})
+    return out
 
 
 def from_env(env) -> tuple[Store | None, str]:

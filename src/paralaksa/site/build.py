@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import html
 import json
+import re
 import shutil
 import sqlite3
 from dataclasses import dataclass, field
@@ -15,7 +16,8 @@ from paralaksa.site import icons
 from paralaksa.site.data import COUNTRY_NAMES, daily_days, daily_payload, daily_summary, event_payload, event_summary, load_report
 
 ASSETS = Path(__file__).parent / "assets"
-LOGO_RING = "#e0643c"
+LOGO = ASSETS / "logo"          # logo „Gazeta w kadrze” (E1), wybrane 2026-10-01; litery jako krzywe
+TOP_BG = "#1c1c1a"
 
 
 @dataclass
@@ -30,18 +32,29 @@ def _asset(name: str) -> str:
     return (ASSETS / name).read_text(encoding="utf-8")
 
 
-def logo_mark(ink: str = "currentColor", ring: str = LOGO_RING) -> str:
-    """The same point seen from two places: a disc and its displaced outline (32×32 grid)."""
-    return (f'<circle cx="12.5" cy="16" r="8" fill="{ink}"/>'
-            f'<circle cx="19.5" cy="16" r="8" fill="none" stroke="{ring}" stroke-width="2.6"/>')
+def logo_file(name: str) -> str:
+    """SVG from assets/logo: logo-jasne-tlo, logo-ciemne-tlo (znak i nazwa), ikona-jasne-tlo, ikona-ciemne-tlo."""
+    return (LOGO / f"{name}.svg").read_text(encoding="utf-8")
 
 
-def logo_svg(ink: str = "#1c1c1a", background: str | None = None) -> str:
-    bg = f'<rect width="32" height="32" rx="7" fill="{background}"/>' if background else ""
-    return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">{bg}{logo_mark(ink)}</svg>'
+def logo_inline(name: str = "logo-ciemne-tlo", prefix: str = "plx") -> str:
+    """Logo to put inside HTML: own mask ids (several SVGs on one page), hidden from screen readers (the link has a label)."""
+    svg = re.sub(r"<title[^>]*>.*?</title>", "", logo_file(name))
+    svg = svg.replace(' role="img" aria-labelledby="title"', ' aria-hidden="true" focusable="false"')
+    for mask in ("back", "front"):
+        svg = svg.replace(f'id="{mask}"', f'id="{prefix}-{mask}"').replace(f"url(#{mask})", f"url(#{prefix}-{mask})")
+    return svg
 
 
-FAVICON = "data:image/svg+xml," + quote(logo_svg("#fff", "#1c1c1a"))
+def icon_svg(background: str = TOP_BG) -> str:
+    """The sign alone on a rounded dark square (favicon)."""
+    inner = re.search(r"<svg[^>]*>(.*)</svg>", logo_file("ikona-ciemne-tlo"), re.S).group(1)
+    inner = re.sub(r"<title[^>]*>.*?</title>", "", inner)
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" '
+            f'fill="{background}"/>{inner}</svg>')
+
+
+FAVICON = "data:image/svg+xml," + quote(icon_svg())
 # przed pierwszym malowaniem: zapamiętany wybór albo ustawienie systemu
 THEME_INIT = ('try{document.documentElement.dataset.theme=localStorage.getItem("plx-theme")||'
               '(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch(e){}')
@@ -66,7 +79,7 @@ def page(title: str, kind: str, payload: dict, root: str) -> str:
 </head>
 <body data-kind="{kind}" data-root="{root}">
 <header class="top">
-  <a class="brand" href="{root}index.html"><svg viewBox="0 0 32 32" aria-hidden="true">{logo_mark()}</svg>Paralaksa</a>
+  <a class="brand" href="{root}index.html" aria-label="Paralaksa">{logo_inline()}</a>
   <nav><a href="{root}index.html#zdarzenia">Zdarzenia</a><a href="{root}index.html#dziennik">Dziennik</a><a href="{root}telewizja.html">Telewizja</a><a href="{root}v2/index.html">2.0</a></nav>
   <span class="internal">wersja wewnętrzna, do oceny</span>
   <button class="theme" id="theme" type="button" title="Tryb jasny albo ciemny"><span aria-hidden="true">◐</span><span class="lbl">tryb</span></button>
@@ -124,12 +137,12 @@ def build_site(out_dir: Path, events_dir: Path, reports_dir: Path, conn: sqlite3
     (out_dir / "index.html").write_text(page("Przegląd", "index", index, ""), encoding="utf-8")
     tv = tv_payload if tv_payload and tv_payload.get("days") else {"channels": {}, "blocs": [], "days": [], "data": {}, "pdf": ""}
     (out_dir / "telewizja.html").write_text(page("Telewizja", "tv", tv, ""), encoding="utf-8")
-    (out_dir / "logo.svg").write_text(logo_svg(), encoding="utf-8")
-    (out_dir / "logo-ciemne-tlo.svg").write_text(logo_svg("#fff", "#1c1c1a"), encoding="utf-8")
+    (out_dir / "logo.svg").write_text(logo_file("logo-jasne-tlo"), encoding="utf-8")
+    (out_dir / "logo-ciemne-tlo.svg").write_text(logo_file("logo-ciemne-tlo"), encoding="utf-8")
     # instalacja jako aplikacja (Chrome, Edge, Android; iOS: „Do ekranu początkowego”)
     (out_dir / "manifest.webmanifest").write_text(icons.manifest(), encoding="utf-8")
-    for name, spec in icons.ICONS.items():
-        (out_dir / name).write_bytes(icons.render_icon(*spec))
+    for name in icons.ICONS:
+        (out_dir / name).write_bytes(icons.icon_png(name))
     copy_v2(v2_dir, out_dir / "v2")
     return res
 

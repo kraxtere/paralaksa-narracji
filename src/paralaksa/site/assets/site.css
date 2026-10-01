@@ -36,7 +36,7 @@ button { font: inherit; color: inherit; }
 .top a { color: #d9d7cf; text-decoration: none; font-size: 14px; }
 .top a:hover { color: #fff; }
 .top .brand { font-family: var(--serif); font-weight: 700; font-size: 18px; color: #fff; letter-spacing: .01em; display: inline-flex; align-items: center; gap: 8px; }
-.top .brand svg { width: 24px; height: 24px; flex: none; }
+.top .brand svg { height: 26px; width: auto; flex: none; display: block; }
 .top .theme { border: 1px solid #45443f; background: none; color: #d9d7cf; border-radius: 14px; padding: 2px 9px; font-size: 12px; cursor: pointer; display: inline-flex; gap: 5px; align-items: center; }
 .top .theme:hover { color: #fff; border-color: #77756d; }
 .top nav { display: flex; gap: 18px; }
