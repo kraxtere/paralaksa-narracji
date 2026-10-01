@@ -25,8 +25,8 @@ jobs:
       - id: check
         run: |
           day=$(date -u +%F)
-          if [ "${{ github.event_name }}" = schedule ] && [ -f "reports/$day.json" ]; then
-            echo "::notice::Raport $day już jest (ręczny przebieg); harmonogram pominięty."
+          if [ "${{ github.event_name }}" = schedule ] && [ -f "reports/$day.status.json" ]; then
+            echo "::notice::Przebieg $day już był (ręczny); harmonogram pominięty."
             echo run=false >> "$GITHUB_OUTPUT"
           else
             echo run=true >> "$GITHUB_OUTPUT"
@@ -57,8 +57,9 @@ jobs:
           from paralaksa.config import load_settings
           settings = load_settings()
           required = {'DB_BACKUP_KEY'}
-          for model in (settings.models.extract, settings.models.synthesize):
-              required.add('DEEPSEEK_API_KEY' if model.startswith('deepseek') else 'ANTHROPIC_API_KEY')
+          # raport powstaje lokalnie (Codex, od 2026-10-01); Actions potrzebuje tylko modelu ekstrakcji
+          model = settings.models.extract
+          required.add('DEEPSEEK_API_KEY' if model.startswith('deepseek') else 'ANTHROPIC_API_KEY')
           missing = sorted(k for k in required if not os.environ.get(k))
           if missing:
               raise SystemExit('Brak wymaganych sekretów: ' + ', '.join(missing))
@@ -99,7 +100,7 @@ jobs:
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: plx run-daily
+        run: plx run-daily --bez-raportu
       - name: Snapshot i szyfrowanie
         id: snapshot
         if: always() && (steps.pipeline.outcome == 'success' || steps.pipeline.outcome == 'failure')
@@ -136,14 +137,14 @@ jobs:
               cat "$file" >> "$GITHUB_STEP_SUMMARY"
             fi
           done
-      - name: Commit raportu (również oznaczonego jako niepełny)
+      - name: Commit statusu dnia (również oznaczonego jako niepełny)
         if: always() && (steps.pipeline.outcome == 'success' || steps.pipeline.outcome == 'failure')
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add reports/
           if ! git diff --cached --quiet; then
-            git commit -m "Raport dzienny $(date -u +%F)"
+            git commit -m "Status dnia $(date -u +%F)"
             git pull --rebase
             git push
           fi
