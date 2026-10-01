@@ -1,4 +1,5 @@
 import base64
+import http.client
 import importlib.util
 import io
 import json
@@ -117,6 +118,41 @@ def test_sessions_split_on_long_gap():
     assert s[0]["od"] == datetime(2026, 10, 1, 9, 0, tzinfo=timezone.utc)   # najnowsze najpierw
 
 
+def test_sessions_hidden_tab_stops_the_clock_and_lists_pages():
+    ev = [("08:00:00", "v", "/index.html"), ("08:00:01", "p", "/index.html#kraje"), ("08:01:01", "p", "/index.html#kraje"),
+          ("08:01:31", "h", "/index.html#kraje"), ("08:05:00", "v", "/zdarzenia/a.html")]
+    s = konta.sessions([{"t": f"2026-10-01T{t}Z", "u": "ala", "p": p, "k": k} for t, k, p in ev])
+    assert len(s) == 1 and s[0]["strony"] == 2 and s[0]["minuty"] == 3          # 1 + 60 + 30 + 60 s
+    assert s[0]["miejsca"] == {"/index.html": 1.0, "/index.html#kraje": 90.0, "/zdarzenia/a.html": 60.0}
+
+
+def test_session_cookie_signature_expiry_and_password_change():
+    secret, fp = b"s" * 32, {"ala": "hash-1"}
+    value = konta.sign_session(secret, "ala", 2000, "hash-1")
+    assert konta.read_session(secret, value, fp.get, 1000) == ("ala", 2000)
+    assert konta.read_session(secret, value, fp.get, 2001) is None                   # wygasło
+    assert konta.read_session(b"x" * 32, value, fp.get, 1000) is None                # inny klucz
+    assert konta.read_session(secret, value.replace("2000", "9000"), fp.get, 1000) is None
+    assert konta.read_session(secret, "śmieci", fp.get, 1000) is None
+    fp["ala"] = "hash-2"                                                              # nowe hasło wylogowuje
+    assert konta.read_session(secret, value, fp.get, 1000) is None
+
+
+def test_delete_keeps_name_but_ends_the_account():
+    st = _store()
+    login, token = st.invite("Ala")
+    st.accept(token, "moje-haslo-123")
+    st.delete(login)
+    person = st.people()[login]
+    assert person["usunieta"] and person["imie"] == "Ala" and not person["hash"]
+    assert not st.authenticate(login, "moje-haslo-123") and st.fingerprint(login) is None
+    with pytest.raises(KeyError):
+        st.invite(login=login)
+    st.set_blocked(login, False)
+    assert st.fingerprint(login) is None
+    assert st.invite("Ala")[0] == "ala-2"                                            # login nie wraca do obiegu
+
+
 def _http_error(code):
     return urllib.error.HTTPError("https://api.github.com", code, "x", {}, io.BytesIO(b"{}"))
 
@@ -215,5 +251,90 @@ def test_server_without_store_keeps_owner_access(monkeypatch, tmp_path):
         assert _req(base + "/", "wlasciciel:tajne-haslo")[0] == 200
         assert _req(base + "/zaproszenie/cokolwiek")[0] == 404
         assert "nie działają" in _req(base + "/osoby", "wlasciciel:tajne-haslo")[1]
+    finally:
+        srv.shutdown()
+
+
+def _raw(base, method, path, headers=None, data=None):
+    """One request without following redirects: (status, body, Location, Set-Cookie)."""
+    conn = http.client.HTTPConnection(base.removeprefix("http://"), timeout=5)
+    body = urllib.parse.urlencode(data).encode() if data is not None else None
+    hdrs = dict(headers or {})
+    if body is not None:
+        hdrs["Content-Type"] = "application/x-www-form-urlencoded"
+    conn.request(method, path, body=body, headers=hdrs)
+    r = conn.getresponse()
+    out = r.status, r.read().decode(errors="replace"), r.getheader("Location"), r.getheader("Set-Cookie")
+    conn.close()
+    return out
+
+
+def _cookie(set_cookie):
+    return {"Cookie": set_cookie.split(";")[0]}
+
+
+def test_server_login_form_sets_cookie(monkeypatch, tmp_path):
+    mod, srv, base = _server(monkeypatch, tmp_path, _store())
+    try:
+        status, _, location, _ = _raw(base, "GET", "/zdarzenia/x.html?a=1")
+        assert status == 303 and location == "/logowanie?next=/zdarzenia/x.html%3Fa%3D1"
+        assert _raw(base, "GET", "/_ping")[0] == 401
+        assert "Zły login" in _raw(base, "POST", "/logowanie", data={"login": "wlasciciel", "haslo": "zle"})[1]
+        status, _, location, set_cookie = _raw(base, "POST", "/logowanie",
+                                               data={"login": "wlasciciel", "haslo": "tajne-haslo", "next": "/index.html"})
+        assert status == 303 and location == "/index.html" and "HttpOnly" in set_cookie and "SameSite=Lax" in set_cookie
+        status, body, _, again = _raw(base, "GET", "/", _cookie(set_cookie))
+        assert status == 200 and "/_ping" in body and 'href="/osoby"' in body and again is None   # świeże: bez odnowienia
+        assert _raw(base, "GET", "/", {"Cookie": "plx=a.1.b"})[0] == 303
+        assert _raw(base, "POST", "/logowanie", data={"login": "wlasciciel", "haslo": "tajne-haslo",
+                                                      "next": "//evil.example"})[2] == "/"
+        assert "Max-Age=0" in _raw(base, "GET", "/wyloguj")[3]
+    finally:
+        srv.shutdown()
+
+
+def test_server_login_attempts_are_limited(monkeypatch, tmp_path):
+    mod, srv, base = _server(monkeypatch, tmp_path, _store())
+    mod.FAIL_MAX = 3
+    try:
+        for _ in range(3):
+            _raw(base, "POST", "/logowanie", data={"login": "ktos", "haslo": "zle-haslo-123"})
+        body = _raw(base, "POST", "/logowanie", data={"login": "wlasciciel", "haslo": "tajne-haslo"})[1]
+        assert "Za dużo" in body
+    finally:
+        srv.shutdown()
+
+
+def test_server_invite_logs_in_new_password_logs_out_and_delete(monkeypatch, tmp_path):
+    store = _store()
+    mod, srv, base = _server(monkeypatch, tmp_path, store)
+    (tmp_path / "zdarzenie.html").write_text("<html><head><title>Zdarzenie X · Paralaksa</title></head><body></body>"
+                                             "</html>", encoding="utf-8")
+    try:
+        login, token = store.invite("Ala")
+        page = _raw(base, "GET", f"/zaproszenie/{token}")[1]
+        assert "Ustaw hasło" in page and "czas" not in page.lower()
+        status, body, _, set_cookie = _raw(base, "POST", f"/zaproszenie/{token}",
+                                           data={"haslo": "moje-haslo-123", "haslo2": "moje-haslo-123"})
+        assert status == 200 and "zalogowane" in body and "czas" not in body.lower()
+        ala = _cookie(set_cookie)
+        assert _raw(base, "GET", "/zdarzenie.html", ala)[0] == 200
+        assert _raw(base, "GET", "/_ping?k=h&p=/zdarzenie.html%23kraje", ala)[0] == 204
+        assert [e["k"] for e in store.pending if e["u"] == login] == ["v", "h"]
+
+        _, token = store.invite(login=login)                                     # nowy link = nowe hasło
+        store.accept(token, "inne-haslo-123")
+        assert _raw(base, "GET", "/", ala)[0] == 303                             # stare ciasteczko już nie działa
+        status, _, _, set_cookie = _raw(base, "POST", "/logowanie", data={"login": "ALA", "haslo": "inne-haslo-123"})
+        assert status == 303 and set_cookie
+        ala = _cookie(set_cookie)
+
+        owner = _cookie(_raw(base, "POST", "/logowanie", data={"login": "wlasciciel", "haslo": "tajne-haslo"})[3])
+        body = _raw(base, "GET", "/osoby", owner)[1]
+        assert "Usuń" in body and "Zdarzenie X" in body
+        body = _raw(base, "POST", "/osoby", owner, {"akcja": "usun", "login": login, "csrf": mod.CSRF})[1]
+        assert "Usunięto konto: Ala" in body and "Ala (usunięta)" in body and "Nowy link" not in body
+        assert _raw(base, "GET", "/", ala)[0] == 303
+        assert _req(base + "/", "ala:inne-haslo-123")[0] == 401
     finally:
         srv.shutdown()

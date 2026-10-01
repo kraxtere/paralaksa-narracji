@@ -12,6 +12,17 @@ Decyzja właściciela: pokazać stronę kilku osobom i wiedzieć, kto ile na nie
   tylko do tego repo, Contents: zapis); bez niego działa jak dotąd, tylko konto właściciela.
 - Próba na prawdziwym repo (zaproszenie, hasło, logowanie, zapis i odczyt aktywności) przeszła; dane próby usunięte.
 
+Poprawki tego samego dnia (uwagi właściciela):
+- Logowanie formularzem (`/logowanie`) zamiast okienka Basic Auth: okienko nie działa w części przeglądarek wbudowanych
+  (Messenger, WhatsApp) i zapomina hasło po zamknięciu przeglądarki. Podpisane ciasteczko na 90 dni, odnawiane przy wizytach,
+  bez zapisu po stronie serwera (przeżywa uśpienie). Nowe hasło, blokada albo usunięcie kończą zalogowanie. Po ustawieniu hasła
+  z zaproszenia urządzenie jest od razu zalogowane. Basic Auth zostaje dla skryptów. Limit 20 nieudanych prób na adres na kwadrans.
+- Bez informacji o mierzeniu czasu na stronach dla osób (decyzja właściciela); opis zostaje tylko w panelu `/osoby`.
+- Przycisk „Usuń”: kasuje konto (hasło, link), imię zostaje przy dawnych sesjach z dopiskiem „usunięta”, login nie wraca do obiegu.
+- Co było czytane: sygnał niesie też zakładkę (`#raport`), wysyłany jest także po kliknięciu, gdy zakładka się zmieni,
+  i „h” od razu po schowaniu karty albo aplikacji (koniec czasu bez czekania na minutę). W sesji lista stron z tytułami i czasem.
+- Sprawdzone w Chrome (widok telefonu) na lokalnym serwerze: zaproszenie, logowanie, przekierowanie z powrotem, zakładki, „h”.
+
 # Rosja w daily — 2026-09-30
 
 Decyzja właściciela: rosyjskie źródła w codziennym przebiegu, sankcje UE nie są przeszkodą (dotąd Rosja była tylko w kartach

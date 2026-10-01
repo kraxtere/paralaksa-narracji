@@ -39,9 +39,10 @@ def _get(url, auth=None):
 def test_server_requires_password(monkeypatch, tmp_path):
     srv, base = _server(monkeypatch, tmp_path, "zespol", "tajne-haslo")
     try:
-        status, _, headers = _get(base + "/")
+        status, body, _ = _get(base + "/")                                   # przekierowanie do formularza logowania
+        assert status == 200 and 'name="haslo"' in body and "<h1>ok</h1>" not in body
+        status, _, headers = _get(base + "/", "zespol:zle")
         assert status == 401 and "Basic" in headers["WWW-Authenticate"]
-        assert _get(base + "/", "zespol:zle")[0] == 401
         status, body, headers = _get(base + "/", "zespol:tajne-haslo")
         assert status == 200 and "ok" in body and headers["X-Robots-Tag"].startswith("noindex")
         assert _get(base + "/zdarzenia/", "zespol:tajne-haslo")[0] == 404   # bez listingu katalogów
@@ -57,7 +58,9 @@ def test_server_serves_only_app_manifest_and_icons_without_password(monkeypatch,
         status, body, headers = _get(base + "/manifest.webmanifest")
         assert status == 200 and "Paralaksa" in body and headers["Content-Type"] == "application/manifest+json"
         assert _get(base + "/icon-192.png")[0] == 200
-        assert _get(base + "/index.html")[0] == 401 and _get(base + "/manifest.webmanifest/../index.html")[0] == 401
+        for path in ("/index.html", "/manifest.webmanifest/../index.html"):
+            body = _get(base + path)[1]
+            assert 'name="haslo"' in body and "<h1>ok</h1>" not in body
     finally:
         srv.shutdown()
 

@@ -3,7 +3,10 @@
 Render's free disk is wiped on every sleep and deploy, so everything lives in a private GitHub repo (ACTIVITY_REPO)
 written through the contents API with a fine-grained token (ACTIVITY_TOKEN, access to that one repo only):
   osoby.json                 people (PBKDF2 password hashes, never passwords) and pending invites (token hashes)
-  aktywnosc/<YYYY-MM-DD>.jsonl   one line per page view ("v") or heartbeat ("p", every minute while the tab is visible)
+  aktywnosc/<YYYY-MM-DD>.jsonl   one line per page view ("v"), heartbeat ("p", every minute while the tab is visible,
+                             path with the #tab) or hidden tab ("h": the app went to the background or was closed)
+Logins live in a signed cookie (sign_session/read_session): stateless, so it survives Render's restarts; it stops
+working when the person's password changes or the account is blocked or deleted.
 """
 from __future__ import annotations
 
@@ -64,6 +67,28 @@ def check_password(password: str, stored: str | None) -> bool:
 
 def token_hash(token: str) -> str:
     return hashlib.sha256(token.encode()).hexdigest()
+
+
+def sign_session(secret: bytes, login: str, exp: int, fingerprint: str) -> str:
+    """Cookie value `login.exp.mac`; the mac covers the password fingerprint, so a new password ends old logins."""
+    raw = base64.urlsafe_b64encode(login.encode()).decode().rstrip("=")
+    mac = hmac.new(secret, f"{raw}.{exp}.{fingerprint}".encode(), "sha256").hexdigest()[:40]
+    return f"{raw}.{exp}.{mac}"
+
+
+def read_session(secret: bytes, value: str, fingerprint_of: Callable[[str], str | None],
+                 now_s: float) -> tuple[str, int] | None:
+    """(login, expiry) from a valid cookie value, else None (garbage, expired, account changed or gone)."""
+    try:
+        raw, exp_s, mac = value.split(".")
+        login, exp = base64.urlsafe_b64decode(raw + "=" * (-len(raw) % 4)).decode(), int(exp_s)
+    except Exception:
+        return None
+    fingerprint = fingerprint_of(login)
+    if fingerprint is None or exp < now_s:
+        return None
+    good = hmac.new(secret, f"{raw}.{exp}.{fingerprint}".encode(), "sha256").hexdigest()[:40]
+    return (login, exp) if hmac.compare_digest(mac, good) else None
 
 
 def make_login(name: str, taken) -> str:
@@ -199,7 +224,7 @@ class Store:
                 who = make_login(name, set(d["osoby"]) | self.reserved)
                 d["osoby"][who] = {"imie": name.strip()[:60] or who, "hash": None, "utworzono": iso(self.clock()),
                                    "zablokowana": False}
-            elif who not in d["osoby"]:
+            elif who not in d["osoby"] or d["osoby"][who].get("usunieta"):
                 raise KeyError(who)
             d["zaproszenia"] = {k: v for k, v in d["zaproszenia"].items()
                                 if v["login"] != who and parse_iso(v["wygasa"]) > self.clock()}
@@ -235,15 +260,35 @@ class Store:
 
     def set_blocked(self, login: str, blocked: bool) -> None:
         def change(d):
+            if d["osoby"][login].get("usunieta"):
+                return
             d["osoby"][login]["zablokowana"] = blocked
             if blocked:
                 d["zaproszenia"] = {k: v for k, v in d["zaproszenia"].items() if v["login"] != login}
         self._change(change, f"osoby: {'blokada' if blocked else 'odblokowanie'} {login}")
 
+    def delete(self, login: str) -> None:
+        """Remove the account (password hash, invites). The name stays, so past sessions keep it and the login is not
+        given to someone else."""
+        def change(d):
+            person = d["osoby"][login]
+            d["osoby"][login] = {"imie": person["imie"], "hash": None, "utworzono": person.get("utworzono"),
+                                 "zablokowana": True, "usunieta": iso(self.clock())}
+            d["zaproszenia"] = {k: v for k, v in d["zaproszenia"].items() if v["login"] != login}
+        self._change(change, f"osoby: usunięta {login}")
+
+    def fingerprint(self, login: str) -> str | None:
+        """Changes whenever the password does; None when the person cannot log in (cookie check)."""
+        with self.lock:
+            person = self.data["osoby"].get(login)
+            if not person or person.get("zablokowana") or person.get("usunieta") or not person.get("hash"):
+                return None
+            return person["hash"]
+
     def authenticate(self, login: str, password: str) -> bool:
         with self.lock:
             person = self.data["osoby"].get(login)
-            if not person or person.get("zablokowana") or not person.get("hash"):
+            if not person or person.get("zablokowana") or person.get("usunieta") or not person.get("hash"):
                 return False
             key = hashlib.sha256(f"{login}\0{password}\0{person['hash']}".encode()).hexdigest()
             if self._auth_cache.get(key) == login:
@@ -315,26 +360,34 @@ class Store:
         return out
 
 
-def sessions(events: list[dict], gap_s: int = SESSION_GAP_S) -> list[dict]:
-    """Per person: runs of activity without a gap longer than `gap_s`; minutes include the last minute of reading."""
+def sessions(events: list[dict], gap_s: int = SESSION_GAP_S, ping_s: int = PING_S) -> list[dict]:
+    """Per person: runs of activity without a gap longer than `gap_s`.
+
+    A view or heartbeat counts as reading until the next signal, at most `ping_s` (a visible tab pings every minute);
+    "h" (tab hidden) stops the clock at once. `miejsca` is reading time per page (#tab included), in visiting order."""
     by_user: dict[str, list[dict]] = {}
     for e in events:
         by_user.setdefault(e["u"], []).append(e)
     out = []
     for user, evs in by_user.items():
         evs.sort(key=lambda e: e["t"])
+        times = [parse_iso(e["t"]) for e in evs]
         cur = None
-        for e in evs:
-            t = parse_iso(e["t"])
-            if cur and (t - cur["do"]).total_seconds() <= gap_s:
-                cur["do"] = t
-            else:
-                cur = {"u": user, "od": t, "do": t, "strony": 0}
+        for i, (e, t) in enumerate(zip(evs, times)):
+            if cur is None or (t - cur["do"]).total_seconds() > gap_s:
+                cur = {"u": user, "od": t, "do": t, "strony": 0, "sekundy": 0.0, "miejsca": {}}
                 out.append(cur)
+            cur["do"] = t
             if e["k"] == "v":
                 cur["strony"] += 1
+            if e["k"] == "h":
+                continue
+            seconds = min((times[i + 1] - t).total_seconds(), ping_s) if i + 1 < len(evs) else ping_s
+            cur["sekundy"] += seconds
+            place = e.get("p") or "/"
+            cur["miejsca"][place] = cur["miejsca"].get(place, 0.0) + seconds
     for s in out:
-        s["minuty"] = round((s["do"] - s["od"]).total_seconds() / 60) + 1
+        s["minuty"] = max(1, round(s.pop("sekundy") / 60))
     return sorted(out, key=lambda s: s["od"], reverse=True)
 
 
