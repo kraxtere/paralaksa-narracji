@@ -48,27 +48,37 @@ FAIL_MAX, FAIL_WINDOW_S = 20, 900           # nieudane logowania z jednego adres
 FAILS: dict[str, list[float]] = {}
 FAIL_LOCK = threading.Lock()
 TITLES: dict[str, str] = {}                 # ścieżka strony -> <title>, do listy czytanych stron
+STARTED = time.time()                       # żądania od startu procesu (Render usypia po 15 min bez żądań)
+REQUESTS: dict[str, int] = {}
 
-IDLE_S = 300                                # bez ruchu na stronie (przewijanie, dotyk, mysz, klawisz) pingi ustają
-# sygnał co minutę, gdy karta jest widoczna i ktoś jej używał w ostatnich IDLE_S; „h” od razu po schowaniu albo przy
-# wygaszeniu, pierwszy ruch wznawia. Bez tego karta zostawiona na ekranie pingowałaby bez końca: zawyżony czas czytania
-# i serwer, który nigdy nie zasypia. Strona z #zakładką i @sekcją (data-sekcja na stronie dnia 2.0: okładka albo tematy,
-# sprawdzane po kliknięciu i po przewinięciu)
-HEARTBEAT = (b'<script>(()=>{let last="",t,act=Date.now(),idle=false;const sek=()=>{const e=document.elementFromPoint('
-             b'innerWidth/2,innerHeight/2),s=e&&e.closest("[data-sekcja]");return s?"@"+s.dataset.sekcja:""},'
-             b'cur=()=>location.pathname+location.hash+sek(),'
-             b'send=k=>fetch("/_ping?k="+k+"&p="+encodeURIComponent(cur()),{cache:"no-store",credentials:"same-origin",'
-             b'keepalive:true}).catch(()=>{}),'
-             b'ping=()=>{if(document.visibilityState!=="visible")return;if(Date.now()-act>' + str(IDLE_S * 1000).encode() +
-             b'){if(!idle){idle=true;send("h")}return}last=cur();send("p")},'
-             b'poke=()=>{act=Date.now();if(idle){idle=false;ping()}},'
-             b'check=()=>{if(cur()!==last)ping()};setInterval(ping,' + str(konta.PING_S * 1000).encode() + b');'
-             b'for(const e of["pointerdown","pointermove","keydown","touchstart","wheel"])addEventListener(e,poke,{passive:true});'
-             b'document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"){act=Date.now();'
-             b'idle=false;ping()}else send("h")});'
-             b'addEventListener("click",()=>setTimeout(check,300));'
-             b'addEventListener("scroll",()=>{poke();clearTimeout(t);t=setTimeout(check,1500)},{passive:true});'
-             b'addEventListener("load",check);last=location.pathname;check()})()</script>')
+IDLE_S = 90                                 # tyle po ostatniej interakcji (klik, dotyk, przewinięcie, klawisz) pomiar trwa
+# Pomiar czasu czytania. Trwa, gdy karta jest widoczna, okno ma fokus i od ostatniej interakcji minęło mniej niż IDLE_S;
+# ruch myszy się nie liczy. Każdy sygnał niesie sekundy od poprzedniego sygnału tej karty: „s” start (0 s), „p” punkt
+# kontrolny co minutę i przy zmianie miejsca, „e” koniec z powodem (hidden, blur, idle, wyjscie; przy idle czas tylko do
+# terminu). Po końcu strona nic nie wysyła, dopiero powrót albo interakcja zaczyna nowy pomiar. Gdy koniec nie dojdzie
+# (zabita aplikacja na telefonie), ginie najwyżej minuta. Miejsce: ścieżka z #zakładką i @sekcją (data-sekcja elementu
+# na środku ekranu, sprawdzana po kliknięciu i przewinięciu); „c” to identyfikator karty (sessionStorage).
+HEARTBEAT = ("""<script>(()=>{const IDLE=%d,PING=%d;let on=false,gone=false,since=0,until=0,place="",t;
+const tab=(()=>{try{let c=sessionStorage.getItem("plx-karta");if(!c){c=Math.random().toString(36).slice(2,10);sessionStorage.setItem("plx-karta",c)}return c}catch(e){return""}})();
+const sek=()=>{const e=document.elementFromPoint(innerWidth/2,innerHeight/2),s=e&&e.closest("[data-sekcja]");return s?"@"+s.dataset.sekcja:""};
+const cur=()=>location.pathname+location.hash+sek();
+const active=()=>document.visibilityState==="visible"&&document.hasFocus();
+const send=(k,r,end)=>{const now=end||Date.now(),n=Math.max(0,Math.round((now-since)/1000));since=now;
+fetch("/_ping?k="+k+"&r="+r+"&s="+n+"&c="+tab+"&p="+encodeURIComponent(place),{cache:"no-store",credentials:"same-origin",keepalive:true}).catch(()=>{})};
+const start=r=>{if(on||gone||!active())return;on=true;since=Date.now();until=since+IDLE;place=cur();send("s",r)};
+const stop=r=>{if(!on)return;on=false;send("e",r,Math.min(Date.now(),until))};
+const tick=()=>{if(!on)return;if(Date.now()>=until)return stop("idle");if(!active())return stop(document.visibilityState==="visible"?"blur":"hidden");
+if(Date.now()-since>=PING)send("p","ping")};
+const check=()=>{if(!on)return;const p=cur();if(p!==place){if(Date.now()-since>=1000)send("p","miejsce");place=p}};
+const poke=()=>{if(on){if(Date.now()<until){until=Date.now()+IDLE;return}stop("idle")}start("ruch")};
+setInterval(tick,5000);
+for(const e of["pointerdown","keydown","touchstart","wheel"])addEventListener(e,poke,{passive:true});
+addEventListener("scroll",()=>{poke();clearTimeout(t);t=setTimeout(check,1500)},{passive:true});
+addEventListener("click",()=>setTimeout(check,300));addEventListener("hashchange",check);
+document.addEventListener("visibilitychange",()=>document.visibilityState==="visible"?start("widoczna"):stop("hidden"));
+addEventListener("blur",()=>stop("blur"));addEventListener("focus",()=>start("fokus"));
+addEventListener("pagehide",()=>{stop("wyjscie");gone=true});addEventListener("pageshow",e=>{if(e.persisted){gone=false;start("powrot")}});
+addEventListener("load",check);start("otwarcie")})()</script>""" % (IDLE_S * 1000, konta.PING_S * 1000)).replace(chr(10), "").encode()
 OWNER_LINK = (b'<a href="/osoby" style="position:fixed;right:10px;bottom:10px;z-index:99;padding:6px 10px;'
               b'background:#1d1b18;color:#f4f0e8;border-radius:8px;font:13px Segoe UI,sans-serif;text-decoration:none">'
               b'Osoby</a>')
@@ -151,6 +161,19 @@ def by_section(ivs: list[dict]) -> dict[str, float]:
     return out
 
 
+THEME_PAGE = re.compile(r"^/v2/\d{4}-\d{2}-\d{2}/temat-([\w-]+)\.html")
+
+
+def by_theme(ivs: list[dict]) -> dict[str, float]:
+    """Reading time per theme (the theme pages of the 2.0 site, all days together), longest first."""
+    out: dict[str, float] = {}
+    for iv in ivs:
+        found = THEME_PAGE.match(iv["p"])
+        if found:
+            out[found.group(1)] = out.get(found.group(1), 0.0) + (iv["do"] - iv["od"]).total_seconds()
+    return dict(sorted(out.items(), key=lambda kv: -kv[1]))
+
+
 def mix_bar(seconds: dict[str, float]) -> str:
     """Stacked bar and legend: how the time splits between the parts of the site."""
     total = sum(seconds.values())
@@ -226,7 +249,7 @@ def safe_next(target: str) -> str:
 
 
 def minutes(seconds: float) -> str:
-    return "<1 min" if seconds < 60 else f"{round(seconds / 60)} min"
+    return f"{round(seconds)} s" if seconds < 60 else f"{round(seconds / 60)} min"
 
 
 class Handler(SimpleHTTPRequestHandler):
@@ -368,6 +391,8 @@ class Handler(SimpleHTTPRequestHandler):
 
     def _handle(self, head: bool) -> None:
         route = self.route
+        kind = route if route in ("/_ping", "/osoby") else "strony" if route == "/" or route.endswith(".html") else "pliki"
+        REQUESTS[kind] = REQUESTS.get(kind, 0) + 1
         if route in PUBLIC:
             return super().do_HEAD() if head else super().do_GET()
         if route.startswith("/zaproszenie/"):
@@ -382,7 +407,10 @@ class Handler(SimpleHTTPRequestHandler):
         if route == "/_ping":
             if STORE is not None:
                 query = urllib.parse.parse_qs(urllib.parse.urlsplit(self.path).query)
-                STORE.record(who, query.get("p", [""])[0], "h" if query.get("k") == ["h"] else "p")
+                kind, seconds = query.get("k", [""])[0], query.get("s", ["0"])[0]
+                if kind in ("s", "p", "e"):
+                    STORE.record(who, query.get("p", [""])[0], kind, int(seconds) if seconds.isdigit() else 0,
+                                 re.sub(r"[^a-z0-9]", "", query.get("c", [""])[0]), re.sub(r"[^a-z]", "", query.get("r", [""])[0]))
             self.send_response(204)
             self.end_headers()
             return
@@ -541,9 +569,12 @@ class Handler(SimpleHTTPRequestHandler):
             week = sum((iv["do"] - iv["od"]).total_seconds() for iv in mine if iv["od"] >= now - timedelta(days=7))
             last = next((x["do"] for x in sess if x["u"] == login), None)
             own = [x for x in sess if x["u"] == login][:40]
-            ses = "".join(f'<li><b>{local(x["od"])}–{warsaw(x["do"]):%H:%M}</b> · {x["minuty"]} min<br>{places(x)}</li>'
+            ses = "".join(f'<li><b>{local(x["od"])}–{warsaw(x["do"]):%H:%M}</b> · {minutes(x["sekundy"])}<br>{places(x)}</li>'
                           for x in own)
+            themes = " · ".join(f'{html.escape(self._theme_name(k))} <span class="s">{minutes(v)}</span>'
+                                for k, v in by_theme(mine).items())
             more = (f'<h3>Gdzie (30 dni)</h3>{mix_bar(by_section(mine))}'
+                    + (f"<h3>Tematy (30 dni)</h3><p>{themes}</p>" if themes else "")
                     + (f"<h3>Oś czasu</h3>{timeline(mine)}" if mine else "")
                     + (f'<h3>Wizyty</h3><ol class="ses">{ses}</ol>' if ses else "")
                     + (f'<div class="acts">{actions}</div>' if actions else ""))
@@ -574,11 +605,36 @@ class Handler(SimpleHTTPRequestHandler):
                 '<div class="hd"><span>Osoba</span><span>Ostatnio</span><span>7 dni</span><span>30 dni</span></div>'
                 + ("".join(blocks) if len(blocks) > 1 else '<p class="s">Nikogo jeszcze nie dodano.</p>' + blocks[0])
                 + f'<p class="s">Kliknij osobę, żeby zobaczyć, gdzie i kiedy czytała. Czas liczony, gdy karta ze stroną jest '
-                f"otwarta i widoczna (sygnał co minutę, koniec od razu po schowaniu karty albo aplikacji); przerwa ponad "
+                f"widoczna, okno ma fokus i od ostatniego kliknięcia, dotyku, przewinięcia albo klawisza minęło mniej niż "
+                f"{IDLE_S} s (ruch myszy się nie liczy); koniec od razu po schowaniu karty, przejściu do innego okna albo "
+                f"aplikacji. Dwie karty naraz liczą się raz. Przerwa ponad "
                 f"{konta.SESSION_GAP_S // 60} min zaczyna nową wizytę. Strona dnia 2.0: okładka i siatka tematów liczone "
                 "osobno, zależnie od tego, co jest na środku ekranu. Godziny polskie."
-                + (f" Uwaga: {html.escape(STORE.error)}" if STORE.error else "") + "</p>")
+                + (f" Uwaga: {html.escape(STORE.error)}" if STORE.error else "") + "</p>" + self._diagnostics(events, now))
         self._send(page("Osoby", body), head=head)
+
+    def _diagnostics(self, events: list[dict], now) -> str:
+        """Why measurements start and stop (7 days, everyone) and what this server process has served since it woke up."""
+        names = {"otwarcie": "otwarcie strony", "fokus": "powrót do okna", "widoczna": "powrót do karty",
+                 "powrot": "powrót wstecz", "ruch": "interakcja po przerwie", "idle": f"{IDLE_S} s bez interakcji",
+                 "blur": "inne okno", "hidden": "schowana karta", "wyjscie": "wyjście ze strony"}
+        stats = konta.signal_stats(events, now - timedelta(days=7))
+
+        def row(counts):
+            return " · ".join(f"{names.get(k, k)} {v}" for k, v in sorted(counts.items(), key=lambda kv: -kv[1])) or "–"
+        up = round((time.time() - STARTED) / 60)
+        served = " · ".join(f"{k} {v}" for k, v in sorted(REQUESTS.items())) or "–"
+        return (f'<details class="box"><summary>Diagnostyka pomiaru</summary><p class="s">Start pomiaru (7 dni): '
+                f'{row(stats["s"])}<br>Koniec pomiaru (7 dni): {row(stats["e"])}<br>Serwer działa {up} min, żądania od '
+                f"startu: {served}</p></details>")
+
+    def _theme_name(self, theme: str) -> str:
+        """Readable theme name from the newest built theme page, without its date."""
+        pages = sorted(Path(self.directory).glob(f"v2/*/temat-{theme}.html"))
+        if not pages:
+            return theme
+        name = self._title("/" + pages[-1].relative_to(self.directory).as_posix())
+        return re.sub(r" \(\d{2}\.\d{2}\)$", "", name)
 
     def _title(self, place: str) -> str:
         """Readable name of a visited page: its <title> from the built site (2.0 pages with their day), plus the #tab."""

@@ -96,7 +96,7 @@ def test_flush_groups_by_day_and_keeps_events_on_failure():
     st = _store(clock)
     st.record("ala", "/index.html", "v")
     clock.t += timedelta(minutes=2)
-    st.record("ala", "/index.html", "p")
+    st.record("ala", "/index.html", "p", 60, "k1", "ping")
     st.files.conflicts = 10                                             # zapis nie przechodzi
     st.flush()
     assert len(st.pending) == 2 and st.error
@@ -107,33 +107,39 @@ def test_flush_groups_by_day_and_keeps_events_on_failure():
     assert len(st.events(30)) == 2
 
 
-def test_sessions_split_on_long_gap():
-    ev = [{"t": f"2026-10-01T08:{m:02d}:00Z", "u": "ala", "p": "/", "k": k}
-          for m, k in [(0, "v"), (1, "p"), (2, "v"), (3, "p")]]
-    ev += [{"t": "2026-10-01T09:00:00Z", "u": "ala", "p": "/", "k": "v"},
-           {"t": "2026-10-01T08:30:00Z", "u": "ola", "p": "/", "k": "p"}]
+def _ev(rows, user="ala"):
+    """(time, kind, place, seconds) -> events as the page and the server record them."""
+    return [{"t": f"2026-10-01T{t}Z", "u": user, "p": p, "k": k, **({"s": sec, "c": "k1", "r": "x"} if k != "v" else {})}
+            for t, k, p, sec in rows]
+
+
+def test_sessions_split_on_long_gap_and_count_reported_seconds():
+    ev = _ev([("08:00:00", "v", "/", 0), ("08:00:01", "s", "/", 0), ("08:01:01", "p", "/", 60), ("08:01:41", "e", "/", 40),
+              ("09:00:00", "v", "/", 0), ("09:00:01", "s", "/", 0), ("09:00:21", "e", "/", 20)])
+    ev += _ev([("08:30:00", "e", "/", 30)], user="ola")
     s = konta.sessions(ev)
     ala = sorted((x for x in s if x["u"] == "ala"), key=lambda x: x["od"])
-    assert [(x["minuty"], x["strony"]) for x in ala] == [(4, 2), (1, 1)]
+    assert [(x["sekundy"], x["strony"]) for x in ala] == [(100.0, 1), (20.0, 1)]
     assert s[0]["od"] == datetime(2026, 10, 1, 9, 0, tzinfo=timezone.utc)   # najnowsze najpierw
 
 
-def test_sessions_hidden_tab_stops_the_clock_and_lists_pages():
-    ev = [("08:00:00", "v", "/index.html"), ("08:00:01", "p", "/index.html#kraje"), ("08:01:01", "p", "/index.html#kraje"),
-          ("08:01:31", "h", "/index.html#kraje"), ("08:05:00", "v", "/zdarzenia/a.html")]
-    s = konta.sessions([{"t": f"2026-10-01T{t}Z", "u": "ala", "p": p, "k": k} for t, k, p in ev])
-    assert len(s) == 1 and s[0]["strony"] == 2 and s[0]["minuty"] == 3          # 1 + 60 + 30 + 60 s
-    assert s[0]["miejsca"] == {"/index.html": 1.0, "/index.html#kraje": 90.0, "/zdarzenia/a.html": 60.0}
+def test_sessions_attribute_seconds_to_the_place_they_were_read_on():
+    ev = _ev([("08:00:00", "v", "/index.html", 0), ("08:00:00", "s", "/index.html", 0),
+              ("08:00:10", "p", "/index.html", 10), ("08:01:10", "p", "/index.html#kraje", 60),
+              ("08:01:40", "e", "/index.html#kraje", 30), ("08:05:00", "v", "/zdarzenia/a.html", 0)])
+    s = konta.sessions(ev)
+    assert len(s) == 1 and s[0]["strony"] == 2 and s[0]["sekundy"] == 100.0       # bez dopisanej minuty po końcu
+    assert s[0]["miejsca"] == {"/index.html": 10.0, "/index.html#kraje": 90.0}
 
 
-def test_late_hidden_signal_of_the_previous_page_is_ignored():
-    ev = [("08:00:00.0", "v", "/a"), ("08:00:30.0", "v", "/b"), ("08:00:30.5", "h", "/a"), ("08:01:30.0", "p", "/b"),
-          ("08:01:40.0", "h", "/b")]
-    evs = [{"t": f"2026-10-01T{t[:8]}Z", "u": "ala", "p": p, "k": k} for t, k, p in ev]
-    evs[2]["t"] = "2026-10-01T08:00:31Z"                                           # „h” strony A po wejściu na B
-    s = konta.sessions(evs)
-    assert s[0]["miejsca"] == {"/a": 30.0, "/b": 70.0}                              # 60 + 10 s na B, nie 1 s
-    assert sum((iv["do"] - iv["od"]).total_seconds() for iv in konta.intervals(evs)) == 100.0
+def test_two_tabs_at_once_count_once_and_old_format_adds_nothing():
+    ev = _ev([("08:01:00", "p", "/a", 60), ("08:01:30", "p", "/b", 60)])          # druga karta nachodzi o 30 s
+    ev += [{"t": "2026-10-01T09:00:00Z", "u": "ala", "p": "/", "k": "p"}, {"t": "2026-10-01T09:00:30Z", "u": "ala", "p": "/", "k": "h"}]
+    ev += _ev([("10:00:00", "e", "/", 9999)])                                    # zawyżone: najwyżej MAX_SIGNAL_S
+    ivs = konta.intervals(ev)
+    assert [(iv["p"], (iv["do"] - iv["od"]).total_seconds()) for iv in ivs] == [("/a", 60), ("/b", 30), ("/", konta.MAX_SIGNAL_S)]
+    st = konta.signal_stats(_ev([("08:00:00", "s", "/", 0), ("08:00:30", "e", "/", 30)]), datetime(2026, 10, 1, tzinfo=timezone.utc))
+    assert st == {"s": {"x": 1}, "e": {"x": 1}}
 
 
 def test_session_cookie_signature_expiry_and_password_change():
@@ -161,12 +167,6 @@ def test_delete_keeps_name_but_ends_the_account():
     st.set_blocked(login, False)
     assert st.fingerprint(login) is None
     assert st.invite("Ala")[0] == "ala-2"                                            # login nie wraca do obiegu
-
-
-def test_intervals_match_session_counting():
-    ev = [("08:00:00", "v", "/a"), ("08:00:20", "p", "/b"), ("08:01:20", "h", "/b"), ("09:00:00", "v", "/c")]
-    ivs = konta.intervals([{"t": f"2026-10-01T{t}Z", "u": "ala", "p": p, "k": k} for t, k, p in ev])
-    assert [(iv["p"], (iv["do"] - iv["od"]).total_seconds()) for iv in ivs] == [("/a", 20), ("/b", 60), ("/c", 60)]
 
 
 def _http_error(code):
@@ -249,7 +249,8 @@ def test_server_invite_flow_heartbeat_and_owner_panel(monkeypatch, tmp_path):
         status, body = _req(base + "/", ala)
         assert status == 200 and "/_ping" in body and 'href="/osoby"' not in body
         assert _req(base + "/a.png", ala) == (200, "png")
-        assert _req(base + "/_ping?p=/index.html", ala)[0] == 204
+        assert _req(base + "/_ping?k=p&s=60&c=k1&r=ping&p=/index.html", ala)[0] == 204
+        assert _req(base + "/_ping?k=zle&p=/index.html", ala)[0] == 204                       # nieznany rodzaj: bez zapisu
         assert _req(base + "/osoby", ala)[0] == 403
         assert _req(base + "/", "ala:zle-haslo-123")[0] == 401
         kinds = [(e["u"], e["k"]) for e in store.events(30)]               # część zapisana już przy wejściu na /osoby
@@ -335,8 +336,10 @@ def test_server_invite_logs_in_new_password_logs_out_and_delete(monkeypatch, tmp
         assert status == 200 and "zalogowane" in body and "czas" not in body.lower()
         ala = _cookie(set_cookie)
         assert _raw(base, "GET", "/zdarzenie.html", ala)[0] == 200
-        assert _raw(base, "GET", "/_ping?k=h&p=/zdarzenie.html%23kraje", ala)[0] == 204
-        assert [e["k"] for e in store.pending if e["u"] == login] == ["v", "h"]
+        assert _raw(base, "GET", "/_ping?k=e&s=999&c=K1!&r=hidden&p=/zdarzenie.html%23kraje", ala)[0] == 204
+        ev = [e for e in store.pending if e["u"] == login]
+        assert [e["k"] for e in ev] == ["v", "e"] and ev[1]["s"] == konta.MAX_SIGNAL_S and ev[1]["c"] == "1"
+        assert ev[1]["r"] == "hidden" and ev[1]["p"] == "/zdarzenie.html#kraje"
 
         _, token = store.invite(login=login)                                     # nowy link = nowe hasło
         store.accept(token, "inne-haslo-123")
@@ -408,4 +411,5 @@ def test_sections_and_timeline_for_the_owner_panel(monkeypatch, tmp_path):
     assert ">4<" in morning and ">10<" in morning and ">11<" not in morning
     assert html_.count("Tematy dnia") == 1 and "08:00–08:02 · Tematy dnia" in html_
     assert mod.by_section(ivs) == {"tematy": 120.0, "stara": 180.0}
+    assert mod.by_theme(ivs + [{"u": "ala", "od": t(7, 0), "do": t(7, 3), "p": "/v2/2026-09-30/temat-middle_east.html@x"}])         == {"middle_east": 180.0, "russia": 60.0}
     assert "Stara wersja 3 min" in mod.mix_bar(mod.by_section(ivs))

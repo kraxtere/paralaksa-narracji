@@ -122,7 +122,7 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
   z `site/icons.py`, do instalacji jako aplikacja). To repo zostaje publiczne (minuty Actions).
   Od 2026-10-01 inne osoby mają własne loginy (`site/hosting/konta.py`): właściciel dodaje je na `/osoby` (link z zaproszeniem,
   osoba sama ustawia hasło), logowanie formularzem z podpisanym ciasteczkiem na 90 dni (Basic Auth tylko dla skryptów),
-  strony co minutę zgłaszają czas czytania i stronę z zakładką, po 5 min bez ruchu milkną, żeby serwer mógł zasnąć (bez informacji o tym dla osób, decyzja właściciela);
+  pomiar czasu czytania (`server.HEARTBEAT`) trwa, gdy karta jest widoczna, okno ma fokus i od ostatniej interakcji minęło < 90 s (ruch myszy się nie liczy); sygnały start/punkt kontrolny co minutę/koniec z powodem niosą sekundy od poprzedniego sygnału i identyfikator karty, panel liczy tylko zgłoszone sekundy (dwie karty naraz raz), czas według tematów i diagnostykę (od 2026-10-01; bez informacji o tym dla osób, decyzja właściciela);
   osoby i aktywność w prywatnym repo `kraxtere/paralaksa-aktywnosc` przez API GitHuba (`ACTIVITY_TOKEN` w Renderze), bo dysk darmowego Rendera znika przy uśpieniu. Serwer: tylko biblioteka standardowa.
   `stories.py`: „historie dnia” w zakładce Najważniejsze (wydarzenia z ≥ 3 krajów, jeden przetłumaczony nagłówek na kraj). Dwa kroki
   modelu ekstrakcji: wyszukanie kandydatów, potem przypisanie każdego artykułu do wydarzenia albo odrzucenie (porcje po 60 artykułów). Tylko przy `plx site`, nigdy w daily;

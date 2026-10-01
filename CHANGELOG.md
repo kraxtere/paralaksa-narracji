@@ -14,6 +14,13 @@ więc limitu nie ruszamy.
   jedną redakcję po stronie). Dwa przebiegi na 30.09: oba bez błędów walidacji, oba IL z 2 + 2 redakcjami (TR i PS z zewnątrz).
   Potem lekka zachęta do dwóch obrazów kraju (dla różnych krajów, drugi tylko na tych samych warunkach): przebieg na 30.09
   dał CN i UA, oba 2 + 2 redakcje. Strona 2.0 pokazuje na razie tylko pierwszy.
+- Pomiar czasu czytania od nowa (po przeglądzie Codexa): stary liczył każdy sygnał jako minutę do przodu, milkł dopiero po
+  5 min bez ruchu, a ruch myszy go podtrzymywał, więc zostawiona karta dawała do ok. 6 min. Teraz pomiar trwa, gdy karta jest
+  widoczna, okno ma fokus i od ostatniego kliknięcia, dotyku, przewinięcia albo klawisza minęło < 90 s. Sygnały niosą sekundy
+  od poprzedniego (start, punkt kontrolny co minutę i przy zmianie miejsca, koniec z powodem: hidden, blur, idle, wyjscie)
+  oraz identyfikator karty; panel liczy tylko zgłoszone sekundy, dwie karty naraz raz, krótkie wizyty w sekundach. W `/osoby`
+  doszły czas według tematów (plakaty tematów 2.0) i diagnostyka (powody startu i końca, żądania od startu serwera).
+  Sprawdzone w Chrome (Playwright, lokalny serwer, skrócone progi); stary format zdarzeń nie dolicza czasu.
 - Telewizja wyłączona (`plx site --z-tv` przywraca). Po zmianach koszt ok. 1 $ dziennie.
 - Oś wydarzeń (prototyp, `data/os_czasu.py` poza gitem): jedna ciągła oś przez wszystkie dni (najpierw był tydzień 24–30.09;
   właściciel wolał całość z przeskakiwaniem dni). Każdy dzień dopisuje Codex: 1–4 nowe zdarzenia, dalszy ciąg istniejących

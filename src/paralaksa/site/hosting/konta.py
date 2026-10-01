@@ -3,8 +3,10 @@
 Render's free disk is wiped on every sleep and deploy, so everything lives in a private GitHub repo (ACTIVITY_REPO)
 written through the contents API with a fine-grained token (ACTIVITY_TOKEN, access to that one repo only):
   osoby.json                 people (PBKDF2 password hashes, never passwords) and pending invites (token hashes)
-  aktywnosc/<YYYY-MM-DD>.jsonl   one line per page view ("v"), heartbeat ("p", every minute while the tab is visible,
-                             path with the #tab) or hidden tab ("h": the app went to the background or was closed)
+  aktywnosc/<YYYY-MM-DD>.jsonl   one line per page view ("v", from the server) or reading signal from the page:
+                             "s" start, "p" checkpoint (every minute and on a change of place), "e" end; "s" = seconds
+                             read since the previous signal of that tab (counted backwards from "t"), "c" = tab id,
+                             "r" = reason (otwarcie, fokus, widoczna, powrot, ruch, ping, miejsce, idle, blur, hidden, wyjscie)
 Logins live in a signed cookie (sign_session/read_session): stateless, so it survives Render's restarts; it stops
 working when the person's password changes or the account is blocked or deleted.
 """
@@ -27,6 +29,7 @@ ITERATIONS = 120_000          # PBKDF2; udane logowania są cache'owane, więc k
 INVITE_DAYS = 7
 SESSION_GAP_S = 600           # przerwa dłuższa niż 10 min zaczyna nową sesję
 PING_S = 60
+MAX_SIGNAL_S = PING_S + 15    # więcej sekund w jednym sygnale się nie dolicza (np. uśpiony telefon)
 MAX_PENDING = 50_000
 DEFAULT_REPO = "kraxtere/paralaksa-aktywnosc"
 LOGIN_RE = re.compile(r"^[a-z0-9-]{1,32}$")
@@ -302,10 +305,13 @@ class Store:
         return False
 
     # --- aktywność ---------------------------------------------------------------------------------------------------
-    def record(self, login: str, path: str, kind: str) -> None:
+    def record(self, login: str, path: str, kind: str, seconds: int = 0, tab: str = "", reason: str = "") -> None:
+        e = {"t": iso(self.clock()), "u": login, "p": path[:200], "k": kind}
+        if kind != "v":
+            e.update(s=max(0, min(int(seconds), MAX_SIGNAL_S)), c=tab[:12], r=reason[:12])
         with self.lock:
             if len(self.pending) < MAX_PENDING:
-                self.pending.append({"t": iso(self.clock()), "u": login, "p": path[:200], "k": kind})
+                self.pending.append(e)
 
     def flush(self) -> None:
         """Append pending events to their day files; on failure they stay pending for the next try."""
@@ -360,72 +366,57 @@ class Store:
         return out
 
 
-def _page(place: str | None) -> str:
-    return (place or "/").partition("#")[0].partition("@")[0]
-
-
-def _live(evs: list[dict]) -> list[dict]:
-    """Drop "h" signals of a page that is no longer open: leaving a page sends its "h" while the next page loads, and it
-    often arrives after the next page's view; it must not stop the clock of the new page."""
-    out, current = [], None
-    for e in evs:
-        if e["k"] == "h" and current is not None and _page(e.get("p")) != current:
-            continue
-        if e["k"] != "h":
-            current = _page(e.get("p"))
-        out.append(e)
+def intervals(events: list[dict]) -> list[dict]:
+    """Reading time as intervals ({"u", "od", "do", "p"}): each page signal covers the seconds it reports, ending at its
+    own time. Per person the intervals are clipped so that two tabs or devices at once do not count twice. Signals
+    without seconds (views, the old format) add nothing."""
+    by_user: dict[str, list[dict]] = {}
+    for e in events:
+        seconds = min(e.get("s") or 0, MAX_SIGNAL_S)
+        if e["k"] in ("p", "e") and seconds > 0:
+            end = parse_iso(e["t"])
+            by_user.setdefault(e["u"], []).append({"u": e["u"], "od": end - timedelta(seconds=seconds), "do": end,
+                                                   "p": e.get("p") or "/"})
+    out = []
+    for ivs in by_user.values():
+        reached = None
+        for iv in sorted(ivs, key=lambda iv: iv["od"]):
+            if reached is not None and iv["od"] < reached:
+                iv["od"] = reached
+            if iv["do"] > iv["od"]:
+                out.append(iv)
+                reached = iv["do"]
     return out
 
 
-def sessions(events: list[dict], gap_s: int = SESSION_GAP_S, ping_s: int = PING_S) -> list[dict]:
-    """Per person: runs of activity without a gap longer than `gap_s`.
-
-    A view or heartbeat counts as reading until the next signal, at most `ping_s` (a visible tab pings every minute);
-    "h" (tab hidden) stops the clock at once. `miejsca` is reading time per page (#tab included), in visiting order."""
-    by_user: dict[str, list[dict]] = {}
-    for e in events:
-        by_user.setdefault(e["u"], []).append(e)
-    out = []
-    for user, evs in by_user.items():
-        evs = _live(sorted(evs, key=lambda e: e["t"]))
-        times = [parse_iso(e["t"]) for e in evs]
-        cur = None
-        for i, (e, t) in enumerate(zip(evs, times)):
-            if cur is None or (t - cur["do"]).total_seconds() > gap_s:
-                cur = {"u": user, "od": t, "do": t, "strony": 0, "sekundy": 0.0, "miejsca": {}}
-                out.append(cur)
-            cur["do"] = t
-            if e["k"] == "v":
-                cur["strony"] += 1
-            if e["k"] == "h":
-                continue
-            seconds = min((times[i + 1] - t).total_seconds(), ping_s) if i + 1 < len(evs) else ping_s
-            cur["sekundy"] += seconds
-            place = e.get("p") or "/"
-            cur["miejsca"][place] = cur["miejsca"].get(place, 0.0) + seconds
-    for s in out:
-        s["minuty"] = max(1, round(s.pop("sekundy") / 60))
+def sessions(events: list[dict], gap_s: int = SESSION_GAP_S) -> list[dict]:
+    """Per person: runs of reading and page views without a gap longer than `gap_s`, newest first. `sekundy` is the
+    reading time, `miejsca` the reading time per place (page, #tab, @section) in visiting order."""
+    items = [(iv["od"], iv["do"], iv["u"], iv) for iv in intervals(events)]
+    items += [(t, t, e["u"], None) for e in events if e["k"] == "v" for t in [parse_iso(e["t"])]]
+    out, current = [], {}
+    for start, end, user, iv in sorted(items, key=lambda x: (x[0], x[3] is not None)):
+        cur = current.get(user)
+        if cur is None or (start - cur["do"]).total_seconds() > gap_s:
+            cur = current[user] = {"u": user, "od": start, "do": end, "strony": 0, "sekundy": 0.0, "miejsca": {}}
+            out.append(cur)
+        cur["do"] = max(cur["do"], end)
+        if iv is None:
+            cur["strony"] += 1
+            continue
+        seconds = (end - start).total_seconds()
+        cur["sekundy"] += seconds
+        cur["miejsca"][iv["p"]] = cur["miejsca"].get(iv["p"], 0.0) + seconds
     return sorted(out, key=lambda s: s["od"], reverse=True)
 
 
-def intervals(events: list[dict], ping_s: int = PING_S) -> list[dict]:
-    """Reading time as intervals ({"u", "od", "do", "p"}), counted like in `sessions`: a view or heartbeat lasts until the
-    next signal, at most `ping_s`; "h" adds nothing. For the timeline and the time per part of the site."""
-    by_user: dict[str, list[dict]] = {}
+def signal_stats(events: list[dict], since: datetime) -> dict[str, dict[str, int]]:
+    """How measurements start and end ({"s": {reason: n}, "e": {reason: n}}) since a moment: for the owner's diagnostics."""
+    out: dict[str, dict[str, int]] = {"s": {}, "e": {}}
     for e in events:
-        by_user.setdefault(e["u"], []).append(e)
-    out = []
-    for user, evs in by_user.items():
-        evs = _live(sorted(evs, key=lambda e: e["t"]))
-        times = [parse_iso(e["t"]) for e in evs]
-        for i, (e, t) in enumerate(zip(evs, times)):
-            if e["k"] == "h":
-                continue
-            end = t + timedelta(seconds=ping_s)
-            if i + 1 < len(evs):
-                end = min(end, times[i + 1])
-            if end > t:
-                out.append({"u": user, "od": t, "do": end, "p": e.get("p") or "/"})
+        if e["k"] in out and parse_iso(e["t"]) >= since:
+            reason = e.get("r") or "?"
+            out[e["k"]][reason] = out[e["k"]].get(reason, 0) + 1
     return out
 
 
