@@ -146,15 +146,15 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
 - `src/paralaksa/extract/codex_client.py`: model `codex[:model][:low|medium|high]` w `build_client` (np. `codex:gpt-6.1-sol:medium`), czyli Codex CLI z limitu konta Pro
   właściciela (decyzja 2026-09-30: eksperymenty i kroki lokalne przez Codex zamiast płatnych API).
   Tylko lokalnie: w CI odmawia działania. Codex pracuje read-only w pustym folderze tymczasowym. Nigdy „ultra”.
-- Wersja 2.0 strony (prototyp obrazkowy): `data/widok_obrazkowy.py` (poza gitem) generuje przez Codex infografikę dnia 2×3
+- Wersja 2.0 strony (prototyp obrazkowy): `scripts/v2/widok_obrazkowy.py` (procedura dnia: `scripts/v2/README.md`; do 2026-10-01 w `data/`, poza gitem) generuje przez Codex infografikę dnia 2×3
   i plakaty tematów. Panele wykrywa po ramkach i nakłada jako linki. Wynik trafia do `data/widok/<dzień>/`,
   a `plx site` kopiuje go do `v2/` (`build.copy_v2`, pliki od „_” pomija). Link „2.0” jest w menu.
   Od 2026-10-01 wersja 2.0 jest podstawowa: serwer pod `/` przekierowuje do najnowszego dnia z `v2/dni.json`,
   stara wersja zostaje pod `/index.html` (link „Stara wersja” na stronach 2.0); `start_url` aplikacji to `./`.
   Pasek i stopka 2.0 są wspólne: `site/assets/pasek.js` (logo, wybór dnia, „Stara wersja” w stopce) trafia do `v2/pasek.js`,
   strony mają tylko `<div id="pasek">`; zmiana paska = zmiana tego pliku i `plx site`, bez przebudowy stron dni.
-  Tytuł okładki nowych dni: „Przegląd prasy · DD.MM” (`data/widok_powitanie.py`).
-  Oś wydarzeń (prototyp 2026-10-01, decyzja właściciela: jedna ciągła oś przez wszystkie dni): `data/os_czasu.py` (poza gitem)
+  Tytuł okładki nowych dni: „Przegląd prasy · DD.MM” (`scripts/v2/widok_powitanie.py`).
+  Oś wydarzeń (prototyp 2026-10-01, decyzja właściciela: jedna ciągła oś przez wszystkie dni): `scripts/v2/os_czasu.py`
   dopisuje każdy nowy dzień (`dzien D`: Codex dzieli Sprawy dnia na nowe zdarzenia i dalszy ciąg istniejących,
   bez pomijania (limit 1–4 zgubił 28.09), przypisuje wątki), `obrazki` (kadr bez napisów na zdarzenie), `strona`. Godzina to pierwszy pokazany nagłówek
   w naszych źródłach, nie godzina zdarzenia, więc dni na osi to daty tych nagłówków. Wynik `data/widok/os/` → `v2/os/`
