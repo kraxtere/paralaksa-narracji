@@ -25,6 +25,9 @@ więc limitu nie ruszamy.
   strzelaniny w RPA), przez co 28.09 zniknął z osi. Teraz każda Sprawa dnia jest nowym zdarzeniem albo dalszym ciągiem
   istniejącego; pominięte dopisane (`os_czasu.py pominiete`, 42 zdarzenia). Wybór dni pokazuje każdy dzień kalendarza
   z zakresu, dzień bez zdarzeń jest wyszarzony.
+- Karty osi mają 2–3 zdania opisu pod nagłówkiem (`os_czasu.py opisy`, Codex, z opisów i nagłówków wszystkich dni
+  zdarzenia; ponownie, gdy zdarzenie dostanie nowy dzień). Bez dat dziennych (daty przy Sprawach to dni przeglądu, nie
+  zdarzeń; pierwsza wersja je podawała), liczby ofiar przypisane źródłu.
 
 # Strona: nowe logo, pasek 2.0, czas według części strony — 2026-10-01
 
