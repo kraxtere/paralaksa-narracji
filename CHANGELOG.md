@@ -10,6 +10,8 @@ więc limitu nie ruszamy.
   czyli to, co bierze okładka 2.0. Test 8 modeli na 30.09 (tabela w CLAUDE.md): Codex Sol/Astra bez błędów walidacji za
   pierwszym razem i z różnicami o tych samych sprawach; Sonnet i DeepSeek bez myślenia porównywały różne sprawy. Pełny
   przebieg `plx report` przez Codex na kopii bazy: jedno wywołanie, bez ponowienia.
+- Raport okładkowy, obraz kraju: każda strona z co najmniej dwóch redakcji, zewnętrzna najlepiej z dwóch krajów (Codex wybierał
+  jedną redakcję po stronie). Dwa przebiegi na 30.09: oba bez błędów walidacji, oba IL z 2 + 2 redakcjami (TR i PS z zewnątrz).
 - Telewizja wyłączona (`plx site --z-tv` przywraca). Po zmianach koszt ok. 1 $ dziennie.
 - Oś wydarzeń (prototyp, `data/os_czasu.py` poza gitem): jedna ciągła oś przez wszystkie dni (najpierw był tydzień 24–30.09;
   właściciel wolał całość z przeskakiwaniem dni). Każdy dzień dopisuje Codex: 1–4 nowe zdarzenia, dalszy ciąg istniejących
