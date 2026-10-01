@@ -760,6 +760,8 @@ def run_daily(
     no_fulltext: bool = typer.Option(False, "--no-fulltext", help="Nie pobieraj pełnych tekstów."),
     skip_ingest: bool = typer.Option(False, "--skip-ingest", help="Bez pobierania (tylko ekstrakcja i raport)."),
     limit: Optional[int] = typer.Option(None, "--limit", "-n", help="Maks. liczba artykułów do ekstrakcji."),
+    no_report: bool = typer.Option(False, "--bez-raportu",
+                                   help="Bez syntezy: tylko metryki i status dnia (Actions od 2026-10-01; raport lokalnie)."),
     out_dir: Optional[Path] = OutDir,
     config_dir: Path = ConfigDir,
     db_path: Optional[Path] = DbPath,
@@ -775,6 +777,18 @@ def run_daily(
         _run_ingest(conn, settings, [s for s in all_sources if s.active], fulltext=not no_fulltext)
     typer.echo("== extract")
     _run_extract(conn, settings, themes, limit, use_batch=True)
+    if no_report:
+        from paralaksa.report.pipeline import material_status
+
+        typer.echo("== aggregate (bez raportu)")
+        status = material_status(conn, settings, all_sources, themes, d, out_dir or settings.report.resolved_output_dir())
+        conn.close()
+        typer.echo(f"Sygnały dnia: {status['n_signals']} | koszt API dnia: ${status['cost_usd']:.4f}")
+        for w in status["warnings"]:
+            typer.echo(f"OSTRZEŻENIE: {w}", err=True)
+        if not status["complete"]:
+            raise typer.Exit(code=1)
+        return
     typer.echo("== aggregate + report")
     result = _run_report(conn, settings, config_dir, d, out_dir)
     conn.close()

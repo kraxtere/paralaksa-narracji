@@ -31,6 +31,51 @@ class ReportResult:
     complete: bool = False
 
 
+def material_checks(conn: sqlite3.Connection, day: str, sources: list[Source], package: dict
+                    ) -> tuple[list[str], list[str]]:
+    """Warnings about the day's material and the blocking subset (incomplete extraction, over 1/3 sources missing)."""
+    warnings, blocking = [], []
+    failures = [f"{r['source_id']}: {r['pending']} oczekujących, {r['failed']} błędów" for r in package['mianowniki_zrodel']
+                if r['pending'] or r['failed']]
+    if failures:
+        warnings.append('niepełna ekstrakcja: ' + '; '.join(failures))
+        blocking.append(warnings[-1])
+    active = [s.id for s in sources if s.active]
+    observed = {r['source_id'] for r in package['mianowniki_zrodel']}
+    missing_sources = [s for s in active if s not in observed]
+    if missing_sources:
+        warnings.append('brak materiałów z aktywnych źródeł: ' + ', '.join(missing_sources))
+        if len(missing_sources) * MAX_MISSING_SOURCES_DIVISOR > len(active):
+            blocking.append(warnings[-1])
+    feed_errors = conn.execute("SELECT DISTINCT source_id FROM fetch_log WHERE substr(fetched_at,1,10)=? AND status != 'ok'", (day,)).fetchall()
+    if feed_errors:
+        warnings.append('błędy kanałów: ' + ', '.join(r[0] for r in feed_errors))
+    return warnings, blocking
+
+
+def material_status(conn: sqlite3.Connection, settings: Settings, sources: list[Source], themes: list[Theme],
+                    day: str, out_dir: Path) -> dict:
+    """Daily run without synthesis: metrics and material checks only, written to <day>.status.json.
+
+    Since 2026-10-01 the report is made locally (Codex, `plx report`), so Actions only gathers and extracts.
+    A later local report overwrites this status."""
+    db.upsert_sources(conn, sources)
+    compute_daily_metrics(conn, day)
+    package = build_data_package(conn, day, settings, themes)
+    warnings, blocking = material_checks(conn, day, sources, package)
+    pending = conn.execute("SELECT COUNT(*) FROM articles WHERE extracted = 0 AND substr(fetched_at, 1, 10) = ?",
+                           (day,)).fetchone()[0]
+    if pending:
+        blocking.append(f"{pending} artykułów bez ekstrakcji")
+    status = {"date": day, "complete": not blocking, "synthesis": "lokalnie (plx report)",
+              "n_signals": sum(c["n_sygnalow"] for c in package["kraje"].values()),
+              "cost_usd": db.spent_on(conn, day), "warnings": warnings, "blocking": blocking,
+              "sources": package['mianowniki_zrodel']}
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / f"{day}.status.json").write_text(json.dumps(status, ensure_ascii=False, indent=2), encoding='utf-8')
+    return status
+
+
 def generate_report(
     conn: sqlite3.Connection, llm, settings: Settings, sources: list[Source], themes: list[Theme],
     day: str, out_dir: Path, now: datetime | None = None,
@@ -49,25 +94,13 @@ def generate_report(
 
     if not any(report.model_dump().values()):
         stats.warnings.append("synteza nie dostarczyła żadnych tez; raport jest niepełny")
-    failures = [f"{r['source_id']}: {r['pending']} oczekujących, {r['failed']} błędów" for r in package['mianowniki_zrodel']
-                if r['pending'] or r['failed']]
-    if failures:
-        stats.warnings.append('niepełna ekstrakcja: ' + '; '.join(failures))
     # Blokujące: synteza/walidacja/ekstrakcja. Informacyjne (pojedyncze źródło, kanał) nie
     # oznaczają nieudanego przebiegu, ale są widoczne w raporcie i statusie.
     # Sanityzacja po nieudanym ponowieniu usuwa tylko wadliwe tezy; reszta raportu jest zwalidowana.
     blocking = [w for w in stats.warnings if not w.startswith('walidacja po ponowieniu')]
-    active = [s.id for s in sources if s.active]
-    observed = {r['source_id'] for r in package['mianowniki_zrodel']}
-    missing_sources = [s for s in active if s not in observed]
-    if missing_sources:
-        msg = 'brak materiałów z aktywnych źródeł: ' + ', '.join(missing_sources)
-        stats.warnings.append(msg)
-        if len(missing_sources) * MAX_MISSING_SOURCES_DIVISOR > len(active):
-            blocking.append(msg)
-    feed_errors = conn.execute("SELECT DISTINCT source_id FROM fetch_log WHERE substr(fetched_at,1,10)=? AND status != 'ok'", (day,)).fetchall()
-    if feed_errors:
-        stats.warnings.append('błędy kanałów: ' + ', '.join(r[0] for r in feed_errors))
+    material_warnings, material_blocking = material_checks(conn, day, sources, package)
+    stats.warnings += material_warnings
+    blocking += material_blocking
     meta = collect_meta(conn, day, settings, sources, themes, package, stats.model, stats.prompt_version,
                         stats.warnings)
     out_dir.mkdir(parents=True, exist_ok=True)
