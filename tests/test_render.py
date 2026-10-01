@@ -8,7 +8,7 @@ from paralaksa import db
 from paralaksa.aggregate.package import build_data_package
 from paralaksa.config import load_themes
 from paralaksa.extract.llm_client import LLMClient
-from paralaksa.report.pipeline import generate_report
+from paralaksa.report.pipeline import generate_report, material_status
 from paralaksa.report.render import collect_meta, render_markdown
 from paralaksa.report.schema import ReportOutput, parse_report
 from report_fixtures import as_text, valid_report
@@ -99,6 +99,19 @@ def test_generate_report_end_to_end(conn, settings, seeded, tmp_path):
     status = json.loads((tmp_path / "reports" / "2026-09-23.status.json").read_text(encoding="utf-8"))
     assert result.complete and status["complete"] and status["blocking"] == []
     assert conn.execute("SELECT COUNT(*) FROM daily_metrics WHERE date = ?", (DAY,)).fetchone()[0] == 4
+
+
+def test_material_status_without_synthesis(conn, settings, seeded, tmp_path):
+    """run-daily --bez-raportu (Actions od 2026-10-01): metryki i status dnia, bez modelu i bez raportu."""
+    sources, _ = seeded
+    status = material_status(conn, settings, sources, THEMES, DAY, tmp_path)
+    saved = json.loads((tmp_path / "2026-09-23.status.json").read_text(encoding="utf-8"))
+    assert saved == status and status["complete"] and status["n_signals"] > 0
+    assert any("qa1" in w for w in status["warnings"]) and status["blocking"] == []   # jedno źródło: informacyjne
+    assert not (tmp_path / "2026-09-23.json").exists()
+    assert conn.execute("SELECT COUNT(*) FROM daily_metrics WHERE date = ?", (DAY,)).fetchone()[0] == 4
+    conn.execute("UPDATE articles SET extracted = 0 WHERE id = (SELECT MIN(id) FROM articles)")
+    assert not material_status(conn, settings, sources, THEMES, DAY, tmp_path)["complete"]
 
 
 def test_generate_report_without_signals_skips_llm(conn, settings, tmp_path):

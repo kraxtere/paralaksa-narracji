@@ -29,7 +29,10 @@ Runner najpierw pobiera aktualny Release. Przy jego niedostępności może wykor
 z jawnym ostrzeżeniem; należy wtedy porównać historię. Brak obu kopii zatrzymuje przebieg.
 Harmonogram: 10:30 UTC, ale GitHub opóźnia start nawet o kilka godzin albo go pomija. Gdy daily nie ruszył, można
 uruchomić go ręcznie (Actions → daily → Run workflow): późniejszy przebieg z harmonogramu tego samego dnia (UTC) zobaczy
-`reports/<dzień>.json` i skończy się bez pracy.
+`reports/<dzień>.status.json` i skończy się bez pracy.
+Od 2026-10-01 Actions robi `plx run-daily --bez-raportu`: pobranie, ekstrakcja, metryki i status dnia, bez syntezy.
+Raport (okładkowy: różnice i obraz kraju) powstaje lokalnie przez Codex: `plx report --date D --db data/prod.db`
+(na kopii bazy z Release), razem z obrazkami wersji 2.0. Bez Codexa zapas to DeepSeek V4-Pro z myśleniem (`config/settings.yaml`).
 `initialize_empty=true` w ręcznym workflow jest wyłącznie świadomą inicjalizacją pierwszej bazy,
 nie mechanizmem naprawy. Domyślnie `false`. Po błędzie ekstrakcji/raportu snapshot zachowuje częściowy postęp,
 a workflow nadal kończy się błędem.
@@ -73,7 +76,7 @@ Jeżeli Release już istnieje, pomiń create. Przed zastąpieniem jego plików z
 - Tryb direct kończy przydzielanie po 2400 s, po zakończeniu bieżącej paczki. Limit nie przerywa
   trwającego requestu. Actions ma 60 min. Batch Anthropic pozostaje innym trybem z timeoutem dostawcy;
   produkcyjny DeepSeek działa direct. Nie ma pomiaru czasu większego koszyka z prawdziwym LLM.
-- `report` i `run-daily` zwracają kod 1 przy pominiętej/pustej syntezie, błędach walidacji,
+- `report` i `run-daily` (z `--bez-raportu` tylko ekstrakcja i źródła) zwracają kod 1 przy pominiętej/pustej syntezie, błędach walidacji,
   brakach ekstrakcji lub brakujących aktywnych źródłach. Raport niepełny zapisuje się z ostrzeżeniami.
 - Powstają `.md`, `.json`, `.short.md`, `.status.json` oraz `.audit.json`.
   Skrót kopiuje do 3 zwalidowanych punktów z pełnego raportu; nie jest osobną generacją LLM.
