@@ -167,7 +167,8 @@ def copy_v2(src: Path | None, dest: Path) -> list[str]:
     """Wersja 2.0 (prototyp obrazkowy, data/widok/<dzień>/ z data/widok_obrazkowy.py): kopiuje gotowe strony i obrazy,
     bez plików roboczych (nazwy od „_”), i dopisuje v2/index.html z listą dni (najnowszy otwiera się od razu),
     v2/dni.json i wspólny pasek v2/pasek.js. Ciągła oś wydarzeń (data/os_czasu.py, widok/os/) trafia do v2/os/,
-    a jej skrót (zakres dni, miniatury) do v2/os.json: z niego pasek pokazuje wejście na stronach dnia."""
+    a jej skrót (zakres dni, miniatury) do v2/os.json: z niego pasek pokazuje wejście na stronach dnia.
+    Streszczenia artykułów (widok/streszczenia/*.json) trafiają do v2/streszczenia/."""
     def found(root: Path) -> list[str]:
         return sorted((d.name for d in root.iterdir() if d.is_dir() and re.fullmatch(r"\d{4}-\d{2}-\d{2}", d.name)
                        and (d / "index.html").exists()), reverse=True) if root.exists() else []
@@ -185,6 +186,12 @@ def copy_v2(src: Path | None, dest: Path) -> list[str]:
     if axis and (axis / "index.html").exists() and (axis / "skrot.json").exists():
         copy(axis, dest / "os")
         shutil.copy2(axis / "skrot.json", dest / "os.json")
+    # streszczenia artykułów pod nagłówkami (scripts/v2/streszczenia.py), pasek.js pobiera plik przy kliknięciu
+    summaries = src / "streszczenia" if days else None
+    if summaries and summaries.exists():
+        (dest / "streszczenia").mkdir(parents=True, exist_ok=True)
+        for f in summaries.glob("*.json"):
+            shutil.copy2(f, dest / "streszczenia" / f.name)
     if days:
         (dest / "dni.json").write_text(json.dumps(days), encoding="utf-8")   # przełącznik dni na stronach dnia
         (dest / "powiadomienie.json").write_text(json.dumps(edition_note(days[0], src.parent / "stories"), ensure_ascii=False),

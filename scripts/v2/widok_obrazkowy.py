@@ -428,7 +428,7 @@ def theme_page(t: dict, opisy: dict, pl: dict, cs: list[dict], debug: bool = Fal
         opis = (f"<p>{with_logos(pods[c], opisy['dane'][c]['zrodla'])}</p>" if pods.get(c) else
                 "".join(f"<p>{esc(w['zdanie'])}</p>" for w in opisy["opisy"].get(c, {}).get("watki", [])
                         if w["temat"] == t["temat"]))
-        arts = "".join(f'<li><a href="{esc(info[a["article_id"]]["url"])}">'
+        arts = "".join(f'<li><a href="{esc(info[a["article_id"]]["url"])}" data-a="{a["article_id"]}">'
                        f'{esc(headline_excerpt(pl.get(a["article_id"]) or info[a["article_id"]]["title"]))}</a> '
                        f'{src_html(a["zrodlo"])}</li>' for a in rest)
         blocks.append(f'<section id="kraj-{c}"><h2>{esc(NAMES[c])} <span class="s">{round(100 * share)}% artykułów'
@@ -554,7 +554,8 @@ def welcome_summaries(inputs: dict) -> dict:
 
 def article_list(ids: list[int], pl: dict) -> str:
     info = article_info(set(ids))
-    return "<ul>" + "".join(f'<li><a href="{esc(info[a]["url"])}">{esc(headline_excerpt(pl.get(a) or info[a]["title"]))}</a>'
+    # data-a: id artykułu dla streszczenia po kliknięciu (scripts/v2/streszczenia.py, v2/pasek.js)
+    return "<ul>" + "".join(f'<li><a href="{esc(info[a]["url"])}" data-a="{a}">{esc(headline_excerpt(pl.get(a) or info[a]["title"]))}</a>'
                             f'{src_html(info[a]["src"])}</li>' for a in dict.fromkeys(ids) if a in info) + "</ul>"
 
 

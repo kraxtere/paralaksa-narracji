@@ -356,7 +356,7 @@ def events(plan: dict) -> list[dict]:
             for k in st[sid]["kraje"]:
                 if k["article_id"] in seen:
                     pub, src, url = seen[k["article_id"]]
-                    heads.append({"kraj": k["kraj"], "naglowek": k.get("naglowek_pl", ""), "zrodlo": src, "url": url,
+                    heads.append({"id": k["article_id"], "kraj": k["kraj"], "naglowek": k.get("naglowek_pl", ""), "zrodlo": src, "url": url,
                                   "czas": datetime.fromisoformat(pub).astimezone(WAW), "dzien": st[sid]["dzien"]})
                     if k["kraj"] not in countries:
                         countries.append(k["kraj"])
@@ -545,7 +545,7 @@ def page() -> str:
         t, d = e["czas"], e["dzien"]
         when = f"{t:%H:%M}" if t.date() == d else f"{t:%d.%m %H:%M}"
         w = e["watek"] if e["watek"] in {x["id"] for x in shown} else ""
-        heads = "".join(f'<li>{esc(NAMES.get(h["kraj"], h["kraj"]))}: <a href="{esc(h["url"])}" rel="noopener" target="_blank">'
+        heads = "".join(f'<li>{esc(NAMES.get(h["kraj"], h["kraj"]))}: <a href="{esc(h["url"])}" data-a="{h["id"]}" rel="noopener" target="_blank">'
                         f'{esc(h["naglowek"])}</a> <span class="s">{esc(src_name(h["zrodlo"]))}, '
                         f'{h["czas"]:%d.%m %H:%M}</span></li>' for h in e["naglowki"])
         img = f'<img src="ev-{e["nr"]}.png" alt="" loading="lazy">' if (OUT / f"ev-{e['nr']}.png").exists() else ""

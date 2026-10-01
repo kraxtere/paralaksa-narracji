@@ -89,6 +89,40 @@
     }).catch(() => {});
   }
 
+  // Streszczenia (od 02.10): klik w nagłówek z data-a rozwija streszczenie artykułu (v2/streszczenia/<id/500>.json,
+  // scripts/v2/streszczenia.py) z linkiem do artykułu; drugi klik zwija. Pliki wczytane od razu po załadowaniu strony,
+  // żeby klik był synchroniczny (nowa karta po fetch to dla przeglądarki wyskakujące okno). Bez streszczenia link jak zwykle.
+  const sums = {};
+  document.addEventListener("DOMContentLoaded", () => {
+    const ns = new Set([...document.querySelectorAll("a[data-a]")].map(a => Math.floor(Number(a.dataset.a) / 500)));
+    for (const n of ns) fetch(new URL(`streszczenia/${n}.json`, base)).then(r => r.ok ? r.json() : {})
+      .then(d => Object.assign(sums, d)).catch(() => {});
+  });
+  const sst = document.createElement("style");
+  sst.textContent =
+    "a[data-a]{cursor:pointer}.streszcz{margin:6px 0 10px;padding:9px 12px;background:#fbf8f2;border-left:3px solid #8a3b2a;" +
+    "border-radius:4px;font:14px/1.5 Segoe UI,sans-serif;color:#2c2924}.streszcz p{margin:0 0 6px}" +
+    ".streszcz .s{color:#7a746a;font-size:.82em}.streszcz a.dalej{color:#8a3b2a;font-weight:600;text-decoration:none}";
+  document.head.append(sst);
+  document.addEventListener("click", e => {
+    const a = e.target.closest && e.target.closest("a[data-a]");
+    if (!a || e.ctrlKey || e.metaKey || e.shiftKey || e.button) return;
+    const open = a.parentElement.querySelector(":scope > .streszcz");
+    if (open) { e.preventDefault(); open.remove(); return; }
+    const s = sums[a.dataset.a];
+    if (!s) return;
+    e.preventDefault();
+    const box = document.createElement("div");
+    box.className = "streszcz";
+    box.innerHTML = `<p></p><p class="s"></p><a class="dalej" target="_blank" rel="noopener">Przejdź do artykułu →</a>`;
+    box.querySelector("p").textContent = s.t;
+    box.querySelector(".s").textContent = s.lead
+      ? "Streszczenie robocze (AI) tylko z tytułu i leadu: nie mamy pełnego tekstu (np. paywall)."
+      : "Streszczenie robocze (AI) z treści artykułu.";
+    box.querySelector("a").href = a.href;
+    a.parentElement.append(box);
+  });
+
   // --- menu osoby, instalacja i powiadomienia (tylko na serwerze: window.plxJa) ------------------------------------
   const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;

@@ -69,6 +69,12 @@ więc limitu nie ruszamy.
 - Panel `/osoby`: na górze „Gdzie czytają” (wszyscy oprócz właściciela) dziś i 7 dni: części strony i strony czytane
   najdłużej; u osoby to samo zamiast 30 dni. Wizyty sumują czas według strony (np. „Oś czasu 6 min” zamiast osobnego wpisu
   dla każdego dnia osi).
+- Streszczenia pod nagłówkami (02.10, decyzja właściciela: przez Codex, nie w ekstrakcji DeepSeek, bo tam +0,3–0,8 $ dziennie
+  za streszczenia, których prawie nikt nie zobaczy): `scripts/v2/streszczenia.py D` streszcza tylko artykuły podlinkowane
+  na stronach dnia i na osi (`data-a`; 01.10: 211 na stronach dnia, z osią ok. 530), z pełnego tekstu w lokalnej bazie
+  5–7 zdań, przy samym leadzie (rp, Spiegel i inne bez pełnego tekstu) 1–2 zdania. Kontrola liczby zdań i długości cytatów,
+  jedno ponowienie. Klik w nagłówek rozwija streszczenie i „Przejdź do artykułu →” (`pasek.js`, pliki `v2/streszczenia/`).
+  Próba 10 artykułów: ok. 1% okna 5 h Codex, przypisania („według…”, „autor ocenia”) poprawne.
 
 # Strona: nowe logo, pasek 2.0, czas według części strony — 2026-10-01
 

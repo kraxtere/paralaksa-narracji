@@ -23,7 +23,8 @@ robi Codex z limitu konta (`codex_limit.py` pokazuje zużycie). Nigdy w Actions.
    - `python scripts/v2/widok_obrazkowy.py strona`: HTML okładki, spraw, różnic, obrazu kraju i tematów.
    Obrazki można puszczać równolegle (8 procesów Codex naraz działało 01.10).
 7. Oś wydarzeń, reszta: `python scripts/v2/os_czasu.py opisy`, `obrazki`, `strona`.
-8. `plx site --db data/prod.db --publikuj`.
+8. `python scripts/v2/streszczenia.py D`: streszczenia artykułów pod nagłówkami stron dnia i osi (tylko brakujące).
+9. `plx site --db data/prod.db --publikuj`.
 
 Po każdym obrazku z ludźmi: obejrzeć (bez stereotypów, bez napisów na kadrach osi). Przy blokadzie moderacji plakatu:
 `widok_warianty.py`.
@@ -33,5 +34,6 @@ Po każdym obrazku z ludźmi: obejrzeć (bez stereotypów, bez napisów na kadra
 - `widok_obrazkowy.py`: siatka tematów, plakaty, wszystkie strony dnia; `widok_tresci.py`: dane i pamięć podręczna tekstów stron.
 - `widok_powitanie.py`: okładka dnia (sprawy, różnice, obraz kraju).
 - `os_czasu.py`: ciągła oś wydarzeń (`data/widok/os/`).
+- `streszczenia.py`: streszczenia artykułów pod nagłówkami (`data/widok/streszczenia/`, klik w nagłówek na stronie).
 - `dzien_prasy.py`: dane i opisy krajów dnia; `loga.py`: ikony redakcji (`data/logos/`).
 - `komiks_codex.py`: wywołanie Codex (`codex_exe`) i dawny prototyp komiksu; `codex_limit.py`: stan limitu Codex.
