@@ -22,6 +22,7 @@ Poprawki tego samego dnia (uwagi właściciela):
 - Co było czytane: sygnał niesie też zakładkę (`#raport`), wysyłany jest także po kliknięciu, gdy zakładka się zmieni,
   i „h” od razu po schowaniu karty albo aplikacji (koniec czasu bez czekania na minutę). W sesji lista stron z tytułami i czasem.
 - Sprawdzone w Chrome (widok telefonu) na lokalnym serwerze: zaproszenie, logowanie, przekierowanie z powrotem, zakładki, „h”.
+- Wersja 2.0 (obrazkowa) jest podstawowa (decyzja właściciela): `/` otwiera najnowszy dzień 2.0, stara wersja pod `/index.html`.
 
 # Rosja w daily — 2026-09-30
 

@@ -338,3 +338,19 @@ def test_server_invite_logs_in_new_password_logs_out_and_delete(monkeypatch, tmp
         assert _req(base + "/", "ala:inne-haslo-123")[0] == 401
     finally:
         srv.shutdown()
+
+
+def test_server_root_opens_newest_v2_day(monkeypatch, tmp_path):
+    mod, srv, base = _server(monkeypatch, tmp_path, None)
+    try:
+        owner = {"Authorization": "Basic " + base64.b64encode(b"wlasciciel:tajne-haslo").decode()}
+        assert _raw(base, "GET", "/", owner)[0] == 200                          # bez wersji 2.0: stara strona
+        (tmp_path / "v2" / "2026-09-30").mkdir(parents=True)
+        (tmp_path / "v2" / "2026-09-30" / "index.html").write_text("<html><body>v2</body></html>", encoding="utf-8")
+        (tmp_path / "v2" / "dni.json").write_text('["2026-09-30", "2026-09-29"]', encoding="utf-8")
+        status, _, location, _ = _raw(base, "GET", "/", owner)
+        assert status == 302 and location == "/v2/2026-09-30/index.html"
+        assert "<h1>ok</h1>" in _raw(base, "GET", "/index.html", owner)[1]   # stara wersja dalej pod /index.html
+        assert _raw(base, "GET", "/")[2].startswith("/logowanie")             # bez logowania nic nie zdradza
+    finally:
+        srv.shutdown()

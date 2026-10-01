@@ -72,7 +72,7 @@ def manifest() -> str:
     return json.dumps({
         "name": "Paralaksa", "short_name": "Paralaksa", "lang": "pl",
         "description": "Jedno zdarzenie, wiele opowieści. Wersja wewnętrzna.",
-        "start_url": "./index.html", "scope": "./", "display": "standalone",
+        "start_url": "./", "scope": "./", "display": "standalone",   # serwer otwiera pod / najnowszy dzień wersji 2.0
         "background_color": "#151513", "theme_color": "#1c1c1a",
         "icons": [{"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
                   {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},

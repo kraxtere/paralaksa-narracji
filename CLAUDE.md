@@ -147,6 +147,8 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
 - Wersja 2.0 strony (prototyp obrazkowy): `data/widok_obrazkowy.py` (poza gitem) generuje przez Codex infografikę dnia 2×3
   i plakaty tematów. Panele wykrywa po ramkach i nakłada jako linki. Wynik trafia do `data/widok/<dzień>/`,
   a `plx site` kopiuje go do `v2/` (`build.copy_v2`, pliki od „_” pomija). Link „2.0” jest w menu.
+  Od 2026-10-01 wersja 2.0 jest podstawowa: serwer pod `/` przekierowuje do najnowszego dnia z `v2/dni.json`,
+  stara wersja zostaje pod `/index.html` (link „Stara wersja” na stronach 2.0); `start_url` aplikacji to `./`.
 - `.github/workflows/daily.yml`: cron 10:30 UTC (poza szczytem DeepSeek; GitHub opóźnia start nawet o 4–5 h), baza jako zaszyfrowany snapshot w Release `database-backup` (cache i artefakt to kopie), commit `reports/`. Kod 1 tylko przy ostrzeżeniach blokujących (synteza, ekstrakcja, brak >1/3 aktywnych źródeł); pojedynczy kanał/źródło to ostrzeżenie informacyjne.
 
 ## Konwencje

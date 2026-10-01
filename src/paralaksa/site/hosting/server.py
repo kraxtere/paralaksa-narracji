@@ -16,6 +16,7 @@ import base64
 import hashlib
 import hmac
 import html
+import json
 import os
 import re
 import signal
@@ -205,8 +206,19 @@ class Handler(SimpleHTTPRequestHandler):
         if not head:
             self.wfile.write(body)
 
-    def _redirect(self, location: str, headers: list[tuple[str, str]] = ()) -> None:
-        self.send_response(303)
+    def _latest_v2(self) -> str | None:
+        """Newest day of version 2.0 (v2/dni.json from the build), if it was built."""
+        try:
+            days = json.loads((Path(self.directory) / "v2" / "dni.json").read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return None
+        day = days[0] if isinstance(days, list) and days else ""
+        if not (isinstance(day, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", day)):
+            return None
+        return day if (Path(self.directory) / "v2" / day / "index.html").is_file() else None
+
+    def _redirect(self, location: str, headers: list[tuple[str, str]] = (), status: int = 303) -> None:
+        self.send_response(status)
         self.send_header("Location", location)
         self.send_header("Content-Length", "0")
         for name, value in headers:
@@ -242,6 +254,8 @@ class Handler(SimpleHTTPRequestHandler):
             return
         if route == "/osoby":
             return self._admin(who, head=head) if who == USER else self.send_error(403)
+        if route == "/" and (latest := self._latest_v2()):     # wersja 2.0 jest podstawowa; stara pod /index.html
+            return self._redirect(f"/v2/{latest}/index.html", status=302)
         target = Path(self.translate_path(self.path))
         if target.is_dir() and (target / "index.html").is_file() and route.endswith("/"):
             target = target / "index.html"
