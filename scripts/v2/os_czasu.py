@@ -11,7 +11,8 @@ Godzina na osi = najwcześniejszy pokazany nagłówek w analizowanych źródłac
   python scripts/v2/os_czasu.py ciag 2026-10-01         # Codex (tekst): czy Sprawy dnia 1–3 to ciąg dalszy wcześniejszych dni
                                                         # i co nowego (okładka i strony spraw); przed widok_powitanie.py
   python scripts/v2/os_czasu.py opisy                   # Codex (tekst): 2–3 zdania pod nagłówkiem karty (nowe i rozszerzone)
-  python scripts/v2/os_czasu.py obrazki                 # Codex (obraz): kadr bez tekstu dla zdarzeń bez obrazka
+  python scripts/v2/os_czasu.py obrazki [api]           # Codex (obraz): kadr bez tekstu dla zdarzeń bez obrazka;
+                                                        # api: OpenAI Images API (płatnie, ok. 0,05 $ za kadr)
   python scripts/v2/os_czasu.py strona                  # index.html + skrot.json (wejście z paska stron dnia)
 Wynik: data/widok/os/ (plx site kopiuje do v2/os/ i v2/os.json).
 """
@@ -40,6 +41,7 @@ EXTRA_MAX = 12
 EXTRA_MIN_COUNTRIES = 2
 NEW_PER_DAY = (4, 8)          # nowych zdarzeń na dzień (decyzja właściciela 2026-10-01)
 TEXT_MODEL = "codex:gpt-6.1-sol:medium"
+API_IMAGE_MODEL = "gpt-image-2"   # obrazki api: płatnie, gdy dobowy limit obrazków Codex się skończył
 WAW = ZoneInfo("Europe/Warsaw")
 DAY_NAMES = ["pon.", "wt.", "śr.", "czw.", "pt.", "sob.", "niedz."]
 STYLE = ("Square 1:1 editorial comic panel, clean flat illustration, warm paper background (#f4f0e8), dark ink outlines, "
@@ -361,9 +363,10 @@ def events(plan: dict) -> list[dict]:
         heads.sort(key=lambda h: h["czas"])
         page = next((f"../{st[s]['dzien']}/sprawa-{st[s]['n']}.html" for s in ev["historie"]
                      if st[s]["n"] <= 3 and (Path("data/widok") / st[s]["dzien"] / f"sprawa-{st[s]['n']}.html").exists()), "")
-        out.append({**ev, "czas": heads[0]["czas"], "naglowki": heads, "kraje": countries, "strona": page,
+        out.append({**ev, "czas": heads[0]["czas"], "dzien": date.fromisoformat(min(st[s]["dzien"] for s in ev["historie"])),
+                    "naglowki": heads, "kraje": countries, "strona": page,
                     "dni": sorted({h["dzien"] for h in heads})})
-    out.sort(key=lambda e: e["czas"])
+    out.sort(key=lambda e: (e["dzien"], e["czas"]))      # dzień przeglądu, w którym zdarzenie weszło (decyzja 2026-10-01)
     return out
 
 
@@ -421,10 +424,30 @@ def image_prompt(ev: dict) -> str:
             "signs, logos or flags with writing anywhere in the image.")
 
 
-def images() -> None:
+def api_image(ev: dict) -> str:
+    """Fallback when the Codex image quota is used up (decision 2026-10-01): OpenAI Images API, paid, ~0.05 $ per frame."""
+    import base64
+    import os
+    import httpx
+    from dotenv import load_dotenv
+    load_dotenv()
+    prompt = (STYLE + PEOPLE_STYLE + " Scene: " + ev["scena"] + " Absolutely no text, letters, numbers, captions, signs, "
+              "logos or flags with writing anywhere in the image.")
+    r = httpx.post("https://api.openai.com/v1/images/generations", timeout=300,
+                   headers={"Authorization": f"Bearer {os.environ['OPENAI_API_KEY']}"},
+                   json={"model": API_IMAGE_MODEL, "prompt": prompt, "size": "1024x1024", "quality": "medium", "n": 1})
+    if r.status_code != 200:
+        return f"ev-{ev['nr']}: BRAK (API {r.status_code}: {r.text[:200]})"
+    (OUT / f"ev-{ev['nr']}.png").write_bytes(base64.b64decode(r.json()["data"][0]["b64_json"]))
+    return f"ev-{ev['nr']}.png (API)"
+
+
+def images(api: bool = False) -> None:
     todo = [e for e in load()["zdarzenia"] if not (OUT / f"ev-{e['nr']}.png").exists()]
 
     def one(ev):
+        if api:
+            return api_image(ev)
         work = OUT / f"_gen-{ev['nr']}"
         run_codex(work, image_prompt(ev))
         if (work / "kadr.png").exists():
@@ -513,13 +536,14 @@ def page() -> str:
     shown = [w for w in plan["watki"] if counts[w["id"]] >= 2]          # wątek z jednym zdarzeniem: bez filtra
     chips = '<button data-w="*" class="on">Wszystko</button>' + "".join(
         f'<button data-w="{esc(w["id"])}">{esc(w["nazwa"])} <span class="s">{counts[w["id"]]}</span></button>' for w in shown)
-    first, last_day = min(e["czas"].date() for e in evs), max(e["czas"].date() for e in evs)
+    first, last_day = min(e["dzien"] for e in evs), max(e["dzien"] for e in evs)
     days = [date.fromordinal(n) for n in range(first.toordinal(), last_day.toordinal() + 1)]   # pusty dzień też widać
     day_chips = "".join(f'<button class="dzien" data-d="{d.isoformat()}">{d:%d.%m}<small>{DAY_NAMES[d.weekday()]}</small></button>'
                         for d in days)
     cards = []
     for e in evs:
-        t = e["czas"]
+        t, d = e["czas"], e["dzien"]
+        when = f"{t:%H:%M}" if t.date() == d else f"{t:%d.%m %H:%M}"
         w = e["watek"] if e["watek"] in {x["id"] for x in shown} else ""
         heads = "".join(f'<li>{esc(NAMES.get(h["kraj"], h["kraj"]))}: <a href="{esc(h["url"])}" rel="noopener" target="_blank">'
                         f'{esc(h["naglowek"])}</a> <span class="s">{esc(src_name(h["zrodlo"]))}, '
@@ -528,8 +552,8 @@ def page() -> str:
         more = f' · {len(e["dni"])} dni w Sprawach dnia' if len(e["dni"]) > 1 else ""
         tag = f'<button class="watek" data-w="{esc(w)}">{esc(names[w])}</button>' if w else ""
         cards.append(
-            f'<article class="ev" data-d="{t.date().isoformat()}" data-w="{esc(w)}"><div class="data"><b>{t:%d.%m}</b>'
-            f'<span>{DAY_NAMES[t.weekday()]} {t:%H:%M}</span></div><div class="linia"><i></i></div><div class="karta">{img}'
+            f'<article class="ev" data-d="{d.isoformat()}" data-w="{esc(w)}"><div class="data"><b>{d:%d.%m}</b>'
+            f'<span>{DAY_NAMES[d.weekday()]} · 1. nagłówek {when}</span></div><div class="linia"><i></i></div><div class="karta">{img}'
             f'<div class="tresc">{tag}<h2>{esc(e["tytul"])}</h2>'
             + (f'<p class="opis">{esc(e["opis"])}</p>' if e.get("opis") else "")
             + f'<div class="kraje">{n_kraje(len(e["kraje"]))}: '
@@ -540,8 +564,8 @@ def page() -> str:
     last = max(plan["dni"])
     body = (f'<div id="pasek" data-dzien="{last}" data-wstecz></div><script src="../pasek.js"></script>'
             f'<div class="head"><h1>Oś czasu</h1><p>Najważniejsze sprawy dzień po dniu. Przesuń w bok albo wybierz dzień; '
-            f'wątek zawęża oś do jednej sprawy. Godzina to pierwszy nagłówek w analizowanych źródłach (czas polski), '
-            f'nie godzina samego zdarzenia.</p></div>'
+            f'wątek zawęża oś do jednej sprawy. Dzień to przegląd prasy, w którym sprawa pojawiła się pierwszy raz; '
+            f'godzina to pierwszy nagłówek w analizowanych źródłach (czas polski), nie godzina samego zdarzenia.</p></div>'
             f'<nav class="wybor-dni" aria-label="Dni"><div class="in"><button class="strz w" aria-label="Poprzedni dzień">‹</button>'
             f'<div class="lista">{day_chips}</div><button class="strz d" aria-label="Następny dzień">›</button></div></nav>'
             f'<nav class="filtry" aria-label="Wątki">{chips}</nav>'
@@ -560,12 +584,12 @@ def summary() -> dict:
                     reverse=True)
     shown = [e for e in newest if (OUT / f"ev-{e['nr']}.png").exists()][:4]
     evs = events(plan)
-    days = [e["czas"].date().isoformat() for e in evs]        # jak wybór dni na osi: daty pierwszych nagłówków
+    days = [e["dzien"].isoformat() for e in evs]               # jak wybór dni na osi: dni przeglądu
     # kafelek „Dzień po dniu”: ostatnie 5 dni osi, po 2 kadry (najszerzej opisywane sprawy dnia)
     rank = {e["nr"]: min(int(s.split("#")[1]) for s in e["historie"]) for e in plan["zdarzenia"]}
     strip = []
     for d in sorted(set(days))[-5:]:
-        pics = sorted((e for e in evs if e["czas"].date().isoformat() == d and (OUT / f"ev-{e['nr']}.png").exists()),
+        pics = sorted((e for e in evs if e["dzien"].isoformat() == d and (OUT / f"ev-{e['nr']}.png").exists()),
                       key=lambda e: rank[e["nr"]])[:2]
         strip.append({"d": d, "obrazki": [f"ev-{e['nr']}.png" for e in pics]})
     return {"od": min(days), "do": max(days), "n": len(plan["zdarzenia"]), "dni": strip,
@@ -585,7 +609,7 @@ if __name__ == "__main__":
     elif cmd == "opisy":
         describe()
     elif cmd == "obrazki":
-        images()
+        images(api=arg == "api")
     elif cmd == "strona":
         (OUT / "index.html").write_text(page(), encoding="utf-8")
         (OUT / "skrot.json").write_text(json.dumps(summary(), ensure_ascii=False), encoding="utf-8")

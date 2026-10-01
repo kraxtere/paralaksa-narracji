@@ -48,6 +48,11 @@ więc limitu nie ruszamy.
   4 dodane (Fairford, Hegseth, naloty Pakistanu, irańska delegacja), razem 8.
 - Obrazki Codex mają osobny dobowy limit (429 `usage_limit_reached`, okno 1440 min), którego `codex_limit.py` nie pokazuje:
   01.10 skończył się po ok. 25 obrazkach przy 30% okna 5 h. 8 procesów obrazków naraz działało bez problemu.
+  Brakujące kadry: `os_czasu.py obrazki api` (OpenAI Images API, `gpt-image-2`, jakość medium, ok. 0,05 $ za kadr;
+  01.10 cztery kadry, ok. 0,20 $, decyzja właściciela).
+- Oś grupuje karty według dnia przeglądu, w którym sprawa weszła, nie według daty pierwszego nagłówka (decyzja właściciela):
+  sprawy z wieczornymi nagłówkami D-1 lądowały na D-1, przez co 01.10 miał 4 karty, a 30.09 osiem. Godzina pierwszego
+  nagłówka zostaje na karcie („1. nagłówek 30.09 18:49”). Teraz każdy dzień 23.09–01.10 ma 4–8 kart.
 
 # Strona: nowe logo, pasek 2.0, czas według części strony — 2026-10-01
 

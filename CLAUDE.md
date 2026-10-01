@@ -157,7 +157,7 @@ Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20
   Oś wydarzeń (prototyp 2026-10-01, decyzja właściciela: jedna ciągła oś przez wszystkie dni): `scripts/v2/os_czasu.py`
   dopisuje każdy nowy dzień (`dzien D`: Codex dzieli Sprawy dnia na nowe zdarzenia i dalszy ciąg istniejących,
   bez pomijania (limit 1–4 zgubił 28.09), przypisuje wątki), `obrazki` (kadr bez napisów na zdarzenie), `strona`. Godzina to pierwszy pokazany nagłówek
-  w naszych źródłach, nie godzina zdarzenia, więc dni na osi to daty tych nagłówków. Wynik `data/widok/os/` → `v2/os/`
+  w naszych źródłach, nie godzina zdarzenia; od 2026-10-01 dzień na osi to dzień przeglądu, w którym sprawa weszła (wcześniej data pierwszego nagłówka). Wynik `data/widok/os/` → `v2/os/`
   i `v2/os.json` (wejście z miniaturami pod paskiem stron dnia, otwiera oś na tym dniu), w panelu `/osoby` część „Oś wydarzeń”.
   Od 2026-10-01 (decyzja właściciela) oś bierze nie tylko Sprawy dnia (najwyżej 6), ale też dalsze zdarzenia dnia z ≥ 2 krajów
   (`dzien D` szuka ich tymi samymi dwoma krokami co `site/stories.py`, ale przez Codex, `data/widok/os/dodatkowe/`, numery spraw od 101,
