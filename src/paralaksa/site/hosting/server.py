@@ -112,7 +112,7 @@ SECTIONS = {
     "roznice": ("Gdzie prasa się różni", "#c47f2c"),
     "obraz": ("Obraz kraju", "#3f6f8a"),
     "tematy": ("Tematy dnia", "#4f7a4a"),
-    "os": ("Oś wydarzeń", "#7a5a8a"),
+    "os": ("Oś czasu", "#7a5a8a"),
     "stara": ("Stara wersja", "#b3ada2"),
 }
 V2_PAGE = re.compile(r"^/v2/(\d{4}-\d{2}-\d{2})/(.*)$")

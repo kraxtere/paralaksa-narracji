@@ -1,4 +1,4 @@
-"""Ad hoc PROTOTYP (2026-10-01): ciągła oś wydarzeń przez wszystkie dni, dopisywana dzień po dniu, z przeskakiwaniem dni
+﻿"""Ad hoc PROTOTYP (2026-10-01): ciągła oś wydarzeń przez wszystkie dni, dopisywana dzień po dniu, z przeskakiwaniem dni
 i filtrem wątków (zastępuje osobne tygodnie z data/os_tygodnia.py).
 
 Dane: Sprawy dnia z data/stories/<dzień>.json (plx site), godziny publikacji z data/prod.db (tylko do odczytu).
@@ -284,7 +284,7 @@ def images() -> None:
             return f"ev-{ev['nr']}.png"
         return f"ev-{ev['nr']}: BRAK (zob. {work / 'codex.log'})"
 
-    with ThreadPoolExecutor(3) as ex:
+    with ThreadPoolExecutor(6) as ex:
         for line in ex.map(one, todo):
             print(line, flush=True)
 
@@ -391,7 +391,7 @@ def page() -> str:
             + '</div></div></article>')
     last = max(plan["dni"])
     body = (f'<div id="pasek" data-dzien="{last}" data-wstecz></div><script src="../pasek.js"></script>'
-            f'<div class="head"><h1>Oś wydarzeń</h1><p>Najważniejsze sprawy dzień po dniu. Przesuń w bok albo wybierz dzień; '
+            f'<div class="head"><h1>Oś czasu</h1><p>Najważniejsze sprawy dzień po dniu. Przesuń w bok albo wybierz dzień; '
             f'wątek zawęża oś do jednej sprawy. Godzina to pierwszy nagłówek w analizowanych źródłach (czas polski), '
             f'nie godzina samego zdarzenia.</p></div>'
             f'<nav class="wybor-dni" aria-label="Dni"><div class="in"><button class="strz w" aria-label="Poprzedni dzień">‹</button>'
@@ -399,7 +399,7 @@ def page() -> str:
             f'<nav class="filtry" aria-label="Wątki">{chips}</nav>'
             f'<div class="os" data-sekcja="os">{"".join(cards)}</div><script>{JS}</script>')
     return (f'<!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">'
-            f'<meta name="robots" content="noindex"><title>Oś wydarzeń · Paralaksa</title><link rel="icon" href="{FAVICON}">'
+            f'<meta name="robots" content="noindex"><title>Oś czasu · Paralaksa</title><link rel="icon" href="{FAVICON}">'
             f'<link rel="manifest" href="../../manifest.webmanifest"><meta name="theme-color" content="#1d1b18">'
             f'<style>{CSS}</style></head><body>{body}</body></html>')
 
@@ -407,9 +407,21 @@ def page() -> str:
 def summary() -> dict:
     """skrot.json for the entry under the bar of day pages: range and the newest pictures."""
     plan = load()
-    newest = sorted(plan["zdarzenia"], key=lambda e: (max(s.split("#")[0] for s in e["historie"]), e["nr"]), reverse=True)
-    pics = [f"ev-{e['nr']}.png" for e in newest if (OUT / f"ev-{e['nr']}.png").exists()][:4]
-    return {"od": min(plan["dni"]), "do": max(plan["dni"]), "obrazki": pics}
+    # najnowszy dzień, w nim kolejność Spraw dnia (pierwsza = najszerzej opisywana)
+    newest = sorted(plan["zdarzenia"], key=lambda e: max((s.split("#")[0], -int(s.split("#")[1])) for s in e["historie"]),
+                    reverse=True)
+    shown = [e for e in newest if (OUT / f"ev-{e['nr']}.png").exists()][:4]
+    evs = events(plan)
+    days = [e["czas"].date().isoformat() for e in evs]        # jak wybór dni na osi: daty pierwszych nagłówków
+    # kafelek „Dzień po dniu”: ostatnie 5 dni osi, po 2 kadry (najszerzej opisywane sprawy dnia)
+    rank = {e["nr"]: min(int(s.split("#")[1]) for s in e["historie"]) for e in plan["zdarzenia"]}
+    strip = []
+    for d in sorted(set(days))[-5:]:
+        pics = sorted((e for e in evs if e["czas"].date().isoformat() == d and (OUT / f"ev-{e['nr']}.png").exists()),
+                      key=lambda e: rank[e["nr"]])[:2]
+        strip.append({"d": d, "obrazki": [f"ev-{e['nr']}.png" for e in pics]})
+    return {"od": min(days), "do": max(days), "n": len(plan["zdarzenia"]), "dni": strip,
+            "obrazki": [f"ev-{e['nr']}.png" for e in shown], "tytuly": [e["tytul"] for e in shown]}
 
 
 if __name__ == "__main__":

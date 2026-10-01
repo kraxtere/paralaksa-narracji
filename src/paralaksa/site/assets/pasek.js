@@ -53,27 +53,37 @@
     }).catch(() => {});
   }
 
-  // Wejście na ciągłą oś wydarzeń (v2/os.json, gdy jest): pasek z miniaturami pod paskiem strony dnia; otwiera oś
-  // na tym dniu (#d=), a dzień spoza osi na jej końcu
+  // Kafelek „Dzień po dniu” (v2/os.json, gdy jest) zaraz pod okładką strony dnia, w stylu jej sekcji, niższy od nich:
+  // oś ostatnich dni z okrągłymi kadrami na zakładkę; otwiera oś na tym dniu (#d=), a dzień spoza osi na jej końcu
   if (!("wstecz" in box.dataset)) {
     fetch(new URL("os.json", base), { cache: "no-store" }).then(r => r.ok ? r.json() : null).then(w => {
-      if (!w || !w.obrazki) return;
+      if (!w || !w.dni || !w.dni.length) return;
       const dir = new URL("os/", base).href;
       const st = document.createElement("style");
       st.textContent =
-        ".wejscie-os{display:flex;align-items:center;gap:12px;max-width:720px;margin:10px auto 0;padding:8px 12px;box-sizing:border-box;" +
-        "background:#fbf8f2;border:1px solid #ddd5c7;border-radius:12px;text-decoration:none;color:#1d1b18;font:14px Segoe UI,sans-serif}" +
-        ".wejscie-os .mini{display:flex;flex:none}.wejscie-os .mini img{width:44px;height:44px;border-radius:8px;object-fit:cover;" +
-        "border:2px solid #fbf8f2;margin-left:-14px;background:#ebe4d6}.wejscie-os .mini img:first-child{margin-left:0}" +
-        ".wejscie-os b{display:block;color:#8a3b2a}.wejscie-os span{color:#7a746a;font-size:.9em}.wejscie-os i{margin-left:auto;font-style:normal;" +
-        "color:#8a3b2a;font-size:1.3em}@media(max-width:740px){.wejscie-os{margin:10px 10px 0}}";
+        ".kafel-os{display:block;max-width:720px;margin:14px auto 0;box-sizing:border-box;background:#f4f0e8;border:2px solid #1d1b18;" +
+        "border-radius:6px;overflow:hidden;text-decoration:none;color:#1d1b18;font:14px Segoe UI,sans-serif}" +
+        ".kafel-os:hover{box-shadow:0 0 0 3px rgba(138,59,42,.25)}.kafel-os .gl{display:flex;align-items:center;justify-content:space-between}" +
+        ".kafel-os .et{background:#8a3b2a;color:#fff;font:700 1.3em Georgia,serif;padding:4px 16px 4px 10px;" +
+        "clip-path:polygon(0 0,100% 0,calc(100% - 10px) 100%,0 100%)}.kafel-os .gl i{font:700 1em Georgia,serif;font-style:normal;color:#8a3b2a;padding-right:10px}" +
+        ".kafel-os .os{position:relative;display:flex;justify-content:space-between;padding:10px 10px 6px}" +
+        ".kafel-os .os:before{content:'';position:absolute;left:10px;right:10px;height:3px;background:#1d1b18;top:58px}" +
+        ".kafel-os .d{display:flex;flex-direction:column;align-items:center;flex:1}.kafel-os .d b{font:700 11px Georgia,serif;color:#5a554c;margin-top:4px}" +
+        ".kafel-os .st{display:flex;height:42px}.kafel-os .st img{width:38px;height:38px;object-fit:cover;border:2px solid #f4f0e8;border-radius:50%;" +
+        "margin-left:-22px;box-shadow:0 1px 3px rgba(0,0,0,.25)}.kafel-os .st img:first-child{margin-left:0}" +
+        ".kafel-os .kr{width:9px;height:9px;border-radius:50%;background:#8a3b2a;border:2px solid #f4f0e8;margin-top:5px;z-index:1}" +
+        "@media(min-width:640px){.kafel-os .st{height:62px}.kafel-os .st img{width:58px;height:58px;margin-left:-30px}.kafel-os .os:before{top:78px}" +
+        ".kafel-os .d b{font-size:13px}}@media(max-width:740px){.kafel-os{margin:12px 6px 0}}";
       document.head.append(st);
       const a = document.createElement("a");
-      a.className = "wejscie-os";
+      a.className = "kafel-os";
+      a.dataset.sekcja = "os";
       a.href = dir + "index.html" + (w.od <= day && day <= w.do ? "#d=" + day : "");
-      a.innerHTML = `<span class="mini">${w.obrazki.slice(0, 4).map(f => `<img src="${dir + f}" alt="">`).join("")}</span>` +
-        `<span><b>Oś wydarzeń · ${short(w.od)}–${short(w.do)}</b><span>Najważniejsze sprawy dzień po dniu</span></span><i>›</i>`;
-      box.after(a);
+      const days = w.dni.map(x => `<span class="d"><span class="st">${x.obrazki.map(f => `<img src="${dir + f}" alt="" loading="lazy">`).join("")}` +
+        `</span><span class="kr"></span><b>${short(x.d)}</b></span>`).join("");
+      a.innerHTML = `<span class="gl"><span class="et">Dzień po dniu</span><i>Oś czasu ›</i></span><span class="os">${days}</span>`;
+      const put = () => (document.querySelector('[data-sekcja="okladka"]') || box).after(a);
+      document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", put) : put();
     }).catch(() => {});
   }
 
