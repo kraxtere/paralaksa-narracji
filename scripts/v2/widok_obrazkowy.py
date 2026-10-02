@@ -12,6 +12,7 @@ import hashlib
 import os
 import json
 import re
+import shutil
 import sqlite3
 import subprocess
 import sys
@@ -221,7 +222,7 @@ def shell(title: str, body: str, debug: bool = False) -> str:
             f'color:#7a746a;font-size:.8em;font-weight:400;white-space:nowrap}}.src img{{width:16px;height:16px;border-radius:3px}}'
             f'.list p{{line-height:1.5}}.list li{{line-height:1.4;margin:4px 0}}.list .ciag{{border-left:4px solid #8a3b2a;'
             f'background:#fbf8f2;padding:8px 12px;border-radius:0 8px 8px 0}}.ciag b{{color:#8a3b2a}}.list .ciag a{{color:#8a3b2a}}'
-            f'h2 .src{{font-size:.55em}}.list h3{{margin:14px 0 2px;font-size:1.05em}}.kraje-link{{display:flex;justify-content:space-between;align-items:center;max-width:720px;margin:10px auto;box-sizing:border-box;border:2px solid #1d1b18;border-radius:6px;background:#fbf8f2;color:#1d1b18;text-decoration:none;padding:8px 12px}}.kraje-link b{{color:#8a3b2a;font:700 1.2em Georgia,serif}}.kraje-link:hover{{box-shadow:0 0 0 3px rgba(138,59,42,.25)}}@media(max-width:740px){{.kraje-link{{margin:8px 6px}}}}.osk{{font-size:.55em;font-weight:400;margin-left:8px;color:#8a3b2a;white-space:nowrap}}.pas{{display:block;width:100%;height:auto;border-radius:10px;margin:18px 0 6px}}.il{{width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:3px}}{STRIPS_CSS}</style></head><body>{body}</body></html>')
+            f'h2 .src{{font-size:.55em}}.list h3{{margin:14px 0 2px;font-size:1.05em}}.osk{{font-size:.55em;font-weight:400;margin-left:8px;color:#8a3b2a;white-space:nowrap}}.pas{{display:block;width:100%;height:auto;border-radius:10px;margin:18px 0 6px}}.il{{width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:3px}}{STRIPS_CSS}</style></head><body>{body}</body></html>')
 
 
 def main_theme(ids: set[int]) -> dict[int, str]:
@@ -631,7 +632,6 @@ def countries_data() -> dict:
 def country_strips(country: str, topics: list[dict]) -> list[str]:
     """Scene strips over the topics (scripts/v2/kraje.py obrazki), copied next to kraje.html; only when the stored
     topic titles match the current ones, otherwise none."""
-    import shutil
     from kraje import strip_names
     names = strip_names(DAY, country, topics)
     for name in names:
@@ -661,7 +661,8 @@ bs.forEach(b=>b.onclick=e=>{e.preventDefault();pick(b.dataset.k,true)});
 const h=()=>pick(location.hash.slice(1).replace(/^kraj-/,'')||'PL',false);addEventListener('hashchange',h);h()})()</script>"""
 COUNTRY_PICK_CSS = (".jeden .kraje-nav{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;padding-bottom:4px}"
                     ".jeden .kraje-nav a.on{background:var(--cegla);border-color:var(--cegla);color:var(--papier)}"
-                    ".jeden.js section[id^=kraj-]{display:none}.jeden.js section[id^=kraj-].on{display:block}")
+                    ".jeden.js section[id^=kraj-]{display:none}.jeden.js section[id^=kraj-].on{display:block}"
+                    ".kraje-baner{display:block;width:100%;height:auto;border-radius:10px;margin:12px 0 0}.jeden h1{margin-top:10px}.przypis{margin:-4px 0 10px;font-size:.8em}")
 
 
 def countries_page(pl: dict) -> str:
@@ -682,19 +683,47 @@ def countries_page(pl: dict) -> str:
                                               for c in order) + '</nav>')
     title = f"Czym żyje kraj · {DAY[8:10]}.{DAY[5:7]}"
     body = (bar("index.html") + f'<style>{COUNTRY_PICK_CSS}</style><div class="list jeden" data-sekcja="kraje">'
-            f'<h1>{esc(title)}</h1>'
+            + ('<img class="kraje-baner" src="../kraje/baner.webp" alt="">' if BANNER.exists() else "")
+            + f'<h1>{esc(title)}</h1>'
             '<p>Sprawy, które zajmowały prasę jednego kraju, a nie trafiły do Wydarzeń dnia, bo inne kraje o nich nie pisały.</p>'
-            '<p class="s">Tematy i opisy wybrane przez AI z nagłówków prasy; nagłówki w tłumaczeniu roboczym, '
-            'dłuższe skrócone do 15 słów.</p>' + nav + "".join(blocks) + '</div>' + COUNTRY_PICK_JS)
+            + nav + '<p class="s przypis">Tematy i opisy wybrane przez AI z nagłówków prasy; nagłówki w tłumaczeniu roboczym, '
+            'dłuższe skrócone do 15 słów.</p>' + "".join(blocks) + '</div>' + COUNTRY_PICK_JS)
     return shell(title, body)
 
 
 def countries_link() -> str:
-    """Strip under the cover leading to kraje.html (only when the day has national topics)."""
+    """Tile under the cover leading to kraje.html (only when the day has national topics): the shared banner with the
+    title over it, like the theme strips of the cover; without the banner the same tile on a dark background."""
     if not any(countries_data().values()):
         return ""
-    return ('<a class="kraje-link" href="kraje.html" data-sekcja="kraje"><b>Czym żyje kraj</b>'
-            '<span>Sprawy z prasy jednego kraju ›</span></a>')
+    img = '<img src="../kraje/baner.webp" alt="" loading="lazy">' if BANNER.exists() else ""
+    return (f'<div class="okl"><a class="okl-pas kraje-pas{"" if img else " bez"}" href="kraje.html" data-sekcja="kraje">{img}'
+            '<span class="okl-t"><b>Czym żyje kraj <span class="strz">›</span></b>'
+            '<span class="okl-n">Sprawy, o których pisała prasa tylko jednego kraju</span></span></a></div>')
+
+
+# Baner „Czym żyje kraj”: stały zasób wspólny dla wszystkich dni (data/widok/kraje/baner.webp, plx site kopiuje go do
+# v2/kraje/), generowany raz (`widok_obrazkowy.py baner`; istniejącego nie nadpisuje)
+BANNER = Path("data/widok/kraje/baner.webp")
+BANNER_SCENE = ("A row of small cartoon figures whose bodies are folded newspapers (newspaper people), standing side by "
+                "side, each wearing a scarf in the colors of a different country (Poland white-and-red, clearly in the "
+                "middle and slightly bigger; others e.g. Ukraine, Germany, United Kingdom, USA, China, Turkey, India, "
+                "Brazil). Each one reads its own open newspaper and looks in a different direction. Background: faint "
+                "outlines of several city skylines blending into one another. Newspaper pages show only abstract grey "
+                "lines, never letters.")
+
+
+def banner_prompt() -> str:
+    """Codex instruction: landscape image with two strips of about 3:1 (two takes of the same scene, the better one kept)."""
+    import paski
+    return ("Use your built-in image generation tool to create ONE image from the prompt below, then copy it into the "
+            "current directory as pasy.png. Do not write code or other files. Reply only with the file name.\n\nPROMPT:\n"
+            "Landscape image 1536×1024 (3:2), clean flat editorial illustration, warm paper tones (#f4f0e8), dark ink, muted "
+            "palette with brick red accents (#8a3b2a). The WHOLE image is a stack of EXACTLY 2 full-width horizontal strips "
+            "of equal height (each about 3:1), one under another. Strips are separated by a thick solid uniform dark bar "
+            "(#1d1b18, about 14 px), and the same thick dark border runs around the whole image. No gutters, nothing drawn "
+            "across the bars, no title, no header, no footer. Both strips show the same scene in two different "
+            "compositions.\nScene: " + BANNER_SCENE + "\n" + paski.NO_TEXT)
 
 
 # --- 2.0 pasami (od 01.10): okładka = pasy tematów, strona tematu = pas tematu + paski krajów (scripts/v2/paski.py) ---
@@ -845,6 +874,7 @@ STRIPS_CSS = (
     ".flaga{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--papier);box-sizing:border-box}"
     ".okl-pas:hover,.okl-pas:focus-visible{outline:3px solid var(--cegla);outline-offset:2px}"
     ".okl-s{text-align:center;color:var(--szary);font-size:.8em}"
+    ".kraje-pas .okl-t{padding-top:30px}.kraje-pas .strz{float:right;font-size:1.3em;line-height:.8}.kraje-pas.bez{min-height:90px}"
     ".pas-tematu{display:block;width:100%;height:auto;border-radius:10px;margin:12px 0 0}"
     ".pas-kraju{display:block;width:100%;height:auto;border-radius:10px;margin:2px 0 0}"
     ".dymek{position:relative;width:fit-content;max-width:80%;margin:-18px 10px 8px auto;padding:7px 11px;"
@@ -890,6 +920,18 @@ def polish_titles() -> dict[int, str]:
 
 
 def main():
+    if sys.argv[1:2] == ["baner"]:          # baner „Czym żyje kraj”, raz; potem wybór: baner wybierz 1|2
+        import paski
+        work, pick = BANNER.parent / "_baner", sys.argv[3] if len(sys.argv) > 3 and sys.argv[2] == "wybierz" else None
+        if pick:
+            shutil.copy2(work / f"wersja-{pick}.webp", BANNER)
+            print(BANNER)
+        elif BANNER.exists():
+            print(f"{BANNER} już jest, nie generuję ponownie")
+        else:
+            print(paski.make(work / "_gen", banner_prompt(), [work / "wersja-1.webp", work / "wersja-2.webp"],
+                             work / "oryginal.png"))
+        return
     opisy = json.loads(OPISY.read_text(encoding="utf-8"))
     ts = themes(opisy)
     pl = {**polish_titles(), **titles.cached(Path("data/tytuly"), DAY)}

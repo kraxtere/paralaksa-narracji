@@ -1,3 +1,13 @@
+# „Czym żyje kraj”: baner i kafel pod okładką — 2026-10-02
+
+- Wspólny baner dla wszystkich dni `data/widok/kraje/baner.webp` (ludziki-gazetki w szalikach krajów, Polska w środku,
+  zarysy miast; bez tekstu): `widok_obrazkowy.py baner` generuje raz jeden obrazek Codex (2 pasy ok. 3:1, cięcie
+  `paski.make`) do `kraje/_baner/wersja-1|2.webp`, `baner wybierz N` zapisuje wybraną; istniejącego nie nadpisuje.
+  `plx site` kopiuje go razem z `widok/kraje/` do `v2/kraje/`.
+- Pod okładką zamiast ramki z przyciskiem klikalny kafel w stylu pasów tematów (`.okl-pas`): baner, na półprzezroczystym
+  pasie tytuł „Czym żyje kraj ›” i linijka „Sprawy, o których pisała prasa tylko jednego kraju”; link i `data-sekcja` bez zmian.
+- `D/kraje.html`: baner na górze (zaokrąglone rogi), pod nim tytuł i podpis; przypis o AI pod przyciskami krajów.
+
 # „Tylko tutaj” → „Czym żyje kraj”, jeden kraj naraz — 2026-10-02
 
 - Strona dnia `D/kraje.html`: nagłówek „Czym żyje kraj · DD.MM”, nowy podpis; rząd przycisków krajów (flaga i nazwa,

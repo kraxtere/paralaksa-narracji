@@ -22,3 +22,21 @@ def test_theme_page_summary_block_and_country_pills(monkeypatch):
                                                                                 for c in ("PL", "DE", "UA"))
     assert nav.count('class="flaga"') == 3 and ">Niemcy</a>" in nav
     assert all(f'<section id="kraj-{c}">' in page for c in t["kraje"])
+
+
+def test_countries_tile_and_page_header_with_banner(monkeypatch, tmp_path):
+    """Kafel „Czym żyje kraj” pod okładką i góra kraje.html: wspólny baner, tytuł, przypis AI pod przyciskami krajów."""
+    banner = tmp_path / "baner.webp"
+    banner.write_bytes(b"x")
+    monkeypatch.setattr(w, "BANNER", banner)
+    monkeypatch.setattr(w, "countries_data", lambda: {"PL": [{"tytul": "T", "opis": "O", "ids": []}]})
+    monkeypatch.setattr(w, "article_info", lambda ids: {})
+    monkeypatch.setattr(w, "country_strips", lambda c, ts: [""] * len(ts))
+    tile = w.countries_link()
+    assert 'class="okl-pas kraje-pas"' in tile and 'href="kraje.html" data-sekcja="kraje"' in tile
+    assert "../kraje/baner.webp" in tile and "Czym żyje kraj" in tile and "tylko jednego kraju" in tile and "›" in tile
+    page = w.countries_page({})
+    assert page.index('class="kraje-baner"') < page.index("<h1>Czym żyje kraj") < page.index('class="kraje-nav"') \
+        < page.index("wybrane przez AI")
+    banner.unlink()
+    assert "kraje-pas bez" in w.countries_link() and 'class="kraje-baner"' not in w.countries_page({})
