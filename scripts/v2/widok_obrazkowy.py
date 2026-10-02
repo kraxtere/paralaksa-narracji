@@ -829,7 +829,7 @@ def page_countries(t: dict, cs: list[dict]) -> list[str]:
 
 
 # kafelki tematów (od 02.10): pas ok. 2:1 (jak pasy okładki) ze sceną z dzisiejszych opisów krajów, gazetki ukryte w scenie „jak Wally”
-WALLY = ("Hidden in different places of the scene, like in \"Where's Wally\": {mascots}, small (about a fifth of the "
+WALLY = ("Placed in different spots of the scene, like in \"Where's Wally\": {mascots}, small (about a fifth of the "
          "strip height), each in a funny side situation (peeking from behind a building, holding a fire hose, taking a "
          "photo, sitting on a roof, carrying a ladder); never the main actors of the events. Mascot = a folded newspaper "
          "with a simple face wearing a scarf in the flag colours; no ethnic features.")
@@ -839,17 +839,20 @@ MASCOT = ("A SMALL mascot in the lower right corner of the strip, about one quar
 
 
 def cover_scene(t: dict, opisy: dict, cs: list[dict]) -> str:
-    """Theme tile: a wide panorama of what the press wrote on the theme that day (country descriptions), not a fixed
-    symbol, so every day gets a new picture; easter eggs from the theme page headlines (cs, plakat-THEME.json) and
-    newspaper mascots of up to 4 countries hidden in it."""
+    """Theme tile: a calm scene with ONE main motif of the theme as the press covered it that day (owner 2026-10-02: the
+    busy version with every story and easter egg was chaotic), 2-3 subtle accents from the theme page headlines (cs,
+    plakat-THEME.json), lots of sky or background, up to 3 newspaper mascots."""
     said = [w["zdanie"] for c in t["kraje"] for w in opisy["opisy"].get(c, {}).get("watki", [])
-            if w["temat"] == t["temat"]][:3]
+            if w["temat"] == t["temat"]][:2]
     what = " ".join(said) or SCENES.get(t["temat"], t["nazwa"])
-    return (f"a wide scene for the press topic \"{t['nazwa']}\" showing concretely what the press wrote about today "
-            f"(places, people, objects, actions; as they are, without softening): {what} "
-            + (" Hide small easter eggs in the scene, each a recognisable detail of one of these stories from the topic "
-               "page: " + "; ".join(x["naglowek"] for x in cs if x.get("naglowek")) + ". " if cs else "")
-            + WALLY.format(mascots=", ".join(f"the {NAMES[c]} mascot (scarf {FLAGS[c]})" for c in list(t["kraje"])[:4]))
+    heads = [x["naglowek"] for x in cs if x.get("naglowek")][:3]
+    return (f"a CALM, airy scene for the press topic \"{t['nazwa']}\" with ONE clear main motif of how the press covered "
+            f"it today: {what} "
+            + ("Add at most 2-3 SUBTLE small accents, each a quiet detail of one of these stories (pick, do not show all): "
+               + "; ".join(heads) + ". " if heads else "")
+            + "Do NOT try to show every event; lots of breathing room (open sky or plain background), few elements, "
+            "readable at a glance. "
+            + WALLY.format(mascots=", ".join(f"the {NAMES[c]} mascot (scarf {FLAGS[c]})" for c in list(t["kraje"])[:3]))
             + " The scene fills the strip edge to edge down to the bottom bar, NO empty band; only its lowest fifth is "
             "simpler (ground, road or water) because a caption is overlaid there later.")
 

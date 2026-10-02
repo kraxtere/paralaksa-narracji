@@ -7,6 +7,9 @@
 
 # Easter eggi w obrazkach tematów i „Czym żyją kraje” — 2026-10-02
 
+- Kafelki tematów spokojniej (akceptacja właściciela, domyślne od 01.10): jeden główny motyw tematu, najwyżej 2–3
+  subtelne akcenty z nagłówków, dużo nieba/tła, do 3 gazetek (`cover_scene`); gęsta wersja 01.10 w `_stare/`.
+
 - Kafelki tematów z powrotem w proporcji pasów okładki (ok. 2:1, 3 na pionowy obrazek; panoramy 3:1 były za niskie),
   opcja `landscape` w `paski.prompt` usunięta. Baner „Czym żyją kraje”: kamienica z 14 oknami, w każdym gazetka kraju przy
   lokalnej sprawie z drobnym akcentem (3 ujęcia, wybór 1), w kaflu przycięty do 2.4:1. 01.10 wygenerowane ponownie (3 obrazki).
