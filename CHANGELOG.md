@@ -1,3 +1,11 @@
+# Strony tematów: wyróżnione podsumowanie i przyciski krajów — 2026-10-02
+
+- `widok_obrazkowy.py theme_page`: opis zbiorczy w osobnym bloku z etykietą „Podsumowanie wszystkich krajów” (tło karty,
+  zaokrąglone rogi, lewy pasek w kolorze akcentu, tekst nieco większy i półgruby); zdanie „N krajów pisało…” nad nim jako podpis.
+- Pod blokiem pigułki krajów (flaga + nazwa) w kolejności kart, kotwice `#kraj-XX`, płynne przewijanie, zawijanie na telefonie.
+  Kolory przez zmienne CSS (`--karta`, `--linia`, `--cegla`). Test `tests/test_strona_tematu.py`.
+- 01.10 przebudowane (`strona`, bez obrazków) i opublikowane.
+
 # Strona 2.0: okładka pasami, paski krajów na stronach tematów — 2026-10-02
 
 - Nowy `scripts/v2/paski.py` (wspólny dla okładki, stron tematów i „Tylko tutaj”): jeden obrazek Codex 1024×1536 z N

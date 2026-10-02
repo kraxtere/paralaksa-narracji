@@ -455,10 +455,14 @@ def theme_page(t: dict, opisy: dict, pl: dict, cs: list[dict], debug: bool = Fal
         poster = card_image(t["nazwa"], detect_panels(OUT / "start.png")[tile], "start.png")
     head = (f'<img class="pas-tematu" src="{theme_strip(t).name}" alt="">'
             if strips_mode() and theme_strip(t).exists() else "")
-    body = (bar("index.html") + poster + f'<div class="list">{head}<h1>{esc(t["nazwa"])}</h1><p>{len(t["kraje"])} krajów pisało '
-            f'o tym temacie ({DAY}). Opis przekazu analizowanych źródeł, nie faktów.</p>'
-            + (f'<p>{with_logos(pods["_opis"], list(SOURCES))}</p>' if pods.get("_opis") else "")
-            + '<p class="s">Nagłówki w tłumaczeniu roboczym; dłuższe skrócone do 15 słów.</p>' + "".join(blocks) + "</div>")
+    # pigułki krajów: kotwice do kart niżej, w tej samej kolejności
+    nav = ('<nav class="kraje-nav">' + "".join(f'<a href="#kraj-{c}">{flag_html(c)}{esc(NAMES[c])}</a>' for c in order)
+           + "</nav>")
+    body = (bar("index.html") + poster + f'<div class="list">{head}<h1>{esc(t["nazwa"])}</h1><p class="s">{len(t["kraje"])} krajów '
+            f'pisało o tym temacie ({DAY}). Opis przekazu analizowanych źródeł, nie faktów.</p>'
+            + (f'<div class="pods"><div class="pods-l">Podsumowanie wszystkich krajów</div>'
+               f'<p>{with_logos(pods["_opis"], list(SOURCES))}</p></div>' if pods.get("_opis") else "")
+            + nav + '<p class="s">Nagłówki w tłumaczeniu roboczym; dłuższe skrócone do 15 słów.</p>' + "".join(blocks) + "</div>")
     return shell(f"{t['nazwa']} · {DAY}", body, debug)
 
 
@@ -794,7 +798,16 @@ def cover_html(ts: list[dict], n_countries: int) -> str:
 
 
 STRIPS_CSS = (
-    ":root{--papier:#f4f0e8;--tusz:#1d1b18;--cegla:#8a3b2a;--szary:#7a746a;--cien:rgba(29,27,24,.82);--dymek:#fffdf8}"
+    ":root{--papier:#f4f0e8;--tusz:#1d1b18;--cegla:#8a3b2a;--szary:#7a746a;--cien:rgba(29,27,24,.82);--dymek:#fffdf8;--karta:#fbf8f2;--linia:#ddd5c7}"
+    # strona tematu: blok podsumowania wszystkich krajów i pigułki-kotwice do kart krajów (pasek u góry nie jest przyklejony)
+    "html{scroll-behavior:smooth}section[id^=kraj-]{scroll-margin-top:12px}"
+    ".pods{background:var(--karta);border:1px solid var(--linia);border-left:5px solid var(--cegla);border-radius:12px;"
+    "padding:10px 14px;margin:10px 0 12px}.pods-l{color:var(--cegla);font-size:.75em;font-weight:700;letter-spacing:.06em;"
+    "text-transform:uppercase}.list .pods p{margin:4px 0 0;font-size:1.06em;font-weight:500;line-height:1.55}"
+    ".kraje-nav{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}.kraje-nav a{display:inline-flex;align-items:center;"
+    "gap:6px;padding:4px 11px 4px 5px;border:1px solid var(--linia);border-radius:999px;background:var(--karta);"
+    "color:var(--tusz);text-decoration:none;font-size:.9em;white-space:nowrap}"
+    ".kraje-nav a:hover,.kraje-nav a:focus-visible{border-color:var(--cegla);color:var(--cegla)}"
     ".okl{max-width:720px;margin:auto;padding:0 6px 10px;box-sizing:border-box}.okl-h{text-align:center;padding:10px 0 4px}"
     ".okl-h h1{margin:0;color:var(--cegla);font:700 1.7em Georgia,serif}.okl-h p{margin:4px 0 0;color:var(--szary)}"
     ".okl-pas{position:relative;display:block;margin:8px 0;border:3px solid var(--tusz);border-radius:8px;overflow:hidden;"
