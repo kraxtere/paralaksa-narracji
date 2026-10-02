@@ -1048,3 +1048,174 @@
   activated_at: '2026-09-30'
   license_note: Decyzja właściciela 2026-09-30. Praw wydawcy nie weryfikowano.
   note: Kanał świeży (100/100 < 48 h), robots.txt dopuszcza nasz UA, pełny tekst pobiera się.
+- id: lefigaro
+  name: Le Figaro
+  aliases:
+  - 'Le Figaro'
+  - 'lefigaro.fr'
+  country: FR
+  editorial_country: FR
+  language: fr
+  type: private
+  feeds:
+  - url: https://www.lefigaro.fr/rss/figaro_actualites.xml
+    section: actualites
+  fulltext: true
+  active: true
+  ownership: prywatne (Groupe Dassault); centroprawicowe; część treści za paywallem, w próbie 3/3 pełne
+  publisher_group: lefigaro
+  channel_scope: actualites
+  activated_at: '2026-10-02'
+  license_note: Przegląd docs/PRZEGLAD_NOWYCH_ZRODEL.md 2026-10-02, zatwierdzone przez właściciela. Praw wydawcy nie weryfikowano.
+- id: francetvinfo
+  name: francetvinfo
+  aliases:
+  - 'France Info'
+  - 'francetvinfo'
+  country: FR
+  editorial_country: FR
+  language: fr
+  type: public
+  feeds:
+  - url: https://www.francetvinfo.fr/titres.rss
+    section: titres
+  fulltext: true
+  active: true
+  ownership: publiczne (France Télévisions)
+  publisher_group: francetv
+  channel_scope: titres
+  activated_at: '2026-10-02'
+  license_note: Przegląd docs/PRZEGLAD_NOWYCH_ZRODEL.md 2026-10-02, zatwierdzone przez właściciela. Praw wydawcy nie weryfikowano.
+- id: rfi_en
+  name: RFI (English)
+  aliases:
+  - 'RFI'
+  - 'rfi.fr'
+  country: FR
+  editorial_country: FR
+  language: en
+  type: public
+  feeds:
+  - url: https://www.rfi.fr/en/rss
+    section: all
+  fulltext: true
+  active: true
+  ownership: publiczne (France Médias Monde; ten sam wydawca co France 24)
+  publisher_group: fmm
+  channel_scope: all
+  activated_at: '2026-10-02'
+  license_note: Przegląd docs/PRZEGLAD_NOWYCH_ZRODEL.md 2026-10-02, zatwierdzone przez właściciela. Praw wydawcy nie weryfikowano.
+- id: telex
+  name: Telex
+  aliases:
+  - 'Telex'
+  - 'telex.hu'
+  country: HU
+  editorial_country: HU
+  language: hu
+  type: private
+  feeds:
+  - url: https://telex.hu/rss
+    section: all
+  fulltext: true
+  active: true
+  ownership: niezależne (Telex Media, założone 2020 przez dawną redakcję Indexu); krytyczne wobec Fidesz
+  publisher_group: telex
+  channel_scope: all
+  activated_at: '2026-10-02'
+  license_note: Przegląd docs/PRZEGLAD_NOWYCH_ZRODEL.md 2026-10-02, zatwierdzone przez właściciela. Praw wydawcy nie weryfikowano.
+- id: index_hu
+  name: Index
+  aliases:
+  - 'Index'
+  - 'index.hu'
+  country: HU
+  editorial_country: HU
+  language: hu
+  type: private
+  feeds:
+  - url: https://index.hu/24ora/rss/
+    section: 24ora
+  fulltext: true
+  active: true
+  ownership: prywatne; od 2020 linia zbliżona do kręgu Fidesz (do potwierdzenia)
+  publisher_group: index_hu
+  channel_scope: 24ora
+  activated_at: '2026-10-02'
+  license_note: Przegląd docs/PRZEGLAD_NOWYCH_ZRODEL.md 2026-10-02, zatwierdzone przez właściciela. Praw wydawcy nie weryfikowano.
+- id: magyarnemzet
+  name: Magyar Nemzet
+  aliases:
+  - 'Magyar Nemzet'
+  - 'magyarnemzet.hu'
+  country: HU
+  editorial_country: HU
+  language: hu
+  type: private
+  feeds:
+  - url: https://magyarnemzet.hu/feed
+    section: all
+  fulltext: true
+  active: true
+  ownership: prywatne (grupa Mediaworks/KESMA); linia prorządowa wobec Fidesz; część artykułów krótka
+  publisher_group: mediaworks
+  channel_scope: all
+  activated_at: '2026-10-02'
+  license_note: Przegląd docs/PRZEGLAD_NOWYCH_ZRODEL.md 2026-10-02, zatwierdzone przez właściciela. Praw wydawcy nie weryfikowano.
+- id: tehrantimes
+  name: Tehran Times
+  aliases:
+  - 'Tehran Times'
+  - 'tehrantimes.com'
+  country: IR
+  editorial_country: IR
+  language: en
+  type: government
+  feeds:
+  - url: https://www.tehrantimes.com/rss
+    section: all
+  fulltext: true
+  active: true
+  ownership: powiązane z państwem (Islamic Culture and Relations Organization); stanowisko oficjalne
+  publisher_group: tehrantimes
+  channel_scope: all
+  activated_at: '2026-10-02'
+  license_note: Przegląd docs/PRZEGLAD_NOWYCH_ZRODEL.md 2026-10-02, zatwierdzone przez właściciela. Praw wydawcy nie weryfikowano.
+- id: mehr_en
+  name: Mehr News (EN)
+  aliases:
+  - 'Mehr News'
+  - 'Mehr'
+  country: IR
+  editorial_country: IR
+  language: en
+  type: agency
+  feeds:
+  - url: https://en.mehrnews.com/rss
+    section: all
+  fulltext: true
+  active: true
+  ownership: agencja półpaństwowa; linia zbliżona do IRGC, ostry język
+  publisher_group: mehr
+  channel_scope: all
+  activated_at: '2026-10-02'
+  license_note: Przegląd docs/PRZEGLAD_NOWYCH_ZRODEL.md 2026-10-02, zatwierdzone przez właściciela. Praw wydawcy nie weryfikowano.
+- id: iranintl
+  name: Iran International
+  aliases:
+  - 'Iran International'
+  - 'Iran Intl'
+  country: IR
+  editorial_country: IR
+  language: en
+  type: private
+  feeds:
+  - url: https://iranintl.com/en/feed
+    section: all
+  fulltext: true
+  active: true
+  ownership: emigracyjna (Londyn), opozycyjna wobec władz IR; kanał pod domeną bez www
+  publisher_group: iranintl
+  channel_scope: all
+  activated_at: '2026-10-02'
+  license_note: Przegląd docs/PRZEGLAD_NOWYCH_ZRODEL.md 2026-10-02, zatwierdzone przez właściciela. Praw wydawcy nie weryfikowano.

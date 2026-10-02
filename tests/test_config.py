@@ -23,7 +23,8 @@ def test_repo_sources_milestone1_selection():
     # + 3 z 2026-09-25 decyzją właściciela: CN globaltimes/chinanews, HK scmp.
     # + 9 z 2026-09-25 po audycie jakości (co najmniej 2 wydawców na kraj poza QA): IN, TR, HK, IL, PS.
     # + 2 z 2026-09-30 decyzją właściciela: RU izvestia/rg (TASS i RT odmawiają naszemu UA).
-    assert len(active) == 34
+    # + 9 z 2026-10-02 decyzją właściciela po przeglądzie (docs/PRZEGLAD_NOWYCH_ZRODEL.md): FR, HU, IR po 3.
+    assert len(active) == 43
     by_country: dict[str, int] = {}
     for s in active:
         by_country[s.country] = by_country.get(s.country, 0) + 1
@@ -33,7 +34,8 @@ def test_repo_sources_milestone1_selection():
     assert by_country["US"] == 4 and by_country["BR"] == 2 and by_country["IL"] == 3 and by_country["PS"] == 2
     assert by_country["CN"] == 3 and by_country["HK"] == 3
     assert by_country["IN"] == 2 and by_country["TR"] == 2 and by_country["QA"] == 1 and by_country["RU"] == 2
-    assert sum(n for c, n in by_country.items() if c not in {"PL", "UA", "DE", "UK"}) == 24
+    assert sum(n for c, n in by_country.items() if c not in {"PL", "UA", "DE", "UK"}) == 33
+    assert by_country["FR"] == 3 and by_country["HU"] == 3 and by_country["IR"] == 3
 
 
 def test_inactive_sources_have_note():

@@ -215,7 +215,7 @@ def language_errors(report, package):
     adjectives = {'CN':'chińsk', 'QA':'katarsk', 'US':'amerykańsk', 'IL':'izraelsk',
                   'PS':'palestyńsk', 'TR':'tureck', 'BR':'brazylijsk', 'PL':'polsk',
                   'UA':'ukraińsk', 'DE':'niemieck', 'UK':'brytyjsk',
-                  'HK':'hongkońsk', 'IN':'indyjsk'}
+                  'HK':'hongkońsk', 'IN':'indyjsk', 'FR':'francusk', 'HU':'węgiersk', 'IR':'irańsk'}
     for path, text in _texts(report):
         for country in single:
             code = re.escape(country)

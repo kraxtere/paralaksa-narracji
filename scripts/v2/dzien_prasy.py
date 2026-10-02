@@ -36,7 +36,7 @@ MIN_ARTICLES = 8        # kraj z mniejszą próbą dnia: karta bez opisu modelu
 
 NAMES = {"PL": "Polska", "UA": "Ukraina", "DE": "Niemcy", "UK": "Wielka Brytania", "US": "Stany Zjednoczone",
          "CN": "Chiny", "HK": "Hongkong", "IL": "Izrael", "PS": "Palestyna", "TR": "Turcja", "IN": "Indie",
-         "BR": "Brazylia", "QA": "Katar", "RU": "Rosja"}
+         "BR": "Brazylia", "QA": "Katar", "RU": "Rosja", "FR": "Francja", "HU": "Węgry", "IR": "Iran"}
 ACTORS = {**NAMES, "IR": "Iran", "UE": "UE", "NATO": "NATO", "ONZ": "ONZ", "FR": "Francja",
           "JP": "Japonia", "SA": "Arabia Saudyjska", "ES": "Hiszpania", "AU": "Australia", "KR": "Korea Płd."}
 STANCE_COLORS = {"alarm": "#c8412f", "krytyka": "#e0873a", "neutralny": "#b9b4aa", "uspokojenie": "#4f9d8f",

@@ -20,6 +20,7 @@ WIDTH, HEIGHT = 1080, 1920
 COUNTRY_PL = {
     "PL": "Polska", "UA": "Ukraina", "DE": "Niemcy", "UK": "Wielka Brytania", "QA": "Katar", "CN": "Chiny",
     "US": "USA", "BR": "Brazylia", "IL": "Izrael", "PS": "Palestyna", "TR": "Turcja", "IN": "Indie",
+    "FR": "Francja", "HU": "Węgry", "IR": "Iran",
 }
 TYPE_PL = {"private": "prywatne", "public": "publiczne", "government": "państwowe", "agency": "agencja"}
 

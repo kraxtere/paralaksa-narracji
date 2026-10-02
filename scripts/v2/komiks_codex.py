@@ -29,11 +29,13 @@ ROOT = Path("data/comic/codex")
 OPISY = Path("data/dzien_prasy") / DAY / "opisy.json"
 CHECK_MODEL = "claude-sonnet-5"
 NAMES = {"PL": "Polska", "UA": "Ukraina", "DE": "Niemcy", "UK": "Wielka Brytania", "US": "USA", "CN": "Chiny",
-         "IL": "Izrael", "TR": "Turcja", "IN": "Indie", "HK": "Hongkong", "PS": "Palestyna", "BR": "Brazylia", "QA": "Katar"}
+         "IL": "Izrael", "TR": "Turcja", "IN": "Indie", "HK": "Hongkong", "PS": "Palestyna", "BR": "Brazylia", "QA": "Katar",
+         "FR": "Francja", "HU": "Węgry", "IR": "Iran"}
 SCARF = {"PL": "white-red", "UA": "blue-yellow", "DE": "black-red-gold", "UK": "union flag", "US": "stars and stripes",
          "CN": "red with yellow stars", "IL": "white with blue star of David", "TR": "red with white crescent",
          "IN": "saffron-white-green", "HK": "red with white bauhinia flower", "PS": "black-white-green with red triangle",
-         "BR": "green-yellow", "QA": "maroon-white"}
+         "BR": "green-yellow", "QA": "maroon-white",
+         "FR": "blue-white-red vertical", "HU": "red-white-green", "IR": "green-white-red with a red emblem"}
 FOOTER = "Opis przekazu analizowanych źródeł, nie faktów · Paralaksa"
 STYLE = ("clean flat editorial comic illustration, warm paper background (#f4f0e8), dark ink outlines, muted palette with "
          "brick red accents (#8a3b2a). No realistic people, no politicians' faces, no ethnic features; countries appear only "
