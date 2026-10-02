@@ -123,11 +123,13 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
       }
       return z ? out.concat(z) : out;
     });
+    const IKONA_GLOS = '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+    const IKONA_STOP = '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>';
     const look = (b, on) => {
       const big = b.classList.contains("duza");
       b.setAttribute("aria-pressed", String(on));
       b.setAttribute("aria-label", on ? "Zatrzymaj czytanie" : big ? "Czytaj temat na głos" : "Czytaj na głos");
-      b.textContent = on ? (big ? "⏹ Zatrzymaj" : "⏹") : (big ? "🔊 Czytaj temat" : "🔊");
+      b.innerHTML = (on ? IKONA_STOP : IKONA_GLOS) + (on ? (big ? "Zatrzymaj" : "Stop") : (big ? "Czytaj temat" : "Czytaj"));
     };
     const stop = () => {
       run++; ss.cancel(); keep = null;
@@ -184,7 +186,7 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
       const show = s => { if (s.offsetParent === null && nav) { const b = nav.querySelector(`a[data-k="${s.id.slice(5)}"]`); b && b.click(); } };
       secs.forEach(s => {                                   // głośniczek obok pigułki kraju
         const pill = s.querySelector("h2 .kraj-pig");
-        if (pill && !s.querySelector("h2 .czytaj")) mowa.button("m", [{ text: () => name(s) + ". " + opis(s) }], b => pill.after(b));
+        if (pill && !s.querySelector(":scope > .czytaj")) mowa.button("m", [{ text: () => name(s) + ". " + opis(s) }], b => (s.querySelector(":scope > p") || pill).before(b));
       });
       const lab = pods && pods.querySelector(".pods-l");
       if (lab && !lab.querySelector(".czytaj")) {
@@ -198,12 +200,14 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
   document.addEventListener("DOMContentLoaded", mowaStart);
   const mst = document.createElement("style");
   mst.textContent =
-    "button.czytaj{font:inherit;line-height:1;cursor:pointer;color:var(--art-akcent);background:var(--art-tlo);" +
-    "border:1px solid var(--art-linia);border-radius:999px;padding:5px 8px;font-size:14px;vertical-align:middle;" +
-    "text-transform:none;letter-spacing:0;font-weight:600}" +
-    "button.czytaj.m{margin-left:8px}button.czytaj.duza{margin-left:12px;padding:5px 12px;font-size:13px}" +
+    "button.czytaj{font:600 13px/1 Segoe UI,sans-serif;cursor:pointer;color:#fff;background:var(--art-akcent);" +
+    "border:0;border-radius:999px;padding:7px 12px;vertical-align:middle;white-space:nowrap;" +
+    "text-transform:none;letter-spacing:0;box-shadow:0 1px 3px rgba(0,0,0,.2)}" +
+    "button.czytaj{display:inline-flex;align-items:center;gap:6px}button.czytaj.m{margin:0 0 8px}button.czytaj.duza{padding:8px 14px;font-size:14px}" +
+    ".pods .pods-l{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}" +
     ".streszcz button.czytaj{float:right;margin:0 0 4px 8px}" +
-    "button.czytaj:hover,button.czytaj[aria-pressed=true]{background:var(--art-tlo-hover);border-color:var(--art-akcent)}" +
+    "button.czytaj[aria-pressed=true]{background:var(--art-tusz);color:var(--art-tlo)}" +
+    "button.czytaj:hover{filter:brightness(1.12)}" +
     "button.czytaj:focus-visible{outline:2px solid var(--art-focus);outline-offset:2px}" +
     ".czyta{outline:2px solid var(--art-akcent);outline-offset:6px;border-radius:12px}";
   document.head.append(mst);

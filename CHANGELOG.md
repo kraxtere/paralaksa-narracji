@@ -6,7 +6,8 @@
 - Strona tematu: „🔊 Czytaj temat” przy podsumowaniu (podsumowanie, potem karty krajów: nazwa + opis, bez artykułów) z
   wyróżnieniem `.czyta` i przewijaniem; w trybie jednego kraju przełącza kraj sama. Głośniczek przy pigułce każdego kraju
   i przy rozwiniętym streszczeniu artykułu (tytuł + streszczenie). HTML: tylko `data-czytaj="temat|kraj"` w `widok_obrazkowy.py`.
-- Przebudowany tylko 01.10 (test z mockiem głosu); pozostałe dni po `plx site`/`widok_obrazkowy.py strona`.
+- Wygląd po uwagach z telefonu: wypełniony przycisk z ikoną SVG i napisem („Czytaj temat”, „Czytaj”, „Stop”); przycisk tematu w
+  wierszu etykiety (flex, zawija się czysto), przycisk kraju osobno nad opisem karty. Dni 23.09–01.10 przebudowane i opublikowane.
 
 # Dymki pasków z wyboru nagłówków (także bez plakatu) — 2026-10-02
 
