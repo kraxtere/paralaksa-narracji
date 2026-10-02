@@ -32,7 +32,7 @@ Procedura dnia strony 2.0: `scripts/v2/README.md`.
 - `scripts/v2/`: strona 2.0 (widok_obrazkowy, widok_powitanie, os_czasu, streszczenia, dzien_prasy, kraje → `D/kraje.html`
   „Czym żyje kraj”, jeden kraj naraz `#KRAJ`, `kraje.py ciag D` + `strona` → oś kraju `kraje/KRAJ.html`). Wyniki w `data/widok/`.
   `paski.py`: wspólne paski (1 obrazek Codex z N pasami, cięcie po ramkach, oryginały, 8/4 procesy); od 01.10 okładka
-  pasami i paski krajów na stronach tematów (`widok_obrazkowy.py paski`), plakaty i `start.png` tylko starsze dni.
+  pasami i paski krajów na stronach tematów (`widok_obrazkowy.py paski`), od 02.10 także dni 23–30.09 (`start.png` i plakaty nieużywane).
 - `.github/workflows/daily.yml`: cron, baza w zaszyfrowanym Release, bez syntezy.
 
 ## Konwencje
