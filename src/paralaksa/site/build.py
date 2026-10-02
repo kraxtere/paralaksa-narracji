@@ -176,7 +176,7 @@ def copy_v2(src: Path | None, dest: Path) -> list[str]:
     def copy(folder: Path, to: Path) -> None:
         to.mkdir(parents=True, exist_ok=True)
         for f in folder.iterdir():
-            if f.is_file() and not f.name.startswith("_") and f.suffix in (".html", ".png"):
+            if f.is_file() and not f.name.startswith("_") and f.suffix in (".html", ".png", ".webp"):
                 shutil.copy2(f, to / f.name)
 
     days = found(src) if src else []

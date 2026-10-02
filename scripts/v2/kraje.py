@@ -5,6 +5,10 @@ artykuły kraju w tematy i odrzuca poradniki, lifestyle, sport i pogodę; walida
 Wejście: okno dnia jak w data/stories/D.json (publication_meta + story_items), bez artykułów przypisanych do historii
 (kraje, pozostale, odrzucone) w data/stories/D.json i data/widok/os/dodatkowe/D.json; polskie tytuły z data/tytuly/D.json.
 Wynik: data/widok/kraje/D.json {"day", "model", "kraje": {"PL": [{"tytul", "opis", "ids", "redakcje"}]}}, Polska pierwsza.
+  python scripts/v2/kraje.py obrazki 2026-10-01 [PL UA ...]   # domyślnie tylko PL; 1 obrazek Codex na kraj
+Obrazki: jeden pionowy obrazek 1024×1536 na kraj, N poziomych pasków (N = liczba tematów) rozdzielonych grubą ciemną
+ramką; paski wycinane po wykrytych ramkach (inna liczba niż N = błąd, nic nie zapisane) do data/widok/kraje/D/KRAJ-n.webp,
+tytuły tematów w data/widok/kraje/D/KRAJ.json (strona pokazuje paski tylko przy zgodnych tytułach).
 """
 import json
 import re
@@ -132,7 +136,92 @@ def main(day: str) -> None:
           f"limit Codex: {used}")
 
 
+def strip_prompt(topics: list[dict]) -> str:
+    from widok_obrazkowy import PEOPLE_STYLE
+    n = len(topics)
+    rows = "\n".join(f"Strip {i} (from the top): a scene for this national news topic: \"{t['tytul']}\" ({t['opis']}) "
+                     "Show places, objects and a symbolic action, not a portrait." for i, t in enumerate(topics, 1))
+    return ("Use your built-in image generation tool to create ONE image from the prompt below, then copy it into the "
+            "current directory as pasy.png. Do not write code or other files. Reply only with the file name.\n\nPROMPT:\n"
+            "Portrait image 1024×1536 (2:3), clean flat editorial illustration, warm paper tones (#f4f0e8), dark ink, muted "
+            f"palette with brick red accents (#8a3b2a). The WHOLE image is a stack of EXACTLY {n} full-width horizontal "
+            "strips of equal height, one under another. Strips are separated by thick solid uniform dark bars (#1d1b18, "
+            "about 14 px), and the same thick dark border runs around the whole image. No gutters, nothing drawn across "
+            "the bars, no title, no header, no footer. " + PEOPLE_STYLE + "\n" + rows +
+            "\nABSOLUTELY NO TEXT anywhere: no letters, numbers, captions, signs, logos or flags with writing.")
+
+
+def detect_strips(png: Path) -> list[tuple[int, int, int, int]]:
+    """Pixel boxes (x0, y0, x1, y1) of the strips between thick dark horizontal bars spanning the image width."""
+    from PIL import Image
+    im = Image.open(png).convert("L")
+    w, h = im.size
+    px = im.load()
+
+    def runs(flags):
+        out, start = [], None
+        for i, f in enumerate(flags + [False]):
+            if f and start is None:
+                start = i
+            elif not f and start is not None:
+                out.append((start, i - 1))
+                start = None
+        return out
+
+    def longest(y):
+        best = cur = 0
+        for x in range(w):
+            cur = cur + 1 if px[x, y] < 90 else 0
+            best = max(best, cur)
+        return best
+
+    # ramka = poziomy ciemny pas przez >= 90% szerokości, gruby na >= 4 px (krawędzie w scenie są cieńsze)
+    bars = [(a, b) for a, b in runs([longest(y) >= 0.9 * w for y in range(h)]) if b - a >= 3]
+    bars = [(-1, -1)] + bars + [(h, h)]                       # brzegi obrazka, gdy brak ramki zewnętrznej
+    boxes = []
+    for (_, top), (bottom, _) in zip(bars, bars[1:]):
+        y0, y1 = top + 1, bottom - 1
+        if y1 - y0 < 0.06 * h:                              # wąska szczelina między ramkami albo margines
+            continue
+        cols = runs([sum(px[x, y] < 90 for y in range(y0, y1 + 1, 4)) >= 0.9 * len(range(y0, y1 + 1, 4))
+                     for x in range(w)])
+        left = [b for a, b in cols if a < 0.1 * w]
+        right = [a for a, b in cols if b > 0.9 * w]
+        boxes.append((left[0] + 1 if left else 0, y0, right[-1] - 1 if right else w - 1, y1))
+    return boxes
+
+
+def images(day: str, countries: list[str]) -> None:
+    from PIL import Image
+    from widok_obrazkowy import run_codex
+    data = json.loads((OUT / f"{day}.json").read_text(encoding="utf-8"))["kraje"]
+    folder = OUT / day
+    for country in countries:
+        topics = data.get(country) or []
+        if not topics:
+            print(f"{country}: brak tematów")
+            continue
+        work = folder / f"_gen-{country}"
+        run_codex(work, strip_prompt(topics))
+        png = work / "pasy.png"
+        if not png.exists():
+            raise SystemExit(f"{country}: Codex nie zapisał obrazka (zob. {work / 'codex.log'})")
+        boxes = detect_strips(png)
+        if len(boxes) != len(topics):
+            raise SystemExit(f"{country}: wykryto {len(boxes)} pasków, tematów {len(topics)}; nic nie zapisano ({png})")
+        im = Image.open(png).convert("RGB")
+        for n, box in enumerate(boxes, 1):
+            im.crop((box[0], box[1], box[2] + 1, box[3] + 1)).save(folder / f"{country}-{n}.webp", quality=85)
+        png.replace(folder / f"_{country}.png")
+        (folder / f"{country}.json").write_text(json.dumps([t["tytul"] for t in topics], ensure_ascii=False),
+                                                encoding="utf-8")
+        print(f"{country}: {len(boxes)} pasków {im.size[0]}×{im.size[1]} -> {folder}")
+
+
 if __name__ == "__main__":
-    if len(sys.argv) != 2 or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", sys.argv[1]):
+    if len(sys.argv) >= 3 and sys.argv[1] == "obrazki" and re.fullmatch(r"\d{4}-\d{2}-\d{2}", sys.argv[2]):
+        images(sys.argv[2], sys.argv[3:] or ["PL"])
+    elif len(sys.argv) == 2 and re.fullmatch(r"\d{4}-\d{2}-\d{2}", sys.argv[1]):
+        main(sys.argv[1])
+    else:
         raise SystemExit(__doc__)
-    main(sys.argv[1])

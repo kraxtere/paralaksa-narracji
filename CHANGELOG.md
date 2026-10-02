@@ -1,3 +1,12 @@
+# Kraje: paski scen nad tematami — 2026-10-02
+
+- `scripts/v2/kraje.py obrazki D [KRAJ...]` (domyślnie PL): jeden pionowy obrazek Codex 1024×1536 na kraj, N poziomych
+  pasków (N = liczba tematów) rozdzielonych grubą ciemną ramką, bez napisów, ludzie uproszczeni. Paski cięte po
+  wykrytych ramkach (`detect_strips`; `detect_panels` z widok_obrazkowy zakłada siatkę 2 kolumn); inna liczba niż N =
+  błąd, nic nie zapisane. Wynik `data/widok/kraje/D/KRAJ-n.webp` + tytuły tematów w `KRAJ.json`.
+- Strona „Tylko tutaj”: pasek nad tytułem tematu na całą szerokość, zaokrąglone rogi; tylko gdy zapisane tytuły
+  zgadzają się z bieżącymi. `copy_v2` kopiuje też pliki `.webp`.
+
 # Kraje: dłuższe opisy tematów — 2026-10-02
 
 - `scripts/v2/kraje.py`: opis tematu 2–3 zdania, 40–60 słów (co się dzieje, kto jest stroną, jak ujmują to redakcje;
