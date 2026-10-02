@@ -23,11 +23,12 @@ def test_repo_sources_milestone1_selection():
     # + 3 z 2026-09-25 decyzją właściciela: CN globaltimes/chinanews, HK scmp.
     # + 9 z 2026-09-25 po audycie jakości (co najmniej 2 wydawców na kraj poza QA): IN, TR, HK, IL, PS.
     # + 2 z 2026-09-30 decyzją właściciela: RU izvestia/rg (TASS i RT odmawiają naszemu UA).
-    assert len(active) == 32
+    assert len(active) == 34
     by_country: dict[str, int] = {}
     for s in active:
         by_country[s.country] = by_country.get(s.country, 0) + 1
-    for country in ("PL", "UA", "DE", "UK"):
+    assert by_country["PL"] == 4                                    # wp i gazeta od 2026-10-02
+    for country in ("UA", "DE", "UK"):
         assert by_country[country] == 2
     assert by_country["US"] == 4 and by_country["BR"] == 2 and by_country["IL"] == 3 and by_country["PS"] == 2
     assert by_country["CN"] == 3 and by_country["HK"] == 3
