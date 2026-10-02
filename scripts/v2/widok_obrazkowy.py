@@ -295,6 +295,20 @@ PEOPLE_STYLE = ("People named in the text may appear only as simple paper-cut si
                 "instead of a face (no eyes, no facial features at all), each recognisable by one attribute such as a "
                 "hairstyle shape, a wide-brimmed hat or a clothing colour; neutral and dignified. Everyone else is a small "
                 "generic stylised figure.")
+# wspólny styl nowych obrazków stron 2.0 (od 02.10, wybór właściciela po teście stylów: wariant E2); stare obrazki bez zmian
+IMAGE_STYLE = ("STYLE (most important, follow strictly): EUROPEAN COMIC BOOK PANEL painted in GOUACHE, clearly a comic, "
+               "NOT realistic and NOT a photo-like painting: every object has a visible dark brush-ink CONTOUR line of "
+               "varying thickness; forms are simplified and slightly stylised; colour is laid in large flat-ish opaque "
+               "gouache patches with visible brush marks and few details; muted, harmonious palette; moody light done "
+               "with a few flat shadow shapes, not smooth rendering.")
+# zasady scen do IMAGE_STYLE: bez techniki, światła i palety (te tylko w stylu), żeby opis stylu nie był przykryty
+SCENE_RULES = ("No mascots, no newspaper characters, no crowds, no speech bubbles. One clear main motif in the centre of "
+               "each strip plus the listed details, with a foreground, middle ground and background; rich but readable. "
+               "Keep the bottom fifth of every strip calmer and simpler (plain ground, floor or road), a title is "
+               "overlaid there later. People: 2-6 small simplified figures per strip as participants of the scene, no "
+               "portraits of real persons, no recognisable faces. Each strip has its own time of day and colour mood as "
+               "described; never two sunsets. Flags, airline liveries, uniforms and other national markings only where "
+               "the scene names them; flags only as plain colour designs without any writing.")
 
 
 def poster_prompt(t: dict, cs: list[dict]) -> str:
@@ -604,7 +618,7 @@ def welcome_pages(pl: dict) -> None:
     """Detail pages with the matching image panel and descriptions grounded in article references."""
     inputs = welcome_cards(pl)
     cards = inputs["karty"]
-    regions = card_regions(cards)
+    regions = card_regions(cards) if (OUT / "powitanie.png").exists() else {}
     summaries = welcome_summaries(inputs)
     cont = continued()
     note = ('<p class="s">Opis przekazu analizowanych źródeł, nie faktów. '
@@ -629,7 +643,10 @@ def welcome_pages(pl: dict) -> None:
             reason = c.get("uzasadnienie", "") if isinstance(c, dict) else ""
             confidence = f'<p class="s">Pewność porównania: {esc(level)}. {esc(reason)}</p>'
         title = summary.get("tytul") or card["tytul"]
-        body = (bar("index.html") + card_image(title, regions[key]) + f'<div class="list"><h1>{esc(title)}</h1>'
+        strip = OUT / f"okl-{key}.webp"                              # okładka z pasów (okladka.py), inaczej wycinek plakatu
+        image = (f'<img class="pas-tematu" src="{strip.name}" alt="{esc(title)}">' if strip.exists()
+                 else card_image(title, regions[key]))
+        body = (bar("index.html") + image + f'<div class="list"><h1>{esc(title)}</h1>'
                 + (continued_note(cont[key]) if key in cont else "") +
                 f'<p>{esc(summary["opis"])}</p><p>{len(summary["kraje"])} krajów w tym zestawieniu.</p>'
                 + note + confidence + "".join(blocks) + '</div>')
@@ -909,12 +926,41 @@ STRIPS_CSS = (
     "background:var(--dymek);color:var(--tusz);border:2px solid var(--tusz);border-radius:14px;"
     "font:600 .95em/1.35 Georgia,serif}.dymek:before{content:'';position:absolute;right:28px;top:-11px;"
     "border:7px solid transparent;border-bottom:10px solid var(--tusz);border-top:0}"
-    "@media(max-width:480px){.okl-t b{font-size:1.05em}.okl-t{padding:16px 9px 6px}.dymek{max-width:88%}}")
+    "@media(max-width:480px){.okl-t b{font-size:1.05em}.okl-t{padding:16px 9px 6px}.dymek{max-width:88%}}"
+    # okładka z pasów (scripts/v2/okladka.py): tytuł i flagi jak na pasach tematów (.okl-t), kolumny krajów pod pasem
+    ".pp-sek{margin:18px 2px 6px;color:var(--cegla);font:700 .8em 'Segoe UI',sans-serif;letter-spacing:.08em;"
+    "text-transform:uppercase;border-bottom:1px solid var(--linia);padding-bottom:4px}"
+    ".pp-k{margin:8px 0 12px;border:3px solid var(--tusz);border-radius:8px;overflow:hidden;background:var(--karta);"
+    "color:var(--tusz)}.pp-obr{position:relative;display:block;background:var(--tusz);color:var(--papier);text-decoration:none}"
+    ".pp-obr:hover,.pp-obr:focus-visible{outline:3px solid var(--cegla);outline-offset:-3px}"
+    ".pp-obr img{display:block;width:100%;height:auto}"
+    ".pp-ciag{flex-basis:100%;width:fit-content;max-width:fit-content;padding:2px 8px;border-radius:4px;"
+    "background:var(--cegla);color:var(--papier);font-size:.72em;font-weight:700;letter-spacing:.04em;text-transform:uppercase}"
+    ".pp-kols{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--linia)}"
+    ".pp-kol{display:flex;flex-direction:column;gap:3px;padding:8px 10px 10px;background:var(--karta);font-size:.86em;"
+    "line-height:1.4}.pp-kol b{font:700 .95em Georgia,serif;color:var(--cegla)}"
+    ".pp-kol .flaga{border-color:var(--linia)}.pp-kol p{margin:0}"
+    # zwijany tekst (v2/pasek.js data-zwin): 4 linie, przycisk „więcej ›” tylko gdy tekst dłuższy
+    "[data-zwin]{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;line-clamp:4;overflow:hidden}"
+    "[data-zwin].rozwin{display:block;-webkit-line-clamp:unset;line-clamp:unset}"
+    ".zwin-b{align-self:flex-start;padding:0;border:0;background:none;color:var(--cegla);font:600 .95em 'Segoe UI',sans-serif;"
+    "cursor:pointer}"
+    "@media(max-width:480px){.pp-kol{font-size:.8em;padding:7px 8px 9px}}")
+
+
+def strip_cover() -> str:
+    """Welcome block in HTML over the cover strips (scripts/v2/okladka.py) once all of them exist, else ""."""
+    if not (OUT / "okladka-sceny.json").exists():
+        return ""
+    import okladka
+    from widok_powitanie import poster_data
+    data = poster_data()
+    return okladka.cover_html(data) if okladka.ready(data) else ""
 
 
 def index_page(ts: list[dict], rects, debug: bool = False) -> str:
-    welcome = ""
-    if (OUT / "powitanie.png").exists():
+    welcome = strip_cover()
+    if not welcome and (OUT / "powitanie.png").exists():
         pl = {**polish_titles(), **titles.cached(Path("data/tytuly"), DAY)}
         inputs = welcome_cards(pl)
         cards = inputs["karty"]
@@ -997,7 +1043,7 @@ def main():
         cs = poster_data(t, opisy, pl)
         (OUT / f"temat-{t['temat']}.html").write_text(theme_page(t, opisy, pl, cs), encoding="utf-8")
         (OUT / f"_podglad-temat-{t['temat']}.html").write_text(theme_page(t, opisy, pl, cs, debug=True), encoding="utf-8")
-    if (OUT / "powitanie.png").exists():
+    if (OUT / "powitanie.png").exists() or strip_cover():
         welcome_pages(pl)
     if countries_data():
         (OUT / "kraje.html").write_text(countries_page(pl), encoding="utf-8")

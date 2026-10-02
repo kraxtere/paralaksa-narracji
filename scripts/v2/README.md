@@ -23,7 +23,12 @@ robi Codex z limitu konta (`codex_limit.py` pokazuje zużycie). Nigdy w Actions.
      429 także przy 4: przerwanie (kod 3); ponowne uruchomienie robi tylko brakujące paski.
      Oryginały w `_paski/`; odrzucone po ponowieniu wypisane na końcu (karta bez paska). Ponowne cięcie bez Codex:
      `python scripts/v2/paski.py pokroj data/widok/D/_paski/NAZWA.png`;
-   - `python scripts/v2/widok_powitanie.py`: okładka `powitanie.png`;
+   - okładka „Przegląd prasy” z pasów (od 02.10, zamiast `widok_powitanie.py` / `powitanie.png`; obrazki bez tekstu,
+     wszystkie napisy w HTML): `python scripts/v2/okladka.py sceny` (opisy scen przez Codex do `okladka-sceny.json`;
+     przejrzeć i poprawić ręcznie: flagi i barwy tylko gdy jednoznacznie z danych), potem `python scripts/v2/okladka.py paski`
+     (jeden pas na sprawę, różnicę i obraz kraju, 3 pasy na obrazek, wspólny styl `IMAGE_STYLE`; tylko brakujące).
+     Sprawdzić wzrokiem: zero liter, bez maskotek i tłumów, bez fałszywych symboli państw; zły obrazek: przenieść jego
+     `okl-*.webp` i oryginał z `_paski/` do `_stare/`, poprawić scenę, uruchomić `paski` ponownie (raz);
    - `python scripts/v2/widok_obrazkowy.py strona`: HTML okładki, spraw, różnic, obrazu kraju i tematów.
    Dni 23–30.09 przerobione na paski 02.10 (`paski`, potem `strona`); dawne `start.png` i plakaty zostają w katalogach.
 7. Oś wydarzeń, reszta: `python scripts/v2/os_czasu.py opisy`, `obrazki`, `strona`.
@@ -43,7 +48,8 @@ Po każdym obrazku z ludźmi: obejrzeć (bez stereotypów, bez napisów na kadra
 
 - `paski.py`: wspólne paski (obrazek Codex z N pasami, cięcie po ramkach, 8/4 procesy).
 - `widok_obrazkowy.py`: okładka pasami (dawniej siatka tematów i plakaty), wszystkie strony dnia; `widok_tresci.py`: dane i pamięć podręczna tekstów stron.
-- `widok_powitanie.py`: okładka dnia (sprawy, różnice, obraz kraju).
+- `widok_powitanie.py`: dane okładki (`poster_data`) i dawny plakat z napisami `powitanie.png` (do 01.10).
+- `okladka.py`: okładka z pasów (opisy scen, pasy przez `paski.styled_prompt`, HTML `cover_html`).
 - `os_czasu.py`: ciągła oś wydarzeń (`data/widok/os/`).
 - `kraje.py`: „Czym żyje kraj”, tematy tylko w prasie jednego kraju (`data/widok/kraje/`).
 - `streszczenia.py`: streszczenia artykułów pod nagłówkami (`data/widok/streszczenia/`, klik w nagłówek na stronie); 3–5 zdań, `skroc` jednorazowo skraca starsze (5–7 zdań) do ok. 60%.

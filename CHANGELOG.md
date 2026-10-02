@@ -1,3 +1,18 @@
+# Okładka dnia 2.0 z pasów, napisy w HTML, wspólny styl obrazków — 2026-10-02
+
+- Test stylów (A–C, D1–D5, E1/E2/E4 w `data/widok/_styl-test/`): wybrany E2, komiks malowany gwaszem z konturem. Stała
+  `IMAGE_STYLE` + `SCENE_RULES` w `widok_obrazkowy.py`, `paski.styled_prompt` (styl na początku, wspólna część bez techniki,
+  światła i palety). Kafelki tematów i paski krajów bez zmian (`paski.prompt`).
+- `scripts/v2/okladka.py`: górny blok „Przegląd prasy” z pasów: pas na sprawę, różnicę i obraz kraju (dane jak dawny plakat:
+  `widok_powitanie.poster_data`); opisy scen przez Codex (`okladka-sceny.json`, ręczna poprawka dozwolona), sceny z
+  detalami miejsca i 2–6 postaciami; flagi i barwy tylko gdy jednoznacznie wynikają z danych. Wszystkie napisy w HTML: tytuł
+  dnia, sekcje, „Ciąg dalszy · od DD.MM”, tytuł, liczba krajów i flagi na gradiencie u dołu pasa, kolumny krajów pod pasem,
+  stopka. Strony spraw/różnic/obrazu kraju biorą pas zamiast wycinka plakatu. Testy: `tests/test_okladka.py`.
+- Kolumny krajów pod pasem: pełne zdania przycięte do 4 linii, „więcej ›” rozwija (wspólny mechanizm `data-zwin` w
+  `pasek.js`; link tylko na pasie, kolumny poza nim). Nagłówek kolumny zewnętrznej: „Z zewnątrz”. Scena różnicy i obrazu
+  kraju nie powtarza głównego motywu żadnej sprawy z tej samej okładki (zasada w `okladka.scenes_prompt`).
+- Próba na 01.10: 2 obrazki (6 pasów) + 1 ponowienie (pas „Obronność” z fałszywym sztandarem); nieopublikowane.
+
 # Czytanie na głos na stronie 2.0 — 2026-10-02
 
 - `pasek.js`: Web Speech API (`speechSynthesis`, pl-PL, głos „Natural/Online”, potem „Google”, potem dowolny `pl-*`; czeka na

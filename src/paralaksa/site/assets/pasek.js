@@ -412,6 +412,22 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
     }
   });
 
+  // zwijany tekst: element z data-zwin przycięty w CSS strony (np. 4 linie); „więcej ›” tylko gdy coś jest ucięte
+  document.addEventListener("DOMContentLoaded", () => document.querySelectorAll("[data-zwin]").forEach(el => {
+    if (el.scrollHeight <= el.clientHeight + 1) return;
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "zwin-b";
+    b.textContent = "więcej ›";
+    b.setAttribute("aria-expanded", "false");
+    b.addEventListener("click", () => {
+      const open = el.classList.toggle("rozwin");
+      b.textContent = open ? "mniej ‹" : "więcej ›";
+      b.setAttribute("aria-expanded", String(open));
+    });
+    el.after(b);
+  }));
+
   document.addEventListener("DOMContentLoaded", () => {
     const foot = document.createElement("footer");
     foot.className = "stopka";
