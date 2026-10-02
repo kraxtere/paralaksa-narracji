@@ -1,3 +1,8 @@
+# Kraje: dłuższe opisy tematów — 2026-10-02
+
+- `scripts/v2/kraje.py`: opis tematu 2–3 zdania, 40–60 słów (co się dzieje, kto jest stroną, jak ujmują to redakcje;
+  twierdzenia przypisane źródłom); walidacja 25–70 słów. Wyniki 01.10 policzone od nowa: opisy PL mają 28–34 słowa.
+
 # Strona „Tylko tutaj” (Kraje) — 2026-10-02
 
 - `widok_obrazkowy.py` buduje `data/widok/D/kraje.html` z `data/widok/kraje/D.json`: sekcja na kraj (Polska pierwsza, logo

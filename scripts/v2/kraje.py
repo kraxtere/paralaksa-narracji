@@ -16,7 +16,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 OUT = Path("data/widok/kraje")
-MAX_TOPICS, MAX_IDS, MAX_TITLE_WORDS, MAX_DESC_WORDS = 5, 4, 6, 25
+MAX_TOPICS, MAX_IDS, MAX_TITLE_WORDS, MIN_DESC_WORDS, MAX_DESC_WORDS = 5, 4, 6, 25, 70
 
 
 def assigned(day: str) -> set[int]:
@@ -56,7 +56,8 @@ def prompt(country: str, items: list[dict]) -> str:
         f"Niżej artykuły prasy z kraju {country} z jednego dnia, które NIE weszły do wydarzeń opisywanych przez prasę wielu "
         "krajów. Wybierz 3–5 tematów krajowych, o których pisała ta prasa (najpierw te, o których pisało kilka redakcji).\n"
         "- tytul: po polsku, najwyżej 6 słów, rzeczowo, bez ocen;\n"
-        "- opis: jedno zdanie po polsku, najwyżej 25 słów, co podaje prasa, bez ocen i bez własnej wiedzy;\n"
+        "- opis: 2–3 zdania po polsku, 40–60 słów: co się dzieje, kto jest stroną i jak ujmują to redakcje; bez ocen i bez "
+        "własnej wiedzy, twierdzenia przypisane źródłom („według X…”, „Y pisze, że…”);\n"
         "- ids: 1–4 numery artykułów o tym temacie (tylko z listy, każdy numer w jednym temacie).\n"
         "Pomijaj poradniki, lifestyle, rozrywkę, sport i pogodę. Jeśli sensownych tematów jest mniej niż 3, podaj tyle, ile jest. "
         "Nie używaj myślników jako przecinków.\n"
@@ -75,8 +76,8 @@ def check(topics: list, items: list[dict]) -> list[str]:
             continue
         if len(t["tytul"].split()) > MAX_TITLE_WORDS:
             errors.append(f"temat {n}: tytuł ma {len(t['tytul'].split())} słów, najwyżej {MAX_TITLE_WORDS}")
-        if len(t["opis"].split()) > MAX_DESC_WORDS:
-            errors.append(f"temat {n}: opis ma {len(t['opis'].split())} słów, najwyżej {MAX_DESC_WORDS}")
+        if not MIN_DESC_WORDS <= len(t["opis"].split()) <= MAX_DESC_WORDS:
+            errors.append(f"temat {n}: opis ma {len(t['opis'].split())} słów, ma mieć {MIN_DESC_WORDS}–{MAX_DESC_WORDS}")
         if not 1 <= len(t["ids"]) <= MAX_IDS:
             errors.append(f"temat {n}: {len(t['ids'])} artykułów, ma być 1–{MAX_IDS}")
         for i in t["ids"]:
