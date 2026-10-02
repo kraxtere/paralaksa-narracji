@@ -730,9 +730,10 @@ def countries_link() -> str:
     if not any(countries_data().values()):
         return ""
     img = '<img src="../kraje/baner.webp" alt="" loading="lazy">' if BANNER.exists() else ""
-    return (f'<div class="okl"><a class="okl-pas kraje-pas{"" if img else " bez"}" href="kraje.html" data-sekcja="kraje">{img}'
-            '<span class="okl-t"><b>Czym żyją kraje <span class="strz">›</span></b>'
-            '<span class="okl-n">Tylko u nas: o tym, co nie wychodzi za granicę</span></span></a></div>')
+    return (f'<div class="okl"><h2 class="pp-sek">Czym żyją kraje</h2>'
+            f'<a class="okl-pas kraje-pas{"" if img else " bez"}" href="kraje.html" data-sekcja="kraje">{img}'
+            '<span class="okl-t"><b>Sprawy, które zostały w domu <span class="strz">›</span></b>'
+            '<span class="okl-n">Co zajmuje prasę każdego kraju, choć nie pisze o tym nikt poza nim</span></span></a></div>')
 
 
 # Baner „Czym żyje kraj”: stały zasób wspólny dla wszystkich dni (data/widok/kraje/baner.webp, plx site kopiuje go do
@@ -906,8 +907,8 @@ def cover_html(ts: list[dict], n_countries: int) -> str:
         rows.append(f'<a class="okl-pas{"" if img else " bez"}" href="temat-{t["temat"]}.html">{img}<span class="okl-t">'
                     f'<b>{esc(t["nazwa"])}</b><span class="okl-n">{n_kraje(len(t["kraje"]))}</span><span class="flagi">'
                     + "".join(flag_html(c) for c in t["kraje"]) + "</span></span></a>")
-    return (f'<div class="okl" data-sekcja="tematy"><header class="okl-h"><h1>Czym żyła prasa {DAY[8:10]}.{DAY[5:7]}'
-            f'</h1><p>{n_countries} krajów · {len(ts)} tematów dnia</p></header>' + "".join(rows)
+    return (f'<div class="okl" data-sekcja="tematy"><h2 class="pp-sek">Czym żyła prasa</h2>'
+            f'<p class="pp-pod">{n_countries} krajów · {len(ts)} tematów dnia</p>' + "".join(rows)
             + '<p class="okl-s">Kliknij temat · Opis przekazu analizowanych źródeł, nie faktów</p></div>')
 
 
@@ -956,7 +957,7 @@ STRIPS_CSS = (
     ".okl-d{display:inline-block;margin-left:10px;padding:2px 9px;background:var(--cegla);color:var(--papier);"
     "font-size:.7em;vertical-align:middle;border-radius:3px}.pp .okl-h p{font-style:italic;color:var(--tusz)}"
     ".pp-sek{margin:18px 0 6px;padding:5px 12px;background:var(--cegla);color:var(--papier);font:700 1.2em Georgia,serif;"
-    "border-radius:4px 4px 0 0}"
+    "border-radius:4px 4px 0 0}.pp-pod{margin:0 2px 4px;color:var(--szary);font-size:.85em}"
     "@media(max-width:480px){.pp .okl-h h1{font-size:1.65em}}"
     ".pp-k{margin:8px 0 12px;border:3px solid var(--tusz);border-radius:8px;overflow:hidden;background:var(--karta);"
     "color:var(--tusz)}.pp-obr{position:relative;display:block;background:var(--tusz);color:var(--papier);text-decoration:none}"

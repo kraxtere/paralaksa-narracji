@@ -7,6 +7,9 @@
 
 # Easter eggi w obrazkach tematów i „Czym żyją kraje” — 2026-10-02
 
+- Nagłówki sekcji strony dnia jednolite: ceglane belki `pp-sek` także nad „Czym żyją kraje” (w kaflu „Sprawy, które
+  zostały w domu” + podpis) i „Czym żyła prasa” (liczby jako drobny podpis `pp-pod`).
+
 - Kafelki tematów spokojniej (akceptacja właściciela, domyślne od 01.10): jeden główny motyw tematu, najwyżej 2–3
   subtelne akcenty z nagłówków, dużo nieba/tła, do 3 gazetek (`cover_scene`); gęsta wersja 01.10 w `_stare/`.
 
