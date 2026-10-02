@@ -1,3 +1,11 @@
+# Nowe źródła FR, HU, IR — 2026-10-02 (nie zacommitowane, w próbie)
+
+- 9 źródeł w `config/sources.yaml` (FR: lefigaro, francetvinfo, rfi_en; HU: telex, index_hu, magyarnemzet; IR: tehrantimes, mehr_en,
+  iranintl) wg `docs/PRZEGLAD_NOWYCH_ZRODEL.md`; nazwy/przymiotniki krajów w `board/render.py` i `report/validate.py`; test koszyka 43 źródła.
+- Próba na osobnej bazie `data/proba-zrodla.db`: 280 artykułów, ekstrakcja 150 za $0,26, 0 błędów; HU i IR-EN dają trafne sygnały.
+- `scripts/v2`: FR/HU/IR w nazwach, flagach (opisy i SVG), „Czym żyje kraj” i liście banera (`COUNTRIES`, liczba okien z długości listy;
+  istniejący `baner.webp` ma 14 okien, nowy wymaga `widok_obrazkowy.py baner` po usunięciu pliku). Napisy „N krajów” już brały liczbę z danych.
+
 # Czytanie na głos wszędzie, gdzie jest tekst — 2026-10-02
 
 - `pasek.js`: przyciski wykrywane po strukturze, bez zmian w HTML: karty krajów (strony tematów, zestawień Spraw/Różnic/Obrazu kraju,

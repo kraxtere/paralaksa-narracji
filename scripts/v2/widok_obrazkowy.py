@@ -52,11 +52,13 @@ def src_html(sid: str) -> str:
 
 
 NAMES = {"PL": "Polska", "UA": "Ukraina", "DE": "Niemcy", "UK": "Wielka Brytania", "US": "USA", "CN": "Chiny",
-         "HK": "Hongkong", "IL": "Izrael", "PS": "Palestyna", "TR": "Turcja", "IN": "Indie", "BR": "Brazylia", "QA": "Katar", "RU": "Rosja"}
+         "HK": "Hongkong", "IL": "Izrael", "PS": "Palestyna", "TR": "Turcja", "IN": "Indie", "BR": "Brazylia", "QA": "Katar", "RU": "Rosja",
+         "FR": "Francja", "HU": "Węgry", "IR": "Iran"}
 FLAGS = {"PL": "white-red", "UA": "blue-yellow", "DE": "black-red-gold", "UK": "Union Jack", "US": "Stars and Stripes",
          "CN": "red with yellow stars", "HK": "red with white bauhinia", "IL": "white with blue Star of David",
          "PS": "Palestinian", "TR": "red with white crescent", "IN": "Indian tricolour", "BR": "Brazilian", "QA": "Qatar (maroon with a white serrated band on the left, NOT red-white)",
-         "RU": "white-blue-red"}
+         "RU": "white-blue-red", "FR": "French tricolour (blue-white-red vertical)", "HU": "red-white-green horizontal",
+         "IR": "green-white-red with a red emblem"}
 SCENES = {
     "middle_east": "a stylised map of the Middle East with a dove and olive branch hovering over it",
     "us_policy": "the US Capitol dome with a large ballot and gavel",
@@ -674,7 +676,7 @@ def country_strips(country: str, topics: list[dict]) -> list[str]:
 LIVES = {"PL": "żyje Polska", "UA": "żyje Ukraina", "DE": "żyją Niemcy", "UK": "żyje Wielka Brytania",
          "US": "żyją Stany Zjednoczone", "CN": "żyją Chiny", "HK": "żyje Hongkong", "IL": "żyje Izrael",
          "PS": "żyje Palestyna", "TR": "żyje Turcja", "IN": "żyją Indie", "BR": "żyje Brazylia", "QA": "żyje Katar",
-         "RU": "żyje Rosja"}
+         "RU": "żyje Rosja", "FR": "żyje Francja", "HU": "żyją Węgry", "IR": "żyje Iran"}
 
 
 def lives_title(c: str) -> str:
@@ -732,18 +734,19 @@ def countries_link() -> str:
     img = '<img src="../kraje/baner.webp" alt="" loading="lazy">' if BANNER.exists() else ""
     return (f'<div class="okl"><h2 class="pp-sek">Czym żyją kraje</h2>'
             f'<a class="okl-pas kraje-pas{"" if img else " bez"}" href="kraje.html" data-sekcja="kraje">{img}'
-            '<span class="okl-t"><b>Sprawy, które zostały w domu <span class="strz">›</span></b>'
+            '<span class="okl-t"><b>Tematy, które zostają w domu <span class="strz">›</span></b>'
             '<span class="okl-n">Co zajmuje prasę każdego kraju, choć nie pisze o tym nikt poza nim</span></span></a></div>')
 
 
 # Baner „Czym żyje kraj”: stały zasób wspólny dla wszystkich dni (data/widok/kraje/baner.webp, plx site kopiuje go do
 # v2/kraje/), generowany raz (`widok_obrazkowy.py baner`; istniejącego nie nadpisuje)
 BANNER = Path("data/widok/kraje/baner.webp")
-COUNTRIES14 = ["PL", "UA", "DE", "UK", "US", "RU", "CN", "IN", "TR", "IL", "PS", "QA", "BR", "HK"]
+COUNTRIES = ["PL", "UA", "DE", "UK", "US", "RU", "CN", "IN", "TR", "IL", "PS", "QA", "BR", "HK", "FR", "HU", "IR"]
+_ROWS = (len(COUNTRIES) + 1) // 2   # okna kamienicy w 2 rzędach; liczba z listy krajów, nie stała
 BANNER_SCENE = ("A calm, symmetrical facade of an old European tenement house seen straight on, filling the strip: an "
-                "orderly grid of EXACTLY 14 equal windows in 2 rows of 7. In every window one small cartoon newspaper "
+                f"orderly grid of EXACTLY {len(COUNTRIES)} equal windows in 2 rows of {_ROWS} (the last row may have one window fewer). In every window one small cartoon newspaper "
                 "figure (a folded newspaper with a simple face) wearing a scarf in the colours of a different country "
-                "(" + ", ".join(f"{NAMES[c]}: {FLAGS[c]}" for c in COUNTRIES14) + "), busy with its own local matter "
+                "(" + ", ".join(f"{NAMES[c]}: {FLAGS[c]}" for c in COUNTRIES) + "), busy with its own local matter "
                 "(reading, phoning, watering a plant, cooking, fixing something), each with ONE small local accent in "
                 "the background of its window (a characteristic object or a bit of landscape of that country). No "
                 "crowds, no chaos: the regular rhythm of windows gives calm. Newspaper pages show only abstract grey "
@@ -794,6 +797,9 @@ FLAG_SVG = {
            'cy="10" r="4" fill="#e30a17"/>' + _star(17.5, 10, 2.4, "#fff")),
     "BR": ('<rect width="30" height="20" fill="#009c3b"/><path d="M15 2L28 10L15 18L2 10Z" fill="#ffdf00"/><circle '
            'cx="15" cy="10" r="4.6" fill="#002776"/>'),
+    "FR": '<rect width="10" height="20" fill="#002395"/><rect x="10" width="10" height="20" fill="#fff"/><rect x="20" width="10" height="20" fill="#ed2939"/>',
+    "HU": _bands("#ce2939", "#fff", "#477050"),
+    "IR": _bands("#239f40", "#fff", "#da0000") + '<circle cx="15" cy="10" r="2.3" fill="none" stroke="#da0000" stroke-width=".9"/>',
     "QA": ('<rect width="30" height="20" fill="#8a1538"/><path d="M0 0H9' + "".join(
            f'L{12 if i % 2 else 9} {i * 20 / 18:.2f}' for i in range(1, 19)) + 'H0Z" fill="#fff"/>'),
 }
