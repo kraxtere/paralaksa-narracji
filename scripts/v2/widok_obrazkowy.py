@@ -413,7 +413,21 @@ def with_logos(text: str, sids: list[str]) -> str:
     return out
 
 
-def theme_page(t: dict, opisy: dict, pl: dict, cs: list[dict], debug: bool = False) -> str:
+def theme_nav(ts: list[dict], t: dict) -> str:
+    """Big buttons to the previous and next theme of the day (cover order); the ends lead back to the day page."""
+    i = [x["temat"] for x in ts].index(t["temat"])
+
+    def btn(x, cls, label, arrow):
+        if not x:
+            return f'<a class="tem-b {cls}" href="index.html"><small>{label}</small><b>{arrow} Strona dnia</b></a>'
+        name = f"{arrow} {esc(x['nazwa'])}" if cls == "pop" else f"{esc(x['nazwa'])} {arrow}"
+        return f'<a class="tem-b {cls}" href="temat-{x["temat"]}.html"><small>{label}</small><b>{name}</b></a>'
+    return ('<nav class="tem-nav" aria-label="Inne tematy dnia">'
+            + btn(ts[i - 1] if i > 0 else None, "pop", "Poprzedni temat", "‹")
+            + btn(ts[i + 1] if i + 1 < len(ts) else None, "nast", "Następny temat", "›") + "</nav>")
+
+
+def theme_page(t: dict, opisy: dict, pl: dict, cs: list[dict], debug: bool = False, ts: list[dict] | None = None) -> str:
     poster = {x["kraj"]: x for x in cs}
     ids = {sg["article_id"] for c in t["kraje"] for sg in theme_articles(t, opisy, c)} | {x["article_id"] for x in cs}
     info = article_info(ids)
@@ -459,11 +473,12 @@ def theme_page(t: dict, opisy: dict, pl: dict, cs: list[dict], debug: bool = Fal
     # pigułki krajów: kotwice do kart niżej, w tej samej kolejności
     nav = ('<nav class="kraje-nav">' + "".join(country_pill(c, "a", f'href="#kraj-{c}" data-k="{c}"') for c in order)
            + "</nav>")
+    tnav = theme_nav(ts, t) if ts else ""
     body = (bar("index.html") + poster + f'<style>{COUNTRY_PICK_CSS}</style><div class="list jeden" data-wszystkie data-sekcja="tematy">{head}<h1>{esc(t["nazwa"])}</h1><p class="s">{len(t["kraje"])} krajów '
             f'pisało o tym temacie ({DAY}). Opis przekazu analizowanych źródeł, nie faktów.</p>'
             + (f'<div class="pods" data-czytaj="temat"><div class="pods-l">Podsumowanie wszystkich krajów</div>'
                f'<p>{with_logos(pods["_opis"], list(SOURCES))}</p></div>' if pods.get("_opis") else "")
-            + nav + '<p class="s">Nagłówki w tłumaczeniu roboczym; dłuższe skrócone do 15 słów.</p>' + "".join(blocks) + "</div>"
+            + nav + '<p class="s">Nagłówki w tłumaczeniu roboczym; dłuższe skrócone do 15 słów.</p>' + "".join(blocks) + tnav + "</div>"
             + COUNTRY_PICK_JS)
     return shell(f"{t['nazwa']} · {DAY}", body, debug)
 
@@ -911,6 +926,12 @@ STRIPS_CSS = (
     "white-space:nowrap;vertical-align:middle}"
     ".kraj-pig.duza{font-size:.75em;font-weight:700;gap:9px;padding:6px 16px 6px 7px}.kraj-pig.duza .flaga{width:28px;height:28px}"
     ".kraje-nav a:hover,.kraje-nav a:focus-visible{border-color:var(--cegla);color:var(--cegla)}"
+    # przejście między tematami dnia (koniec strony tematu): duże przyciski, nazwa tematu w środku
+    ".tem-nav{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:22px 0 8px}"
+    ".tem-b{display:flex;flex-direction:column;gap:2px;min-height:58px;justify-content:center;padding:8px 12px;"
+    "border:2px solid var(--tusz);border-radius:10px;background:var(--karta);color:var(--tusz);text-decoration:none}"
+    ".tem-b.nast{text-align:right;background:var(--tusz);color:var(--papier)}.tem-b small{font-size:.8em;opacity:.8}"
+    ".tem-b b{font:700 1.1em Georgia,serif}.tem-b:hover,.tem-b:focus-visible{outline:3px solid var(--cegla);outline-offset:2px}"
     ".okl{max-width:720px;margin:auto;padding:0 6px 10px;box-sizing:border-box}.okl-h{text-align:center;padding:10px 0 4px}"
     ".okl-h h1{margin:0;color:var(--cegla);font:700 1.7em Georgia,serif}.okl-h p{margin:4px 0 0;color:var(--szary)}"
     ".okl-pas{position:relative;display:block;margin:8px 0;border:3px solid var(--tusz);border-radius:8px;overflow:hidden;"
@@ -1049,8 +1070,8 @@ def main():
         return
     for t in ts:
         cs = poster_data(t, opisy, pl)
-        (OUT / f"temat-{t['temat']}.html").write_text(theme_page(t, opisy, pl, cs), encoding="utf-8")
-        (OUT / f"_podglad-temat-{t['temat']}.html").write_text(theme_page(t, opisy, pl, cs, debug=True), encoding="utf-8")
+        (OUT / f"temat-{t['temat']}.html").write_text(theme_page(t, opisy, pl, cs, ts=ts), encoding="utf-8")
+        (OUT / f"_podglad-temat-{t['temat']}.html").write_text(theme_page(t, opisy, pl, cs, debug=True, ts=ts), encoding="utf-8")
     if (OUT / "powitanie.png").exists() or strip_cover():
         welcome_pages(pl)
     if countries_data():

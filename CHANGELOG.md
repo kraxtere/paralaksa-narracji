@@ -7,6 +7,9 @@
 
 # Easter eggi w obrazkach tematów i „Czym żyją kraje” — 2026-10-02
 
+- Strona tematu: na końcu duże przyciski „‹ Poprzedni temat” / „Następny temat ›” (kolejność z okładki; na końcach
+  powrót do strony dnia), `theme_nav`. Obrazki 01.10 (3 panoramy tematów, 13 krajów) wygenerowane ponownie z nowymi promptami.
+
 - Kafelki tematów: w panoramie ukryte szczegóły nagłówków ze strony tematu (`plakat-TEMAT.json`), poza gazetkami krajów.
 - „Czym żyją kraje” (`kraje.py obrazki`): pas to konkretna sprawa z nagłówkami (do 3, `data/tytuly/D.json`) i 2–3 easter
   eggami zamiast ogólnego symbolu, w każdym pasie jedna ukryta gazetka kraju „jak Wally”.

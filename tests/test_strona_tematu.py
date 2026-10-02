@@ -61,3 +61,12 @@ def test_headline_cards_and_bubble_from_headline_pick(monkeypatch, tmp_path):
     monkeypatch.setattr(w, "country_strip", lambda t, c: tmp_path / "pas.webp")
     (tmp_path / "pas.webp").write_bytes(b"x")
     assert '<div class="dymek">Chmurka</div>' in w.theme_page(t, opisy, {}, cs)
+
+
+def test_theme_nav_previous_next_and_ends():
+    """Strona tematu: duże przyciski do poprzedniego i następnego tematu dnia; na końcach powrót do strony dnia."""
+    ts = [{"temat": "a", "nazwa": "Bliski Wschód"}, {"temat": "b", "nazwa": "Wojna w Ukrainie"}, {"temat": "c", "nazwa": "Rosja"}]
+    mid = w.theme_nav(ts, ts[1])
+    assert 'href="temat-a.html"' in mid and "‹ Bliski Wschód" in mid and 'href="temat-c.html"' in mid and "Rosja ›" in mid
+    first, last = w.theme_nav(ts, ts[0]), w.theme_nav(ts, ts[2])
+    assert 'href="index.html"' in first and "‹ Strona dnia" in first and 'href="index.html"' in last and "data-theme" not in mid
