@@ -437,7 +437,7 @@ def theme_page(t: dict, opisy: dict, pl: dict, cs: list[dict], debug: bool = Fal
         if strips_mode():
             if country_strip(t, c).exists():
                 strip = f'<img class="pas-kraju" src="{country_strip(t, c).name}" alt="" loading="lazy">'
-                if top and drawn_poster(t):                    # dymek tylko z chmurki narysowanego plakatu
+                if top:                                        # dymek: nagłówek kraju z plakat-TEMAT.json (wybór jak na plakacie)
                     strip += f'<div class="dymek">{esc(top["naglowek"])}</div>'
         blocks.append(f'<section id="kraj-{c}">{strip}<h2>{country_pill(c, big=True)} <span class="s">{round(100 * share)}% artykułów'
                       f'</span>{"".join(src_html(z) for z in opisy["dane"][c]["zrodla"])}</h2>'
@@ -580,10 +580,6 @@ def art_list(cards: list[str]) -> str:
     return (f'<div class="arts"><div class="arts-l">Artykuły ({len(cards)})</div><ul class="arts-u">{"".join(cards)}</ul></div>'
             if cards else "")
 
-
-def drawn_poster(t: dict) -> bool:
-    """Speech bubbles come only from a drawn poster; plakat-THEME.json alone is a headline pick, not a bubble."""
-    return (OUT / f"plakat-{t['temat']}.png").exists()
 
 
 def article_list(ids: list[int], pl: dict) -> str:

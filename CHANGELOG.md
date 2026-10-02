@@ -1,3 +1,8 @@
+# Dymki pasków z wyboru nagłówków (także bez plakatu) — 2026-10-02
+
+- Cofnięty warunek „dymek tylko z narysowanego plakatu”: dymek to nagłówek kraju z `plakat-TEMAT.json`, jak od początku
+  (zapisywany też w kroku `paski`, więc dni bez plakatów, od 02.10, mają dymki). Przebudowa 23.09–01.10.
+
 # Strona 2.0: nagłówki jako karty do rozwinięcia — 2026-10-02
 
 - Wspólne `art_card`/`art_list` w `widok_obrazkowy.py` (strony tematów, „Czym żyje kraj”, osie krajów, oś czasu): etykieta

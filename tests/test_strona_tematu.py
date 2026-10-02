@@ -42,8 +42,8 @@ def test_countries_tile_and_page_header_with_banner(monkeypatch, tmp_path):
     assert "kraje-pas bez" in w.countries_link() and 'class="kraje-baner"' not in w.countries_page({})
 
 
-def test_headline_cards_and_bubble_only_from_drawn_poster(monkeypatch, tmp_path):
-    """Headlines are cards under „Artykuły (N)”; a country strip gets a bubble only when the poster was drawn."""
+def test_headline_cards_and_bubble_from_headline_pick(monkeypatch, tmp_path):
+    """Headlines are cards under „Artykuły (N)”; a country strip gets the picked headline as a bubble, poster or not."""
     cards = [w.art_card("https://e.x/a?b=1&c", 7, "Tytuł <b>", "Źródło")]
     lst = w.art_list(cards)
     assert lst.startswith('<div class="arts"><div class="arts-l">Artykuły (1)</div><ul class="arts-u"><li class="art">')
@@ -59,6 +59,4 @@ def test_headline_cards_and_bubble_only_from_drawn_poster(monkeypatch, tmp_path)
     monkeypatch.setattr(w, "strips_mode", lambda: True)
     monkeypatch.setattr(w, "country_strip", lambda t, c: tmp_path / "pas.webp")
     (tmp_path / "pas.webp").write_bytes(b"x")
-    assert 'class="dymek"' not in w.theme_page(t, opisy, {}, cs)           # sam plakat-x.json: brak dymka
-    (tmp_path / "plakat-x.png").write_bytes(b"x")
     assert '<div class="dymek">Chmurka</div>' in w.theme_page(t, opisy, {}, cs)
