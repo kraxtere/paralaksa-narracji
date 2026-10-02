@@ -4,10 +4,13 @@ pasków krajów na stronach tematów i „Tylko tutaj”, scripts/v2/kraje.py).
 Zawsze: w obrazku żadnego tekstu; oryginał zapisany przed cięciem (obok plik .json z listą wyników, więc
 `python scripts/v2/paski.py pokroj ORYGINAŁ.png` tnie ponownie bez Codex); przy niezgodnej liczbie pasków jedno
 ponowienie, potem pozycja odrzucona (nic nie zapisane).
-Współbieżność (run_all): do 8 procesów Codex, starty co 15 s; po pierwszym 429 4 procesy co 20 s i ponowienie.
+Współbieżność (run_all): do 8 procesów Codex (PASKI_PROCESY=12 więcej), starty co 10 s (PASKI_ODSTEP); po pierwszym 429 4 procesy
+co 20 s i ponowienie; 429 także przy 4 procesach: przerwanie (kod wyjścia 3, gotowe paski zostają, ponowne uruchomienie
+robi tylko brakujące).
 """
 
 import json
+import os
 import re
 import shutil
 import sys
@@ -180,13 +183,14 @@ def make(work: Path, prompt_text: str, dest: list[Path], original: Path) -> str:
 
 
 def run_all(jobs: list[tuple[str, object]]) -> dict[str, str]:
-    """Runs (label, callable -> status) jobs: up to 8 at once, starts every 15 s; after the first 429 4 at once every
+    """Runs (label, callable -> status) jobs: up to 8 at once, starts every 10 s; after the first 429 4 at once every
     20 s, and the job that hit 429 is queued once more. Prints the count first and one summary line at the end."""
     print(f"obrazków do zrobienia: {len(jobs)}", flush=True)
-    t0, state, lock = time.time(), {"width": 8, "gap": 15, "hits": 0}, threading.Lock()
+    width = int(os.environ.get("PASKI_PROCESY", "8"))
+    t0, state, lock = time.time(), {"width": width, "gap": int(os.environ.get("PASKI_ODSTEP", "10")), "hits": 0, "stop": False}, threading.Lock()
     queue, running, results = [(label, fn, 0) for label, fn in jobs], [], {}
 
-    def work(label, fn, tries):
+    def work(label, fn, tries, slowed):
         try:
             res = fn()
         except BaseException as e:                                   # SystemExit z limit_guard też
@@ -195,7 +199,11 @@ def run_all(jobs: list[tuple[str, object]]) -> dict[str, str]:
             if res == "429":
                 state["hits"] += 1
                 state["width"], state["gap"] = 4, 20
-                if tries == 0:
+                if slowed:                                           # 429 mimo 4 procesów: przerwać
+                    state["stop"] = True
+                    results.update({lb: "nie zaczęty" for lb, _, _ in queue})
+                    queue.clear()
+                elif tries == 0:
                     queue.append((label, fn, 1))
                     return
             results[label] = res
@@ -209,7 +217,7 @@ def run_all(jobs: list[tuple[str, object]]) -> dict[str, str]:
             ready = queue and len(running) < state["width"] and time.time() - last >= state["gap"]
             job = queue.pop(0) if ready else None
         if job:
-            th = threading.Thread(target=work, args=job)
+            th = threading.Thread(target=work, args=(*job, state["width"] == 4 and state["hits"] > 0))
             th.start()
             running.append(th)
             last = time.time()
@@ -220,6 +228,8 @@ def run_all(jobs: list[tuple[str, object]]) -> dict[str, str]:
     print(f"zrobione {len(results) - len(bad)}, odrzucone {len(bad)}"
           + (" (" + "; ".join(f"{k}: {v}" for k, v in bad.items()) + ")" if bad else "")
           + f", 429: {state['hits']}, czas {took // 60} min {took % 60} s", flush=True)
+    if state["stop"]:
+        raise SystemExit(3)
     return results
 
 

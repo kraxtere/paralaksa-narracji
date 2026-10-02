@@ -1,3 +1,22 @@
+# Strona 2.0: paski także dla dni 23–30.09 — 2026-10-02
+
+- Dni 23–30.09 przerobione na nowy układ (okładka pasami, paski krajów na stronach tematów); `start.png` i plakaty zostają w katalogach.
+- `paski.py run_all`: `PASKI_PROCESY` (domyślnie 8), starty domyślnie co 10 s (`PASKI_ODSTEP`); 429 także przy 4 procesach
+  przerywa (kod 3). `strip_jobs` pomija obrazki, których paski już są (ponowne uruchomienie robi tylko brakujące).
+
+# Wspólna pigułka kraju, wybór kraju na stronach tematów, kółko na rzędach krajów — 2026-10-02
+
+- `widok_obrazkowy.country_pill(c, tag, attrs, big)`: jedna pigułka z flagą i nazwą (klasa `.kraj-pig`, `.duza` w nagłówkach).
+  Używają jej: przyciski krajów, nagłówki sekcji krajów na „Czym żyje kraj”, nagłówki kart krajów na stronach tematów
+  i kart (sprawy/różnice), oś kraju `kraje/KRAJ.html` (pigułka pod tytułem). Opisy w zwykłym tekście bez zmian.
+- Strony tematów: klik w kraj nie przewija, tylko pokazuje samą wybraną kartę pod przyciskami (wariant „tylko ona”,
+  jak „Czym żyje kraj”); pierwszy przycisk „Wszystkie kraje” (dodawany przez JS) przywraca całą listę. Domyślnie
+  wszystkie karty; wybór w `#KRAJ` (działa też `#kraj-KRAJ`). Bez JS widać wszystko jak dotąd. Wspólny JS `COUNTRY_PICK_JS`
+  (atrybut `data-wszystkie` na pudełku włącza „Wszystkie kraje”; bez niego jak dotąd domyślnie PL).
+- `window.plxKolko(el)` w `pasek.js`: kółko nad rzędem przesuwa go w bok, na końcu rzędu albo gdy się mieści przewija stronę.
+  Używają jej filtry osi czasu (dawny kod z 89a5f8e zastąpiony wywołaniem) i rzędy przycisków krajów.
+- Przebudowane strony dni 23.09–01.10 i osie krajów (bez obrazków).
+
 # „Czym żyje kraj”: baner i kafel pod okładką — 2026-10-02
 
 - Wspólny baner dla wszystkich dni `data/widok/kraje/baner.webp` (ludziki-gazetki w szalikach krajów, Polska w środku,

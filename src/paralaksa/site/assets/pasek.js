@@ -4,6 +4,15 @@
    na stronach tematów i spraw, powrót do strony dnia. W stopce link do starej wersji.
    Na serwerze (window.plxJa, wstawiane przez hosting/server.py) dochodzi menu osoby: imię, powiadomienia o nowym wydaniu,
    instalacja aplikacji, wylogowanie; oraz service worker /sw.js (bez niego Chrome nie proponuje instalacji). */
+// Kółko nad poziomo przewijanym rzędem (filtry osi czasu, przyciski krajów) przesuwa go w bok; na końcu rzędu albo gdy
+// się mieści, przewija stronę normalnie. Wywołanie: plxKolko(element).
+window.plxKolko = el => el.addEventListener("wheel", ev => {
+  if (ev.ctrlKey || Math.abs(ev.deltaX) >= Math.abs(ev.deltaY)) return;
+  const m = el.scrollWidth - el.clientWidth;
+  if (m <= 1 || (ev.deltaY < 0 && el.scrollLeft <= 0) || (ev.deltaY > 0 && el.scrollLeft >= m - 1)) return;
+  ev.preventDefault(); el.scrollLeft += ev.deltaY;
+}, { passive: false });
+
 (() => {
   const LOGO = "__LOGO__";
   const box = document.getElementById("pasek");

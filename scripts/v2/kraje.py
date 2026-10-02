@@ -306,6 +306,7 @@ def country_pages() -> None:
         title = W.lives_title(country)
         page = (f'<div id="pasek" data-dzien="{order[0]}" data-wstecz></div><script src="../pasek.js"></script>'
                 f'<div class="list" data-sekcja="kraje"><h1>{W.esc(title)}</h1>'
+                f'<p>{W.country_pill(country, big=True)}</p>'
                 f'<p>Sprawy obecne tylko w prasie tego kraju ({W.esc(name)}), dzień po dniu, najnowszy u góry.</p>'
                 '<p class="s">Tematy i opisy wybrane przez AI z nagłówków prasy; nagłówki w tłumaczeniu roboczym, '
                 'dłuższe skrócone do 15 słów.</p>' + "".join(sections) + '</div>')

@@ -439,7 +439,7 @@ def theme_page(t: dict, opisy: dict, pl: dict, cs: list[dict], debug: bool = Fal
                 strip = f'<img class="pas-kraju" src="{country_strip(t, c).name}" alt="" loading="lazy">'
                 if top:                                        # dymek: nagłówek z plakatu tego kraju
                     strip += f'<div class="dymek">{esc(top["naglowek"])}</div>'
-        blocks.append(f'<section id="kraj-{c}">{strip}<h2>{esc(NAMES[c])} <span class="s">{round(100 * share)}% artykułów'
+        blocks.append(f'<section id="kraj-{c}">{strip}<h2>{country_pill(c, big=True)} <span class="s">{round(100 * share)}% artykułów'
                       f'</span>{"".join(src_html(z) for z in opisy["dane"][c]["zrodla"])}</h2>'
                       + opis + (f"<ul>{arts}</ul>" if arts else "") + "</section>")
     poster = ""
@@ -457,13 +457,14 @@ def theme_page(t: dict, opisy: dict, pl: dict, cs: list[dict], debug: bool = Fal
     head = (f'<img class="pas-tematu" src="{theme_strip(t).name}" alt="">'
             if strips_mode() and theme_strip(t).exists() else "")
     # pigułki krajów: kotwice do kart niżej, w tej samej kolejności
-    nav = ('<nav class="kraje-nav">' + "".join(f'<a href="#kraj-{c}">{flag_html(c)}{esc(NAMES[c])}</a>' for c in order)
+    nav = ('<nav class="kraje-nav">' + "".join(country_pill(c, "a", f'href="#kraj-{c}" data-k="{c}"') for c in order)
            + "</nav>")
-    body = (bar("index.html") + poster + f'<div class="list">{head}<h1>{esc(t["nazwa"])}</h1><p class="s">{len(t["kraje"])} krajów '
+    body = (bar("index.html") + poster + f'<style>{COUNTRY_PICK_CSS}</style><div class="list jeden" data-wszystkie data-sekcja="tematy">{head}<h1>{esc(t["nazwa"])}</h1><p class="s">{len(t["kraje"])} krajów '
             f'pisało o tym temacie ({DAY}). Opis przekazu analizowanych źródeł, nie faktów.</p>'
             + (f'<div class="pods"><div class="pods-l">Podsumowanie wszystkich krajów</div>'
                f'<p>{with_logos(pods["_opis"], list(SOURCES))}</p></div>' if pods.get("_opis") else "")
-            + nav + '<p class="s">Nagłówki w tłumaczeniu roboczym; dłuższe skrócone do 15 słów.</p>' + "".join(blocks) + "</div>")
+            + nav + '<p class="s">Nagłówki w tłumaczeniu roboczym; dłuższe skrócone do 15 słów.</p>' + "".join(blocks) + "</div>"
+            + COUNTRY_PICK_JS)
     return shell(f"{t['nazwa']} · {DAY}", body, debug)
 
 
@@ -607,7 +608,7 @@ def welcome_pages(pl: dict) -> None:
             if card["typ"] == "autoobraz":
                 label = ' <span class="s">' + ("o sobie" if country == card["kraj"] else "z zewnątrz") + '</span>'
             description = "".join(f'<p>{with_logos(p["tekst"], sids)}</p>' for p in paragraphs)
-            blocks.append(f'<section id="kraj-{country}"><h2>{esc(NAMES.get(country, country))}{label}'
+            blocks.append(f'<section id="kraj-{country}"><h2>{country_pill(country, big=True)}{label}'
                           f'{"".join(src_html(sid) for sid in sids)}</h2>{description}{article_list(ids, pl)}</section>')
         confidence = ""
         if card.get("pewnosc"):
@@ -651,14 +652,16 @@ def lives_title(c: str) -> str:
 
 
 # Jeden kraj naraz: wybór w #KRAJ (np. #PL, działa też dawne #kraj-PL); bez JS widać wszystkie sekcje
-COUNTRY_PICK_JS = """<script>(()=>{const box=document.querySelector('.jeden'),bs=[...box.querySelectorAll('.kraje-nav a')],
-ss=[...box.querySelectorAll('section[id^=kraj-]')];box.classList.add('js');
-function pick(c,push){if(!ss.some(s=>s.id==='kraj-'+c))c=ss[0]&&ss[0].id.slice(5);
- ss.forEach(s=>s.classList.toggle('on',s.id==='kraj-'+c));bs.forEach(b=>{const on=b.dataset.k===c;b.classList.toggle('on',on);
- if(on)b.parentElement.scrollLeft+=b.getBoundingClientRect().left-b.parentElement.getBoundingClientRect().left-8});
- if(push)history.replaceState(null,'','#'+c)}
+COUNTRY_PICK_JS = """<script>(()=>{const box=document.querySelector('.jeden'),nav=box.querySelector('.kraje-nav'),
+all=box.hasAttribute('data-wszystkie'),ss=[...box.querySelectorAll('section[id^=kraj-]')];box.classList.add('js');
+if(all){const w=document.createElement('a');w.href='#';w.className='kraj-pig';w.dataset.k='';w.textContent='Wszystkie kraje';nav.prepend(w)}
+const bs=[...nav.querySelectorAll('a')];window.plxKolko&&plxKolko(nav);
+function pick(c,push){if(c&&!ss.some(s=>s.id==='kraj-'+c))c='';if(!c&&!all)c=ss[0]&&ss[0].id.slice(5);
+ ss.forEach(s=>s.classList.toggle('on',!c||s.id==='kraj-'+c));bs.forEach(b=>{const on=b.dataset.k===c;b.classList.toggle('on',on);
+ if(on)nav.scrollLeft+=b.getBoundingClientRect().left-nav.getBoundingClientRect().left-8});
+ if(push)history.replaceState(null,'',c?'#'+c:location.pathname+location.search)}
 bs.forEach(b=>b.onclick=e=>{e.preventDefault();pick(b.dataset.k,true)});
-const h=()=>pick(location.hash.slice(1).replace(/^kraj-/,'')||'PL',false);addEventListener('hashchange',h);h()})()</script>"""
+const h=()=>pick(location.hash.slice(1).replace(/^kraj-/,'')||(all?'':'PL'),false);addEventListener('hashchange',h);h()})()</script>"""
 COUNTRY_PICK_CSS = (".jeden .kraje-nav{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;padding-bottom:4px}"
                     ".jeden .kraje-nav a.on{background:var(--cegla);border-color:var(--cegla);color:var(--papier)}"
                     ".jeden.js section[id^=kraj-]{display:none}.jeden.js section[id^=kraj-].on{display:block}"
@@ -676,10 +679,10 @@ def countries_page(pl: dict) -> str:
         strips = country_strips(country, data[country])
         topics = "".join(f'{strips[k]}<h3>{esc(t["tytul"])}</h3><p>{esc(t["opis"])}</p>{article_list(t["ids"], pl)}'
                          for k, t in enumerate(data[country]))
-        blocks.append(f'<section id="kraj-{country}"><h2>{esc(NAMES.get(country, country))}'
+        blocks.append(f'<section id="kraj-{country}"><h2>{country_pill(country, big=True)}'
                       f'{"".join(src_html(sid) for sid in sids)}<a class="osk" href="../kraje/{country}.html">Cała oś kraju →</a>'
                       f'</h2>{topics}</section>')
-    nav = ('<nav class="kraje-nav">' + "".join(f'<a href="#{c}" data-k="{c}">{flag_html(c)}{esc(NAMES.get(c, c))}</a>'
+    nav = ('<nav class="kraje-nav">' + "".join(country_pill(c, "a", f'href="#{c}" data-k="{c}"')
                                               for c in order) + '</nav>')
     title = f"Czym żyje kraj · {DAY[8:10]}.{DAY[5:7]}"
     body = (bar("index.html") + f'<style>{COUNTRY_PICK_CSS}</style><div class="list jeden" data-sekcja="kraje">'
@@ -774,6 +777,12 @@ def flag_html(c: str) -> str:
             f'aria-label="{esc(NAMES.get(c, c))}">{FLAG_SVG.get(c, "")}</svg>')
 
 
+def country_pill(c: str, tag: str = "span", attrs: str = "", big: bool = False) -> str:
+    """The one country label of the 2.0 pages: pill with the flag and the name (buttons, card headers); `big` for headers."""
+    return (f'<{tag} class="kraj-pig{" duza" if big else ""}"{" " + attrs if attrs else ""}>'
+            f'{flag_html(c)}{esc(NAMES.get(c, c))}</{tag}>')
+
+
 def strips_mode() -> bool:
     """The day uses the strip layout once its strip originals exist; older days keep start.png and posters."""
     return PASKI.exists()
@@ -823,6 +832,8 @@ def strip_jobs(ts: list[dict], opisy: dict, pl: dict) -> list[tuple[str, object]
     jobs = []
     for k, part in enumerate(paski.split(ts, 3)):                # pas okładki ok. 2:1: najwyżej 3 na obrazek
         name = f"okladka-{'AB'[k]}"
+        if all(theme_strip(t).exists() for t in part):            # ponowne uruchomienie: tylko brakujące
+            continue
         jobs.append((name, lambda part=part, name=name: paski.make(
             OUT / f"_gen-{name}", paski.prompt([cover_scene(t) for t in part]), [theme_strip(t) for t in part],
             PASKI / f"{name}.png")))
@@ -834,6 +845,8 @@ def strip_jobs(ts: list[dict], opisy: dict, pl: dict) -> list[tuple[str, object]
         pods = summaries(t, pl, cs)
         for k, part in enumerate(paski.split(page_countries(t, cs))):
             name = f"{t['temat']}-{'AB'[k]}"
+            if all(country_strip(t, c).exists() for c in part):
+                continue
             jobs.append((name, lambda t=t, part=part, name=name, pods=pods: paski.make(
                 OUT / f"_gen-paski-{name}", paski.prompt([country_scene(t, c, pods, opisy) for c in part], PEOPLE_STYLE),
                 [country_strip(t, c) for c in part], PASKI / f"{name}.png")))
@@ -860,9 +873,12 @@ STRIPS_CSS = (
     ".pods{background:var(--karta);border:1px solid var(--linia);border-left:5px solid var(--cegla);border-radius:12px;"
     "padding:10px 14px;margin:10px 0 12px}.pods-l{color:var(--cegla);font-size:.75em;font-weight:700;letter-spacing:.06em;"
     "text-transform:uppercase}.list .pods p{margin:4px 0 0;font-size:1.06em;font-weight:500;line-height:1.55}"
-    ".kraje-nav{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}.kraje-nav a{display:inline-flex;align-items:center;"
-    "gap:6px;padding:4px 11px 4px 5px;border:1px solid var(--linia);border-radius:999px;background:var(--karta);"
-    "color:var(--tusz);text-decoration:none;font-size:.9em;white-space:nowrap}"
+    ".kraje-nav{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}"
+    # jedna pigułka kraju (country_pill): przyciski krajów i nagłówki kart; .duza w nagłówkach h2
+    ".kraj-pig{display:inline-flex;align-items:center;gap:6px;padding:4px 11px 4px 5px;border:1px solid var(--linia);"
+    "border-radius:999px;background:var(--karta);color:var(--tusz);text-decoration:none;font-size:.9em;font-weight:400;"
+    "white-space:nowrap;vertical-align:middle}"
+    ".kraj-pig.duza{font-size:.75em;font-weight:700;gap:9px;padding:6px 16px 6px 7px}.kraj-pig.duza .flaga{width:28px;height:28px}"
     ".kraje-nav a:hover,.kraje-nav a:focus-visible{border-color:var(--cegla);color:var(--cegla)}"
     ".okl{max-width:720px;margin:auto;padding:0 6px 10px;box-sizing:border-box}.okl-h{text-align:center;padding:10px 0 4px}"
     ".okl-h h1{margin:0;color:var(--cegla);font:700 1.7em Georgia,serif}.okl-h p{margin:4px 0 0;color:var(--szary)}"

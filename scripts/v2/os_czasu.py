@@ -528,10 +528,7 @@ function filtr(w){watek=w;ws.forEach(b=>b.classList.toggle('on',b.dataset.w===w)
  evs.forEach(e=>e.classList.remove('start'));let last='';vis().forEach(e=>{if(e.dataset.d!==last)e.classList.add('start');last=e.dataset.d});
  const keep=cur;cur='';idz(w==='*'?(ds.includes(keep)?keep:ds.at(-1)):ds[0])}
 ws.forEach(b=>b.onclick=()=>filtr(b.dataset.w));
-const fl=document.querySelector('.filtry');   // kółko nad filtrami przesuwa je w bok; na końcu paska przewija stronę
-fl.addEventListener('wheel',ev=>{if(ev.ctrlKey||Math.abs(ev.deltaX)>=Math.abs(ev.deltaY))return;
- const m=fl.scrollWidth-fl.clientWidth;if((ev.deltaY<0&&fl.scrollLeft<=0)||(ev.deltaY>0&&fl.scrollLeft>=m-1))return;
- ev.preventDefault();fl.scrollLeft+=ev.deltaY},{passive:false});
+plxKolko(document.querySelector('.filtry'));   // wspólna funkcja z pasek.js: kółko przesuwa filtry w bok
 document.querySelectorAll('.watek').forEach(b=>b.onclick=()=>{filtr(b.dataset.w);scrollTo({top:0,behavior:'smooth'})});
 const q=new URLSearchParams(location.hash.slice(1));
 if(q.get('w')&&ws.some(b=>b.dataset.w===q.get('w')))filtr(q.get('w'));else filtr('*');

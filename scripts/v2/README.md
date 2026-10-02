@@ -19,12 +19,13 @@ robi Codex z limitu konta (`codex_limit.py` pokazuje zużycie). Nigdy w Actions.
 6. Strona dnia (`DZIEN=D` w środowisku), od 01.10 pasami:
    - `python scripts/v2/widok_obrazkowy.py paski`: okładka pasami (jeden pas na temat dnia, `pas-TEMAT.webp`) i paski
      krajów na stronach tematów (jeden na kraj, `pas-TEMAT-KRAJ.webp`; dymek = nagłówek z `plakat-TEMAT.json`).
-     Okładka: obrazki po najwyżej 3 pasy (pas ok. 2:1); temat: jeden obrazek (przy > 6 krajach dwa), do 8 procesów co 15 s, po 429 4 co 20 s.
+     Okładka: obrazki po najwyżej 3 pasy (pas ok. 2:1); temat: jeden obrazek (przy > 6 krajach dwa), do 8 procesów co 10 s (`PASKI_PROCESY=12`, `PASKI_ODSTEP`), po 429 4 co 20 s;
+     429 także przy 4: przerwanie (kod 3); ponowne uruchomienie robi tylko brakujące paski.
      Oryginały w `_paski/`; odrzucone po ponowieniu wypisane na końcu (karta bez paska). Ponowne cięcie bez Codex:
      `python scripts/v2/paski.py pokroj data/widok/D/_paski/NAZWA.png`;
    - `python scripts/v2/widok_powitanie.py`: okładka `powitanie.png`;
    - `python scripts/v2/widok_obrazkowy.py strona`: HTML okładki, spraw, różnic, obrazu kraju i tematów.
-   Dni sprzed 01.10 (bez `_paski/`): siatka `start.png` (`widok_obrazkowy.py obraz`) i plakaty (`plakat TEMAT`).
+   Dni 23–30.09 przerobione na paski 02.10 (`paski`, potem `strona`); dawne `start.png` i plakaty zostają w katalogach.
 7. Oś wydarzeń, reszta: `python scripts/v2/os_czasu.py opisy`, `obrazki`, `strona`.
 8. `python scripts/v2/kraje.py D`: „Czym żyje kraj”, 3–5 tematów krajowych z artykułów spoza wydarzeń wielokrajowych
    (po krokach 5 i 7; `data/widok/kraje/D.json`, Codex, ok. 2 min). Potem `python scripts/v2/kraje.py obrazki D`
