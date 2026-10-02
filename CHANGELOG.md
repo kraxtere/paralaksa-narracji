@@ -30,6 +30,7 @@
   przewijanie osi). Zaznaczony dzień liczony z uwzględnieniem marginesu (wcześniej o dzień za wcześnie).
 - Kółko myszy nad kartami przesuwa oś w bok o jedną kartę; na końcu osi kółko przewija stronę normalnie.
   Poza kartą (tło osi) kółko zawsze przewija stronę w dół, np. do rozwiniętych nagłówków.
+- Kółko nad paskiem filtrów wątków przesuwa go w bok (na końcu paska przewija stronę).
 
 # Koszty po przeglądzie, raport okładkowy przez Codex, oś tygodnia — 2026-10-01
 
