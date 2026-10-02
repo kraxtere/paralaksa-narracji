@@ -1,3 +1,13 @@
+# Czytanie na głos na stronie 2.0 — 2026-10-02
+
+- `pasek.js`: Web Speech API (`speechSynthesis`, pl-PL, głos „Natural/Online”, potem „Google”, potem dowolny `pl-*`; czeka na
+  `voiceschanged`). Bez wsparcia albo bez polskiego głosu przyciski się nie pojawiają (dodaje je JS). Tekst dzielony na zdania
+  (kolejka, obejście ucinania w Chrome), jedno czytanie naraz, stop przy `pagehide`, zmianie kraju w `kraje-nav` i zwinięciu streszczenia.
+- Strona tematu: „🔊 Czytaj temat” przy podsumowaniu (podsumowanie, potem karty krajów: nazwa + opis, bez artykułów) z
+  wyróżnieniem `.czyta` i przewijaniem; w trybie jednego kraju przełącza kraj sama. Głośniczek przy pigułce każdego kraju
+  i przy rozwiniętym streszczeniu artykułu (tytuł + streszczenie). HTML: tylko `data-czytaj="temat|kraj"` w `widok_obrazkowy.py`.
+- Przebudowany tylko 01.10 (test z mockiem głosu); pozostałe dni po `plx site`/`widok_obrazkowy.py strona`.
+
 # Dymki pasków z wyboru nagłówków (także bez plakatu) — 2026-10-02
 
 - Cofnięty warunek „dymek tylko z narysowanego plakatu”: dymek to nagłówek kraju z `plakat-TEMAT.json`, jak od początku

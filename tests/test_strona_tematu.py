@@ -21,7 +21,8 @@ def test_theme_page_summary_block_and_country_pills(monkeypatch):
     assert [nav.index(f'href="#kraj-{c}"') for c in ("PL", "DE", "UA")] == sorted(nav.index(f'href="#kraj-{c}"')
                                                                                 for c in ("PL", "DE", "UA"))
     assert nav.count('class="flaga"') == 3 and ">Niemcy</a>" in nav
-    assert all(f'<section id="kraj-{c}">' in page for c in t["kraje"])
+    assert all(f'<section id="kraj-{c}" data-czytaj="kraj">' in page for c in t["kraje"])
+    assert 'class="pods" data-czytaj="temat"' in page
 
 
 def test_countries_tile_and_page_header_with_banner(monkeypatch, tmp_path):

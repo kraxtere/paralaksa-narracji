@@ -98,6 +98,116 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
     }).catch(() => {});
   }
 
+  // Czytanie na głos (od 02.10): Web Speech API przeglądarki, bez własnego modelu. Przyciski dodaje JS, tylko gdy jest
+  // polski głos. Temat: blok [data-czytaj=temat] (podsumowanie) + sekcje [data-czytaj=kraj] w kolejności kraje-nav;
+  // karta kraju i streszczenie artykułu mają własne głośniczki. Jedno czytanie naraz; tekst dzielony na zdania (Chrome
+  // ucina długie wypowiedzi), kolejka zdań w JS.
+  const mowa = (() => {
+    const ss = window.speechSynthesis;
+    if (!ss || typeof SpeechSynthesisUtterance === "undefined") return null;
+    let voice = null, run = 0, active = null, keep = null;
+    const pick = () => {
+      const score = v => /Natural|Online/.test(v.name) ? 3 : /Google/.test(v.name) ? 2 : 1;
+      const pl = ss.getVoices().filter(v => /^pl([-_]|$)/i.test(v.lang));
+      voice = pl.sort((a, b) => score(b) - score(a))[0] || null;
+      if (voice) document.dispatchEvent(new Event("plx-mowa"));
+    };
+    pick();
+    if (!voice) ss.addEventListener("voiceschanged", () => { if (!voice) pick(); });
+    const norm = s => (s || "").replace(/\s+/g, " ").trim();
+    const chunks = text => norm(text).split(/(?<=[.!?…])\s+/).flatMap(z => {
+      const out = [];
+      while (z.length > 220) {                              // bardzo długie zdanie: tnij na przecinku/spacji
+        let i = z.lastIndexOf(", ", 200); if (i < 60) i = z.lastIndexOf(" ", 200); if (i < 1) i = 200;
+        out.push(z.slice(0, i + 1)); z = z.slice(i + 1).trim();
+      }
+      return z ? out.concat(z) : out;
+    });
+    const look = (b, on) => {
+      const big = b.classList.contains("duza");
+      b.setAttribute("aria-pressed", String(on));
+      b.setAttribute("aria-label", on ? "Zatrzymaj czytanie" : big ? "Czytaj temat na głos" : "Czytaj na głos");
+      b.textContent = on ? (big ? "⏹ Zatrzymaj" : "⏹") : (big ? "🔊 Czytaj temat" : "🔊");
+    };
+    const stop = () => {
+      run++; ss.cancel(); keep = null;
+      if (active) { look(active.btn, false); active.mark && active.mark.classList.remove("czyta"); active = null; }
+    };
+    const start = (btn, items) => {                         // items: [{el, text, przed}]; el dostaje .czyta i jest przewijany
+      stop();
+      const id = run;
+      active = { btn, mark: null };
+      look(btn, true);
+      let k = 0;
+      const item = () => {
+        if (id !== run) return;
+        if (active.mark) active.mark.classList.remove("czyta");
+        if (k >= items.length) return stop();
+        const it = items[k++], parts = chunks(typeof it.text === "function" ? it.text() : it.text);
+        if (it.przed) it.przed();
+        if (it.el) { active.mark = it.el; it.el.classList.add("czyta"); it.el.scrollIntoView({ behavior: "smooth", block: "start" }); }
+        let i = 0;
+        const next = () => {
+          if (id !== run) return;
+          if (i >= parts.length) return item();
+          const u = new SpeechSynthesisUtterance(parts[i++]);
+          u.lang = "pl-PL"; u.rate = 1; if (voice) u.voice = voice;
+          u.onend = next;
+          u.onerror = e => { if (id === run && e.error !== "canceled" && e.error !== "interrupted") stop(); };
+          keep = u;                                         // Chrome gubi wypowiedź bez referencji (brak onend)
+          ss.speak(u);
+        };
+        next();
+      };
+      item();
+    };
+    const button = (cls, items, place) => {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "czytaj " + cls; look(b, false);
+      b.onclick = e => { e.preventDefault(); e.stopPropagation(); active && active.btn === b ? stop() : start(b, items); };
+      place(b); return b;
+    };
+    addEventListener("pagehide", stop);
+    addEventListener("hashchange", stop);                   // zmiana kraju z zewnątrz (wstecz); nasza zmiana nie rusza hasha
+    document.addEventListener("click", e => { if (e.isTrusted && e.target.closest && e.target.closest(".kraje-nav a")) stop(); });
+    return { ok: () => !!voice, stop, button, norm, active: b => !!active && active.btn === b };
+  })();
+  const mowaStart = () => {
+    if (!mowa) return;
+    const init = () => {
+      const pods = document.querySelector("[data-czytaj=temat]");
+      const secs = [...document.querySelectorAll("section[data-czytaj=kraj]")];
+      const nav = document.querySelector(".kraje-nav");
+      const opis = el => [...el.querySelectorAll(":scope > p")].map(p => p.textContent).join(" ");
+      const name = s => { const p = s.querySelector("h2 .kraj-pig"); return p ? mowa.norm(p.textContent) : ""; };
+      // przy trybie „jeden kraj naraz” sekcja bywa ukryta: przełącz ją programowo (untrusted click nie zatrzymuje czytania)
+      const show = s => { if (s.offsetParent === null && nav) { const b = nav.querySelector(`a[data-k="${s.id.slice(5)}"]`); b && b.click(); } };
+      secs.forEach(s => {                                   // głośniczek obok pigułki kraju
+        const pill = s.querySelector("h2 .kraj-pig");
+        if (pill && !s.querySelector("h2 .czytaj")) mowa.button("m", [{ text: () => name(s) + ". " + opis(s) }], b => pill.after(b));
+      });
+      const lab = pods && pods.querySelector(".pods-l");
+      if (lab && !lab.querySelector(".czytaj")) {
+        const items = [{ el: pods, text: () => opis(pods) }].concat(
+          secs.map(s => ({ el: s, przed: () => show(s), text: () => name(s) + ". " + opis(s) })));
+        mowa.button("duza", items, b => lab.append(b));
+      }
+    };
+    mowa.ok() ? init() : document.addEventListener("plx-mowa", init, { once: true });
+  };
+  document.addEventListener("DOMContentLoaded", mowaStart);
+  const mst = document.createElement("style");
+  mst.textContent =
+    "button.czytaj{font:inherit;line-height:1;cursor:pointer;color:var(--art-akcent);background:var(--art-tlo);" +
+    "border:1px solid var(--art-linia);border-radius:999px;padding:5px 8px;font-size:14px;vertical-align:middle;" +
+    "text-transform:none;letter-spacing:0;font-weight:600}" +
+    "button.czytaj.m{margin-left:8px}button.czytaj.duza{margin-left:12px;padding:5px 12px;font-size:13px}" +
+    ".streszcz button.czytaj{float:right;margin:0 0 4px 8px}" +
+    "button.czytaj:hover,button.czytaj[aria-pressed=true]{background:var(--art-tlo-hover);border-color:var(--art-akcent)}" +
+    "button.czytaj:focus-visible{outline:2px solid var(--art-focus);outline-offset:2px}" +
+    ".czyta{outline:2px solid var(--art-akcent);outline-offset:6px;border-radius:12px}";
+  document.head.append(mst);
+
   // Streszczenia (od 02.10): nagłówki z data-a to karty (art_card w scripts/v2/widok_obrazkowy.py); klik w kartę ze
   // streszczeniem (v2/streszczenia/<id/500>.json, scripts/v2/streszczenia.py) rozwija je w tej samej karcie z linkiem do
   // artykułu, drugi klik zwija. Pliki wczytane od razu po załadowaniu strony, żeby klik był synchroniczny (nowa karta po
@@ -159,6 +269,8 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
         ? "Streszczenie robocze (AI) tylko z tytułu i leadu: nie mamy pełnego tekstu (np. paywall)."
         : "Streszczenie robocze (AI) z treści artykułu.";
       box.querySelector("a").href = a.href;
+      if (mowa && mowa.ok()) mowa.button("m", [{ text: () => (a.querySelector(".art-t")?.textContent || "") + ". " + s.t }],
+        b => box.querySelector("p").before(b));
       a.after(box);
       box.offsetHeight;                                   // stan zwinięty przed animacją
     }
@@ -166,6 +278,8 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
     box.classList.toggle("otw", open);
     a.classList.toggle("otw", open);
     a.setAttribute("aria-expanded", String(open));
+    const cb = box.querySelector(".czytaj");
+    if (!open && mowa && cb && mowa.active(cb)) mowa.stop();
   });
 
   // --- menu osoby, instalacja i powiadomienia (tylko na serwerze: window.plxJa) ------------------------------------

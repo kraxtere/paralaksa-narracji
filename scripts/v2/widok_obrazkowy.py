@@ -439,7 +439,7 @@ def theme_page(t: dict, opisy: dict, pl: dict, cs: list[dict], debug: bool = Fal
                 strip = f'<img class="pas-kraju" src="{country_strip(t, c).name}" alt="" loading="lazy">'
                 if top:                                        # dymek: nagłówek kraju z plakat-TEMAT.json (wybór jak na plakacie)
                     strip += f'<div class="dymek">{esc(top["naglowek"])}</div>'
-        blocks.append(f'<section id="kraj-{c}">{strip}<h2>{country_pill(c, big=True)} <span class="s">{round(100 * share)}% artykułów'
+        blocks.append(f'<section id="kraj-{c}" data-czytaj="kraj">{strip}<h2>{country_pill(c, big=True)} <span class="s">{round(100 * share)}% artykułów'
                       f'</span>{"".join(src_html(z) for z in opisy["dane"][c]["zrodla"])}</h2>'
                       + opis + art_list(arts) + "</section>")
     poster = ""
@@ -461,7 +461,7 @@ def theme_page(t: dict, opisy: dict, pl: dict, cs: list[dict], debug: bool = Fal
            + "</nav>")
     body = (bar("index.html") + poster + f'<style>{COUNTRY_PICK_CSS}</style><div class="list jeden" data-wszystkie data-sekcja="tematy">{head}<h1>{esc(t["nazwa"])}</h1><p class="s">{len(t["kraje"])} krajów '
             f'pisało o tym temacie ({DAY}). Opis przekazu analizowanych źródeł, nie faktów.</p>'
-            + (f'<div class="pods"><div class="pods-l">Podsumowanie wszystkich krajów</div>'
+            + (f'<div class="pods" data-czytaj="temat"><div class="pods-l">Podsumowanie wszystkich krajów</div>'
                f'<p>{with_logos(pods["_opis"], list(SOURCES))}</p></div>' if pods.get("_opis") else "")
             + nav + '<p class="s">Nagłówki w tłumaczeniu roboczym; dłuższe skrócone do 15 słów.</p>' + "".join(blocks) + "</div>"
             + COUNTRY_PICK_JS)
