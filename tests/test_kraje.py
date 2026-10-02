@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parents[1] / "scripts" / "v2"))
-from kraje import check, check_ciag  # noqa: E402
+from kraje import check, check_ciag, detect_strips  # noqa: E402
 
 
 def test_check_topics():
@@ -23,3 +23,19 @@ def test_check_ciag():
                          {"temat": 2, "od": "2026-09-30#1"}, {"temat": 4, "od": "2026-09-30#1"}], 3, prev)
     assert [e.split(":")[0] for e in errors] == ["temat 1", "temat 2", "temat 2", "temat 4"]
     assert "nie istnieje" in errors[0] and "nie ma takiego" in errors[1] and "powtórzony" in errors[2]
+
+
+
+def test_detect_strips_ignores_dark_line_inside_strip(tmp_path):
+    from PIL import Image, ImageDraw
+    im = Image.new("L", (200, 300), 230)
+    d = ImageDraw.Draw(im)
+    d.rectangle((0, 0, 199, 299), outline=20, width=8)            # ramka zewnętrzna
+    d.rectangle((0, 96, 199, 103), fill=20)                         # ramki między paskami (N = 3)
+    d.rectangle((0, 196, 199, 203), fill=20)
+    d.rectangle((60, 196, 67, 203), fill=230)                       # przedmiot przecina ramkę (4% szerokości)
+    d.rectangle((0, 120, 199, 127), fill=20)                        # gruba ciemna linia w scenie paska 2
+    png = tmp_path / "pasy.png"
+    im.save(png)
+    assert detect_strips(png, 3) == [(8, 8, 191, 95), (8, 104, 191, 195), (8, 204, 191, 291)]
+    assert detect_strips(png, 5) == []                              # w oknach N = 5 brak ramki

@@ -1,3 +1,15 @@
+# Kraje: cięcie pasków przy liniach w scenie, `pokroj`, dane wstecz — 2026-10-02
+
+- `scripts/v2/kraje.py`: `detect_strips(png, n)`. Najpierw dotychczasowe cięcie po wszystkich ciemnych pasach
+  (`runs_strips`); gdy liczba pasków różni się od N albo któryś ma < 40% średniej wysokości (linia sceny wzięta za ramkę),
+  `chosen_strips`: ramka = pas 6 px…3% H, wiersze ≥ 95% ciemnych pikseli jednolitego tonu; spośród układów N−1 ramek
+  z każdym paskiem ≥ 40% średniej wybór najgrubszych (remis: równiejsze paski). Okna ±15% wokół k·H/N odrzucone:
+  Codex rysuje paski nierównej wysokości (np. 475/396/632 px). Test offline na sztucznym obrazku z linią w pasku.
+- `kraje.py pokroj D KRAJ...`: ponowne cięcie zapisanego oryginału (`_gen-KRAJ/pasy.png` po odrzuceniu, inaczej
+  `_KRAJ.png`) bez Codex. Sprawdzone na 80 oryginałach: wszystkie cięte, dotychczasowe cięcia bez zmian.
+- Dane „Tylko tutaj” wstecz 23–30.09 (`kraje.py D`, `ciag D`), 79 obrazków pasków (78 od razu albo po 1 ponowieniu,
+  IL 25.09 pokrojony po zmianie). Strony osi krajów i dni przebudowane, opublikowane.
+
 # Streszczenia: 3–5 zdań, tryb `skroc` — 2026-10-02
 
 - `scripts/v2/streszczenia.py`: nowe streszczenia 3–5 zdań (50–100 słów, walidacja 3–6), wcześniej 5–7.

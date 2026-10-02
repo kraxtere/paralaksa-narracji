@@ -7,8 +7,9 @@ Wejście: okno dnia jak w data/stories/D.json (publication_meta + story_items), 
 Wynik: data/widok/kraje/D.json {"day", "model", "kraje": {"PL": [{"tytul", "opis", "ids", "redakcje"}]}}, Polska pierwsza.
   python scripts/v2/kraje.py obrazki 2026-10-01 [PL UA ...]   # domyślnie tylko PL; 1 obrazek Codex na kraj
 Obrazki: jeden pionowy obrazek 1024×1536 na kraj, N poziomych pasków (N = liczba tematów) rozdzielonych grubą ciemną
-ramką; paski wycinane po wykrytych ramkach (inna liczba niż N = błąd, nic nie zapisane) do data/widok/kraje/D/KRAJ-n.webp,
+ramką; N−1 ramek szukane w oknach ±15% wysokości paska wokół k·H/N (brak ramki w oknie = błąd, nic nie zapisane) do data/widok/kraje/D/KRAJ-n.webp,
 tytuły tematów w data/widok/kraje/D/KRAJ.json (strona pokazuje paski tylko przy zgodnych tytułach).
+  python scripts/v2/kraje.py pokroj 2026-10-01 IL ...         # ponowne cięcie zapisanego oryginału, bez Codex
   python scripts/v2/kraje.py ciag 2026-10-01      # Codex: które tematy to ciąg dalszy spraw z 7 dni wstecz (ciag_od)
   python scripts/v2/kraje.py strona               # oś kraju data/widok/kraje/KRAJ.html, wszystkie dni, najnowszy u góry
 """
@@ -154,7 +155,7 @@ def strip_prompt(topics: list[dict]) -> str:
             "\nABSOLUTELY NO TEXT anywhere: no letters, numbers, captions, signs, logos or flags with writing.")
 
 
-def detect_strips(png: Path) -> list[tuple[int, int, int, int]]:
+def runs_strips(png: Path) -> list[tuple[int, int, int, int]]:
     """Pixel boxes (x0, y0, x1, y1) of the strips between thick dark horizontal bars spanning the image width."""
     from PIL import Image
     im = Image.open(png).convert("L")
@@ -194,8 +195,99 @@ def detect_strips(png: Path) -> list[tuple[int, int, int, int]]:
     return boxes
 
 
-def images(day: str, countries: list[str]) -> None:
+def chosen_strips(png: Path, n: int) -> list[tuple[int, int, int, int]]:
+    """Pixel boxes (x0, y0, x1, y1) of exactly n strips, or [] when no set of n-1 inner bars fits.
+
+    A bar is a horizontal band 6 px to 3% of the height thick whose rows are >= 95% dark pixels of one uniform tone
+    (thicker dark bands are scenery). Of all choices of n-1 bars leaving every strip >= 40% of the mean strip height,
+    the one with the thickest bars (then the most even strips) wins, so dark lines inside the scenes do not change the count."""
+    from itertools import combinations
+    from PIL import Image, ImageStat
+    im = Image.open(png).convert("L")
+    w, h = im.size
+    px = im.load()
+    mask = im.point(lambda v: 255 if v < 90 else 0)
+
+    def is_bar_row(y):
+        if ImageStat.Stat(mask.crop((0, y, w, y + 1))).mean[0] < 0.95 * 255:
+            return False
+        dark = [px[x, y] for x in range(0, w, 2) if px[x, y] < 90]
+        mean = sum(dark) / len(dark)
+        return (sum((v - mean) ** 2 for v in dark) / len(dark)) ** 0.5 <= 20
+
+    flags = [is_bar_row(y) for y in range(h)]
+    bands, start = [], None
+    for y, f in enumerate(flags + [False]):
+        if f and start is None:
+            start = y
+        elif not f and start is not None:
+            bands.append((start, y - 1))
+            start = None
+    thin = [(a, b) for a, b in bands if b - a + 1 <= 0.03 * h]
+    top = next((b for a, b in thin if a == 0), -1)                    # ramka zewnętrzna (gdy jest)
+    bottom = next((a for a, b in thin if b == h - 1), h)
+    inner = [(a, b) for a, b in thin if b - a >= 5 and a > top and b < bottom]
+    least, best = 0.4 * (bottom - top) / n, None
+    for pick in combinations(inner, n - 1):
+        edges = [(top, top), *pick, (bottom, bottom)]
+        heights = [nxt[0] - prev[1] - 1 for prev, nxt in zip(edges, edges[1:])]
+        if min(heights) >= least:
+            weight = (sum(b - a for a, b in pick), -(max(heights) - min(heights)))   # remis: równiejsze paski
+            if best is None or weight > best[0]:
+                best = (weight, edges)
+    if best is None:
+        return []
+    bars = best[1]
+    boxes = []
+    for (_, t), (bt, _) in zip(bars, bars[1:]):
+        y0, y1 = t + 1, bt - 1
+        ys = range(y0, y1 + 1, 4)
+        cols = [sum(px[x, y] < 90 for y in ys) >= 0.9 * len(ys) for x in range(w)]
+        left = next((x for x in range(int(0.1 * w)) if cols[x] and not cols[x + 1]), -1)
+        right = next((x for x in range(w - 1, int(0.9 * w), -1) if cols[x] and not cols[x - 1]), w)
+        boxes.append((left + 1, y0, right - 1, y1))
+    return boxes
+
+
+def detect_strips(png: Path, n: int) -> list[tuple[int, int, int, int]]:
+    """Strips by all wide dark bars (runs_strips); when their count is not n or a strip is under 40% of the mean
+    strip height (a scene line taken for a bar), the best choice of n-1 bars (chosen_strips)."""
+    boxes = runs_strips(png)
+    if len(boxes) == n and min(b[3] - b[1] for b in boxes) + 1 >= 0.4 * sum(b[3] - b[1] + 1 for b in boxes) / n:
+        return boxes
+    return chosen_strips(png, n)
+
+
+def cut(day: str, country: str, topics: list[dict], png: Path) -> None:
+    """Slices png into the strips of the topics and saves them; SystemExit when the bars do not match."""
     from PIL import Image
+    folder = OUT / day
+    boxes = detect_strips(png, len(topics))
+    if not boxes:
+        raise SystemExit(f"{country}: brak ramki w oknie, tematów {len(topics)}; nic nie zapisano ({png})")
+    im = Image.open(png).convert("RGB")
+    for n, box in enumerate(boxes, 1):
+        im.crop((box[0], box[1], box[2] + 1, box[3] + 1)).save(folder / f"{country}-{n}.webp", quality=85)
+    if png != folder / f"_{country}.png":
+        png.replace(folder / f"_{country}.png")
+    (folder / f"{country}.json").write_text(json.dumps([t["tytul"] for t in topics], ensure_ascii=False),
+                                            encoding="utf-8")
+    print(f"{country}: {len(boxes)} pasków {im.size[0]}×{im.size[1]} -> {folder}")
+
+
+def recut(day: str, countries: list[str]) -> None:
+    """Slices again the saved originals (_gen-KRAJ/pasy.png after a rejection, else _KRAJ.png), without Codex."""
+    data = json.loads((OUT / f"{day}.json").read_text(encoding="utf-8"))["kraje"]
+    for country in countries:
+        folder = OUT / day
+        png = next((p for p in (folder / f"_gen-{country}" / "pasy.png", folder / f"_{country}.png") if p.exists()), None)
+        if not png or not data.get(country):
+            print(f"{country}: brak oryginału albo tematów")
+            continue
+        cut(day, country, data[country], png)
+
+
+def images(day: str, countries: list[str]) -> None:
     from widok_obrazkowy import run_codex
     data = json.loads((OUT / f"{day}.json").read_text(encoding="utf-8"))["kraje"]
     folder = OUT / day
@@ -209,16 +301,7 @@ def images(day: str, countries: list[str]) -> None:
         png = work / "pasy.png"
         if not png.exists():
             raise SystemExit(f"{country}: Codex nie zapisał obrazka (zob. {work / 'codex.log'})")
-        boxes = detect_strips(png)
-        if len(boxes) != len(topics):
-            raise SystemExit(f"{country}: wykryto {len(boxes)} pasków, tematów {len(topics)}; nic nie zapisano ({png})")
-        im = Image.open(png).convert("RGB")
-        for n, box in enumerate(boxes, 1):
-            im.crop((box[0], box[1], box[2] + 1, box[3] + 1)).save(folder / f"{country}-{n}.webp", quality=85)
-        png.replace(folder / f"_{country}.png")
-        (folder / f"{country}.json").write_text(json.dumps([t["tytul"] for t in topics], ensure_ascii=False),
-                                                encoding="utf-8")
-        print(f"{country}: {len(boxes)} pasków {im.size[0]}×{im.size[1]} -> {folder}")
+        cut(day, country, topics, png)
 
 
 def strip_names(day: str, country: str, topics: list[dict]) -> list[str]:
@@ -345,6 +428,8 @@ def country_pages() -> None:
 if __name__ == "__main__":
     if len(sys.argv) >= 3 and sys.argv[1] == "obrazki" and re.fullmatch(r"\d{4}-\d{2}-\d{2}", sys.argv[2]):
         images(sys.argv[2], sys.argv[3:] or ["PL"])
+    elif len(sys.argv) >= 4 and sys.argv[1] == "pokroj" and re.fullmatch(r"\d{4}-\d{2}-\d{2}", sys.argv[2]):
+        recut(sys.argv[2], sys.argv[3:])
     elif len(sys.argv) == 3 and sys.argv[1] == "ciag" and re.fullmatch(r"\d{4}-\d{2}-\d{2}", sys.argv[2]):
         ciag(sys.argv[2])
     elif sys.argv[1:] == ["strona"]:
