@@ -1,3 +1,10 @@
+# Czytanie na głos wszędzie, gdzie jest tekst — 2026-10-02
+
+- `pasek.js`: przyciski wykrywane po strukturze, bez zmian w HTML: karty krajów (strony tematów, zestawień Spraw/Różnic/Obrazu kraju,
+  „Czym żyje kraj”), karty dni na osiach krajów (data czytana słownie, „30 września”), karty zdarzeń osi czasu (tytuł + opis),
+  streszczenia artykułów. „Czytaj temat” na stronach tematów i zestawień (wstęp + karty krajów po kolei).
+- Bez przycisków: okładka dnia i „Dzień prasy” (same kafelki), stara wersja strony.
+
 # Okładka dnia 2.0 z pasów, napisy w HTML, wspólny styl obrazków — 2026-10-02
 
 - Test stylów (A–C, D1–D5, E1/E2/E4 w `data/widok/_styl-test/`): wybrany E2, komiks malowany gwaszem z konturem. Stała

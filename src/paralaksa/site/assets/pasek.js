@@ -177,22 +177,44 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
   const mowaStart = () => {
     if (!mowa) return;
     const init = () => {
-      const pods = document.querySelector("[data-czytaj=temat]");
-      const secs = [...document.querySelectorAll("section[data-czytaj=kraj]")];
       const nav = document.querySelector(".kraje-nav");
-      const opis = el => [...el.querySelectorAll(":scope > p")].map(p => p.textContent).join(" ");
-      const name = s => { const p = s.querySelector("h2 .kraj-pig"); return p ? mowa.norm(p.textContent) : ""; };
+      const secs = [...document.querySelectorAll("section[id^=kraj-], section[id^=d-]")];
+      const MIES = ["", "stycznia", "lutego", "marca", "kwietnia", "maja", "czerwca", "lipca", "sierpnia", "września", "października", "listopada", "grudnia"];
+      const sentence = t => { t = mowa.norm(t); return t && !/[.!?…:]$/.test(t) ? t + "." : t; };
+      // treść karty: nagłówki h3 i akapity bez przypisów (.s), „ciągu dalszego” i listy artykułów
+      const body = el => [...el.querySelectorAll(":scope > h3, :scope > p")].filter(x => !x.matches(".s, .ciag"))
+        .map(x => sentence(x.textContent)).join(" ");
+      const title = sec => {
+        const h = sec.querySelector("h2");
+        if (!h) return "";
+        const c = h.cloneNode(true); c.querySelectorAll("a.osk, button, .s, .src").forEach(x => x.remove());
+        const t = mowa.norm(c.textContent), m = t.match(/^(\d\d)\.(\d\d)$/);   // data osi kraju: „30.09” → „30 września”
+        return sentence(m ? `${+m[1]} ${MIES[+m[2]] || m[2]}` : t);
+      };
+      const text = sec => title(sec) + " " + body(sec);
       // przy trybie „jeden kraj naraz” sekcja bywa ukryta: przełącz ją programowo (untrusted click nie zatrzymuje czytania)
-      const show = s => { if (s.offsetParent === null && nav) { const b = nav.querySelector(`a[data-k="${s.id.slice(5)}"]`); b && b.click(); } };
-      secs.forEach(s => {                                   // głośniczek obok pigułki kraju
-        const pill = s.querySelector("h2 .kraj-pig");
-        if (pill && !s.querySelector(":scope > .czytaj")) mowa.button("m", [{ text: () => name(s) + ". " + opis(s) }], b => (s.querySelector(":scope > p") || pill).before(b));
+      const show = sec => { if (sec.offsetParent === null && nav) { const b = nav.querySelector(`a[data-k="${sec.id.slice(5)}"]`); b && b.click(); } };
+      secs.forEach(sec => {                                 // przycisk nad opisem karty kraju / dnia
+        const first = sec.querySelector(":scope > h3, :scope > p");
+        if (first && !sec.querySelector(":scope > .czytaj")) mowa.button("m", [{ text: () => text(sec) }], b => first.before(b));
       });
-      const lab = pods && pods.querySelector(".pods-l");
+      document.querySelectorAll("article.ev .tresc").forEach(t => {   // oś czasu: tytuł i opis zdarzenia
+        const h = t.querySelector("h2");
+        if (h) mowa.button("m", [{ text: () => sentence(h.textContent) + " " + sentence((t.querySelector(".opis") || {}).textContent) }],
+          b => h.after(b));
+      });
+      // cały temat: blok podsumowania (strona tematu) albo wstęp strony zestawienia + karty krajów po kolei
+      const pods = document.querySelector(".pods"), lab = pods && pods.querySelector(".pods-l");
+      const list = document.querySelector(".list:not(.jeden)"), h1 = list && list.querySelector(":scope > h1");
+      const cards = secs.filter(x => x.id.startsWith("kraj-")).map(x => ({ el: x, przed: () => show(x), text: () => text(x) }));
       if (lab && !lab.querySelector(".czytaj")) {
-        const items = [{ el: pods, text: () => opis(pods) }].concat(
-          secs.map(s => ({ el: s, przed: () => show(s), text: () => name(s) + ". " + opis(s) })));
-        mowa.button("duza", items, b => lab.append(b));
+        mowa.button("duza", [{ el: pods, text: () => body(pods) }]
+          .concat(cards), b => lab.append(b));
+      } else if (h1 && cards.length && !list.querySelector(":scope > .czytaj.duza")) {
+        const lead = () => sentence(h1.textContent) + " " + [...list.querySelectorAll(":scope > p")].filter(x => !x.matches(".s"))
+          .map(x => sentence(x.textContent)).join(" ");
+        const at = list.querySelector(":scope > section");
+        mowa.button("duza", [{ el: h1, text: lead }].concat(cards), b => { b.style.marginBottom = "10px"; at.before(b); });
       }
     };
     mowa.ok() ? init() : document.addEventListener("plx-mowa", init, { once: true });
