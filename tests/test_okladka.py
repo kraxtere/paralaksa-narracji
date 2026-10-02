@@ -58,3 +58,12 @@ def test_strip_prompt_poster_style_without_captions():
 def test_cover_css_uses_variables_only():
     css = w.STRIPS_CSS[w.STRIPS_CSS.index(".pp-sek"):]
     assert "#" not in css.replace("var(--", "")
+
+
+def test_country_strips_use_headlines_and_one_mascot():
+    """„Czym żyją kraje”: concrete story with easter eggs from its headlines and one hidden mascot of the country."""
+    import kraje
+    text = kraje.strip_prompt("PL", [{"tytul": "Zarzuty w uczelni", "opis": "Opis.", "ids": [7, 8]}],
+                              {"7": "Jedenaście osób z zarzutami", "9": "Inny"})
+    assert "Headlines: Jedenaście osób z zarzutami." in text and "easter eggs" in text and "Inny" not in text
+    assert text.count("Polska newspaper mascot") == 1 and paski.NO_TEXT in text

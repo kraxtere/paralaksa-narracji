@@ -827,14 +827,17 @@ MASCOT = ("A SMALL mascot in the lower right corner of the strip, about one quar
           "no ethnic features.")
 
 
-def cover_scene(t: dict, opisy: dict) -> str:
+def cover_scene(t: dict, opisy: dict, cs: list[dict]) -> str:
     """Theme tile: a wide panorama of what the press wrote on the theme that day (country descriptions), not a fixed
-    symbol, so every day gets a new picture; newspaper mascots of up to 4 countries hidden in it."""
+    symbol, so every day gets a new picture; easter eggs from the theme page headlines (cs, plakat-THEME.json) and
+    newspaper mascots of up to 4 countries hidden in it."""
     said = [w["zdanie"] for c in t["kraje"] for w in opisy["opisy"].get(c, {}).get("watki", [])
             if w["temat"] == t["temat"]][:3]
     what = " ".join(said) or SCENES.get(t["temat"], t["nazwa"])
     return (f"a wide panorama for the press topic \"{t['nazwa']}\" showing concretely what the press wrote about today "
             f"(places, people, objects, actions; as they are, without softening): {what} "
+            + (" Hide small easter eggs in the scene, each a recognisable detail of one of these stories from the topic "
+               "page: " + "; ".join(x["naglowek"] for x in cs if x.get("naglowek")) + ". " if cs else "")
             + WALLY.format(mascots=", ".join(f"the {NAMES[c]} mascot (scarf {FLAGS[c]})" for c in list(t["kraje"])[:4]))
             + " The scene fills the strip edge to edge down to the bottom bar, NO empty band; only its lowest fifth is "
             "simpler (ground, road or water) because a caption is overlaid there later.")
@@ -857,15 +860,16 @@ def strip_jobs(ts: list[dict], opisy: dict, pl: dict) -> list[tuple[str, object]
     """Codex jobs of the day: cover strips (one per theme) and country strips per theme (one per country on the page)."""
     import paski
     jobs = []
+    css = {t["temat"]: poster_data(t, opisy, pl) for t in ts}
     for k, part in enumerate(ts[i:i + 2] for i in range(0, len(ts), 2)):   # panorama ok. 3:1: 2 na obrazek poziomy
         name = f"okladka-{'ABCD'[k]}"
         if all(theme_strip(t).exists() for t in part):            # ponowne uruchomienie: tylko brakujące
             continue
         jobs.append((name, lambda part=part, name=name: paski.make(
-            OUT / f"_gen-{name}", paski.prompt([cover_scene(t, opisy) for t in part], landscape=True), [theme_strip(t) for t in part],
+            OUT / f"_gen-{name}", paski.prompt([cover_scene(t, opisy, css[t["temat"]]) for t in part], landscape=True), [theme_strip(t) for t in part],
             PASKI / f"{name}.png")))
     for t in ts:
-        cs = poster_data(t, opisy, pl)
+        cs = css[t["temat"]]
         saved = OUT / f"plakat-{t['temat']}.json"         # te same kraje i dymki na stronie co przy rysowaniu
         if not saved.exists():
             saved.write_text(json.dumps(cs, ensure_ascii=False, indent=1), encoding="utf-8")

@@ -140,11 +140,22 @@ def main(day: str) -> None:
           f"limit Codex: {used}")
 
 
-def strip_prompt(topics: list[dict]) -> str:
+def strip_prompt(country: str, topics: list[dict], titles: dict[str, str]) -> str:
+    """One strip per national topic: the concrete story with recognisable details (easter eggs) from its headlines, not a
+    generic symbol (owner 2026-10-02), and one hidden newspaper mascot of the country in every strip."""
     from paski import prompt as strips_prompt
-    from widok_obrazkowy import PEOPLE_STYLE
-    return strips_prompt([f"a scene for this national news topic: \"{t['tytul']}\" ({t['opis']}) Show places, objects "
-                          "and a symbolic action, not a portrait." for t in topics], PEOPLE_STYLE)
+    from widok_obrazkowy import FLAGS, NAMES, PEOPLE_STYLE
+
+    def heads(t):
+        hs = [titles[str(i)] for i in t["ids"] if str(i) in titles][:3]
+        return f" Headlines: {'; '.join(hs)}." if hs else ""
+    return strips_prompt([
+        f"a concrete scene of this national news story in {NAMES[country]}: \"{t['tytul']}\" ({t['opis']}){heads(t)} "
+        "Show the specific places, people (simplified), objects and actions of THIS story, as they are, and hide 2-3 small "
+        "easter eggs taken from the headlines that a reader of the story recognises; never a generic symbol or a portrait. "
+        f"Hidden somewhere in the scene, like in \"Where's Wally\": one small {NAMES[country]} newspaper mascot (a folded "
+        f"newspaper with a simple face and a scarf in the colours {FLAGS[country]}) in a funny side situation."
+        for t in topics], PEOPLE_STYLE)
 
 
 def save_titles(day: str, country: str, topics: list[dict]) -> None:
@@ -178,10 +189,12 @@ def images(day: str, countries: list[str]) -> None:
     import paski
     data = json.loads((OUT / f"{day}.json").read_text(encoding="utf-8"))["kraje"]
     folder = OUT / day
+    tpath = Path(f"data/tytuly/{day}.json")                   # nagłówki po polsku do „easter eggów”
+    titles = json.loads(tpath.read_text(encoding="utf-8"))["tytuly"] if tpath.exists() else {}
 
     def job(country):
         topics = data[country]
-        res = paski.make(folder / f"_gen-{country}", strip_prompt(topics), strip_paths(day, country, len(topics)),
+        res = paski.make(folder / f"_gen-{country}", strip_prompt(country, topics, titles), strip_paths(day, country, len(topics)),
                          folder / f"_{country}.png")
         if res == "ok":
             save_titles(day, country, topics)

@@ -5,6 +5,12 @@
   streszczenia artykułów. „Czytaj temat” na stronach tematów i zestawień (wstęp + karty krajów po kolei).
 - Bez przycisków: okładka dnia i „Dzień prasy” (same kafelki), stara wersja strony.
 
+# Easter eggi w obrazkach tematów i „Czym żyją kraje” — 2026-10-02
+
+- Kafelki tematów: w panoramie ukryte szczegóły nagłówków ze strony tematu (`plakat-TEMAT.json`), poza gazetkami krajów.
+- „Czym żyją kraje” (`kraje.py obrazki`): pas to konkretna sprawa z nagłówkami (do 3, `data/tytuly/D.json`) i 2–3 easter
+  eggami zamiast ogólnego symbolu, w każdym pasie jedna ukryta gazetka kraju „jak Wally”.
+
 # Okładka dnia 2.0: styl dawnego plakatu z gazetkami, bez napisów w obrazku — 2026-10-02
 
 - Nazwy (decyzja właściciela): winieta „Co tam w prasie piszczy” z datą w ceglanym polu, sekcje jako ceglane belki: „Tego
