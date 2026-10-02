@@ -430,18 +430,18 @@ def theme_page(t: dict, opisy: dict, pl: dict, cs: list[dict], debug: bool = Fal
         opis = (f"<p>{with_logos(pods[c], opisy['dane'][c]['zrodla'])}</p>" if pods.get(c) else
                 "".join(f"<p>{esc(w['zdanie'])}</p>" for w in opisy["opisy"].get(c, {}).get("watki", [])
                         if w["temat"] == t["temat"]))
-        arts = "".join(f'<li><a href="{esc(info[a["article_id"]]["url"])}" data-a="{a["article_id"]}">'
-                       f'{esc(headline_excerpt(pl.get(a["article_id"]) or info[a["article_id"]]["title"]))}</a> '
-                       f'{src_html(a["zrodlo"])}</li>' for a in rest)
+        arts = [art_card(info[a["article_id"]]["url"], a["article_id"],
+                         headline_excerpt(pl.get(a["article_id"]) or info[a["article_id"]]["title"]), src_html(a["zrodlo"]))
+                 for a in rest]
         strip = ""
         if strips_mode():
             if country_strip(t, c).exists():
                 strip = f'<img class="pas-kraju" src="{country_strip(t, c).name}" alt="" loading="lazy">'
-                if top:                                        # dymek: nagłówek z plakatu tego kraju
+                if top and drawn_poster(t):                    # dymek tylko z chmurki narysowanego plakatu
                     strip += f'<div class="dymek">{esc(top["naglowek"])}</div>'
         blocks.append(f'<section id="kraj-{c}">{strip}<h2>{country_pill(c, big=True)} <span class="s">{round(100 * share)}% artykułów'
                       f'</span>{"".join(src_html(z) for z in opisy["dane"][c]["zrodla"])}</h2>'
-                      + opis + (f"<ul>{arts}</ul>" if arts else "") + "</section>")
+                      + opis + art_list(arts) + "</section>")
     poster = ""
     img = OUT / f"plakat-{t['temat']}.png"
     if strips_mode():                                         # 2.0 pasami: bez plakatu, pas tematu nad tytułem
@@ -569,11 +569,27 @@ def welcome_summaries(inputs: dict) -> dict:
     return res
 
 
+def art_card(url: str, aid: int, title: str, meta: str) -> str:
+    """One headline card; data-a = article id for the summary that unfolds inside it (streszczenia.py, v2/pasek.js)."""
+    return (f'<li class="art"><a href="{esc(url)}" data-a="{aid}"><span class="art-t">{esc(title)}</span>'
+            f'<span class="art-m">{meta}</span></a></li>')
+
+
+def art_list(cards: list[str]) -> str:
+    """Shared headline list of all 2.0 pages: label „Artykuły (N)” and the cards (styles in v2/pasek.js)."""
+    return (f'<div class="arts"><div class="arts-l">Artykuły ({len(cards)})</div><ul class="arts-u">{"".join(cards)}</ul></div>'
+            if cards else "")
+
+
+def drawn_poster(t: dict) -> bool:
+    """Speech bubbles come only from a drawn poster; plakat-THEME.json alone is a headline pick, not a bubble."""
+    return (OUT / f"plakat-{t['temat']}.png").exists()
+
+
 def article_list(ids: list[int], pl: dict) -> str:
     info = article_info(set(ids))
-    # data-a: id artykułu dla streszczenia po kliknięciu (scripts/v2/streszczenia.py, v2/pasek.js)
-    return "<ul>" + "".join(f'<li><a href="{esc(info[a]["url"])}" data-a="{a}">{esc(headline_excerpt(pl.get(a) or info[a]["title"]))}</a>'
-                            f'{src_html(info[a]["src"])}</li>' for a in dict.fromkeys(ids) if a in info) + "</ul>"
+    return art_list([art_card(info[a]["url"], a, headline_excerpt(pl.get(a) or info[a]["title"]), src_html(info[a]["src"]))
+                     for a in dict.fromkeys(ids) if a in info])
 
 
 def continued() -> dict:

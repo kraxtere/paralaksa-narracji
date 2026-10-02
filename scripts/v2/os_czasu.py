@@ -541,6 +541,7 @@ def n_kraje(n: int) -> str:
 
 
 def page() -> str:
+    import widok_obrazkowy as W                                 # wspólne karty nagłówków
     plan = load()
     evs = events(plan)
     names = {w["id"]: w["nazwa"] for w in plan["watki"]}
@@ -557,9 +558,8 @@ def page() -> str:
         t, d = e["czas"], e["dzien"]
         when = f"{t:%H:%M}" if t.date() == d else f"{t:%d.%m %H:%M}"
         w = e["watek"] if e["watek"] in {x["id"] for x in shown} else ""
-        heads = "".join(f'<li>{esc(NAMES.get(h["kraj"], h["kraj"]))}: <a href="{esc(h["url"])}" data-a="{h["id"]}" rel="noopener" target="_blank">'
-                        f'{esc(h["naglowek"])}</a> <span class="s">{esc(src_name(h["zrodlo"]))}, '
-                        f'{h["czas"]:%d.%m %H:%M}</span></li>' for h in e["naglowki"])
+        heads = W.art_list([W.art_card(h["url"], h["id"], h["naglowek"], f'{esc(NAMES.get(h["kraj"], h["kraj"]))} · '
+                                       f'{esc(src_name(h["zrodlo"]))}, {h["czas"]:%d.%m %H:%M}') for h in e["naglowki"]])
         img = f'<img src="ev-{e["nr"]}.png" alt="" loading="lazy">' if (OUT / f"ev-{e['nr']}.png").exists() else ""
         more = f' · {len(e["dni"])} dni w Wydarzeniach dnia' if len(e["dni"]) > 1 else ""
         tag = f'<button class="watek" data-w="{esc(w)}">{esc(names[w])}</button>' if w else ""
@@ -570,7 +570,7 @@ def page() -> str:
             + (f'<p class="opis">{esc(e["opis"])}</p>' if e.get("opis") else "")
             + f'<div class="kraje">{n_kraje(len(e["kraje"]))}: '
             f'{esc(", ".join(NAMES.get(k, k) for k in e["kraje"]))}{more}</div>'
-            f'<details><summary>Nagłówki ({len(e["naglowki"])})</summary><ul>{heads}</ul></details>'
+            f'<details><summary>Nagłówki ({len(e["naglowki"])})</summary>{heads}</details>'
             + (f'<a class="wiecej" href="{esc(e["strona"])}">Wydarzenie dnia →</a>' if e["strona"] else "")
             + '</div></div></article>')
     last = max(plan["dni"])

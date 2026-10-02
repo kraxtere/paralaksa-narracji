@@ -1,3 +1,12 @@
+# Strona 2.0: nagłówki jako karty do rozwinięcia — 2026-10-02
+
+- Wspólne `art_card`/`art_list` w `widok_obrazkowy.py` (strony tematów, „Czym żyje kraj”, osie krajów, oś czasu): etykieta
+  „Artykuły (N)”, karta na nagłówek (ramka, tło, tytuł, pod nim logo i redakcja), bez kropek i wcięcia.
+- `pasek.js`: strzałka w kółku (obrót w dół po rozwinięciu), streszczenie i „Przejdź do artykułu” w tej samej karcie z animacją
+  wysokości; bez streszczenia ikona ↗ i zwykły link. Kolory przez zmienne `--art-*` (wariant `:root[data-theme=dark]`), znak ▸ usunięty.
+- Dymek nad paskiem kraju tylko z chmurki narysowanego plakatu (`plakat-TEMAT.png`); sam `plakat-TEMAT.json` (np. 24.09
+  `us_policy`) nie daje dymka. Przebudowane strony 23.09–01.10, osie krajów i oś czasu (bez obrazków). Test w `test_strona_tematu.py`.
+
 # Strona 2.0: paski także dla dni 23–30.09 — 2026-10-02
 
 - Dni 23–30.09 przerobione na nowy układ (okładka pasami, paski krajów na stronach tematów); `start.png` i plakaty zostają w katalogach.

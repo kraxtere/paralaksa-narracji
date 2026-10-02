@@ -40,3 +40,25 @@ def test_countries_tile_and_page_header_with_banner(monkeypatch, tmp_path):
         < page.index("wybrane przez AI")
     banner.unlink()
     assert "kraje-pas bez" in w.countries_link() and 'class="kraje-baner"' not in w.countries_page({})
+
+
+def test_headline_cards_and_bubble_only_from_drawn_poster(monkeypatch, tmp_path):
+    """Headlines are cards under „Artykuły (N)”; a country strip gets a bubble only when the poster was drawn."""
+    cards = [w.art_card("https://e.x/a?b=1&c", 7, "Tytuł <b>", "Źródło")]
+    lst = w.art_list(cards)
+    assert lst.startswith('<div class="arts"><div class="arts-l">Artykuły (1)</div><ul class="arts-u"><li class="art">')
+    assert 'href="https://e.x/a?b=1&amp;c" data-a="7"><span class="art-t">Tytuł &lt;b&gt;</span>' in lst
+    assert w.art_list([]) == ""
+    t = {"temat": "x", "nazwa": "Temat", "kraje": {"BR": 1.0}}
+    opisy = {"dane": {"BR": {"zrodla": []}}, "opisy": {}}
+    cs = [{"kraj": "BR", "article_id": 1, "zrodlo": "x", "naglowek": "Chmurka"}]
+    monkeypatch.setattr(w, "OUT", tmp_path)
+    monkeypatch.setattr(w, "article_info", lambda ids: {})
+    monkeypatch.setattr(w, "theme_articles", lambda *a: [])
+    monkeypatch.setattr(w, "summaries", lambda *a: {})
+    monkeypatch.setattr(w, "strips_mode", lambda: True)
+    monkeypatch.setattr(w, "country_strip", lambda t, c: tmp_path / "pas.webp")
+    (tmp_path / "pas.webp").write_bytes(b"x")
+    assert 'class="dymek"' not in w.theme_page(t, opisy, {}, cs)           # sam plakat-x.json: brak dymka
+    (tmp_path / "plakat-x.png").write_bytes(b"x")
+    assert '<div class="dymek">Chmurka</div>' in w.theme_page(t, opisy, {}, cs)

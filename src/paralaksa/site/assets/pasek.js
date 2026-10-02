@@ -98,46 +98,74 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
     }).catch(() => {});
   }
 
-  // Streszczenia (od 02.10): klik w nagłówek z data-a rozwija streszczenie artykułu (v2/streszczenia/<id/500>.json,
-  // scripts/v2/streszczenia.py) z linkiem do artykułu; drugi klik zwija. Pliki wczytane od razu po załadowaniu strony,
-  // żeby klik był synchroniczny (nowa karta po fetch to dla przeglądarki wyskakujące okno). Bez streszczenia link jak zwykle.
+  // Streszczenia (od 02.10): nagłówki z data-a to karty (art_card w scripts/v2/widok_obrazkowy.py); klik w kartę ze
+  // streszczeniem (v2/streszczenia/<id/500>.json, scripts/v2/streszczenia.py) rozwija je w tej samej karcie z linkiem do
+  // artykułu, drugi klik zwija. Pliki wczytane od razu po załadowaniu strony, żeby klik był synchroniczny (nowa karta po
+  // fetch to dla przeglądarki wyskakujące okno). Karta bez streszczenia: ikona ↗, klik otwiera artykuł jak zwykle.
   const sums = {};
   document.addEventListener("DOMContentLoaded", () => {
     const ns = new Set([...document.querySelectorAll("a[data-a]")].map(a => Math.floor(Number(a.dataset.a) / 500)));
     Promise.all([...ns].map(n => fetch(new URL(`streszczenia/${n}.json`, base)).then(r => r.ok ? r.json() : {})
       .then(d => Object.assign(sums, d)).catch(() => {})))
-      .then(() => document.querySelectorAll("a[data-a]").forEach(a => {   // znak ▸/▾ tylko przy linkach ze streszczeniem
+      .then(() => document.querySelectorAll("a[data-a]").forEach(a => {   // strzałka tylko przy kartach ze streszczeniem
         if (!sums[a.dataset.a]) return;
         a.classList.add("ma-str");
+        a.setAttribute("aria-expanded", "false");
         a.title = "Kliknij, aby rozwinąć streszczenie";
       }));
   });
   const sst = document.createElement("style");
   sst.textContent =
-    "a[data-a]{cursor:pointer}.streszcz{margin:6px 0 10px;padding:9px 12px;background:#fbf8f2;border-left:3px solid #8a3b2a;" +
-    "border-radius:4px;font:14px/1.5 Segoe UI,sans-serif;color:#2c2924}.streszcz p{margin:0 0 6px}" +
-    ".streszcz .s{color:#7a746a;font-size:.82em}.streszcz a.dalej{color:#8a3b2a;font-weight:600;text-decoration:none}" +
-    ":root{--str-znak:#9a948a}a.ma-str::after{content:\" ▸\";color:var(--str-znak);font-size:.8em}" +
-    "a.ma-str.otw::after{content:\" ▾\"}";
+    ":root{--art-tlo:#fffdf8;--art-tlo-hover:#f6f0e4;--art-linia:#ddd5c7;--art-tusz:#1d1b18;--art-szary:#7a746a;" +
+    "--art-akcent:#8a3b2a;--art-focus:#2f6db3}" +
+    ":root[data-theme=dark]{--art-tlo:#24211d;--art-tlo-hover:#2e2a25;--art-linia:#3d3832;--art-tusz:#ece6dc;" +
+    "--art-szary:#a49c90;--art-akcent:#d98a72;--art-focus:#7fb0ea}" +
+    ".arts{margin:10px 0 4px}.arts-l{color:var(--art-szary);font:600 .72em/1.2 Segoe UI,sans-serif;letter-spacing:.06em;" +
+    "text-transform:uppercase;margin:0 0 6px}ul.arts-u{list-style:none;margin:0;padding:0}" +
+    "li.art{margin:0 0 8px;padding:0;background:var(--art-tlo);border:1px solid var(--art-linia);border-radius:12px;" +
+    "overflow:hidden;line-height:1.4}" +
+    "li.art>a[data-a]{display:flex;flex-direction:column;gap:4px;position:relative;padding:10px 52px 10px 12px;" +
+    "color:var(--art-tusz);text-decoration:none;font-weight:500;cursor:pointer;border-radius:12px}" +
+    "li.art>a[data-a]:hover{background:var(--art-tlo-hover)}" +
+    "li.art>a[data-a]:focus-visible{outline:2px solid var(--art-focus);outline-offset:-2px}" +
+    ".art-t{color:var(--art-tusz)}.art-m{color:var(--art-szary);font-size:.8em;font-weight:400}" +
+    ".art-m .src{margin-left:0}" +
+    "li.art>a[data-a]::after{content:\"↗\";position:absolute;right:12px;top:50%;width:28px;height:28px;margin-top:-14px;" +
+    "border:1.5px solid var(--art-linia);border-radius:50%;display:flex;align-items:center;justify-content:center;" +
+    "color:var(--art-akcent);font:600 15px/1 Segoe UI,sans-serif;transition:transform .25s}" +
+    "li.art>a.ma-str::after{content:\"›\";font-size:24px;padding-bottom:3px;box-sizing:border-box}" +
+    "li.art>a.ma-str.otw::after{transform:rotate(90deg)}li.art>a.otw{border-radius:12px 12px 0 0}" +
+    ".streszcz{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}" +
+    ".streszcz.otw{grid-template-rows:1fr}.streszcz>div{overflow:hidden;min-height:0}" +
+    ".streszcz>div>div{margin:0 12px 12px;padding:9px 0 0;border-top:1px solid var(--art-linia);" +
+    "font:14px/1.5 Segoe UI,sans-serif;color:var(--art-tusz)}.streszcz p{margin:0 0 6px}" +
+    ".streszcz .s{color:var(--art-szary);font-size:.82em}" +
+    ".streszcz a.dalej{color:var(--art-akcent);font-weight:600;text-decoration:none}" +
+    "@media(prefers-reduced-motion:reduce){.streszcz,li.art>a[data-a]::after{transition:none}}";
   document.head.append(sst);
   document.addEventListener("click", e => {
     const a = e.target.closest && e.target.closest("a[data-a]");
     if (!a || e.ctrlKey || e.metaKey || e.shiftKey || e.button) return;
-    const open = a.parentElement.querySelector(":scope > .streszcz");
-    if (open) { e.preventDefault(); open.remove(); a.classList.remove("otw"); return; }
     const s = sums[a.dataset.a];
     if (!s) return;
     e.preventDefault();
-    const box = document.createElement("div");
-    box.className = "streszcz";
-    box.innerHTML = `<p></p><p class="s"></p><a class="dalej" target="_blank" rel="noopener">Przejdź do artykułu →</a>`;
-    box.querySelector("p").textContent = s.t;
-    box.querySelector(".s").textContent = s.lead
-      ? "Streszczenie robocze (AI) tylko z tytułu i leadu: nie mamy pełnego tekstu (np. paywall)."
-      : "Streszczenie robocze (AI) z treści artykułu.";
-    box.querySelector("a").href = a.href;
-    a.parentElement.append(box);
-    a.classList.add("otw");
+    let box = a.parentElement.querySelector(":scope > .streszcz");
+    if (!box) {
+      box = document.createElement("div");
+      box.className = "streszcz";
+      box.innerHTML = `<div><div><p></p><p class="s"></p><a class="dalej" target="_blank" rel="noopener">Przejdź do artykułu →</a></div></div>`;
+      box.querySelector("p").textContent = s.t;
+      box.querySelector(".s").textContent = s.lead
+        ? "Streszczenie robocze (AI) tylko z tytułu i leadu: nie mamy pełnego tekstu (np. paywall)."
+        : "Streszczenie robocze (AI) z treści artykułu.";
+      box.querySelector("a").href = a.href;
+      a.after(box);
+      box.offsetHeight;                                   // stan zwinięty przed animacją
+    }
+    const open = !box.classList.contains("otw");
+    box.classList.toggle("otw", open);
+    a.classList.toggle("otw", open);
+    a.setAttribute("aria-expanded", String(open));
   });
 
   // --- menu osoby, instalacja i powiadomienia (tylko na serwerze: window.plxJa) ------------------------------------
