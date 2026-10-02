@@ -1,7 +1,26 @@
+# Źródła: włączone wp i gazeta — 2026-10-02
+
+- `wp` (Wirtualna Polska) i `gazeta` (Gazeta.pl) aktywne (decyzja właściciela); razem 34 aktywne źródła. Próba na pustej
+  bazie: wp 15 artykułów / 15 pełnych tekstów, gazeta 30 / 30, bez błędów.
+
+# Kraje: tematy „tylko w tym kraju” (dane) — 2026-10-02
+
+- `scripts/v2/kraje.py D`: artykuły z okna dnia spoza wydarzeń wielokrajowych (Sprawy dnia i dalsze zdarzenia osi, łącznie
+  z `pozostale`/`odrzucone`), per kraj Codex (model tekstowy) grupuje w 3–5 tematów krajowych (tytuł ≤ 6 słów, opis ≤ 25 słów,
+  1–4 artykuły); bez poradników, lifestyle'u, sportu, pogody. Walidacja w kodzie, jedno ponowienie; tematy z ≥ 2 redakcji wyżej.
+  Wynik `data/widok/kraje/D.json`. Próba 01.10: 531 artykułów z 14 krajów, 59 tematów (QA: żadnego tematu krajowego).
+
 # Strona 2.0: znak „rozwiń” przy nagłówkach ze streszczeniem — 2026-10-02
 
 - Linki `a[data-a]`, które mają streszczenie, dostają po wczytaniu shardów klasę `ma-str`, znak „▸” (otwarte „▾”, kolor
   przez zmienną `--str-znak`) i podpowiedź „Kliknij, aby rozwinąć streszczenie”. Linki bez streszczenia bez zmian.
+
+# Oś czasu: przyciski dni i strzałki, kółko myszy — 2026-10-02
+
+- Przyciski dni i strzałki nie przesuwały osi na szerokim ekranie: `scroll-padding-left` wracał jako tekst `max(...)`, więc
+  przewijanie szło do 0; teraz liczone z `padding-left`. Pasek dni przewijany bez `scrollIntoView` (w Chromium przerywał płynne
+  przewijanie osi). Zaznaczony dzień liczony z uwzględnieniem marginesu (wcześniej o dzień za wcześnie).
+- Kółko myszy nad kartami przesuwa oś w bok o jedną kartę; na końcu osi kółko przewija stronę normalnie.
 
 # Koszty po przeglądzie, raport okładkowy przez Codex, oś tygodnia — 2026-10-01
 

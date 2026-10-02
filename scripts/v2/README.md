@@ -23,8 +23,10 @@ robi Codex z limitu konta (`codex_limit.py` pokazuje zużycie). Nigdy w Actions.
    - `python scripts/v2/widok_obrazkowy.py strona`: HTML okładki, spraw, różnic, obrazu kraju i tematów.
    Obrazki można puszczać równolegle (8 procesów Codex naraz działało 01.10).
 7. Oś wydarzeń, reszta: `python scripts/v2/os_czasu.py opisy`, `obrazki`, `strona`.
-8. `python scripts/v2/streszczenia.py D`: streszczenia artykułów pod nagłówkami stron dnia i osi (tylko brakujące).
-9. `plx site --db data/prod.db --publikuj`.
+8. `python scripts/v2/kraje.py D`: „tylko tutaj”, 3–5 tematów krajowych z artykułów spoza wydarzeń wielokrajowych
+   (po krokach 5 i 7; `data/widok/kraje/D.json`, Codex, ok. 2 min).
+9. `python scripts/v2/streszczenia.py D`: streszczenia artykułów pod nagłówkami stron dnia i osi (tylko brakujące).
+10. `plx site --db data/prod.db --publikuj`.
 
 Po każdym obrazku z ludźmi: obejrzeć (bez stereotypów, bez napisów na kadrach osi). Przy blokadzie moderacji plakatu:
 `widok_warianty.py`.
@@ -34,6 +36,7 @@ Po każdym obrazku z ludźmi: obejrzeć (bez stereotypów, bez napisów na kadra
 - `widok_obrazkowy.py`: siatka tematów, plakaty, wszystkie strony dnia; `widok_tresci.py`: dane i pamięć podręczna tekstów stron.
 - `widok_powitanie.py`: okładka dnia (sprawy, różnice, obraz kraju).
 - `os_czasu.py`: ciągła oś wydarzeń (`data/widok/os/`).
+- `kraje.py`: tematy „tylko w tym kraju” (`data/widok/kraje/`).
 - `streszczenia.py`: streszczenia artykułów pod nagłówkami (`data/widok/streszczenia/`, klik w nagłówek na stronie).
 - `dzien_prasy.py`: dane i opisy krajów dnia; `loga.py`: ikony redakcji (`data/logos/`).
 - `komiks_codex.py`: wywołanie Codex (`codex_exe`) i dawny prototyp komiksu; `codex_limit.py`: stan limitu Codex.

@@ -67,8 +67,8 @@
   - url: https://wiadomosci.wp.pl/rss.xml
     section: wiadomosci
   fulltext: true
-  active: false
-  note: RSS zweryfikowany; do włączenia w KM4 (pełna lista źródeł).
+  active: true
+  note: RSS zweryfikowany; włączone 2026-10-02 (decyzja właściciela).
 - id: gazeta
   name: Gazeta.pl
   country: PL
@@ -78,8 +78,8 @@
   - url: https://rss.gazeta.pl/pub/rss/wiadomosci.xml
     section: wiadomosci
   fulltext: true
-  active: false
-  note: RSS zweryfikowany (portal Gazeta.pl, nie Wyborcza); do włączenia w KM4.
+  active: true
+  note: RSS zweryfikowany (portal Gazeta.pl, nie Wyborcza); włączone 2026-10-02 (decyzja właściciela).
 - id: ukrinform
   name: Ukrinform
   aliases:

@@ -498,16 +498,27 @@ body{margin:0;background:#f4f0e8;color:#1d1b18;font-family:Segoe UI,sans-serif}
 JS = """
 const os=document.querySelector('.os'),evs=[...os.querySelectorAll('.ev')],chips=[...document.querySelectorAll('.dzien')],
  ws=[...document.querySelectorAll('.filtry button')],prev=document.querySelector('.strz.w'),next=document.querySelector('.strz.d');
-let watek='*',cur='';
+let watek='*',cur='',auto=0;
 const vis=()=>evs.filter(e=>!e.classList.contains('ukryte'));
-function idz(d,smooth){const e=vis().find(x=>x.dataset.d>=d)||vis().at(-1);if(!e)return;
- os.scrollTo({left:e.offsetLeft-parseFloat(getComputedStyle(os).scrollPaddingLeft||16),behavior:smooth?'smooth':'auto'});zaznacz(e.dataset.d)}
+const lewo=e=>e.offsetLeft-(parseFloat(getComputedStyle(os).paddingLeft)||16);
+function przewin(e,smooth){if(smooth){clearTimeout(auto);auto=setTimeout(()=>auto=0,900)}
+ os.scrollTo({left:lewo(e),behavior:smooth?'smooth':'auto'})}
+function idz(d,smooth){const e=vis().find(x=>x.dataset.d>=d)||vis().at(-1);if(!e)return;przewin(e,smooth);zaznacz(e.dataset.d)}
+// scrollIntoView would cancel the smooth scroll of .os in Chromium, so the chip bar is scrolled directly
 function zaznacz(d){if(d===cur)return;cur=d;chips.forEach(c=>{c.classList.toggle('on',c.dataset.d===d);
- if(c.dataset.d===d)c.scrollIntoView({inline:'center',block:'nearest'})});
+ if(c.dataset.d===d){const p=c.parentElement,r=c.getBoundingClientRect(),pr=p.getBoundingClientRect();
+  p.scrollLeft+=r.left-pr.left-(p.clientWidth-r.width)/2}});
  const ds=dniWidoczne(),i=ds.indexOf(d);prev.disabled=i<=0;next.disabled=i<0||i>=ds.length-1;
  history.replaceState(null,'','#d='+d+(watek==='*'?'':'&w='+watek))}
 const dniWidoczne=()=>[...new Set(vis().map(e=>e.dataset.d))];
-os.addEventListener('scroll',()=>{const x=os.scrollLeft+40,e=vis().find(v=>v.offsetLeft+v.offsetWidth>x);if(e)zaznacz(e.dataset.d)},{passive:true});
+os.addEventListener('scrollend',()=>{clearTimeout(auto);auto=0});
+let kolko=0,kolkoT=0;
+os.addEventListener('wheel',ev=>{if(ev.ctrlKey||Math.abs(ev.deltaX)>=Math.abs(ev.deltaY))return;
+ const v=vis(),x=os.scrollLeft,i=v.findIndex(e=>lewo(e)>=x-5),j=ev.deltaY>0?i+1:i-1;
+ if(i<0||j<0||j>=v.length)return;ev.preventDefault();
+ if(Date.now()<kolkoT)return;kolko+=ev.deltaY;if(Math.abs(kolko)<40)return;
+ kolko=0;kolkoT=Date.now()+250;przewin(v[j],true);zaznacz(v[j].dataset.d)},{passive:false});
+os.addEventListener('scroll',()=>{if(auto)return;const x=os.scrollLeft,e=vis().find(v=>lewo(v)+v.offsetWidth/2>x);if(e)zaznacz(e.dataset.d)},{passive:true});
 chips.forEach(c=>c.onclick=()=>idz(c.dataset.d,true));
 prev.onclick=()=>{const ds=dniWidoczne(),i=ds.indexOf(cur);if(i>0)idz(ds[i-1],true)};
 next.onclick=()=>{const ds=dniWidoczne(),i=ds.indexOf(cur);if(i<ds.length-1)idz(ds[i+1],true)};
