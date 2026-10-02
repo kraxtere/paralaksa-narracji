@@ -26,7 +26,7 @@ robi Codex z limitu konta (`codex_limit.py` pokazuje zużycie). Nigdy w Actions.
    - `python scripts/v2/widok_obrazkowy.py strona`: HTML okładki, spraw, różnic, obrazu kraju i tematów.
    Dni sprzed 01.10 (bez `_paski/`): siatka `start.png` (`widok_obrazkowy.py obraz`) i plakaty (`plakat TEMAT`).
 7. Oś wydarzeń, reszta: `python scripts/v2/os_czasu.py opisy`, `obrazki`, `strona`.
-8. `python scripts/v2/kraje.py D`: „tylko tutaj”, 3–5 tematów krajowych z artykułów spoza wydarzeń wielokrajowych
+8. `python scripts/v2/kraje.py D`: „Czym żyje kraj”, 3–5 tematów krajowych z artykułów spoza wydarzeń wielokrajowych
    (po krokach 5 i 7; `data/widok/kraje/D.json`, Codex, ok. 2 min). Potem `python scripts/v2/kraje.py obrazki D`
    (domyślnie tylko PL; 1 obrazek na kraj, `paski.py`): paski scen nad tematami (`data/widok/kraje/D/PL-n.webp`);
    przy innej liczbie pasków jedno ponowienie, potem kraj odrzucony (nic nie zapisane); `kraje.py pokroj D KRAJ`. Potem `python scripts/v2/kraje.py ciag D`
@@ -44,7 +44,7 @@ Po każdym obrazku z ludźmi: obejrzeć (bez stereotypów, bez napisów na kadra
 - `widok_obrazkowy.py`: okładka pasami (dawniej siatka tematów i plakaty), wszystkie strony dnia; `widok_tresci.py`: dane i pamięć podręczna tekstów stron.
 - `widok_powitanie.py`: okładka dnia (sprawy, różnice, obraz kraju).
 - `os_czasu.py`: ciągła oś wydarzeń (`data/widok/os/`).
-- `kraje.py`: tematy „tylko w tym kraju” (`data/widok/kraje/`).
+- `kraje.py`: „Czym żyje kraj”, tematy tylko w prasie jednego kraju (`data/widok/kraje/`).
 - `streszczenia.py`: streszczenia artykułów pod nagłówkami (`data/widok/streszczenia/`, klik w nagłówek na stronie); 3–5 zdań, `skroc` jednorazowo skraca starsze (5–7 zdań) do ok. 60%.
 - `dzien_prasy.py`: dane i opisy krajów dnia; `loga.py`: ikony redakcji (`data/logos/`).
 - `komiks_codex.py`: wywołanie Codex (`codex_exe`) i dawny prototyp komiksu; `codex_limit.py`: stan limitu Codex.

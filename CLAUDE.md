@@ -30,7 +30,7 @@ Procedura dnia strony 2.0: `scripts/v2/README.md`.
   (`plx site`: `build.py`, `data.py`, `stories.py`, `titles.py`, `publish.py`, `assets/pasek.js` wspólny pasek 2.0, `hosting/server.py`
   Render + konta + push), `gdelt/`, `events/`, `board/`.
 - `scripts/v2/`: strona 2.0 (widok_obrazkowy, widok_powitanie, os_czasu, streszczenia, dzien_prasy, kraje → `D/kraje.html`
-  „Tylko tutaj”, `kraje.py ciag D` + `strona` → oś kraju `kraje/KRAJ.html`). Wyniki w `data/widok/`.
+  „Czym żyje kraj”, jeden kraj naraz `#KRAJ`, `kraje.py ciag D` + `strona` → oś kraju `kraje/KRAJ.html`). Wyniki w `data/widok/`.
   `paski.py`: wspólne paski (1 obrazek Codex z N pasami, cięcie po ramkach, oryginały, 8/4 procesy); od 01.10 okładka
   pasami i paski krajów na stronach tematów (`widok_obrazkowy.py paski`), plakaty i `start.png` tylko starsze dni.
 - `.github/workflows/daily.yml`: cron, baza w zaszyfrowanym Release, bez syntezy.

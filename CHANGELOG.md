@@ -1,3 +1,11 @@
+# „Tylko tutaj” → „Czym żyje kraj”, jeden kraj naraz — 2026-10-02
+
+- Strona dnia `D/kraje.html`: nagłówek „Czym żyje kraj · DD.MM”, nowy podpis; rząd przycisków krajów (flaga i nazwa,
+  przewijany w poziomie), widać jeden kraj naraz (domyślnie Polska), wybór w `#KRAJ` (dawne `#kraj-XX` też działa); bez JS
+  wszystkie kraje. Gotowych ludzików-gazetek osobno nie ma (są tylko wewnątrz plakatów i pasków), więc flagi.
+- Oś kraju `kraje/KRAJ.html`: „Czym żyje Polska” / „Czym żyją Niemcy” (słownik `LIVES` w `widok_obrazkowy.py`).
+- Link pod okładką i sekcja w panelu właściciela: „Czym żyje kraj” (klucz `kraje` bez zmian). Przebudowane dni 23.09–01.10 i osie.
+
 # Strony tematów: wyróżnione podsumowanie i przyciski krajów — 2026-10-02
 
 - `widok_obrazkowy.py theme_page`: opis zbiorczy w osobnym bloku z etykietą „Podsumowanie wszystkich krajów” (tło karty,

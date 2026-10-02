@@ -40,3 +40,9 @@ def test_detect_strips_ignores_dark_line_inside_strip(tmp_path):
     im.save(png)
     assert detect_strips(png, 3) == [(8, 8, 191, 95), (8, 104, 191, 195), (8, 204, 191, 291)]
     assert detect_strips(png, 5) == []                              # w oknach N = 5 brak ramki
+
+
+def test_lives_title_every_country():
+    import widok_obrazkowy as W
+    assert W.lives_title("PL") == "Czym żyje Polska" and W.lives_title("DE") == "Czym żyją Niemcy"
+    assert W.lives_title("TR") == "Czym żyje Turcja" and set(W.LIVES) == set(W.NAMES)

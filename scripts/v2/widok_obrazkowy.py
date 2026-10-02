@@ -639,14 +639,38 @@ def country_strips(country: str, topics: list[dict]) -> list[str]:
     return [f'<img class="pas" src="kraje-{name}" alt="" loading="lazy">' for name in names] or [""] * len(topics)
 
 
+# „Czym żyje kraj”: nazwa kraju w mianowniku z orzeczeniem w liczbie pojedynczej albo mnogiej
+LIVES = {"PL": "żyje Polska", "UA": "żyje Ukraina", "DE": "żyją Niemcy", "UK": "żyje Wielka Brytania",
+         "US": "żyją Stany Zjednoczone", "CN": "żyją Chiny", "HK": "żyje Hongkong", "IL": "żyje Izrael",
+         "PS": "żyje Palestyna", "TR": "żyje Turcja", "IN": "żyją Indie", "BR": "żyje Brazylia", "QA": "żyje Katar",
+         "RU": "żyje Rosja"}
+
+
+def lives_title(c: str) -> str:
+    return "Czym " + LIVES.get(c, "żyje " + NAMES.get(c, c))
+
+
+# Jeden kraj naraz: wybór w #KRAJ (np. #PL, działa też dawne #kraj-PL); bez JS widać wszystkie sekcje
+COUNTRY_PICK_JS = """<script>(()=>{const box=document.querySelector('.jeden'),bs=[...box.querySelectorAll('.kraje-nav a')],
+ss=[...box.querySelectorAll('section[id^=kraj-]')];box.classList.add('js');
+function pick(c,push){if(!ss.some(s=>s.id==='kraj-'+c))c=ss[0]&&ss[0].id.slice(5);
+ ss.forEach(s=>s.classList.toggle('on',s.id==='kraj-'+c));bs.forEach(b=>{const on=b.dataset.k===c;b.classList.toggle('on',on);
+ if(on)b.parentElement.scrollLeft+=b.getBoundingClientRect().left-b.parentElement.getBoundingClientRect().left-8});
+ if(push)history.replaceState(null,'','#'+c)}
+bs.forEach(b=>b.onclick=e=>{e.preventDefault();pick(b.dataset.k,true)});
+const h=()=>pick(location.hash.slice(1).replace(/^kraj-/,'')||'PL',false);addEventListener('hashchange',h);h()})()</script>"""
+COUNTRY_PICK_CSS = (".jeden .kraje-nav{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;padding-bottom:4px}"
+                    ".jeden .kraje-nav a.on{background:var(--cegla);border-color:var(--cegla);color:var(--papier)}"
+                    ".jeden.js section[id^=kraj-]{display:none}.jeden.js section[id^=kraj-].on{display:block}")
+
+
 def countries_page(pl: dict) -> str:
-    """„Tylko tutaj”: per country, national topics outside the multi-country events of the day."""
+    """„Czym żyje kraj”: per country, national topics outside the multi-country events of the day; one country at a time."""
     data = countries_data()
     info = article_info({i for ts in data.values() for t in ts for i in t["ids"]})
+    order = [c for c in sorted(data, key=lambda c: (c != "PL", NAMES.get(c, c))) if data[c]]
     blocks = []
-    for country in sorted(data, key=lambda c: (c != "PL", NAMES.get(c, c))):
-        if not data[country]:
-            continue
+    for country in order:
         sids = list(dict.fromkeys(info[i]["src"] for t in data[country] for i in t["ids"] if i in info))
         strips = country_strips(country, data[country])
         topics = "".join(f'{strips[k]}<h3>{esc(t["tytul"])}</h3><p>{esc(t["opis"])}</p>{article_list(t["ids"], pl)}'
@@ -654,11 +678,14 @@ def countries_page(pl: dict) -> str:
         blocks.append(f'<section id="kraj-{country}"><h2>{esc(NAMES.get(country, country))}'
                       f'{"".join(src_html(sid) for sid in sids)}<a class="osk" href="../kraje/{country}.html">Cała oś kraju →</a>'
                       f'</h2>{topics}</section>')
-    title = f"Tylko tutaj · {DAY[8:10]}.{DAY[5:7]}"
-    body = (bar("index.html") + f'<div class="list" data-sekcja="kraje"><h1>{esc(title)}</h1>'
-            '<p>Sprawy obecne w prasie jednego kraju, nieobecne w Wydarzeniach dnia.</p>'
+    nav = ('<nav class="kraje-nav">' + "".join(f'<a href="#{c}" data-k="{c}">{flag_html(c)}{esc(NAMES.get(c, c))}</a>'
+                                              for c in order) + '</nav>')
+    title = f"Czym żyje kraj · {DAY[8:10]}.{DAY[5:7]}"
+    body = (bar("index.html") + f'<style>{COUNTRY_PICK_CSS}</style><div class="list jeden" data-sekcja="kraje">'
+            f'<h1>{esc(title)}</h1>'
+            '<p>Sprawy, które zajmowały prasę jednego kraju, a nie trafiły do Wydarzeń dnia, bo inne kraje o nich nie pisały.</p>'
             '<p class="s">Tematy i opisy wybrane przez AI z nagłówków prasy; nagłówki w tłumaczeniu roboczym, '
-            'dłuższe skrócone do 15 słów.</p>' + "".join(blocks) + '</div>')
+            'dłuższe skrócone do 15 słów.</p>' + nav + "".join(blocks) + '</div>' + COUNTRY_PICK_JS)
     return shell(title, body)
 
 
@@ -666,7 +693,7 @@ def countries_link() -> str:
     """Strip under the cover leading to kraje.html (only when the day has national topics)."""
     if not any(countries_data().values()):
         return ""
-    return ('<a class="kraje-link" href="kraje.html" data-sekcja="kraje"><b>Tylko tutaj</b>'
+    return ('<a class="kraje-link" href="kraje.html" data-sekcja="kraje"><b>Czym żyje kraj</b>'
             '<span>Sprawy z prasy jednego kraju ›</span></a>')
 
 

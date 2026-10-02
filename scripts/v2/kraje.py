@@ -301,9 +301,9 @@ def country_pages() -> None:
                         if od else "")
                 body += f'{img}<h3>{W.esc(t["tytul"])}</h3>{note}<p>{W.esc(t["opis"])}</p>{W.article_list(t["ids"], pl)}'
             sections.append(f'<section id="d-{d}"><h2>{d[8:10]}.{d[5:7]} <a class="osk" href="../{d}/kraje.html'
-                            f'#kraj-{country}">cały dzień →</a></h2>{body}</section>')
+                            f'#{country}">cały dzień →</a></h2>{body}</section>')
         name = W.NAMES.get(country, country)
-        title = f"{name} · tylko tutaj"
+        title = W.lives_title(country)
         page = (f'<div id="pasek" data-dzien="{order[0]}" data-wstecz></div><script src="../pasek.js"></script>'
                 f'<div class="list" data-sekcja="kraje"><h1>{W.esc(title)}</h1>'
                 f'<p>Sprawy obecne tylko w prasie tego kraju ({W.esc(name)}), dzień po dniu, najnowszy u góry.</p>'
