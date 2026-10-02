@@ -1,3 +1,8 @@
+# Strona 2.0: znak „rozwiń” przy nagłówkach ze streszczeniem — 2026-10-02
+
+- Linki `a[data-a]`, które mają streszczenie, dostają po wczytaniu shardów klasę `ma-str`, znak „▸” (otwarte „▾”, kolor
+  przez zmienną `--str-znak`) i podpowiedź „Kliknij, aby rozwinąć streszczenie”. Linki bez streszczenia bez zmian.
+
 # Koszty po przeglądzie, raport okładkowy przez Codex, oś tygodnia — 2026-10-01
 
 Przegląd kosztów 24–30.09 (decyzja właściciela: zostawić to, czego używa wersja 2.0): ekstrakcja DeepSeek ok. 0,90 $ dziennie,

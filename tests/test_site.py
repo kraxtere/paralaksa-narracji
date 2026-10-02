@@ -238,4 +238,5 @@ def test_v2_copies_finished_views_without_work_files(tmp_path):
     bar = (tmp_path / "v2" / "pasek.js").read_text(encoding="utf-8")                  # wspólny pasek z logo w środku
     assert "__LOGO__" not in bar and "<svg" in bar and "dni.json" in bar and "Stara wersja" in bar
     assert "streszczenia/" in bar and "Przejdź do artykułu" in bar
+    assert "ma-str" in bar and "var(--str-znak)" in bar and "Kliknij, aby rozwinąć streszczenie" in bar
     assert copy_v2(None, tmp_path / "brak") == []

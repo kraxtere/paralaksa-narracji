@@ -95,20 +95,27 @@
   const sums = {};
   document.addEventListener("DOMContentLoaded", () => {
     const ns = new Set([...document.querySelectorAll("a[data-a]")].map(a => Math.floor(Number(a.dataset.a) / 500)));
-    for (const n of ns) fetch(new URL(`streszczenia/${n}.json`, base)).then(r => r.ok ? r.json() : {})
-      .then(d => Object.assign(sums, d)).catch(() => {});
+    Promise.all([...ns].map(n => fetch(new URL(`streszczenia/${n}.json`, base)).then(r => r.ok ? r.json() : {})
+      .then(d => Object.assign(sums, d)).catch(() => {})))
+      .then(() => document.querySelectorAll("a[data-a]").forEach(a => {   // znak ▸/▾ tylko przy linkach ze streszczeniem
+        if (!sums[a.dataset.a]) return;
+        a.classList.add("ma-str");
+        a.title = "Kliknij, aby rozwinąć streszczenie";
+      }));
   });
   const sst = document.createElement("style");
   sst.textContent =
     "a[data-a]{cursor:pointer}.streszcz{margin:6px 0 10px;padding:9px 12px;background:#fbf8f2;border-left:3px solid #8a3b2a;" +
     "border-radius:4px;font:14px/1.5 Segoe UI,sans-serif;color:#2c2924}.streszcz p{margin:0 0 6px}" +
-    ".streszcz .s{color:#7a746a;font-size:.82em}.streszcz a.dalej{color:#8a3b2a;font-weight:600;text-decoration:none}";
+    ".streszcz .s{color:#7a746a;font-size:.82em}.streszcz a.dalej{color:#8a3b2a;font-weight:600;text-decoration:none}" +
+    ":root{--str-znak:#9a948a}a.ma-str::after{content:\" ▸\";color:var(--str-znak);font-size:.8em}" +
+    "a.ma-str.otw::after{content:\" ▾\"}";
   document.head.append(sst);
   document.addEventListener("click", e => {
     const a = e.target.closest && e.target.closest("a[data-a]");
     if (!a || e.ctrlKey || e.metaKey || e.shiftKey || e.button) return;
     const open = a.parentElement.querySelector(":scope > .streszcz");
-    if (open) { e.preventDefault(); open.remove(); return; }
+    if (open) { e.preventDefault(); open.remove(); a.classList.remove("otw"); return; }
     const s = sums[a.dataset.a];
     if (!s) return;
     e.preventDefault();
@@ -121,6 +128,7 @@
       : "Streszczenie robocze (AI) z treści artykułu.";
     box.querySelector("a").href = a.href;
     a.parentElement.append(box);
+    a.classList.add("otw");
   });
 
   // --- menu osoby, instalacja i powiadomienia (tylko na serwerze: window.plxJa) ------------------------------------
