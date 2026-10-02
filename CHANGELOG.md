@@ -1,3 +1,11 @@
+# Streszczenia: 3–5 zdań, tryb `skroc` — 2026-10-02
+
+- `scripts/v2/streszczenia.py`: nowe streszczenia 3–5 zdań (50–100 słów, walidacja 3–6), wcześniej 5–7.
+- Tryb `skroc` (jednorazowy): Codex skraca istniejące streszczenia do ok. 60% bez pełnych tekstów (scala zdania);
+  akceptacja 40–90% słów, 3–6 zdań, cytaty tylko dosłowne z dotychczasowego tekstu; skrócone mają `"k":1`.
+- 02.10: 1180 z 1193 skróconych (2 przebiegi), 13 zostaje w starej wersji; kopia sprzed zmiany w
+  `data/widok/streszczenia_kopia_0210/`. Opublikowane.
+
 # Kraje: oś kraju w czasie — 2026-10-02
 
 - `scripts/v2/kraje.py strona`: strona osi kraju `data/widok/kraje/KRAJ.html` ze wszystkich dni w `data/widok/kraje/*.json`,

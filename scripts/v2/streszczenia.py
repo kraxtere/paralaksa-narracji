@@ -1,8 +1,9 @@
 """Streszczenia artykułów pod nagłówkami stron 2.0 (decyzja właściciela 2026-10-02): klik w nagłówek pod krajem rozwija
-5–7 zdań streszczenia i link „Przejdź do artykułu”. Tylko dla nagłówków, które strony pokazują (linki z data-a=<id artykułu>
+3–5 zdań streszczenia (od 02.10, wcześniej 5–7) i link „Przejdź do artykułu”. Tylko dla nagłówków, które strony pokazują (linki z data-a=<id artykułu>
 na stronach dnia i na osi), nie dla całej ekstrakcji. Codex z limitu konta, pełny tekst z lokalnej bazy (0 $).
 Źródła bez pełnego tekstu (paywall, np. rp, Spiegel): 1–2 zdania z leadu, oznaczone na stronie.
   python scripts/v2/streszczenia.py 2026-10-02          # strony dnia D i oś czasu; tylko brakujące
+  python scripts/v2/streszczenia.py skroc               # jednorazowo: istniejące streszczenia do ok. 2/3
   python scripts/v2/streszczenia.py wszystko            # wszystkie dni w data/widok/ i oś
 Wynik: data/widok/streszczenia/<id // 500>.json ({id: {"t": tekst, "lead": bool}}); plx site kopiuje do v2/streszczenia/,
 a v2/pasek.js wczytuje plik przy kliknięciu.
@@ -71,7 +72,7 @@ def prompt(batch: list[dict]) -> str:
     return (
         "Streszczasz artykuły prasowe dla polskiego czytelnika serwisu, który porównuje przekaz prasy z różnych krajów. "
         "Dla KAŻDEGO artykułu niżej napisz po polsku streszczenie tego, co podaje sam artykuł:\n"
-        "- PEŁNY TEKST: 5–7 zdań (razem 70–150 słów): co się stało albo o czym jest tekst, najważniejsze ustalenia i liczby, "
+        "- PEŁNY TEKST: 3–5 zdań (razem 50–100 słów): co się stało albo o czym jest tekst, najważniejsze ustalenia i liczby, "
         "na kogo powołuje się redakcja, czyje stanowiska przytacza i jakie ma ujęcie (np. podkreśla skutki dla…, oddaje głos…).\n"
         "- TYLKO LEAD: 1–2 zdania z tego, co jest w tytule i leadzie; nie dopowiadaj reszty.\n"
         "Zasady: wyłącznie na podstawie podanego tekstu, bez własnej wiedzy, bez ocen prawdziwości i bez prognoz. Twierdzenia "
@@ -95,8 +96,8 @@ def check(batch: list[dict], got: dict[int, str]) -> list[str]:
         n = sentences(t)
         if a["lead"] and n > 3:
             errors.append(f"#{a['id']}: {n} zdań, przy samym leadzie najwyżej 2")
-        if not a["lead"] and not 4 <= n <= 8:
-            errors.append(f"#{a['id']}: {n} zdań, ma być 5–7")
+        if not a["lead"] and not 3 <= n <= 6:
+            errors.append(f"#{a['id']}: {n} zdań, ma być 3–5")
         # w prompcie 10 słów, twardy próg to zasada projektu (cytaty maks. 15 słów)
         errors += [f"#{a['id']}: cytat ma {len(q.split())} słów, najwyżej 10" for q in QUOTE.findall(t) if len(q.split()) > 15]
     return errors
@@ -130,6 +131,38 @@ def run(batch: list[dict], n: int) -> dict[int, str]:
     return got
 
 
+def shorten(batch: list[dict], n: int) -> dict[int, str]:
+    """Compress existing summaries to about 2/3 (no article text needed, cheap)."""
+    text = ("Skróć każde streszczenie niżej do ok. 60% długości (3–5 zdań), po polsku: scal, co się da. Zachowaj najważniejsze fakty, liczby, "
+            "przypisania źródeł („według…”) i ujęcie redakcji; usuń powtórzenia i szczegóły poboczne. Nic nie dodawaj. Cytaty w cudzysłowie przepisz dosłownie albo usuń. "
+            "Zwróć WYŁĄCZNIE JSON: {\"streszczenia\":[{\"id\":123,\"tekst\":\"...\"}]} z wszystkimi id.\n\n"
+            + "\n\n".join(f"### #{a['id']}\n{a['t']}" for a in batch))
+    raw = codex_text(OUT / f"_codex-k{n}", text)
+    try:
+        new = {int(d["id"]): " ".join(d["tekst"].split())
+               for d in json.loads(raw[raw.index("{"):raw.rindex("}") + 1])["streszczenia"]}
+    except (ValueError, KeyError, TypeError) as e:
+        print(f"porcja {n}: niepoprawny JSON ({e})", flush=True)
+        return {}
+    old = {a["id"]: a["t"] for a in batch}
+    # luźny górny próg (0.9): chodzi o scalenie, nie o co do słowa; cytaty tylko dosłowne z dotychczasowego tekstu
+    return {i: t for i, t in new.items() if i in old and 0.4 * len(old[i].split()) <= len(t.split()) <= 0.9 * len(old[i].split())
+            and 3 <= sentences(t) <= 6 and all(len(q.split()) <= 15 and q in old[i] for q in QUOTE.findall(t))}
+
+
+def main_shorten() -> None:
+    done = load_all()
+    todo = [{"id": i, "t": v["t"]} for i, v in done.items() if not v["lead"] and not v.get("k") and len(v["t"].split()) > 75]
+    print(f"do skrócenia: {len(todo)}", flush=True)
+    batches = [todo[k:k + 40] for k in range(0, len(todo), 40)]
+    with ThreadPoolExecutor(4) as ex:
+        for got in ex.map(shorten, batches, range(len(batches))):
+            for i, t in got.items():
+                done[i] = {"t": t, "lead": False, "k": 1}
+            save(done)
+    print(f"skrócono; zostało dłuższych: {len([1 for v in done.values() if not v['lead'] and not v.get('k') and len(v['t'].split()) > 75])}")
+
+
 def main(arg: str) -> None:
     ids = shown_ids(None if arg == "wszystko" else arg)
     done = load_all()
@@ -145,6 +178,8 @@ def main(arg: str) -> None:
 
 
 if __name__ == "__main__":
+    if sys.argv[1:] == ["skroc"]:
+        raise SystemExit(main_shorten())
     if len(sys.argv) != 2 or not (sys.argv[1] == "wszystko" or re.fullmatch(r"\d{4}-\d{2}-\d{2}", sys.argv[1])):
         raise SystemExit(__doc__)
     main(sys.argv[1])
