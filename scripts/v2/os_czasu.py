@@ -513,7 +513,7 @@ function zaznacz(d){if(d===cur)return;cur=d;chips.forEach(c=>{c.classList.toggle
 const dniWidoczne=()=>[...new Set(vis().map(e=>e.dataset.d))];
 os.addEventListener('scrollend',()=>{clearTimeout(auto);auto=0});
 let kolko=0,kolkoT=0;
-os.addEventListener('wheel',ev=>{if(ev.ctrlKey||Math.abs(ev.deltaX)>=Math.abs(ev.deltaY))return;
+os.addEventListener('wheel',ev=>{if(ev.ctrlKey||!ev.target.closest('.karta')||Math.abs(ev.deltaX)>=Math.abs(ev.deltaY))return;
  const v=vis(),x=os.scrollLeft,i=v.findIndex(e=>lewo(e)>=x-5),j=ev.deltaY>0?i+1:i-1;
  if(i<0||j<0||j>=v.length)return;ev.preventDefault();
  if(Date.now()<kolkoT)return;kolko+=ev.deltaY;if(Math.abs(kolko)<40)return;

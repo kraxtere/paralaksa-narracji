@@ -29,6 +29,7 @@
   przewijanie szło do 0; teraz liczone z `padding-left`. Pasek dni przewijany bez `scrollIntoView` (w Chromium przerywał płynne
   przewijanie osi). Zaznaczony dzień liczony z uwzględnieniem marginesu (wcześniej o dzień za wcześnie).
 - Kółko myszy nad kartami przesuwa oś w bok o jedną kartę; na końcu osi kółko przewija stronę normalnie.
+  Poza kartą (tło osi) kółko zawsze przewija stronę w dół, np. do rozwiniętych nagłówków.
 
 # Koszty po przeglądzie, raport okładkowy przez Codex, oś tygodnia — 2026-10-01
 
