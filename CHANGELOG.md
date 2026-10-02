@@ -16,8 +16,9 @@
 # Easter eggi w obrazkach tematów i „Czym żyją kraje” — 2026-10-02
 
 - Baner „Czym żyją kraje” wygenerowany ponownie z 17 oknami (doszły FR, HU, IR); wersja z 14 oknami w `_baner/_stare-14/`.
-- Kafel „Czym żyją kraje”: baner w całości (bez przycinania 2.4:1), podpis w jasnym pasku pod obrazkiem. Automatyczne
-  cięcie banera (`paski.cut`) pomyliło ramy z siatką okien; baner pocięty ręcznie po ciemnych ramkach oryginału.
+- Kafel „Czym żyją kraje”: wyższy baner (ok. 1.35:1, 2 ujęcia na obrazek), cały budynek, 17 okien w 3 rzędach
+  czytelnych na telefonie; jeden podpis „Tematy, które zostają w domu ›” na gradiencie. (Wcześniejsze automatyczne cięcie
+  banera 2:1 pomyliło ramy z siatką okien.)
 
 - Nagłówki sekcji strony dnia jednolite: ceglane belki `pp-sek` także nad „Czym żyją kraje” (w kaflu „Tematy, które
   zostają w domu” + podpis) i „Czym żyła prasa” (liczby jako drobny podpis `pp-pod`).

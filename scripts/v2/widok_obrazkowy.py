@@ -734,17 +734,17 @@ def countries_link() -> str:
     img = '<img src="../kraje/baner.webp" alt="" loading="lazy">' if BANNER.exists() else ""
     return (f'<div class="okl"><h2 class="pp-sek">Czym żyją kraje</h2>'
             f'<a class="okl-pas kraje-pas{"" if img else " bez"}" href="kraje.html" data-sekcja="kraje">{img}'
-            '<span class="okl-t"><b>Tematy, które zostają w domu <span class="strz">›</span></b>'
-            '<span class="okl-n">Co zajmuje prasę każdego kraju, choć nie pisze o tym nikt poza nim</span></span></a></div>')
+            '<span class="okl-t"><b>Tematy, które zostają w domu <span class="strz">›</span></b></span></a></div>')
 
 
 # Baner „Czym żyje kraj”: stały zasób wspólny dla wszystkich dni (data/widok/kraje/baner.webp, plx site kopiuje go do
 # v2/kraje/), generowany raz (`widok_obrazkowy.py baner`; istniejącego nie nadpisuje)
 BANNER = Path("data/widok/kraje/baner.webp")
 COUNTRIES = ["PL", "UA", "DE", "UK", "US", "RU", "CN", "IN", "TR", "IL", "PS", "QA", "BR", "HK", "FR", "HU", "IR"]
-_ROWS = (len(COUNTRIES) + 1) // 2   # okna kamienicy w 2 rzędach; liczba z listy krajów, nie stała
+_ROWS = -(-len(COUNTRIES) // 3)      # okna kamienicy w 3 rzędach (większe okna na telefonie); liczba z listy krajów
 BANNER_SCENE = ("A calm, symmetrical facade of an old European tenement house seen straight on, filling the strip: an "
-                f"orderly grid of EXACTLY {len(COUNTRIES)} equal windows in 2 rows of {_ROWS} (the last row may have one window fewer). In every window one small cartoon newspaper "
+                f"orderly grid of EXACTLY {len(COUNTRIES)} large equal windows in 3 rows of {_ROWS} (the last row may have fewer), "
+                "the WHOLE building facade filling the strip, windows big enough that each country's accent reads clearly. In every window one small cartoon newspaper "
                 "figure (a folded newspaper with a simple face) wearing a scarf in the colours of a different country "
                 "(" + ", ".join(f"{NAMES[c]}: {FLAGS[c]}" for c in COUNTRIES) + "), busy with its own local matter "
                 "(reading, phoning, watering a plant, cooking, fixing something), each with ONE small local accent in "
@@ -754,9 +754,10 @@ BANNER_SCENE = ("A calm, symmetrical facade of an old European tenement house se
 
 
 def banner_prompt() -> str:
-    """Codex instruction: three takes of the same scene, strips of about 2:1 (shown cropped to 2.4:1), the best one kept."""
+    """Codex instruction: two takes of the same scene, strips of about 1.35:1 (taller tile, whole building), the better
+    one kept."""
     import paski
-    return paski.prompt([BANNER_SCENE + " Take %d: same facade, different light." % i for i in (1, 2, 3)])
+    return paski.prompt([BANNER_SCENE + " Take %d: same facade, different light." % i for i in (1, 2)])
 
 
 # --- 2.0 pasami (od 01.10): okładka = pasy tematów, strona tematu = pas tematu + paski krajów (scripts/v2/paski.py) ---
@@ -948,10 +949,8 @@ STRIPS_CSS = (
     ".flaga{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--papier);box-sizing:border-box}"
     ".okl-pas:hover,.okl-pas:focus-visible{outline:3px solid var(--cegla);outline-offset:2px}"
     ".okl-s{text-align:center;color:var(--szary);font-size:.8em}"
-    # kafel „Czym żyją kraje”: baner w całości (okna nieucięte), podpis w jasnym pasku pod obrazkiem jak kolumny okładki
-    ".kraje-pas .okl-t{position:static;padding:9px 12px 10px;background:var(--karta);color:var(--tusz)}"
-    ".kraje-pas .okl-t b{color:var(--cegla)}.kraje-pas .okl-n{color:var(--tusz)}"
-    ".kraje-pas .strz{float:right;font-size:1.3em;line-height:.8}.kraje-pas.bez{min-height:0}"
+    # kafel „Czym żyją kraje”: baner w całości (cały budynek, ok. 1.35:1), jeden podpis na gradiencie jak tytuły pasów
+    ".kraje-pas .okl-t{padding-top:30px}.kraje-pas .strz{float:right;font-size:1.3em;line-height:.8}.kraje-pas.bez{min-height:90px}"
     ".pas-tematu{display:block;width:100%;height:auto;border-radius:10px;margin:12px 0 0}"
     ".pas-kraju{display:block;width:100%;height:auto;border-radius:10px;margin:2px 0 0}"
     ".dymek{position:relative;width:fit-content;max-width:80%;margin:-18px 10px 8px auto;padding:7px 11px;"
@@ -959,7 +958,6 @@ STRIPS_CSS = (
     "font:600 .95em/1.35 Georgia,serif}.dymek:before{content:'';position:absolute;right:28px;top:-11px;"
     "border:7px solid transparent;border-bottom:10px solid var(--tusz);border-top:0}"
     "@media(max-width:480px){.okl-t b{font-size:1.05em}.okl-t{padding:16px 9px 6px}.dymek{max-width:88%}}"
-    "@media(max-width:480px){.kraje-pas .okl-t{padding:8px 10px 9px}}"
     # okładka z pasów (scripts/v2/okladka.py): tytuł i flagi jak na pasach tematów (.okl-t), kolumny krajów pod pasem
     # nagłówek jak winieta gazety (podwójna linia, data w ceglanym polu), sekcje jako ceglane belki jak na dawnym plakacie
     ".pp .okl-h{border-top:4px double var(--tusz);border-bottom:4px double var(--tusz);margin:6px 0 4px;padding:10px 4px 8px}"
@@ -1033,7 +1031,7 @@ def polish_titles() -> dict[int, str]:
 
 
 def main():
-    if sys.argv[1:2] == ["baner"]:          # baner „Czym żyją kraje”, raz; potem wybór: baner wybierz 1|2|3
+    if sys.argv[1:2] == ["baner"]:          # baner „Czym żyją kraje”, raz; potem wybór: baner wybierz 1|2
         import paski
         work, pick = BANNER.parent / "_baner", sys.argv[3] if len(sys.argv) > 3 and sys.argv[2] == "wybierz" else None
         if pick:
@@ -1042,7 +1040,7 @@ def main():
         elif BANNER.exists():
             print(f"{BANNER} już jest, nie generuję ponownie")
         else:
-            print(paski.make(work / "_gen", banner_prompt(), [work / f"wersja-{i}.webp" for i in (1, 2, 3)],
+            print(paski.make(work / "_gen", banner_prompt(), [work / f"wersja-{i}.webp" for i in (1, 2)],
                              work / "oryginal.png"))
         return
     opisy = json.loads(OPISY.read_text(encoding="utf-8"))
