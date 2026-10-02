@@ -295,20 +295,6 @@ PEOPLE_STYLE = ("People named in the text may appear only as simple paper-cut si
                 "instead of a face (no eyes, no facial features at all), each recognisable by one attribute such as a "
                 "hairstyle shape, a wide-brimmed hat or a clothing colour; neutral and dignified. Everyone else is a small "
                 "generic stylised figure.")
-# wspólny styl nowych obrazków stron 2.0 (od 02.10, wybór właściciela po teście stylów: wariant E2); stare obrazki bez zmian
-IMAGE_STYLE = ("STYLE (most important, follow strictly): EUROPEAN COMIC BOOK PANEL painted in GOUACHE, clearly a comic, "
-               "NOT realistic and NOT a photo-like painting: every object has a visible dark brush-ink CONTOUR line of "
-               "varying thickness; forms are simplified and slightly stylised; colour is laid in large flat-ish opaque "
-               "gouache patches with visible brush marks and few details; muted, harmonious palette; moody light done "
-               "with a few flat shadow shapes, not smooth rendering.")
-# zasady scen do IMAGE_STYLE: bez techniki, światła i palety (te tylko w stylu), żeby opis stylu nie był przykryty
-SCENE_RULES = ("No mascots, no newspaper characters, no crowds, no speech bubbles. One clear main motif in the centre of "
-               "each strip plus the listed details, with a foreground, middle ground and background; rich but readable. "
-               "Keep the bottom fifth of every strip calmer and simpler (plain ground, floor or road), a title is "
-               "overlaid there later. People: 2-6 small simplified figures per strip as participants of the scene, no "
-               "portraits of real persons, no recognisable faces. Each strip has its own time of day and colour mood as "
-               "described; never two sunsets. Flags, airline liveries, uniforms and other national markings only where "
-               "the scene names them; flags only as plain colour designs without any writing.")
 
 
 def poster_prompt(t: dict, cs: list[dict]) -> str:
@@ -713,7 +699,7 @@ def countries_page(pl: dict) -> str:
                       f'</h2>{topics}</section>')
     nav = ('<nav class="kraje-nav">' + "".join(country_pill(c, "a", f'href="#{c}" data-k="{c}"')
                                               for c in order) + '</nav>')
-    title = f"Czym żyje kraj · {DAY[8:10]}.{DAY[5:7]}"
+    title = f"Czym żyją kraje · {DAY[8:10]}.{DAY[5:7]}"
     body = (bar("index.html") + f'<style>{COUNTRY_PICK_CSS}</style><div class="list jeden" data-sekcja="kraje">'
             + ('<img class="kraje-baner" src="../kraje/baner.webp" alt="">' if BANNER.exists() else "")
             + f'<h1>{esc(title)}</h1>'
@@ -730,8 +716,8 @@ def countries_link() -> str:
         return ""
     img = '<img src="../kraje/baner.webp" alt="" loading="lazy">' if BANNER.exists() else ""
     return (f'<div class="okl"><a class="okl-pas kraje-pas{"" if img else " bez"}" href="kraje.html" data-sekcja="kraje">{img}'
-            '<span class="okl-t"><b>Czym żyje kraj <span class="strz">›</span></b>'
-            '<span class="okl-n">Sprawy, o których pisała prasa tylko jednego kraju</span></span></a></div>')
+            '<span class="okl-t"><b>Czym żyją kraje <span class="strz">›</span></b>'
+            '<span class="okl-n">Tylko u nas: o tym, co nie wychodzi za granicę</span></span></a></div>')
 
 
 # Baner „Czym żyje kraj”: stały zasób wspólny dla wszystkich dni (data/widok/kraje/baner.webp, plx site kopiuje go do
@@ -831,15 +817,27 @@ def page_countries(t: dict, cs: list[dict]) -> list[str]:
     return poster + [c for c in t["kraje"] if c not in poster]
 
 
+# kafelki tematów (od 02.10): panorama ok. 3:1 ze sceną z dzisiejszych opisów krajów, gazetki ukryte w scenie „jak Wally”
+WALLY = ("Hidden in different places of the scene, like in \"Where's Wally\": {mascots}, small (about a fifth of the "
+         "strip height), each in a funny side situation (peeking from behind a building, holding a fire hose, taking a "
+         "photo, sitting on a roof, carrying a ladder); never the main actors of the events. Mascot = a folded newspaper "
+         "with a simple face wearing a scarf in the flag colours; no ethnic features.")
 MASCOT = ("A SMALL mascot in the lower right corner of the strip, about one quarter of the strip height: a folded "
           "newspaper with a simple face wearing a scarf in the colours of the {flag} flag, expression matching the tone; "
           "no ethnic features.")
 
 
-def cover_scene(t: dict) -> str:
-    return (f"a symbolic scene for the press topic \"{t['nazwa']}\": {SCENES.get(t['temat'], t['nazwa'])}; maps, "
-            "symbols and places like a magazine cover tile. Keep the lower left third of the strip calm and plain (a "
-            "caption is laid over it later).")
+def cover_scene(t: dict, opisy: dict) -> str:
+    """Theme tile: a wide panorama of what the press wrote on the theme that day (country descriptions), not a fixed
+    symbol, so every day gets a new picture; newspaper mascots of up to 4 countries hidden in it."""
+    said = [w["zdanie"] for c in t["kraje"] for w in opisy["opisy"].get(c, {}).get("watki", [])
+            if w["temat"] == t["temat"]][:3]
+    what = " ".join(said) or SCENES.get(t["temat"], t["nazwa"])
+    return (f"a wide panorama for the press topic \"{t['nazwa']}\" showing concretely what the press wrote about today "
+            f"(places, people, objects, actions; as they are, without softening): {what} "
+            + WALLY.format(mascots=", ".join(f"the {NAMES[c]} mascot (scarf {FLAGS[c]})" for c in list(t["kraje"])[:4]))
+            + " The scene fills the strip edge to edge down to the bottom bar, NO empty band; only its lowest fifth is "
+            "simpler (ground, road or water) because a caption is overlaid there later.")
 
 
 def country_scene(t: dict, c: str, pods: dict, opisy: dict) -> str:
@@ -859,12 +857,12 @@ def strip_jobs(ts: list[dict], opisy: dict, pl: dict) -> list[tuple[str, object]
     """Codex jobs of the day: cover strips (one per theme) and country strips per theme (one per country on the page)."""
     import paski
     jobs = []
-    for k, part in enumerate(paski.split(ts, 3)):                # pas okładki ok. 2:1: najwyżej 3 na obrazek
-        name = f"okladka-{'AB'[k]}"
+    for k, part in enumerate(ts[i:i + 2] for i in range(0, len(ts), 2)):   # panorama ok. 3:1: 2 na obrazek poziomy
+        name = f"okladka-{'ABCD'[k]}"
         if all(theme_strip(t).exists() for t in part):            # ponowne uruchomienie: tylko brakujące
             continue
         jobs.append((name, lambda part=part, name=name: paski.make(
-            OUT / f"_gen-{name}", paski.prompt([cover_scene(t) for t in part]), [theme_strip(t) for t in part],
+            OUT / f"_gen-{name}", paski.prompt([cover_scene(t, opisy) for t in part], landscape=True), [theme_strip(t) for t in part],
             PASKI / f"{name}.png")))
     for t in ts:
         cs = poster_data(t, opisy, pl)
@@ -928,8 +926,14 @@ STRIPS_CSS = (
     "border:7px solid transparent;border-bottom:10px solid var(--tusz);border-top:0}"
     "@media(max-width:480px){.okl-t b{font-size:1.05em}.okl-t{padding:16px 9px 6px}.dymek{max-width:88%}}"
     # okładka z pasów (scripts/v2/okladka.py): tytuł i flagi jak na pasach tematów (.okl-t), kolumny krajów pod pasem
-    ".pp-sek{margin:18px 2px 6px;color:var(--cegla);font:700 .8em 'Segoe UI',sans-serif;letter-spacing:.08em;"
-    "text-transform:uppercase;border-bottom:1px solid var(--linia);padding-bottom:4px}"
+    # nagłówek jak winieta gazety (podwójna linia, data w ceglanym polu), sekcje jako ceglane belki jak na dawnym plakacie
+    ".pp .okl-h{border-top:4px double var(--tusz);border-bottom:4px double var(--tusz);margin:6px 0 4px;padding:10px 4px 8px}"
+    ".pp .okl-h h1{color:var(--tusz);font:900 2.1em/1.1 Georgia,serif;letter-spacing:-.01em}"
+    ".okl-d{display:inline-block;margin-left:10px;padding:2px 9px;background:var(--cegla);color:var(--papier);"
+    "font-size:.7em;vertical-align:middle;border-radius:3px}.pp .okl-h p{font-style:italic;color:var(--tusz)}"
+    ".pp-sek{margin:18px 0 6px;padding:5px 12px;background:var(--cegla);color:var(--papier);font:700 1.2em Georgia,serif;"
+    "border-radius:4px 4px 0 0}"
+    "@media(max-width:480px){.pp .okl-h h1{font-size:1.65em}}"
     ".pp-k{margin:8px 0 12px;border:3px solid var(--tusz);border-radius:8px;overflow:hidden;background:var(--karta);"
     "color:var(--tusz)}.pp-obr{position:relative;display:block;background:var(--tusz);color:var(--papier);text-decoration:none}"
     ".pp-obr:hover,.pp-obr:focus-visible{outline:3px solid var(--cegla);outline-offset:-3px}"
@@ -950,7 +954,7 @@ STRIPS_CSS = (
 
 def strip_cover() -> str:
     """Welcome block in HTML over the cover strips (scripts/v2/okladka.py) once all of them exist, else ""."""
-    if not (OUT / "okladka-sceny.json").exists():
+    if not (OUT / "okl-sprawa-1.webp").exists():
         return ""
     import okladka
     from widok_powitanie import poster_data

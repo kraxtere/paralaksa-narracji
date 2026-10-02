@@ -5,6 +5,25 @@
   streszczenia artykułów. „Czytaj temat” na stronach tematów i zestawień (wstęp + karty krajów po kolei).
 - Bez przycisków: okładka dnia i „Dzień prasy” (same kafelki), stara wersja strony.
 
+# Okładka dnia 2.0: styl dawnego plakatu z gazetkami, bez napisów w obrazku — 2026-10-02
+
+- Nazwy (decyzja właściciela): winieta „Co tam w prasie piszczy” z datą w ceglanym polu, sekcje jako ceglane belki: „Tego
+  dnia”, „Tonacje”, „Autoportret”; kafel „Czym żyją kraje” z podpisem „Tylko u nas: …” (też tytuł `kraje.html`).
+- Gazetki „jak Wally”: rozstawione w różnych miejscach sceny w zabawnych sytuacjach (wąż strażacki, aparat, drabina),
+  nigdy w głównych rolach; scen nie łagodzimy. Scena wypełnia pas do dołu (bez pustego paska pod tytuł).
+- Kafelki tematów: co dzień nowa panorama ok. 3:1 ze scenami z opisów krajów tego dnia (zamiast stałego symbolu tematu),
+  2 pasy na obrazek poziomy (`paski.prompt(landscape=True)`), gazetki do 4 krajów tematu.
+- Oś czasu „Dzień po dniu”: kwadratowe kadry zamiast okrągłych (`pasek.js`).
+- Przełącznik dni (dostępność, dla starszych osób): osobny wiersz paska na całą szerokość, duże przyciski ‹ › (54 px,
+  z datą sąsiedniego dnia) i data słownie na środku (lista dni); na stronach tematów i spraw duży przycisk „Wróć do dnia”.
+- Temat `alliances`: nazwa „Układy mocarstw” zamiast „Sojusze” (decyzja właściciela). Kafel krajów: „Tylko u nas: o tym,
+  co nie wychodzi za granicę”. Nowy wygląd od 01.10; starsze dni zostają jak były (historia).
+
+- Zmiana decyzji: styl E2 i ręczne sceny wyglądały generycznie. Pasy okładki (`okladka.py`) mają sceny i styl dawnego
+  plakatu `powitanie.png` (komiks, gazetki z szalikami, najwyżej 4 w pasie), bez tytułów, podpisów i nazw, z `NO_TEXT` i
+  spokojnym dołem pasa. Usunięte: `IMAGE_STYLE`, `SCENE_RULES`, `paski.styled_prompt`, opisy scen `okladka-sceny.json`.
+  Zasada o flagach jednym zdaniem w `okladka.STYLE`. Układ HTML bez zmian. Pasy 01.10 wygenerowane ponownie (E2 w `_stare/okladka-e2/`).
+
 # Okładka dnia 2.0 z pasów, napisy w HTML, wspólny styl obrazków — 2026-10-02
 
 - Test stylów (A–C, D1–D5, E1/E2/E4 w `data/widok/_styl-test/`): wybrany E2, komiks malowany gwaszem z konturem. Stała

@@ -22,7 +22,7 @@
   description: przebieg wojny, negocjacje, pomoc dla Ukrainy
 
 - id: alliances
-  name_pl: Sojusze
+  name_pl: Układy mocarstw
   description: NATO, UE, relacje transatlantyckie, spójność sojuszy
 
 - id: energy

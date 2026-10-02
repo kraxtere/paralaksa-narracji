@@ -24,8 +24,8 @@ def test_cover_html_sections_titles_flags_and_no_poster():
     """All cover texts in HTML: day title, sections, story titles, 'continued' tag, flags, two columns, footer."""
     page = okladka.cover_html(DATA)
     day = f"{w.DAY[8:10]}.{w.DAY[5:7]}"
-    assert f"<h1>Przegląd prasy · {day}</h1><p>Jeden dzień, wiele perspektyw</p>" in page
-    heads = [w.EVENTS_HEADER, "Gdzie prasa się różni", "Jak kraj widzi siebie"]
+    assert f'<h1>Co tam w prasie piszczy<span class="okl-d">{day}</span></h1><p>Jeden dzień, wiele perspektyw</p>' in page
+    heads = ["Tego dnia", "Tonacje", "Autoportret"]
     assert [page.index(f'class="pp-sek">{h}<') for h in heads] == sorted(page.index(f'class="pp-sek">{h}<') for h in heads)
     assert page.count('class="pp-k"') == page.count('class="pp-obr" href=') == 4 and 'href="sprawa-1.html"' in page and 'href="obraz-kraju.html"' in page
     assert page.count('class="okl-t"') == 4                       # tytuł zawsze w tym samym miejscu: gradient u dołu pasa
@@ -42,15 +42,17 @@ def test_cover_html_sections_titles_flags_and_no_poster():
 
 def test_cover_without_differences_and_self_image():
     page = okladka.cover_html({**DATA, "roznice": [], "autoobraz": None})
-    assert "Gdzie prasa się różni" not in page and "Jak kraj widzi siebie" not in page and page.count('class="pp-k"') == 2
+    assert "Tonacje" not in page and "Autoportret" not in page and page.count('class="pp-k"') == 2
 
 
-def test_styled_prompt_leads_with_common_style_and_forbids_text():
-    text = paski.styled_prompt(["scene one", "scene two", "scene three"])
-    body = text[text.index("PROMPT:\n") + 8:]
-    assert body.startswith(w.IMAGE_STYLE) and "EXACTLY 3 full-width" in body
-    assert "Strip 3 (from the top): scene three" in body and paski.NO_TEXT in body and "mascots" in body
-    assert "paper tones" not in body and "#f4f0e8" not in body     # wspólna część nie narzuca palety
+def test_strip_prompt_poster_style_without_captions():
+    """Strips keep the poster's newspaper mascots and comic style; no captions, names or labels, NO_TEXT instead."""
+    text = paski.prompt([okladka.scene(i, DATA) for i in okladka.items(DATA)][:3], okladka.STYLE)
+    assert "folded newspaper with a face" in text and paski.NO_TEXT in text and "EXACTLY 3 full-width" in text
+    assert "the Niemcy mascot (scarf black-red-gold)" in text
+    assert "exactly:" not in text and "Caption" not in text and "Label" not in text
+    last = okladka.scene(okladka.items(DATA)[-1], DATA)
+    assert "mirror" in last and last.count("mascot (scarf") == 3
 
 
 def test_cover_css_uses_variables_only():

@@ -35,9 +35,9 @@ def test_countries_tile_and_page_header_with_banner(monkeypatch, tmp_path):
     monkeypatch.setattr(w, "country_strips", lambda c, ts: [""] * len(ts))
     tile = w.countries_link()
     assert 'class="okl-pas kraje-pas"' in tile and 'href="kraje.html" data-sekcja="kraje"' in tile
-    assert "../kraje/baner.webp" in tile and "Czym żyje kraj" in tile and "tylko jednego kraju" in tile and "›" in tile
+    assert "../kraje/baner.webp" in tile and "Czym żyją kraje" in tile and "Tylko u nas: o tym, co nie wychodzi za granicę" in tile and "›" in tile
     page = w.countries_page({})
-    assert page.index('class="kraje-baner"') < page.index("<h1>Czym żyje kraj") < page.index('class="kraje-nav"') \
+    assert page.index('class="kraje-baner"') < page.index("<h1>Czym żyją kraje") < page.index('class="kraje-nav"') \
         < page.index("wybrane przez AI")
     banner.unlink()
     assert "kraje-pas bez" in w.countries_link() and 'class="kraje-baner"' not in w.countries_page({})

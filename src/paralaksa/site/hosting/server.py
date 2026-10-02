@@ -127,11 +127,11 @@ def local(dt) -> str:
 SECTIONS = {
     "okladka": ("Okładka", "#6b655b"),
     "sprawy": ("Wydarzenia dnia", "#8a3b2a"),
-    "roznice": ("Gdzie prasa się różni", "#c47f2c"),
+    "roznice": ("Tonacje", "#c47f2c"),
     "obraz": ("Obraz kraju", "#3f6f8a"),
     "tematy": ("Tematy dnia", "#4f7a4a"),
     "os": ("Oś czasu", "#7a5a8a"),
-    "kraje": ("Czym żyje kraj", "#5a6b3a"),
+    "kraje": ("Czym żyją kraje", "#5a6b3a"),
     "stara": ("Stara wersja", "#b3ada2"),
 }
 V2_PAGE = re.compile(r"^/v2/(\d{4}-\d{2}-\d{2})/(.*)$")
