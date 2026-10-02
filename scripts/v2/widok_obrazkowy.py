@@ -220,7 +220,7 @@ def shell(title: str, body: str, debug: bool = False) -> str:
             f'color:#7a746a;font-size:.8em;font-weight:400;white-space:nowrap}}.src img{{width:16px;height:16px;border-radius:3px}}'
             f'.list p{{line-height:1.5}}.list li{{line-height:1.4;margin:4px 0}}.list .ciag{{border-left:4px solid #8a3b2a;'
             f'background:#fbf8f2;padding:8px 12px;border-radius:0 8px 8px 0}}.ciag b{{color:#8a3b2a}}.list .ciag a{{color:#8a3b2a}}'
-            f'h2 .src{{font-size:.55em}}.il{{width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:3px}}</style></head><body>{body}</body></html>')
+            f'h2 .src{{font-size:.55em}}.list h3{{margin:14px 0 2px;font-size:1.05em}}.kraje-link{{display:flex;justify-content:space-between;align-items:center;max-width:720px;margin:10px auto;box-sizing:border-box;border:2px solid #1d1b18;border-radius:6px;background:#fbf8f2;color:#1d1b18;text-decoration:none;padding:8px 12px}}.kraje-link b{{color:#8a3b2a;font:700 1.2em Georgia,serif}}.kraje-link:hover{{box-shadow:0 0 0 3px rgba(138,59,42,.25)}}@media(max-width:740px){{.kraje-link{{margin:8px 6px}}}}.il{{width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:3px}}</style></head><body>{body}</body></html>')
 
 
 def main_theme(ids: set[int]) -> dict[int, str]:
@@ -607,6 +607,41 @@ def welcome_pages(pl: dict) -> None:
         (OUT / f"{key}.html").write_text(shell(title, body), encoding="utf-8")
 
 
+def countries_data() -> dict:
+    """Topics present only in one country's press (scripts/v2/kraje.py), Poland first."""
+    path = Path("data/widok/kraje") / f"{DAY}.json"
+    return json.loads(path.read_text(encoding="utf-8"))["kraje"] if path.exists() else {}
+
+
+def countries_page(pl: dict) -> str:
+    """„Tylko tutaj”: per country, national topics outside the multi-country events of the day."""
+    data = countries_data()
+    info = article_info({i for ts in data.values() for t in ts for i in t["ids"]})
+    blocks = []
+    for country in sorted(data, key=lambda c: (c != "PL", NAMES.get(c, c))):
+        if not data[country]:
+            continue
+        sids = list(dict.fromkeys(info[i]["src"] for t in data[country] for i in t["ids"] if i in info))
+        topics = "".join(f'<h3>{esc(t["tytul"])}</h3><p>{esc(t["opis"])}</p>{article_list(t["ids"], pl)}'
+                         for t in data[country])
+        blocks.append(f'<section id="kraj-{country}"><h2>{esc(NAMES.get(country, country))}'
+                      f'{"".join(src_html(sid) for sid in sids)}</h2>{topics}</section>')
+    title = f"Tylko tutaj · {DAY[8:10]}.{DAY[5:7]}"
+    body = (bar("index.html") + f'<div class="list" data-sekcja="kraje"><h1>{esc(title)}</h1>'
+            '<p>Sprawy obecne w prasie jednego kraju, nieobecne w Wydarzeniach dnia.</p>'
+            '<p class="s">Tematy i opisy wybrane przez AI z nagłówków prasy; nagłówki w tłumaczeniu roboczym, '
+            'dłuższe skrócone do 15 słów.</p>' + "".join(blocks) + '</div>')
+    return shell(title, body)
+
+
+def countries_link() -> str:
+    """Strip under the cover leading to kraje.html (only when the day has national topics)."""
+    if not any(countries_data().values()):
+        return ""
+    return ('<a class="kraje-link" href="kraje.html" data-sekcja="kraje"><b>Tylko tutaj</b>'
+            '<span>Sprawy z prasy jednego kraju ›</span></a>')
+
+
 def index_page(ts: list[dict], rects, debug: bool = False) -> str:
     welcome = ""
     if (OUT / "powitanie.png").exists():
@@ -618,7 +653,7 @@ def index_page(ts: list[dict], rects, debug: bool = False) -> str:
         welcome = overlay("powitanie.png", f"Przegląd prasy {DAY}: {EVENTS_HEADER.lower()} i różnice",
                           [(f"{k}.html", summaries[k].get("tytul") or cards[k]["tytul"]) for k in WELCOME_KEYS if k in reg],
                           [reg[k] for k in WELCOME_KEYS if k in reg], "okladka")
-    body = bar(None) + welcome + overlay("start.png", f"Czym żyła prasa {DAY}: " + ", ".join(t["nazwa"] for t in ts),
+    body = bar(None) + welcome + countries_link() + overlay("start.png", f"Czym żyła prasa {DAY}: " + ", ".join(t["nazwa"] for t in ts),
                                [(f"temat-{t['temat']}.html", t["nazwa"]) for t in ts], rects, "tematy")
     return shell(f"Paralaksa · {DAY}", body, debug)
 
@@ -664,6 +699,8 @@ def main():
     rects = detect_panels(OUT / "start.png")
     if cmd == "indeks":                      # tylko strona dnia (np. nowy układ okładki), bez stron tematów i spraw
         (OUT / "index.html").write_text(index_page(ts, rects), encoding="utf-8")
+        if countries_data():
+            (OUT / "kraje.html").write_text(countries_page(pl), encoding="utf-8")
         print("index.html")
         return
     for t in ts:
@@ -673,6 +710,8 @@ def main():
         (OUT / f"_podglad-temat-{t['temat']}.html").write_text(theme_page(t, opisy, pl, cs, debug=True), encoding="utf-8")
     if (OUT / "powitanie.png").exists():
         welcome_pages(pl)
+    if countries_data():
+        (OUT / "kraje.html").write_text(countries_page(pl), encoding="utf-8")
     (OUT / "index.html").write_text(index_page(ts, rects), encoding="utf-8")
     (OUT / "_podglad-index.html").write_text(index_page(ts, rects, debug=True), encoding="utf-8")
     if len(sys.argv) > 2:

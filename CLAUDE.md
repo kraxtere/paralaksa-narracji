@@ -29,7 +29,8 @@ Procedura dnia strony 2.0: `scripts/v2/README.md`.
   model `codex[:model][:effort]`, tylko lokalnie, nigdy „ultra”), `aggregate/`, `report/` (okładka przez Codex lokalnie), `site/`
   (`plx site`: `build.py`, `data.py`, `stories.py`, `titles.py`, `publish.py`, `assets/pasek.js` wspólny pasek 2.0, `hosting/server.py`
   Render + konta + push), `gdelt/`, `events/`, `board/`.
-- `scripts/v2/`: strona 2.0 (widok_obrazkowy, widok_powitanie, os_czasu, streszczenia, dzien_prasy). Wyniki w `data/widok/`.
+- `scripts/v2/`: strona 2.0 (widok_obrazkowy, widok_powitanie, os_czasu, streszczenia, dzien_prasy, kraje → `D/kraje.html`
+  „Tylko tutaj”). Wyniki w `data/widok/`.
 - `.github/workflows/daily.yml`: cron, baza w zaszyfrowanym Release, bez syntezy.
 
 ## Konwencje

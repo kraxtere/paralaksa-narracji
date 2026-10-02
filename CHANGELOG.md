@@ -1,3 +1,11 @@
+# Strona „Tylko tutaj” (Kraje) — 2026-10-02
+
+- `widok_obrazkowy.py` buduje `data/widok/D/kraje.html` z `data/widok/kraje/D.json`: sekcja na kraj (Polska pierwsza, logo
+  redakcji), tematy z opisem i nagłówkami jak w `article_list` (`data-a`, streszczenia po kliknięciu). Polecenia `strona` i `indeks`.
+- Okładka: pasek „Tylko tutaj · Sprawy z prasy jednego kraju” pod obrazkiem okładki (okładka to jeden obraz z polami, więc link
+  nie siedzi w samym obrazku). `data-sekcja="kraje"`, w panelu właściciela sekcja „Tylko tutaj” (`server.section_of`).
+- 01.10: 94 nagłówki na stronie, 79 nowych streszczeń; opublikowane.
+
 # Źródła: włączone wp i gazeta — 2026-10-02
 
 - `wp` (Wirtualna Polska) i `gazeta` (Gazeta.pl) aktywne (decyzja właściciela); razem 34 aktywne źródła. Próba na pustej
