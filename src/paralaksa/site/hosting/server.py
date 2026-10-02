@@ -146,6 +146,8 @@ def section_of(place: str) -> str:
         return "stara"
     if path.startswith("/v2/os/"):
         return "os"
+    if path.startswith("/v2/kraje/"):                         # oś kraju (scripts/v2/kraje.py strona)
+        return "kraje"
     found = V2_PAGE.match(path)
     name = found.group(2) if found else ""
     for prefix, key in (("sprawa-", "sprawy"), ("roznica-", "roznice"), ("obraz-kraju", "obraz"), ("temat-", "tematy"), ("kraje", "kraje")):

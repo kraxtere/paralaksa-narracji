@@ -9,12 +9,15 @@ Wynik: data/widok/kraje/D.json {"day", "model", "kraje": {"PL": [{"tytul", "opis
 Obrazki: jeden pionowy obrazek 1024×1536 na kraj, N poziomych pasków (N = liczba tematów) rozdzielonych grubą ciemną
 ramką; paski wycinane po wykrytych ramkach (inna liczba niż N = błąd, nic nie zapisane) do data/widok/kraje/D/KRAJ-n.webp,
 tytuły tematów w data/widok/kraje/D/KRAJ.json (strona pokazuje paski tylko przy zgodnych tytułach).
+  python scripts/v2/kraje.py ciag 2026-10-01      # Codex: które tematy to ciąg dalszy spraw z 7 dni wstecz (ciag_od)
+  python scripts/v2/kraje.py strona               # oś kraju data/widok/kraje/KRAJ.html, wszystkie dni, najnowszy u góry
 """
 import json
 import re
 import sqlite3
 import sys
 from concurrent.futures import ThreadPoolExecutor
+from datetime import date, timedelta
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -218,9 +221,134 @@ def images(day: str, countries: list[str]) -> None:
         print(f"{country}: {len(boxes)} pasków {im.size[0]}×{im.size[1]} -> {folder}")
 
 
+def strip_names(day: str, country: str, topics: list[dict]) -> list[str]:
+    """Strip files of the topics (data/widok/kraje/D/KRAJ-n.webp) when the stored titles match the current ones."""
+    saved = OUT / day / f"{country}.json"
+    if saved.exists() and json.loads(saved.read_text(encoding="utf-8")) == [t["tytul"] for t in topics]:
+        return [f"{country}-{n}.webp" for n in range(1, len(topics) + 1)]
+    return []
+
+
+def load_days() -> dict[str, dict]:
+    return {p.stem: json.loads(p.read_text(encoding="utf-8"))["kraje"] for p in sorted(OUT.glob("*.json"))
+            if re.fullmatch(r"\d{4}-\d{2}-\d{2}", p.stem)}
+
+
+def ciag_prompt(country: str, day: str, topics: list[dict], previous: dict[str, list[dict]]) -> str:
+    def line(key, t):
+        return f"- {key}: {t['tytul']}. {t['opis']}"
+    return (
+        f"Niżej tematy prasy z kraju {country} z dnia {day} (numerowane) i tematy tej samej prasy z poprzednich dni "
+        "(klucz DATA#n). Wskaż tematy dnia, które są CIĄGIEM DALSZYM konkretnej sprawy z poprzednich dni: ta sama sprawa, "
+        "te same osoby lub instytucje, kolejny etap (np. nowe zarzuty w tym samym śledztwie). Sam ten sam obszar "
+        "(np. dwie różne sprawy sądowe) to NIE ciąg dalszy. Przy kilku pasujących dniach wskaż najpóźniejszy.\n"
+        "Zwróć WYŁĄCZNIE JSON: {\"ciag\":[{\"temat\":1,\"od\":\"2026-09-30#2\"}]} (pusta lista, jeśli nic).\n\n"
+        f"Tematy dnia {day}:\n" + "\n".join(line(n, t) for n, t in enumerate(topics, 1)) +
+        "\n\nPoprzednie dni:\n" + "\n".join(line(f"{d}#{n}", t) for d in sorted(previous)
+                                            for n, t in enumerate(previous[d], 1)))
+
+
+def check_ciag(pairs: list, n_today: int, previous: dict[str, list[dict]]) -> list[str]:
+    """The day and the topic referenced as the earlier case must exist; each topic of the day at most once."""
+    errors, seen = [], set()
+    for p in pairs:
+        if not isinstance(p, dict) or not isinstance(p.get("temat"), int) or not isinstance(p.get("od"), str):
+            errors.append(f"zły wpis {p}")
+            continue
+        found = re.fullmatch(r"(\d{4}-\d{2}-\d{2})#(\d+)", p["od"])
+        if not 1 <= p["temat"] <= n_today or p["temat"] in seen:
+            errors.append(f"temat {p['temat']}: spoza listy albo powtórzony")
+        elif not found or found.group(1) not in previous:
+            errors.append(f"temat {p['temat']}: dzień {p['od']} nie istnieje")
+        elif not 1 <= int(found.group(2)) <= len(previous[found.group(1)]):
+            errors.append(f"temat {p['temat']}: {p['od']} nie ma takiego tematu")
+        seen.add(p["temat"])
+    return errors
+
+
+def ciag(day: str) -> None:
+    """Mark the day's topics that continue a case of the last 7 days (ciag_od: first day of the case)."""
+    from widok_obrazkowy import codex_text
+    days = load_days()
+    data = days[day]
+    window = {(date.fromisoformat(day) - timedelta(days=k)).isoformat() for k in range(1, 8)}
+
+    def one(country: str) -> int:
+        topics = data[country]
+        for t in topics:
+            t.pop("ciag_od", None)
+        previous = {d: days[d][country] for d in sorted(window & days.keys()) if days[d].get(country)}
+        if not topics or not previous:
+            return 0
+        text, pairs = ciag_prompt(country, day, topics, previous), []
+        for attempt in range(2):
+            raw = codex_text(OUT / f"_codex-ciag-{country}", text)
+            try:
+                pairs = json.loads(raw[raw.index("{"):raw.rindex("}") + 1])["ciag"]
+                errors = check_ciag(pairs, len(topics), previous)
+            except (ValueError, KeyError, TypeError) as e:
+                errors = [f"niepoprawny JSON ({e})"]
+            if not errors:
+                break
+            print(f"{country}: {'ponawiam' if attempt == 0 else 'pomijam kraj'}: {'; '.join(errors)[:300]}", flush=True)
+            text, pairs = ciag_prompt(country, day, topics, previous) + "\n\nPoprzednio błędy:\n" + "\n".join(errors), []
+        for p in pairs:
+            d, n = p["od"].split("#")
+            earlier = previous[d][int(n) - 1]
+            topics[p["temat"] - 1]["ciag_od"] = earlier.get("ciag_od") or d     # początek sprawy, nie poprzedni etap
+        return len(pairs)
+
+    with ThreadPoolExecutor(4) as ex:
+        found = sum(ex.map(one, list(data)))
+    doc = json.loads((OUT / f"{day}.json").read_text(encoding="utf-8"))
+    doc["kraje"] = data
+    (OUT / f"{day}.json").write_text(json.dumps(doc, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"{day}: ciąg dalszy w {found} tematach (dni wstecz z danymi: {len(window & days.keys())})")
+
+
+def country_pages() -> None:
+    """data/widok/kraje/KRAJ.html: every day with national topics of the country, newest first (plx site -> v2/kraje/)."""
+    import widok_obrazkowy as W
+    days = load_days()
+    order = sorted(days, reverse=True)
+    countries = sorted({c for d in days for c, ts in days[d].items() if ts}, key=lambda c: (c != "PL", W.NAMES.get(c, c)))
+    W.OUT = OUT                                   # src_html kopiuje logo obok strony
+    for country in countries:
+        sections = []
+        for d in order:
+            topics = days[d].get(country) or []
+            if not topics:
+                continue
+            W.DAY = d
+            pl = {**W.polish_titles(), **W.titles.cached(Path("data/tytuly"), d)}
+            strips = strip_names(d, country, topics) or [""] * len(topics)
+            body = ""
+            for t, strip in zip(topics, strips):
+                img = f'<img class="pas" src="{d}/{strip}" alt="" loading="lazy">' if strip else ""
+                od = t.get("ciag_od")
+                note = (f'<p class="ciag"><a href="#d-{od}"><b>Ciąg dalszy</b> · od {od[8:10]}.{od[5:7]}</a></p>'
+                        if od else "")
+                body += f'{img}<h3>{W.esc(t["tytul"])}</h3>{note}<p>{W.esc(t["opis"])}</p>{W.article_list(t["ids"], pl)}'
+            sections.append(f'<section id="d-{d}"><h2>{d[8:10]}.{d[5:7]} <a class="osk" href="../{d}/kraje.html'
+                            f'#kraj-{country}">cały dzień →</a></h2>{body}</section>')
+        name = W.NAMES.get(country, country)
+        title = f"{name} · tylko tutaj"
+        page = (f'<div id="pasek" data-dzien="{order[0]}" data-wstecz></div><script src="../pasek.js"></script>'
+                f'<div class="list" data-sekcja="kraje"><h1>{W.esc(title)}</h1>'
+                f'<p>Sprawy obecne tylko w prasie tego kraju ({W.esc(name)}), dzień po dniu, najnowszy u góry.</p>'
+                '<p class="s">Tematy i opisy wybrane przez AI z nagłówków prasy; nagłówki w tłumaczeniu roboczym, '
+                'dłuższe skrócone do 15 słów.</p>' + "".join(sections) + '</div>')
+        (OUT / f"{country}.html").write_text(W.shell(title, page), encoding="utf-8")
+    print(f"strony osi kraju: {len(countries)} ({', '.join(countries)}), dni: {len(order)}")
+
+
 if __name__ == "__main__":
     if len(sys.argv) >= 3 and sys.argv[1] == "obrazki" and re.fullmatch(r"\d{4}-\d{2}-\d{2}", sys.argv[2]):
         images(sys.argv[2], sys.argv[3:] or ["PL"])
+    elif len(sys.argv) == 3 and sys.argv[1] == "ciag" and re.fullmatch(r"\d{4}-\d{2}-\d{2}", sys.argv[2]):
+        ciag(sys.argv[2])
+    elif sys.argv[1:] == ["strona"]:
+        country_pages()
     elif len(sys.argv) == 2 and re.fullmatch(r"\d{4}-\d{2}-\d{2}", sys.argv[1]):
         main(sys.argv[1])
     else:

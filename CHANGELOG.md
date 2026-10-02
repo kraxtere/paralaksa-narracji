@@ -1,3 +1,13 @@
+# Kraje: oś kraju w czasie — 2026-10-02
+
+- `scripts/v2/kraje.py strona`: strona osi kraju `data/widok/kraje/KRAJ.html` ze wszystkich dni w `data/widok/kraje/*.json`,
+  najnowszy u góry; sekcja na dzień z tematami (paski grafik, jeśli są i tytuły się zgadzają, opis, nagłówki z `data-a`)
+  i linkiem do strony dnia. `plx site` kopiuje ją do `v2/kraje/` razem z logo i paskami dni; serwer liczy ją do sekcji „kraje”.
+- `scripts/v2/kraje.py ciag D`: Codex porównuje tematy dnia z tematami tego kraju z 7 dni wstecz i oznacza ciąg dalszy
+  (`ciag_od`: pierwszy dzień sprawy). Walidacja w kodzie: wskazany dzień i temat muszą istnieć. Na osi kraju etykieta
+  „Ciąg dalszy · od DD.MM” z linkiem do tamtego dnia. Dla 01.10 brak wcześniejszych dni, więc bez oznaczeń.
+- Strona dnia „Tylko tutaj”: przy nazwie kraju link „Cała oś kraju →”. `streszczenia.py shown_ids` skanuje też osie krajów.
+
 # Kraje: paski scen nad tematami — 2026-10-02
 
 - `scripts/v2/kraje.py obrazki D [KRAJ...]` (domyślnie PL): jeden pionowy obrazek Codex 1024×1536 na kraj, N poziomych

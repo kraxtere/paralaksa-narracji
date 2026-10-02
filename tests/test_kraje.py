@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parents[1] / "scripts" / "v2"))
-from kraje import check  # noqa: E402
+from kraje import check, check_ciag  # noqa: E402
 
 
 def test_check_topics():
@@ -14,3 +14,12 @@ def test_check_topics():
     assert any("tytuł ma 7" in e for e in errors) and any("opis ma 71" in e for e in errors)
     assert any("opis ma 2 " in e for e in check([{"tytul": "x", "opis": "Krótki opis.", "ids": [3]}], items))
     assert check([{"tytul": "x", "opis": "y", "ids": [1]}] * 6, items)
+
+
+def test_check_ciag():
+    prev = {"2026-09-30": [{"tytul": "a"}, {"tytul": "b"}]}
+    assert check_ciag([{"temat": 1, "od": "2026-09-30#2"}], 3, prev) == []
+    errors = check_ciag([{"temat": 1, "od": "2026-09-29#1"}, {"temat": 2, "od": "2026-09-30#3"},
+                         {"temat": 2, "od": "2026-09-30#1"}, {"temat": 4, "od": "2026-09-30#1"}], 3, prev)
+    assert [e.split(":")[0] for e in errors] == ["temat 1", "temat 2", "temat 2", "temat 4"]
+    assert "nie istnieje" in errors[0] and "nie ma takiego" in errors[1] and "powtórzony" in errors[2]

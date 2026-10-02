@@ -28,7 +28,7 @@ QUOTE = re.compile(r'[„"«“]([^”"»„“]+)[”"»“]')
 
 def shown_ids(day: str | None) -> list[int]:
     """Article ids linked from the pages: one day (and the axis) or all days."""
-    files = list((ROOT / "os").glob("index.html"))
+    files = list((ROOT / "os").glob("index.html")) + list((ROOT / "kraje").glob("*.html"))   # oś czasu, osie krajów
     days = [ROOT / day] if day else [d for d in ROOT.iterdir() if re.fullmatch(r"\d{4}-\d{2}-\d{2}", d.name)]
     for d in days:
         files += [f for f in d.glob("*.html") if not f.name.startswith("_")]

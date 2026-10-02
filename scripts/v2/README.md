@@ -26,7 +26,9 @@ robi Codex z limitu konta (`codex_limit.py` pokazuje zużycie). Nigdy w Actions.
 8. `python scripts/v2/kraje.py D`: „tylko tutaj”, 3–5 tematów krajowych z artykułów spoza wydarzeń wielokrajowych
    (po krokach 5 i 7; `data/widok/kraje/D.json`, Codex, ok. 2 min). Potem `python scripts/v2/kraje.py obrazki D`
    (domyślnie tylko PL; 1 obrazek z dobowego limitu na kraj): paski scen nad tematami (`data/widok/kraje/D/PL-n.webp`);
-   przy innej liczbie wykrytych pasków niż tematów błąd i nic nie zapisane. Na koniec `DZIEN=D widok_obrazkowy.py strona`.
+   przy innej liczbie wykrytych pasków niż tematów błąd i nic nie zapisane. Potem `python scripts/v2/kraje.py ciag D`
+   (Codex: ciąg dalszy spraw z 7 dni wstecz, pole `ciag_od`) i `python scripts/v2/kraje.py strona` (osie krajów
+   `data/widok/kraje/KRAJ.html`, wszystkie dni). Na koniec `DZIEN=D widok_obrazkowy.py strona`.
 9. `python scripts/v2/streszczenia.py D`: streszczenia artykułów pod nagłówkami stron dnia i osi (tylko brakujące).
 10. `plx site --db data/prod.db --publikuj`.
 

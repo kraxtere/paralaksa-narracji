@@ -186,6 +186,13 @@ def copy_v2(src: Path | None, dest: Path) -> list[str]:
     if axis and (axis / "index.html").exists() and (axis / "skrot.json").exists():
         copy(axis, dest / "os")
         shutil.copy2(axis / "skrot.json", dest / "os.json")
+    # oś kraju „tylko tutaj” (scripts/v2/kraje.py strona): widok/kraje/KRAJ.html z logo i paski dni widok/kraje/D/*.webp
+    countries = src / "kraje" if days else None
+    if countries and any(countries.glob("*.html")):
+        copy(countries, dest / "kraje")
+        for d in countries.iterdir():
+            if d.is_dir() and re.fullmatch(r"\d{4}-\d{2}-\d{2}", d.name):
+                copy(d, dest / "kraje" / d.name)
     # streszczenia artykułów pod nagłówkami (scripts/v2/streszczenia.py), pasek.js pobiera plik przy kliknięciu
     summaries = src / "streszczenia" if days else None
     if summaries and summaries.exists():

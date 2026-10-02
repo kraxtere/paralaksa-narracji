@@ -220,7 +220,7 @@ def shell(title: str, body: str, debug: bool = False) -> str:
             f'color:#7a746a;font-size:.8em;font-weight:400;white-space:nowrap}}.src img{{width:16px;height:16px;border-radius:3px}}'
             f'.list p{{line-height:1.5}}.list li{{line-height:1.4;margin:4px 0}}.list .ciag{{border-left:4px solid #8a3b2a;'
             f'background:#fbf8f2;padding:8px 12px;border-radius:0 8px 8px 0}}.ciag b{{color:#8a3b2a}}.list .ciag a{{color:#8a3b2a}}'
-            f'h2 .src{{font-size:.55em}}.list h3{{margin:14px 0 2px;font-size:1.05em}}.kraje-link{{display:flex;justify-content:space-between;align-items:center;max-width:720px;margin:10px auto;box-sizing:border-box;border:2px solid #1d1b18;border-radius:6px;background:#fbf8f2;color:#1d1b18;text-decoration:none;padding:8px 12px}}.kraje-link b{{color:#8a3b2a;font:700 1.2em Georgia,serif}}.kraje-link:hover{{box-shadow:0 0 0 3px rgba(138,59,42,.25)}}@media(max-width:740px){{.kraje-link{{margin:8px 6px}}}}.pas{{display:block;width:100%;height:auto;border-radius:10px;margin:18px 0 6px}}.il{{width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:3px}}</style></head><body>{body}</body></html>')
+            f'h2 .src{{font-size:.55em}}.list h3{{margin:14px 0 2px;font-size:1.05em}}.kraje-link{{display:flex;justify-content:space-between;align-items:center;max-width:720px;margin:10px auto;box-sizing:border-box;border:2px solid #1d1b18;border-radius:6px;background:#fbf8f2;color:#1d1b18;text-decoration:none;padding:8px 12px}}.kraje-link b{{color:#8a3b2a;font:700 1.2em Georgia,serif}}.kraje-link:hover{{box-shadow:0 0 0 3px rgba(138,59,42,.25)}}@media(max-width:740px){{.kraje-link{{margin:8px 6px}}}}.osk{{font-size:.55em;font-weight:400;margin-left:8px;color:#8a3b2a;white-space:nowrap}}.pas{{display:block;width:100%;height:auto;border-radius:10px;margin:18px 0 6px}}.il{{width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:3px}}</style></head><body>{body}</body></html>')
 
 
 def main_theme(ids: set[int]) -> dict[int, str]:
@@ -617,15 +617,11 @@ def country_strips(country: str, topics: list[dict]) -> list[str]:
     """Scene strips over the topics (scripts/v2/kraje.py obrazki), copied next to kraje.html; only when the stored
     topic titles match the current ones, otherwise none."""
     import shutil
-    folder = Path("data/widok/kraje") / DAY
-    saved = folder / f"{country}.json"
-    if not saved.exists() or json.loads(saved.read_text(encoding="utf-8")) != [t["tytul"] for t in topics]:
-        return [""] * len(topics)
-    out = []
-    for n, t in enumerate(topics, 1):
-        shutil.copy2(folder / f"{country}-{n}.webp", OUT / f"kraje-{country}-{n}.webp")
-        out.append(f'<img class="pas" src="kraje-{country}-{n}.webp" alt="" loading="lazy">')
-    return out
+    from kraje import strip_names
+    names = strip_names(DAY, country, topics)
+    for name in names:
+        shutil.copy2(Path("data/widok/kraje") / DAY / name, OUT / f"kraje-{name}")
+    return [f'<img class="pas" src="kraje-{name}" alt="" loading="lazy">' for name in names] or [""] * len(topics)
 
 
 def countries_page(pl: dict) -> str:
@@ -641,7 +637,8 @@ def countries_page(pl: dict) -> str:
         topics = "".join(f'{strips[k]}<h3>{esc(t["tytul"])}</h3><p>{esc(t["opis"])}</p>{article_list(t["ids"], pl)}'
                          for k, t in enumerate(data[country]))
         blocks.append(f'<section id="kraj-{country}"><h2>{esc(NAMES.get(country, country))}'
-                      f'{"".join(src_html(sid) for sid in sids)}</h2>{topics}</section>')
+                      f'{"".join(src_html(sid) for sid in sids)}<a class="osk" href="../kraje/{country}.html">Cała oś kraju →</a>'
+                      f'</h2>{topics}</section>')
     title = f"Tylko tutaj · {DAY[8:10]}.{DAY[5:7]}"
     body = (bar("index.html") + f'<div class="list" data-sekcja="kraje"><h1>{esc(title)}</h1>'
             '<p>Sprawy obecne w prasie jednego kraju, nieobecne w Wydarzeniach dnia.</p>'
