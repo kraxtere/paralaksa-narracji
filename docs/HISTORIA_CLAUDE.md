@@ -1,0 +1,309 @@
+# CLAUDE.md
+
+## Dla nowej sesji / agenta
+Historia projektu żyje w plikach, nie w kontekście rozmowy. Zanim zaczniesz cokolwiek odtwarzać
+z pamięci: `CHANGELOG.md` ma decyzje i wyniki per kamień milowy, ten plik ma bieżący stan i konwencje,
+`git log` i kod są źródłem prawdy o szczegółach implementacji. Sesja, która to napisała, mogła zostać
+zamknięta bez utraty informacji — nie zakładaj, że coś trzeba „przypomnieć sobie" z transkryptu.
+Przy dużych wynikach (porównania modeli, zrzuty danych) pisz do plików i odsyłaj ścieżką, nie wklejaj
+całości do czatu — to niepotrzebnie puchnie kontekst rozmowy.
+
+## Projekt
+**Paralaksa narracji**: codzienna analiza przekazu medialnego z wielu krajów (PL, UA, DE, UK
+i spoza bloku). Porównujemy linie przekazu w tematach, nie relacje z tego samego wydarzenia.
+Pełna specyfikacja: `SPEC.md`. Jest źródłem prawdy, ale nazewnictwo w repo różni się od niej:
+
+| SPEC | repo |
+|---|---|
+| `radar-narracji`, „Radar narracji” | `paralaksa-narracji`, „Paralaksa narracji” |
+| pakiet `src/radar` | `src/paralaksa` |
+| komenda `radar` | `plx` |
+| `data/radar.db` | `data/paralaksa.db` |
+
+## Zwrot koncepcji: Paralaksa zdarzeń (2026-09-23)
+Po przeglądzie prawnym kierunek to krótka forma: jedno zdarzenie, nagłówki z wielu krajów obok siebie, bez komentarza.
+Koncepcja, zasady formatu i plan KM4 w nowym kierunku: `docs/PARALAKSA_ZDARZEN.md`. Prototyp: `plx board events/<id>.yaml`
+(`src/paralaksa/board/`, wynik w `data/boards/`). Daily z raportem działa dalej bez zmian.
+2026-09-24: format „Jedno zdarzenie. Dwie opowieści.”, ręczny pilot na kartach `events/*.md` (zasady: `events/README.md`).
+Automatyzacja dopiero po pilocie.
+Wyjątek: `plx events check` (`src/paralaksa/events/check.py`) podpowiada do kart kopie Wayback z dnia publikacji, h1/og:title
+i datePublished/dateModified z kopii, zmiany i naprzemienność nagłówków (test A/B) oraz tytuł z naszej bazy. Raport w `data/checks/`.
+Nigdy nie zmienia karty ani `sprawdzil`. Indeks CDX odmawia części domen (np. Guardian, 403), wtedy są tylko kopie najbliższe krańcom okna.
+`plx events archive` (`src/paralaksa/events/archive.py`) wypełnia tylko puste `archiwum`: istniejąca kopia do 48 h po publikacji
+albo nowa przez Save Page Now (SPN2, wymaga `IA_ACCESS_KEY`/`IA_SECRET_KEY`; anonimowe SPN zwraca 401, stan z 2026-09-24).
+
+## Aktualizacja przed KM4 (2026-09-23)
+
+Aktualny punkt wejścia: `docs/CURRENT_HANDOFF.md`, stan źródeł: `docs/SOURCE_REVIEW.md`,
+obsługa: `docs/OPERATIONS.md`. Poniższe decyzje KM1–3 zachowano jako historię.
+Nowe reguły mają pierwszeństwo przed dawnymi uwagami o dniu pobrania i starcie od zera:
+- migracja v4, rzeczywiste braki dat publikacji; regularne porównania z okna D-1..D UTC;
+- pochodzenie każdej tezy po signal_id/theme_id/kraju/redakcji, odrzucenie całej wadliwej tezy;
+- JS wyłącznie rozkład stance, pewność niska przy jednej redakcji; audyt semantyczny pending;
+- metadane i wagi, konserwatywna kontrola identycznej syndykacji, jawne odłożenia;
+- trwały zaszyfrowany backup Release, nigdy cichy restart bazy; wymagany DB_BACKUP_KEY;
+- kandydaci nieaktywni do kompletu bramek. Nie twierdzić, że rozszerzony koszyk przeszedł odbiór.
+
+## Stan KM3 (2026-09-23)
+- [x] **KM1: szkielet i ingest.** Konfiguracja YAML + pydantic, SQLite (pełny schemat §7
+  + `fetch_log`, `schema_version`), ingest RSS/Atom/RDF dla 10 źródeł, pełne teksty, `plx init-db | sources | ingest`, testy.
+- [x] **KM2: ekstrakcja sygnałów.** Prompt (`prompts/extract_signals.md`), klient LLM z retry
+  (`LLMClient` – Anthropic, `DeepSeekClient` – OpenAI-compatible), Message Batches API (Anthropic,
+  próg 50 artykułów), walidacja pydantic sygnałów, kontrola kosztów dziennych. Model produkcyjny:
+  **DeepSeek V4-Pro**, decyzja i metodologia niżej.
+- [x] **KM3: agregacja i raport.** Metryki dzienne, pakiet danych SPEC §9.3 (zbieżność kierunku przez
+  zgrubny kierunek stance zamiast embeddingów; dodatkowo „rozbieżne przekazy”), synteza LLM z walidatorem
+  i jednym ponowieniem, render Markdown do `reports/`, `plx aggregate | report | run-daily`, workflow Actions.
+  Model syntezy: **Sonnet 5 bez myślenia**, decyzja niżej. Bez „Ciekawostek” (KM4).
+- [ ] KM4: pełna lista źródeł, GDELT, Global Times przez sitemap, tematy wyłaniające się, ciekawostki, raport tygodniowy.
+
+Po każdym KM: commit, wpis w `CHANGELOG.md`, aktualizacja README i tego pliku.
+
+## Komendy
+```powershell
+py -3.12 -m venv .venv; .venv\Scripts\python -m pip install -e ".[dev]"   # uv nie jest zainstalowany
+.venv\Scripts\python -m pytest -q        # testy offline (httpx.MockTransport)
+.venv\Scripts\plx init-db
+.venv\Scripts\plx sources
+.venv\Scripts\plx ingest [--no-fulltext] [-s ID ...] [--db PATH]
+.venv\Scripts\plx extract [--dry-run] [--limit N] [--no-batch] [--db PATH]   # wymaga DEEPSEEK_API_KEY w .env
+.venv\Scripts\plx aggregate [--date D] [--db PATH]
+.venv\Scripts\plx report [--date D] [--out-dir DIR] [--db PATH]
+.venv\Scripts\plx run-daily [--skip-ingest] [--no-fulltext] [--limit N] [--bez-raportu] [--out-dir DIR]   # Actions: --bez-raportu
+.venv\Scripts\plx board events\<id>.yaml [-o data/boards] [--no-png]   # plansza 1080×1920, PNG przez Chrome/Edge
+.venv\Scripts\plx events check events\<karta>.md|events [--dni 2] [--max-fetch 12] [-o data/checks]   # podpowiedzi z Wayback, karty nie zmienia
+.venv\Scripts\plx site [--db data/prod.db] [-o data/site] [--zip] [--bez-historii] [--z-tv] [--publikuj]   # strona wewnętrzna: zdarzenia + dziennik (+ telewizja z --z-tv), statyczny HTML; --publikuj: prywatne repo SITE_REPO → Render pod hasłem
+.venv\Scripts\plx events archive events\<karta>.md|events [--na-sucho] [--bez-wpisu]   # wypełnia puste archiwum (Wayback / Save Page Now)
+.venv\Scripts\plx gdelt rezonans [--dzien D]   # kandydaci na karty z GDELT (BigQuery, GCP_PROJECT w .env)
+.venv\Scripts\plx gdelt szukaj events\<karta>.md [--fraza F ...] [--dni-po 3]   # brakujące relacje do karty, karty nie zmienia
+.venv\Scripts\plx gdelt tv [--dzien D] [--kanal KOD ...] [--fraza F ...]   # raporty TV GDELT (PDF, D+1): nowe nazwy w kilku stacjach, bez modelu
+.venv\Scripts\plx gdelt tv-widoki [--dni 7] [--do D]   # robocze widoki tylko z TV: data/gdelt/tv-widoki.html (lokalnie)
+.venv\Scripts\plx gdelt tv-historie [--dni 1] [--do D]   # historie dnia z TV: różne wersje w stacjach (flash + Pro + Haiku, ok. 0,07 $/dzień)
+```
+Pełny ingest z pełnymi tekstami trwa ok. 2–2,5 min (~310 artykułów przy pierwszym uruchomieniu).
+Pełny `extract` na DeepSeek V4-Pro (tryb bezpośredni, concurrency=4): ~15–20 min na ~310 artykułów; przy 30 źródłach
+(25.09: 840 artykułów w 40 min, limit `max_runtime_s`) concurrency podniesione do 8.
+
+## Układ kodu
+- `src/paralaksa/config.py`: modele `Settings`, `Source`, `Feed`, `Theme`; `load_settings/sources/themes()`;
+  `Pricing`/`DeepSeekPricing` (cennik, `is_deepseek_peak`).
+- `src/paralaksa/db.py`: schemat, `connect`, `init_db`, `insert_article` (INSERT OR IGNORE), `log_fetch`, `stale_sources`.
+- `src/paralaksa/ingest/http.py`: `PoliteClient`: UA, cache robots.txt, 2 s na domenę (wstrzykiwalne `transport/sleep/clock`).
+- `src/paralaksa/ingest/rss.py`: `parse_feed`, `ingest_sources` (pełne teksty pobierane round-robin po domenach).
+- `src/paralaksa/ingest/dedup.py`: `clean_url` (zapisywany URL) vs `normalize_url` (tylko do hasha).
+- `src/paralaksa/ingest/prefilter.py`: odrzut sportu, rozrywki, pogody, horoskopów.
+- `src/paralaksa/ingest/fulltext.py`: trafilatura, usuwanie banerów cookies, obcięcie do 1500 słów.
+- `src/paralaksa/extract/llm_client.py`: `LLMClient` (Anthropic: bezpośrednio + Message Batches),
+  `DeepSeekClient` (OpenAI-compatible, duck-type zgodny z `.complete()`, brak Batches API u DeepSeek),
+  `build_client(model, ...)` wybiera klienta po prefiksie modelu (`deepseek*` → `DeepSeekClient`,
+  wymaga `DEEPSEEK_API_KEY`; inaczej → `LLMClient`).
+- `src/paralaksa/extract/schema.py`: `Signal` (pydantic), `parse_extraction` (walidacja + naprawa
+  evidence_span, sprawdzenie dosłowności cytatu w tekście źródłowym).
+- `src/paralaksa/extract/signals.py`: `extract_pending`/`estimate_pending` – pętla ekstrakcji per artykuł,
+  budżet dzienny, ponowienie przy błędzie walidacji, wybór trybu batch/direct.
+- `src/paralaksa/aggregate/metrics.py`: `compute_daily_metrics` (udział = artykuły kraju z tematem / wszystkie
+  artykuły kraju danego dnia), `day_signals`. Przebieg D wyznacza `fetched_at`; regularne porównania tylko dla `published_at` w oknie D-1..D UTC (szczegóły: `docs/CURRENT_HANDOFF.md`).
+- `src/paralaksa/aggregate/stats.py`: `z_score`, `js_divergence` (log2), `coarse_direction` (stance → kierunek).
+- `src/paralaksa/aggregate/package.py`: `build_data_package` – pakiet SPEC §9.3 (+ „rozbieżności” między
+  krajami); historia/linia bazowa z `daily_metrics`. Payload bez URL-i (model cytuje `article_id`).
+- `src/paralaksa/report/schema.py`: `ReportOutput` (pydantic), `parse_report`, `SCHEMA_EXAMPLE` dla promptu.
+- `src/paralaksa/report/validate.py`: `validate_report` (odnośniki, progi, trend bez linii bazowej, cytaty
+  > 15 słów), `sanitize_report` (ostatnia deska po nieudanym ponowieniu: usuwa twierdzenia bez odnośników).
+- `src/paralaksa/report/synthesize.py`: `run_synthesis` – jedno wywołanie, jedno ponowienie z listą błędów,
+  budżet dzienny; `report/render.py`: `collect_meta`, `render_markdown`; `report/pipeline.py`: `generate_report`.
+- `src/paralaksa/site/`: `plx site`. `data.py` składa dane stron (karty: wątki, typ, oś czasu, link do naszej bazy;
+  dzień: próbka z okna publikacji, sygnały, metryki, raport), `build.py` pisze samowystarczalne HTML (CSS, JS i dane w pliku,
+  działa z file://), `assets/*.js` renderuje widoki.
+  Kolory tylko przez zmienne CSS (jest tryb ciemny `[data-theme="dark"]`); logo (od 2026-10-01 „Gazeta w kadrze”):
+  SVG w `site/assets/logo/` (`build.logo_file`, `logo_inline`), ikony aplikacji PNG gotowe w `site/assets/icons/`. Bez pełnych tekstów, leadów i `evidence_span`. Nie publikujemy otwarcie (decyzja 2026-09-25); od 2026-09-26 strona
+  jest dostępna tylko pod hasłem: `plx site --publikuj` (`site/publish.py`) wypycha ją jednym commitem (force push) do prywatnego repo
+  `SITE_REPO` (`kraxtere/paralaksa-strona`, odmawia, gdy repo nie jest prywatne), Render (darmowy Web Service) uruchamia `site/hosting/server.py`
+  z HTTP Basic Auth (`SITE_USER`/`SITE_PASSWORD` tylko w Renderze; bez nich 503; bez hasła tylko manifest i ikony
+  z `site/icons.py`, do instalacji jako aplikacja). To repo zostaje publiczne (minuty Actions).
+  Od 2026-10-01 inne osoby mają własne loginy (`site/hosting/konta.py`): właściciel dodaje je na `/osoby` (link z zaproszeniem,
+  osoba sama ustawia hasło), logowanie formularzem z podpisanym ciasteczkiem na 90 dni (Basic Auth tylko dla skryptów),
+  pomiar czasu czytania (`server.HEARTBEAT`) trwa, gdy karta jest widoczna, okno ma fokus i od ostatniej interakcji minęło < 90 s (ruch myszy się nie liczy); sygnały start/punkt kontrolny co minutę/koniec z powodem niosą sekundy od poprzedniego sygnału i identyfikator karty, panel liczy tylko zgłoszone sekundy (dwie karty naraz raz), czas według tematów i diagnostykę (od 2026-10-01; bez informacji o tym dla osób, decyzja właściciela);
+  osoby i aktywność w prywatnym repo `kraxtere/paralaksa-aktywnosc` przez API GitHuba (`ACTIVITY_TOKEN` w Renderze), bo dysk darmowego Rendera znika przy uśpieniu. Serwer: biblioteka standardowa, wyjątek `pywebpush` w `hosting/powiadomienia.py`.
+  Od 2026-10-01 menu osoby w pasku 2.0 (imię z `window.plxJa` od serwera, powiadomienia, instalacja, Wyloguj), `/sw.js`
+  (bez niego Chrome nie proponuje instalacji) i powiadomienia push o nowym wydaniu: subskrypcje w `powiadomienia.json`
+  w repo aktywności, wysyłka przez serwer raz na nowy dzień przy starcie po wdrożeniu (`v2/powiadomienie.json` z `plx site`),
+  klucz `VAPID_PRIVATE_KEY` (lokalnie w `.env`, w Renderze ręcznie); bez klucza strona działa bez powiadomień.
+  `stories.py`: „historie dnia” w zakładce Najważniejsze (wydarzenia z ≥ 3 krajów, jeden przetłumaczony nagłówek na kraj). Dwa kroki
+  modelu ekstrakcji: wyszukanie kandydatów, potem przypisanie każdego artykułu do wydarzenia albo odrzucenie (porcje po 60 artykułów). Tylko przy `plx site`, nigdy w daily;
+  wynik w `data/stories/<dzień>.json` (ok. 0,03–0,04 $ na dzień, ponowna budowa za darmo). Pierwszy krok bez weryfikacji dokleja artykuły
+  nie na temat (sprawdzone 2026-09-25), więc drugiego kroku nie usuwać. „Co się wyróżnia” (`data.standouts`) liczy się bez modelu.
+  `titles.py`: wszystkie nagłówki dnia po polsku (oryginał pod spodem), model ekstrakcji tylko przy `plx site`, zapis w `data/tytuly/`
+  według id artykułu (ok. 0,05 $ na dzień). Nie używać `data-theme` na elementach klikanych: tryb ciemny trzyma go na `<html>`.
+- `src/paralaksa/gdelt/`: `plx gdelt`, lokalnie, nigdy w daily. `bq.py` (BigQuery z próbą na sucho i limitem bajtów, dekodowanie
+  encji w nagłówkach GKG), `rezonans.py` (skok osób/organizacji względem 7 dni + model grupuje i tłumaczy), `szukaj.py` (frazy per język
+  od modelu, wyszukiwanie w nagłówkach, sprawdzenie modelem). DOC API GDELT odrzucone (429). Wyniki w `data/gdelt/`.
+  `tv.py`: raporty „Today's Media Trends” (Gemini streszcza dzień wydań kanału z TV News Archive), bez modelu po naszej stronie;
+  nazwy nowe w kilku stacjach ze zdaniem z każdej. To interpretacja modelu, nie przekaz stacji: przed kartą sprawdzić w transkrypcji
+  (Visual Explorer, ręcznie). Transkrypcji nie pobierać automatycznie: są za podpisanym ciasteczkiem, w Internet Archive prywatne.
+  `tv_views.py` składa dane zakładki Telewizja na stronie (`telewizja.html`, skrypt `site/assets/tv.js`, klasy CSS `tv-*`):
+  Od 2026-10-01 zakładka jest wyłączona (decyzja właściciela: skupiamy się na prasie, ok. 0,2 $ dziennie mniej);
+  `plx site --z-tv` ją przywraca i dociąga raporty z ostatnich 7 dni do `data/gdelt/tv/`.
+  `tv_pl.py`: tłumaczenie raportów na polski (`deepseek-flash`, ok. 0,12 $ dziennie), tylko przy `plx site`, zapis `<KOD>.pl.json`.
+  `tv_stories.py`: „Historie dnia” (pierwsza zakładka Telewizji): tezy z raportów (flash, bez sekcji spekulacji Gemini), zdarzenia
+  z różnymi wersjami (DeepSeek Pro), weryfikacja (Haiku 4.5) z odrzuceniem decydowanym w kodzie (pytania kontrolne, liczby jako przedziały,
+  pisownia nazw). Każdy krok zapisany w `data/gdelt/tv/<dzień>/`; zmiana reguł bez nowych wywołań. Tylko przy `plx site`, nigdy w daily.
+- `src/paralaksa/extract/codex_client.py`: model `codex[:model][:low|medium|high]` w `build_client` (np. `codex:gpt-6.1-sol:medium`), czyli Codex CLI z limitu konta Pro
+  właściciela (decyzja 2026-09-30: eksperymenty i kroki lokalne przez Codex zamiast płatnych API).
+  Tylko lokalnie: w CI odmawia działania. Codex pracuje read-only w pustym folderze tymczasowym. Nigdy „ultra”.
+- Wersja 2.0 strony (prototyp obrazkowy): `scripts/v2/widok_obrazkowy.py` (procedura dnia: `scripts/v2/README.md`; do 2026-10-01 w `data/`, poza gitem) generuje przez Codex infografikę dnia 2×3
+  i plakaty tematów. Panele wykrywa po ramkach i nakłada jako linki. Wynik trafia do `data/widok/<dzień>/`,
+  a `plx site` kopiuje go do `v2/` (`build.copy_v2`, pliki od „_” pomija). Link „2.0” jest w menu.
+  Od 2026-10-01 wersja 2.0 jest podstawowa: serwer pod `/` przekierowuje do najnowszego dnia z `v2/dni.json`,
+  stara wersja zostaje pod `/index.html` (link „Stara wersja” na stronach 2.0); `start_url` aplikacji to `./`.
+  Pasek i stopka 2.0 są wspólne: `site/assets/pasek.js` (logo, wybór dnia, „Stara wersja” w stopce) trafia do `v2/pasek.js`,
+  strony mają tylko `<div id="pasek">`; zmiana paska = zmiana tego pliku i `plx site`, bez przebudowy stron dni.
+  Tytuł okładki nowych dni: „Przegląd prasy · DD.MM” (`scripts/v2/widok_powitanie.py`); od 02.10 sekcja spraw nazywa się
+  „Wydarzenia dnia” (`widok_obrazkowy.EVENTS_HEADER`, starsze okładki „Sprawy dnia”). `widok_obrazkowy.py indeks`: tylko strona dnia.
+  Od 02.10 linki nagłówków pod krajami (strony dnia, oś) mają `data-a=<id artykułu>`; `scripts/v2/streszczenia.py D` (Codex, pełny
+  tekst z lokalnej bazy, 5–7 zdań, przy samym leadzie 1–2) pisze `data/widok/streszczenia/<id//500>.json`, a `pasek.js` po kliknięciu
+  rozwija streszczenie z „Przejdź do artykułu →”. Bez streszczenia link działa jak dawniej.
+  Oś wydarzeń (prototyp 2026-10-01, decyzja właściciela: jedna ciągła oś przez wszystkie dni): `scripts/v2/os_czasu.py`
+  dopisuje każdy nowy dzień (`dzien D`: Codex dzieli Sprawy dnia na nowe zdarzenia i dalszy ciąg istniejących,
+  bez pomijania (limit 1–4 zgubił 28.09), przypisuje wątki), `obrazki` (kadr bez napisów na zdarzenie), `strona`. Godzina to pierwszy pokazany nagłówek
+  w naszych źródłach, nie godzina zdarzenia; od 2026-10-01 dzień na osi to dzień przeglądu, w którym sprawa weszła (wcześniej data pierwszego nagłówka). Wynik `data/widok/os/` → `v2/os/`
+  i `v2/os.json` (kafelek „Dzień po dniu” na samej górze strony dnia, pod paskiem, otwiera oś na tym dniu), w panelu `/osoby` część „Oś wydarzeń”.
+  Od 2026-10-01 (decyzja właściciela) oś bierze nie tylko Sprawy dnia (najwyżej 6), ale też dalsze zdarzenia dnia z ≥ 2 krajów
+  (`dzien D` szuka ich tymi samymi dwoma krokami co `site/stories.py`, ale przez Codex, `data/widok/os/dodatkowe/`, numery spraw od 101,
+  bez strony sprawy) i składa 4–8 nowych zdarzeń na dzień; mniej ważne dalsze pomija (`plan.pominiete`). `ciag D` rozpoznaje, które
+  Sprawy dnia 1–3 to ciąg dalszy wcześniejszych dni (01.10: wszystkie trzy z 30.09), i pisze zdanie „co nowego”: etykieta na okładce,
+  ramka z linkiem na oś na stronie sprawy. Kolejność dnia (`scripts/v2/README.md`): `dzien`, `ciag`, strony dnia, potem `opisy`, `obrazki`, `strona`, `plx site`. Panel `/osoby` liczy czas według części
+  strony (`server.section_of`: okładka, sprawy, różnice, obraz kraju, tematy, stara wersja); strona dnia oznacza okładkę
+  i siatkę tematów `data-sekcja`.
+- `.github/workflows/daily.yml`: cron 10:30 UTC (poza szczytem DeepSeek; GitHub opóźnia start nawet o 4–5 h), baza jako zaszyfrowany snapshot w Release `database-backup` (cache i artefakt to kopie), commit `reports/<dzień>.status.json`. Od 2026-10-01 bez syntezy (`run-daily --bez-raportu`; raport lokalnie przez Codex). Kod 1 tylko przy ostrzeżeniach blokujących (ekstrakcja, brak >1/3 aktywnych źródeł); pojedynczy kanał/źródło to ostrzeżenie informacyjne.
+
+## Konwencje
+- Identyfikatory i docstringi po angielsku; komunikaty CLI, komentarze w YAML i raporty po polsku.
+- Daty w bazie: ISO 8601 UTC (`db.to_iso`).
+- **Nie normalizuj zapisywanego URL.** Ukraińska Prawda zwraca 403 bez końcowego `/`.
+  Deduplikacja idzie po `url_hash(normalize_url(...))`, a w bazie i raportach jest `clean_url(...)`.
+- Prefiltr jest celowo ostrożny. Ogólne słowa („football”, „celebrity”) liczą się tylko w sekcji URL
+  i kategoriach kanału, nie w tytule, bo artykuł polityczny może je zawierać.
+- Testy bez sieci. Nowe przypadki z prawdziwych kanałów dodawaj jako fixtures w `tests/fixtures/`.
+
+## Zasady obowiązkowe (SPEC §3, §6, §16)
+- Normalizacja do wolumenu, linia bazowa 28 dni, progi (≥3 kraje, ≥2 źródła/kraj), sygnały przeciwne,
+  poziom pewności, każde twierdzenie z odnośnikiem (id + URL). Implementacja w KM2–3.
+- Opisujemy przekaz medialny, nie fakty; bez prognoz jako faktów.
+- Pobieranie: respektuj robots.txt, nie obchodź paywalli ani ochrony antybotowej, identyfikujący UA.
+- Pełne teksty tylko lokalnie (`data/`, poza gitem), nigdy w raportach; cytaty maks. 15 słów.
+- Źródła rosyjskie, także objęte sankcjami UE (RT, RIA, Izwiestia), są dozwolone (decyzja właściciela 2026-09-25, zmienia
+  wcześniejszy zakaz). W kartach zdarzeń wymagane tylko przy zdarzeniach, które dotyczą Rosji albo do których Rosja się odnosi;
+  ogólnie: strony istotne dla zdarzenia, z zapisem gdzie szukano (2026-09-26). Daily: od 2026-09-30 (decyzja właściciela) RU: izvestia, rg;
+  TASS i RT odmawiają naszemu UA (robots.txt 403 / zerwane połączenie), RIA zablokowana w DNS w PL; UA nie zmieniamy.
+  Taksonomii tematów nie zmieniamy automatycznie.
+
+## Decyzje modelowe (ekstrakcja sygnałów, KM2)
+
+**Sonnet 5 zamiast Haiku 4.5** (SPEC §9.2 proponuje tańszy model domyślnie): porównanie 2026-09-23
+na 20 artykułach pokazało, że Haiku częściej gubi drugorzędne sygnały i miesza aktorów w artykułach
+wieloaktorowych; Sonnet 5 wybrany jako baseline jakości mimo wyższej ceny.
+
+**DeepSeek V4-Pro zamiast Sonnet 5 do produkcji** (odejście od doboru powyżej i od SPEC §4/§9.2):
+porównanie 2026-09-23 na 26 artykułach (wcześniejsze 20 + 6 o Chinach z różnych stron, celowo dobranych
+pod kątem testu neutralności wobec dostawcy z siedzibą w Chinach):
+- DeepSeek V4-Pro **bez myślenia** dał **82/82 sygnałów** — identyczna liczba co Sonnet 5 — za
+  **~7,7× niższą cenę** ($0,051 vs $0,396 na próbce).
+- Na jedynym jawnie krytycznym wobec Chin artykule w próbce (F-35 w Hongkongu) V4-Pro był *surowszy*
+  w ocenie niż Sonnet, nie łagodniejszy — brak dowodu na spłaszczanie/cenzurowanie przekazu.
+- Jedna nieprawidłowość przypisania aktora na artykule 294 (własny materiał CGTN: rama przypisana
+  US zamiast CN) — pojedynczy przypadek, do obserwacji przy pełnym przebiegu, nie ustalony wzorzec.
+- **Myślenie (`thinking: enabled`) nie działa przy obecnym promptcie**: nawet `reasoning_effort: low`
+  zużywa >4000 tokenów na samo rozumowanie i ucina odpowiedź (7/8 artykułów nieudanych w teście) —
+  strukturalna cecha długiego promptu (instrukcje + lista tematów), nie kwestia doboru poziomu.
+  Odpuszczone; `extract.thinking` zostaje `disabled`.
+
+**Konsekwencje decyzji o DeepSeek** (świadomie zaakceptowane):
+- Brak Message Batches API u DeepSeek → ekstrakcja zawsze idzie bezpośrednio (`run_direct`),
+  `extract.batch_threshold` nie ma znaczenia dla tego modelu (por. SPEC §9.2, która zakłada Batches
+  powyżej 50 artykułów).
+- Treść artykułów trafia na serwery DeepSeek (poza Anthropic) — świadoma zgoda użytkownika.
+- Cennik DeepSeek zależy od pory dnia (szczyt/poza szczytem, `is_deepseek_peak`); przebiegi nie są
+  automatycznie planowane pod tańsze okna.
+- Narzędzie do przyszłych porównań: `data/compare_models.py` (poza gitem, jednorazowe/ad-hoc użycie).
+
+## Decyzje modelowe (raport okładkowy, 2026-10-01)
+
+Wersja 2.0 bierze z raportu tylko 2 różnice i obraz kraju, a pełny raport Sonneta kosztował ok. 1,2 $ dziennie (połowa kosztów
+projektu): paczka urosła do ok. 250 tys. tokenów przy 32 źródłach, a pierwsza odpowiedź co dzień nie przechodziła walidacji.
+Teraz `report.form: okladka` (`prompts/synthesize_cover.md`, `synthesize.cover_package`: tylko różnice i autoobraz, rejestr
+dowodów z pokazanych sygnałów, ok. 3,5× krótszy prompt), model `codex:gpt-6.1-sol:medium`, lokalnie (Actions bez syntezy).
+Test 2026-09-30 na tej samej paczce i walidatorze (`data/test_raport/`, poza gitem), ocena ręczna:
+
+| model | 1. odpowiedź | koszt | czas | ocena |
+|---|---|---|---|---|
+| Sonnet 5 | 14 błędów, po ponowieniu OK | 0,41 $ | 63 s | autoobraz szeroki; 1 z 3 różnic porównuje różne sprawy |
+| DeepSeek V4-Pro | 5 błędów, po ponowieniu OK | 0,05 $ | 44 s | obie różnice porównują różne sprawy |
+| DeepSeek V4-Pro, myślenie high | 2 błędy, po ponowieniu OK | 0,09 $ | 230 s | dobre: 3 różnice o tych samych zdarzeniach |
+| DeepSeek flash | 2 błędy, po sanityzacji 1 różnica | 0,01 $ | 10 s | słabe |
+| Codex GPT-6.1-Sol medium | bez błędów | 0 $ | 68 s | dobre, ostrożne komentarze; autoobraz węższy |
+| Codex GPT-6.1-Sol high | bez błędów | 0 $ | 91 s | jak medium |
+| Codex GPT-6-Astra medium | bez błędów | 0 $ | 66 s | jak Sol |
+| Codex GPT-6-Luna medium | 3 błędy, po ponowieniu OK | 0 $ | 52 s | 1 różnica |
+
+Zapas bez Codexa: DeepSeek V4-Pro z myśleniem high. Codex zużywa ok. 1–2% okna 5 h na raport.
+
+## Decyzje modelowe (synteza raportu, KM3)
+
+**Sonnet 5 bez myślenia** (zgodnie z domyślnym SPEC §9.4, ale po teście). Porównanie 2026-09-23 na pełnym
+pakiecie dnia (807 sygnałów, ~34–52 tys. tokenów wejścia zależnie od tokenizera), 6 wariantów, po jednym
+przebiegu każdy (wyniki: `data/compare_synth/<wariant>/2026-09-23.md` + `summary.json`, skrypt
+`data/compare_synthesis.py`, oba poza gitem):
+
+| wariant | walidacja 1. odpowiedzi | koszt | czas |
+|---|---|---|---|
+| Sonnet 5, myślenie wył. | 2 błędy (puste article_ids), po ponowieniu OK | $0,29 (2 wywołania) | 85 s |
+| Sonnet 5, adaptive | uszkodzony JSON; po ponowieniu 1 błąd → sanityzacja | $0,43 (2 wywołania) | 223 s |
+| DeepSeek V4-Pro, wył. | OK | $0,028 | 54 s |
+| DeepSeek V4-Pro, low | OK | $0,039 | 156 s |
+| DeepSeek V4-Pro, high | OK | $0,050 | 244 s |
+| DeepSeek V4-Pro, max | ucięte przy 16 000 tokenów (całość na rozumowanie) | $0,055 | 349 s |
+
+- **Jakość (przegląd ręczny) zadecydowała na korzyść Sonnet.** Kluczowa różnica to kalibracja pewności
+  i trzymanie się progów (SPEC §3): Sonnet dawał „niski” tam, gdzie kraj ma 1 źródło albo porównanie
+  obejmuje 2 kraje, i to uzasadniał. DeepSeek bez myślenia dawał „wysoki” na takich samych danych,
+  nazwał temat „nowym” bez linii bazowej i miał usterki językowe („autoresponder” zamiast „autoobraz”);
+  z myśleniem (low/high) kalibracja wyraźnie lepsza, ale nadal „średni” przy krajach z jednym źródłem.
+  Sonnet (oba warianty) uwzględnił autoobraz Chin (najwyższe JS dnia), DeepSeek bez myślenia go pominął.
+- **Myślenie**: u Sonnet adaptive dało nieco bogatszy raport (więcej rozbieżności, Bliski Wschód), ale +48%
+  kosztu, 2,6× dłużej i gorszą niezawodność JSON – nie warto. U DeepSeek myślenie poprawia jakość, a `max`
+  nie mieści się w 16 000 tokenów (jak w KM2: rozumowanie zjada limit).
+- **Tania alternatywa**: DeepSeek V4-Pro z `thinking: enabled`, `effort: high` (~$0,05/dzień zamiast ~$0,14–0,29)
+  – zmiana dwóch linii w `settings.yaml` (`models.synthesize`, `report.thinking/effort`).
+- **Poprawki promptu po teście** (problemy wspólne dla modeli): niepusta lista article_ids w „w_skrocie”,
+  zakaz powtarzania ograniczeń danych w „w_skrocie”, „wysoki” tylko przy spełnionych progach. Przebieg
+  produkcyjny po poprawce: Sonnet bez ponowienia, $0,14, żadnego „wysoki” poniżej progów.
+
+## Znane ograniczenia
+- **Zbieżność kierunku prawie zawsze pusta przy obecnej ekstrakcji.** ~83% sygnałów ma stance `neutralny`
+  (673/807), więc zgrubny kierunek z rozkładu stance rzadko wychodzi poza „neutralny” (2026-09-23: 0 kandydatów,
+  2 słabe). Do tego źródła jednokrajowe (QA, CN) nigdy nie spełnią progu 2 źródeł. Właściwe grupowanie ram
+  przez embeddingi (KM4) albo kalibracja stance w promptcie ekstrakcji to kolejny krok; nie obniżać progów SPEC.
+- **Pierwszy przebieg (2026-09-23) jest inicjalny**: zawiera zaległość z RSS (publikacje 09-08…09-23)
+  i nie wchodzi do linii bazowej. Kolejne dni porównują tylko okno publikacji D-1..D UTC.
+- **Baza w Actions** żyje w zaszyfrowanym Release (`docs/OPERATIONS.md`); brak backupu zatrzymuje przebieg, nigdy cichy restart.
+- **rp i spiegel bez pełnego tekstu** (paywall, nie obchodzimy). W KM2 ekstrakcja dla nich działa
+  tylko na tytule i leadzie (lead rp ok. 200 znaków, Spiegel ok. 225). Sygnały będą płytsze: mniej sygnałów na artykuł,
+  niższa `intensity`, uboższe ramy. To oznacza, że PL (rp) i DE (spiegel) są asymetryczne względem źródeł z pełnym
+  tekstem (onet, tagesschau). Przy interpretacji porównań między krajami i w metadanych raportu (KM3) trzeba to uwzględnić.
+  Rozważyć w KM2: flagę „tylko lead” w sygnałach lub wagę per źródło.
+- **Prefiltr odcina całe sekcje.** Artykuły z `/sport/` czy `/weather/` odpadają nawet z kątem
+  politycznym (np. BBC Sport o meczu Izrael–Irlandia, El Niño w BBC Weather). To świadomy kompromis.
+  Kontrola z 2026-09-23: z 319 wpisów odrzucono 5, wszystkie przejrzane ręcznie.
+
+## Źródła (`config/sources.yaml`, weryfikacja 2026-09-23)
+Aktywne (10): rp, onet (PL); ukrinform, pravda_ua (UA, po ukraińsku); tagesschau, spiegel (DE);
+bbc (world + europe), guardian (UK); aljazeera (QA), cgtn (CN). `fulltext: false`: rp i spiegel (paywall).
+
+2026-09-25 (decyzja właściciela): globaltimes (CN, Google News sitemap, `parse_news_sitemap`), chinanews (CN, po chińsku,
+tekst CJK przycinany w znakach), scmp (HK, tylko lead). Razem 21 aktywnych; CN ma 3 źródła.
+2026-09-25, dwa źródła na kraj (po audycie jakości): thehindu, indianexpress (IN), dailysabah, hurriyet (TR), rthk, hongkongfp (HK),
+israelhayom, haaretz (IL, tylko lead), wafa (PS, dzienna mapa strony `{yyyy}/{mm}/{dd}`). Razem 30 aktywnych, 13 krajów; tylko QA ma
+jednego wydawcę. Al-Quds z GitHub Actions dostaje 403 (z domowego łącza działa), nie obchodzimy.
+2026-09-30 (decyzja właściciela): RU izvestia, rg (pełne teksty). Razem 32 aktywne, 14 krajów. TASS, RT po rosyjsku: nieaktywne (blokada naszego UA).
+Nieaktywne, bo nie działa RSS: PAP (Incapsula), Polskie Radio, Suspilne (403), Telegraph (402). People's Daily RSS stoi od 06.2025.
+Nieaktywne, ale zweryfikowane, do włączenia w KM4: wp, gazeta (to nie Wyborcza), kyivindependent, dw, faz, skynews. Martwe: Xinhua RSS (2018), China Daily RSS (404). Reuters/AP/AFP bez publicznego RSS.
