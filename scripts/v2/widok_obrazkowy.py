@@ -738,25 +738,21 @@ def countries_link() -> str:
 # Baner „Czym żyje kraj”: stały zasób wspólny dla wszystkich dni (data/widok/kraje/baner.webp, plx site kopiuje go do
 # v2/kraje/), generowany raz (`widok_obrazkowy.py baner`; istniejącego nie nadpisuje)
 BANNER = Path("data/widok/kraje/baner.webp")
-BANNER_SCENE = ("A row of small cartoon figures whose bodies are folded newspapers (newspaper people), standing side by "
-                "side, each wearing a scarf in the colors of a different country (Poland white-and-red, clearly in the "
-                "middle and slightly bigger; others e.g. Ukraine, Germany, United Kingdom, USA, China, Turkey, India, "
-                "Brazil). Each one reads its own open newspaper and looks in a different direction. Background: faint "
-                "outlines of several city skylines blending into one another. Newspaper pages show only abstract grey "
+COUNTRIES14 = ["PL", "UA", "DE", "UK", "US", "RU", "CN", "IN", "TR", "IL", "PS", "QA", "BR", "HK"]
+BANNER_SCENE = ("A calm, symmetrical facade of an old European tenement house seen straight on, filling the strip: an "
+                "orderly grid of EXACTLY 14 equal windows in 2 rows of 7. In every window one small cartoon newspaper "
+                "figure (a folded newspaper with a simple face) wearing a scarf in the colours of a different country "
+                "(" + ", ".join(f"{NAMES[c]}: {FLAGS[c]}" for c in COUNTRIES14) + "), busy with its own local matter "
+                "(reading, phoning, watering a plant, cooking, fixing something), each with ONE small local accent in "
+                "the background of its window (a characteristic object or a bit of landscape of that country). No "
+                "crowds, no chaos: the regular rhythm of windows gives calm. Newspaper pages show only abstract grey "
                 "lines, never letters.")
 
 
 def banner_prompt() -> str:
-    """Codex instruction: landscape image with two strips of about 3:1 (two takes of the same scene, the better one kept)."""
+    """Codex instruction: three takes of the same scene, strips of about 2:1 (shown cropped to 2.4:1), the best one kept."""
     import paski
-    return ("Use your built-in image generation tool to create ONE image from the prompt below, then copy it into the "
-            "current directory as pasy.png. Do not write code or other files. Reply only with the file name.\n\nPROMPT:\n"
-            "Landscape image 1536×1024 (3:2), clean flat editorial illustration, warm paper tones (#f4f0e8), dark ink, muted "
-            "palette with brick red accents (#8a3b2a). The WHOLE image is a stack of EXACTLY 2 full-width horizontal strips "
-            "of equal height (each about 3:1), one under another. Strips are separated by a thick solid uniform dark bar "
-            "(#1d1b18, about 14 px), and the same thick dark border runs around the whole image. No gutters, nothing drawn "
-            "across the bars, no title, no header, no footer. Both strips show the same scene in two different "
-            "compositions.\nScene: " + BANNER_SCENE + "\n" + paski.NO_TEXT)
+    return paski.prompt([BANNER_SCENE + " Take %d: same facade, different light." % i for i in (1, 2, 3)])
 
 
 # --- 2.0 pasami (od 01.10): okładka = pasy tematów, strona tematu = pas tematu + paski krajów (scripts/v2/paski.py) ---
@@ -832,7 +828,7 @@ def page_countries(t: dict, cs: list[dict]) -> list[str]:
     return poster + [c for c in t["kraje"] if c not in poster]
 
 
-# kafelki tematów (od 02.10): panorama ok. 3:1 ze sceną z dzisiejszych opisów krajów, gazetki ukryte w scenie „jak Wally”
+# kafelki tematów (od 02.10): pas ok. 2:1 (jak pasy okładki) ze sceną z dzisiejszych opisów krajów, gazetki ukryte w scenie „jak Wally”
 WALLY = ("Hidden in different places of the scene, like in \"Where's Wally\": {mascots}, small (about a fifth of the "
          "strip height), each in a funny side situation (peeking from behind a building, holding a fire hose, taking a "
          "photo, sitting on a roof, carrying a ladder); never the main actors of the events. Mascot = a folded newspaper "
@@ -849,7 +845,7 @@ def cover_scene(t: dict, opisy: dict, cs: list[dict]) -> str:
     said = [w["zdanie"] for c in t["kraje"] for w in opisy["opisy"].get(c, {}).get("watki", [])
             if w["temat"] == t["temat"]][:3]
     what = " ".join(said) or SCENES.get(t["temat"], t["nazwa"])
-    return (f"a wide panorama for the press topic \"{t['nazwa']}\" showing concretely what the press wrote about today "
+    return (f"a wide scene for the press topic \"{t['nazwa']}\" showing concretely what the press wrote about today "
             f"(places, people, objects, actions; as they are, without softening): {what} "
             + (" Hide small easter eggs in the scene, each a recognisable detail of one of these stories from the topic "
                "page: " + "; ".join(x["naglowek"] for x in cs if x.get("naglowek")) + ". " if cs else "")
@@ -876,12 +872,12 @@ def strip_jobs(ts: list[dict], opisy: dict, pl: dict) -> list[tuple[str, object]
     import paski
     jobs = []
     css = {t["temat"]: poster_data(t, opisy, pl) for t in ts}
-    for k, part in enumerate(ts[i:i + 2] for i in range(0, len(ts), 2)):   # panorama ok. 3:1: 2 na obrazek poziomy
-        name = f"okladka-{'ABCD'[k]}"
+    for k, part in enumerate(paski.split(ts, 3)):                # pas ok. 2:1 jak pasy okładki: najwyżej 3 na obrazek
+        name = f"okladka-{'AB'[k]}"
         if all(theme_strip(t).exists() for t in part):            # ponowne uruchomienie: tylko brakujące
             continue
         jobs.append((name, lambda part=part, name=name: paski.make(
-            OUT / f"_gen-{name}", paski.prompt([cover_scene(t, opisy, css[t["temat"]]) for t in part], landscape=True), [theme_strip(t) for t in part],
+            OUT / f"_gen-{name}", paski.prompt([cover_scene(t, opisy, css[t["temat"]]) for t in part]), [theme_strip(t) for t in part],
             PASKI / f"{name}.png")))
     for t in ts:
         cs = css[t["temat"]]
@@ -942,7 +938,7 @@ STRIPS_CSS = (
     ".flaga{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--papier);box-sizing:border-box}"
     ".okl-pas:hover,.okl-pas:focus-visible{outline:3px solid var(--cegla);outline-offset:2px}"
     ".okl-s{text-align:center;color:var(--szary);font-size:.8em}"
-    ".kraje-pas .okl-t{padding-top:30px}.kraje-pas .strz{float:right;font-size:1.3em;line-height:.8}.kraje-pas.bez{min-height:90px}"
+    ".kraje-pas img{aspect-ratio:2.4/1;object-fit:cover}.kraje-pas .okl-t{padding-top:30px}.kraje-pas .strz{float:right;font-size:1.3em;line-height:.8}.kraje-pas.bez{min-height:90px}"
     ".pas-tematu{display:block;width:100%;height:auto;border-radius:10px;margin:12px 0 0}"
     ".pas-kraju{display:block;width:100%;height:auto;border-radius:10px;margin:2px 0 0}"
     ".dymek{position:relative;width:fit-content;max-width:80%;margin:-18px 10px 8px auto;padding:7px 11px;"
@@ -1023,7 +1019,7 @@ def polish_titles() -> dict[int, str]:
 
 
 def main():
-    if sys.argv[1:2] == ["baner"]:          # baner „Czym żyje kraj”, raz; potem wybór: baner wybierz 1|2
+    if sys.argv[1:2] == ["baner"]:          # baner „Czym żyją kraje”, raz; potem wybór: baner wybierz 1|2|3
         import paski
         work, pick = BANNER.parent / "_baner", sys.argv[3] if len(sys.argv) > 3 and sys.argv[2] == "wybierz" else None
         if pick:
@@ -1032,7 +1028,7 @@ def main():
         elif BANNER.exists():
             print(f"{BANNER} już jest, nie generuję ponownie")
         else:
-            print(paski.make(work / "_gen", banner_prompt(), [work / "wersja-1.webp", work / "wersja-2.webp"],
+            print(paski.make(work / "_gen", banner_prompt(), [work / f"wersja-{i}.webp" for i in (1, 2, 3)],
                              work / "oryginal.png"))
         return
     opisy = json.loads(OPISY.read_text(encoding="utf-8"))

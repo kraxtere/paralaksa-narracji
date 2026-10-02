@@ -24,14 +24,12 @@ NO_TEXT = ("ABSOLUTELY NO TEXT anywhere: no letters, numbers, captions, speech b
            "writing.")
 
 
-def prompt(scenes: list[str], style: str = "", landscape: bool = False) -> str:
-    """Codex instruction for one 1024×1536 image (landscape: 1536×1024, two strips give ~3:1 panoramas): len(scenes)
-    full-width strips, scene i in strip i from the top."""
+def prompt(scenes: list[str], style: str = "") -> str:
+    """Codex instruction for one 1024×1536 image: len(scenes) full-width strips, scene i in strip i from the top."""
     rows = "\n".join(f"Strip {i} (from the top): {scene}" for i, scene in enumerate(scenes, 1))
     return ("Use your built-in image generation tool to create ONE image from the prompt below, then copy it into the "
             "current directory as pasy.png. Do not write code or other files. Reply only with the file name.\n\nPROMPT:\n"
-            + ("Landscape image 1536×1024 (3:2)" if landscape else "Portrait image 1024×1536 (2:3)")
-            + ", clean flat editorial illustration, warm paper tones (#f4f0e8), dark ink, muted "
+            "Portrait image 1024×1536 (2:3), clean flat editorial illustration, warm paper tones (#f4f0e8), dark ink, muted "
             f"palette with brick red accents (#8a3b2a). The WHOLE image is a stack of EXACTLY {len(scenes)} full-width "
             "horizontal strips of equal height, one under another. Strips are separated by thick solid uniform dark bars "
             "(#1d1b18, about 14 px), and the same thick dark border runs around the whole image. No gutters, nothing drawn "
