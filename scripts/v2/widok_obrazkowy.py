@@ -948,7 +948,10 @@ STRIPS_CSS = (
     ".flaga{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--papier);box-sizing:border-box}"
     ".okl-pas:hover,.okl-pas:focus-visible{outline:3px solid var(--cegla);outline-offset:2px}"
     ".okl-s{text-align:center;color:var(--szary);font-size:.8em}"
-    ".kraje-pas img{aspect-ratio:2.4/1;object-fit:cover}.kraje-pas .okl-t{padding-top:30px}.kraje-pas .strz{float:right;font-size:1.3em;line-height:.8}.kraje-pas.bez{min-height:90px}"
+    # kafel „Czym żyją kraje”: baner w całości (okna nieucięte), podpis w jasnym pasku pod obrazkiem jak kolumny okładki
+    ".kraje-pas .okl-t{position:static;padding:9px 12px 10px;background:var(--karta);color:var(--tusz)}"
+    ".kraje-pas .okl-t b{color:var(--cegla)}.kraje-pas .okl-n{color:var(--tusz)}"
+    ".kraje-pas .strz{float:right;font-size:1.3em;line-height:.8}.kraje-pas.bez{min-height:0}"
     ".pas-tematu{display:block;width:100%;height:auto;border-radius:10px;margin:12px 0 0}"
     ".pas-kraju{display:block;width:100%;height:auto;border-radius:10px;margin:2px 0 0}"
     ".dymek{position:relative;width:fit-content;max-width:80%;margin:-18px 10px 8px auto;padding:7px 11px;"
@@ -956,6 +959,7 @@ STRIPS_CSS = (
     "font:600 .95em/1.35 Georgia,serif}.dymek:before{content:'';position:absolute;right:28px;top:-11px;"
     "border:7px solid transparent;border-bottom:10px solid var(--tusz);border-top:0}"
     "@media(max-width:480px){.okl-t b{font-size:1.05em}.okl-t{padding:16px 9px 6px}.dymek{max-width:88%}}"
+    "@media(max-width:480px){.kraje-pas .okl-t{padding:8px 10px 9px}}"
     # okładka z pasów (scripts/v2/okladka.py): tytuł i flagi jak na pasach tematów (.okl-t), kolumny krajów pod pasem
     # nagłówek jak winieta gazety (podwójna linia, data w ceglanym polu), sekcje jako ceglane belki jak na dawnym plakacie
     ".pp .okl-h{border-top:4px double var(--tusz);border-bottom:4px double var(--tusz);margin:6px 0 4px;padding:10px 4px 8px}"
