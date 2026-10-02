@@ -7,6 +7,9 @@
 
 # Easter eggi w obrazkach tematów i „Czym żyją kraje” — 2026-10-02
 
+- Przełącznik dni na telefonie: jasny pasek przyklejony na dole ekranu (górny pasek tylko z logo); od 640 px w ciemnym
+  pasku u góry obok logo. Baner powiadomień przesunięty nad niego.
+
 - Strona tematu: na końcu duże przyciski „‹ Poprzedni temat” / „Następny temat ›” (kolejność z okładki; na końcach
   powrót do strony dnia), `theme_nav`. Obrazki 01.10 (3 panoramy tematów, 13 krajów) wygenerowane ponownie z nowymi promptami.
 

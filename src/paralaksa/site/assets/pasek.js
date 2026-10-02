@@ -27,16 +27,23 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
     ".bar2{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 12px;padding:12px 16px;background:#1d1b18;" +
     "color:#f4f0e8;font:14px Segoe UI,sans-serif}.bar2 a{color:#f4f0e8;text-decoration:none}.bar2 .logo{line-height:0;flex:none}" +
     ".bar2 .logo svg{height:26px;width:auto}.bar2 .dni{display:flex;align-items:center;gap:6px;white-space:nowrap}" +
-    // przełącznik dni (od 02.10, dla starszych osób): osobny wiersz, duże przyciski ‹ › po bokach, data na środku
-    ".bar2 .nawi{flex-basis:100%;display:grid;grid-template-columns:64px minmax(0,1fr) 64px;gap:8px;align-items:stretch}" +
-    ".bar2 .nawi a,.bar2 .nawi .pusty{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:54px;" +
-    "border:2px solid #8a7f6e;border-radius:10px;background:#2c2924;line-height:1.1}.bar2 .nawi .pusty{visibility:hidden}" +
-    ".bar2 .nawi a b{font-size:40px;line-height:.75}.bar2 .nawi a small{font-size:13px;color:#d8d1c3}" +
-    ".bar2 .nawi a:hover,.bar2 .nawi a:focus-visible,.bar2 .nawi select:focus-visible{border-color:#f4f0e8;outline:none}" +
-    ".bar2 .nawi select,.bar2 .nawi .data{width:100%;min-height:54px;min-width:0;font:700 17px Segoe UI,sans-serif;text-align:center;text-align-last:center;appearance:none;" +
-    "background:#f4f0e8;color:#1d1b18;border:2px solid #f4f0e8;border-radius:10px;padding:6px 8px;cursor:pointer;box-sizing:border-box}" +
+    // przełącznik dni (od 02.10, dla starszych osób): duże przyciski ‹ › po bokach, data na środku. Na telefonie przyklejony
+    // jasny pasek na dole ekranu (górny pasek zostaje sam z logo), od 640 px w ciemnym pasku u góry, obok logo
+    ".bar2 .nawi{position:fixed;left:0;right:0;bottom:0;z-index:40;display:grid;grid-template-columns:64px minmax(0,1fr) 64px;gap:8px;" +
+    "padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:#f4f0e8;border-top:2px solid #1d1b18;" +
+    "box-shadow:0 -4px 14px rgba(0,0,0,.12)}body{padding-bottom:78px}" +
+    ".bar2 .nawi a,.bar2 .nawi .pusty{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:52px;" +
+    "border:2px solid #1d1b18;border-radius:10px;background:#fbf8f2;color:#1d1b18;line-height:1.1}.bar2 .nawi .pusty{visibility:hidden}" +
+    ".bar2 .nawi a b{font-size:40px;line-height:.75}.bar2 .nawi a small{font-size:13px;color:#5a554c}" +
+    ".bar2 .nawi a:hover,.bar2 .nawi a:focus-visible,.bar2 .nawi select:focus-visible{border-color:#8a3b2a;outline:2px solid #8a3b2a}" +
+    ".bar2 .nawi select,.bar2 .nawi .data{width:100%;min-height:52px;min-width:0;font:700 17px Segoe UI,sans-serif;text-align:center;text-align-last:center;appearance:none;" +
+    "background:#1d1b18;color:#f4f0e8;border:2px solid #1d1b18;border-radius:10px;padding:6px 8px;cursor:pointer;box-sizing:border-box}" +
     ".bar2 .nawi .data{display:flex;align-items:center;justify-content:center}" +
     ".bar2 .nawi.wroc{grid-template-columns:1fr}.bar2 .nawi.wroc a{flex-direction:row;gap:10px;font:700 18px Segoe UI,sans-serif}" +
+    ".baner-ja{bottom:86px!important}" +
+    "@media(min-width:640px){.bar2 .nawi{position:static;flex:0 1 430px;margin-left:auto;padding:0;background:none;border:0;box-shadow:none}" +
+    "body{padding-bottom:0}.baner-ja{bottom:8px!important}.bar2 .nawi a,.bar2 .nawi .pusty{background:#2c2924;color:#f4f0e8;border-color:#8a7f6e}" +
+    ".bar2 .nawi a small{color:#d8d1c3}.bar2 .nawi select,.bar2 .nawi .data{background:#f4f0e8;color:#1d1b18;border-color:#f4f0e8}}" +
     ".stopka{max-width:720px;margin:28px auto 0;padding:14px 16px 72px;border-top:1px solid #ddd5c7;" +
     "display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 16px;color:#7a746a;font:13px Segoe UI,sans-serif}" +
     ".stopka a{color:#8a3b2a}" +
@@ -44,8 +51,8 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
   document.head.append(style);
 
   box.className = "bar2";
-  box.innerHTML = `<a class="logo" href="${page(day)}" aria-label="Paralaksa, strona dnia">${LOGO}</a><span class="dni"></span>` +
-    `<nav class="nawi" aria-label="Wybór dnia"></nav>`;
+  box.innerHTML = `<a class="logo" href="${page(day)}" aria-label="Paralaksa, strona dnia">${LOGO}</a>` +
+    `<nav class="nawi" aria-label="Wybór dnia"></nav><span class="dni"></span>`;
   const right = box.querySelector(".dni");                     // miejsce na menu osoby (serwer)
   const nav = box.querySelector(".nawi");
   const wide = matchMedia("(min-width:480px)").matches;      // na telefonie skrót dnia tygodnia, żeby data się mieściła
