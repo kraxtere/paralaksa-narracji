@@ -1,3 +1,19 @@
+# Strona 2.0: okładka pasami, paski krajów na stronach tematów — 2026-10-02
+
+- Nowy `scripts/v2/paski.py` (wspólny dla okładki, stron tematów i „Tylko tutaj”): jeden obrazek Codex 1024×1536 z N
+  poziomymi pasami w ciemnych ramkach, bez żadnego tekstu; oryginał zapisany przed cięciem (`.png` + `.json` z listą
+  wyników, `paski.py pokroj` tnie ponownie bez Codex); przy złej liczbie pasków jedno ponowienie, potem odrzucony.
+  `run_all`: do 8 procesów co 15 s, po pierwszym 429 4 co 20 s i ponowienie; liczba na starcie, podsumowanie na końcu.
+  Detekcja ramek przeniesiona z `kraje.py`, który korzysta teraz z `paski.make` (też 8/4 procesy).
+- `widok_obrazkowy.py paski`: okładka dnia jako pasy tematów (najwyżej 3 na obrazek, pas ok. 2:1, `pas-TEMAT.webp`)
+  i paski krajów na stronach tematów (jeden na kraj, przy > 6 krajach 2 obrazki; scena z opisu kraju, ludzik-gazetka
+  w szaliku kraju w rogu; `pas-TEMAT-KRAJ.webp`). Oryginały w `data/widok/D/_paski/`.
+- Okładka w HTML: nagłówek, na pasie tytuł, „N krajów” i flagi (uproszczone SVG), kolory przez zmienne CSS, link do
+  strony tematu; `data-sekcja="tematy"`, powitanie i „Tylko tutaj” bez zmian. Strona tematu: pas tematu, tytuł, opis,
+  karty krajów z paskiem i dymkiem HTML z nagłówkiem z `plakat-TEMAT.json` (kraj bez nagłówka: bez dymka, kraj bez
+  paska: karta bez obrazka). Plakat znika z nowych stron; tryb plakatu i `start.png` zostają dla dni bez `_paski/`.
+- Testy offline `tests/test_paski.py` (podział, prompt, cięcie, ponowienie i odrzucenie, 429).
+
 # Kraje: cięcie pasków przy liniach w scenie, `pokroj`, dane wstecz — 2026-10-02
 
 - `scripts/v2/kraje.py`: `detect_strips(png, n)`. Najpierw dotychczasowe cięcie po wszystkich ciemnych pasach

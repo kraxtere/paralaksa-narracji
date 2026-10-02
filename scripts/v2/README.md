@@ -16,17 +16,20 @@ robi Codex z limitu konta (`codex_limit.py` pokazuje zużycie). Nigdy w Actions.
      potem Sprawy dnia i dalsze zdarzenia → nowe zdarzenia albo dalszy ciąg, razem 4–8 nowych na dzień;
    - `python scripts/v2/os_czasu.py ciag D`: które Sprawy dnia 1–3 to ciąg dalszy wcześniejszych dni i co nowego
      (`data/widok/os/ciag/D.json`; okładka dostaje etykietę „Ciąg dalszy · od DD.MM”, strona sprawy ramkę z linkiem na oś).
-6. Strona dnia (`DZIEN=D` w środowisku):
-   - `python scripts/v2/widok_obrazkowy.py obraz`: siatka tematów `start.png`;
-   - `python scripts/v2/widok_obrazkowy.py plakat TEMAT` dla każdego tematu z `tematy.json`;
+6. Strona dnia (`DZIEN=D` w środowisku), od 01.10 pasami:
+   - `python scripts/v2/widok_obrazkowy.py paski`: okładka pasami (jeden pas na temat dnia, `pas-TEMAT.webp`) i paski
+     krajów na stronach tematów (jeden na kraj, `pas-TEMAT-KRAJ.webp`; dymek = nagłówek z `plakat-TEMAT.json`).
+     Okładka: obrazki po najwyżej 3 pasy (pas ok. 2:1); temat: jeden obrazek (przy > 6 krajach dwa), do 8 procesów co 15 s, po 429 4 co 20 s.
+     Oryginały w `_paski/`; odrzucone po ponowieniu wypisane na końcu (karta bez paska). Ponowne cięcie bez Codex:
+     `python scripts/v2/paski.py pokroj data/widok/D/_paski/NAZWA.png`;
    - `python scripts/v2/widok_powitanie.py`: okładka `powitanie.png`;
    - `python scripts/v2/widok_obrazkowy.py strona`: HTML okładki, spraw, różnic, obrazu kraju i tematów.
-   Obrazki można puszczać równolegle (8 procesów Codex naraz działało 01.10).
+   Dni sprzed 01.10 (bez `_paski/`): siatka `start.png` (`widok_obrazkowy.py obraz`) i plakaty (`plakat TEMAT`).
 7. Oś wydarzeń, reszta: `python scripts/v2/os_czasu.py opisy`, `obrazki`, `strona`.
 8. `python scripts/v2/kraje.py D`: „tylko tutaj”, 3–5 tematów krajowych z artykułów spoza wydarzeń wielokrajowych
    (po krokach 5 i 7; `data/widok/kraje/D.json`, Codex, ok. 2 min). Potem `python scripts/v2/kraje.py obrazki D`
-   (domyślnie tylko PL; 1 obrazek z dobowego limitu na kraj): paski scen nad tematami (`data/widok/kraje/D/PL-n.webp`);
-   przy innej liczbie wykrytych pasków niż tematów błąd i nic nie zapisane. Potem `python scripts/v2/kraje.py ciag D`
+   (domyślnie tylko PL; 1 obrazek na kraj, `paski.py`): paski scen nad tematami (`data/widok/kraje/D/PL-n.webp`);
+   przy innej liczbie pasków jedno ponowienie, potem kraj odrzucony (nic nie zapisane); `kraje.py pokroj D KRAJ`. Potem `python scripts/v2/kraje.py ciag D`
    (Codex: ciąg dalszy spraw z 7 dni wstecz, pole `ciag_od`) i `python scripts/v2/kraje.py strona` (osie krajów
    `data/widok/kraje/KRAJ.html`, wszystkie dni). Na koniec `DZIEN=D widok_obrazkowy.py strona`.
 9. `python scripts/v2/streszczenia.py D`: streszczenia artykułów pod nagłówkami stron dnia i osi (tylko brakujące).
@@ -37,7 +40,8 @@ Po każdym obrazku z ludźmi: obejrzeć (bez stereotypów, bez napisów na kadra
 
 ## Pliki
 
-- `widok_obrazkowy.py`: siatka tematów, plakaty, wszystkie strony dnia; `widok_tresci.py`: dane i pamięć podręczna tekstów stron.
+- `paski.py`: wspólne paski (obrazek Codex z N pasami, cięcie po ramkach, 8/4 procesy).
+- `widok_obrazkowy.py`: okładka pasami (dawniej siatka tematów i plakaty), wszystkie strony dnia; `widok_tresci.py`: dane i pamięć podręczna tekstów stron.
 - `widok_powitanie.py`: okładka dnia (sprawy, różnice, obraz kraju).
 - `os_czasu.py`: ciągła oś wydarzeń (`data/widok/os/`).
 - `kraje.py`: tematy „tylko w tym kraju” (`data/widok/kraje/`).

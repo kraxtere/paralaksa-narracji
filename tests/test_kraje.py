@@ -2,7 +2,8 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parents[1] / "scripts" / "v2"))
-from kraje import check, check_ciag, detect_strips  # noqa: E402
+from kraje import check, check_ciag  # noqa: E402
+from paski import detect_strips, split  # noqa: E402
 
 
 def test_check_topics():
