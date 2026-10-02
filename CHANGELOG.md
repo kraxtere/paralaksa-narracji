@@ -19,6 +19,8 @@
 - Kafel „Czym żyją kraje”: wyższy baner (ok. 1.35:1, 2 ujęcia na obrazek), cały budynek, 17 okien w 3 rzędach
   czytelnych na telefonie; jeden podpis „Tematy, które zostają w domu ›” na gradiencie. (Wcześniejsze automatyczne cięcie
   banera 2:1 pomyliło ramy z siatką okien.)
+- Okładka bez własnej stopki („N krajów · Niżej: tematy dnia · …”; to samo jest w stopce strony); odstęp przed belkami
+  „Czym żyją kraje” i „Czym żyła prasa” taki jak między sekcjami okładki (18 px).
 
 - Nagłówki sekcji strony dnia jednolite: ceglane belki `pp-sek` także nad „Czym żyją kraje” (w kaflu „Tematy, które
   zostają w domu” + podpis) i „Czym żyła prasa” (liczby jako drobny podpis `pp-pod`).

@@ -126,8 +126,6 @@ def cover_html(data: dict) -> str:
                 + col(si["zewn"], "Z zewnątrz", si["tekst_z_zewnatrz"]))
         parts.append(card(si["key"], f'<b>{esc(NAMES[si["kraj"]])}</b>' + flags([si["kraj"]] + si["zewn"]),
                           f'<div class="pp-kols">{cols}</div>'))
-    parts.append(f'<p class="okl-s">{data["n_krajow"]} krajów · Niżej: tematy dnia · Opis przekazu analizowanych źródeł, '
-                 'nie faktów · Paralaksa</p>')
     return '<div class="okl pp" data-sekcja="okladka">' + "".join(parts) + "</div>"
 
 

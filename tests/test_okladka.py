@@ -36,7 +36,7 @@ def test_cover_html_sections_titles_flags_and_no_poster():
     diff = page[page.index('href="roznica-1.html"'):page.index('href="obraz-kraju.html"')]
     assert diff.count('class="pp-kol"') == 2 and "Izrael · głównie neutralnie" in diff and "Śledztwo bez motywu" in diff
     assert "Chiny o sobie" in page and "<b>Z zewnątrz</b>" in page and page.count("<p data-zwin>") == 4
-    assert "14 krajów · Niżej: tematy dnia" in page
+    assert "Niżej: tematy dnia" not in page                       # stopka strony mówi to samo
     assert 'src="okl-sprawa-1.webp"' in page and "powitanie.png" not in page and "data-theme" not in page
 
 

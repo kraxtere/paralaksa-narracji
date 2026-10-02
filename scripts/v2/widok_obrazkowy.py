@@ -966,6 +966,8 @@ STRIPS_CSS = (
     "font-size:.7em;vertical-align:middle;border-radius:3px}.pp .okl-h p{font-style:italic;color:var(--tusz)}"
     ".pp-sek{margin:18px 0 6px;padding:5px 12px;background:var(--cegla);color:var(--papier);font:700 1.2em Georgia,serif;"
     "border-radius:4px 4px 0 0}.pp-pod{margin:0 2px 4px;color:var(--szary);font-size:.85em}"
+    # belka sekcji na początku kolejnego bloku: ten sam odstęp od poprzedniego kafla co wewnątrz okładki (18 px)
+    ".okl>.pp-sek:first-child{margin-top:0}.pp.okl{padding-bottom:6px}"
     "@media(max-width:480px){.pp .okl-h h1{font-size:1.65em}}"
     ".pp-k{margin:8px 0 12px;border:3px solid var(--tusz);border-radius:8px;overflow:hidden;background:var(--karta);"
     "color:var(--tusz)}.pp-obr{position:relative;display:block;background:var(--tusz);color:var(--papier);text-decoration:none}"
