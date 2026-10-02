@@ -15,6 +15,8 @@
 
 # Easter eggi w obrazkach tematów i „Czym żyją kraje” — 2026-10-02
 
+- Baner „Czym żyją kraje” wygenerowany ponownie z 17 oknami (doszły FR, HU, IR); wersja z 14 oknami w `_baner/_stare-14/`.
+
 - Nagłówki sekcji strony dnia jednolite: ceglane belki `pp-sek` także nad „Czym żyją kraje” (w kaflu „Tematy, które
   zostają w domu” + podpis) i „Czym żyła prasa” (liczby jako drobny podpis `pp-pod`).
 
