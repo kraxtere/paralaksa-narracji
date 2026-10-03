@@ -2,11 +2,11 @@
   "date": "2026-10-03",
   "complete": true,
   "synthesis": "lokalnie (plx report)",
-  "n_signals": 1693,
-  "cost_usd": 1.143324424,
+  "n_signals": 2351,
+  "cost_usd": 1.603294704,
   "warnings": [
     "brak materiałów z aktywnych źródeł: indianexpress, alquds_ps, izvestia",
-    "błędy kanałów: alquds_ps, indianexpress, izvestia"
+    "błędy kanałów: alquds_ps, indianexpress, izvestia, telex"
   ],
   "blocking": [],
   "sources": [
@@ -25,14 +25,14 @@
       "sections": [
         "all"
       ],
-      "articles": 10,
-      "eligible": 10,
-      "fulltext": 10,
+      "articles": 20,
+      "eligible": 20,
+      "fulltext": 20,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 10
+        "unknown": 20
       },
       "genre_shares": {
         "unknown": 1.0
@@ -55,19 +55,19 @@
       "sections": [
         "all"
       ],
-      "articles": 19,
-      "eligible": 19,
+      "articles": 33,
+      "eligible": 33,
       "fulltext": 0,
-      "lead_only": 19,
+      "lead_only": 33,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 18,
-        "opinion": 1
+        "unknown": 31,
+        "opinion": 2
       },
       "genre_shares": {
-        "unknown": 0.9473684210526315,
-        "opinion": 0.05263157894736842
+        "unknown": 0.9393939393939394,
+        "opinion": 0.06060606060606061
       }
     },
     {
@@ -83,14 +83,14 @@
       "sections": [
         "world"
       ],
-      "articles": 18,
-      "eligible": 18,
-      "fulltext": 18,
+      "articles": 23,
+      "eligible": 23,
+      "fulltext": 23,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 18
+        "unknown": 23
       },
       "genre_shares": {
         "unknown": 1.0
@@ -138,14 +138,14 @@
         "politics",
         "world"
       ],
-      "articles": 43,
-      "eligible": 43,
-      "fulltext": 43,
+      "articles": 59,
+      "eligible": 59,
+      "fulltext": 59,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 43
+        "unknown": 59
       },
       "genre_shares": {
         "unknown": 1.0
@@ -164,14 +164,14 @@
       "sections": [
         "world"
       ],
-      "articles": 10,
-      "eligible": 10,
-      "fulltext": 10,
+      "articles": 11,
+      "eligible": 11,
+      "fulltext": 11,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 10
+        "unknown": 11
       },
       "genre_shares": {
         "unknown": 1.0
@@ -190,14 +190,14 @@
       "sections": [
         "mundo"
       ],
-      "articles": 17,
-      "eligible": 17,
-      "fulltext": 17,
+      "articles": 22,
+      "eligible": 22,
+      "fulltext": 22,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 17
+        "unknown": 22
       },
       "genre_shares": {
         "unknown": 1.0
@@ -219,14 +219,14 @@
         "us",
         "world"
       ],
-      "articles": 16,
-      "eligible": 16,
-      "fulltext": 16,
+      "articles": 18,
+      "eligible": 18,
+      "fulltext": 18,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 16
+        "unknown": 18
       },
       "genre_shares": {
         "unknown": 1.0
@@ -246,14 +246,14 @@
       "sections": [
         "titres"
       ],
-      "articles": 23,
-      "eligible": 23,
-      "fulltext": 23,
+      "articles": 41,
+      "eligible": 40,
+      "fulltext": 41,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 23
+        "unknown": 41
       },
       "genre_shares": {
         "unknown": 1.0
@@ -272,14 +272,14 @@
       "sections": [
         "wiadomosci"
       ],
-      "articles": 20,
-      "eligible": 20,
-      "fulltext": 20,
+      "articles": 25,
+      "eligible": 25,
+      "fulltext": 25,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 20
+        "unknown": 25
       },
       "genre_shares": {
         "unknown": 1.0
@@ -298,14 +298,14 @@
       "sections": [
         "all"
       ],
-      "articles": 7,
-      "eligible": 6,
-      "fulltext": 7,
+      "articles": 10,
+      "eligible": 9,
+      "fulltext": 10,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 7
+        "unknown": 10
       },
       "genre_shares": {
         "unknown": 1.0
@@ -324,14 +324,14 @@
       "sections": [
         "world"
       ],
-      "articles": 27,
-      "eligible": 27,
-      "fulltext": 27,
+      "articles": 37,
+      "eligible": 37,
+      "fulltext": 37,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 27
+        "unknown": 37
       },
       "genre_shares": {
         "unknown": 1.0
@@ -350,14 +350,14 @@
       "sections": [
         "latest"
       ],
-      "articles": 19,
-      "eligible": 18,
+      "articles": 21,
+      "eligible": 20,
       "fulltext": 0,
-      "lead_only": 19,
+      "lead_only": 21,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 19
+        "unknown": 21
       },
       "genre_shares": {
         "unknown": 1.0
@@ -431,14 +431,14 @@
       "sections": [
         "24ora"
       ],
-      "articles": 39,
-      "eligible": 39,
-      "fulltext": 39,
+      "articles": 63,
+      "eligible": 63,
+      "fulltext": 63,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 39
+        "unknown": 63
       },
       "genre_shares": {
         "unknown": 1.0
@@ -458,14 +458,14 @@
       "sections": [
         "all"
       ],
-      "articles": 10,
-      "eligible": 10,
-      "fulltext": 10,
+      "articles": 12,
+      "eligible": 12,
+      "fulltext": 12,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 10
+        "unknown": 12
       },
       "genre_shares": {
         "unknown": 1.0
@@ -511,14 +511,14 @@
       "sections": [
         "frontpage"
       ],
-      "articles": 15,
-      "eligible": 9,
-      "fulltext": 15,
+      "articles": 24,
+      "eligible": 13,
+      "fulltext": 24,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 15
+        "unknown": 24
       },
       "genre_shares": {
         "unknown": 1.0
@@ -538,14 +538,14 @@
       "sections": [
         "actualites"
       ],
-      "articles": 14,
-      "eligible": 13,
-      "fulltext": 14,
-      "lead_only": 0,
+      "articles": 22,
+      "eligible": 21,
+      "fulltext": 21,
+      "lead_only": 1,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 14
+        "unknown": 22
       },
       "genre_shares": {
         "unknown": 1.0
@@ -565,14 +565,14 @@
       "sections": [
         "all"
       ],
-      "articles": 19,
-      "eligible": 19,
-      "fulltext": 19,
+      "articles": 32,
+      "eligible": 32,
+      "fulltext": 32,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 19
+        "unknown": 32
       },
       "genre_shares": {
         "unknown": 1.0
@@ -592,14 +592,14 @@
       "sections": [
         "all"
       ],
-      "articles": 20,
-      "eligible": 20,
-      "fulltext": 20,
+      "articles": 23,
+      "eligible": 23,
+      "fulltext": 23,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 20
+        "unknown": 23
       },
       "genre_shares": {
         "unknown": 1.0
@@ -644,14 +644,14 @@
       "sections": [
         "wiadomosci"
       ],
-      "articles": 17,
-      "eligible": 17,
-      "fulltext": 17,
+      "articles": 36,
+      "eligible": 36,
+      "fulltext": 36,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 17
+        "unknown": 36
       },
       "genre_shares": {
         "unknown": 1.0
@@ -671,14 +671,14 @@
         "headlines",
         "politics"
       ],
-      "articles": 22,
-      "eligible": 22,
-      "fulltext": 22,
+      "articles": 26,
+      "eligible": 26,
+      "fulltext": 26,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 22
+        "unknown": 26
       },
       "genre_shares": {
         "unknown": 1.0
@@ -701,14 +701,14 @@
       "sections": [
         "wiadomosci"
       ],
-      "articles": 20,
-      "eligible": 20,
-      "fulltext": 20,
+      "articles": 35,
+      "eligible": 35,
+      "fulltext": 35,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 20
+        "unknown": 35
       },
       "genre_shares": {
         "unknown": 1.0
@@ -754,14 +754,14 @@
       "sections": [
         "all"
       ],
-      "articles": 6,
-      "eligible": 6,
-      "fulltext": 6,
+      "articles": 9,
+      "eligible": 9,
+      "fulltext": 9,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 6
+        "unknown": 9
       },
       "genre_shares": {
         "unknown": 1.0
@@ -781,14 +781,14 @@
       "sections": [
         "all"
       ],
-      "articles": 100,
-      "eligible": 100,
-      "fulltext": 100,
+      "articles": 155,
+      "eligible": 155,
+      "fulltext": 155,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 100
+        "unknown": 155
       },
       "genre_shares": {
         "unknown": 1.0
@@ -808,14 +808,14 @@
       "sections": [
         "glowne"
       ],
-      "articles": 19,
-      "eligible": 19,
+      "articles": 39,
+      "eligible": 39,
       "fulltext": 0,
-      "lead_only": 19,
+      "lead_only": 39,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 19
+        "unknown": 39
       },
       "genre_shares": {
         "unknown": 1.0
@@ -836,14 +836,14 @@
         "local",
         "world"
       ],
-      "articles": 18,
-      "eligible": 18,
-      "fulltext": 18,
+      "articles": 21,
+      "eligible": 21,
+      "fulltext": 21,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 18
+        "unknown": 21
       },
       "genre_shares": {
         "unknown": 1.0
@@ -864,14 +864,14 @@
         "china",
         "world"
       ],
-      "articles": 21,
-      "eligible": 21,
+      "articles": 24,
+      "eligible": 24,
       "fulltext": 0,
-      "lead_only": 21,
+      "lead_only": 24,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 21
+        "unknown": 24
       },
       "genre_shares": {
         "unknown": 1.0
@@ -891,14 +891,14 @@
       "sections": [
         "ausland"
       ],
-      "articles": 15,
-      "eligible": 15,
+      "articles": 19,
+      "eligible": 19,
       "fulltext": 0,
-      "lead_only": 15,
+      "lead_only": 19,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 15
+        "unknown": 19
       },
       "genre_shares": {
         "unknown": 1.0
@@ -918,14 +918,14 @@
       "sections": [
         "alle"
       ],
-      "articles": 24,
-      "eligible": 24,
-      "fulltext": 24,
+      "articles": 30,
+      "eligible": 30,
+      "fulltext": 30,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 24
+        "unknown": 30
       },
       "genre_shares": {
         "unknown": 1.0
@@ -945,14 +945,14 @@
       "sections": [
         "all"
       ],
-      "articles": 24,
-      "eligible": 24,
-      "fulltext": 23,
+      "articles": 34,
+      "eligible": 34,
+      "fulltext": 33,
       "lead_only": 1,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 24
+        "unknown": 34
       },
       "genre_shares": {
         "unknown": 1.0
@@ -998,14 +998,14 @@
       "sections": [
         "international"
       ],
-      "articles": 20,
-      "eligible": 20,
-      "fulltext": 20,
+      "articles": 29,
+      "eligible": 29,
+      "fulltext": 29,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 20
+        "unknown": 29
       },
       "genre_shares": {
         "unknown": 1.0
@@ -1024,14 +1024,14 @@
       "sections": [
         "ostatnie"
       ],
-      "articles": 23,
-      "eligible": 23,
-      "fulltext": 23,
+      "articles": 49,
+      "eligible": 49,
+      "fulltext": 49,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 23
+        "unknown": 49
       },
       "genre_shares": {
         "unknown": 1.0
@@ -1051,14 +1051,14 @@
       "sections": [
         "all"
       ],
-      "articles": 48,
-      "eligible": 29,
-      "fulltext": 48,
+      "articles": 72,
+      "eligible": 40,
+      "fulltext": 72,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 48
+        "unknown": 72
       },
       "genre_shares": {
         "unknown": 1.0
@@ -1077,14 +1077,14 @@
       "sections": [
         "wiadomosci"
       ],
-      "articles": 15,
-      "eligible": 15,
-      "fulltext": 15,
+      "articles": 30,
+      "eligible": 30,
+      "fulltext": 30,
       "lead_only": 0,
       "pending": 0,
       "failed": 0,
       "genres": {
-        "unknown": 15
+        "unknown": 30
       },
       "genre_shares": {
         "unknown": 1.0
