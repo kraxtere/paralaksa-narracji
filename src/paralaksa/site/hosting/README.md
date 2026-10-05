@@ -4,16 +4,21 @@ Repo generowane przez `plx site --publikuj` z repo `paralaksa-narracji`. Nie edy
 zastępuje całą zawartość jednym commitem.
 
 - `public/`: zbudowana strona (nagłówki do 15 słów, tłumaczenia, linki; bez pełnych tekstów).
-- `server.py`: serwer z logowaniem (formularz i podpisane ciasteczko na 90 dni; HTTP Basic Auth dla skryptów),
-  biblioteka standardowa (poza powiadomieniami).
-- `konta.py`: konta innych osób (zaproszenia, hasła jako skróty PBKDF2) i czas na stronie.
+- `server.py`: serwer z logowaniem (linki zaproszenia, hasło właściciela, podpisane ciasteczko na 365 dni odnawiane
+  przy czytaniu; HTTP Basic Auth dla skryptów), biblioteka standardowa (poza powiadomieniami).
+- `konta.py`: konta innych osób (linki zaproszenia, klucze logowania; starsze konta z hasłem jako skrót PBKDF2) i czas
+  na stronie.
 - `powiadomienia.py`: powiadomienia push o nowym wydaniu (Web Push, `pywebpush` z `requirements.txt`).
 
 Render: Web Service z tego repo, start `python server.py`, zmienne `SITE_USER` i `SITE_PASSWORD` (konto właściciela).
 Bez nich serwer odpowiada 503 i niczego nie pokazuje.
 
-Konta innych osób: właściciel otwiera `/osoby`, dodaje osobę i wysyła jej jednorazowy link `/zaproszenie/...`
-(ważny 7 dni), pod którym osoba sama ustawia hasło i zostaje zalogowana. Strony co minutę zgłaszają, co jest czytane,
+Konta innych osób, bez haseł: właściciel otwiera `/osoby`, dodaje osobę i wysyła jej imienny link `/zaproszenie/...`;
+otwarcie od razu loguje („Witaj, imię”), także na kolejnych urządzeniach, przez 30 dni. „Nowy link” unieważnia
+poprzedni (zalogowane urządzenia zostają), „Zablokuj” wylogowuje wszędzie i unieważnia linki. Link ogólny (włączany na
+`/osoby`, „Nowy link ogólny” unieważnia stary) pyta tylko o imię lub nazwę: nowe imię zakłada konto, to samo imię na
+innym urządzeniu to to samo konto (można się podszyć), zablokowane imię nie wejdzie. Link można też wkleić na stronie
+logowania (aplikacja na ekranie głównym nie ma paska adresu). Hasło ma tylko właściciel. Strony co minutę zgłaszają, co jest czytane,
 gdy karta jest widoczna i ktoś jej używał w ostatnich 5 minutach (przewijanie, dotyk, mysz, klawisz), oraz od razu,
 gdy karta zostanie schowana. Karta zostawiona bez ruchu milknie, więc serwer może zasnąć po 15 minutach. „Usuń” kasuje konto, historia zostaje.
 Dysk darmowego Rendera znika przy każdym uśpieniu i wdrożeniu, więc osoby i aktywność trafiają do prywatnego repo

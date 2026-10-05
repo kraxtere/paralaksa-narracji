@@ -2,13 +2,16 @@
 
 Render's free disk is wiped on every sleep and deploy, so everything lives in a private GitHub repo (ACTIVITY_REPO)
 written through the contents API with a fine-grained token (ACTIVITY_TOKEN, access to that one repo only):
-  osoby.json                 people (PBKDF2 password hashes, never passwords) and pending invites (token hashes)
+  osoby.json                 people ("klucz": random key that signs their logins; older accounts may also have a PBKDF2
+                             password hash, never a password), invite links (token hashes) and the share link ("ogolny")
   aktywnosc/<YYYY-MM-DD>.jsonl   one line per page view ("v", from the server) or reading signal from the page:
                              "s" start, "p" checkpoint (every minute and on a change of place), "e" end; "s" = seconds
                              read since the previous signal of that tab (counted backwards from "t"), "c" = tab id,
                              "r" = reason (otwarcie, fokus, widoczna, powrot, ruch, ping, miejsce, idle, blur, hidden, wyjscie)
-Logins live in a signed cookie (sign_session/read_session): stateless, so it survives Render's restarts; it stops
-working when the person's password changes or the account is blocked or deleted.
+Invite links log in without a password: a named link (invite; reusable until it expires or a new one replaces it) at
+once, the share link after typing a name (join: the same name is the same person, on any device). Logins live in a
+signed cookie (sign_session/read_session): stateless, so it survives Render's restarts; it stops working when the
+account is blocked (a new key) or deleted.
 """
 from __future__ import annotations
 
@@ -26,7 +29,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Callable
 
 ITERATIONS = 120_000          # PBKDF2; udane logowania są cache'owane, więc koszt płaci się raz na proces
-INVITE_DAYS = 7
+INVITE_DAYS = 30              # link imienny działa wielokrotnie (kilka urządzeń), do wygaśnięcia albo nowego linku
 SESSION_GAP_S = 600           # przerwa dłuższa niż 10 min zaczyna nową sesję
 PING_S = 60
 MAX_SIGNAL_S = PING_S + 15    # więcej sekund w jednym sygnale się nie dolicza (np. uśpiony telefon)
@@ -92,6 +95,16 @@ def read_session(secret: bytes, value: str, fingerprint_of: Callable[[str], str 
         return None
     good = hmac.new(secret, f"{raw}.{exp}.{fingerprint}".encode(), "sha256").hexdigest()[:40]
     return (login, exp) if hmac.compare_digest(mac, good) else None
+
+
+def new_key() -> str:
+    return secrets.token_hex(16)
+
+
+def name_key(name: str) -> str:
+    """Name compared on the share link: case, accents and punctuation do not matter ("Łukasz K." = "lukasz k")."""
+    folded = unicodedata.normalize("NFKD", name.replace("ł", "l").replace("Ł", "L"))
+    return " ".join(re.findall(r"[^\W_]+", "".join(c for c in folded if not unicodedata.combining(c)).casefold()))
 
 
 def make_login(name: str, taken) -> str:
@@ -183,7 +196,7 @@ class Store:
         self.lock = threading.RLock()
         self.pending: list[dict] = []
         self.error = ""
-        self.data: dict = {"osoby": {}, "zaproszenia": {}}
+        self.data: dict = {"osoby": {}, "zaproszenia": {}, "ogolny": {}}
         self.sha: str | None = None
         self._auth_cache: dict[str, str] = {}
         self._day_cache: dict[str, tuple[str, list[dict]]] = {}
@@ -194,7 +207,8 @@ class Store:
         with self.lock:
             text, sha = self.files.get("osoby.json")
             data = json.loads(text) if text else {}
-            self.data = {"osoby": data.get("osoby", {}), "zaproszenia": data.get("zaproszenia", {})}
+            self.data = {"osoby": data.get("osoby", {}), "zaproszenia": data.get("zaproszenia", {}),
+                         "ogolny": data.get("ogolny", {})}
             self.sha = sha
             self._auth_cache.clear()
 
@@ -218,14 +232,15 @@ class Store:
             return json.loads(json.dumps(self.data["osoby"]))
 
     def invite(self, name: str = "", login: str | None = None) -> tuple[str, str]:
-        """New person (from `name`) or a fresh link for an existing `login` (also a password reset). Returns (login, token)."""
+        """New person (from `name`) or a fresh link for an existing `login` (the old link stops working, logged-in
+        devices stay). Returns (login, token)."""
         token = secrets.token_urlsafe(24)
 
         def change(d):                       # przy konflikcie wołane ponownie na świeżych danych: bez stanu z zewnątrz
             who = login
             if who is None:
                 who = make_login(name, set(d["osoby"]) | self.reserved)
-                d["osoby"][who] = {"imie": name.strip()[:60] or who, "hash": None, "utworzono": iso(self.clock()),
+                d["osoby"][who] = {"imie": name.strip()[:60] or who, "klucz": new_key(), "utworzono": iso(self.clock()),
                                    "zablokowana": False}
             elif who not in d["osoby"] or d["osoby"][who].get("usunieta"):
                 raise KeyError(who)
@@ -247,26 +262,66 @@ class Store:
                 return None
             return {"login": inv["login"], "imie": person["imie"], "wygasa": inv["wygasa"]}
 
-    def accept(self, token: str, password: str) -> str:
-        if len(password) < 10:
-            raise ValueError("Hasło musi mieć co najmniej 10 znaków.")
-        hashed = hash_password(password)
+    def ensure_key(self, login: str) -> None:
+        """Give a key to a person invited before links logged in (no password set yet), so the cookie can be signed."""
+        if self.fingerprint(login) is not None:
+            return
 
         def change(d):
-            inv = d["zaproszenia"].pop(token_hash(token), None)
-            if not inv or parse_iso(inv["wygasa"]) <= self.clock() or inv["login"] not in d["osoby"]:
-                raise LookupError("Link nie działa albo wygasł.")
-            d["osoby"][inv["login"]]["hash"] = hashed
-            return inv["login"]
+            person = d["osoby"].get(login)
+            if person and not person.get("klucz") and not person.get("zablokowana") and not person.get("usunieta"):
+                person["klucz"] = new_key()
+        self._change(change, f"osoby: klucz {login}")
 
-        return self._change(change, "osoby: ustawione hasło")
+    def join(self, name: str) -> str:
+        """Login for a name typed on the share link: the person with the same name_key, else a new person.
+        Blocked names are refused (PermissionError); deleted accounts are skipped, so the name gets a new account."""
+        name = " ".join(name.split())[:60]
+        key = name_key(name)
+        if not key:
+            raise ValueError("Podaj imię lub nazwę.")
+
+        def same(d):
+            return next((login for login, p in sorted(d["osoby"].items(), key=lambda kv: kv[1].get("utworzono") or "")
+                         if not p.get("usunieta") and name_key(p["imie"]) == key), None)
+
+        with self.lock:
+            found = same(self.data)
+            if found and self.fingerprint(found) is not None:
+                return found                 # znana osoba z kluczem albo hasłem: bez zapisu
+
+        def change(d):
+            who = same(d)
+            if who is None:
+                who = make_login(name, set(d["osoby"]) | self.reserved)
+                d["osoby"][who] = {"imie": name, "klucz": new_key(), "utworzono": iso(self.clock()),
+                                   "zablokowana": False, "z_linku_ogolnego": True}
+            elif d["osoby"][who].get("zablokowana"):
+                raise PermissionError("To imię jest zablokowane.")
+            elif not d["osoby"][who].get("klucz") and not d["osoby"][who].get("hash"):
+                d["osoby"][who]["klucz"] = new_key()
+            return who
+
+        return self._change(change, f"osoby: wejście z linku ogólnego ({make_login(name, ())})")
+
+    def share(self) -> dict:
+        """The share link: {"wlaczony": bool, "wersja": int}; the token itself is derived by the server."""
+        with self.lock:
+            return dict(self.data["ogolny"])
+
+    def set_share(self, on: bool) -> None:
+        """Turn the share link off, or on with a new version (the previous link stops working)."""
+        def change(d):
+            d["ogolny"] = {"wlaczony": on, "wersja": d["ogolny"].get("wersja", 0) + (1 if on else 0)}
+        self._change(change, f"osoby: link ogólny {'nowy' if on else 'wyłączony'}")
 
     def set_blocked(self, login: str, blocked: bool) -> None:
         def change(d):
             if d["osoby"][login].get("usunieta"):
                 return
             d["osoby"][login]["zablokowana"] = blocked
-            if blocked:
+            if blocked:                      # nowy klucz: urządzenia wylogowane także po odblokowaniu
+                d["osoby"][login]["klucz"] = new_key()
                 d["zaproszenia"] = {k: v for k, v in d["zaproszenia"].items() if v["login"] != login}
         self._change(change, f"osoby: {'blokada' if blocked else 'odblokowanie'} {login}")
 
@@ -281,12 +336,13 @@ class Store:
         self._change(change, f"osoby: usunięta {login}")
 
     def fingerprint(self, login: str) -> str | None:
-        """Changes whenever the password does; None when the person cannot log in (cookie check)."""
+        """Signs the person's login cookie: the key (or the password hash of an older account without one), new after
+        blocking; None when the person cannot log in."""
         with self.lock:
             person = self.data["osoby"].get(login)
-            if not person or person.get("zablokowana") or person.get("usunieta") or not person.get("hash"):
+            if not person or person.get("zablokowana") or person.get("usunieta"):
                 return None
-            return person["hash"]
+            return person.get("klucz") or person.get("hash") or None
 
     def authenticate(self, login: str, password: str) -> bool:
         with self.lock:

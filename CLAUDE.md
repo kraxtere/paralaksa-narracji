@@ -11,7 +11,8 @@ Limit konta jest wąskim gardłem. Każdy krok czyta cały kontekst od nowa, wi�
 
 ## Projekt
 **Paralaksa narracji / zdarzeń**: codzienny przegląd prasy z 17 krajów (43 źródła, `config/sources.yaml`), strona wewnętrzna
-pod hasłem (wersja 2.0 obrazkowa). Spec: `SPEC.md` (radar→paralaksa, `src/radar`→`src/paralaksa`, `radar`→`plx`, `data/paralaksa.db`).
+prywatna: dostęp przez link zaproszenia, noindex (wersja 2.0 obrazkowa). Spec: `SPEC.md` (radar→paralaksa,
+`src/radar`→`src/paralaksa`, `radar`→`plx`, `data/paralaksa.db`).
 Stan i obsługa: `docs/CURRENT_HANDOFF.md`, `docs/OPERATIONS.md`, `docs/SOURCE_REVIEW.md`, `docs/PARALAKSA_ZDARZEN.md`, `CHANGELOG.md`.
 Procedura dnia strony 2.0: `scripts/v2/README.md`.
 
@@ -44,6 +45,7 @@ Procedura dnia strony 2.0: `scripts/v2/README.md`.
 ## Zasady obowiązkowe
 - Opisujemy przekaz medialny, nie fakty. Progi SPEC (≥3 kraje, ≥2 źródła/kraj), odnośniki do każdego twierdzenia; progów nie obniżać.
 - robots.txt, bez obchodzenia paywalli i antybotów, UA bez zmian. Pełne teksty tylko lokalnie (`data/`), cytaty maks. 15 słów.
-- Strona prywatna (noindex, pod hasłem); `SITE_USER/SITE_PASSWORD`, `VAPID_PRIVATE_KEY` tylko w Renderze/.env, nigdy w repo ani w czacie.
+- Strona prywatna: dostęp przez link zaproszenia, noindex (hasło ma tylko właściciel); `SITE_USER/SITE_PASSWORD`,
+  `VAPID_PRIVATE_KEY` tylko w Renderze/.env, nigdy w repo ani w czacie.
 - Źródła rosyjskie dozwolone. Taksonomii tematów nie zmieniać automatycznie. Pole `sprawdzil` w kartach tylko człowiek.
 - Codex/GPT tylko do treści, nie do kodu. Nie commitować `AGENTS.md`.

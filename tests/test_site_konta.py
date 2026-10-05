@@ -49,39 +49,69 @@ def test_make_login_is_ascii_and_unique():
     assert konta.make_login("  !!! ", set()) == "osoba"
 
 
-def test_invite_accept_and_login():
-    clock = Clock()
-    st = _store(clock)
+def test_invite_link_works_many_times_without_password():
+    st = _store()
     st.reserved = {"wlasciciel"}
     login, token = st.invite("Ala")
     assert login == "ala" and st.invite_info(token)["imie"] == "Ala"
-    assert not st.authenticate("ala", "cokolwiek-123")                 # przed ustawieniem hasła
-    with pytest.raises(ValueError):
-        st.accept(token, "krotkie")
-    assert st.accept(token, "moje-haslo-123") == "ala"
-    assert st.authenticate("ala", "moje-haslo-123") and not st.authenticate("ala", "zle-haslo-123")
-    assert st.invite_info(token) is None                                # link działa raz
-    saved = json.loads(st.files.get("osoby.json")[0])
-    assert "moje-haslo-123" not in json.dumps(saved) and token not in json.dumps(saved)
+    assert st.invite_info(token) and st.fingerprint("ala")              # link wielokrotny, klucz od razu, bez hasła
+    assert not st.authenticate("ala", "")
+    assert token not in st.files.get("osoby.json")[0]
     assert st.invite("wlasciciel")[0] == "wlasciciel-2"                  # login właściciela zajęty
+
+
+def test_older_accounts_keep_passwords_and_pending_invites_get_a_key():
+    st = _store()
+    hashed = konta.hash_password("moje-haslo-123", iterations=1000)
+    people = {"ala": {"imie": "Ala", "hash": hashed, "zablokowana": False},
+              "ola": {"imie": "Ola", "hash": None, "zablokowana": False}}
+    invites = {konta.token_hash("t" * 32): {"login": "ola", "wygasa": "2026-10-05T00:00:00Z"}}
+    st.files.put("osoby.json", json.dumps({"osoby": people, "zaproszenia": invites}), None, "stare konta")
+    st.load()
+    assert st.authenticate("ala", "moje-haslo-123") and st.fingerprint("ala") == hashed
+    st.ensure_key("ala")
+    assert st.fingerprint("ala") == hashed                              # stare ciasteczka dalej ważne
+    assert st.fingerprint("ola") is None and st.invite_info("t" * 32)["login"] == "ola"
+    st.ensure_key("ola")
+    assert st.fingerprint("ola") and st.join("ola") == "ola"
+
+
+def test_share_link_same_name_is_the_same_person():
+    st = _store()
+    st.reserved = {"wlasciciel"}
+    login, _ = st.invite("Łukasz")
+    assert st.join("  lukasz ") == login                                # wielkość liter, ogonki i spacje bez znaczenia
+    assert st.join("Ola") == "ola" and st.join("OLA") == "ola" and st.people()["ola"]["z_linku_ogolnego"]
+    assert st.join("Ola K.") == "ola-k" and st.join("wlasciciel") == "wlasciciel-2"
+    with pytest.raises(ValueError):
+        st.join(" !! ")
+    st.set_blocked("ola", True)
+    with pytest.raises(PermissionError):
+        st.join("ola")
+    st.delete(login)
+    assert st.join("Łukasz") == "lukasz-2"                              # usunięte konto nie wraca
+    assert st.share() == {}
+    st.set_share(True)
+    st.set_share(True)
+    assert st.share() == {"wlaczony": True, "wersja": 2}
+    st.set_share(False)
+    assert st.share() == {"wlaczony": False, "wersja": 2}
 
 
 def test_invite_expires_new_link_replaces_old_and_block():
     clock = Clock()
     st = _store(clock)
     login, old = st.invite("Bartek")
+    key = st.fingerprint(login)
     _, new = st.invite(login=login)
-    assert st.invite_info(old) is None and st.invite_info(new)
+    assert st.invite_info(old) is None and st.invite_info(new) and st.fingerprint(login) == key   # urządzenia zostają
     clock.t += timedelta(days=konta.INVITE_DAYS, seconds=1)
     assert st.invite_info(new) is None
-    with pytest.raises(LookupError):
-        st.accept(new, "moje-haslo-123")
     _, token = st.invite(login=login)
-    st.accept(token, "moje-haslo-123")
     st.set_blocked(login, True)
-    assert not st.authenticate(login, "moje-haslo-123")
+    assert st.fingerprint(login) is None and st.invite_info(token) is None
     st.set_blocked(login, False)
-    assert st.authenticate(login, "moje-haslo-123")
+    assert st.fingerprint(login) not in (None, key)                     # po blokadzie stare logowania nie wracają
 
 
 def test_people_write_retries_after_conflict_without_duplicates():
@@ -157,11 +187,10 @@ def test_session_cookie_signature_expiry_and_password_change():
 def test_delete_keeps_name_but_ends_the_account():
     st = _store()
     login, token = st.invite("Ala")
-    st.accept(token, "moje-haslo-123")
     st.delete(login)
     person = st.people()[login]
-    assert person["usunieta"] and person["imie"] == "Ala" and not person["hash"]
-    assert not st.authenticate(login, "moje-haslo-123") and st.fingerprint(login) is None
+    assert person["usunieta"] and person["imie"] == "Ala" and "klucz" not in person
+    assert st.invite_info(token) is None and st.fingerprint(login) is None
     with pytest.raises(KeyError):
         st.invite(login=login)
     st.set_blocked(login, False)
@@ -235,24 +264,23 @@ def test_server_invite_flow_heartbeat_and_owner_panel(monkeypatch, tmp_path):
         assert _req(base + "/osoby", owner)[0] == 200
         assert _req(base + "/osoby", owner, {"akcja": "dodaj", "imie": "Ala"})[0] == 403           # bez tokenu CSRF
         status, body = _req(base + "/osoby", owner, {"akcja": "dodaj", "imie": "Ala", "csrf": mod.CSRF})
-        assert status == 200 and "/zaproszenie/" in body
+        assert status == 200 and "/zaproszenie/" in body and "bez hasła" in body
         token = body.split("/zaproszenie/")[1].split("<")[0]
 
         assert _req(base + "/zaproszenie/zly-token")[0] == 404
-        status, body = _req(base + f"/zaproszenie/{token}")                                     # bez hasła
-        assert status == 200 and "Ustaw hasło" in body and "ala" in body
-        assert "różnią" in _req(base + f"/zaproszenie/{token}", data={"haslo": "moje-haslo-123", "haslo2": "inne"})[1]
-        status, body = _req(base + f"/zaproszenie/{token}", data={"haslo": "moje-haslo-123", "haslo2": "moje-haslo-123"})
-        assert status == 200 and "Gotowe" in body
+        status, body, _, set_cookie = _raw(base, "GET", f"/zaproszenie/{token}")              # od razu zalogowana
+        assert status == 200 and "Witaj, Ala!" in body and 'type="password"' not in body
+        assert f"Max-Age={365 * 86400}" in set_cookie and "HttpOnly" in set_cookie
+        assert _raw(base, "GET", f"/zaproszenie/{token}")[3]                                  # drugie urządzenie
+        assert "Link działa" in _req(base + f"/zaproszenie/{token}", owner)[1]               # właściciel zostaje sobą
 
-        ala = "ala:moje-haslo-123"
-        status, body = _req(base + "/", ala)
+        ala = _cookie(set_cookie)
+        status, body, _, _ = _raw(base, "GET", "/", ala)
         assert status == 200 and "/_ping" in body and 'href="/osoby"' not in body
-        assert _req(base + "/a.png", ala) == (200, "png")
-        assert _req(base + "/_ping?k=p&s=60&c=k1&r=ping&p=/index.html", ala)[0] == 204
-        assert _req(base + "/_ping?k=zle&p=/index.html", ala)[0] == 204                       # nieznany rodzaj: bez zapisu
-        assert _req(base + "/osoby", ala)[0] == 403
-        assert _req(base + "/", "ala:zle-haslo-123")[0] == 401
+        assert _raw(base, "GET", "/a.png", ala)[:2] == (200, "png")
+        assert _raw(base, "GET", "/_ping?k=p&s=60&c=k1&r=ping&p=/index.html", ala)[0] == 204
+        assert _raw(base, "GET", "/_ping?k=zle&p=/index.html", ala)[0] == 204                 # nieznany rodzaj: bez zapisu
+        assert _raw(base, "GET", "/osoby", ala)[0] == 403
         kinds = [(e["u"], e["k"]) for e in store.events(30)]               # część zapisana już przy wejściu na /osoby
         assert ("ala", "v") in kinds and ("ala", "p") in kinds and ("wlasciciel", "v") in kinds
 
@@ -322,18 +350,15 @@ def test_server_login_attempts_are_limited(monkeypatch, tmp_path):
         srv.shutdown()
 
 
-def test_server_invite_logs_in_new_password_logs_out_and_delete(monkeypatch, tmp_path):
+def test_server_new_link_block_and_delete_end_logins(monkeypatch, tmp_path):
     store = _store()
     mod, srv, base = _server(monkeypatch, tmp_path, store)
     (tmp_path / "zdarzenie.html").write_text("<html><head><title>Zdarzenie X · Paralaksa</title></head><body></body>"
                                              "</html>", encoding="utf-8")
     try:
         login, token = store.invite("Ala")
-        page = _raw(base, "GET", f"/zaproszenie/{token}")[1]
-        assert "Ustaw hasło" in page and "czas" not in page.lower()
-        status, body, _, set_cookie = _raw(base, "POST", f"/zaproszenie/{token}",
-                                           data={"haslo": "moje-haslo-123", "haslo2": "moje-haslo-123"})
-        assert status == 200 and "zalogowane" in body and "czas" not in body.lower()
+        status, body, _, set_cookie = _raw(base, "GET", f"/zaproszenie/{token}")
+        assert status == 200 and "Witaj, Ala" in body and "czas" not in body.lower()
         ala = _cookie(set_cookie)
         assert _raw(base, "GET", "/zdarzenie.html", ala)[0] == 200
         assert _raw(base, "GET", "/_ping?k=e&s=999&c=K1!&r=hidden&p=/zdarzenie.html%23kraje", ala)[0] == 204
@@ -341,20 +366,59 @@ def test_server_invite_logs_in_new_password_logs_out_and_delete(monkeypatch, tmp
         assert [e["k"] for e in ev] == ["v", "e"] and ev[1]["s"] == konta.MAX_SIGNAL_S and ev[1]["c"] == "1"
         assert ev[1]["r"] == "hidden" and ev[1]["p"] == "/zdarzenie.html#kraje"
 
-        _, token = store.invite(login=login)                                     # nowy link = nowe hasło
-        store.accept(token, "inne-haslo-123")
-        assert _raw(base, "GET", "/", ala)[0] == 303                             # stare ciasteczko już nie działa
-        status, _, _, set_cookie = _raw(base, "POST", "/logowanie", data={"login": "ALA", "haslo": "inne-haslo-123"})
-        assert status == 303 and set_cookie
-        ala = _cookie(set_cookie)
+        _, new = store.invite(login=login)                                       # nowy link: stary nie działa,
+        assert _raw(base, "GET", f"/zaproszenie/{token}")[0] == 404              # zalogowane urządzenia zostają
+        assert _raw(base, "GET", "/", ala)[0] == 200
 
         owner = _cookie(_raw(base, "POST", "/logowanie", data={"login": "wlasciciel", "haslo": "tajne-haslo"})[3])
+        body = _raw(base, "POST", "/osoby", owner, {"akcja": "zablokuj", "login": login, "csrf": mod.CSRF})[1]
+        assert "zablokowana" in body
+        assert _raw(base, "GET", "/", ala)[0] == 303 and _raw(base, "GET", f"/zaproszenie/{new}")[0] == 404
+        _raw(base, "POST", "/osoby", owner, {"akcja": "odblokuj", "login": login, "csrf": mod.CSRF})
+        assert _raw(base, "GET", "/", ala)[0] == 303                             # po odblokowaniu potrzebny nowy link
+        body = _raw(base, "POST", "/osoby", owner, {"akcja": "link", "login": login, "csrf": mod.CSRF})[1]
+        ala = _cookie(_raw(base, "GET", "/zaproszenie/" + body.split("/zaproszenie/")[1].split("<")[0])[3])
+        assert _raw(base, "GET", "/", ala)[0] == 200
+
         body = _raw(base, "GET", "/osoby", owner)[1]
         assert "Usuń" in body and "Zdarzenie X" in body
         body = _raw(base, "POST", "/osoby", owner, {"akcja": "usun", "login": login, "csrf": mod.CSRF})[1]
         assert "Usunięto konto: Ala" in body and "ala · usunięta" in body and "Nowy link" not in body
         assert _raw(base, "GET", "/", ala)[0] == 303
-        assert _req(base + "/", "ala:inne-haslo-123")[0] == 401
+    finally:
+        srv.shutdown()
+
+
+def test_server_share_link_asks_for_a_name_and_the_same_name_is_the_same_person(monkeypatch, tmp_path):
+    store = _store()
+    mod, srv, base = _server(monkeypatch, tmp_path, store)
+    try:
+        owner = {"Authorization": "Basic " + base64.b64encode(b"wlasciciel:tajne-haslo").decode()}
+        assert "wyłączony" in _raw(base, "GET", "/osoby", owner)[1]
+        body = _raw(base, "POST", "/osoby", owner, {"akcja": "ogolny", "csrf": mod.CSRF})[1]
+        link = "/zaproszenie/" + body.split("/zaproszenie/")[1].split("<")[0]
+        assert link in _raw(base, "GET", "/osoby", owner)[1]                       # panel pokazuje go ponownie
+        status, body, _, set_cookie = _raw(base, "GET", link)
+        assert status == 200 and "Podaj imię lub nazwę" in body and set_cookie is None
+        status, body, _, set_cookie = _raw(base, "POST", link, data={"imie": " Ola "})
+        assert status == 200 and "Witaj, Ola!" in body
+        ola = _cookie(set_cookie)
+        assert _raw(base, "GET", "/", ola)[0] == 200
+        again = _cookie(_raw(base, "POST", link, data={"imie": "ola"})[3])          # inne urządzenie, to samo imię
+        assert again["Cookie"].split(".")[0] == ola["Cookie"].split(".")[0] and list(store.people()) == ["ola"]
+        assert "Podaj imię lub nazwę." in _raw(base, "POST", link, data={"imie": "!!"})[1]
+        status, _, location, _ = _raw(base, "POST", "/logowanie", data={"link": base + link})   # aplikacja bez paska
+        assert status == 303 and location == link
+        assert "To nie jest link" in _raw(base, "POST", "/logowanie", data={"link": "cokolwiek"})[1]
+
+        _raw(base, "POST", "/osoby", owner, {"akcja": "zablokuj", "login": "ola", "csrf": mod.CSRF})
+        assert "zablokowane" in _raw(base, "POST", link, data={"imie": "Ola"})[1]
+        mod.FAIL_MAX = 4                                                            # nowe konta z jednego adresu
+        assert "Za dużo prób" in _raw(base, "POST", link, data={"imie": "Ewa"})[1] and "ewa" not in store.people()
+        _raw(base, "POST", "/osoby", owner, {"akcja": "ogolny", "csrf": mod.CSRF})       # nowy link ogólny
+        assert _raw(base, "GET", link)[0] == 404
+        _raw(base, "POST", "/osoby", owner, {"akcja": "ogolny-wylacz", "csrf": mod.CSRF})
+        assert "wyłączony" in _raw(base, "GET", "/osoby", owner)[1] and store.share()["wlaczony"] is False
     finally:
         srv.shutdown()
 
@@ -499,10 +563,12 @@ def test_server_menu_data_service_worker_and_push_endpoint(monkeypatch, tmp_path
 
         (tmp_path / "v2" / "powiadomienie.json").write_text(
             json.dumps({"dzien": "2026-10-02", "tytul": "Paralaksa · 02.10", "tresc": "A; B"}), encoding="utf-8")
+        mod.PUSH.add(store.invite("Ala")[0], _sub(2))                                      # konto bez hasła
         got = []
-        assert mod.announce(tmp_path, lambda sub, data: got.append(json.loads(data)) or 201) == "2026-10-02: wysłane 1, usunięte 0"
-        assert got == [{"title": "Paralaksa · 02.10", "body": "A; B", "url": "/v2/2026-10-02/index.html", "tag": "wydanie"}]
+        assert mod.announce(tmp_path, lambda sub, data: got.append(json.loads(data)) or 201) == "2026-10-02: wysłane 2, usunięte 0"
+        assert got[0] == {"title": "Paralaksa · 02.10", "body": "A; B", "url": "/v2/2026-10-02/index.html", "tag": "wydanie"}
         assert post({"usun": _sub(1)["endpoint"]}) == 204
-        assert json.loads(store.files.get("powiadomienia.json")[0])["subskrypcje"] == {}
+        subs = json.loads(store.files.get("powiadomienia.json")[0])["subskrypcje"]
+        assert [s["login"] for s in subs.values()] == ["ala"]
     finally:
         srv.shutdown()

@@ -1,3 +1,18 @@
+# Logowanie przez linki zaproszenia, bez haseł — 2026-10-05
+
+- `hosting/konta.py`, `server.py`: imienny link `/zaproszenie/...` loguje od razu (bez hasła i pytania o imię): strona
+  „Witaj, imię!”, po 1,5 s dzień. Link wielokrotny (kilka urządzeń), 30 dni, „Nowy link” unieważnia poprzedni. Ciasteczko
+  365 dni, odnawiane przy czytaniu. Podgląd linku w komunikatorze widzi tylko powitanie (stronę otwiera skrypt).
+- Link ogólny (`/osoby`: włącz, nowy, wyłącz; token wyliczany z sekretu, więc panel pokazuje go ponownie): jedno pole
+  „Podaj imię lub nazwę”; nowe imię zakłada konto, to samo imię (wielkość liter, ogonki bez znaczenia) na innym
+  urządzeniu = to samo konto; zablokowane imię nie wejdzie; limit 20 wejść z adresu na kwadrans.
+- Każda osoba ma `klucz` (podpis ciasteczka); „Zablokuj” go zmienia (wylogowuje wszędzie, także po odblokowaniu) i
+  unieważnia linki. Starsze konta z hasłem działają dalej; oczekujące zaproszenie dostaje klucz przy otwarciu.
+- Właściciel: hasło i `/osoby` bez zmian; otwarcie linku zaproszenia na jego zalogowanym urządzeniu nie przełącza konta.
+  Na stronie logowania pole na wklejenie linku (aplikacja na ekranie głównym nie ma paska adresu). Powiadomienia także
+  dla kont bez hasła (wcześniej wymagały hasła).
+- Testy `tests/test_site_konta.py`; `CLAUDE.md`: „pod hasłem” → „prywatna: dostęp przez link zaproszenia, noindex”.
+
 # Procedura dnia w trzech fazach: `scripts/v2/dzien.py` — 2026-10-05 (nie zacommitowane)
 
 - Faza 1 teksty po kolei, faza 2 wszystkie obrazki dnia (paski tematów i krajów w tematach, okładka, oś, kraje) w jednej kolejce
