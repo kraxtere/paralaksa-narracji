@@ -39,6 +39,7 @@ def script(name: str, *args: str) -> list[str]:
 
 def phase1(day: str) -> list[Step]:
     return [
+        Step("kategorie", script("kategorie.py")),        # kategoria ogólna artykułów bez sygnałów (archiwum); dokańcza brakujące
         Step("site", [PLX, "site", "--db", DB], Path(f"data/stories/{day}.json")),
         Step("report", [PLX, "report", "--date", day, "--db", DB], Path(f"reports/{day}.json")),
         Step("dzien_prasy", script("dzien_prasy.py", day, "--bez-opisow"), Path(f"data/dzien_prasy/{day}/opisy.json")),

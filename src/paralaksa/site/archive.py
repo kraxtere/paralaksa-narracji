@@ -10,10 +10,22 @@ from __future__ import annotations
 import gzip
 import html
 import json
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
 from paralaksa.site.data import COUNTRY_NAMES
+from paralaksa.site.slowa import lemmas, rising
+
+CATEGORIES_FILE = Path("data/widok/kategorie.json")      # {id artykułu: kategoria}, scripts/v2/kategorie.py (lokalnie, Codex)
+RISING_WORDS = 12
+
+
+def load_categories(path: Path = CATEGORIES_FILE) -> dict[int, str]:
+    try:
+        return {int(k): v for k, v in json.loads(path.read_text(encoding="utf-8")).items()}
+    except (OSError, ValueError):
+        return {}
 
 
 def _utc(stamp: str | None) -> datetime | None:
@@ -23,9 +35,10 @@ def _utc(stamp: str | None) -> datetime | None:
         return None
 
 
-def records(payload: dict) -> list[list]:
+def records(payload: dict, categories: dict[int, str] | None = None) -> list[list]:
     """Compact rows of one day from `daily_payload`: [source, title, Polish title or "", url,
-    [[theme, stance, actor, frame, summary_pl], ...]]; articles published before the window are dropped."""
+    [[theme, stance, actor, frame, summary_pl], ...], lemmas of the Polish title (space-separated, "" without one),
+    general category (only for articles without signals, "" otherwise)]; articles published before the window are dropped."""
     start = _utc(payload["publikacja"]["publication_window_start"])
     rows = []
     for a in payload["artykuly"]:
@@ -33,9 +46,34 @@ def records(payload: dict) -> list[list]:
         if pub is not None and pub < start:
             continue
         pl = a.get("pl") or ""
-        rows.append([a["src"], a["tytul"], "" if pl == a["tytul"] else pl, a["url"],
-                     [[s["th"], s["st"], s["actor"], s["frame"], s["sum"]] for s in a["s"]]])
+        polish = pl or (a["tytul"] if a.get("kraj") == "PL" else "")        # źródła polskie: tytuł oryginalny jest polski
+        sig = [[s["th"], s["st"], s["actor"], s["frame"], s["sum"]] for s in a["s"]]
+        rows.append([a["src"], a["tytul"], "" if pl == a["tytul"] else pl, a["url"], sig,
+                     " ".join(lemmas(polish)), "" if sig else (categories or {}).get(a["id"], "")])
     return rows
+
+
+def rising_words(days: dict[str, list[list]], sources: dict[str, dict]) -> dict:
+    """Words rising on the newest day vs the mean of the previous 7 days: {"": global top, "PL": per country top}.
+    Counts articles (a lemma once per title); a country needs at least 3 mentions today, global 5."""
+    if not days:
+        return {}
+    ordered = sorted(days, reverse=True)
+
+    def counts(day: str, country: str | None) -> Counter:
+        c: Counter = Counter()
+        for r in days[day]:
+            if r[5] and (country is None or (sources.get(r[0]) or {}).get("kraj") == country):
+                c.update(set(r[5].split()))
+        return c
+
+    previous = ordered[1:8]
+    out = {"": rising(counts(ordered[0], None), [counts(d, None) for d in previous], 5)[:RISING_WORDS]}
+    for country in sorted({(sources.get(r[0]) or {}).get("kraj") for r in days[ordered[0]]} - {None}):
+        top = rising(counts(ordered[0], country), [counts(d, country) for d in previous], 3)[:RISING_WORDS]
+        if top:
+            out[country] = top
+    return out
 
 
 def _dump(obj) -> str:
@@ -57,7 +95,8 @@ def write(dest: Path, days: dict[str, list[list]], sources: dict[str, dict], the
         used.update(r[0] for r in rows)
         listing.append({"d": day, "n": len(rows)})
     spis = {"dni": listing, "tematy": theme_names, "kraje": COUNTRY_NAMES,
-            "zrodla": {s: [sources[s]["name"], sources[s]["kraj"]] for s in sorted(used) if s in sources}}
+            "zrodla": {s: [sources[s]["name"], sources[s]["kraj"]] for s in sorted(used) if s in sources},
+            "rosnace": rising_words(days, sources), "rosnace_dzien": listing[0]["d"] if listing else ""}
     (dest / "index.html").write_text(page(spis, favicon, script), encoding="utf-8")
     return spis
 

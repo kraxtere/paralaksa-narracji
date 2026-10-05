@@ -15,11 +15,11 @@ def test_steps_skip_done_and_resume(tmp_path, monkeypatch):
     def fake(cmd, env):
         ran.append(cmd[-1] if len(cmd) < 3 else cmd[2])
         assert env["DZIEN"] == day
-        return 1 if len(ran) == 3 else 0                              # trzeci uruchomiony krok pada
+        return 1 if len(ran) == 4 else 0                              # czwarty uruchomiony krok pada
 
     assert not dzien.run_steps(dzien.phase1(day), day, state, fake)
-    assert len(ran) == 3 and "site" not in state.done and state.done == ["report", "dzien_prasy"][: len(state.done)]
-    first_failed = [s.name for s in dzien.phase1(day)][3]
+    assert len(ran) == 4 and "site" not in state.done and state.done == ["kategorie", "report", "dzien_prasy"][: len(state.done)]
+    first_failed = [s.name for s in dzien.phase1(day)][4]
     assert first_failed not in state.done
     ran.clear()
     assert dzien.run_steps(dzien.phase1(day), day, dzien.State(day), lambda c, e: 0)   # wznowienie: nic nie pada

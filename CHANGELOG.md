@@ -1,3 +1,15 @@
+# Archiwum: kategorie bez sygnałów i słowa kluczowe — 2026-10-05
+
+- `scripts/v2/kategorie.py`: kategoria ogólna (polityka, gospodarka, sport, kultura i rozrywka, technologia i AI, nauka,
+  zdrowie, społeczeństwo, wypadki i kryminalne, inne) dla artykułów bez sygnałów, po samym tytule, Codex lokalnie
+  (`codex:gpt-6.1-sol:low`, wsad 100 tytułów). Wynik w `data/widok/kategorie.json` {id: kategoria}, bez migracji bazy;
+  ponowne uruchomienie dokańcza brakujące (krok dzienny: `dzien.py` faza 1). Filtr „Kategoria” w archiwum.
+- `site/slowa.py` (nowa zależność `simplemma`, czysty Python): lematy polskich tytułów (Rosji/Rosję → rosja), stoplista,
+  „słowa rosnące” (dziś vs średnia z 7 dni; globalnie min. 5 wystąpień, per kraj min. 3). Paczki dnia mają 2 pola więcej
+  (lematy tytułu PL, kategoria), spis `rosnace`. Panel „Słowa” w archiwum: najczęstsze w wynikach (klik wpisuje hasło)
+  i rosnące (dla wybranego kraju); pary sąsiednich słów (donald trump, morze czarny) wypierają pojedyncze słowo, gdy
+  tłumaczą ≥ 60% jego trafień. Tytuły bez polskiego tłumaczenia pomijane.
+
 # Archiwum 2.0: wyszukiwarka wszystkich artykułów — 2026-10-05
 
 - `site/archive.py`, `assets/archiwum.js`: `plx site` buduje `v2/archiwum/index.html` i paczki dzienne `D.json.gz`

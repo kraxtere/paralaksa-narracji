@@ -267,13 +267,14 @@ def test_v2_archive_day_packs_without_fulltexts(tmp_path, conn):
     title = lambda i: conn.execute("SELECT title, url FROM articles WHERE id = ?", (i,)).fetchone()
     rows_by_title = {r[1]: r for r in rows}
     assert title(old)[0] not in rows_by_title
-    assert rows_by_title[title(bare)[0]] == ["ua1", title(bare)[0], "", title(bare)[1], []]
+    assert rows_by_title[title(bare)[0]] == ["ua1", title(bare)[0], "", title(bare)[1], [], "", ""]   # bez PL tytułu: bez lematów
     assert rows_by_title[title(aid)[0]][4] == [["russia", "alarm", "UA", "Rosja zagraża", f"Streszczenie sygnału {aid}."]]
     assert len(rows) == 4 and "Lead." not in raw and "dowód" not in raw          # bez leadów, pełnych tekstów i dowodów
     page = (arch / "index.html").read_text(encoding="utf-8")
     assert 'content="noindex, nofollow"' in page and 'src="../pasek.js"' in page and "data-wstecz" in page
     spis = json.loads(re.search(r'<script type="application/json" id="spis">(.*?)</script>', page, re.S).group(1))
     assert spis["dni"] == [{"d": DAY, "n": 4}] and spis["tematy"] == themes and spis["kraje"]["UA"] == "Ukraina"
+    assert spis["rosnace"] == {"": []} and spis["rosnace_dzien"] == DAY
     assert spis["zrodla"] == {"pl1": ["PL1", "PL"], "pl2": ["PL2", "PL"], "ua1": ["UA1", "UA"]}
     bar = (out / "v2" / "pasek.js").read_text(encoding="utf-8")
     assert "const archive = true;" in bar and "archiwum/index.html?dzien=" in bar

@@ -121,10 +121,11 @@ def build_site(out_dir: Path, events_dir: Path, reports_dir: Path, conn: sqlite3
 
     days = []
     archive_days, sources = {}, {}
+    categories = archive.load_categories()
     if conn is not None:
         for day in daily_days(conn):
             p = daily_payload(conn, day, load_report(reports_dir, day), theme_names, summaries, stories_for, titles_for)
-            archive_days[day], sources = archive.records(p), p["zrodla"]
+            archive_days[day], sources = archive.records(p, categories), p["zrodla"]
             (out_dir / "dziennik" / f"{day}.html").write_text(page(f"Dziennik {day}", "daily", p, "../", tv_on),
                                                              encoding="utf-8")
             days.append(daily_summary(p))

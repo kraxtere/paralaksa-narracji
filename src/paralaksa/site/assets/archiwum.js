@@ -1,7 +1,7 @@
 /* Archiwum 2.0: wyszukiwarka wszystkich artykułów (plx site → v2/archiwum/index.html, src/paralaksa/site/archive.py).
    Spis dni w stronie (#spis); paczka dnia D.json.gz (D.json, gdy przeglądarka nie ma DecompressionStream) pobierana tylko
    dla dni wybranego okresu i trzymana w pamięci. Wiersz paczki: [źródło, tytuł, nagłówek PL, link,
-   [[temat, ton, aktor, rama, streszczenie], ...]]. Stan filtrów w adresie (#q=…), odświeżenie strony go nie gubi. */
+   [[temat, ton, aktor, rama, streszczenie], ...], lematy polskiego tytułu (spacje), kategoria ogólna (tylko bez sygnałów)]. Stan filtrów w adresie (#q=…), odświeżenie strony go nie gubi. */
 (() => {
   const SPIS = JSON.parse(document.getElementById("spis").textContent);
   const app = document.getElementById("arch");
@@ -11,7 +11,7 @@
   const PAGE = 40;                                            // wyników naraz; „pokaż więcej” dodaje tyle samo
   const ROWS = 6;                                             // krajów na wykresie, reszta po kliknięciu
   const GZ = "DecompressionStream" in window;
-  const DEFAULT = { okres: "7", od: "", do: "", q: "", kraj: "", src: "", th: "", st: "", ak: "", widok: "lista" };
+  const DEFAULT = { okres: "7", od: "", do: "", q: "", kraj: "", src: "", th: "", st: "", ak: "", kat: "", widok: "lista" };
 
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
   const short = d => d.slice(8, 10) + "." + d.slice(5, 7);
@@ -87,6 +87,10 @@
     ".kol{padding:6px 12px;border:1px solid var(--linia);border-radius:12px;background:var(--karta)}" +
     ".kol h3{margin:4px 0 0;font:700 1.05em Georgia,serif}.kol h3 button{all:unset;cursor:pointer;color:var(--cegla)}" +
     ".kol h3 small{color:var(--szary);font:400 .75em Segoe UI,sans-serif}.kol li:last-child{border-bottom:0}.kol .wiecej{margin:4px 0 8px;padding:8px}" +
+    ".slowa{margin:8px 0;border:1px solid var(--linia);border-radius:10px;background:var(--karta)}" +
+    ".slowa summary{padding:9px 12px;cursor:pointer;font-weight:700;list-style:none}.slowa summary::-webkit-details-marker{display:none}" +
+    ".slowa summary small{color:var(--cegla);font-weight:600}.slowa-c{padding:0 12px 10px}.slowa h4{margin:8px 0 5px;color:var(--szary);font:600 .78em Segoe UI,sans-serif}" +
+    ".slowa .chipy{flex-wrap:wrap;overflow:visible;margin:0}.slowa .chipy button{padding:5px 10px;font-size:13px;font-weight:600}.slowa .chipy button i{color:var(--szary);font-style:normal;font-weight:400;margin-left:4px}" +
     ".pusto{margin:18px 2px;color:var(--szary)}";
   document.head.append(style);
 
@@ -101,10 +105,12 @@
     <details class="filtry"><summary>Filtry <small></small></summary><div class="pola">
       <label>Kraj<select data-f="kraj"></select></label><label>Źródło<select data-f="src"></select></label>
       <label>Temat<select data-f="th"></select></label><label>Ton<select data-f="st"></select></label>
-      <label class="cala">Aktor (kraj, organizacja)<select data-f="ak"></select></label><button type="button" class="czysc cala">Wyczyść filtry i szukanie</button>
+      <label class="cala">Aktor (kraj, organizacja)<select data-f="ak"></select></label>
+      <label class="cala">Kategoria (artykuły bez sygnałów)<select data-f="kat"></select></label><button type="button" class="czysc cala">Wyczyść filtry i szukanie</button>
     </div></details>
     <div class="wiersz"><div class="info" aria-live="polite"></div><div class="chipy widoki" role="group" aria-label="Widok">` +
     `<button type="button" data-widok="lista">Lista</button><button type="button" data-widok="kraje">Po krajach</button></div></div><div class="wykres" hidden></div>
+    <details class="slowa"><summary>Słowa <small></small></summary><div class="slowa-c"></div></details>
     <div class="wyniki"></div>`;
   const $ = sel => app.querySelector(sel);
   const q = $(".q"), info = $(".info"), chart = $(".wykres"), out = $(".wyniki");
@@ -116,7 +122,7 @@
   const load = d => packs[d] || (packs[d] = fetch(`${d}.json${GZ ? ".gz" : ""}`).then(r => {
     if (!r.ok) throw new Error(`${d}: ${r.status}`);
     return GZ ? new Response(r.body.pipeThrough(new DecompressionStream("gzip"))).json() : r.json();
-  }).then(rows => rows.map(([src, t, pl, u, s]) => ({ d, src, k: (SPIS.zrodla[src] || [])[1] || "", t, pl, u, s })))
+  }).then(rows => rows.map(([src, t, pl, u, s, lem, kat]) => ({ d, src, k: (SPIS.zrodla[src] || [])[1] || "", t, pl, u, s, lem: lem ? lem.split(" ") : [], kat: kat || "" })))
     .catch(e => { delete packs[d]; throw e; }));
 
   const period = () => {
@@ -162,7 +168,7 @@
   const sigOk = s => (!f.th || s[0] === f.th) && stanceOk(s[1]) && (!f.ak || s[2] === f.ak);
   const filtered = () => {
     const ws = terms();
-    return arts.filter(a => (!f.kraj || a.k === f.kraj) && (!f.src || a.src === f.src)
+    return arts.filter(a => (!f.kraj || a.k === f.kraj) && (!f.src || a.src === f.src) && (!f.kat || a.kat === f.kat)
       && (!(f.th || f.st || f.ak) || a.s.some(sigOk)) && ws.every(t => has(text(a), t)));
   };
 
@@ -191,6 +197,8 @@
     const poza = arts.filter(a => a.s.some(s => s[1] !== "neutralny")).length;
     fill("st", "każdy ton", [["nie-neutralny", `poza neutralnym · ${num(poza)}`],
                              ...STANCES.filter(s => tony[s]).map(s => [s, `${s} · ${num(tony[s])}`])]);
+    const kat = count(a => a.kat ? [a.kat] : []);
+    fill("kat", "każda kategoria", byCount(kat).map(k => [k, `${k} · ${num(kat[k])}`]));
     const aktorzy = count(a => a.s.map(s => s[2]));
     fill("ak", "wszyscy aktorzy", byCount(aktorzy).map(a => {
       const n = actorName(a);
@@ -205,6 +213,7 @@
     if (f.th) tags.push(SPIS.tematy[f.th] || f.th);
     if (f.st) tags.push(f.st === "nie-neutralny" ? "ton: poza neutralnym" : "ton: " + f.st);
     if (f.ak) tags.push("aktor: " + actorName(f.ak));
+    if (f.kat) tags.push("kategoria: " + f.kat);
     $(".filtry small").textContent = tags.length ? "· " + tags.join(", ") : "";
     app.querySelectorAll("[data-okres]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.okres === f.okres)));
     app.querySelectorAll("[data-widok]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.widok === f.widok)));
@@ -301,10 +310,11 @@
     summary();
     const ws = terms(), list = filtered();
     const range = days.length ? (days.length === 1 ? short(days[0]) : `${short(days[days.length - 1])}–${short(days[0])}`) : "";
-    const narrowed = ws.length || f.kraj || f.src || f.th || f.st || f.ak;
+    const narrowed = ws.length || f.kraj || f.src || f.th || f.st || f.ak || f.kat;
     info.innerHTML = `<b>${num(list.length)}</b> ${narrowed ? `z ${num(arts.length)} ${plural(arts.length)}` : plural(list.length)} · ${range}` +
       (failed.length ? ` · <span style="color:var(--cegla)">nie wczytano: ${failed.map(short).join(", ")} (odśwież stronę)</span>` : "");
     drawChart(list);
+    words(list);
     if (!list.length) {
       out.innerHTML = `<p class="pusto">${arts.length ? "Nic nie pasuje. Zmień okres albo filtry." : "Brak artykułów w tym okresie."}</p>`;
       return;
@@ -321,6 +331,24 @@
     }
     out.innerHTML = `<ol>${list.slice(0, shown).map(a => item(a, ws)).join("")}</ol>` +
       (list.length > shown ? `<button type="button" class="wiecej" data-wiecej>Pokaż więcej (${num(Math.min(PAGE, list.length - shown))} z ${num(list.length - shown)})</button>` : "");
+  }
+
+  // --- słowa: najczęstsze w wybranych artykułach i rosnące dziś (liczone przy budowie, ostatni dzień archiwum) ---------------
+  function words(list) {                                      // lematy i pary (a_b); para wypiera pojedyncze słowo, gdy tłumaczy ≥ 60% jego trafień
+    const c = {}, used = new Set(norm(f.q).split(/\s+/));
+    for (const a of list) for (const w of a.lem) c[w] = (c[w] || 0) + 1;
+    const label = w => w.replace(/_/g, " ");
+    const free = w => !w.split("_").some(p => used.has(norm(p)));
+    const keys = Object.keys(c).filter(w => c[w] >= (w.includes("_") ? 3 : 2) && free(w));
+    const eaten = new Set();
+    for (const w of keys) if (w.includes("_")) for (const p of w.split("_")) if (c[w] >= 0.6 * c[p]) eaten.add(p);
+    const top = keys.filter(w => !eaten.has(w)).sort((x, y) => c[y] - c[x] || x.localeCompare(y, "pl")).slice(0, 16);
+    const rise = (SPIS.rosnace[f.kraj] || (f.kraj ? [] : SPIS.rosnace[""]) || []).filter(r => free(r[0])).slice(0, 10);
+    const btn = (w, n) => `<button type="button" data-slowo="${esc(label(w))}">${esc(label(w))}${n ? `<i>${n}</i>` : ""}</button>`;
+    $(".slowa small").textContent = top.length ? "· " + top.slice(0, 3).map(label).join(", ") : "";
+    $(".slowa-c").innerHTML = (top.length ? `<h4>Najczęstsze w wynikach</h4><div class="chipy">${top.map(w => btn(w, c[w])).join("")}</div>` : "") +
+      (rise.length ? `<h4>Rosnące ${SPIS.rosnace_dzien ? short(SPIS.rosnace_dzien) : "dziś"} (vs średnia z 7 dni${f.kraj ? ", " + esc(countryName(f.kraj)) : ""})</h4>` +
+        `<div class="chipy">${rise.map(r => btn(r[0], "×" + r[1])).join("")}</div>` : "") || '<p class="pusto">Brak słów dla tego wyboru.</p>';
   }
 
   // --- zdarzenia ----------------------------------------------------------------------------------------------------
@@ -345,7 +373,12 @@
   app.addEventListener("click", ev => {
     const b = ev.target.closest("button");
     if (!b) return;
-    if (b.dataset.okres) {
+    if (b.dataset.slowo) {
+      f.q = b.dataset.slowo;
+      q.value = f.q;
+      changed();
+      info.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else if (b.dataset.okres) {
       f.okres = b.dataset.okres;
       if (f.okres === "zakres" && !f.od) { f.od = shift(LAST, -6); f.do = LAST; }
       changed(true);
@@ -371,7 +404,7 @@
       allRows = !allRows;
       results();
     } else if (b.classList.contains("czysc")) {
-      Object.assign(f, { q: "", kraj: "", src: "", th: "", st: "", ak: "" });
+      Object.assign(f, { q: "", kraj: "", src: "", th: "", st: "", ak: "", kat: "" });
       q.value = "";
       options();
       changed();
