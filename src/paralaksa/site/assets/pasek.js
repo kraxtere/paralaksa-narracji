@@ -232,7 +232,10 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
       const list = document.querySelector(".list:not(.jeden)"), h1 = list && list.querySelector(":scope > h1");
       const cards = secs.filter(x => x.id.startsWith("kraj-")).map(x => ({ el: x, przed: () => show(x), text: () => text(x) }));
       if (lab && !lab.querySelector(".czytaj")) {
-        mowa.button("duza", [{ el: pods, text: () => body(pods) }]
+        // podsumowanie tematu: wstęp i akapity zwinięte pod „Czytaj dalej” (.pods-wiecej), także gdy są zwinięte
+        const podsText = () => body(pods) + [...pods.querySelectorAll(":scope > .pods-wiecej > p")]
+          .map(x => " " + sentence(x.textContent)).join("");
+        mowa.button("duza", [{ el: pods, text: podsText }]
           .concat(cards), b => lab.append(b));
       } else if (h1 && cards.length && !list.querySelector(":scope > .czytaj.duza")) {
         const lead = () => sentence(h1.textContent) + " " + [...list.querySelectorAll(":scope > p")].filter(x => !x.matches(".s"))

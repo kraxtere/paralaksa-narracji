@@ -4,7 +4,19 @@ Skrypty obrazkowej wersji strony (do 2026-10-01 leżały w `data/`, poza gitem).
 bo czytają i piszą `data/` (baza `data/prod.db` tylko do odczytu, wyniki w `data/widok/`). Obrazki i większość tekstów
 robi Codex z limitu konta (`codex_limit.py` pokazuje zużycie). Nigdy w Actions.
 
-## Nowy dzień D
+## Nowy dzień D: jedno polecenie (od 05.10)
+
+`python scripts/v2/dzien.py D [--publikuj] [--faza 1|2|3] [--sucho]` robi kroki poniżej w trzech fazach i wznawia od miejsca przerwania
+(gotowe pomija; stan w `data/widok/D/_dzien.json`):
+1. teksty po kolei: `plx site`, `plx report`, `dzien_prasy`, `os_czasu dzien/ciag/opisy`, `kraje.py D` i `kraje.py ciag D`;
+2. wszystkie obrazki dnia w jednej kolejce `paski.run_all` (paski tematów i krajów w tematach, okładka, oś, kraje wszystkich krajów),
+   jeden proces na obrazek (`PASKI_PROCESY=100` domyślnie), starty co 10 s, po 429 hamowanie jak w kroku 6;
+   teksty potrzebne obrazkom (podsumowania, `plakat-*.json`) powstają przy budowie zleceń (z pamięci podręcznej);
+3. strony dnia, osi i krajów, `streszczenia.py D`, strony ponownie (streszczenia), z `--publikuj` także `plx site --publikuj`.
+Kod wyjścia: 1 = krok tekstowy lub strona nie wyszedł, 2 = obrazki odrzucone lub przerwane (ponowne uruchomienie robi tylko brakujące).
+Ręczne kroki poniżej zostają do poprawek pojedynczych obrazków; `kraje.py obrazki` ręcznie nadal domyślnie tylko PL.
+
+## Nowy dzień D: kroki ręczne
 
 1. Baza z produkcji do `data/prod.db` (`docs/OPERATIONS.md`, odszyfrowanie snapshotu).
 2. `plx site --db data/prod.db`: Sprawy dnia (`data/stories/D.json`) i nagłówki po polsku (`data/tytuly/`).
@@ -45,6 +57,7 @@ Po każdym obrazku z ludźmi: obejrzeć (bez stereotypów, bez napisów na kadra
 
 ## Pliki
 
+- `dzien.py`: procedura dnia w 3 fazach (teksty, wszystkie obrazki naraz, strony i publikacja); `image_jobs()` w `widok_obrazkowy.py`, `okladka.py`, `os_czasu.py`, `kraje.py` oddają zlecenia obrazków.
 - `paski.py`: wspólne paski (obrazek Codex z N pasami, cięcie po ramkach, 8/4 procesy).
 - `widok_obrazkowy.py`: okładka pasami (dawniej siatka tematów i plakaty), wszystkie strony dnia; `widok_tresci.py`: dane i pamięć podręczna tekstów stron.
 - `widok_powitanie.py`: dane okładki (`poster_data`) i dawny plakat z napisami `powitanie.png` (do 01.10).

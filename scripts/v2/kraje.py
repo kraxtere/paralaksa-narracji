@@ -205,6 +205,29 @@ def images(day: str, countries: list[str]) -> None:
     paski.run_all([(f"{day} {c}", lambda c=c: job(c)) for c in countries if data.get(c)])
 
 
+def image_jobs(day: str, countries: list[str] | None = None) -> list[tuple[str, object]]:
+    """Strip jobs for scripts/v2/dzien.py: every country with topics (or the given ones) whose strips are not all there yet."""
+    import paski
+    data = json.loads((OUT / f"{day}.json").read_text(encoding="utf-8"))["kraje"]
+    folder = OUT / day
+    tpath = Path(f"data/tytuly/{day}.json")
+    titles = json.loads(tpath.read_text(encoding="utf-8"))["tytuly"] if tpath.exists() else {}
+    jobs = []
+    for country in countries or sorted(data):
+        topics = data.get(country)
+        paths = strip_paths(day, country, len(topics or []))
+        if not topics or all(p.exists() for p in paths):
+            continue
+
+        def job(country=country, topics=topics, paths=paths):
+            res = paski.make(folder / f"_gen-{country}", strip_prompt(country, topics, titles), paths, folder / f"_{country}.png")
+            if res == "ok":
+                save_titles(day, country, topics)
+            return res
+        jobs.append((f"{day} {country}", job))
+    return jobs
+
+
 def strip_names(day: str, country: str, topics: list[dict]) -> list[str]:
     """Strip files of the topics (data/widok/kraje/D/KRAJ-n.webp) when the stored titles match the current ones."""
     saved = OUT / day / f"{country}.json"

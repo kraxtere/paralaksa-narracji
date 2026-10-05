@@ -18,6 +18,10 @@ class Models(BaseModel):
     extract: str = "claude-sonnet-5"
     synthesize: str = "claude-sonnet-5"
     curiosities: str = "claude-haiku-4-5-20251001"
+    site: str | None = None   # plx site (sprawy dnia, tłumaczenia nagłówków); brak = extract
+
+    def site_model(self) -> str:
+        return self.site or self.extract
 
 
 class Thresholds(BaseModel):

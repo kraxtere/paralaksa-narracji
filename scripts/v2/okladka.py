@@ -129,6 +129,13 @@ def cover_html(data: dict) -> str:
     return '<div class="okl pp" data-sekcja="okladka">' + "".join(parts) + "</div>"
 
 
+def image_jobs() -> list[tuple[str, object]]:
+    """Codex jobs of the cover strips for scripts/v2/dzien.py (only missing ones)."""
+    from widok_powitanie import poster_data
+    PASKI.mkdir(parents=True, exist_ok=True)
+    return strip_jobs(poster_data())
+
+
 def main():
     from widok_powitanie import poster_data
     cmd = sys.argv[1] if len(sys.argv) > 1 else ""

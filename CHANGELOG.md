@@ -1,3 +1,35 @@
+# Procedura dnia w trzech fazach: `scripts/v2/dzien.py` — 2026-10-05 (nie zacommitowane)
+
+- Faza 1 teksty po kolei, faza 2 wszystkie obrazki dnia (paski tematów i krajów w tematach, okładka, oś, kraje) w jednej kolejce
+  `paski.run_all` (jeden proces na obrazek, starty co 10 s, hamowanie po 429), faza 3 strony, streszczenia, `--publikuj`.
+  Wznawialny (stan `data/widok/D/_dzien.json`, gotowe pliki pomijane). Cel: obrazki w ok. 10 min zamiast 30–40.
+- Nowe `image_jobs()` w `widok_obrazkowy.py`, `okladka.py`, `os_czasu.py`, `kraje.py` (kraje: wszystkie z tematami, tylko brakujące paski).
+- Testy `tests/test_dzien.py`; README `scripts/v2`. Sprawdzone na 02.10 (wszystko gotowe: 0 obrazków) i `--sucho`; pełny dzień nieprzetestowany.
+
+# `plx site` przez Codex (`models.site`) — 2026-10-05
+
+- Decyzja właściciela: wszystko, co dzieje się lokalnie, idzie przez Codex. Nowy klucz `models.site` w `config/settings.yaml`
+  (`codex:gpt-6.1-sol:medium`) dla Spraw dnia i tłumaczeń nagłówków w `plx site`; `Models.site_model()`, a bez `site` jak dotąd `extract`.
+  `models.extract` zostaje DeepSeek (daily w Actions, gdzie Codex nie działa). Powód: 05.10 DeepSeek 402 (brak środków), strona bez Spraw dnia.
+- Historie TV (`--z-tv`) mają własne modele w `gdelt/tv_pl.py` i `tv_stories.py`; bez zmian. Test w `tests/test_config.py`.
+
+# Opisy okładki: jedno ponowienie po odrzuceniu — 2026-10-04
+
+- `widok_obrazkowy.py welcome_summaries`: gdy odpowiedź nie przejdzie `validate_welcome` (04.10 trzy razy z rzędu: obraz kraju DE/RU
+  z artykułem spoza dowodów), jedno ponowienie z treścią błędu i listą dozwolonych `article_ids` kraju (`welcome_retry_note`).
+  Walidacja bez zmian; drugi błąd przerywa budowę, nic nie trafia do pamięci. Testy w `tests/test_strona_tematu.py`.
+
+# Dłuższe podsumowanie tematu, bez „[article_ids: …]” — 2026-10-03
+
+- `widok_obrazkowy.py summaries`: „Podsumowanie wszystkich krajów” to jeden tekst w 4 akapitach (250–350 słów, min. 180): pierwszy
+  akapit widoczny jak dotąd, reszta (różnice redakcji i krajów, wątki tylko w jednym kraju) pod „Czytaj dalej” w tym samym okienku
+  (`<details class="pods-wiecej">`). Pamięć `temat-opisy-v2`: przebudowa starszego dnia wygeneruje jego podsumowania od nowa.
+- Strona tematu, „Wszystkie kraje”: karty krajów zwinięte do paska z dymkiem i belki kraju („Rozwiń ▾”), klik w pasek/belkę
+  rozwija opis i artykuły; wybrany w pigułkach jeden kraj od razu rozwinięty (`data-zwin`, `COUNTRY_PICK_JS/CSS`; bez JS wszystko widać).
+- Dymek nad paskiem kraju także dla krajów spoza plakatu tematu: nagłówek pierwszego artykułu z listy kraju.
+- `pasek.js`: czytanie podsumowania tematu obejmuje też akapity pod „Czytaj dalej”.
+- Luna dopisywała 03.10 identyfikatory na końcu akapitów okładki (sprawy, różnice, obraz kraju); `strip_id_tags` usuwa je także z zapisanych odpowiedzi.
+
 # Nowe źródła FR, HU, IR — 2026-10-02 (nie zacommitowane, w próbie)
 
 - 9 źródeł w `config/sources.yaml` (FR: lefigaro, francetvinfo, rfi_en; HU: telex, index_hu, magyarnemzet; IR: tehrantimes, mehr_en,

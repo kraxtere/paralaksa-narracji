@@ -460,6 +460,19 @@ def images(api: bool = False) -> None:
             print(line, flush=True)
 
 
+def image_jobs() -> list[tuple[str, object]]:
+    """Codex jobs of the missing event pictures for scripts/v2/dzien.py (status "ok", "429" or a description)."""
+    def job(ev):
+        work = OUT / f"_gen-{ev['nr']}"
+        run_codex(work, image_prompt(ev))
+        if (work / "kadr.png").exists():
+            (work / "kadr.png").replace(OUT / f"ev-{ev['nr']}.png")
+            return "ok"
+        log = (work / "codex.log").read_text(encoding="utf-8", errors="replace") if (work / "codex.log").exists() else ""
+        return "429" if re.search(r"429|rate.?limit|usage limit", log, re.I) else f"ev-{ev['nr']}: brak obrazka"
+    return [(f"ev-{e['nr']}", lambda e=e: job(e)) for e in load()["zdarzenia"] if not (OUT / f"ev-{e['nr']}.png").exists()]
+
+
 CSS = """
 body{margin:0;background:#f4f0e8;color:#1d1b18;font-family:Segoe UI,sans-serif}
 .head{max-width:720px;margin:auto;padding:18px 16px 2px}.head h1{margin:0;color:#8a3b2a;font-size:1.6em}

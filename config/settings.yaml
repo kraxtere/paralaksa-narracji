@@ -10,6 +10,9 @@ models:
   # effort: high (ok. 0,09 $). Do 30.09: claude-sonnet-5 bez myślenia, pełny raport (CLAUDE.md).
   synthesize: codex:gpt-6.1-sol:medium
   curiosities: claude-haiku-4-5-20251001
+  # plx site (Sprawy dnia, tłumaczenia nagłówków): od 2026-10-05 lokalnie przez Codex (decyzja właściciela: lokalnie
+  # wszystko przez Codex). extract zostaje DeepSeek, bo używa go daily w Actions, gdzie Codex nie działa.
+  site: codex:gpt-6.1-sol:medium
 
 thresholds:
   min_countries: 3
