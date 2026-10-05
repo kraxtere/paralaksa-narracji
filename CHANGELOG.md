@@ -1,3 +1,19 @@
+# Archiwum 2.0: wyszukiwarka wszystkich artykułów — 2026-10-05
+
+- `site/archive.py`, `assets/archiwum.js`: `plx site` buduje `v2/archiwum/index.html` i paczki dzienne `D.json.gz`
+  (`D.json` dla przeglądarek bez DecompressionStream); przeglądarka pobiera tylko dni wybranego okresu (dziś, 7 dni
+  domyślnie, 30 dni, wszystko, zakres). Zamiast paczek miesięcznych: dzień to 350–960 KB JSON (125–370 KB gzip), miesiąc
+  ok. 20 MB, więc „7 dni” na początku miesiąca ciągnęłoby dwa miesiące; 7 dni dziennymi ok. 1,8 MB gzip.
+- Dzień = dzień pobrania i okno publikacji jak w dzienniku (`daily_payload`); zaległość RSS dnia inicjalnego (54 artykuły
+  ze starymi datami) poza archiwum. Bez pełnych tekstów, leadów i dowodów: źródło, tytuł, nagłówek PL, link i sygnały
+  (temat, ton, aktor, rama, summary_pl); artykuły bez sygnałów szukają się po tytule.
+- Szukanie w nagłówkach PL i oryginalnych, ramach i streszczeniach, bez ogonków; hasło od 5 liter bez 1–2 końcowych
+  samogłosek łapie odmiany (grenlandia → Grenlandii), do 3 liter tylko całe słowa (UE). Filtry w zwijanym panelu: kraj,
+  źródło, temat (tylko stałe), ton (z „poza neutralnym”), aktor (nazwy krajów, `Intl.DisplayNames`). Lista po 40
+  z „pokaż więcej” albo po krajach; nad wynikami wykres kraje × dni (kod kraju zawęża). Stan filtrów w adresie (#…).
+- `pasek.js`: kafel „Archiwum” na dole strony dnia (wszystkie dni bez przebudowy, `?dzien=` to powrót); `copy_v2`
+  włącza go tylko przy zbudowanym archiwum. Test `test_v2_archive_day_packs_without_fulltexts`.
+
 # Logowanie przez linki zaproszenia, bez haseł — 2026-10-05
 
 - `hosting/konta.py`, `server.py`: imienny link `/zaproszenie/...` loguje od razu (bez hasła i pytania o imię): strona

@@ -478,6 +478,20 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
   }));
 
   document.addEventListener("DOMContentLoaded", () => {
+    // Kafel „Archiwum” (od 05.10) na dole strony dnia, przed stopką, w stylu sekcji okładki (belka i ciemny pas bez obrazka):
+    // wyszukiwarka wszystkich artykułów (v2/archiwum/, src/paralaksa/site/archive.py); ?dzien= to powrót na ten dzień
+    const archive = "__ARCHIWUM__";                                 // plx site: true, gdy zbudował v2/archiwum/
+    if (archive && !("wstecz" in box.dataset)) {
+      const a = document.createElement("div");
+      a.className = "okl";
+      a.innerHTML = "<h2 class=\"pp-sek\">Archiwum</h2>" +             // belka pierwsza: odstęp jak przed innymi sekcjami
+        `<a class="okl-pas arch-pas" href="${new URL("archiwum/index.html?dzien=" + day, base).href}">` +
+        "<span class=\"okl-t\"><b>Szukaj we wszystkich artykułach <span class=\"strz\">›</span></b>" +
+        "<span class=\"okl-n\">Nagłówki, ramy i streszczenia ze wszystkich dni; kraj, źródło, temat, ton</span></span></a>" +
+        "<style>.arch-pas{min-height:96px}.arch-pas .okl-t{padding-top:30px}" +
+        ".arch-pas .strz{float:right;font-size:1.3em;line-height:.8}</style>";
+      document.body.append(a);
+    }
     const foot = document.createElement("footer");
     foot.className = "stopka";
     foot.innerHTML = `<span>Paralaksa · wersja wewnętrzna · nowy dzień codziennie około 19:00</span>` +

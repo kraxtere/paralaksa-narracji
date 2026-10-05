@@ -67,3 +67,5 @@ Po każdym obrazku z ludźmi: obejrzeć (bez stereotypów, bez napisów na kadra
 - `streszczenia.py`: streszczenia artykułów pod nagłówkami (`data/widok/streszczenia/`, klik w nagłówek na stronie); 3–5 zdań, `skroc` jednorazowo skraca starsze (5–7 zdań) do ok. 60%.
 - `dzien_prasy.py`: dane i opisy krajów dnia; `loga.py`: ikony redakcji (`data/logos/`).
 - `komiks_codex.py`: wywołanie Codex (`codex_exe`) i dawny prototyp komiksu; `codex_limit.py`: stan limitu Codex.
+- Archiwum (wyszukiwarka wszystkich artykułów, `v2/archiwum/`, kafel na dole strony dnia): buduje je `plx site` z bazy
+  (`src/paralaksa/site/archive.py`, `assets/archiwum.js`), bez kroków ręcznych i bez modelu.
