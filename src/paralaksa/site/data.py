@@ -191,13 +191,13 @@ def daily_payload(conn: sqlite3.Connection, day: str, report: dict | None, theme
                for r in conn.execute("SELECT id, name, country, type FROM sources")}
     arts: dict[int, dict] = {}
     for r in conn.execute(
-        """SELECT a.id, a.source_id, a.title, a.url, a.published_at, a.genre, a.fulltext IS NOT NULL
+        """SELECT a.id, a.source_id, a.title, a.url, a.published_at, a.fetched_at, a.genre, a.fulltext IS NOT NULL
                   AND a.fulltext != '' AS full, s.country
            FROM articles a JOIN sources s ON s.id = a.source_id
            WHERE substr(a.fetched_at,1,10) = ? ORDER BY a.published_at DESC""", (day,)):
         if r["id"] in eligible:
             arts[r["id"]] = {"id": r["id"], "src": r["source_id"], "kraj": r["country"], "tytul": r["title"],
-                             "url": r["url"], "pub": r["published_at"], "gatunek": r["genre"],
+                             "url": r["url"], "pub": r["published_at"], "fetched": r["fetched_at"], "gatunek": r["genre"],
                              "lead": not r["full"], "s": []}
     if arts:
         marks = ",".join("?" * len(arts))

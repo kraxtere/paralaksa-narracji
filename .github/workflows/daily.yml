@@ -1,7 +1,7 @@
 name: daily
 on:
   schedule:
-    # 10:30 UTC: poza szczytem DeepSeek (01–04 i 06–10 UTC), także przy wielogodzinnych opóźnieniach crona GitHuba
+    # 10:30 UTC; Actions tylko pobiera artykuły i robi backup bazy (ekstrakcja lokalnie, docs/OPERATIONS.md)
     - cron: "30 10 * * *"
   workflow_dispatch:
     inputs:
@@ -47,23 +47,8 @@ jobs:
           cache: pip
       - name: Instalacja
         run: pip install -e .
-      - name: Sprawdź konfigurację API i backupu
-        env:
-          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: |
-          python - <<'PY'
-          import os
-          from paralaksa.config import load_settings
-          settings = load_settings()
-          required = {'DB_BACKUP_KEY'}
-          # raport powstaje lokalnie (Codex, od 2026-10-01); Actions potrzebuje tylko modelu ekstrakcji
-          model = settings.models.extract
-          required.add('DEEPSEEK_API_KEY' if model.startswith('deepseek') else 'ANTHROPIC_API_KEY')
-          missing = sorted(k for k in required if not os.environ.get(k))
-          if missing:
-              raise SystemExit('Brak wymaganych sekretów: ' + ', '.join(missing))
-          PY
+      - name: Sprawdź konfigurację backupu
+        run: test -n "$DB_BACKUP_KEY" || { echo '::error::Brak sekretu DB_BACKUP_KEY'; exit 1; }
       - name: Przywróć zaszyfrowany cache
         uses: actions/cache/restore@v4
         with:
@@ -95,12 +80,9 @@ jobs:
             mv data/restore.db data/paralaksa.db
           fi
           python scripts/db_state.py data/paralaksa.db
-      - name: plx run-daily
+      - name: plx ingest (ekstrakcja lokalnie przez Codex)
         id: pipeline
-        env:
-          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: plx run-daily --bez-raportu
+        run: plx ingest
       - name: Snapshot i szyfrowanie
         id: snapshot
         if: always() && (steps.pipeline.outcome == 'success' || steps.pipeline.outcome == 'failure')

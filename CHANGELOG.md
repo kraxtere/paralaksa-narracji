@@ -1,3 +1,180 @@
+# daily.yml: tylko ingest i backup — 2026-10-06
+
+- Za zgodą właściciela Actions robi `plx ingest` + snapshot/backup bazy; bez ekstrakcji i bez kluczy DeepSeek/Anthropic (artykuły zostają
+  `extracted=0`, podejmuje je lokalnie `scripts/ekstrakcja_codex_dnia.py`). Nie powstaje już `reports/D.status.json` z Actions.
+  Po ekstrakcji baza musi wrócić do Release (`docs/OPERATIONS.md`), inaczej następny przebieg ją nadpisze.
+
+# Ekstrakcja przez Codex na stałe — 2026-10-06
+
+- Decyzja właściciela: bez płatnych API (DeepSeek); ekstrakcja lokalnie przez Codex z limitu konta (`codex:gpt-6-luna:medium`,
+  wsady 25, prompt v3 w `scripts/v2/prompt_luna_v3.md`). Skrypt dnia: `scripts/ekstrakcja_codex_dnia.py` (opcje: `--model`, `--wsad`,
+  `--rownolegle`, `--dodatek`, `--limit`). Zmiana procedury i `daily.yml`: osobno, po zgodzie właściciela.
+
+# Archiwum: jeden filtr „Temat” zamiast kategorii i tematów — 2026-10-06
+
+- `archiwum.js`: znika wiersz „Kategoria” (przyciski „tematy analizy”, „polityka”…) i osobny filtr tematu w „Więcej filtrów”.
+  W jego miejscu pod okresem jest jedna rozwijana lista „Temat” (natywny wybierak, na telefonie czytelny, pełna szerokość).
+- Zasada: artykuł ma jedną etykietę: temat analizy z sygnałów (jak dotąd tylko stałe, bez `emergent:*`; artykuł z kilkoma
+  tematami liczy się w każdym), a gdy sygnałów brak, kategoria ogólna. Duplikaty scalane po zapisie (wielkość liter, polskie
+  znaki, spacje: „Polityka”/„polityka”) i po nazwie tematu analizy (kategoria „wojna w Ukrainie” to temat „Wojna w Ukrainie”).
+  Bez zgadywania znaczeń: „polityka” i „gospodarka” zostają osobnymi opcjami obok „Wybory i polityka” / „Gospodarka i sankcje”.
+- Filtry progresywne bez zmian w zasadzie: liczba przy każdej opcji (bez własnego filtra, z kraj/źródło/ton/aktor/słowa/dzień),
+  opcje zerowe ukryte, wybrana zostaje; ton i aktor nadal dotyczą sygnałów (artykuły bez sygnałów znikają z listy tematów).
+  Znacznik pod artykułem to jeden „temat” (bez „kategoria”). Stare linki `#kat=…` działają jak `#th=…`; `kat=*` ignorowane.
+- Testy: `tests/test_archiwum_ui.py` (lista tematów, scalanie, progresja, stary link); wykres i pozostałe filtry bez zmian.
+
+# schema.py: naprawa evidence_span z wielokropkiem — 2026-10-06
+
+- `parse_extraction` z `source_text`: gdy `evidence_span` skleja fragmenty przez „...”/„…”, wybierany jest najdłuższy kawałek, który
+  sam występuje dosłownie w artykule (min. 3 słowa, maks. 15; `longest_verbatim_segment`), i liczony jako `repairs`. Gdy żaden
+  kawałek nie spełnia warunków, sygnał nadal jest odrzucany jak dotąd. Reszta walidacji bez poluzowania. Powód: test Luny
+  (Codex) odrzucał ok. 7% sygnałów, z czego część to wielokropki mimo zakazu w prompcie. Testy w `tests/test_extract_schema.py`.
+
+# dzien.py: faza 1 równolegle, streszczenia razem z obrazkami, pomiar czasu — 2026-10-06
+
+- `scripts/v2/dzien.py` (tylko organizacja, treści i skrypty kroków bez zmian): `Step.after` + `run_parallel` (5 wątków; pierwszy
+  błąd zatrzymuje nowe starty, wznowienie jak dawniej). Zależności fazy 1 wyprowadzone z kodu: `os-dzien` i `kraje-D` czytają
+  `data/stories/D.json` (po `site`), `kraje-D` wyklucza też wynik `os-dzien`, `os-ciag`/`os-opisy` piszą ten sam magazyn osi,
+  `kraje-ciag` po `kraje-D`; `kategorie`, `report`, `dzien_prasy` tylko czytają bazę.
+- Streszczenia czytają linki `data-a` ze stron, nie obrazki: pełny przebieg = strony wstępne → (streszczenia ‖ obrazki) → strony
+  końcowe + publikacja. `--faza 3` samodzielnie bez zmian (strony, streszczenia, strony). `--faza 1|2` jak dawniej.
+- Pomiar: `data/widok/D/_czasy.json` (fazy i kroki), podsumowanie na końcu. Test `test_parallel_respects_after_and_stops_on_failure`.
+- `PASKI_ODSTEP` (10 s) i limit procesów bez zmian; skrócenie ryzykowne bez pomiaru 429 (dobowa pula obrazków osobna), do decyzji po pierwszych czasach.
+- Uwaga: `kategorie` i `site` równolegle piszą do bazy tylko przy tłumaczeniach nagłówków (SQLite blokuje, nie psuje).
+
+# Archiwum: filtry progresywne, kategoria na górze, czytelna karta, Tłumacz — 2026-10-06
+
+- `assets/archiwum.js` (tylko interfejs; `slowa.py`, `kategorie.py` i dane bez zmian). Kolejność strony: szukanie z chmurkami
+  → okres → Kategoria (rząd przycisków z liczbami, wszystkie widoczne) → Słowa → „Więcej filtrów” (kraj, źródło, temat,
+  ton, aktor) → licznik → wykres kraje × dni → Lista / Po krajach / kolejność → wyniki.
+- Filtry progresywne (`scan()`, jedno przejście): przy każdej opcji liczba wyników, jaką da jej wybór przy pozostałych
+  filtrach (okres, hasła, kategoria, kraj, źródło, temat, ton, aktor, dzień z wykresu); opcje bez wyników ukryte, wybrana
+  zostaje także z zerem, select bez opcji jest wyłączony. Panel Słowa: najczęstsze z bieżących wyników; rosnące (dzień
+  vs średnia z 7 dni przed nim) przy zawężeniu liczone w przeglądarce (paczki 7 dni wstecz dociągane dopiero przy
+  otwartym panelu), bez zawężenia z danych budowy strony.
+- Kategorię ogólną mają tylko artykuły bez sygnałów (3910 z 5709 ma sygnały), więc w rzędzie jest też „tematy analizy”
+  = artykuły z sygnałami; ich temat, ton i aktora wybiera się w „Więcej filtrów”.
+- Wykres klikalny: kod kraju (jak dotąd), słupek „razem” danego dnia/tygodnia (`dz=` w adresie), kratka = kraj i dzień;
+  drugi klik zdejmuje; wybór wyróżniony, reszta przygaszona; „×” przy liczniku zdejmuje dzień. Wykres liczy wyniki bez
+  filtra kraju i dnia, żeby zawsze pokazywać całą siatkę.
+- Karta: na wierzchu polski tytuł (link do artykułu), pełny opis w odsuniętym bloku (bez „z zajawki:/z analizy:”, bez
+  ucinania), jedna linia „data, godzina · flaga · źródło”. Pod „więcej” (stan przetrwa przerysowanie listy): tytuł
+  oryginalny, pochodzenie opisu, godzina publikacji albo pobrania, trafienie poza opisem, znaczniki filtrów (klik ustawia).
+- „Przetłumacz” przy artykule: oryginał w Tłumaczu Google w języku przeglądarki (`navigator.languages[0]` → `tl`, nowa
+  karta, `noopener noreferrer`), nic nie zapisujemy; pomijany przy polskim źródle w polskiej przeglądarce.
+- `tests/test_archiwum_ui.py`: Playwright + Chromium na paczkach syntetycznych i lokalnym serwerze (pomijany bez nich);
+  `tests/test_archiwum_js.py`: link tłumacza i brak prefiksu opisu.
+
+# Archiwum: hasła w chmurkach, czas i znaczniki przy artykułach, opisy, wybór krajów — 2026-10-06
+
+- `assets/archiwum.js`: kilka haseł naraz jako chmurki z „×” (Enter albo klik w słowo z panelu Słowa; Backspace w pustym
+  polu zdejmuje ostatnie), łączone „wszystkie” (domyślnie) albo „którekolwiek”; w adresie `q=a|b&tryb=lub`. Tekst
+  w trakcie pisania filtruje od razu.
+- Przy artykule data i godzina w czasie lokalnym (z RSS; bez wiarygodnej publikacji „pobrano HH:MM”); kolejność od
+  najnowszych po dacie i godzinie, przełącznik „najstarsze ↑”.
+- Opis pod tytułem: streszczenie pierwszego sygnału („z analizy”) albo zdanie z zajawki („z zajawki”), 3 linie, klik
+  rozwija; podświetlenie haseł także w opisie.
+- Klikalne znaczniki pod artykułem: kraj (flaga), źródło, tematy stałe, do 2 aktorów, ton (bez neutralnego), kategoria;
+  klik ustawia filtr, drugi zdejmuje.
+- „Po krajach”: flagi krajów (jak kraje-nav) wybierają, które sekcje pokazać (`pk=RU,PL`), „wszystkie” wraca.
+- Flagi to kopia `FLAG_SVG` ze stron dnia; `tests/test_archiwum_js.py` pilnuje zgodności i tego, że interfejs czyta
+  wszystkie pola wiersza paczki (`archive.records`).
+
+# Archiwum: opisy z zajawek, czas, stałe pary słów — 2026-10-06
+
+- `scripts/v2/kategorie.py`: w tym samym wsadzie kategoria + jedno zdanie PL z tytułu i zajawki RSS (tylko gdy zajawka
+  ma ≥ 40 znaków; bez pełnych tekstów); `--opisy` dopisuje opisy do wcześniej sklasyfikowanych. `data/widok/kategorie.json`
+  teraz {id: {"k", "o"}} (stary format się wczytuje). Zaległość 2257 opisów: 5 h okno +16 pp, tygodniowe +2 pp.
+- Paczki dnia: pola 7–10 wiersza: czas UTC `RRRR-MM-DDTHH:MMZ`, znacznik `p` (publikacja w oknie) / `f` (pobranie), opis
+  (tylko bez sygnałów, z zajawki), źródło opisu `analiza` | `zajawka` | "" (przy `analiza` strona bierze streszczenie
+  pierwszego sygnału). `daily_payload` ma `fetched` artykułu.
+- `slowa.py`: stałe pary (≥ 3 trafienia, słowo prawie zawsze w parze: ≥ 70% jego trafień) zdejmują z tytułu słowo
+  pokryte parą (Donald Trump zdejmuje „donald”, zostaje „trump”); rzadkie pary poza paczkami (paczka dnia ok. +40%).
+
+# Archiwum: kategorie bez sygnałów i słowa kluczowe — 2026-10-05
+
+- `scripts/v2/kategorie.py`: kategoria ogólna (polityka, gospodarka, sport, kultura i rozrywka, technologia i AI, nauka,
+  zdrowie, społeczeństwo, wypadki i kryminalne, inne) dla artykułów bez sygnałów, po samym tytule, Codex lokalnie
+  (`codex:gpt-6.1-sol:low`, wsad 100 tytułów). Wynik w `data/widok/kategorie.json` {id: kategoria}, bez migracji bazy;
+  ponowne uruchomienie dokańcza brakujące (krok dzienny: `dzien.py` faza 1). Filtr „Kategoria” w archiwum.
+- `site/slowa.py` (nowa zależność `simplemma`, czysty Python): lematy polskich tytułów (Rosji/Rosję → rosja), stoplista,
+  „słowa rosnące” (dziś vs średnia z 7 dni; globalnie min. 5 wystąpień, per kraj min. 3). Paczki dnia mają 2 pola więcej
+  (lematy tytułu PL, kategoria), spis `rosnace`. Panel „Słowa” w archiwum: najczęstsze w wynikach (klik wpisuje hasło)
+  i rosnące (dla wybranego kraju); pary sąsiednich słów (donald trump, morze czarny) wypierają pojedyncze słowo, gdy
+  tłumaczą ≥ 60% jego trafień. Tytuły bez polskiego tłumaczenia pomijane.
+
+# Archiwum 2.0: wyszukiwarka wszystkich artykułów — 2026-10-05
+
+- `site/archive.py`, `assets/archiwum.js`: `plx site` buduje `v2/archiwum/index.html` i paczki dzienne `D.json.gz`
+  (`D.json` dla przeglądarek bez DecompressionStream); przeglądarka pobiera tylko dni wybranego okresu (dziś, 7 dni
+  domyślnie, 30 dni, wszystko, zakres). Zamiast paczek miesięcznych: dzień to 350–960 KB JSON (125–370 KB gzip), miesiąc
+  ok. 20 MB, więc „7 dni” na początku miesiąca ciągnęłoby dwa miesiące; 7 dni dziennymi ok. 1,8 MB gzip.
+- Dzień = dzień pobrania i okno publikacji jak w dzienniku (`daily_payload`); zaległość RSS dnia inicjalnego (54 artykuły
+  ze starymi datami) poza archiwum. Bez pełnych tekstów, leadów i dowodów: źródło, tytuł, nagłówek PL, link i sygnały
+  (temat, ton, aktor, rama, summary_pl); artykuły bez sygnałów szukają się po tytule.
+- Szukanie w nagłówkach PL i oryginalnych, ramach i streszczeniach, bez ogonków; hasło od 5 liter bez 1–2 końcowych
+  samogłosek łapie odmiany (grenlandia → Grenlandii), do 3 liter tylko całe słowa (UE). Filtry w zwijanym panelu: kraj,
+  źródło, temat (tylko stałe), ton (z „poza neutralnym”), aktor (nazwy krajów, `Intl.DisplayNames`). Lista po 40
+  z „pokaż więcej” albo po krajach; nad wynikami wykres kraje × dni (kod kraju zawęża). Stan filtrów w adresie (#…).
+- `pasek.js`: kafel „Archiwum” na dole strony dnia (wszystkie dni bez przebudowy, `?dzien=` to powrót); `copy_v2`
+  włącza go tylko przy zbudowanym archiwum. Test `test_v2_archive_day_packs_without_fulltexts`.
+
+# Logowanie przez linki zaproszenia, bez haseł — 2026-10-05
+
+- `hosting/konta.py`, `server.py`: imienny link `/zaproszenie/...` loguje od razu (bez hasła i pytania o imię): strona
+  „Witaj, imię!”, po 1,5 s dzień. Link wielokrotny (kilka urządzeń), 30 dni, „Nowy link” unieważnia poprzedni. Ciasteczko
+  365 dni, odnawiane przy czytaniu. Podgląd linku w komunikatorze widzi tylko powitanie (stronę otwiera skrypt).
+- Link ogólny (`/osoby`: włącz, nowy, wyłącz; token wyliczany z sekretu, więc panel pokazuje go ponownie): jedno pole
+  „Podaj imię lub nazwę”; nowe imię zakłada konto, to samo imię (wielkość liter, ogonki bez znaczenia) na innym
+  urządzeniu = to samo konto; zablokowane imię nie wejdzie; limit 20 wejść z adresu na kwadrans.
+- Każda osoba ma `klucz` (podpis ciasteczka); „Zablokuj” go zmienia (wylogowuje wszędzie, także po odblokowaniu) i
+  unieważnia linki. Starsze konta z hasłem działają dalej; oczekujące zaproszenie dostaje klucz przy otwarciu.
+- Właściciel: hasło i `/osoby` bez zmian; otwarcie linku zaproszenia na jego zalogowanym urządzeniu nie przełącza konta.
+  Na stronie logowania pole na wklejenie linku (aplikacja na ekranie głównym nie ma paska adresu). Powiadomienia także
+  dla kont bez hasła (wcześniej wymagały hasła).
+- Testy `tests/test_site_konta.py`; `CLAUDE.md`: „pod hasłem” → „prywatna: dostęp przez link zaproszenia, noindex”.
+
+# Nazwa okładki: „Co w prasie piszczy” (bez „tam”) — 2026-10-05 (nie zacommitowane)
+
+- `okladka.py` TITLE i test; strony dni przebudowane i opublikowane (tylko HTML).
+
+# Strona dnia: oś „Dzień po dniu” pod blokiem o prasie — 2026-10-05 (nie zacommitowane)
+
+- `pasek.js`: kafelek osi wstawiany zaraz po nagłówku `.okl-h` bloku okładki („Co w prasie piszczy”), przed Wydarzeniami dnia; bez okładki HTML jak dotąd pod paskiem.
+  Zmiana tylko po stronie JS, HTML dni bez zmian; bez testów (brak testów JS).
+
+# Procedura dnia w trzech fazach: `scripts/v2/dzien.py` — 2026-10-05 (nie zacommitowane)
+
+- Faza 1 teksty po kolei, faza 2 wszystkie obrazki dnia (paski tematów i krajów w tematach, okładka, oś, kraje) w jednej kolejce
+  `paski.run_all` (jeden proces na obrazek, starty co 10 s, hamowanie po 429), faza 3 strony, streszczenia, `--publikuj`.
+  Wznawialny (stan `data/widok/D/_dzien.json`, gotowe pliki pomijane). Cel: obrazki w ok. 10 min zamiast 30–40.
+- Nowe `image_jobs()` w `widok_obrazkowy.py`, `okladka.py`, `os_czasu.py`, `kraje.py` (kraje: wszystkie z tematami, tylko brakujące paski).
+- Testy `tests/test_dzien.py`; README `scripts/v2`. Sprawdzone na 02.10 (wszystko gotowe: 0 obrazków) i `--sucho`; pełny dzień nieprzetestowany.
+
+# `plx site` przez Codex (`models.site`) — 2026-10-05
+
+- Decyzja właściciela: wszystko, co dzieje się lokalnie, idzie przez Codex. Nowy klucz `models.site` w `config/settings.yaml`
+  (`codex:gpt-6.1-sol:medium`) dla Spraw dnia i tłumaczeń nagłówków w `plx site`; `Models.site_model()`, a bez `site` jak dotąd `extract`.
+  `models.extract` zostaje DeepSeek (daily w Actions, gdzie Codex nie działa). Powód: 05.10 DeepSeek 402 (brak środków), strona bez Spraw dnia.
+- Historie TV (`--z-tv`) mają własne modele w `gdelt/tv_pl.py` i `tv_stories.py`; bez zmian. Test w `tests/test_config.py`.
+
+# Opisy okładki: jedno ponowienie po odrzuceniu — 2026-10-04
+
+- `widok_obrazkowy.py welcome_summaries`: gdy odpowiedź nie przejdzie `validate_welcome` (04.10 trzy razy z rzędu: obraz kraju DE/RU
+  z artykułem spoza dowodów), jedno ponowienie z treścią błędu i listą dozwolonych `article_ids` kraju (`welcome_retry_note`).
+  Walidacja bez zmian; drugi błąd przerywa budowę, nic nie trafia do pamięci. Testy w `tests/test_strona_tematu.py`.
+
+# Dłuższe podsumowanie tematu, bez „[article_ids: …]” — 2026-10-03
+
+- `widok_obrazkowy.py summaries`: „Podsumowanie wszystkich krajów” to jeden tekst w 4 akapitach (250–350 słów, min. 180): pierwszy
+  akapit widoczny jak dotąd, reszta (różnice redakcji i krajów, wątki tylko w jednym kraju) pod „Czytaj dalej” w tym samym okienku
+  (`<details class="pods-wiecej">`). Pamięć `temat-opisy-v2`: przebudowa starszego dnia wygeneruje jego podsumowania od nowa.
+- Strona tematu, „Wszystkie kraje”: karty krajów zwinięte do paska z dymkiem i belki kraju („Rozwiń ▾”), klik w pasek/belkę
+  rozwija opis i artykuły; wybrany w pigułkach jeden kraj od razu rozwinięty (`data-zwin`, `COUNTRY_PICK_JS/CSS`; bez JS wszystko widać).
+- Dymek nad paskiem kraju także dla krajów spoza plakatu tematu: nagłówek pierwszego artykułu z listy kraju.
+- `pasek.js`: czytanie podsumowania tematu obejmuje też akapity pod „Czytaj dalej”.
+- Luna dopisywała 03.10 identyfikatory na końcu akapitów okładki (sprawy, różnice, obraz kraju); `strip_id_tags` usuwa je także z zapisanych odpowiedzi.
+
 # Nowe źródła FR, HU, IR — 2026-10-02 (nie zacommitowane, w próbie)
 
 - 9 źródeł w `config/sources.yaml` (FR: lefigaro, francetvinfo, rfi_en; HU: telex, index_hu, magyarnemzet; IR: tehrantimes, mehr_en,
@@ -14,6 +191,13 @@
 - Bez przycisków: okładka dnia i „Dzień prasy” (same kafelki), stara wersja strony.
 
 # Easter eggi w obrazkach tematów i „Czym żyją kraje” — 2026-10-02
+
+- Baner „Czym żyją kraje” wygenerowany ponownie z 17 oknami (doszły FR, HU, IR); wersja z 14 oknami w `_baner/_stare-14/`.
+- Kafel „Czym żyją kraje”: wyższy baner (ok. 1.35:1, 2 ujęcia na obrazek), cały budynek, 17 okien w 3 rzędach
+  czytelnych na telefonie; jeden podpis „Tematy, które zostają w domu ›” na gradiencie. (Wcześniejsze automatyczne cięcie
+  banera 2:1 pomyliło ramy z siatką okien.)
+- Okładka bez własnej stopki („N krajów · Niżej: tematy dnia · …”; to samo jest w stopce strony); odstęp przed belkami
+  „Czym żyją kraje” i „Czym żyła prasa” taki jak między sekcjami okładki (18 px).
 
 - Nagłówki sekcji strony dnia jednolite: ceglane belki `pp-sek` także nad „Czym żyją kraje” (w kaflu „Tematy, które
   zostają w domu” + podpis) i „Czym żyła prasa” (liczby jako drobny podpis `pp-pod`).

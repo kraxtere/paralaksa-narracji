@@ -21,7 +21,7 @@ def test_theme_page_summary_block_and_country_pills(monkeypatch):
     assert [nav.index(f'href="#kraj-{c}"') for c in ("PL", "DE", "UA")] == sorted(nav.index(f'href="#kraj-{c}"')
                                                                                 for c in ("PL", "DE", "UA"))
     assert nav.count('class="flaga"') == 3 and ">Niemcy</a>" in nav
-    assert all(f'<section id="kraj-{c}" data-czytaj="kraj">' in page for c in t["kraje"])
+    assert all(f'<section id="kraj-{c}" data-czytaj="kraj" data-zwin>' in page for c in t["kraje"])
     assert 'class="pods" data-czytaj="temat"' in page
 
 
@@ -70,3 +70,29 @@ def test_theme_nav_previous_next_and_ends():
     assert 'href="temat-a.html"' in mid and "‹ Bliski Wschód" in mid and 'href="temat-c.html"' in mid and "Rosja ›" in mid
     first, last = w.theme_nav(ts, ts[0]), w.theme_nav(ts, ts[2])
     assert 'href="index.html"' in first and "‹ Strona dnia" in first and 'href="index.html"' in last and "data-theme" not in mid
+
+
+def test_welcome_summaries_retry_with_error_and_allowed_ids(monkeypatch, tmp_path):
+    """A reply citing an article outside the country's evidence gets one retry with the error and allowed ids."""
+    inputs = {"dzien": "2026-10-04", "karty": {"obraz-kraju": {"kraje": {"DE": [{"article_id": 8234}, {"article_id": 8250}]}}}}
+    bad = '{"obraz-kraju": {"opis": "O.", "kraje": {"DE": [{"tekst": "T.", "article_ids": [8223]}]}}}'
+    good = '{"obraz-kraju": {"opis": "O.", "kraje": {"DE": [{"tekst": "T.", "article_ids": [8234]}]}}}'
+    prompts = []
+    monkeypatch.setattr(w, "OUT", tmp_path)
+    monkeypatch.setattr(w, "codex_text", lambda work, p: prompts.append(p) or (bad if len(prompts) == 1 else good))
+    res = w.welcome_summaries(inputs)
+    assert res["obraz-kraju"]["kraje"]["DE"][0]["article_ids"] == [8234]
+    assert len(prompts) == 2 and "obraz-kraju/DE: artykuł spoza wskazanych dowodów" in prompts[1]
+    assert "wyłącznie: 8234, 8250." in prompts[1]
+
+
+def test_welcome_summaries_second_failure_raises(monkeypatch, tmp_path):
+    """Validation is not relaxed: a second bad reply stops the build and nothing is cached."""
+    import pytest
+    inputs = {"dzien": "2026-10-04", "karty": {"obraz-kraju": {"kraje": {"DE": [{"article_id": 8234}]}}}}
+    bad = '{"obraz-kraju": {"opis": "O.", "kraje": {"DE": [{"tekst": "T.", "article_ids": [8223]}]}}}'
+    monkeypatch.setattr(w, "OUT", tmp_path)
+    monkeypatch.setattr(w, "codex_text", lambda work, p: bad)
+    with pytest.raises(ValueError, match="spoza wskazanych"):
+        w.welcome_summaries(inputs)
+    assert not (tmp_path / "podsumowania-powitanie.json").exists()

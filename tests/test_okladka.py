@@ -24,7 +24,7 @@ def test_cover_html_sections_titles_flags_and_no_poster():
     """All cover texts in HTML: day title, sections, story titles, 'continued' tag, flags, two columns, footer."""
     page = okladka.cover_html(DATA)
     day = f"{w.DAY[8:10]}.{w.DAY[5:7]}"
-    assert f'<h1>Co tam w prasie piszczy<span class="okl-d">{day}</span></h1><p>Jeden dzień, wiele perspektyw</p>' in page
+    assert f'<h1>Co w prasie piszczy<span class="okl-d">{day}</span></h1><p>Jeden dzień, wiele perspektyw</p>' in page
     heads = ["Tego dnia", "Tonacje", "Autoportret"]
     assert [page.index(f'class="pp-sek">{h}<') for h in heads] == sorted(page.index(f'class="pp-sek">{h}<') for h in heads)
     assert page.count('class="pp-k"') == page.count('class="pp-obr" href=') == 4 and 'href="sprawa-1.html"' in page and 'href="obraz-kraju.html"' in page
@@ -36,7 +36,7 @@ def test_cover_html_sections_titles_flags_and_no_poster():
     diff = page[page.index('href="roznica-1.html"'):page.index('href="obraz-kraju.html"')]
     assert diff.count('class="pp-kol"') == 2 and "Izrael · głównie neutralnie" in diff and "Śledztwo bez motywu" in diff
     assert "Chiny o sobie" in page and "<b>Z zewnątrz</b>" in page and page.count("<p data-zwin>") == 4
-    assert "14 krajów · Niżej: tematy dnia" in page
+    assert "Niżej: tematy dnia" not in page                       # stopka strony mówi to samo
     assert 'src="okl-sprawa-1.webp"' in page and "powitanie.png" not in page and "data-theme" not in page
 
 

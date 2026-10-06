@@ -4,7 +4,27 @@ Skrypty obrazkowej wersji strony (do 2026-10-01 leżały w `data/`, poza gitem).
 bo czytają i piszą `data/` (baza `data/prod.db` tylko do odczytu, wyniki w `data/widok/`). Obrazki i większość tekstów
 robi Codex z limitu konta (`codex_limit.py` pokazuje zużycie). Nigdy w Actions.
 
-## Nowy dzień D
+## Procedura dnia: ekstrakcja lokalnie (od 06.10, po zmianie `daily.yml`)
+
+1. Actions (`plx ingest` + backup) już przeszły; baza z Release → `data/prod.db` (`docs/OPERATIONS.md`).
+2. Ekstrakcja: `python scripts/ekstrakcja_codex_dnia.py --db data/prod.db --dni D [D-1] --zapisz` (bez `--zapisz` sucha próba;
+   idempotentna, `extracted` 0/2 → 1 lub 3). Przed dalszym ciągiem: brak artykułów z `extracted=0` z dnia D.
+3. Baza z sygnałami z powrotem do Release (`docs/OPERATIONS.md`, „Wysyłka bazy po ekstrakcji”), zanim ruszy kolejny przebieg Actions.
+4. `python scripts/v2/dzien.py D [--publikuj]` (raport robi `plx report`, metryki liczy sam).
+
+## Nowy dzień D: jedno polecenie (od 05.10)
+
+`python scripts/v2/dzien.py D [--publikuj] [--faza 1|2|3] [--sucho]` robi kroki poniżej w trzech fazach i wznawia od miejsca przerwania
+(gotowe pomija; stan w `data/widok/D/_dzien.json`, czasy kroków i faz w `_czasy.json` + podsumowanie na końcu). Streszczenia idą równolegle z obrazkami (po stronach „wstępnych”), strony końcowe po obu:
+1. teksty, niezależne kroki równolegle (`site`, `report`, `kategorie`, `dzien_prasy` od razu; `os-dzien` po `site`, `os-ciag` i `os-opisy` po nim, `kraje-D` po `site` i `os-dzien`, `kraje-ciag` po `kraje-D`; zależności w `phase1()`): `plx site`, `plx report`, `dzien_prasy`, `os_czasu dzien/ciag/opisy`, `kraje.py D` i `kraje.py ciag D`;
+2. wszystkie obrazki dnia w jednej kolejce `paski.run_all` (paski tematów i krajów w tematach, okładka, oś, kraje wszystkich krajów),
+   jeden proces na obrazek (`PASKI_PROCESY=100` domyślnie), starty co 10 s, po 429 hamowanie jak w kroku 6;
+   teksty potrzebne obrazkom (podsumowania, `plakat-*.json`) powstają przy budowie zleceń (z pamięci podręcznej);
+3. strony dnia, osi i krajów, `streszczenia.py D`, strony ponownie (streszczenia), z `--publikuj` także `plx site --publikuj`.
+Kod wyjścia: 1 = krok tekstowy lub strona nie wyszedł, 2 = obrazki odrzucone lub przerwane (ponowne uruchomienie robi tylko brakujące).
+Ręczne kroki poniżej zostają do poprawek pojedynczych obrazków; `kraje.py obrazki` ręcznie nadal domyślnie tylko PL.
+
+## Nowy dzień D: kroki ręczne
 
 1. Baza z produkcji do `data/prod.db` (`docs/OPERATIONS.md`, odszyfrowanie snapshotu).
 2. `plx site --db data/prod.db`: Sprawy dnia (`data/stories/D.json`) i nagłówki po polsku (`data/tytuly/`).
@@ -45,6 +65,7 @@ Po każdym obrazku z ludźmi: obejrzeć (bez stereotypów, bez napisów na kadra
 
 ## Pliki
 
+- `dzien.py`: procedura dnia w 3 fazach (teksty, wszystkie obrazki naraz, strony i publikacja); `image_jobs()` w `widok_obrazkowy.py`, `okladka.py`, `os_czasu.py`, `kraje.py` oddają zlecenia obrazków.
 - `paski.py`: wspólne paski (obrazek Codex z N pasami, cięcie po ramkach, 8/4 procesy).
 - `widok_obrazkowy.py`: okładka pasami (dawniej siatka tematów i plakaty), wszystkie strony dnia; `widok_tresci.py`: dane i pamięć podręczna tekstów stron.
 - `widok_powitanie.py`: dane okładki (`poster_data`) i dawny plakat z napisami `powitanie.png` (do 01.10).
@@ -54,3 +75,5 @@ Po każdym obrazku z ludźmi: obejrzeć (bez stereotypów, bez napisów na kadra
 - `streszczenia.py`: streszczenia artykułów pod nagłówkami (`data/widok/streszczenia/`, klik w nagłówek na stronie); 3–5 zdań, `skroc` jednorazowo skraca starsze (5–7 zdań) do ok. 60%.
 - `dzien_prasy.py`: dane i opisy krajów dnia; `loga.py`: ikony redakcji (`data/logos/`).
 - `komiks_codex.py`: wywołanie Codex (`codex_exe`) i dawny prototyp komiksu; `codex_limit.py`: stan limitu Codex.
+- Archiwum (wyszukiwarka wszystkich artykułów, `v2/archiwum/`, kafel na dole strony dnia): buduje je `plx site` z bazy
+  (`src/paralaksa/site/archive.py`, `assets/archiwum.js`), bez kroków ręcznych i bez modelu.

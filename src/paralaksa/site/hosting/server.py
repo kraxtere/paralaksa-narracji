@@ -1,13 +1,15 @@
-"""Password-protected static server for the internal site (Render web service, standard library only).
+"""Private static server for the internal site (Render web service, standard library only).
 
-Serves ./public to logged-in people only. The owner's credentials come from SITE_USER and SITE_PASSWORD; without them
-every request gets 503, so a misconfigured deploy never exposes the site. Only the app manifest, icons, the login form
-and invite links are served without logging in (browsers fetch the manifest and icons without credentials when
-installing the app). Logging in sets a signed cookie for COOKIE_DAYS (works in in-app browsers and installed apps);
-HTTP Basic Auth still works for scripts.
+Serves ./public to logged-in people only. The owner logs in with SITE_USER and SITE_PASSWORD (also the panel /osoby);
+without them every request gets 503, so a misconfigured deploy never exposes the site. Only the app manifest, icons, the
+login form and invite links are served without logging in (browsers fetch the manifest and icons without credentials
+when installing the app). Logging in sets a signed cookie for COOKIE_DAYS, renewed while reading (works in in-app
+browsers and installed apps); HTTP Basic Auth still works for scripts.
 
-Other people get their own logins (konta.py): the owner adds them on /osoby, each gets a one-time invite link and sets
-a password. Pages report reading time (a heartbeat every minute while the tab is visible, "h" when it is hidden); people,
+Other people come in by invite links, without passwords (konta.py): the owner adds a person on /osoby and sends their
+named link, which logs in at once; or shares the general link, where one types a name (the same name on another device
+is the same person). A link pasted on the login page works too (installed apps have no address bar). Pages report
+reading time (a heartbeat every minute while the tab is visible, "h" when it is hidden); people,
 invites and activity are kept in a private GitHub repo (ACTIVITY_TOKEN), because Render's free disk is wiped on every
 sleep and deploy.
 
@@ -46,13 +48,13 @@ EXPECTED = b"Basic " + base64.b64encode(f"{USER}:{PASSWORD}".encode()) if USER a
 CSRF = hmac.new(PASSWORD.encode(), b"paralaksa-osoby", "sha256").hexdigest()[:32]
 SECRET = hmac.new(PASSWORD.encode(), b"paralaksa-sesja", "sha256").digest()     # podpis ciasteczek logowania
 OWNER_FP = hashlib.sha256(f"{USER}\0{PASSWORD}".encode()).hexdigest()           # zmiana hasła właściciela wylogowuje
-COOKIE, COOKIE_DAYS = "plx", 90
+COOKIE, COOKIE_DAYS = "plx", 365
 STORE: "konta.Store | None" = None          # ustawiane w __main__ (konta.from_env) albo w testach
 STORE_ERROR = "zapis kont nie został uruchomiony"
 PUSH: "powiadomienia.Subscriptions | None" = None   # subskrypcje powiadomień (main, testy)
 PUSH_KEY = ""                                       # klucz publiczny VAPID dla strony; pusty = bez powiadomień
 FLUSH_S = 180
-FAIL_MAX, FAIL_WINDOW_S = 20, 900           # nieudane logowania z jednego adresu na kwadrans
+FAIL_MAX, FAIL_WINDOW_S = 20, 900           # nieudane logowania (i osobno wejścia z linku ogólnego) z adresu na kwadrans
 FAILS: dict[str, list[float]] = {}
 FAIL_LOCK = threading.Lock()
 TITLES: dict[str, str] = {}                 # ścieżka strony -> <title>, do listy czytanych stron
@@ -259,6 +261,12 @@ def safe_next(target: str) -> str:
     return target
 
 
+def share_token(version: int) -> str:
+    """Token of the general link: derived, not stored, so the panel can show it again; a new version replaces it."""
+    mac = hmac.new(SECRET, f"paralaksa-link-ogolny:{version}".encode(), "sha256").digest()[:16]
+    return base64.urlsafe_b64encode(mac).decode().rstrip("=")
+
+
 def minutes(seconds: float) -> str:
     return f"{round(seconds)} s" if seconds < 60 else f"{round(seconds / 60)} min"
 
@@ -281,21 +289,21 @@ class Handler(SimpleHTTPRequestHandler):
     def _ip(self) -> str:
         return (self.headers.get("X-Forwarded-For") or self.client_address[0]).split(",")[0].strip()
 
-    def _limited(self) -> bool:
-        now = time.time()
+    def _limited(self, bucket: str = "") -> bool:
+        now, key = time.time(), self._ip() + bucket
         with FAIL_LOCK:
-            recent = [t for t in FAILS.get(self._ip(), []) if now - t < FAIL_WINDOW_S]
+            recent = [t for t in FAILS.get(key, []) if now - t < FAIL_WINDOW_S]
             if recent:
-                FAILS[self._ip()] = recent
+                FAILS[key] = recent
             else:
-                FAILS.pop(self._ip(), None)
+                FAILS.pop(key, None)
             return len(recent) >= FAIL_MAX
 
-    def _failed(self) -> None:
+    def _failed(self, bucket: str = "") -> None:
         with FAIL_LOCK:
             if len(FAILS) > 10_000:
                 FAILS.clear()
-            FAILS.setdefault(self._ip(), []).append(time.time())
+            FAILS.setdefault(self._ip() + bucket, []).append(time.time())
 
     @staticmethod
     def _fingerprint(login: str) -> str | None:
@@ -384,6 +392,9 @@ class Handler(SimpleHTTPRequestHandler):
         if not (isinstance(day, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", day)):
             return None
         return day if (Path(self.directory) / "v2" / day / "index.html").is_file() else None
+
+    def _base(self) -> str:
+        return f"{self.headers.get('X-Forwarded-Proto', 'http')}://{self.headers.get('Host', '')}"
 
     def _redirect(self, location: str, headers: list[tuple[str, str]] = (), status: int = 303) -> None:
         self.send_response(status)
@@ -510,7 +521,12 @@ class Handler(SimpleHTTPRequestHandler):
         query = urllib.parse.parse_qs(urllib.parse.urlsplit(self.path).query)
         target = safe_next((form or {}).get("next") or query.get("next", ["/"])[0])
         error = ""
-        if form is not None:
+        if form is not None and "link" in form:     # aplikacja na ekranie głównym nie ma paska adresu
+            token = form["link"].strip().split("/zaproszenie/")[-1].split("?")[0].split("#")[0].strip("/")
+            if re.fullmatch(r"[A-Za-z0-9_-]{16,64}", token):
+                return self._redirect(f"/zaproszenie/{token}")
+            error = "To nie jest link zaproszenia."
+        elif form is not None:
             login, password = form.get("login", "").strip(), form.get("haslo", "")
             if self._limited():
                 error = "Za dużo nieudanych prób. Spróbuj za kwadrans."
@@ -530,37 +546,56 @@ class Handler(SimpleHTTPRequestHandler):
                 '<p><label>Login<br><input name="login" autocomplete="username" autocapitalize="none" spellcheck="false" '
                 'required></label></p><p><label>Hasło<br><input type="password" name="haslo" autocomplete="current-password" '
                 'required></label></p><button>Zaloguj</button></form>'
-                '<p class="s">Nie pamiętasz hasła? Poproś o nowy link.</p>')
+                '<form method="post" action="/logowanie" class="box"><p><label>Masz link zaproszenia? Wklej go tutaj<br>'
+                '<input name="link" autocapitalize="none" spellcheck="false" required></label></p><button>Wejdź</button>'
+                '</form><p class="s">Hasło ma tylko właściciel. Pozostali wchodzą przez link zaproszenia; gdy nie działa, '
+                'poproś o nowy.</p>')
         self._send(page("Logowanie", body), head=head)
 
     def _invite(self, token: str, form: dict | None = None, head: bool = False) -> None:
+        """Invite links log in without a password: a named link at once, the general link after typing a name."""
         info = STORE.invite_info(token) if STORE is not None and token else None
-        if info is None:
-            return self._send(page("Link nie działa", "<h1>Link nie działa</h1><p>Ten link wygasł albo został już użyty. "
+        share = STORE.share() if STORE is not None and token and info is None else {}
+        expected = share_token(share.get("wersja", 0)).encode()
+        general = bool(share.get("wlaczony")) and hmac.compare_digest(token.encode(), expected)
+        if info is None and not general:
+            return self._send(page("Link nie działa", "<h1>Link nie działa</h1><p>Ten link wygasł albo został unieważniony. "
                                    "Poproś o nowy.</p>"), 404, head=head)
-        error = ""
-        if form is not None:
-            if form.get("haslo", "") != form.get("haslo2", ""):
-                error = "Hasła się różnią."
-            else:
-                try:
-                    login = STORE.accept(token, form.get("haslo", ""))
-                    return self._send(page("Gotowe", f"<h1>Gotowe</h1><p>Twój login: <b>{html.escape(login)}</b>. To "
-                                           "urządzenie jest już zalogowane. Na innym zaloguj się tym loginem i hasłem.</p>"
-                                           '<p><a href="/">Przejdź do Paralaksy</a></p>'),
-                                      headers=[self._session_cookie(login)])
-                except (ValueError, LookupError) as e:
-                    error = str(e)
-        body = (f"<h1>Paralaksa</h1><p>Cześć {html.escape(info['imie'])}! Ustaw hasło do wewnętrznej wersji Paralaksy.</p>"
-                f"<p>Twój login: <b>{html.escape(info['login'])}</b></p>"
-                + (f'<p style="color:#b00020">{html.escape(error)}</p>' if error else "")
-                + '<form method="post" class="box"><input type="hidden" name="login" autocomplete="username" value="'
-                f'{html.escape(info["login"])}"><p><label>Hasło (min. 10 znaków)<br><input type="password" name="haslo" '
-                'autocomplete="new-password" required minlength="10"></label></p><p><label>Powtórz hasło<br><input '
-                'type="password" name="haslo2" autocomplete="new-password" required minlength="10"></label></p>'
-                '<button>Ustaw hasło</button></form><p class="s">Link działa raz, do '
-                f"{local(konta.parse_iso(info['wygasa']))}.</p>")
-        self._send(page("Zaproszenie", body), head=head)
+        if self._who() == USER:                     # właściciel sprawdza link u siebie: konta mu nie przełączamy
+            whom = f"jako <b>{html.escape(info['imie'])}</b>" if info else "po podaniu imienia"
+            return self._send(page("Link działa", f"<h1>Link działa</h1><p>Loguje {whom}. Tu jesteś zalogowany jako "
+                                   "właściciel, więc nic nie zmieniam; sprawdź go w oknie prywatnym.</p>"
+                                   '<p><a href="/">Wróć do Paralaksy</a></p>'), head=head)
+        error, login = "", None
+        try:
+            if info is not None:
+                STORE.ensure_key(info["login"])
+                login = info["login"]
+            elif form is not None:
+                if self._limited("+"):
+                    error = "Za dużo prób z tego adresu. Spróbuj za kwadrans."
+                else:
+                    self._failed("+")               # każde wejście z linku ogólnego: limit nowych kont z jednego adresu
+                    login = STORE.join(form.get("imie", ""))
+        except (ValueError, PermissionError) as e:
+            error = str(e)
+        except Exception as e:                      # GitHub niedostępny
+            return self._send(page("Błąd", f"<h1>Nie udało się</h1><p>{html.escape(str(e)[:200])}</p><p>Spróbuj za "
+                                   "chwilę.</p>"), 502, head=head)
+        if login is not None:
+            return self._welcome(login, STORE.people()[login]["imie"], head)
+        body = ("<h1>Paralaksa</h1>" + (f'<p style="color:#b00020">{html.escape(error)}</p>' if error else "")
+                + '<form method="post" class="box"><p><label>Podaj imię lub nazwę<br><input name="imie" maxlength="60" '
+                'autocomplete="nickname" required autofocus></label></p><button>Wejdź</button></form>'
+                '<p class="s">To samo imię na innym urządzeniu otwiera to samo konto.</p>')
+        self._send(page("Wejście", body), head=head)
+
+    def _welcome(self, login: str, name: str, head: bool) -> None:
+        """Logged in by a link: a greeting, then the site. The page script opens the site, so a link preview (fetched
+        without running scripts) sees only the greeting."""
+        body = (f"<h1>Witaj, {html.escape(name)}!</h1><p>To urządzenie jest już zalogowane.</p>"
+                '<p><a href="/">Wejdź do Paralaksy</a></p><script>setTimeout(()=>location.replace("/"),1500)</script>')
+        self._send(page("Witaj", body), head=head, headers=[self._session_cookie(login)])
 
     # --- panel właściciela ---------------------------------------------------------------------------------------------
     def _admin(self, who: str, form: dict | None = None, head: bool = False) -> None:
@@ -574,12 +609,14 @@ class Handler(SimpleHTTPRequestHandler):
                     if action == "dodaj" and not form.get("imie", "").strip():
                         raise ValueError("Podaj imię.")
                     login, token = STORE.invite(form.get("imie", ""), None if action == "dodaj" else login)
-                    proto = self.headers.get("X-Forwarded-Proto", "http")
-                    url = f"{proto}://{self.headers.get('Host', '')}/zaproszenie/{token}"
+                    url = f"{self._base()}/zaproszenie/{token}"
                     notice = (f'<div class="box"><b>Link dla {html.escape(STORE.people()[login]["imie"])}</b> (login '
                               f"{html.escape(login)}):<br><code>{html.escape(url)}</code><br><span class=\"s\">Wyślij go tej "
-                              f"osobie. Działa raz, przez {konta.INVITE_DAYS} dni. Nie zapisujemy go nigdzie, więc skopiuj "
-                              "teraz.</span></div>")
+                              f"osobie: otwarcie od razu ją loguje, bez hasła, także na kolejnych urządzeniach, przez "
+                              f"{konta.INVITE_DAYS} dni. Nowy link unieważnia poprzedni. Nie zapisujemy go nigdzie, więc "
+                              "skopiuj teraz.</span></div>")
+                elif action in ("ogolny", "ogolny-wylacz"):
+                    STORE.set_share(action == "ogolny")
                 elif action in ("zablokuj", "odblokuj") and login:
                     STORE.set_blocked(login, action == "zablokuj")
                 elif action == "usun" and login:
@@ -660,18 +697,29 @@ class Handler(SimpleHTTPRequestHandler):
             if p.get("usunieta"):
                 gone.append(person(login, p["imie"], "usunięta"))
                 continue
-            status = "zablokowana" if p.get("zablokowana") else ("aktywna" if p.get("hash") else "czeka na hasło")
+            status = "zablokowana" if p.get("zablokowana") else "aktywna" + (" · z linku ogólnego"
+                                                                            if p.get("z_linku_ogolnego") else "")
             actions = (btn("link", login, "Nowy link", "l") + " "
                        + (btn("odblokuj", login, "Odblokuj", "l") if p.get("zablokowana")
                           else btn("zablokuj", login, "Zablokuj", "l"))
                        + " " + btn("usun", login, "Usuń", "l", f"Usunąć konto: {p['imie']}? Historia wizyt zostanie."))
             blocks.append(person(login, p["imie"], status, actions))
         blocks += gone + [person(USER, "Ty", "właściciel")]
+        share = STORE.share()
+        if share.get("wlaczony"):
+            general = (f'<div class="box"><b>Link ogólny</b> do udostępniania:<br><code>{html.escape(self._base())}/zaproszenie/'
+                       f'{share_token(share.get("wersja", 0))}</code><br><span class="s">Kto go otworzy, podaje imię lub nazwę '
+                       "i wchodzi; to samo imię na innym urządzeniu to to samo konto (można się podszyć). Zablokowane imię "
+                       "nie wejdzie.</span><br>" + btn("ogolny", "", "Nowy link ogólny", "l", "Obecny link ogólny przestanie "
+                                                       "działać. Dalej?") + " " + btn("ogolny-wylacz", "", "Wyłącz", "l") + "</div>")
+        else:
+            general = ('<div class="box">Link ogólny (wchodzi się po podaniu imienia): wyłączony. '
+                       + btn("ogolny", "", "Włącz", "l") + "</div>")
         legend = "".join(f'<span><i style="background:{color}"></i>{label}</span>' for label, color in SECTIONS.values())
         body = (f'<p><a href="/">← Paralaksa</a> · <a href="/wyloguj">Wyloguj</a></p><h1>Osoby</h1>{notice}'
                 f'<form method="post" class="box"><input type="hidden" name="csrf" value="{CSRF}"><input type="hidden" '
                 'name="akcja" value="dodaj"><label>Imię nowej osoby <input name="imie" maxlength="60" required></label> '
-                '<button>Dodaj i utwórz link</button></form>'
+                '<button>Dodaj i utwórz link</button></form>' + general +
                 f'<details class="box" open><summary>Gdzie czytają (wszyscy oprócz Ciebie)</summary>'
                 f'{summary([iv for iv in ivs if iv["u"] != USER])}</details>'
                 f'<div class="leg">{legend}</div>'
@@ -761,10 +809,7 @@ def announce(root: Path, send) -> str:
         return "brak dnia w powiadomieniu"
 
     def active(login: str) -> bool:
-        if login == USER:
-            return True
-        person = STORE.people().get(login) if STORE is not None else None
-        return bool(person and person.get("hash") and not person.get("zablokowana") and not person.get("usunieta"))
+        return login == USER or (STORE is not None and STORE.fingerprint(login) is not None)
 
     payload = {"title": note.get("tytul") or "Paralaksa", "body": note.get("tresc") or "Nowe wydanie",
                "url": f"/v2/{day}/index.html", "tag": "wydanie"}

@@ -12,7 +12,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 from paralaksa.events.check import CardError, card_paths
-from paralaksa.site import icons
+from paralaksa.site import archive, icons
 from paralaksa.site.data import COUNTRY_NAMES, daily_days, daily_payload, daily_summary, event_payload, event_summary, load_report
 
 ASSETS = Path(__file__).parent / "assets"
@@ -26,6 +26,7 @@ class SiteResult:
     events: list[str] = field(default_factory=list)
     days: list[str] = field(default_factory=list)
     errors: list[str] = field(default_factory=list)
+    archive: list[dict] = field(default_factory=list)    # dni archiwum 2.0 (v2/archiwum/), od najnowszego
 
 
 def _asset(name: str) -> str:
@@ -119,9 +120,12 @@ def build_site(out_dir: Path, events_dir: Path, reports_dir: Path, conn: sqlite3
     summaries = [event_summary(e) for e in events]
 
     days = []
+    archive_days, sources = {}, {}
+    categories = archive.load_categories()
     if conn is not None:
         for day in daily_days(conn):
             p = daily_payload(conn, day, load_report(reports_dir, day), theme_names, summaries, stories_for, titles_for)
+            archive_days[day], sources = archive.records(p, categories), p["zrodla"]
             (out_dir / "dziennik" / f"{day}.html").write_text(page(f"Dziennik {day}", "daily", p, "../", tv_on),
                                                              encoding="utf-8")
             days.append(daily_summary(p))
@@ -147,7 +151,9 @@ def build_site(out_dir: Path, events_dir: Path, reports_dir: Path, conn: sqlite3
     for name in icons.ICONS:
         (out_dir / name).write_bytes(icons.icon_png(name))
     (out_dir / "sw.js").write_text(_asset("sw.js"), encoding="utf-8")     # instalacja i powiadomienia, zakres „/”
-    copy_v2(v2_dir, out_dir / "v2")
+    if copy_v2(v2_dir, out_dir / "v2", with_archive=bool(archive_days)) and archive_days:
+        res.archive = archive.write(out_dir / "v2" / "archiwum", archive_days, sources, theme_names, FAVICON,
+                                    _asset("archiwum.js"))["dni"]
     return res
 
 
@@ -163,12 +169,13 @@ def edition_note(day: str, stories_dir: Path) -> dict:
             "tresc": "; ".join(titles) if titles else "Nowe wydanie jest gotowe."}
 
 
-def copy_v2(src: Path | None, dest: Path) -> list[str]:
+def copy_v2(src: Path | None, dest: Path, with_archive: bool = False) -> list[str]:
     """Wersja 2.0 (prototyp obrazkowy, data/widok/<dzień>/ z data/widok_obrazkowy.py): kopiuje gotowe strony i obrazy,
     bez plików roboczych (nazwy od „_”), i dopisuje v2/index.html z listą dni (najnowszy otwiera się od razu),
     v2/dni.json i wspólny pasek v2/pasek.js. Ciągła oś wydarzeń (data/os_czasu.py, widok/os/) trafia do v2/os/,
     a jej skrót (zakres dni, miniatury) do v2/os.json: z niego pasek pokazuje wejście na stronach dnia.
-    Streszczenia artykułów (widok/streszczenia/*.json) trafiają do v2/streszczenia/."""
+    Streszczenia artykułów (widok/streszczenia/*.json) trafiają do v2/streszczenia/. `with_archive`: będzie
+    v2/archiwum/ (archive.write), pasek pokazuje wtedy wejście na dole strony dnia."""
     def found(root: Path) -> list[str]:
         return sorted((d.name for d in root.iterdir() if d.is_dir() and re.fullmatch(r"\d{4}-\d{2}-\d{2}", d.name)
                        and (d / "index.html").exists()), reverse=True) if root.exists() else []
@@ -204,8 +211,8 @@ def copy_v2(src: Path | None, dest: Path) -> list[str]:
         (dest / "powiadomienie.json").write_text(json.dumps(edition_note(days[0], src.parent / "stories"), ensure_ascii=False),
                                                  encoding="utf-8")
         # wspólny pasek i stopka wszystkich stron 2.0 (strony mają tylko <div id="pasek"> i ten skrypt)
-        (dest / "pasek.js").write_text(_asset("pasek.js").replace('"__LOGO__"', json.dumps(logo_inline("logo-ciemne-tlo", "plx"))),
-                                       encoding="utf-8")
+        (dest / "pasek.js").write_text(_asset("pasek.js").replace('"__LOGO__"', json.dumps(logo_inline("logo-ciemne-tlo", "plx")))
+                                       .replace('"__ARCHIWUM__"', json.dumps(with_archive)), encoding="utf-8")
         links ="".join(f'<li><a href="{d}/index.html">{d}</a></li>' for d in days)
         (dest / "index.html").write_text(
             f'<!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="robots" content="noindex">'

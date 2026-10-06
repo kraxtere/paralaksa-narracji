@@ -1,4 +1,5 @@
-# Render Blueprint: strona wewnętrzna pod hasłem. Login, hasło i token podajesz w Renderze, nie w repo.
+# Render Blueprint: strona wewnętrzna prywatna (linki zaproszenia, noindex). Login, hasło i token podajesz w Renderze,
+# nie w repo.
 services:
   - type: web
     name: paralaksa-strona

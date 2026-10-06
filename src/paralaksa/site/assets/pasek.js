@@ -88,7 +88,7 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
     }).catch(() => {});
   }
 
-  // Kafelek „Dzień po dniu” (v2/os.json, gdy jest) na samej górze strony dnia, zaraz pod paskiem (od 01.10), w stylu sekcji okładki:
+  // Kafelek „Dzień po dniu” (v2/os.json, gdy jest) na stronie dnia jako druga pozycja: zaraz pod nagłówkiem „Co w prasie piszczy” (okładka HTML, od 02.10; bez niej pod paskiem), w stylu sekcji okładki:
   // oś ostatnich dni z kwadratowymi kadrami na zakładkę; otwiera oś na tym dniu (#d=), a dzień spoza osi na jej końcu
   if (!("wstecz" in box.dataset)) {
     fetch(new URL("os.json", base), { cache: "no-store" }).then(r => r.ok ? r.json() : null).then(w => {
@@ -117,7 +117,7 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
       const days = w.dni.map(x => `<span class="d"><span class="st">${x.obrazki.map(f => `<img src="${dir + f}" alt="" loading="lazy">`).join("")}` +
         `</span><span class="kr"></span><b>${short(x.d)}</b></span>`).join("");
       a.innerHTML = `<span class="gl"><span class="et">Dzień po dniu</span><i>Oś czasu ›</i></span><span class="os">${days}</span>`;
-      const put = () => box.after(a);
+      const put = () => (document.querySelector('[data-sekcja="okladka"] .okl-h') || box).after(a);
       document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", put) : put();
     }).catch(() => {});
   }
@@ -232,7 +232,10 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
       const list = document.querySelector(".list:not(.jeden)"), h1 = list && list.querySelector(":scope > h1");
       const cards = secs.filter(x => x.id.startsWith("kraj-")).map(x => ({ el: x, przed: () => show(x), text: () => text(x) }));
       if (lab && !lab.querySelector(".czytaj")) {
-        mowa.button("duza", [{ el: pods, text: () => body(pods) }]
+        // podsumowanie tematu: wstęp i akapity zwinięte pod „Czytaj dalej” (.pods-wiecej), także gdy są zwinięte
+        const podsText = () => body(pods) + [...pods.querySelectorAll(":scope > .pods-wiecej > p")]
+          .map(x => " " + sentence(x.textContent)).join("");
+        mowa.button("duza", [{ el: pods, text: podsText }]
           .concat(cards), b => lab.append(b));
       } else if (h1 && cards.length && !list.querySelector(":scope > .czytaj.duza")) {
         const lead = () => sentence(h1.textContent) + " " + [...list.querySelectorAll(":scope > p")].filter(x => !x.matches(".s"))
@@ -475,6 +478,20 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
   }));
 
   document.addEventListener("DOMContentLoaded", () => {
+    // Kafel „Archiwum” (od 05.10) na dole strony dnia, przed stopką, w stylu sekcji okładki (belka i ciemny pas bez obrazka):
+    // wyszukiwarka wszystkich artykułów (v2/archiwum/, src/paralaksa/site/archive.py); ?dzien= to powrót na ten dzień
+    const archive = "__ARCHIWUM__";                                 // plx site: true, gdy zbudował v2/archiwum/
+    if (archive && !("wstecz" in box.dataset)) {
+      const a = document.createElement("div");
+      a.className = "okl";
+      a.innerHTML = "<h2 class=\"pp-sek\">Archiwum</h2>" +             // belka pierwsza: odstęp jak przed innymi sekcjami
+        `<a class="okl-pas arch-pas" href="${new URL("archiwum/index.html?dzien=" + day, base).href}">` +
+        "<span class=\"okl-t\"><b>Szukaj we wszystkich artykułach <span class=\"strz\">›</span></b>" +
+        "<span class=\"okl-n\">Nagłówki, ramy i streszczenia ze wszystkich dni; kraj, źródło, temat, ton</span></span></a>" +
+        "<style>.arch-pas{min-height:96px}.arch-pas .okl-t{padding-top:30px}" +
+        ".arch-pas .strz{float:right;font-size:1.3em;line-height:.8}</style>";
+      document.body.append(a);
+    }
     const foot = document.createElement("footer");
     foot.className = "stopka";
     foot.innerHTML = `<span>Paralaksa · wersja wewnętrzna · nowy dzień codziennie około 19:00</span>` +

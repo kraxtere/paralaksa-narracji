@@ -239,4 +239,50 @@ def test_v2_copies_finished_views_without_work_files(tmp_path):
     assert "__LOGO__" not in bar and "<svg" in bar and "dni.json" in bar and "Stara wersja" in bar
     assert "streszczenia/" in bar and "Przejdź do artykułu" in bar
     assert "ma-str" in bar and "var(--art-akcent)" in bar and "Kliknij, aby rozwinąć streszczenie" in bar
+    assert "const archive = false;" in bar                    # bez archiwum: bez kafla na dole strony dnia
     assert copy_v2(None, tmp_path / "brak") == []
+
+
+def test_v2_archive_day_packs_without_fulltexts(tmp_path, conn):
+    import gzip
+
+    from seed import article
+
+    aid = _seed(conn)
+    old = article(conn, "pl1")                       # zaległość RSS dnia inicjalnego: śmieciowa data publikacji
+    conn.execute("UPDATE articles SET published_at = '2024-01-01T00:00:00+00:00' WHERE id = ?", (old,))
+    bare = article(conn, "ua1")                      # bez sygnałów: zostaje, szuka się po tytule
+    (tmp_path / "widok" / DAY).mkdir(parents=True)
+    (tmp_path / "widok" / DAY / "index.html").write_text("x", encoding="utf-8")
+    (tmp_path / "events").mkdir()
+    themes = {t.id: t.name_pl for t in load_themes()}
+    out = tmp_path / "site"
+    res = build_site(out, tmp_path / "events", tmp_path / "events", conn, themes, v2_dir=tmp_path / "widok")
+
+    arch = out / "v2" / "archiwum"
+    assert res.archive == [{"d": DAY, "n": 4}]
+    raw = (arch / f"{DAY}.json").read_text(encoding="utf-8")
+    rows = json.loads(gzip.decompress((arch / f"{DAY}.json.gz").read_bytes()))
+    assert rows == json.loads(raw)
+    title = lambda i: conn.execute("SELECT title, url FROM articles WHERE id = ?", (i,)).fetchone()
+    rows_by_title = {r[1]: r for r in rows}
+    assert title(old)[0] not in rows_by_title
+    bare_row = rows_by_title[title(bare)[0]]
+    assert bare_row[:7] == ["ua1", title(bare)[0], "", title(bare)[1], [], "", ""]   # bez PL tytułu: bez lematów
+    assert re.fullmatch(r"\d{4}-\d\d-\d\dT\d\d:\d\dZ", bare_row[7]) and bare_row[8] in "pf" and bare_row[9:] == ["", ""]
+    assert rows_by_title[title(aid)[0]][10] == "analiza" and rows_by_title[title(aid)[0]][9] == ""
+    assert rows_by_title[title(aid)[0]][4] == [["russia", "alarm", "UA", "Rosja zagraża", f"Streszczenie sygnału {aid}."]]
+    assert len(rows) == 4 and "Lead." not in raw and "dowód" not in raw          # bez leadów, pełnych tekstów i dowodów
+    page = (arch / "index.html").read_text(encoding="utf-8")
+    assert 'content="noindex, nofollow"' in page and 'src="../pasek.js"' in page and "data-wstecz" in page
+    spis = json.loads(re.search(r'<script type="application/json" id="spis">(.*?)</script>', page, re.S).group(1))
+    assert spis["dni"] == [{"d": DAY, "n": 4}] and spis["tematy"] == themes and spis["kraje"]["UA"] == "Ukraina"
+    assert spis["rosnace"] == {"": []} and spis["rosnace_dzien"] == DAY
+    assert spis["zrodla"] == {"pl1": ["PL1", "PL"], "pl2": ["PL2", "PL"], "ua1": ["UA1", "UA"]}
+    bar = (out / "v2" / "pasek.js").read_text(encoding="utf-8")
+    assert "const archive = true;" in bar and "archiwum/index.html?dzien=" in bar
+
+    without_db = tmp_path / "bez-bazy"
+    assert build_site(without_db, tmp_path / "events", tmp_path / "events", None, themes,
+                      v2_dir=tmp_path / "widok").archive == []
+    assert not (without_db / "v2" / "archiwum").exists()

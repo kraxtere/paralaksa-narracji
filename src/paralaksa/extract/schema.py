@@ -98,7 +98,7 @@ class ParseOutcome:
     signals: list[Signal] = field(default_factory=list)   # poprawne sygnały
     errors: list[str] = field(default_factory=list)       # błędy pojedynczych sygnałów
     fatal: str | None = None                               # odpowiedź w ogóle nieużywalna
-    repairs: int = 0                                       # obcięte evidence_span
+    repairs: int = 0                                       # obcięte lub naprawione (wielokropek) evidence_span
 
     @property
     def clean(self) -> bool:
@@ -156,6 +156,23 @@ def is_verbatim(span: str, source: str) -> bool:
     return False
 
 
+MIN_ELLIPSIS_SEGMENT_WORDS = 3
+
+
+def longest_verbatim_segment(span: str, source: str) -> str | None:
+    """Longest piece of an ellipsis-joined span that is itself a verbatim fragment of the source.
+
+    Models sometimes stitch two quotes with "..."; a lone piece (>= MIN_ELLIPSIS_SEGMENT_WORDS words,
+    cut to MAX_EVIDENCE_WORDS) is still an honest, checkable quote. None when no piece qualifies.
+    """
+    best: list[str] = []
+    for piece in re.split(r"\.{3}|…", span):
+        words = piece.split()[:MAX_EVIDENCE_WORDS]
+        if len(words) >= MIN_ELLIPSIS_SEGMENT_WORDS and len(words) > len(best) and is_verbatim(" ".join(words), source):
+            best = words
+    return " ".join(best) or None
+
+
 def _format_error(i: int, err: dict) -> str:
     loc = ".".join(str(p) for p in err["loc"])
     return f"signals.{i}.{loc}: {err['msg']}"
@@ -188,6 +205,11 @@ def parse_extraction(text: str, theme_ids: set[str], source_text: str | None = N
         if isinstance(span, str) and len(span.split()) > MAX_EVIDENCE_WORDS and "..." not in span and "…" not in span:
             raw = {**raw, "evidence_span": " ".join(span.split()[:MAX_EVIDENCE_WORDS])}
             out.repairs += 1
+        elif isinstance(span, str) and source_text is not None and ("..." in span or "…" in span):
+            piece = longest_verbatim_segment(span, source_text)
+            if piece:
+                raw = {**raw, "evidence_span": piece}
+                out.repairs += 1
         try:
             signal = Signal.model_validate(raw)
         except ValidationError as e:

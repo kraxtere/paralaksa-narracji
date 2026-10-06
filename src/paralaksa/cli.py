@@ -304,7 +304,7 @@ def site(
     else:
         conn.row_factory = sqlite3.Row
 
-    model = settings.models.extract
+    model = settings.models.site_model()
     client = None
     spent = 0.0
 

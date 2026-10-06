@@ -380,16 +380,21 @@ def summaries(t: dict, pl: dict, cs: list[dict]) -> dict:
         "od tej sprawy, własnymi słowami (nie pisz, że to nagłówek, plakat ani temat nagłówkowy). Nazywaj redakcje (pole zrodlo). Tylko na podstawie danych, bez własnej wiedzy, "
         "bez ocen prawdziwości i bez prognoz; pisz „według X”, „X przedstawia”. Cytaty najwyżej 15 słów. "
         "Nie używaj myślników jako przecinków.\n"
-        "Dodaj _opis: zwięzły, rzeczowy wstęp 3–4 zdania (około 60–90 słów), bez zdań wprowadzających i bez wyliczania "
+        "Dodaj _opis: jeden spójny tekst, 4 akapity rozdzielone pustą linią, razem 250–350 słów. Pierwszy akapit to "
+        "samodzielny wstęp 3–4 zdania (około 60–90 słów; czytelnik może nie rozwinąć reszty). Dalsze akapity go rozwijają, "
+        "żeby czytelnik nie musiał przeglądać nagłówków wszystkich krajów: konkretne różnice, które kraje i redakcje "
+        "wybrały inne wątki, inną ramę lub inny ton, co pojawia się tylko w jednym kraju i czego w prasie danego kraju "
+        "zabrakło, choć pisali o tym inni; bez wyliczania krajów, które piszą to samo, i bez identyfikatorów artykułów. "
+        "Całość bez zdań wprowadzających i bez wyliczania "
         "wszystkich redakcji; nazwij tylko te, które najlepiej pokazują różnice. Porównuje konkretne wątki i redakcje "
-        "z różnych krajów, oraz _article_ids: identyfikatory artykułów wspierających ten wstęp. "
+        "z różnych krajów, oraz _article_ids: identyfikatory artykułów wspierających ten tekst. "
         "Wstęp ma wyjaśniać, kto pisał o czym i czym różnił się dobór spraw; nie sugeruj, że wszystkie artykuły "
         "dotyczą tego samego wydarzenia. Nie uogólniaj pojedynczej redakcji na całą prasę kraju. "
         "Odpowiedz WYŁĄCZNIE obiektem JSON {\"_opis\":\"...\",\"_article_ids\":[123],\"KOD_KRAJU\": \"podsumowanie\", ...} z kluczami krajów: "
         + ", ".join(f"{c} ({n})" for c, n in names.items()) + ".\n\nDANE:\n"
         + json.dumps(data, ensure_ascii=False, indent=1))
     inputs = {"prompt": prompt_text, "model": TEXT_MODEL}
-    cached = read_cache(path, inputs, "temat-opisy-v1", adopt=True)
+    cached = read_cache(path, inputs, "temat-opisy-v2", adopt=True)
     if cached is not None:
         return cached
     work = OUT / f"_pods-{t['temat']}"
@@ -399,10 +404,20 @@ def summaries(t: dict, pl: dict, cs: list[dict]) -> dict:
     if (set(res) != set(data) | {"_opis", "_article_ids"}
             or not all(isinstance(res[c], str) and res[c].strip() for c in data)
             or not isinstance(res.get("_opis"), str) or not res["_opis"].strip()
+            or len(res["_opis"].split()) < 180
             or not res.get("_article_ids") or not set(res["_article_ids"]) <= allowed):
         raise ValueError(f"{t['temat']}: niekompletne podsumowania krajów")
-    save_cache(path, res, inputs, "temat-opisy-v1")
+    save_cache(path, res, inputs, "temat-opisy-v2")
     return res
+
+
+def summary_paras(text: str) -> str:
+    """Topic summary: the first paragraph stays visible, the rest unfolds under „Czytaj dalej” in the same box
+    (days cached before 03.10 have one paragraph only)."""
+    paras = [q.strip() for q in re.split(r"\n\s*\n", ID_TAG.sub("", text)) if q.strip()]
+    rest = "".join(f"<p>{with_logos(p, list(SOURCES))}</p>" for p in paras[1:])
+    return (f"<p>{with_logos(paras[0], list(SOURCES))}</p>" if paras else "") + (
+        f'<details class="pods-wiecej"><summary>Czytaj dalej</summary>{rest}</details>' if rest else "")
 
 
 def with_logos(text: str, sids: list[str]) -> str:
@@ -453,10 +468,13 @@ def theme_page(t: dict, opisy: dict, pl: dict, cs: list[dict], debug: bool = Fal
         if strips_mode():
             if country_strip(t, c).exists():
                 strip = f'<img class="pas-kraju" src="{country_strip(t, c).name}" alt="" loading="lazy">'
-                if top:                                        # dymek: nagłówek kraju z plakat-TEMAT.json (wybór jak na plakacie)
-                    strip += f'<div class="dymek">{esc(top["naglowek"])}</div>'
-        blocks.append(f'<section id="kraj-{c}" data-czytaj="kraj">{strip}<h2>{country_pill(c, big=True)} <span class="s">{round(100 * share)}% artykułów'
-                      f'</span>{"".join(src_html(z) for z in opisy["dane"][c]["zrodla"])}</h2>'
+                # dymek: nagłówek kraju z plakat-TEMAT.json (wybór jak na plakacie); kraj spoza plakatu: pierwszy artykuł listy
+                head = top["naglowek"] if top else next((headline_excerpt(pl[a["article_id"]]) for a in rest
+                                                         if pl.get(a["article_id"])), "")
+                if head:
+                    strip += f'<div class="dymek">{esc(head)}</div>'
+        blocks.append(f'<section id="kraj-{c}" data-czytaj="kraj" data-zwin>{strip}<h2>{country_pill(c, big=True)} <span class="s">{round(100 * share)}% artykułów'
+                      f'</span>{"".join(src_html(z) for z in opisy["dane"][c]["zrodla"])}<span class="rozwin"></span></h2>'
                       + opis + art_list(arts) + "</section>")
     poster = ""
     img = OUT / f"plakat-{t['temat']}.png"
@@ -479,7 +497,7 @@ def theme_page(t: dict, opisy: dict, pl: dict, cs: list[dict], debug: bool = Fal
     body = (bar("index.html") + poster + f'<style>{COUNTRY_PICK_CSS}</style><div class="list jeden" data-wszystkie data-sekcja="tematy">{head}<h1>{esc(t["nazwa"])}</h1><p class="s">{len(t["kraje"])} krajów '
             f'pisało o tym temacie ({DAY}). Opis przekazu analizowanych źródeł, nie faktów.</p>'
             + (f'<div class="pods" data-czytaj="temat"><div class="pods-l">Podsumowanie wszystkich krajów</div>'
-               f'<p>{with_logos(pods["_opis"], list(SOURCES))}</p></div>' if pods.get("_opis") else "")
+               f'{summary_paras(pods["_opis"])}</div>' if pods.get("_opis") else "")
             + nav + '<p class="s">Nagłówki w tłumaczeniu roboczym; dłuższe skrócone do 15 słów.</p>' + "".join(blocks) + tnav + "</div>"
             + COUNTRY_PICK_JS)
     return shell(f"{t['nazwa']} · {DAY}", body, debug)
@@ -572,16 +590,46 @@ def parse_welcome(raw: str) -> dict:
     return res
 
 
+ID_TAG = re.compile(r"\s*\[article_ids?:[^\]]*\]")
+
+
+def strip_id_tags(res: dict) -> None:
+    """Luna sometimes repeats a paragraph's ids at the end of its text (`[article_ids: 1, 2]`, 03.10); they belong only
+    in the article_ids field, so remove them from the texts (also in replies cached before this fix)."""
+    for card in res.values():
+        for paras in card.get("kraje", {}).values():
+            for para in paras:
+                para["tekst"] = ID_TAG.sub("", para["tekst"])
+
+
+def welcome_retry_note(err: Exception, inputs: dict) -> str:
+    """Retry hint after a rejected answer: the error and, for a card/country error, that country's allowed article ids."""
+    note = f"\n\nPoprzednia odpowiedź została odrzucona: {err}. Popraw to i odpowiedz ponownie całym JSON-em."
+    m = re.match(r"([\w-]+)/([A-Z]{2}): ", str(err))
+    card = inputs["karty"].get(m.group(1)) if m else None
+    if card and m.group(2) in card["kraje"]:
+        allowed = sorted({a["article_id"] for a in card["kraje"][m.group(2)]})
+        note += (f" W karcie {m.group(1)} dla kraju {m.group(2)} wolno podać w article_ids wyłącznie: "
+                 f"{', '.join(map(str, allowed))}.")
+    return note
+
+
 def welcome_summaries(inputs: dict) -> dict:
     path = OUT / "podsumowania-powitanie.json"
     signature = {"data": inputs, "prompt_version": WELCOME_VERSION, "model": TEXT_MODEL,
                  "instructions": welcome_prompt({})}
     res = read_cache(path, signature, WELCOME_VERSION)
     if res is None:
-        raw = codex_text(OUT / "_pods-powitanie", welcome_prompt(inputs))
-        res = parse_welcome(raw)
-        validate_welcome(res, inputs)
+        prompt_text = welcome_prompt(inputs)
+        try:
+            res = parse_welcome(codex_text(OUT / "_pods-powitanie", prompt_text))
+            validate_welcome(res, inputs)
+        except ValueError as err:                  # jedno ponowienie z treścią błędu; walidacja bez zmian
+            print(f"podsumowania powitania: ponawiam ({err})")
+            res = parse_welcome(codex_text(OUT / "_pods-powitanie", prompt_text + welcome_retry_note(err, inputs)))
+            validate_welcome(res, inputs)
         save_cache(path, res, signature, WELCOME_VERSION)
+    strip_id_tags(res)
     validate_welcome(res, inputs)
     return res
 
@@ -688,8 +736,10 @@ COUNTRY_PICK_JS = """<script>(()=>{const box=document.querySelector('.jeden'),na
 all=box.hasAttribute('data-wszystkie'),ss=[...box.querySelectorAll('section[id^=kraj-]')];box.classList.add('js');
 if(all){const w=document.createElement('a');w.href='#';w.className='kraj-pig';w.dataset.k='';w.textContent='Wszystkie kraje';nav.prepend(w)}
 const bs=[...nav.querySelectorAll('a')];window.plxKolko&&plxKolko(nav);
+ss.forEach(s=>s.hasAttribute('data-zwin')&&s.querySelectorAll(':scope>.pas-kraju,:scope>.dymek,:scope>h2').forEach(e=>
+ e.onclick=ev=>{if(!ev.target.closest('a,button'))s.classList.toggle('zwin')}));
 function pick(c,push){if(c&&!ss.some(s=>s.id==='kraj-'+c))c='';if(!c&&!all)c=ss[0]&&ss[0].id.slice(5);
- ss.forEach(s=>s.classList.toggle('on',!c||s.id==='kraj-'+c));bs.forEach(b=>{const on=b.dataset.k===c;b.classList.toggle('on',on);
+ ss.forEach(s=>{s.classList.toggle('on',!c||s.id==='kraj-'+c);s.classList.toggle('zwin',!c&&s.hasAttribute('data-zwin'))});bs.forEach(b=>{const on=b.dataset.k===c;b.classList.toggle('on',on);
  if(on)nav.scrollLeft+=b.getBoundingClientRect().left-nav.getBoundingClientRect().left-8});
  if(push)history.replaceState(null,'',c?'#'+c:location.pathname+location.search)}
 bs.forEach(b=>b.onclick=e=>{e.preventDefault();pick(b.dataset.k,true)});
@@ -697,6 +747,11 @@ const h=()=>pick(location.hash.slice(1).replace(/^kraj-/,'')||(all?'':'PL'),fals
 COUNTRY_PICK_CSS = (".jeden .kraje-nav{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;padding-bottom:4px}"
                     ".jeden .kraje-nav a.on{background:var(--cegla);border-color:var(--cegla);color:var(--papier)}"
                     ".jeden.js section[id^=kraj-]{display:none}.jeden.js section[id^=kraj-].on{display:block}"
+                    # strona tematu, „Wszystkie kraje”: karty zwinięte do paska z dymkiem i belki kraju, klik rozwija opis i artykuły
+                    ".jeden.js section.zwin>:not(.pas-kraju):not(.dymek):not(h2){display:none}"
+                    ".jeden.js section[data-zwin]>h2,.jeden.js section[data-zwin]>.pas-kraju,.jeden.js section[data-zwin]>.dymek{cursor:pointer}"
+                    ".rozwin{display:none}.jeden.js .rozwin{display:inline;float:right;margin:.5em 0 0 8px;color:var(--cegla);font-size:.6em;font-weight:700;white-space:nowrap}"
+                    ".jeden.js .rozwin:after{content:'Zwiń ▴'}.jeden.js section.zwin .rozwin:after{content:'Rozwiń ▾'}"
                     ".kraje-baner{display:block;width:100%;height:auto;border-radius:10px;margin:12px 0 0}.jeden h1{margin-top:10px}.przypis{margin:-4px 0 10px;font-size:.8em}")
 
 
@@ -734,17 +789,17 @@ def countries_link() -> str:
     img = '<img src="../kraje/baner.webp" alt="" loading="lazy">' if BANNER.exists() else ""
     return (f'<div class="okl"><h2 class="pp-sek">Czym żyją kraje</h2>'
             f'<a class="okl-pas kraje-pas{"" if img else " bez"}" href="kraje.html" data-sekcja="kraje">{img}'
-            '<span class="okl-t"><b>Tematy, które zostają w domu <span class="strz">›</span></b>'
-            '<span class="okl-n">Co zajmuje prasę każdego kraju, choć nie pisze o tym nikt poza nim</span></span></a></div>')
+            '<span class="okl-t"><b>Tematy, które zostają w domu <span class="strz">›</span></b></span></a></div>')
 
 
 # Baner „Czym żyje kraj”: stały zasób wspólny dla wszystkich dni (data/widok/kraje/baner.webp, plx site kopiuje go do
 # v2/kraje/), generowany raz (`widok_obrazkowy.py baner`; istniejącego nie nadpisuje)
 BANNER = Path("data/widok/kraje/baner.webp")
 COUNTRIES = ["PL", "UA", "DE", "UK", "US", "RU", "CN", "IN", "TR", "IL", "PS", "QA", "BR", "HK", "FR", "HU", "IR"]
-_ROWS = (len(COUNTRIES) + 1) // 2   # okna kamienicy w 2 rzędach; liczba z listy krajów, nie stała
+_ROWS = -(-len(COUNTRIES) // 3)      # okna kamienicy w 3 rzędach (większe okna na telefonie); liczba z listy krajów
 BANNER_SCENE = ("A calm, symmetrical facade of an old European tenement house seen straight on, filling the strip: an "
-                f"orderly grid of EXACTLY {len(COUNTRIES)} equal windows in 2 rows of {_ROWS} (the last row may have one window fewer). In every window one small cartoon newspaper "
+                f"orderly grid of EXACTLY {len(COUNTRIES)} large equal windows in 3 rows of {_ROWS} (the last row may have fewer), "
+                "the WHOLE building facade filling the strip, windows big enough that each country's accent reads clearly. In every window one small cartoon newspaper "
                 "figure (a folded newspaper with a simple face) wearing a scarf in the colours of a different country "
                 "(" + ", ".join(f"{NAMES[c]}: {FLAGS[c]}" for c in COUNTRIES) + "), busy with its own local matter "
                 "(reading, phoning, watering a plant, cooking, fixing something), each with ONE small local accent in "
@@ -754,9 +809,10 @@ BANNER_SCENE = ("A calm, symmetrical facade of an old European tenement house se
 
 
 def banner_prompt() -> str:
-    """Codex instruction: three takes of the same scene, strips of about 2:1 (shown cropped to 2.4:1), the best one kept."""
+    """Codex instruction: two takes of the same scene, strips of about 1.35:1 (taller tile, whole building), the better
+    one kept."""
     import paski
-    return paski.prompt([BANNER_SCENE + " Take %d: same facade, different light." % i for i in (1, 2, 3)])
+    return paski.prompt([BANNER_SCENE + " Take %d: same facade, different light." % i for i in (1, 2)])
 
 
 # --- 2.0 pasami (od 01.10): okładka = pasy tematów, strona tematu = pas tematu + paski krajów (scripts/v2/paski.py) ---
@@ -925,6 +981,8 @@ STRIPS_CSS = (
     ".pods{background:var(--karta);border:1px solid var(--linia);border-left:5px solid var(--cegla);border-radius:12px;"
     "padding:10px 14px;margin:10px 0 12px}.pods-l{color:var(--cegla);font-size:.75em;font-weight:700;letter-spacing:.06em;"
     "text-transform:uppercase}.list .pods p{margin:4px 0 0;font-size:1.06em;font-weight:500;line-height:1.55}"
+    ".pods-wiecej summary{cursor:pointer;color:var(--cegla);font-weight:700;margin-top:8px}"
+    ".pods-wiecej[open] summary{margin-bottom:2px}.list .pods .pods-wiecej p{margin:8px 0 0}"
     ".kraje-nav{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}"
     # jedna pigułka kraju (country_pill): przyciski krajów i nagłówki kart; .duza w nagłówkach h2
     ".kraj-pig{display:inline-flex;align-items:center;gap:6px;padding:4px 11px 4px 5px;border:1px solid var(--linia);"
@@ -948,7 +1006,8 @@ STRIPS_CSS = (
     ".flaga{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--papier);box-sizing:border-box}"
     ".okl-pas:hover,.okl-pas:focus-visible{outline:3px solid var(--cegla);outline-offset:2px}"
     ".okl-s{text-align:center;color:var(--szary);font-size:.8em}"
-    ".kraje-pas img{aspect-ratio:2.4/1;object-fit:cover}.kraje-pas .okl-t{padding-top:30px}.kraje-pas .strz{float:right;font-size:1.3em;line-height:.8}.kraje-pas.bez{min-height:90px}"
+    # kafel „Czym żyją kraje”: baner w całości (cały budynek, ok. 1.35:1), jeden podpis na gradiencie jak tytuły pasów
+    ".kraje-pas .okl-t{padding-top:30px}.kraje-pas .strz{float:right;font-size:1.3em;line-height:.8}.kraje-pas.bez{min-height:90px}"
     ".pas-tematu{display:block;width:100%;height:auto;border-radius:10px;margin:12px 0 0}"
     ".pas-kraju{display:block;width:100%;height:auto;border-radius:10px;margin:2px 0 0}"
     ".dymek{position:relative;width:fit-content;max-width:80%;margin:-18px 10px 8px auto;padding:7px 11px;"
@@ -964,6 +1023,8 @@ STRIPS_CSS = (
     "font-size:.7em;vertical-align:middle;border-radius:3px}.pp .okl-h p{font-style:italic;color:var(--tusz)}"
     ".pp-sek{margin:18px 0 6px;padding:5px 12px;background:var(--cegla);color:var(--papier);font:700 1.2em Georgia,serif;"
     "border-radius:4px 4px 0 0}.pp-pod{margin:0 2px 4px;color:var(--szary);font-size:.85em}"
+    # belka sekcji na początku kolejnego bloku: ten sam odstęp od poprzedniego kafla co wewnątrz okładki (18 px)
+    ".okl>.pp-sek:first-child{margin-top:0}.pp.okl{padding-bottom:6px}"
     "@media(max-width:480px){.pp .okl-h h1{font-size:1.65em}}"
     ".pp-k{margin:8px 0 12px;border:3px solid var(--tusz);border-radius:8px;overflow:hidden;background:var(--karta);"
     "color:var(--tusz)}.pp-obr{position:relative;display:block;background:var(--tusz);color:var(--papier);text-decoration:none}"
@@ -1028,8 +1089,20 @@ def polish_titles() -> dict[int, str]:
         "WHERE s.language = 'pl' AND substr(a.fetched_at, 1, 10) = ?", (DAY,))}
 
 
+def image_jobs() -> list[tuple[str, object]]:
+    """Codex jobs of the day for scripts/v2/dzien.py: cover strips and country strips of the themes (only missing ones).
+    Builds the texts they need (summaries, plakat-*.json) on the way, cached like in `paski`."""
+    opisy = json.loads(OPISY.read_text(encoding="utf-8"))
+    ts = themes(opisy)
+    pl = {**polish_titles(), **titles.cached(Path("data/tytuly"), DAY)}
+    OUT.mkdir(parents=True, exist_ok=True)
+    (OUT / "tematy.json").write_text(json.dumps(ts, ensure_ascii=False, indent=1), encoding="utf-8")
+    PASKI.mkdir(parents=True, exist_ok=True)
+    return strip_jobs(ts, opisy, pl)
+
+
 def main():
-    if sys.argv[1:2] == ["baner"]:          # baner „Czym żyją kraje”, raz; potem wybór: baner wybierz 1|2|3
+    if sys.argv[1:2] == ["baner"]:          # baner „Czym żyją kraje”, raz; potem wybór: baner wybierz 1|2
         import paski
         work, pick = BANNER.parent / "_baner", sys.argv[3] if len(sys.argv) > 3 and sys.argv[2] == "wybierz" else None
         if pick:
@@ -1038,7 +1111,7 @@ def main():
         elif BANNER.exists():
             print(f"{BANNER} już jest, nie generuję ponownie")
         else:
-            print(paski.make(work / "_gen", banner_prompt(), [work / f"wersja-{i}.webp" for i in (1, 2, 3)],
+            print(paski.make(work / "_gen", banner_prompt(), [work / f"wersja-{i}.webp" for i in (1, 2)],
                              work / "oryginal.png"))
         return
     opisy = json.loads(OPISY.read_text(encoding="utf-8"))

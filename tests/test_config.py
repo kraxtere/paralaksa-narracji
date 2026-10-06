@@ -71,3 +71,13 @@ def test_duplicate_source_ids_rejected(tmp_path):
     )
     with pytest.raises(ValueError, match="zduplikowane"):
         load_sources(tmp_path)
+
+
+def test_site_model_is_codex_locally_and_extract_stays_for_actions():
+    """plx site uses models.site (Codex, never ultra); daily extraction in Actions keeps its own model."""
+    from paralaksa.config import Models
+
+    models = load_settings().models
+    assert models.site_model().startswith("codex") and "ultra" not in models.site_model()
+    assert not models.extract.startswith("codex")
+    assert Models(extract="deepseek-v4-pro").site_model() == "deepseek-v4-pro"   # brak site: jak dotąd extract

@@ -16,7 +16,7 @@ from widok_obrazkowy import (DAY, FLAGS, NAMES, OUT, PASKI, PEOPLE_STYLE, esc, f
                              n_kraje)
 
 SUBTITLE = "Jeden dzień, wiele perspektyw"
-TITLE = "Co tam w prasie piszczy"
+TITLE = "Co w prasie piszczy"
 # nazwy sekcji okładki (decyzja właściciela 2026-10-02)
 EVENTS, TONES, SELF = "Tego dnia", "Tonacje", "Autoportret"
 
@@ -126,9 +126,14 @@ def cover_html(data: dict) -> str:
                 + col(si["zewn"], "Z zewnątrz", si["tekst_z_zewnatrz"]))
         parts.append(card(si["key"], f'<b>{esc(NAMES[si["kraj"]])}</b>' + flags([si["kraj"]] + si["zewn"]),
                           f'<div class="pp-kols">{cols}</div>'))
-    parts.append(f'<p class="okl-s">{data["n_krajow"]} krajów · Niżej: tematy dnia · Opis przekazu analizowanych źródeł, '
-                 'nie faktów · Paralaksa</p>')
     return '<div class="okl pp" data-sekcja="okladka">' + "".join(parts) + "</div>"
+
+
+def image_jobs() -> list[tuple[str, object]]:
+    """Codex jobs of the cover strips for scripts/v2/dzien.py (only missing ones)."""
+    from widok_powitanie import poster_data
+    PASKI.mkdir(parents=True, exist_ok=True)
+    return strip_jobs(poster_data())
 
 
 def main():
