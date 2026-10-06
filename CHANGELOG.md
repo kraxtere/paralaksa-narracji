@@ -1,3 +1,16 @@
+# Archiwum: jeden filtr „Temat” zamiast kategorii i tematów — 2026-10-06
+
+- `archiwum.js`: znika wiersz „Kategoria” (przyciski „tematy analizy”, „polityka”…) i osobny filtr tematu w „Więcej filtrów”.
+  W jego miejscu pod okresem jest jedna rozwijana lista „Temat” (natywny wybierak, na telefonie czytelny, pełna szerokość).
+- Zasada: artykuł ma jedną etykietę: temat analizy z sygnałów (jak dotąd tylko stałe, bez `emergent:*`; artykuł z kilkoma
+  tematami liczy się w każdym), a gdy sygnałów brak, kategoria ogólna. Duplikaty scalane po zapisie (wielkość liter, polskie
+  znaki, spacje: „Polityka”/„polityka”) i po nazwie tematu analizy (kategoria „wojna w Ukrainie” to temat „Wojna w Ukrainie”).
+  Bez zgadywania znaczeń: „polityka” i „gospodarka” zostają osobnymi opcjami obok „Wybory i polityka” / „Gospodarka i sankcje”.
+- Filtry progresywne bez zmian w zasadzie: liczba przy każdej opcji (bez własnego filtra, z kraj/źródło/ton/aktor/słowa/dzień),
+  opcje zerowe ukryte, wybrana zostaje; ton i aktor nadal dotyczą sygnałów (artykuły bez sygnałów znikają z listy tematów).
+  Znacznik pod artykułem to jeden „temat” (bez „kategoria”). Stare linki `#kat=…` działają jak `#th=…`; `kat=*` ignorowane.
+- Testy: `tests/test_archiwum_ui.py` (lista tematów, scalanie, progresja, stary link); wykres i pozostałe filtry bez zmian.
+
 # dzien.py: faza 1 równolegle, streszczenia razem z obrazkami, pomiar czasu — 2026-10-06
 
 - `scripts/v2/dzien.py` (tylko organizacja, treści i skrypty kroków bez zmian): `Step.after` + `run_parallel` (5 wątków; pierwszy

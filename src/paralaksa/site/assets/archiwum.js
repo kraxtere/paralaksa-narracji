@@ -2,23 +2,23 @@
    Spis dni w stronie (#spis); paczka dnia D.json.gz (D.json, gdy przeglądarka nie ma DecompressionStream) pobierana tylko
    dla dni wybranego okresu (przy otwartym panelu Słowa także do 7 dni przed nim, do słów rosnących) i trzymana w pamięci.
    Wiersz paczki: [źródło, tytuł, nagłówek PL, link, [[temat, ton, aktor, rama, streszczenie], ...], lematy polskiego
-   tytułu (spacje), kategoria ogólna (tylko bez sygnałów), czas UTC „RRRR-MM-DDTHH:MMZ”, „p” godzina publikacji | „f”
+   tytułu (spacje), kategoria ogólna (tylko bez sygnałów; w filtrze „Temat” gra rolę tematu), czas UTC „RRRR-MM-DDTHH:MMZ”, „p” godzina publikacji | „f”
    godzina pobrania, opis, źródło opisu „analiza” (opis pusty: streszczenie pierwszego sygnału) | „zajawka” | „”].
    Filtry progresywne: przy każdej opcji liczba wyników, jaką dałby jej wybór przy pozostałych filtrach; opcje bez wyników
-   ukryte, wybrana zostaje. Stan filtrów w adresie (#q=…), odświeżenie strony go nie gubi. */
+   ukryte, wybrana zostaje. Jeden filtr „Temat”: temat analizy z sygnałów, a gdy ich brak, kategoria ogólna (kategoria o nazwie
+   tematu analizy jest tym tematem). Stan filtrów w adresie (#q=…), odświeżenie strony go nie gubi. */
 (() => {
   const SPIS = JSON.parse(document.getElementById("spis").textContent);
   const app = document.getElementById("arch");
   const DAYS = SPIS.dni.map(x => x.d);                        // od najnowszego
   const LAST = DAYS[0] || "";
   const STANCES = ["alarm", "krytyka", "neutralny", "uspokojenie", "poparcie"];
-  const ANALIZA = "*";                                        // „kategoria” artykułów z sygnałami (kategorię ogólną mają tylko te bez)
   const PAGE = 40;                                            // wyników naraz; „pokaż więcej” dodaje tyle samo
   const ROWS = 6;                                             // krajów na wykresie, reszta po kliknięciu
   const GZ = "DecompressionStream" in window;
   // q: hasła rozdzielone „|” (chmurki), tryb „lub” = którekolwiek hasło; dz: dzień z wykresu (tydzień „od..do”);
   // pk: kraje widoku „Po krajach”; sort „stare” = od najstarszych
-  const DEFAULT = { okres: "7", od: "", do: "", dz: "", q: "", tryb: "", kraj: "", src: "", th: "", st: "", ak: "", kat: "", widok: "lista", pk: "", sort: "" };
+  const DEFAULT = { okres: "7", od: "", do: "", dz: "", q: "", tryb: "", kraj: "", src: "", th: "", st: "", ak: "", widok: "lista", pk: "", sort: "" };
   // uproszczone flagi jak FLAG_SVG w scripts/v2/widok_obrazkowy.py (tests/test_site.py pilnuje zgodności); kolory flag to dane
   const FLAGS = {"PL":"<rect y=\"0.000\" width=\"30\" height=\"10.050\" fill=\"#fff\"/><rect y=\"10.000\" width=\"30\" height=\"10.050\" fill=\"#dc143c\"/>","UA":"<rect y=\"0.000\" width=\"30\" height=\"10.050\" fill=\"#0057b7\"/><rect y=\"10.000\" width=\"30\" height=\"10.050\" fill=\"#ffd700\"/>","DE":"<rect y=\"0.000\" width=\"30\" height=\"6.717\" fill=\"#000\"/><rect y=\"6.667\" width=\"30\" height=\"6.717\" fill=\"#dd0000\"/><rect y=\"13.333\" width=\"30\" height=\"6.717\" fill=\"#ffce00\"/>","RU":"<rect y=\"0.000\" width=\"30\" height=\"6.717\" fill=\"#fff\"/><rect y=\"6.667\" width=\"30\" height=\"6.717\" fill=\"#0039a6\"/><rect y=\"13.333\" width=\"30\" height=\"6.717\" fill=\"#d52b1e\"/>","IN":"<rect y=\"0.000\" width=\"30\" height=\"6.717\" fill=\"#ff9933\"/><rect y=\"6.667\" width=\"30\" height=\"6.717\" fill=\"#fff\"/><rect y=\"13.333\" width=\"30\" height=\"6.717\" fill=\"#138808\"/><circle cx=\"15\" cy=\"10\" r=\"2.6\" fill=\"none\" stroke=\"#000080\" stroke-width=\".8\"/>","UK":"<rect width=\"30\" height=\"20\" fill=\"#012169\"/><path d=\"M0 0L30 20M30 0L0 20\" stroke=\"#fff\" stroke-width=\"4\"/><path d=\"M0 0L30 20M30 0L0 20\" stroke=\"#c8102e\" stroke-width=\"1.5\"/><path d=\"M15 0V20M0 10H30\" stroke=\"#fff\" stroke-width=\"6\"/><path d=\"M15 0V20M0 10H30\" stroke=\"#c8102e\" stroke-width=\"3.5\"/>","US":"<rect width=\"30\" height=\"20\" fill=\"#fff\"/><rect y=\"0.00\" width=\"30\" height=\"1.54\" fill=\"#b22234\"/><rect y=\"3.08\" width=\"30\" height=\"1.54\" fill=\"#b22234\"/><rect y=\"6.15\" width=\"30\" height=\"1.54\" fill=\"#b22234\"/><rect y=\"9.23\" width=\"30\" height=\"1.54\" fill=\"#b22234\"/><rect y=\"12.31\" width=\"30\" height=\"1.54\" fill=\"#b22234\"/><rect y=\"15.38\" width=\"30\" height=\"1.54\" fill=\"#b22234\"/><rect y=\"18.46\" width=\"30\" height=\"1.54\" fill=\"#b22234\"/><rect width=\"13\" height=\"10.8\" fill=\"#3c3b6e\"/>","CN":"<rect width=\"30\" height=\"20\" fill=\"#de2910\"/><polygon points=\"6.00,2.40 6.85,4.84 9.42,4.89 7.37,6.44 8.12,8.91 6.00,7.44 3.88,8.91 4.63,6.44 2.58,4.89 5.15,4.84\" fill=\"#ffde00\"/>","HK":"<rect width=\"30\" height=\"20\" fill=\"#de2910\"/><polygon points=\"15.00,4.00 16.41,8.06 20.71,8.15 17.28,10.74 18.53,14.85 15.00,12.40 11.47,14.85 12.72,10.74 9.29,8.15 13.59,8.06\" fill=\"#fff\"/>","IL":"<rect width=\"30\" height=\"20\" fill=\"#fff\"/><rect y=\"2\" width=\"30\" height=\"3\" fill=\"#0038b8\"/><rect y=\"15\" width=\"30\" height=\"3\" fill=\"#0038b8\"/><path d=\"M15 6.2L18.3 12H11.7ZM15 13.8L11.7 8H18.3Z\" fill=\"none\" stroke=\"#0038b8\" stroke-width=\".9\"/>","PS":"<rect y=\"0.000\" width=\"30\" height=\"6.717\" fill=\"#000\"/><rect y=\"6.667\" width=\"30\" height=\"6.717\" fill=\"#fff\"/><rect y=\"13.333\" width=\"30\" height=\"6.717\" fill=\"#149954\"/><path d=\"M0 0L11 10L0 20Z\" fill=\"#e4312b\"/>","TR":"<rect width=\"30\" height=\"20\" fill=\"#e30a17\"/><circle cx=\"11\" cy=\"10\" r=\"5\" fill=\"#fff\"/><circle cx=\"12.3\" cy=\"10\" r=\"4\" fill=\"#e30a17\"/><polygon points=\"17.50,7.60 18.06,9.22 19.78,9.26 18.41,10.30 18.91,11.94 17.50,10.96 16.09,11.94 16.59,10.30 15.22,9.26 16.94,9.22\" fill=\"#fff\"/>","BR":"<rect width=\"30\" height=\"20\" fill=\"#009c3b\"/><path d=\"M15 2L28 10L15 18L2 10Z\" fill=\"#ffdf00\"/><circle cx=\"15\" cy=\"10\" r=\"4.6\" fill=\"#002776\"/>","FR":"<rect width=\"10\" height=\"20\" fill=\"#002395\"/><rect x=\"10\" width=\"10\" height=\"20\" fill=\"#fff\"/><rect x=\"20\" width=\"10\" height=\"20\" fill=\"#ed2939\"/>","HU":"<rect y=\"0.000\" width=\"30\" height=\"6.717\" fill=\"#ce2939\"/><rect y=\"6.667\" width=\"30\" height=\"6.717\" fill=\"#fff\"/><rect y=\"13.333\" width=\"30\" height=\"6.717\" fill=\"#477050\"/>","IR":"<rect y=\"0.000\" width=\"30\" height=\"6.717\" fill=\"#239f40\"/><rect y=\"6.667\" width=\"30\" height=\"6.717\" fill=\"#fff\"/><rect y=\"13.333\" width=\"30\" height=\"6.717\" fill=\"#da0000\"/><circle cx=\"15\" cy=\"10\" r=\"2.3\" fill=\"none\" stroke=\"#da0000\" stroke-width=\".9\"/>","QA":"<rect width=\"30\" height=\"20\" fill=\"#8a1538\"/><path d=\"M0 0H9L12 1.11L9 2.22L12 3.33L9 4.44L12 5.56L9 6.67L12 7.78L9 8.89L12 10.00L9 11.11L12 12.22L9 13.33L12 14.44L9 15.56L12 16.67L9 17.78L12 18.89L9 20.00H0Z\" fill=\"#fff\"/>"};
   // Tłumacz Google w języku przeglądarki (pl-PL → pl; chiński z odmianą pisma, jak w kodach Tłumacza)
@@ -49,6 +49,7 @@
   const f = { ...DEFAULT };
   const hash = new URLSearchParams(location.hash.slice(1));
   for (const k in DEFAULT) if (hash.has(k)) f[k] = hash.get(k);
+  if (!f.th && hash.get("kat") && hash.get("kat") !== "*") f.th = hash.get("kat");       // stare linki: kategoria jest dziś tematem
   if (!["1", "7", "30", "all", "zakres"].includes(f.okres)) f.okres = "7";
   if (!/^\d{4}-\d\d-\d\d(\.\.\d{4}-\d\d-\d\d)?$/.test(f.dz)) f.dz = "";
   const save = () => {
@@ -93,9 +94,11 @@
     ".chipy button:focus-visible,.arch select:focus-visible,.arch input[type=date]:focus-visible,.wiecej:focus-visible,.wk button:focus-visible," +
     ".kol h3 button:focus-visible,.tag:focus-visible,.tt a:focus-visible,.tlum:focus-visible,.rozwin:focus-visible,.zdejmij:focus-visible" +
     "{outline:3px solid var(--cegla);outline-offset:1px}" +
-    // kategoria: podstawowy filtr, wszystkie opcje widoczne naraz (zawijane), przy każdej liczba wyników
-    ".kategorie{flex-wrap:wrap;overflow:visible;align-items:center;gap:5px;margin:4px 0 8px}.kategorie[hidden]{display:none}" +
-    ".kategorie button{padding:4px 10px;font-size:13px}.etyk{margin-right:2px;color:var(--szary);font-size:.8em;font-weight:600}" +
+    // temat: jeden podstawowy filtr, lista rozwijana (na telefonie natywny wybierak), przy każdej opcji liczba wyników
+    ".temat{display:flex;align-items:center;gap:8px;margin:4px 0 8px}.temat[hidden]{display:none}" +
+    ".temat label{flex:none;color:var(--szary);font-size:.8em;font-weight:600}" +
+    ".temat select{flex:1;min-width:0;max-width:26em;padding:8px 10px;border:2px solid var(--tusz);border-radius:999px;background:var(--karta);" +
+    "color:var(--tusz);font:600 16px Segoe UI,sans-serif}.temat select:disabled{opacity:.5}" +
     ".zakres{display:flex;flex-wrap:wrap;gap:8px 12px;margin:0 0 8px;font-size:.88em;color:var(--szary)}.zakres[hidden]{display:none}" +
     ".zakres input{margin-left:4px;padding:6px 8px;border:2px solid var(--linia);border-radius:8px;background:var(--karta);color:var(--tusz);font:15px Segoe UI,sans-serif}" +
     ".filtry{margin:8px 0;border:2px solid var(--linia);border-radius:10px;background:var(--karta)}" +
@@ -161,7 +164,7 @@
   const lastToday = LAST === new Date().toLocaleDateString("sv");           // „sv” daje RRRR-MM-DD w czasie lokalnym
   const PERIODS = [["1", lastToday ? "dziś" : "ostatni dzień"], ["7", "7 dni"], ["30", "30 dni"], ["all", "wszystko"], ["zakres", "zakres…"]];
   const first = DAYS[DAYS.length - 1] || "";
-  // kolejność: szukanie → okres → kategoria → słowa → pozostałe filtry → wykres → lista
+  // kolejność: szukanie → okres → temat → słowa → pozostałe filtry → wykres → lista
   app.innerHTML = `<h1>Archiwum prasy</h1>
     <p class="lead">${DAYS.length ? `${num(DAYS.length)} dni (${short(first)}–${short(LAST)}): nagłówki polskie i oryginalne, ramy i streszczenia sygnałów, bez pełnych tekstów.` : "Archiwum jest puste."}</p>
     <div class="szukaj"><div class="hasla"></div><input class="q" type="search" enterkeyhint="enter" placeholder="Szukaj, np. Grenlandia (Enter dodaje hasło)"
@@ -169,12 +172,12 @@
     <div class="chipy tryb" role="group" aria-label="Jak łączyć hasła" hidden>Hasła:<button type="button" data-tryb="">wszystkie</button><button type="button" data-tryb="lub">którekolwiek</button></div>
     <div class="chipy okresy" role="group" aria-label="Okres">${PERIODS.map(([v, l]) => `<button type="button" data-okres="${v}">${l}</button>`).join("")}</div>
     <div class="zakres" hidden><label>od<input type="date" data-z="od" min="${first}" max="${LAST}"></label><label>do<input type="date" data-z="do" min="${first}" max="${LAST}"></label></div>
-    <div class="chipy kategorie" role="group" aria-label="Kategoria" hidden></div>
+    <div class="temat" hidden><label for="f-th">Temat</label><select id="f-th" data-f="th"></select></div>
     <details class="slowa"><summary>Słowa <small></small></summary><div class="slowa-c"><div class="czeste"></div><div class="ros"></div></div></details>
     <details class="filtry"><summary>Więcej filtrów <small></small></summary><div class="pola">
       <label>Kraj<select data-f="kraj"></select></label><label>Źródło<select data-f="src"></select></label>
-      <label>Temat<select data-f="th"></select></label><label>Ton<select data-f="st"></select></label>
-      <label class="cala">Aktor (kraj, organizacja)<select data-f="ak"></select></label>
+      <label>Ton<select data-f="st"></select></label>
+      <label>Aktor (kraj, organizacja)<select data-f="ak"></select></label>
       <button type="button" class="czysc cala">Wyczyść filtry i szukanie</button>
     </div></details>
     <div class="info" aria-live="polite"></div>
@@ -189,9 +192,16 @@
 
   // --- dane ---------------------------------------------------------------------------------------------------------
   const packs = {}, got = {};                                 // obietnice paczek i paczki już wczytane
+  // temat artykułu bez sygnałów: kategoria ogólna; kategoria o nazwie tematu analizy (też bez polskich znaków i wielkości liter)
+  // to ten temat, kategorie różniące się tylko zapisem są jedną opcją
+  const flat = s => norm(s).replace(/\s+/g, " ").trim();
+  const THEME_BY_NAME = Object.fromEntries(Object.entries(SPIS.tematy).map(([id, n]) => [flat(n), id]));
+  const catNames = {};
+  const topicOf = kat => { const k = flat(kat); return !k ? "" : THEME_BY_NAME[k] || (catNames[k] ||= kat.trim()); };
+  const topicName = v => SPIS.tematy[v] || v.charAt(0).toUpperCase() + v.slice(1);
   const row = d => ([src, t, pl, u, s, lem, kat, ts, tf, op, ops]) => {
     ops = ops ?? (s.length ? "analiza" : "");                 // paczki sprzed pól opisu: opis ze streszczenia sygnału
-    return { d, src, k: (SPIS.zrodla[src] || [])[1] || "", t, pl, u, s, lem: lem ? lem.split(" ") : [], kat: kat || "",
+    return { d, src, k: (SPIS.zrodla[src] || [])[1] || "", t, pl, u, s, lem: lem ? lem.split(" ") : [], ck: s.length ? "" : topicOf(kat || ""),
              ts: ts || "", tf: tf || "", op: op || (ops === "analiza" && s.length ? s[0][4] : ""), ops };
   };
   const load = d => packs[d] || (packs[d] = fetch(`${d}.json${GZ ? ".gz" : ""}`).then(r => {
@@ -244,49 +254,52 @@
   const text = a => a.x || (a.x = norm([a.t, a.pl, a.ops === "zajawka" ? a.op : "", ...a.s.map(s => s[3] + "\n" + s[4])].join("\n")));
   const stanceOk = st => !f.st || (f.st === "nie-neutralny" ? st !== "neutralny" : st === f.st);
   // sygnał spełnia filtry tematu, tonu i aktora naraz; `skip` pomija jeden z nich (liczenie jego opcji)
-  const sigOk = (s, skip) => (skip === "th" || !f.th || s[0] === f.th) && (skip === "st" || stanceOk(s[1])) && (skip === "ak" || !f.ak || s[2] === f.ak);
+  const sigOk = (s, skip) => (skip === "th" || !SPIS.tematy[f.th] || s[0] === f.th) && (skip === "st" || stanceOk(s[1])) && (skip === "ak" || !f.ak || s[2] === f.ak);
   // bity filtrów, których artykuł nie spełnia; opcje filtra liczy się bez jego bitu (ile wyników dałby wybór tej opcji)
-  const KRAJ = 1, SRC = 2, KAT = 4, DZIEN = 8, TEKST = 16, SYG = 32;
+  const KRAJ = 1, SRC = 2, TH = 4, DZIEN = 8, TEKST = 16, SYG = 32;
   function fails(a, gs, dz) {
     const fits = g => g.every(t => has(text(a), t));
     let m = 0;
     if (f.kraj && a.k !== f.kraj) m |= KRAJ;
     if (f.src && a.src !== f.src) m |= SRC;
-    if (f.kat && (f.kat === ANALIZA ? !a.s.length : a.kat !== f.kat)) m |= KAT;
+    if (f.th && a.ck !== f.th && !a.s.some(s => s[0] === f.th)) m |= TH;
     if (dz && (a.d < dz[0] || a.d > dz[1])) m |= DZIEN;
     if (gs.length && !(f.tryb === "lub" ? gs.some(fits) : gs.every(fits))) m |= TEKST;
-    if ((f.th || f.st || f.ak) && !a.s.some(s => sigOk(s))) m |= SYG;
+    if ((f.st || f.ak) && !a.s.some(s => sigOk(s))) m |= SYG;
     return m;
   }
 
   function scan() {                                           // jedno przejście: wyniki, liczby opcji filtrów, siatka wykresu
     const gs = groups(), dz = dzRange();
-    const n = { kat: {}, kraj: {}, src: {}, th: {}, st: {}, ak: {} };
+    const n = { kraj: {}, src: {}, th: {}, st: {}, ak: {} };
     const inc = (c, v) => { c[v] = (c[v] || 0) + 1; };
     const list = [], grid = [];
-    let anyKat = 0;
     for (const a of arts) {
       const m = fails(a, gs, dz);
       if (!m) list.push(a);
       if (!(m & ~KRAJ)) inc(n.kraj, a.k);
       if (!(m & ~SRC)) inc(n.src, a.src);
-      if (!(m & ~KAT)) { anyKat++; if (a.s.length) inc(n.kat, ANALIZA); else if (a.kat) inc(n.kat, a.kat); }
+      if (!(m & ~(TH | SYG))) {                               // temat liczy się bez własnego filtra, ale z tonem i aktorem w tym samym sygnale
+        if (a.s.length) {
+          const th = new Set(a.s.filter(s => SPIS.tematy[s[0]] && sigOk(s, "th")).map(s => s[0]));    // emergent:* są rozdrobnione
+          th.forEach(v => inc(n.th, v));
+        } else if (a.ck && !(m & SYG)) inc(n.th, a.ck);
+      }
       if (!(m & ~(KRAJ | DZIEN))) grid.push(a);               // wykres pokazuje wszystkie kraje i dni, wybór wyróżnia
       if (!(m & ~SYG) && a.s.length) {
-        const seen = { th: new Set(), st: new Set(), ak: new Set() };
+        const seen = { st: new Set(), ak: new Set() };
         for (const s of a.s) {
-          if (sigOk(s, "th")) seen.th.add(s[0]);
           if (sigOk(s, "st")) { seen.st.add(s[1]); if (s[1] !== "neutralny") seen.st.add("nie-neutralny"); }
           if (sigOk(s, "ak")) seen.ak.add(s[2]);
         }
         for (const k in seen) seen[k].forEach(v => inc(n[k], v));
       }
     }
-    return { list: f.sort === "stare" ? list.reverse() : list, n, anyKat, grid };
+    return { list: f.sort === "stare" ? list.reverse() : list, n, grid };
   }
 
   const LABELS = {
-    kraj: k => countryName(k), src: s => `${srcName(s)} (${(SPIS.zrodla[s] || [])[1] || "?"})`, th: t => SPIS.tematy[t] || t,
+    kraj: k => countryName(k), src: s => `${srcName(s)} (${(SPIS.zrodla[s] || [])[1] || "?"})`, th: topicName,
     st: s => s === "nie-neutralny" ? "poza neutralnym" : s, ak: a => { const n = actorName(a); return n !== a ? `${n} (${a})` : n; },
   };
   function selects(n) {                                       // opcje z liczbą wyników; bez wyników ukryte, wybrana zostaje
@@ -296,40 +309,27 @@
       sel.innerHTML = `<option value="">${first}</option>` +
         keys.map(v => `<option value="${esc(v)}">${esc(LABELS[name](v))} · ${num(c[v] || 0)}</option>`).join("");
       sel.value = f[name];
-      sel.disabled = !keys.length;                            // nic do wyboru przy tych filtrach (np. kategoria bez sygnałów nie ma tematów)
+      sel.disabled = !keys.length;                            // nic do wyboru przy tych filtrach (np. aktor występuje tylko w sygnałach)
       sel.title = keys.length ? "" : "Brak opcji w tych wynikach";
     };
     const byCount = (c, keep = () => true) => Object.keys(c).filter(v => v && keep(v)).sort((x, y) => c[y] - c[x] || x.localeCompare(y));
     fill("kraj", "wszystkie kraje", byCount(n.kraj));
     fill("src", f.kraj ? `wszystkie źródła (${countryName(f.kraj)})` : "wszystkie źródła",
          Object.keys(n.src).filter(Boolean).sort((x, y) => srcName(x).localeCompare(srcName(y), "pl")));
-    fill("th", "wszystkie tematy", byCount(n.th, t => SPIS.tematy[t]));      // tylko stałe tematy, emergent:* są rozdrobnione
+    fill("th", "wszystkie tematy", byCount(n.th));
+    $(".temat").hidden = !Object.keys(n.th).length && !f.th;
     fill("st", "każdy ton", ["nie-neutralny", ...STANCES].filter(s => n.st[s]));
     fill("ak", "wszyscy aktorzy", byCount(n.ak));
-  }
-
-  function categories(n, total) {                             // podstawowy filtr: „tematy analizy” + kategorie ogólne bez sygnałów
-    const c = n.kat, box = $(".kategorie");
-    const keys = Object.keys(c).filter(k => k !== ANALIZA).sort((x, y) => c[y] - c[x] || x.localeCompare(y, "pl"));
-    if (f.kat && f.kat !== ANALIZA && !c[f.kat]) keys.push(f.kat);
-    box.hidden = !keys.length && !c[ANALIZA] && !f.kat;
-    const btn = (v, label, title = "") => `<button type="button" data-kat="${esc(v)}" aria-pressed="${f.kat === v}"` +
-      `${title ? ` title="${esc(title)}"` : ""}>${esc(label)}<i>${num(v ? c[v] || 0 : total)}</i></button>`;
-    box.innerHTML = '<span class="etyk">Kategoria</span>' + btn("", "wszystkie") +
-      (c[ANALIZA] || f.kat === ANALIZA ? btn(ANALIZA, "tematy analizy",
-        "Artykuły z sygnałami w tematach analizy (temat wybierzesz w „Więcej filtrów”); pozostałe kategorie mają artykuły bez sygnałów") : "") +
-      keys.map(k => btn(k, k)).join("");
   }
 
   function summary() {
     const tags = [];
     if (f.kraj) tags.push(countryName(f.kraj));
     if (f.src) tags.push(srcName(f.src));
-    if (f.th) tags.push(SPIS.tematy[f.th] || f.th);
     if (f.st) tags.push(f.st === "nie-neutralny" ? "ton: poza neutralnym" : "ton: " + f.st);
     if (f.ak) tags.push("aktor: " + actorName(f.ak));
     const small = $(".filtry small");
-    small.textContent = tags.length ? "· " + tags.join(", ") : "kraj, źródło, temat, ton, aktor";
+    small.textContent = tags.length ? "· " + tags.join(", ") : "kraj, źródło, ton, aktor";
     small.classList.toggle("wyb", tags.length > 0);
     $(".hasla").innerHTML = chips.map((c, i) =>
       `<span class="haslo">${esc(c)}<button type="button" data-usun="${i}" aria-label="Usuń hasło: ${esc(c)}">×</button></span>`).join("");
@@ -394,10 +394,9 @@
     const uniq = xs => [...new Set(xs)];
     const head = mark(a.pl || a.t, ws), h = inList ? "h2" : "h4";
     const tags = (a.k ? tag("kraj", a.k, countryName(a.k), flag(a.k)) : "") + tag("src", a.src, srcName(a.src)) +
-      uniq(a.s.map(s => s[0])).filter(t => SPIS.tematy[t]).map(t => tag("th", t, SPIS.tematy[t], "<i>temat</i>")).join("") +
+      uniq(a.ck ? [a.ck] : a.s.map(s => s[0]).filter(t => SPIS.tematy[t])).map(t => tag("th", t, topicName(t), "<i>temat</i>")).join("") +
       uniq(a.s.map(s => s[2])).slice(0, 2).map(x => tag("ak", x, actorName(x), "<i>aktor</i>")).join("") +
-      uniq(a.s.map(s => s[1])).filter(s => s !== "neutralny").map(s => tag("st", s, s, "<i>ton</i>")).join("") +
-      (a.kat ? tag("kat", a.kat, a.kat, "<i>kategoria</i>") : "");
+      uniq(a.s.map(s => s[1])).filter(s => s !== "neutralny").map(s => tag("st", s, s, "<i>ton</i>")).join("");
     const about = [a.op && a.ops ? "opis: " + a.ops : "",
                    a.ts ? (a.tf === "f" ? "godzina pobrania (brak wiarygodnej godziny publikacji)" : "godzina publikacji") : ""];
     const tr = url && !(a.k === "PL" && LANG === "pl") ? `<a class="tlum" href="${esc(translated(url))}" target="_blank" ` +
@@ -485,13 +484,12 @@
 
   function results() {
     const focus = focusKey();
-    const { list, n, anyKat, grid } = scan();
+    const { list, n, grid } = scan();
     const ws = groups().flat(), dz = dzRange();
     summary();
-    categories(n, anyKat);
     selects(n);
     const range = days.length ? (days.length === 1 ? short(days[0]) : `${short(days[days.length - 1])}–${short(days[0])}`) : "";
-    const narrowed = ws.length || f.kraj || f.src || f.th || f.st || f.ak || f.kat || dz;
+    const narrowed = ws.length || f.kraj || f.src || f.th || f.st || f.ak || dz;
     info.innerHTML = `<b>${num(list.length)}</b> ${narrowed ? `z ${num(arts.length)} ${arts.length === 1 ? "artykułu" : "artykułów"}` : plural(list.length)} · ${range}` +
       (dz ? `, tylko ${dz[0] === dz[1] ? short(dz[0]) : `${short(dz[0])}–${short(dz[1])}`}<button type="button" class="zdejmij" data-dz="" ` +
         'title="Pokaż cały okres" aria-label="Pokaż cały okres">×</button>' : "") +
@@ -537,7 +535,7 @@
     const prev = at < 0 ? [] : DAYS.slice(at + 1, at + 8);
     if (!prev.length) { box.innerHTML = ""; return; }
     const used = usedWords(), free = w => !w.split("_").some(p => used.has(norm(p)));
-    const narrowed = allTerms().length || f.kat || f.src || f.th || f.st || f.ak;
+    const narrowed = allTerms().length || f.src || f.th || f.st || f.ak;
     let top, base = prev.length;
     if (!narrowed && day === SPIS.rosnace_dzien && SPIS.rosnace) {
       top = SPIS.rosnace[f.kraj] || (f.kraj ? [] : SPIS.rosnace[""]) || [];         // policzone przy budowie (archive.rising_words)
@@ -629,9 +627,6 @@
     } else if (b.dataset.tryb !== undefined) {
       f.tryb = b.dataset.tryb;
       changed();
-    } else if (b.dataset.kat !== undefined) {                 // kategoria; drugi klik w wybraną wraca do wszystkich
-      f.kat = f.kat === b.dataset.kat ? "" : b.dataset.kat;
-      changed();
     } else if (b.dataset.tag) {                               // znacznik pod artykułem: ustawia filtr, drugi klik go zdejmuje
       const k = b.dataset.tag;
       f[k] = f[k] === b.dataset.v ? "" : b.dataset.v;
@@ -672,7 +667,7 @@
       allRows = !allRows;
       results();
     } else if (b.classList.contains("czysc")) {
-      Object.assign(f, { tryb: "", kraj: "", src: "", th: "", st: "", ak: "", kat: "", dz: "", pk: "" });
+      Object.assign(f, { tryb: "", kraj: "", src: "", th: "", st: "", ak: "", dz: "", pk: "" });
       chips = [];
       q.value = pend = "";
       syncQ();

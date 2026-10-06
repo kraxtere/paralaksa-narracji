@@ -1,5 +1,5 @@
-"""Archiwum 2.0, interfejs w przeglądarce (Playwright + Chromium; bez nich testy się pomijają): kategoria jako filtr
-podstawowy, filtry progresywne (liczby, ukryte opcje bez wyników), wykres, karta artykułu i link do Tłumacza Google.
+"""Archiwum 2.0, interfejs w przeglądarce (Playwright + Chromium; bez nich testy się pomijają): jeden filtr „Temat”
+(temat analizy albo kategoria ogólna), filtry progresywne (liczby, ukryte opcje bez wyników), wykres, karta artykułu i link do Tłumacza Google.
 Paczki syntetyczne, serwer lokalny na 127.0.0.1, bez sieci."""
 import functools
 import http.server
@@ -34,12 +34,13 @@ def day_packs() -> dict[str, list[list]]:
             bare("pl1", "Finał mistrzostw", "https://pl1.example/b", "final mistrzostwo", "sport", "2026-10-05T11:00Z", "Opis finału."),
             ["ua1", "Війна", "Wojna w Ukrainie", URL_UA, [["ukraine_war", "alarm", "RU", "rama wojny", "Streszczenie wojny."]],
              "wojna ukraina", "", "2026-10-05T12:00Z", "p", "", "analiza"],
-            *[bare("pl1", f"Grenlandia {i}", f"https://pl1.example/g{i}", "grenlandia", "polityka", f"2026-10-05T0{i}:00Z", f"Opis {i}.")
+            *[bare("pl1", f"Grenlandia {i}", f"https://pl1.example/g{i}", "grenlandia", "Polityka" if i == 3 else "polityka", f"2026-10-05T0{i}:00Z", f"Opis {i}.")
               for i in (1, 2, 3)]],
         "2026-10-04": [
             ["ru1", "Выборы", "Wybory w Rosji", "https://ru1.example/a", [["elections_politics", "neutralny", "RU", "rama wyborów", "Streszczenie wyborów."]],
              "wybory rosja", "", "2026-10-04T09:00Z", "p", "", "analiza"],
-            bare("ru1", "Погода", "https://ru1.example/b", "pogoda moskwa", "pogoda i środowisko", "2026-10-04T08:00Z", "Deszcz w Moskwie.", "f")],
+            bare("ru1", "Погода", "https://ru1.example/b", "pogoda moskwa", "pogoda i środowisko", "2026-10-04T08:00Z", "Deszcz w Moskwie.", "f"),
+            bare("ru1", "Дождь", "https://ru1.example/c", "dozhd", "wojna w Ukrainie", "2026-10-04T07:00Z", "Opis deszczu.")],
     }
 
 
@@ -89,52 +90,65 @@ def texts(page, selector):
     return page.eval_on_selector_all(selector, "els => els.map(e => e.textContent.trim())")
 
 
-def test_category_row_is_primary_filter_with_counts(open_page):
+def test_topic_is_single_filter_with_counts_and_merged_labels(open_page):
     page = open_page()
-    assert texts(page, ".kategorie button") == ["wszystkie8", "tematy analizy2", "polityka4", "pogoda i środowisko1", "sport1"]
-    page.click("button[data-kat='polityka']")
-    assert page.locator(".wyniki li").count() == 4 and page.inner_text(".info").startswith("4 z 8 artykułów")
-    assert "kat=polityka" in page.evaluate("location.hash")
-    page.click("button[data-kat='polityka']")                           # drugi klik wraca do wszystkich
-    assert page.locator(".wyniki li").count() == 8
+    assert page.locator(".kategorie").count() == 0 and page.locator(".pola select[data-f=th]").count() == 0   # tylko jeden filtr tematu
+    # temat analizy i kategoria ogólna na jednej liście; „Polityka”/„polityka” to jedna opcja, kategoria „wojna w Ukrainie” to temat analizy
+    assert texts(page, ".temat select option") == ["wszystkie tematy", "Polityka · 4", "Wojna w Ukrainie · 2", "Wybory i polityka · 1",
+                                                   "Pogoda i środowisko · 1", "Sport · 1"]
+    page.select_option(".temat select", "polityka")
+    assert page.locator(".wyniki li").count() == 4 and page.inner_text(".info").startswith("4 z 9 artykułów")
+    assert "th=polityka" in page.evaluate("location.hash")
+    page.select_option(".temat select", "ukraine_war")                  # sygnał z tematu + artykuł z kategorią o tej nazwie
+    assert page.locator(".wyniki li").count() == 2
+    page.select_option(".temat select", "")
+    assert page.locator(".wyniki li").count() == 9
+    tags = texts(page, ".wyniki li .tag[data-tag=th]")                  # znacznik pod artykułem: ten sam temat, bez osobnej „kategorii”
+    assert "temat" in tags[0] and not any("kategoria" in t for t in tags)
+    page.locator(".wyniki li").first.locator(".rozwin").click()           # znaczniki są pod „więcej”
+    page.locator(".wyniki li").first.locator(".tag[data-tag=th]").click()
+    assert page.input_value(".temat select") == "ukraine_war"
 
 
 def test_filters_are_progressive_zero_options_hidden(open_page):
     page = open_page("&kraj=PL")
-    assert texts(page, ".kategorie button") == ["wszystkie5", "polityka4", "sport1"]       # brak „pogoda” i „tematy analizy”
-    assert texts(page, "select[data-f=kraj] option")[1:] == [f"{COUNTRY_NAMES['PL']} · 5", f"{COUNTRY_NAMES['RU']} · 2",
+    assert texts(page, ".temat select option")[1:] == ["Polityka · 4", "Sport · 1"]         # brak tematów spoza Polski
+    assert texts(page, "select[data-f=kraj] option")[1:] == [f"{COUNTRY_NAMES['PL']} · 5", f"{COUNTRY_NAMES['RU']} · 3",
                                                             f"{COUNTRY_NAMES['UA']} · 1"]
     assert texts(page, "select[data-f=src] option")[1:] == ["Polska Gazeta (PL) · 5"]       # źródła tylko wybranego kraju
-    page = open_page("&kat=polityka")
+    page = open_page("&kat=polityka")                                   # stary link z kategorią działa jak temat
+    assert page.input_value(".temat select") == "polityka"
     assert texts(page, "select[data-f=kraj] option")[1:] == [f"{COUNTRY_NAMES['PL']} · 4"]
-    assert page.is_disabled("select[data-f=th]") and page.is_disabled("select[data-f=st]")   # bez sygnałów nie ma tematów i tonów
+    assert page.is_disabled("select[data-f=st]") and page.is_disabled("select[data-f=ak]")   # bez sygnałów nie ma tonów i aktorów
     page = open_page("&th=ukraine_war")
     assert texts(page, "select[data-f=st] option")[1:] == ["poza neutralnym · 1", "alarm · 1"]
-    assert texts(page, ".kategorie button") == ["wszystkie1", "tematy analizy1"]
+    page = open_page("&st=alarm")                                       # ton dotyczy sygnałów: kategorie bez sygnałów znikają z listy
+    assert texts(page, ".temat select option") == ["wszystkie tematy", "Wojna w Ukrainie · 1"]
 
 
 def test_selected_option_stays_visible_with_zero(open_page):
-    page = open_page("&kat=sport&kraj=RU")
-    assert texts(page, ".kategorie button") == ["wszystkie2", "tematy analizy1", "pogoda i środowisko1", "sport0"]
-    assert page.get_attribute("button[data-kat='sport']", "aria-pressed") == "true"
+    page = open_page("&th=sport&kraj=RU")
+    assert texts(page, ".temat select option") == ["wszystkie tematy", "Wybory i polityka · 1", "Pogoda i środowisko · 1",
+                                                   "Wojna w Ukrainie · 1", "Sport · 0"]
+    assert page.input_value(".temat select") == "sport"
     assert page.input_value("select[data-f=kraj]") == "RU" and "Nic nie pasuje" in page.inner_text(".wyniki")
 
 
 def test_chart_click_narrows_by_day_and_country(open_page):
     page = open_page()
-    assert page.locator(".wyniki li").count() == 8 and page.locator(".wykres").is_visible()
+    assert page.locator(".wyniki li").count() == 9 and page.locator(".wykres").is_visible()
     page.click(".wk .bc >> nth=0")                                       # słupek 04.10 (kolumny rosnąco)
-    assert page.locator(".wyniki li").count() == 2 and "tylko 04.10" in page.inner_text(".info")
+    assert page.locator(".wyniki li").count() == 3 and "tylko 04.10" in page.inner_text(".info")
     page.click(".zdejmij")
-    assert page.locator(".wyniki li").count() == 8 and "dz=" not in page.evaluate("location.hash")
+    assert page.locator(".wyniki li").count() == 9 and "dz=" not in page.evaluate("location.hash")
     page.click(".wk .kr[data-kraj='PL']")                                # kod kraju, jak dotąd
     assert page.locator(".wyniki li").count() == 5
     page.click(".wk .kr[data-kraj='PL']")
     page.click(".wk .c[data-k='RU'][data-d='2026-10-04']")               # kratka: kraj i dzień naraz
-    assert page.locator(".wyniki li").count() == 2
+    assert page.locator(".wyniki li").count() == 3
     assert "kraj=RU" in page.evaluate("location.hash") and "dz=2026-10-04" in page.evaluate("location.hash")
     page.click(".wk .c[data-k='RU'][data-d='2026-10-04']")               # drugi klik zdejmuje oba
-    assert page.locator(".wyniki li").count() == 8
+    assert page.locator(".wyniki li").count() == 9
 
 
 def test_card_title_description_meta_and_details(open_page):
@@ -150,15 +164,15 @@ def test_card_title_description_meta_and_details(open_page):
     for part in ("tytuł oryginalny", "Війна", "opis: analiza", "godzina publikacji", "Wojna w Ukrainie", "ton", "alarm"):
         assert part in details.inner_text()
     assert page.locator(".wyniki li").nth(1).locator(".szcz").is_hidden()     # inne karty zostają zwinięte
-    page.click("button[data-kat='sport']")                               # przerysowanie listy zachowuje rozwinięcie
+    page.select_option(".temat select", "sport")                         # przerysowanie listy zachowuje rozwinięcie
     assert page.locator(".wyniki li .rozwin[aria-expanded=true]").count() == 0
-    page.click("button[data-kat='sport']")
+    page.select_option(".temat select", "")
     assert page.locator(".wyniki li").first.locator(".szcz").is_visible()
     bare = page.locator(".wyniki li").filter(has_text="Finał mistrzostw")
     bare.locator(".rozwin").click()
     assert "opis: zajawka" in bare.locator(".szcz").inner_text()
     assert bare.locator(".opis").inner_text() == "Opis finału."
-    page.goto(page.url.split("#")[0] + "#okres=all&kat=pogoda i środowisko")
+    page.goto(page.url.split("#")[0] + "#okres=all&th=pogoda i środowisko")
     page.reload()
     page.wait_for_selector(".wyniki li")
     page.locator(".wyniki li .rozwin").click()
@@ -178,7 +192,7 @@ def test_translate_link_uses_browser_language(open_page):
 
 
 def test_words_panel_follows_filters_and_rising_words_are_computed(open_page):
-    page = open_page("&kat=polityka")
+    page = open_page("&th=polityka")
     page.click(".slowa summary")
     page.wait_for_selector(".ros button")
     assert texts(page, ".czeste button") == ["grenlandia3"]               # najczęstsze: tylko powtarzające się w wynikach
