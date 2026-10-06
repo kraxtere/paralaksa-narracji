@@ -1,3 +1,26 @@
+# Archiwum: filtry progresywne, kategoria na górze, czytelna karta, Tłumacz — 2026-10-06
+
+- `assets/archiwum.js` (tylko interfejs; `slowa.py`, `kategorie.py` i dane bez zmian). Kolejność strony: szukanie z chmurkami
+  → okres → Kategoria (rząd przycisków z liczbami, wszystkie widoczne) → Słowa → „Więcej filtrów” (kraj, źródło, temat,
+  ton, aktor) → licznik → wykres kraje × dni → Lista / Po krajach / kolejność → wyniki.
+- Filtry progresywne (`scan()`, jedno przejście): przy każdej opcji liczba wyników, jaką da jej wybór przy pozostałych
+  filtrach (okres, hasła, kategoria, kraj, źródło, temat, ton, aktor, dzień z wykresu); opcje bez wyników ukryte, wybrana
+  zostaje także z zerem, select bez opcji jest wyłączony. Panel Słowa: najczęstsze z bieżących wyników; rosnące (dzień
+  vs średnia z 7 dni przed nim) przy zawężeniu liczone w przeglądarce (paczki 7 dni wstecz dociągane dopiero przy
+  otwartym panelu), bez zawężenia z danych budowy strony.
+- Kategorię ogólną mają tylko artykuły bez sygnałów (3910 z 5709 ma sygnały), więc w rzędzie jest też „tematy analizy”
+  = artykuły z sygnałami; ich temat, ton i aktora wybiera się w „Więcej filtrów”.
+- Wykres klikalny: kod kraju (jak dotąd), słupek „razem” danego dnia/tygodnia (`dz=` w adresie), kratka = kraj i dzień;
+  drugi klik zdejmuje; wybór wyróżniony, reszta przygaszona; „×” przy liczniku zdejmuje dzień. Wykres liczy wyniki bez
+  filtra kraju i dnia, żeby zawsze pokazywać całą siatkę.
+- Karta: na wierzchu polski tytuł (link do artykułu), pełny opis w odsuniętym bloku (bez „z zajawki:/z analizy:”, bez
+  ucinania), jedna linia „data, godzina · flaga · źródło”. Pod „więcej” (stan przetrwa przerysowanie listy): tytuł
+  oryginalny, pochodzenie opisu, godzina publikacji albo pobrania, trafienie poza opisem, znaczniki filtrów (klik ustawia).
+- „Przetłumacz” przy artykule: oryginał w Tłumaczu Google w języku przeglądarki (`navigator.languages[0]` → `tl`, nowa
+  karta, `noopener noreferrer`), nic nie zapisujemy; pomijany przy polskim źródle w polskiej przeglądarce.
+- `tests/test_archiwum_ui.py`: Playwright + Chromium na paczkach syntetycznych i lokalnym serwerze (pomijany bez nich);
+  `tests/test_archiwum_js.py`: link tłumacza i brak prefiksu opisu.
+
 # Archiwum: hasła w chmurkach, czas i znaczniki przy artykułach, opisy, wybór krajów — 2026-10-06
 
 - `assets/archiwum.js`: kilka haseł naraz jako chmurki z „×” (Enter albo klik w słowo z panelu Słowa; Backspace w pustym

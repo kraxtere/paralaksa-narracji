@@ -1,22 +1,32 @@
 /* Archiwum 2.0: wyszukiwarka wszystkich artykułów (plx site → v2/archiwum/index.html, src/paralaksa/site/archive.py).
    Spis dni w stronie (#spis); paczka dnia D.json.gz (D.json, gdy przeglądarka nie ma DecompressionStream) pobierana tylko
-   dla dni wybranego okresu i trzymana w pamięci. Wiersz paczki: [źródło, tytuł, nagłówek PL, link,
-   [[temat, ton, aktor, rama, streszczenie], ...], lematy polskiego tytułu (spacje), kategoria ogólna (tylko bez sygnałów),
-   czas UTC „RRRR-MM-DDTHH:MMZ”, „p” godzina publikacji | „f” godzina pobrania, opis, źródło opisu „analiza” (opis pusty:
-   streszczenie pierwszego sygnału) | „zajawka” | „”]. Stan filtrów w adresie (#q=…), odświeżenie strony go nie gubi. */
+   dla dni wybranego okresu (przy otwartym panelu Słowa także do 7 dni przed nim, do słów rosnących) i trzymana w pamięci.
+   Wiersz paczki: [źródło, tytuł, nagłówek PL, link, [[temat, ton, aktor, rama, streszczenie], ...], lematy polskiego
+   tytułu (spacje), kategoria ogólna (tylko bez sygnałów), czas UTC „RRRR-MM-DDTHH:MMZ”, „p” godzina publikacji | „f”
+   godzina pobrania, opis, źródło opisu „analiza” (opis pusty: streszczenie pierwszego sygnału) | „zajawka” | „”].
+   Filtry progresywne: przy każdej opcji liczba wyników, jaką dałby jej wybór przy pozostałych filtrach; opcje bez wyników
+   ukryte, wybrana zostaje. Stan filtrów w adresie (#q=…), odświeżenie strony go nie gubi. */
 (() => {
   const SPIS = JSON.parse(document.getElementById("spis").textContent);
   const app = document.getElementById("arch");
   const DAYS = SPIS.dni.map(x => x.d);                        // od najnowszego
   const LAST = DAYS[0] || "";
   const STANCES = ["alarm", "krytyka", "neutralny", "uspokojenie", "poparcie"];
+  const ANALIZA = "*";                                        // „kategoria” artykułów z sygnałami (kategorię ogólną mają tylko te bez)
   const PAGE = 40;                                            // wyników naraz; „pokaż więcej” dodaje tyle samo
   const ROWS = 6;                                             // krajów na wykresie, reszta po kliknięciu
   const GZ = "DecompressionStream" in window;
-  // q: hasła rozdzielone „|” (chmurki), tryb „lub” = którekolwiek hasło; pk: kraje widoku „Po krajach”; sort „stare” = od najstarszych
-  const DEFAULT = { okres: "7", od: "", do: "", q: "", tryb: "", kraj: "", src: "", th: "", st: "", ak: "", kat: "", widok: "lista", pk: "", sort: "" };
+  // q: hasła rozdzielone „|” (chmurki), tryb „lub” = którekolwiek hasło; dz: dzień z wykresu (tydzień „od..do”);
+  // pk: kraje widoku „Po krajach”; sort „stare” = od najstarszych
+  const DEFAULT = { okres: "7", od: "", do: "", dz: "", q: "", tryb: "", kraj: "", src: "", th: "", st: "", ak: "", kat: "", widok: "lista", pk: "", sort: "" };
   // uproszczone flagi jak FLAG_SVG w scripts/v2/widok_obrazkowy.py (tests/test_site.py pilnuje zgodności); kolory flag to dane
   const FLAGS = {"PL":"<rect y=\"0.000\" width=\"30\" height=\"10.050\" fill=\"#fff\"/><rect y=\"10.000\" width=\"30\" height=\"10.050\" fill=\"#dc143c\"/>","UA":"<rect y=\"0.000\" width=\"30\" height=\"10.050\" fill=\"#0057b7\"/><rect y=\"10.000\" width=\"30\" height=\"10.050\" fill=\"#ffd700\"/>","DE":"<rect y=\"0.000\" width=\"30\" height=\"6.717\" fill=\"#000\"/><rect y=\"6.667\" width=\"30\" height=\"6.717\" fill=\"#dd0000\"/><rect y=\"13.333\" width=\"30\" height=\"6.717\" fill=\"#ffce00\"/>","RU":"<rect y=\"0.000\" width=\"30\" height=\"6.717\" fill=\"#fff\"/><rect y=\"6.667\" width=\"30\" height=\"6.717\" fill=\"#0039a6\"/><rect y=\"13.333\" width=\"30\" height=\"6.717\" fill=\"#d52b1e\"/>","IN":"<rect y=\"0.000\" width=\"30\" height=\"6.717\" fill=\"#ff9933\"/><rect y=\"6.667\" width=\"30\" height=\"6.717\" fill=\"#fff\"/><rect y=\"13.333\" width=\"30\" height=\"6.717\" fill=\"#138808\"/><circle cx=\"15\" cy=\"10\" r=\"2.6\" fill=\"none\" stroke=\"#000080\" stroke-width=\".8\"/>","UK":"<rect width=\"30\" height=\"20\" fill=\"#012169\"/><path d=\"M0 0L30 20M30 0L0 20\" stroke=\"#fff\" stroke-width=\"4\"/><path d=\"M0 0L30 20M30 0L0 20\" stroke=\"#c8102e\" stroke-width=\"1.5\"/><path d=\"M15 0V20M0 10H30\" stroke=\"#fff\" stroke-width=\"6\"/><path d=\"M15 0V20M0 10H30\" stroke=\"#c8102e\" stroke-width=\"3.5\"/>","US":"<rect width=\"30\" height=\"20\" fill=\"#fff\"/><rect y=\"0.00\" width=\"30\" height=\"1.54\" fill=\"#b22234\"/><rect y=\"3.08\" width=\"30\" height=\"1.54\" fill=\"#b22234\"/><rect y=\"6.15\" width=\"30\" height=\"1.54\" fill=\"#b22234\"/><rect y=\"9.23\" width=\"30\" height=\"1.54\" fill=\"#b22234\"/><rect y=\"12.31\" width=\"30\" height=\"1.54\" fill=\"#b22234\"/><rect y=\"15.38\" width=\"30\" height=\"1.54\" fill=\"#b22234\"/><rect y=\"18.46\" width=\"30\" height=\"1.54\" fill=\"#b22234\"/><rect width=\"13\" height=\"10.8\" fill=\"#3c3b6e\"/>","CN":"<rect width=\"30\" height=\"20\" fill=\"#de2910\"/><polygon points=\"6.00,2.40 6.85,4.84 9.42,4.89 7.37,6.44 8.12,8.91 6.00,7.44 3.88,8.91 4.63,6.44 2.58,4.89 5.15,4.84\" fill=\"#ffde00\"/>","HK":"<rect width=\"30\" height=\"20\" fill=\"#de2910\"/><polygon points=\"15.00,4.00 16.41,8.06 20.71,8.15 17.28,10.74 18.53,14.85 15.00,12.40 11.47,14.85 12.72,10.74 9.29,8.15 13.59,8.06\" fill=\"#fff\"/>","IL":"<rect width=\"30\" height=\"20\" fill=\"#fff\"/><rect y=\"2\" width=\"30\" height=\"3\" fill=\"#0038b8\"/><rect y=\"15\" width=\"30\" height=\"3\" fill=\"#0038b8\"/><path d=\"M15 6.2L18.3 12H11.7ZM15 13.8L11.7 8H18.3Z\" fill=\"none\" stroke=\"#0038b8\" stroke-width=\".9\"/>","PS":"<rect y=\"0.000\" width=\"30\" height=\"6.717\" fill=\"#000\"/><rect y=\"6.667\" width=\"30\" height=\"6.717\" fill=\"#fff\"/><rect y=\"13.333\" width=\"30\" height=\"6.717\" fill=\"#149954\"/><path d=\"M0 0L11 10L0 20Z\" fill=\"#e4312b\"/>","TR":"<rect width=\"30\" height=\"20\" fill=\"#e30a17\"/><circle cx=\"11\" cy=\"10\" r=\"5\" fill=\"#fff\"/><circle cx=\"12.3\" cy=\"10\" r=\"4\" fill=\"#e30a17\"/><polygon points=\"17.50,7.60 18.06,9.22 19.78,9.26 18.41,10.30 18.91,11.94 17.50,10.96 16.09,11.94 16.59,10.30 15.22,9.26 16.94,9.22\" fill=\"#fff\"/>","BR":"<rect width=\"30\" height=\"20\" fill=\"#009c3b\"/><path d=\"M15 2L28 10L15 18L2 10Z\" fill=\"#ffdf00\"/><circle cx=\"15\" cy=\"10\" r=\"4.6\" fill=\"#002776\"/>","FR":"<rect width=\"10\" height=\"20\" fill=\"#002395\"/><rect x=\"10\" width=\"10\" height=\"20\" fill=\"#fff\"/><rect x=\"20\" width=\"10\" height=\"20\" fill=\"#ed2939\"/>","HU":"<rect y=\"0.000\" width=\"30\" height=\"6.717\" fill=\"#ce2939\"/><rect y=\"6.667\" width=\"30\" height=\"6.717\" fill=\"#fff\"/><rect y=\"13.333\" width=\"30\" height=\"6.717\" fill=\"#477050\"/>","IR":"<rect y=\"0.000\" width=\"30\" height=\"6.717\" fill=\"#239f40\"/><rect y=\"6.667\" width=\"30\" height=\"6.717\" fill=\"#fff\"/><rect y=\"13.333\" width=\"30\" height=\"6.717\" fill=\"#da0000\"/><circle cx=\"15\" cy=\"10\" r=\"2.3\" fill=\"none\" stroke=\"#da0000\" stroke-width=\".9\"/>","QA":"<rect width=\"30\" height=\"20\" fill=\"#8a1538\"/><path d=\"M0 0H9L12 1.11L9 2.22L12 3.33L9 4.44L12 5.56L9 6.67L12 7.78L9 8.89L12 10.00L9 11.11L12 12.22L9 13.33L12 14.44L9 15.56L12 16.67L9 17.78L12 18.89L9 20.00H0Z\" fill=\"#fff\"/>"};
+  // Tłumacz Google w języku przeglądarki (pl-PL → pl; chiński z odmianą pisma, jak w kodach Tłumacza)
+  const LANG = (() => {
+    const l = String((navigator.languages || [])[0] || navigator.language || "pl").toLowerCase();
+    return l.startsWith("zh") ? (/-(tw|hk|mo|hant)/.test(l) ? "zh-TW" : "zh-CN") : l.split("-")[0] || "pl";
+  })();
+  const translated = u => `https://translate.google.com/translate?sl=auto&tl=${LANG}&u=${encodeURIComponent(u)}`;
 
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
   const short = d => d.slice(8, 10) + "." + d.slice(5, 7);
@@ -40,10 +50,16 @@
   const hash = new URLSearchParams(location.hash.slice(1));
   for (const k in DEFAULT) if (hash.has(k)) f[k] = hash.get(k);
   if (!["1", "7", "30", "all", "zakres"].includes(f.okres)) f.okres = "7";
+  if (!/^\d{4}-\d\d-\d\d(\.\.\d{4}-\d\d-\d\d)?$/.test(f.dz)) f.dz = "";
   const save = () => {
     const p = new URLSearchParams();
     for (const k in DEFAULT) if (f[k] !== DEFAULT[k] && (f.okres === "zakres" || (k !== "od" && k !== "do"))) p.set(k, f[k]);
     history.replaceState(null, "", location.pathname + location.search + (String(p) ? "#" + p : ""));
+  };
+  const dzRange = () => {                                     // [od, do] dnia albo tygodnia wybranego na wykresie
+    if (!f.dz) return null;
+    const [lo, hi = lo] = f.dz.split("..");
+    return [lo, hi];
   };
   // hasła: chmurki (Enter albo klik w słowo) i tekst w trakcie pisania, który filtruje od razu; w adresie wszystkie razem
   let chips = f.q.split("|").map(s => s.trim()).filter(Boolean), pend = "";
@@ -57,7 +73,7 @@
 
   const style = document.createElement("style");
   style.textContent =
-    ":root{--papier:#f4f0e8;--tusz:#1d1b18;--cegla:#8a3b2a;--szary:#7a746a;--karta:#fbf8f2;--linia:#ddd5c7;--zaznacz:#f1d9a8}" +
+    ":root{--papier:#f4f0e8;--tusz:#1d1b18;--cegla:#8a3b2a;--szary:#7a746a;--opis:#4b463f;--karta:#fbf8f2;--linia:#ddd5c7;--zaznacz:#f1d9a8}" +
     "body{margin:0;background:var(--papier);color:var(--tusz);font-family:Segoe UI,sans-serif}" +
     ".arch{max-width:720px;margin:auto;padding:6px 14px 40px;box-sizing:border-box}" +
     ".arch h1{margin:12px 0 2px;color:var(--cegla);font:700 1.6em Georgia,serif}.arch .lead{margin:0 0 10px;color:var(--szary);font-size:.88em}" +
@@ -73,40 +89,53 @@
     ".chipy{display:flex;gap:6px;overflow-x:auto;margin:8px 0;padding-bottom:2px;scrollbar-width:thin}" +
     ".chipy button{flex:none;padding:7px 12px;border:2px solid var(--tusz);border-radius:999px;background:var(--karta);color:var(--tusz);" +
     "font:600 14px Segoe UI,sans-serif;cursor:pointer}.chipy button[aria-pressed=true]{background:var(--tusz);color:var(--papier)}" +
+    ".chipy button i{margin-left:5px;color:var(--szary);font-style:normal;font-weight:400}.chipy button[aria-pressed=true] i{color:var(--papier)}" +
     ".chipy button:focus-visible,.arch select:focus-visible,.arch input[type=date]:focus-visible,.wiecej:focus-visible,.wk button:focus-visible," +
-    ".kol h3 button:focus-visible,.tag:focus-visible{outline:3px solid var(--cegla);outline-offset:1px}" +
+    ".kol h3 button:focus-visible,.tag:focus-visible,.tt a:focus-visible,.tlum:focus-visible,.rozwin:focus-visible,.zdejmij:focus-visible" +
+    "{outline:3px solid var(--cegla);outline-offset:1px}" +
+    // kategoria: podstawowy filtr, wszystkie opcje widoczne naraz (zawijane), przy każdej liczba wyników
+    ".kategorie{flex-wrap:wrap;overflow:visible;align-items:center;gap:5px;margin:4px 0 8px}.kategorie[hidden]{display:none}" +
+    ".kategorie button{padding:4px 10px;font-size:13px}.etyk{margin-right:2px;color:var(--szary);font-size:.8em;font-weight:600}" +
     ".zakres{display:flex;flex-wrap:wrap;gap:8px 12px;margin:0 0 8px;font-size:.88em;color:var(--szary)}.zakres[hidden]{display:none}" +
     ".zakres input{margin-left:4px;padding:6px 8px;border:2px solid var(--linia);border-radius:8px;background:var(--karta);color:var(--tusz);font:15px Segoe UI,sans-serif}" +
     ".filtry{margin:8px 0;border:2px solid var(--linia);border-radius:10px;background:var(--karta)}" +
     ".filtry summary{display:flex;align-items:center;gap:8px;padding:10px 12px;cursor:pointer;list-style:none;font-weight:700}" +
     ".filtry summary::-webkit-details-marker{display:none}.filtry summary:after{content:'▾';margin-left:auto}.filtry[open] summary:after{content:'▴'}" +
-    ".filtry summary small{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:var(--cegla);font-weight:600}" +
+    ".filtry summary small{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:var(--szary);font-weight:400}" +
+    ".filtry summary small.wyb{color:var(--cegla);font-weight:600}" +
     ".pola{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px 12px}.pola .cala{grid-column:1/-1}" +
     ".pola label{display:flex;flex-direction:column;gap:3px;min-width:0;color:var(--szary);font-size:.8em}" +
     ".pola select{min-width:0;padding:7px 6px;border:2px solid var(--linia);border-radius:8px;background:var(--papier);color:var(--tusz);font:15px Segoe UI,sans-serif}" +
     ".czysc{align-self:end;padding:9px 12px;border:2px solid var(--tusz);border-radius:8px;background:var(--papier);color:var(--tusz);font:600 14px Segoe UI,sans-serif;cursor:pointer}" +
-    ".wiersz{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 10px;margin:10px 0 6px}" +
-    ".info{margin:0 2px;color:var(--szary);font-size:.9em}.info b{color:var(--tusz)}" +
-    // wykres: kraje × dni, jeden odcień (cegła) od jasnego do ciemnego; nad nim słupki „razem”, liczby w kratkach przy ≤ 10 dniach
-    ".wykres{margin:4px 0 10px;padding:8px 10px 6px;border:1px solid var(--linia);border-radius:10px;background:var(--karta)}" +
+    ".info{margin:12px 2px 2px;color:var(--szary);font-size:.9em}.info b{color:var(--tusz)}" +
+    ".zdejmij{all:unset;margin-left:3px;padding:0 6px;border-radius:999px;background:var(--tusz);color:var(--papier);font-weight:700;cursor:pointer}" +
+    // wykres: kraje × dni, jeden odcień (cegła) od jasnego do ciemnego; nad nim słupki „razem”, liczby w kratkach przy ≤ 10 dniach;
+    // klik w kod kraju, słupek dnia albo kratkę zawęża listę, reszta siatki przygaszona
+    ".wykres{margin:10px 0 4px;padding:8px 10px 6px;border:1px solid var(--linia);border-radius:10px;background:var(--karta)}" +
     ".wykres[hidden]{display:none}.wk-t{margin:0 0 6px;color:var(--szary);font-size:.75em}" +
     ".wk{display:grid;gap:2px;align-items:center;font-size:11px}.wk .n{color:var(--szary);font-size:10px}" +
-    ".wk .s{color:var(--szary);font-size:10px;text-align:right}.wk .bc{display:flex;align-items:flex-end;height:24px}" +
-    ".wk .bc i{display:block;width:100%;min-height:1px;background:var(--tusz);border-radius:3px 3px 0 0}" +
-    ".wk button{all:unset;cursor:pointer;font-weight:700;color:var(--tusz);padding:1px 0}.wk button[aria-pressed=true]{color:var(--cegla);text-decoration:underline}" +
-    ".wk .c{position:relative;height:17px;border-radius:2px;background:var(--papier);color:var(--tusz);font-size:10px;line-height:17px;text-align:center;overflow:hidden}" +
+    ".wk .s{color:var(--szary);font-size:10px;text-align:right}.wk button{all:unset;box-sizing:border-box;cursor:pointer}" +
+    ".wk .bc{display:flex;align-items:flex-end;height:24px}.wk .bc i{display:block;width:100%;min-height:1px;background:var(--tusz);border-radius:3px 3px 0 0}" +
+    ".wk .bc[aria-pressed=true] i{background:var(--cegla)}" +
+    ".wk .kr{font-weight:700;color:var(--tusz);padding:1px 0}.wk .kr[aria-pressed=true]{color:var(--cegla);text-decoration:underline}" +
+    ".wk .c{position:relative;height:17px;border-radius:2px;background:var(--papier);color:var(--tusz);font-size:10px;line-height:17px;text-align:center;overflow:hidden;cursor:pointer}" +
     ".wk .c:before{content:'';position:absolute;inset:0;background:var(--cegla);opacity:var(--o,0)}.wk .c span{position:relative}.wk .c.dk{color:var(--papier)}" +
+    ".wk .dim{opacity:.3}" +
     ".wk .x{overflow:visible;white-space:nowrap;color:var(--szary);font-size:10px}.wk .rest{grid-column:1/-1;justify-self:start;font-weight:600;color:var(--cegla);font-size:12px;padding:4px 0}" +
     ".chipy.widoki{margin:0;gap:4px}.widoki button{padding:5px 10px;font-size:13px}" +
-    ".wyniki ol{margin:0;padding:0;list-style:none}.wyniki li{padding:10px 2px;border-bottom:1px solid var(--linia)}" +
-    ".wyniki li>a{color:var(--tusz);font-weight:600;line-height:1.35;text-decoration:none}.wyniki li>a:hover{text-decoration:underline}" +
-    ".org{display:block;margin-top:2px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:var(--szary);font-size:.82em}" +
-    // opis: 3 linie, klik rozwija; mała etykieta, skąd jest
-    ".opis{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;line-clamp:3;overflow:hidden;margin-top:4px;font-size:.88em;line-height:1.4;cursor:pointer}" +
-    ".opis.cale{display:block}.opis small{margin-right:3px;color:var(--szary);font-size:.85em}" +
-    ".snip{display:block;margin-top:4px;padding-left:8px;border-left:3px solid var(--linia);font-size:.84em;font-style:italic}" +
-    // znaczniki pod artykułem: czas i filtry, po których go znaleźć (klik ustawia filtr, drugi klik zdejmuje)
-    ".tagi{display:flex;flex-wrap:wrap;align-items:center;gap:3px 4px;margin-top:5px;font-size:12px}.cz{margin-right:3px;color:var(--szary);white-space:nowrap}" +
+    ".wyniki ol{margin:0;padding:0;list-style:none}.wyniki li{padding:12px 2px 9px;border-bottom:1px solid var(--linia)}" +
+    // karta: polski tytuł, pod nim pełny opis (kreska z boku, spokojniejszy kolor), jedna mała linia czasu i źródła
+    ".tt{margin:0;font:700 1.03em/1.32 Georgia,serif}.tt a{color:var(--tusz);text-decoration:none}.tt a:hover{text-decoration:underline}" +
+    ".opis{margin:6px 0 0;padding:1px 0 1px 10px;border-left:3px solid var(--linia);color:var(--opis);font-size:.9em;line-height:1.45}" +
+    ".meta{display:flex;flex-wrap:wrap;align-items:center;gap:2px 5px;margin-top:6px;color:var(--szary);font-size:12px}" +
+    ".meta .flaga{width:14px;height:14px}.cz{white-space:nowrap}.akcje{display:flex;margin-left:auto}" +
+    ".tlum,.rozwin{all:unset;padding:3px 7px;border-radius:6px;color:var(--cegla);font:600 12px Segoe UI,sans-serif;cursor:pointer;white-space:nowrap}" +
+    ".tlum:hover,.rozwin:hover{text-decoration:underline}.rozwin[aria-expanded=true]{background:var(--linia);color:var(--tusz)}" +
+    ".rozwin .pkt{display:inline-block;width:6px;height:6px;margin:0 0 1px 4px;border-radius:50%;background:var(--cegla)}" +
+    // „więcej”: tytuł oryginalny, skąd opis i godzina, trafienie poza opisem, znaczniki filtrów (klik ustawia filtr, drugi zdejmuje)
+    ".szcz{margin-top:6px;padding:8px 10px;border:1px solid var(--linia);border-radius:8px;background:var(--karta);font-size:.84em;line-height:1.4}" +
+    ".szcz[hidden]{display:none}.szcz p{margin:0 0 6px}.szcz small{color:var(--szary)}" +
+    ".snip{padding-left:8px;border-left:3px solid var(--zaznacz);font-style:italic}.tagi{display:flex;flex-wrap:wrap;align-items:center;gap:4px}" +
     ".tag{display:inline-flex;align-items:center;gap:3px;max-width:100%;padding:1px 7px;line-height:1.5;border:1px solid var(--linia);border-radius:999px;" +
     "background:var(--papier);color:var(--tusz);font:12px Segoe UI,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}" +
     ".tag i{color:var(--szary);font-style:normal}.tag[aria-pressed=true]{border-color:var(--tusz);background:var(--tusz);color:var(--papier)}" +
@@ -116,21 +145,23 @@
     ".wiecej{display:block;width:100%;margin:12px 0;padding:11px;border:2px solid var(--tusz);border-radius:10px;background:var(--karta);" +
     "color:var(--tusz);font:700 15px Segoe UI,sans-serif;cursor:pointer}" +
     ".kraje-wyb{margin:0 0 10px}.kraje-wyb button{display:inline-flex;align-items:center;gap:5px;padding:5px 10px 5px 6px;font-size:13px}" +
-    ".kraje-wyb button i{color:var(--szary);font-style:normal;font-weight:400}.kraje-wyb button[aria-pressed=true] i{color:var(--papier)}" +
+    ".kraje-wyb button i{margin:0}" +
     ".kols{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}@media(min-width:640px){.kols{grid-template-columns:repeat(2,minmax(0,1fr))}}" +
     ".kol{padding:6px 12px;border:1px solid var(--linia);border-radius:12px;background:var(--karta)}" +
     ".kol h3{margin:4px 0 0;font:700 1.05em Georgia,serif}.kol h3 button{all:unset;display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:var(--cegla)}" +
     ".kol h3 small{color:var(--szary);font:400 .75em Segoe UI,sans-serif}.kol li:last-child{border-bottom:0}.kol .wiecej{margin:4px 0 8px;padding:8px}" +
+    ".kol .tt{font-size:.98em}.kol .szcz{background:var(--papier)}" +
     ".slowa{margin:8px 0;border:1px solid var(--linia);border-radius:10px;background:var(--karta)}" +
     ".slowa summary{padding:9px 12px;cursor:pointer;font-weight:700;list-style:none}.slowa summary::-webkit-details-marker{display:none}" +
     ".slowa summary small{color:var(--cegla);font-weight:600}.slowa-c{padding:0 12px 10px}.slowa h4{margin:8px 0 5px;color:var(--szary);font:600 .78em Segoe UI,sans-serif}" +
-    ".slowa .chipy{flex-wrap:wrap;overflow:visible;margin:0}.slowa .chipy button{padding:5px 10px;font-size:13px;font-weight:600}.slowa .chipy button i{color:var(--szary);font-style:normal;font-weight:400;margin-left:4px}" +
-    ".pusto{margin:18px 2px;color:var(--szary)}";
+    ".slowa .chipy{flex-wrap:wrap;overflow:visible;margin:0}.slowa .chipy button{padding:5px 10px;font-size:13px;font-weight:600}" +
+    ".pusto{margin:18px 2px;color:var(--szary)}.slowa .pusto{margin:4px 0;font-size:.88em}";
   document.head.append(style);
 
   const lastToday = LAST === new Date().toLocaleDateString("sv");           // „sv” daje RRRR-MM-DD w czasie lokalnym
   const PERIODS = [["1", lastToday ? "dziś" : "ostatni dzień"], ["7", "7 dni"], ["30", "30 dni"], ["all", "wszystko"], ["zakres", "zakres…"]];
   const first = DAYS[DAYS.length - 1] || "";
+  // kolejność: szukanie → okres → kategoria → słowa → pozostałe filtry → wykres → lista
   app.innerHTML = `<h1>Archiwum prasy</h1>
     <p class="lead">${DAYS.length ? `${num(DAYS.length)} dni (${short(first)}–${short(LAST)}): nagłówki polskie i oryginalne, ramy i streszczenia sygnałów, bez pełnych tekstów.` : "Archiwum jest puste."}</p>
     <div class="szukaj"><div class="hasla"></div><input class="q" type="search" enterkeyhint="enter" placeholder="Szukaj, np. Grenlandia (Enter dodaje hasło)"
@@ -138,23 +169,26 @@
     <div class="chipy tryb" role="group" aria-label="Jak łączyć hasła" hidden>Hasła:<button type="button" data-tryb="">wszystkie</button><button type="button" data-tryb="lub">którekolwiek</button></div>
     <div class="chipy okresy" role="group" aria-label="Okres">${PERIODS.map(([v, l]) => `<button type="button" data-okres="${v}">${l}</button>`).join("")}</div>
     <div class="zakres" hidden><label>od<input type="date" data-z="od" min="${first}" max="${LAST}"></label><label>do<input type="date" data-z="do" min="${first}" max="${LAST}"></label></div>
-    <details class="filtry"><summary>Filtry <small></small></summary><div class="pola">
+    <div class="chipy kategorie" role="group" aria-label="Kategoria" hidden></div>
+    <details class="slowa"><summary>Słowa <small></small></summary><div class="slowa-c"><div class="czeste"></div><div class="ros"></div></div></details>
+    <details class="filtry"><summary>Więcej filtrów <small></small></summary><div class="pola">
       <label>Kraj<select data-f="kraj"></select></label><label>Źródło<select data-f="src"></select></label>
       <label>Temat<select data-f="th"></select></label><label>Ton<select data-f="st"></select></label>
       <label class="cala">Aktor (kraj, organizacja)<select data-f="ak"></select></label>
-      <label class="cala">Kategoria (artykuły bez sygnałów)<select data-f="kat"></select></label><button type="button" class="czysc cala">Wyczyść filtry i szukanie</button>
+      <button type="button" class="czysc cala">Wyczyść filtry i szukanie</button>
     </div></details>
-    <div class="wiersz"><div class="info" aria-live="polite"></div><div class="chipy widoki" role="group" aria-label="Widok">` +
+    <div class="info" aria-live="polite"></div>
+    <div class="wykres" hidden></div>
+    <div class="chipy widoki" role="group" aria-label="Widok">` +
     `<button type="button" data-widok="lista">Lista</button><button type="button" data-widok="kraje">Po krajach</button>` +
-    `<button type="button" data-sort title="Kolejność po dacie i godzinie"></button></div></div><div class="wykres" hidden></div>
-    <details class="slowa"><summary>Słowa <small></small></summary><div class="slowa-c"></div></details>
+    `<button type="button" data-sort title="Kolejność po dacie i godzinie"></button></div>
     <div class="wyniki"></div>`;
   const $ = sel => app.querySelector(sel);
   const q = $(".q"), info = $(".info"), chart = $(".wykres"), out = $(".wyniki");
   if (window.plxKolko) app.querySelectorAll(".chipy").forEach(window.plxKolko);
 
   // --- dane ---------------------------------------------------------------------------------------------------------
-  const packs = {};
+  const packs = {}, got = {};                                 // obietnice paczek i paczki już wczytane
   const row = d => ([src, t, pl, u, s, lem, kat, ts, tf, op, ops]) => {
     ops = ops ?? (s.length ? "analiza" : "");                 // paczki sprzed pól opisu: opis ze streszczenia sygnału
     return { d, src, k: (SPIS.zrodla[src] || [])[1] || "", t, pl, u, s, lem: lem ? lem.split(" ") : [], kat: kat || "",
@@ -163,7 +197,7 @@
   const load = d => packs[d] || (packs[d] = fetch(`${d}.json${GZ ? ".gz" : ""}`).then(r => {
     if (!r.ok) throw new Error(`${d}: ${r.status}`);
     return GZ ? new Response(r.body.pipeThrough(new DecompressionStream("gzip"))).json() : r.json();
-  }).then(rows => rows.map(row(d))).catch(e => { delete packs[d]; throw e; }));
+  }).then(rows => (got[d] = rows.map(row(d)))).catch(e => { delete packs[d]; throw e; }));
 
   const period = () => {
     if (f.okres === "all" || !LAST) return DAYS;
@@ -176,8 +210,11 @@
   async function refresh() {
     const my = ++token;
     days = period();
+    const dz = dzRange();
+    if (dz && (!days.length || dz[1] < days[days.length - 1] || dz[0] > days[0])) { f.dz = ""; save(); }   // dzień spoza okresu
+    summary();
     let done = 0;
-    const todo = days.filter(d => !packs[d]).length;
+    const todo = days.filter(d => !got[d]).length;
     if (todo) info.textContent = `Wczytuję ${todo} ${todo === 1 ? "dzień" : "dni"}…`;
     const lists = await Promise.all(days.map(d => load(d).then(x => {
       if (my === token && todo) info.textContent = `Wczytuję dni: ${++done}/${days.length}…`;
@@ -187,7 +224,6 @@
     failed = days.filter((d, i) => !lists[i]);
     // od najnowszych po dacie i godzinie; bez czasu (stare paczki) dzień, kolejność z paczki zostaje (sortowanie stabilne)
     arts = lists.filter(Boolean).flat().sort((a, b) => { const x = a.ts || a.d, y = b.ts || b.d; return x < y ? 1 : x > y ? -1 : 0; });
-    options();
     results();
   }
 
@@ -207,48 +243,82 @@
   const has = (s, t) => t.re ? hits(s, t).length > 0 : s.includes(t.w);
   const text = a => a.x || (a.x = norm([a.t, a.pl, a.ops === "zajawka" ? a.op : "", ...a.s.map(s => s[3] + "\n" + s[4])].join("\n")));
   const stanceOk = st => !f.st || (f.st === "nie-neutralny" ? st !== "neutralny" : st === f.st);
-  const sigOk = s => (!f.th || s[0] === f.th) && stanceOk(s[1]) && (!f.ak || s[2] === f.ak);
-  const filtered = () => {
-    const gs = groups(), any = f.tryb === "lub";
-    const fits = g => a => g.every(t => has(text(a), t));
-    const textOk = a => !gs.length || (any ? gs.some(g => fits(g)(a)) : gs.every(g => fits(g)(a)));
-    const list = arts.filter(a => (!f.kraj || a.k === f.kraj) && (!f.src || a.src === f.src) && (!f.kat || a.kat === f.kat)
-      && (!(f.th || f.st || f.ak) || a.s.some(sigOk)) && textOk(a));
-    return f.sort === "stare" ? list.reverse() : list;
-  };
+  // sygnał spełnia filtry tematu, tonu i aktora naraz; `skip` pomija jeden z nich (liczenie jego opcji)
+  const sigOk = (s, skip) => (skip === "th" || !f.th || s[0] === f.th) && (skip === "st" || stanceOk(s[1])) && (skip === "ak" || !f.ak || s[2] === f.ak);
+  // bity filtrów, których artykuł nie spełnia; opcje filtra liczy się bez jego bitu (ile wyników dałby wybór tej opcji)
+  const KRAJ = 1, SRC = 2, KAT = 4, DZIEN = 8, TEKST = 16, SYG = 32;
+  function fails(a, gs, dz) {
+    const fits = g => g.every(t => has(text(a), t));
+    let m = 0;
+    if (f.kraj && a.k !== f.kraj) m |= KRAJ;
+    if (f.src && a.src !== f.src) m |= SRC;
+    if (f.kat && (f.kat === ANALIZA ? !a.s.length : a.kat !== f.kat)) m |= KAT;
+    if (dz && (a.d < dz[0] || a.d > dz[1])) m |= DZIEN;
+    if (gs.length && !(f.tryb === "lub" ? gs.some(fits) : gs.every(fits))) m |= TEKST;
+    if ((f.th || f.st || f.ak) && !a.s.some(s => sigOk(s))) m |= SYG;
+    return m;
+  }
 
-  function options() {
-    const count = (key) => {
-      const c = {};
-      for (const a of arts) for (const v of new Set(key(a))) c[v] = (c[v] || 0) + 1;
-      return c;
-    };
-    const fill = (name, first, items) => {
-      const sel = $(`select[data-f="${name}"]`);
-      if (f[name] && !items.some(([v]) => v === f[name])) items.push([f[name], `${f[name]} · brak w okresie`]);
-      sel.innerHTML = `<option value="">${first}</option>` + items.map(([v, l]) => `<option value="${esc(v)}">${esc(l)}</option>`).join("");
+  function scan() {                                           // jedno przejście: wyniki, liczby opcji filtrów, siatka wykresu
+    const gs = groups(), dz = dzRange();
+    const n = { kat: {}, kraj: {}, src: {}, th: {}, st: {}, ak: {} };
+    const inc = (c, v) => { c[v] = (c[v] || 0) + 1; };
+    const list = [], grid = [];
+    let anyKat = 0;
+    for (const a of arts) {
+      const m = fails(a, gs, dz);
+      if (!m) list.push(a);
+      if (!(m & ~KRAJ)) inc(n.kraj, a.k);
+      if (!(m & ~SRC)) inc(n.src, a.src);
+      if (!(m & ~KAT)) { anyKat++; if (a.s.length) inc(n.kat, ANALIZA); else if (a.kat) inc(n.kat, a.kat); }
+      if (!(m & ~(KRAJ | DZIEN))) grid.push(a);               // wykres pokazuje wszystkie kraje i dni, wybór wyróżnia
+      if (!(m & ~SYG) && a.s.length) {
+        const seen = { th: new Set(), st: new Set(), ak: new Set() };
+        for (const s of a.s) {
+          if (sigOk(s, "th")) seen.th.add(s[0]);
+          if (sigOk(s, "st")) { seen.st.add(s[1]); if (s[1] !== "neutralny") seen.st.add("nie-neutralny"); }
+          if (sigOk(s, "ak")) seen.ak.add(s[2]);
+        }
+        for (const k in seen) seen[k].forEach(v => inc(n[k], v));
+      }
+    }
+    return { list: f.sort === "stare" ? list.reverse() : list, n, anyKat, grid };
+  }
+
+  const LABELS = {
+    kraj: k => countryName(k), src: s => `${srcName(s)} (${(SPIS.zrodla[s] || [])[1] || "?"})`, th: t => SPIS.tematy[t] || t,
+    st: s => s === "nie-neutralny" ? "poza neutralnym" : s, ak: a => { const n = actorName(a); return n !== a ? `${n} (${a})` : n; },
+  };
+  function selects(n) {                                       // opcje z liczbą wyników; bez wyników ukryte, wybrana zostaje
+    const fill = (name, first, keys) => {
+      const sel = $(`select[data-f="${name}"]`), c = n[name];
+      if (f[name] && !keys.includes(f[name])) keys.push(f[name]);
+      sel.innerHTML = `<option value="">${first}</option>` +
+        keys.map(v => `<option value="${esc(v)}">${esc(LABELS[name](v))} · ${num(c[v] || 0)}</option>`).join("");
       sel.value = f[name];
+      sel.disabled = !keys.length;                            // nic do wyboru przy tych filtrach (np. kategoria bez sygnałów nie ma tematów)
+      sel.title = keys.length ? "" : "Brak opcji w tych wynikach";
     };
-    const byCount = c => Object.keys(c).sort((x, y) => c[y] - c[x] || x.localeCompare(y));
-    const kraje = count(a => [a.k]);
-    fill("kraj", "wszystkie kraje", byCount(kraje).map(k => [k, `${countryName(k)} · ${num(kraje[k])}`]));
-    const zrodla = count(a => [a.src]);
+    const byCount = (c, keep = () => true) => Object.keys(c).filter(v => v && keep(v)).sort((x, y) => c[y] - c[x] || x.localeCompare(y));
+    fill("kraj", "wszystkie kraje", byCount(n.kraj));
     fill("src", f.kraj ? `wszystkie źródła (${countryName(f.kraj)})` : "wszystkie źródła",
-         Object.keys(zrodla).filter(s => !f.kraj || (SPIS.zrodla[s] || [])[1] === f.kraj)
-           .sort((x, y) => srcName(x).localeCompare(srcName(y), "pl")).map(s => [s, `${srcName(s)} (${(SPIS.zrodla[s] || [])[1] || "?"}) · ${num(zrodla[s])}`]));
-    const tematy = count(a => a.s.map(s => s[0]));                        // tylko stałe tematy, emergent:* są rozdrobnione
-    fill("th", "wszystkie tematy", byCount(tematy).filter(t => SPIS.tematy[t]).map(t => [t, `${SPIS.tematy[t]} · ${num(tematy[t])}`]));
-    const tony = count(a => a.s.map(s => s[1]));
-    const poza = arts.filter(a => a.s.some(s => s[1] !== "neutralny")).length;
-    fill("st", "każdy ton", [["nie-neutralny", `poza neutralnym · ${num(poza)}`],
-                             ...STANCES.filter(s => tony[s]).map(s => [s, `${s} · ${num(tony[s])}`])]);
-    const kat = count(a => a.kat ? [a.kat] : []);
-    fill("kat", "każda kategoria", byCount(kat).map(k => [k, `${k} · ${num(kat[k])}`]));
-    const aktorzy = count(a => a.s.map(s => s[2]));
-    fill("ak", "wszyscy aktorzy", byCount(aktorzy).map(a => {
-      const n = actorName(a);
-      return [a, `${n}${n !== a ? ` (${a})` : ""} · ${num(aktorzy[a])}`];
-    }));
+         Object.keys(n.src).filter(Boolean).sort((x, y) => srcName(x).localeCompare(srcName(y), "pl")));
+    fill("th", "wszystkie tematy", byCount(n.th, t => SPIS.tematy[t]));      // tylko stałe tematy, emergent:* są rozdrobnione
+    fill("st", "każdy ton", ["nie-neutralny", ...STANCES].filter(s => n.st[s]));
+    fill("ak", "wszyscy aktorzy", byCount(n.ak));
+  }
+
+  function categories(n, total) {                             // podstawowy filtr: „tematy analizy” + kategorie ogólne bez sygnałów
+    const c = n.kat, box = $(".kategorie");
+    const keys = Object.keys(c).filter(k => k !== ANALIZA).sort((x, y) => c[y] - c[x] || x.localeCompare(y, "pl"));
+    if (f.kat && f.kat !== ANALIZA && !c[f.kat]) keys.push(f.kat);
+    box.hidden = !keys.length && !c[ANALIZA] && !f.kat;
+    const btn = (v, label, title = "") => `<button type="button" data-kat="${esc(v)}" aria-pressed="${f.kat === v}"` +
+      `${title ? ` title="${esc(title)}"` : ""}>${esc(label)}<i>${num(v ? c[v] || 0 : total)}</i></button>`;
+    box.innerHTML = '<span class="etyk">Kategoria</span>' + btn("", "wszystkie") +
+      (c[ANALIZA] || f.kat === ANALIZA ? btn(ANALIZA, "tematy analizy",
+        "Artykuły z sygnałami w tematach analizy (temat wybierzesz w „Więcej filtrów”); pozostałe kategorie mają artykuły bez sygnałów") : "") +
+      keys.map(k => btn(k, k)).join("");
   }
 
   function summary() {
@@ -258,8 +328,9 @@
     if (f.th) tags.push(SPIS.tematy[f.th] || f.th);
     if (f.st) tags.push(f.st === "nie-neutralny" ? "ton: poza neutralnym" : "ton: " + f.st);
     if (f.ak) tags.push("aktor: " + actorName(f.ak));
-    if (f.kat) tags.push("kategoria: " + f.kat);
-    $(".filtry small").textContent = tags.length ? "· " + tags.join(", ") : "";
+    const small = $(".filtry small");
+    small.textContent = tags.length ? "· " + tags.join(", ") : "kraj, źródło, temat, ton, aktor";
+    small.classList.toggle("wyb", tags.length > 0);
     $(".hasla").innerHTML = chips.map((c, i) =>
       `<span class="haslo">${esc(c)}<button type="button" data-usun="${i}" aria-label="Usuń hasło: ${esc(c)}">×</button></span>`).join("");
     $(".tryb").hidden = allTerms().length < 2;
@@ -305,34 +376,44 @@
     return "";
   }
 
-  function when(a) {                                          // czas lokalny przeglądarki; „pobrano”, gdy nie ma wiarygodnej publikacji
+  function when(a) {                                          // czas lokalny przeglądarki; czy to pobranie, mówi „więcej”
     const t = a.ts ? new Date(a.ts) : null;
     if (!t || isNaN(t)) return `<span class="cz">${short(a.d)}</span>`;
-    const day = `${two(t.getDate())}.${two(t.getMonth() + 1)}`, hour = `${two(t.getHours())}:${two(t.getMinutes())}`;
-    return a.tf === "f" ? `<span class="cz" title="Godzina pobrania: brak wiarygodnej godziny publikacji">${day}, pobrano ${hour}</span>`
-      : `<time class="cz" datetime="${esc(a.ts)}">${day}, ${hour}</time>`;
+    return `<time class="cz" datetime="${esc(a.ts)}"${a.tf === "f" ? ' title="Godzina pobrania: brak wiarygodnej godziny publikacji"' : ""}>` +
+      `${two(t.getDate())}.${two(t.getMonth() + 1)}, ${two(t.getHours())}:${two(t.getMinutes())}</time>`;
   }
 
   const tag = (kind, value, label, pre = "") =>
     `<button type="button" class="tag" data-tag="${kind}" data-v="${esc(value)}" aria-pressed="${f[kind] === value}" ` +
     `title="${f[kind] === value ? "Zdejmij filtr" : "Pokaż tylko takie"}">${pre}${esc(label)}</button>`;
 
-  const item = (a, ws, withCountry = true) => {
-    const url = /^https?:\/\//i.test(a.u) ? a.u : "#";
-    const snip = snippet(a, ws);
+  const opened = new Set();                                   // artykuły z rozwiniętym „więcej” (przetrwa przerysowanie listy)
+  const item = (a, ws, inList = true) => {                    // na wierzchu tytuł, opis i linia czasu; reszta pod „więcej”
+    const url = /^https?:\/\//i.test(a.u) ? a.u : "";
+    const key = a.d + " " + a.u, open = opened.has(key), snip = snippet(a, ws);
     const uniq = xs => [...new Set(xs)];
-    const tags = (withCountry && a.k ? tag("kraj", a.k, a.k, flag(a.k)) : "") + tag("src", a.src, srcName(a.src)) +
-      uniq(a.s.map(s => s[0])).filter(t => SPIS.tematy[t]).map(t => tag("th", t, SPIS.tematy[t])).join("") +
+    const head = mark(a.pl || a.t, ws), h = inList ? "h2" : "h4";
+    const tags = (a.k ? tag("kraj", a.k, countryName(a.k), flag(a.k)) : "") + tag("src", a.src, srcName(a.src)) +
+      uniq(a.s.map(s => s[0])).filter(t => SPIS.tematy[t]).map(t => tag("th", t, SPIS.tematy[t], "<i>temat</i>")).join("") +
       uniq(a.s.map(s => s[2])).slice(0, 2).map(x => tag("ak", x, actorName(x), "<i>aktor</i>")).join("") +
       uniq(a.s.map(s => s[1])).filter(s => s !== "neutralny").map(s => tag("st", s, s, "<i>ton</i>")).join("") +
       (a.kat ? tag("kat", a.kat, a.kat, "<i>kategoria</i>") : "");
-    return `<li><a href="${esc(url)}" target="_blank" rel="noopener">${mark(a.pl || a.t, ws)}</a>` +
-      (a.pl ? `<span class="org" dir="auto">${mark(a.t, ws)}</span>` : "") +
-      (a.op ? `<span class="opis" data-opis title="Kliknij, aby rozwinąć albo zwinąć"><small>${a.ops === "zajawka" ? "z zajawki" : "z analizy"}:</small> ${mark(a.op, ws)}</span>` : "") +
-      (snip ? `<span class="snip">${snip}</span>` : "") + `<span class="tagi">${when(a)}${tags}</span></li>`;
+    const about = [a.op && a.ops ? "opis: " + a.ops : "",
+                   a.ts ? (a.tf === "f" ? "godzina pobrania (brak wiarygodnej godziny publikacji)" : "godzina publikacji") : ""];
+    const tr = url && !(a.k === "PL" && LANG === "pl") ? `<a class="tlum" href="${esc(translated(url))}" target="_blank" ` +
+      `rel="noopener noreferrer" title="Oryginał w Tłumaczu Google">Przetłumacz</a>` : "";
+    return `<li><${h} class="tt">${url ? `<a href="${esc(url)}" target="_blank" rel="noopener" dir="auto">${head}</a>` : head}</${h}>` +
+      (a.op ? `<p class="opis">${mark(a.op, ws)}</p>` : "") +
+      `<div class="meta">${when(a)}<span aria-hidden="true">·</span>${inList && a.k ? flag(a.k) : ""}<span>${esc(srcName(a.src))}</span>` +
+      `<span class="akcje">${tr}<button type="button" class="rozwin" data-rozwin="${esc(key)}" aria-expanded="${open}"` +
+      `${snip ? ' title="Szukane słowo jest w szczegółach"' : ""}>więcej${snip ? '<i class="pkt"></i>' : ""}</button></span></div>` +
+      `<div class="szcz"${open ? "" : " hidden"}>` +
+      (a.pl && a.pl !== a.t ? `<p><small>tytuł oryginalny:</small> <span dir="auto">${mark(a.t, ws)}</span></p>` : "") +
+      (about.some(Boolean) ? `<p><small>${about.filter(Boolean).join(" · ")}</small></p>` : "") +
+      (snip ? `<p class="snip">${snip}</p>` : "") + `<div class="tagi">${tags}</div></div></li>`;
   };
 
-  function drawChart(list) {
+  function drawChart(list) {                                  // wyniki bez filtra kraju i dnia: cała siatka, wybór wyróżniony
     if (!list.length || !days.length) { chart.hidden = true; return; }
     const asc = [...days].reverse();
     const size = asc.length > 45 ? 7 : 1;                     // długi okres: kolumna = tydzień
@@ -349,25 +430,34 @@
     }
     const order = Object.keys(per).sort((x, y) => sum[y] - sum[x]);
     const rows = allRows || order.length <= ROWS + 1 ? order : order.slice(0, ROWS);
+    if (f.kraj && per[f.kraj] && !rows.includes(f.kraj)) rows.push(f.kraj);          // wybrany kraj zawsze widać
+    const dz = dzRange();
+    const key = c => c.length > 1 ? `${c[0]}..${c[c.length - 1]}` : c[0];             // wartość filtra dnia
+    const off = i => dz && (cols[i][cols[i].length - 1] < dz[0] || cols[i][0] > dz[1]);
     const max = Math.max(...rows.flatMap(k => per[k])), top = Math.max(...tot);
     const nums = cols.length <= 10;
     const label = c => size === 1 ? short(c[0]) : `${short(c[0])}–${short(c[c.length - 1])}`;
+    const unit = size === 1 ? "dzień" : "tydzień";
     const every = cols.length <= 7 ? 1 : Math.ceil(cols.length / 5);     // podpisy osi bez nachodzenia na telefonie
     let g = `<span class="n">razem</span>` + tot.map((v, i) =>
-      `<span class="bc" title="${label(cols[i])}: ${num(v)}"><i style="height:${(v / top * 100).toFixed(1)}%"></i></span>`).join("") +
+      `<button type="button" class="bc${off(i) ? " dim" : ""}" data-dz="${key(cols[i])}" aria-pressed="${f.dz === key(cols[i])}" ` +
+      `title="${label(cols[i])}: ${num(v)} · tylko ten ${unit}"><i style="height:${(v / top * 100).toFixed(1)}%"></i></button>`).join("") +
       `<span class="s">${num(list.length)}</span>`;
     for (const k of rows) {
-      g += `<button type="button" data-kraj="${esc(k)}" aria-pressed="${f.kraj === k}" title="${esc(countryName(k))}: tylko ten kraj">${esc(k)}</button>` +
+      const dim = f.kraj && f.kraj !== k;
+      g += `<button type="button" class="kr${dim ? " dim" : ""}" data-kraj="${esc(k)}" aria-pressed="${f.kraj === k}" ` +
+        `title="${esc(countryName(k))}: tylko ten kraj">${esc(k)}</button>` +
         per[k].map((v, i) => {
           const o = v ? 0.15 + 0.85 * Math.pow(v / max, 0.6) : 0;
-          return `<span class="c${o > 0.55 ? " dk" : ""}" style="--o:${o.toFixed(2)}" title="${esc(countryName(k))} · ${label(cols[i])}: ${num(v)}">` +
-            (nums && v ? `<span>${v}</span>` : "") + "</span>";
-        }).join("") + `<span class="s">${num(sum[k])}</span>`;
+          return `<span class="c${o > 0.55 ? " dk" : ""}${dim || off(i) ? " dim" : ""}" style="--o:${o.toFixed(2)}" data-k="${esc(k)}" ` +
+            `data-d="${key(cols[i])}" title="${esc(countryName(k))} · ${label(cols[i])}: ${num(v)}">` + (nums && v ? `<span>${v}</span>` : "") + "</span>";
+        }).join("") + `<span class="s${dim ? " dim" : ""}">${num(sum[k])}</span>`;
     }
     if (rows.length < order.length) g += `<button type="button" class="rest" data-rest>+ ${order.length - rows.length} krajów ▾</button>`;
     else if (order.length > ROWS + 1) g += `<button type="button" class="rest" data-rest>mniej krajów ▴</button>`;
     g += `<span></span>` + cols.map((c, i) => `<span class="x">${i % every === 0 ? short(c[0]) : ""}</span>`).join("") + "<span></span>";
-    chart.innerHTML = `<p class="wk-t">Trafienia ${size === 1 ? "dziennie" : "tygodniowo"} według krajów (ciemniej = więcej); kod kraju zawęża wynik</p>` +
+    chart.innerHTML = `<p class="wk-t">Wyniki ${size === 1 ? "dziennie" : "tygodniowo"} według krajów (ciemniej = więcej). ` +
+      `Klik w kod kraju, słupek ${size === 1 ? "dnia" : "tygodnia"} albo kratkę zawęża listę, drugi klik zdejmuje.</p>` +
       `<div class="wk" style="grid-template-columns:28px repeat(${cols.length},minmax(0,1fr)) 34px">${g}</div>`;
     chart.hidden = false;
   }
@@ -388,44 +478,91 @@
       "</section>").join("") + "</div>";
   }
 
+  const focusKey = () => {                                    // przycisk z fokusem znika przy przerysowaniu: wróć do odpowiednika
+    const e = document.activeElement, ks = e && e.tagName === "BUTTON" && app.contains(e) ? Object.keys(e.dataset) : [];
+    return ks.length ? "button" + ks.map(k => `[data-${k.replace(/[A-Z]/g, c => "-" + c.toLowerCase())}="${CSS.escape(e.dataset[k])}"]`).join("") : "";
+  };
+
   function results() {
+    const focus = focusKey();
+    const { list, n, anyKat, grid } = scan();
+    const ws = groups().flat(), dz = dzRange();
     summary();
-    const ws = groups().flat(), list = filtered();
+    categories(n, anyKat);
+    selects(n);
     const range = days.length ? (days.length === 1 ? short(days[0]) : `${short(days[days.length - 1])}–${short(days[0])}`) : "";
-    const narrowed = ws.length || f.kraj || f.src || f.th || f.st || f.ak || f.kat;
-    info.innerHTML = `<b>${num(list.length)}</b> ${narrowed ? `z ${num(arts.length)} ${plural(arts.length)}` : plural(list.length)} · ${range}` +
+    const narrowed = ws.length || f.kraj || f.src || f.th || f.st || f.ak || f.kat || dz;
+    info.innerHTML = `<b>${num(list.length)}</b> ${narrowed ? `z ${num(arts.length)} ${arts.length === 1 ? "artykułu" : "artykułów"}` : plural(list.length)} · ${range}` +
+      (dz ? `, tylko ${dz[0] === dz[1] ? short(dz[0]) : `${short(dz[0])}–${short(dz[1])}`}<button type="button" class="zdejmij" data-dz="" ` +
+        'title="Pokaż cały okres" aria-label="Pokaż cały okres">×</button>' : "") +
       (failed.length ? ` · <span style="color:var(--cegla)">nie wczytano: ${failed.map(short).join(", ")} (odśwież stronę)</span>` : "");
-    drawChart(list);
+    drawChart(grid);
     words(list);
     if (!list.length) {
       out.innerHTML = `<p class="pusto">${arts.length ? "Nic nie pasuje. Zmień okres albo filtry." : "Brak artykułów w tym okresie."}</p>`;
-      return;
-    }
-    if (f.widok === "kraje") {
+    } else if (f.widok === "kraje") {
       out.innerHTML = byCountry(list, ws);
       if (window.plxKolko) window.plxKolko(out.querySelector(".kraje-wyb"));
-      return;
+    } else {
+      out.innerHTML = `<ol>${list.slice(0, shown).map(a => item(a, ws)).join("")}</ol>` +
+        (list.length > shown ? `<button type="button" class="wiecej" data-wiecej>Pokaż więcej (${num(Math.min(PAGE, list.length - shown))} z ${num(list.length - shown)})</button>` : "");
     }
-    out.innerHTML = `<ol>${list.slice(0, shown).map(a => item(a, ws)).join("")}</ol>` +
-      (list.length > shown ? `<button type="button" class="wiecej" data-wiecej>Pokaż więcej (${num(Math.min(PAGE, list.length - shown))} z ${num(list.length - shown)})</button>` : "");
+    if (focus && !app.contains(document.activeElement)) app.querySelector(focus)?.focus({ preventScroll: true });
   }
 
-  // --- słowa: najczęstsze w wybranych artykułach i rosnące dziś (liczone przy budowie, ostatni dzień archiwum) ---------------
+  // --- słowa: najczęstsze w wynikach i rosnące (ostatni dzień okresu albo dzień z wykresu vs 7 dni przed nim) -------------
+  const usedWords = () => new Set(allTerms().flatMap(t => norm(t).split(/\s+/)));
+  const wlabel = w => w.replace(/_/g, " ");
+  const wbtn = (w, n, title = "") => `<button type="button" data-slowo="${esc(wlabel(w))}"${title ? ` title="${esc(title)}"` : ""}>` +
+    `${esc(wlabel(w))}${n ? `<i>${n}</i>` : ""}</button>`;
   function words(list) {                                      // lematy i pary (a_b); para wypiera pojedyncze słowo, gdy tłumaczy ≥ 60% jego trafień
-    const c = {}, used = new Set(allTerms().flatMap(t => norm(t).split(/\s+/)));
+    const c = {}, used = usedWords();
     for (const a of list) for (const w of a.lem) c[w] = (c[w] || 0) + 1;
-    const label = w => w.replace(/_/g, " ");
     const free = w => !w.split("_").some(p => used.has(norm(p)));
     const keys = Object.keys(c).filter(w => c[w] >= (w.includes("_") ? 3 : 2) && free(w));
     const eaten = new Set();
     for (const w of keys) if (w.includes("_")) for (const p of w.split("_")) if (c[w] >= 0.6 * c[p]) eaten.add(p);
     const top = keys.filter(w => !eaten.has(w)).sort((x, y) => c[y] - c[x] || x.localeCompare(y, "pl")).slice(0, 16);
-    const rise = (SPIS.rosnace[f.kraj] || (f.kraj ? [] : SPIS.rosnace[""]) || []).filter(r => free(r[0])).slice(0, 10);
-    const btn = (w, n) => `<button type="button" data-slowo="${esc(label(w))}">${esc(label(w))}${n ? `<i>${n}</i>` : ""}</button>`;
-    $(".slowa small").textContent = top.length ? "· " + top.slice(0, 3).map(label).join(", ") : "";
-    $(".slowa-c").innerHTML = (top.length ? `<h4>Najczęstsze w wynikach (klik dodaje hasło)</h4><div class="chipy">${top.map(w => btn(w, c[w])).join("")}</div>` : "") +
-      (rise.length ? `<h4>Rosnące ${SPIS.rosnace_dzien ? short(SPIS.rosnace_dzien) : "dziś"} (vs średnia z 7 dni${f.kraj ? ", " + esc(countryName(f.kraj)) : ""})</h4>` +
-        `<div class="chipy">${rise.map(r => btn(r[0], "×" + r[1])).join("")}</div>` : "") || '<p class="pusto">Brak słów dla tego wyboru.</p>';
+    $(".slowa small").textContent = top.length ? "· " + top.slice(0, 3).map(wlabel).join(", ") : "";
+    $(".czeste").innerHTML = top.length ? `<h4>Najczęstsze w wynikach (klik dodaje hasło)</h4><div class="chipy">${top.map(w => wbtn(w, c[w])).join("")}</div>`
+      : '<h4>Najczęstsze w wynikach</h4><p class="pusto">Brak powtarzających się słów.</p>';
+    risingWords();
+  }
+
+  let riseToken = 0;
+  async function risingWords() {                              // tylko przy otwartym panelu: dociąga do 7 dni przed porównywanym
+    const box = $(".ros");
+    if (!$(".slowa").open) return;
+    const my = ++riseToken, dz = dzRange(), day = dz ? dz[1] : days[0], at = DAYS.indexOf(day);
+    const prev = at < 0 ? [] : DAYS.slice(at + 1, at + 8);
+    if (!prev.length) { box.innerHTML = ""; return; }
+    const used = usedWords(), free = w => !w.split("_").some(p => used.has(norm(p)));
+    const narrowed = allTerms().length || f.kat || f.src || f.th || f.st || f.ak;
+    let top, base = prev.length;
+    if (!narrowed && day === SPIS.rosnace_dzien && SPIS.rosnace) {
+      top = SPIS.rosnace[f.kraj] || (f.kraj ? [] : SPIS.rosnace[""]) || [];         // policzone przy budowie (archive.rising_words)
+    } else {
+      if (![day, ...prev].every(d => got[d])) box.innerHTML = `<h4>Rosnące ${short(day)}</h4><p class="pusto">Wczytuję dni do porównania…</p>`;
+      const lists = (await Promise.all([day, ...prev].map(d => load(d).catch(() => null))));
+      if (my !== riseToken || !$(".slowa").open) return;
+      if (!lists[0]) { box.innerHTML = ""; return; }
+      const gs = groups();
+      const [now, ...before] = lists.filter(Boolean).map(rows => {
+        const c = {};
+        for (const a of rows) if (!fails(a, gs, null)) for (const w of new Set(a.lem)) c[w] = (c[w] || 0) + 1;
+        return c;
+      });
+      base = before.length;
+      const min = narrowed || f.kraj ? 3 : 5;                 // jak przy budowie: kraj 3, całość 5
+      top = Object.keys(now).filter(w => now[w] >= min).map(w => {
+        const avg = before.reduce((s, c) => s + (c[w] || 0), 0) / Math.max(base, 1);
+        return [w, now[w], Math.round(avg * 100) / 100, Math.round(now[w] / (avg + 1) * 100) / 100];
+      }).sort((x, y) => y[3] - x[3] || y[1] - x[1] || (x[0] < y[0] ? -1 : 1));
+    }
+    const rise = top.filter(r => r[3] > 1 && free(r[0])).slice(0, 10);
+    box.innerHTML = `<h4>Rosnące ${short(day)} (vs średnia z ${base} ${base === 1 ? "dnia" : "dni"} przed nim)</h4>` + (rise.length
+      ? `<div class="chipy">${rise.map(r => wbtn(r[0], "×" + r[1], `${short(day)}: ${r[1]}, wcześniej średnio ${String(r[2]).replace(".", ",")} dziennie`)).join("")}</div>`
+      : '<p class="pusto">Brak słów rosnących przy tych filtrach.</p>');
   }
 
   // --- zdarzenia ----------------------------------------------------------------------------------------------------
@@ -450,23 +587,37 @@
       changed();
     }
   });
+  $(".slowa").addEventListener("toggle", () => risingWords());
   app.addEventListener("change", ev => {
     const el = ev.target;
     if (el.dataset.f) {
       f[el.dataset.f] = el.value;
-      if (el.dataset.f === "kraj") { fixSrc(); options(); }
+      if (el.dataset.f === "kraj") fixSrc();
       changed();
     } else if (el.dataset.z && el.value) {
       f[el.dataset.z] = el.value;
+      f.dz = "";
       changed(true);
     }
   });
   app.addEventListener("click", ev => {
-    const opis = ev.target.closest("[data-opis]");
-    if (opis) { opis.classList.toggle("cale"); return; }
+    const cell = ev.target.closest(".wk .c[data-k]");
+    if (cell) {                                               // kratka wykresu: ten kraj tego dnia; drugi klik zdejmuje oba
+      const same = f.kraj === cell.dataset.k && f.dz === cell.dataset.d;
+      f.kraj = same ? "" : cell.dataset.k;
+      f.dz = same ? "" : cell.dataset.d;
+      fixSrc();
+      changed();
+      return;
+    }
     const b = ev.target.closest("button");
     if (!b) return;
-    if (b.dataset.slowo) {
+    if (b.classList.contains("rozwin")) {
+      const open = b.getAttribute("aria-expanded") !== "true";
+      b.setAttribute("aria-expanded", String(open));
+      b.closest("li").querySelector(".szcz").hidden = !open;
+      if (open) opened.add(b.dataset.rozwin); else opened.delete(b.dataset.rozwin);
+    } else if (b.dataset.slowo) {
       addChip(b.dataset.slowo);
       changed();
       info.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -478,11 +629,16 @@
     } else if (b.dataset.tryb !== undefined) {
       f.tryb = b.dataset.tryb;
       changed();
+    } else if (b.dataset.kat !== undefined) {                 // kategoria; drugi klik w wybraną wraca do wszystkich
+      f.kat = f.kat === b.dataset.kat ? "" : b.dataset.kat;
+      changed();
     } else if (b.dataset.tag) {                               // znacznik pod artykułem: ustawia filtr, drugi klik go zdejmuje
       const k = b.dataset.tag;
       f[k] = f[k] === b.dataset.v ? "" : b.dataset.v;
       if (k === "kraj") fixSrc();
-      options();
+      changed();
+    } else if (b.dataset.dz !== undefined) {                  // słupek dnia na wykresie albo „×” przy wyniku
+      f.dz = f.dz === b.dataset.dz ? "" : b.dataset.dz;
       changed();
     } else if (b.dataset.pk !== undefined) {
       const pick = f.pk.split(",").filter(Boolean), k = b.dataset.pk;
@@ -490,6 +646,7 @@
       changed();
     } else if (b.dataset.okres) {
       f.okres = b.dataset.okres;
+      f.dz = "";
       if (f.okres === "zakres" && !f.od) { f.od = shift(LAST, -6); f.do = LAST; }
       changed(true);
     } else if (b.dataset.widok) {
@@ -505,23 +662,20 @@
     } else if (b.dataset.kraj !== undefined) {
       f.kraj = f.kraj === b.dataset.kraj ? "" : b.dataset.kraj;
       fixSrc();
-      options();
       changed();
     } else if (b.dataset.lista) {
       f.kraj = b.dataset.lista;
       f.widok = "lista";
-      options();
       changed();
       info.scrollIntoView({ behavior: "smooth", block: "start" });
     } else if ("rest" in b.dataset) {
       allRows = !allRows;
       results();
     } else if (b.classList.contains("czysc")) {
-      Object.assign(f, { tryb: "", kraj: "", src: "", th: "", st: "", ak: "", kat: "", pk: "" });
+      Object.assign(f, { tryb: "", kraj: "", src: "", th: "", st: "", ak: "", kat: "", dz: "", pk: "" });
       chips = [];
       q.value = pend = "";
       syncQ();
-      options();
       changed();
     }
   });

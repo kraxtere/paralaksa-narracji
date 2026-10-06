@@ -24,3 +24,9 @@ def test_archive_ui_reads_every_pack_field():
                "artykuly": [{"id": 1, "src": "pl1", "kraj": "PL", "tytul": "Tytuł", "url": "https://pl1.example/1",
                              "pub": "2026-09-23T04:00:00+00:00", "s": []}]}
     assert len(names) == len(archive.records(payload)[0])     # nowe pole w paczce wymaga obsługi w interfejsie
+
+
+def test_archive_translate_link_and_description_without_origin_prefix():
+    assert "https://translate.google.com/translate?sl=auto&tl=${LANG}&u=${encodeURIComponent(u)}" in JS
+    assert 'rel="noopener noreferrer"' in JS and "navigator.languages" in JS      # język przeglądarki → tl
+    assert "z zajawki" not in JS and "z analizy" not in JS                      # pochodzenie opisu tylko pod „więcej”
