@@ -4,6 +4,14 @@ Skrypty obrazkowej wersji strony (do 2026-10-01 leżały w `data/`, poza gitem).
 bo czytają i piszą `data/` (baza `data/prod.db` tylko do odczytu, wyniki w `data/widok/`). Obrazki i większość tekstów
 robi Codex z limitu konta (`codex_limit.py` pokazuje zużycie). Nigdy w Actions.
 
+## Procedura dnia: ekstrakcja lokalnie (od 06.10, po zmianie `daily.yml`)
+
+1. Actions (`plx ingest` + backup) już przeszły; baza z Release → `data/prod.db` (`docs/OPERATIONS.md`).
+2. Ekstrakcja: `python scripts/ekstrakcja_codex_dnia.py --db data/prod.db --dni D [D-1] --zapisz` (bez `--zapisz` sucha próba;
+   idempotentna, `extracted` 0/2 → 1 lub 3). Przed dalszym ciągiem: brak artykułów z `extracted=0` z dnia D.
+3. Baza z sygnałami z powrotem do Release (`docs/OPERATIONS.md`, „Wysyłka bazy po ekstrakcji”), zanim ruszy kolejny przebieg Actions.
+4. `python scripts/v2/dzien.py D [--publikuj]` (raport robi `plx report`, metryki liczy sam).
+
 ## Nowy dzień D: jedno polecenie (od 05.10)
 
 `python scripts/v2/dzien.py D [--publikuj] [--faza 1|2|3] [--sucho]` robi kroki poniżej w trzech fazach i wznawia od miejsca przerwania
