@@ -1,3 +1,9 @@
+# daily.yml: tylko ingest i backup — 2026-10-06
+
+- Za zgodą właściciela Actions robi `plx ingest` + snapshot/backup bazy; bez ekstrakcji i bez kluczy DeepSeek/Anthropic (artykuły zostają
+  `extracted=0`, podejmuje je lokalnie `scripts/ekstrakcja_codex_dnia.py`). Nie powstaje już `reports/D.status.json` z Actions.
+  Po ekstrakcji baza musi wrócić do Release (`docs/OPERATIONS.md`), inaczej następny przebieg ją nadpisze.
+
 # Ekstrakcja przez Codex na stałe — 2026-10-06
 
 - Decyzja właściciela: bez płatnych API (DeepSeek); ekstrakcja lokalnie przez Codex z limitu konta (`codex:gpt-6-luna:medium`,

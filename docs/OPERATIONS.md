@@ -31,7 +31,7 @@ Harmonogram: 10:30 UTC, ale GitHub opóźnia start nawet o kilka godzin albo go 
 uruchomić go ręcznie (Actions → daily → Run workflow): późniejszy przebieg z harmonogramu tego samego dnia (UTC) zobaczy
 `reports/<dzień>.status.json` i skończy się bez pracy.
 Od 2026-10-01 Actions robi `plx run-daily --bez-raportu`: pobranie, ekstrakcja, metryki i status dnia, bez syntezy.
-Docelowo (po zmianie `daily.yml`, czeka na zgodę właściciela; do tego czasu nadal `run-daily --bez-raportu`) Actions robi tylko `plx ingest` i backup: artykuły zostają
+Od 2026-10-06 (zgoda właściciela) Actions robi tylko `plx ingest` i backup: artykuły zostają
 `extracted=0`. Ekstrakcja idzie lokalnie przez Codex (`scripts/ekstrakcja_codex_dnia.py`, Luna:medium, prompt v3), bez płatnych API.
 Wysyłka bazy po ekstrakcji: snapshot (`python scripts/db_state.py data/prod.db --snapshot data/snap.db`), szyfrowanie jak w
 workflow (`openssl enc -aes-256-cbc -salt -pbkdf2 -iter 200000`), `sha256sum`, `gh release upload database-backup
