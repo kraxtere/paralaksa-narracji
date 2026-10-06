@@ -1,7 +1,9 @@
 /* Archiwum 2.0: wyszukiwarka wszystkich artykułów (plx site → v2/archiwum/index.html, src/paralaksa/site/archive.py).
    Spis dni w stronie (#spis); paczka dnia D.json.gz (D.json, gdy przeglądarka nie ma DecompressionStream) pobierana tylko
    dla dni wybranego okresu i trzymana w pamięci. Wiersz paczki: [źródło, tytuł, nagłówek PL, link,
-   [[temat, ton, aktor, rama, streszczenie], ...], lematy polskiego tytułu (spacje), kategoria ogólna (tylko bez sygnałów)]. Stan filtrów w adresie (#q=…), odświeżenie strony go nie gubi. */
+   [[temat, ton, aktor, rama, streszczenie], ...], lematy polskiego tytułu (spacje), kategoria ogólna (tylko bez sygnałów),
+   czas UTC „RRRR-MM-DDTHH:MMZ”, „p” godzina publikacji | „f” godzina pobrania, opis, źródło opisu „analiza” (opis pusty:
+   streszczenie pierwszego sygnału) | „zajawka” | „”]. Stan filtrów w adresie (#q=…), odświeżenie strony go nie gubi. */
 (() => {
   const SPIS = JSON.parse(document.getElementById("spis").textContent);
   const app = document.getElementById("arch");
@@ -11,10 +13,14 @@
   const PAGE = 40;                                            // wyników naraz; „pokaż więcej” dodaje tyle samo
   const ROWS = 6;                                             // krajów na wykresie, reszta po kliknięciu
   const GZ = "DecompressionStream" in window;
-  const DEFAULT = { okres: "7", od: "", do: "", q: "", kraj: "", src: "", th: "", st: "", ak: "", kat: "", widok: "lista" };
+  // q: hasła rozdzielone „|” (chmurki), tryb „lub” = którekolwiek hasło; pk: kraje widoku „Po krajach”; sort „stare” = od najstarszych
+  const DEFAULT = { okres: "7", od: "", do: "", q: "", tryb: "", kraj: "", src: "", th: "", st: "", ak: "", kat: "", widok: "lista", pk: "", sort: "" };
+  // uproszczone flagi jak FLAG_SVG w scripts/v2/widok_obrazkowy.py (tests/test_site.py pilnuje zgodności); kolory flag to dane
+  const FLAGS = {"PL":"<rect y=\"0.000\" width=\"30\" height=\"10.050\" fill=\"#fff\"/><rect y=\"10.000\" width=\"30\" height=\"10.050\" fill=\"#dc143c\"/>","UA":"<rect y=\"0.000\" width=\"30\" height=\"10.050\" fill=\"#0057b7\"/><rect y=\"10.000\" width=\"30\" height=\"10.050\" fill=\"#ffd700\"/>","DE":"<rect y=\"0.000\" width=\"30\" height=\"6.717\" fill=\"#000\"/><rect y=\"6.667\" width=\"30\" height=\"6.717\" fill=\"#dd0000\"/><rect y=\"13.333\" width=\"30\" height=\"6.717\" fill=\"#ffce00\"/>","RU":"<rect y=\"0.000\" width=\"30\" height=\"6.717\" fill=\"#fff\"/><rect y=\"6.667\" width=\"30\" height=\"6.717\" fill=\"#0039a6\"/><rect y=\"13.333\" width=\"30\" height=\"6.717\" fill=\"#d52b1e\"/>","IN":"<rect y=\"0.000\" width=\"30\" height=\"6.717\" fill=\"#ff9933\"/><rect y=\"6.667\" width=\"30\" height=\"6.717\" fill=\"#fff\"/><rect y=\"13.333\" width=\"30\" height=\"6.717\" fill=\"#138808\"/><circle cx=\"15\" cy=\"10\" r=\"2.6\" fill=\"none\" stroke=\"#000080\" stroke-width=\".8\"/>","UK":"<rect width=\"30\" height=\"20\" fill=\"#012169\"/><path d=\"M0 0L30 20M30 0L0 20\" stroke=\"#fff\" stroke-width=\"4\"/><path d=\"M0 0L30 20M30 0L0 20\" stroke=\"#c8102e\" stroke-width=\"1.5\"/><path d=\"M15 0V20M0 10H30\" stroke=\"#fff\" stroke-width=\"6\"/><path d=\"M15 0V20M0 10H30\" stroke=\"#c8102e\" stroke-width=\"3.5\"/>","US":"<rect width=\"30\" height=\"20\" fill=\"#fff\"/><rect y=\"0.00\" width=\"30\" height=\"1.54\" fill=\"#b22234\"/><rect y=\"3.08\" width=\"30\" height=\"1.54\" fill=\"#b22234\"/><rect y=\"6.15\" width=\"30\" height=\"1.54\" fill=\"#b22234\"/><rect y=\"9.23\" width=\"30\" height=\"1.54\" fill=\"#b22234\"/><rect y=\"12.31\" width=\"30\" height=\"1.54\" fill=\"#b22234\"/><rect y=\"15.38\" width=\"30\" height=\"1.54\" fill=\"#b22234\"/><rect y=\"18.46\" width=\"30\" height=\"1.54\" fill=\"#b22234\"/><rect width=\"13\" height=\"10.8\" fill=\"#3c3b6e\"/>","CN":"<rect width=\"30\" height=\"20\" fill=\"#de2910\"/><polygon points=\"6.00,2.40 6.85,4.84 9.42,4.89 7.37,6.44 8.12,8.91 6.00,7.44 3.88,8.91 4.63,6.44 2.58,4.89 5.15,4.84\" fill=\"#ffde00\"/>","HK":"<rect width=\"30\" height=\"20\" fill=\"#de2910\"/><polygon points=\"15.00,4.00 16.41,8.06 20.71,8.15 17.28,10.74 18.53,14.85 15.00,12.40 11.47,14.85 12.72,10.74 9.29,8.15 13.59,8.06\" fill=\"#fff\"/>","IL":"<rect width=\"30\" height=\"20\" fill=\"#fff\"/><rect y=\"2\" width=\"30\" height=\"3\" fill=\"#0038b8\"/><rect y=\"15\" width=\"30\" height=\"3\" fill=\"#0038b8\"/><path d=\"M15 6.2L18.3 12H11.7ZM15 13.8L11.7 8H18.3Z\" fill=\"none\" stroke=\"#0038b8\" stroke-width=\".9\"/>","PS":"<rect y=\"0.000\" width=\"30\" height=\"6.717\" fill=\"#000\"/><rect y=\"6.667\" width=\"30\" height=\"6.717\" fill=\"#fff\"/><rect y=\"13.333\" width=\"30\" height=\"6.717\" fill=\"#149954\"/><path d=\"M0 0L11 10L0 20Z\" fill=\"#e4312b\"/>","TR":"<rect width=\"30\" height=\"20\" fill=\"#e30a17\"/><circle cx=\"11\" cy=\"10\" r=\"5\" fill=\"#fff\"/><circle cx=\"12.3\" cy=\"10\" r=\"4\" fill=\"#e30a17\"/><polygon points=\"17.50,7.60 18.06,9.22 19.78,9.26 18.41,10.30 18.91,11.94 17.50,10.96 16.09,11.94 16.59,10.30 15.22,9.26 16.94,9.22\" fill=\"#fff\"/>","BR":"<rect width=\"30\" height=\"20\" fill=\"#009c3b\"/><path d=\"M15 2L28 10L15 18L2 10Z\" fill=\"#ffdf00\"/><circle cx=\"15\" cy=\"10\" r=\"4.6\" fill=\"#002776\"/>","FR":"<rect width=\"10\" height=\"20\" fill=\"#002395\"/><rect x=\"10\" width=\"10\" height=\"20\" fill=\"#fff\"/><rect x=\"20\" width=\"10\" height=\"20\" fill=\"#ed2939\"/>","HU":"<rect y=\"0.000\" width=\"30\" height=\"6.717\" fill=\"#ce2939\"/><rect y=\"6.667\" width=\"30\" height=\"6.717\" fill=\"#fff\"/><rect y=\"13.333\" width=\"30\" height=\"6.717\" fill=\"#477050\"/>","IR":"<rect y=\"0.000\" width=\"30\" height=\"6.717\" fill=\"#239f40\"/><rect y=\"6.667\" width=\"30\" height=\"6.717\" fill=\"#fff\"/><rect y=\"13.333\" width=\"30\" height=\"6.717\" fill=\"#da0000\"/><circle cx=\"15\" cy=\"10\" r=\"2.3\" fill=\"none\" stroke=\"#da0000\" stroke-width=\".9\"/>","QA":"<rect width=\"30\" height=\"20\" fill=\"#8a1538\"/><path d=\"M0 0H9L12 1.11L9 2.22L12 3.33L9 4.44L12 5.56L9 6.67L12 7.78L9 8.89L12 10.00L9 11.11L12 12.22L9 13.33L12 14.44L9 15.56L12 16.67L9 17.78L12 18.89L9 20.00H0Z\" fill=\"#fff\"/>"};
 
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
   const short = d => d.slice(8, 10) + "." + d.slice(5, 7);
+  const two = n => String(n).padStart(2, "0");
   const shift = (d, n) => new Date(Date.parse(d + "T00:00:00Z") + n * 864e5).toISOString().slice(0, 10);
   const norm = s => String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ł/g, "l");
   const plural = n => n === 1 ? "artykuł" : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? "artykuły" : "artykułów";
@@ -28,6 +34,7 @@
     return a;
   };
   const srcName = s => (SPIS.zrodla[s] || [s])[0];
+  const flag = c => `<svg class="flaga" viewBox="0 0 30 20" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${FLAGS[c] || ""}</svg>`;
 
   const f = { ...DEFAULT };
   const hash = new URLSearchParams(location.hash.slice(1));
@@ -38,6 +45,15 @@
     for (const k in DEFAULT) if (f[k] !== DEFAULT[k] && (f.okres === "zakres" || (k !== "od" && k !== "do"))) p.set(k, f[k]);
     history.replaceState(null, "", location.pathname + location.search + (String(p) ? "#" + p : ""));
   };
+  // hasła: chmurki (Enter albo klik w słowo) i tekst w trakcie pisania, który filtruje od razu; w adresie wszystkie razem
+  let chips = f.q.split("|").map(s => s.trim()).filter(Boolean), pend = "";
+  const allTerms = () => pend.trim() ? [...chips, pend.trim()] : chips;
+  const syncQ = () => { f.q = allTerms().join("|"); };
+  const addChip = s => {
+    s = s.replace(/\|/g, " ").trim();
+    if (s && !chips.some(c => norm(c) === norm(s))) chips.push(s);
+    syncQ();
+  };
 
   const style = document.createElement("style");
   style.textContent =
@@ -45,13 +61,20 @@
     "body{margin:0;background:var(--papier);color:var(--tusz);font-family:Segoe UI,sans-serif}" +
     ".arch{max-width:720px;margin:auto;padding:6px 14px 40px;box-sizing:border-box}" +
     ".arch h1{margin:12px 0 2px;color:var(--cegla);font:700 1.6em Georgia,serif}.arch .lead{margin:0 0 10px;color:var(--szary);font-size:.88em}" +
-    ".q{width:100%;box-sizing:border-box;padding:11px 14px;border:2px solid var(--tusz);border-radius:10px;background:var(--karta);" +
-    "color:var(--tusz);font:16px Segoe UI,sans-serif}.q:focus-visible{outline:3px solid var(--cegla);outline-offset:1px}" +
+    // pole szukania z chmurkami haseł w środku
+    ".szukaj{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:5px 8px;border:2px solid var(--tusz);border-radius:10px;background:var(--karta)}" +
+    ".szukaj:focus-within{outline:3px solid var(--cegla);outline-offset:1px}.hasla{display:contents}" +
+    ".haslo{display:inline-flex;align-items:center;max-width:100%;padding:4px 2px 4px 11px;border-radius:999px;background:var(--tusz);color:var(--papier);" +
+    "font:600 14px Segoe UI,sans-serif}.haslo button{all:unset;cursor:pointer;padding:0 8px;font-size:18px;line-height:1}" +
+    ".haslo button:focus-visible{outline:2px solid var(--papier);border-radius:50%}" +
+    ".q{flex:1 1 9em;min-width:0;padding:7px 4px;border:0;outline:0;background:transparent;color:var(--tusz);font:16px Segoe UI,sans-serif}" +
+    ".tryb{display:flex;align-items:center;gap:6px;margin:6px 2px 0;color:var(--szary);font-size:.85em}.tryb[hidden]{display:none}" +
+    ".tryb.chipy{overflow:visible}.tryb button{padding:4px 10px;font-size:13px}" +
     ".chipy{display:flex;gap:6px;overflow-x:auto;margin:8px 0;padding-bottom:2px;scrollbar-width:thin}" +
     ".chipy button{flex:none;padding:7px 12px;border:2px solid var(--tusz);border-radius:999px;background:var(--karta);color:var(--tusz);" +
     "font:600 14px Segoe UI,sans-serif;cursor:pointer}.chipy button[aria-pressed=true]{background:var(--tusz);color:var(--papier)}" +
     ".chipy button:focus-visible,.arch select:focus-visible,.arch input[type=date]:focus-visible,.wiecej:focus-visible,.wk button:focus-visible," +
-    ".kol h3 button:focus-visible{outline:3px solid var(--cegla);outline-offset:1px}" +
+    ".kol h3 button:focus-visible,.tag:focus-visible{outline:3px solid var(--cegla);outline-offset:1px}" +
     ".zakres{display:flex;flex-wrap:wrap;gap:8px 12px;margin:0 0 8px;font-size:.88em;color:var(--szary)}.zakres[hidden]{display:none}" +
     ".zakres input{margin-left:4px;padding:6px 8px;border:2px solid var(--linia);border-radius:8px;background:var(--karta);color:var(--tusz);font:15px Segoe UI,sans-serif}" +
     ".filtry{margin:8px 0;border:2px solid var(--linia);border-radius:10px;background:var(--karta)}" +
@@ -78,14 +101,25 @@
     ".wyniki ol{margin:0;padding:0;list-style:none}.wyniki li{padding:10px 2px;border-bottom:1px solid var(--linia)}" +
     ".wyniki li>a{color:var(--tusz);font-weight:600;line-height:1.35;text-decoration:none}.wyniki li>a:hover{text-decoration:underline}" +
     ".org{display:block;margin-top:2px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:var(--szary);font-size:.82em}" +
-    ".meta{display:block;margin-top:3px;color:var(--szary);font-size:.8em}.meta b{color:var(--cegla)}" +
+    // opis: 3 linie, klik rozwija; mała etykieta, skąd jest
+    ".opis{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;line-clamp:3;overflow:hidden;margin-top:4px;font-size:.88em;line-height:1.4;cursor:pointer}" +
+    ".opis.cale{display:block}.opis small{margin-right:3px;color:var(--szary);font-size:.85em}" +
     ".snip{display:block;margin-top:4px;padding-left:8px;border-left:3px solid var(--linia);font-size:.84em;font-style:italic}" +
+    // znaczniki pod artykułem: czas i filtry, po których go znaleźć (klik ustawia filtr, drugi klik zdejmuje)
+    ".tagi{display:flex;flex-wrap:wrap;align-items:center;gap:3px 4px;margin-top:5px;font-size:12px}.cz{margin-right:3px;color:var(--szary);white-space:nowrap}" +
+    ".tag{display:inline-flex;align-items:center;gap:3px;max-width:100%;padding:1px 7px;line-height:1.5;border:1px solid var(--linia);border-radius:999px;" +
+    "background:var(--papier);color:var(--tusz);font:12px Segoe UI,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}" +
+    ".tag i{color:var(--szary);font-style:normal}.tag[aria-pressed=true]{border-color:var(--tusz);background:var(--tusz);color:var(--papier)}" +
+    ".tag[aria-pressed=true] i{color:var(--papier)}" +
+    ".flaga{flex:none;width:16px;height:16px;border:1px solid var(--linia);border-radius:50%;box-sizing:border-box;background:var(--linia)}.tag .flaga{width:14px;height:14px}" +
     "mark{background:var(--zaznacz);color:inherit;border-radius:2px}" +
     ".wiecej{display:block;width:100%;margin:12px 0;padding:11px;border:2px solid var(--tusz);border-radius:10px;background:var(--karta);" +
     "color:var(--tusz);font:700 15px Segoe UI,sans-serif;cursor:pointer}" +
+    ".kraje-wyb{margin:0 0 10px}.kraje-wyb button{display:inline-flex;align-items:center;gap:5px;padding:5px 10px 5px 6px;font-size:13px}" +
+    ".kraje-wyb button i{color:var(--szary);font-style:normal;font-weight:400}.kraje-wyb button[aria-pressed=true] i{color:var(--papier)}" +
     ".kols{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}@media(min-width:640px){.kols{grid-template-columns:repeat(2,minmax(0,1fr))}}" +
     ".kol{padding:6px 12px;border:1px solid var(--linia);border-radius:12px;background:var(--karta)}" +
-    ".kol h3{margin:4px 0 0;font:700 1.05em Georgia,serif}.kol h3 button{all:unset;cursor:pointer;color:var(--cegla)}" +
+    ".kol h3{margin:4px 0 0;font:700 1.05em Georgia,serif}.kol h3 button{all:unset;display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:var(--cegla)}" +
     ".kol h3 small{color:var(--szary);font:400 .75em Segoe UI,sans-serif}.kol li:last-child{border-bottom:0}.kol .wiecej{margin:4px 0 8px;padding:8px}" +
     ".slowa{margin:8px 0;border:1px solid var(--linia);border-radius:10px;background:var(--karta)}" +
     ".slowa summary{padding:9px 12px;cursor:pointer;font-weight:700;list-style:none}.slowa summary::-webkit-details-marker{display:none}" +
@@ -99,7 +133,9 @@
   const first = DAYS[DAYS.length - 1] || "";
   app.innerHTML = `<h1>Archiwum prasy</h1>
     <p class="lead">${DAYS.length ? `${num(DAYS.length)} dni (${short(first)}–${short(LAST)}): nagłówki polskie i oryginalne, ramy i streszczenia sygnałów, bez pełnych tekstów.` : "Archiwum jest puste."}</p>
-    <input class="q" type="search" placeholder="Szukaj, np. Grenlandia" aria-label="Szukaj w nagłówkach, ramach i streszczeniach" autocomplete="off">
+    <div class="szukaj"><div class="hasla"></div><input class="q" type="search" enterkeyhint="enter" placeholder="Szukaj, np. Grenlandia (Enter dodaje hasło)"
+      aria-label="Szukaj w nagłówkach, opisach, ramach i streszczeniach; Enter dodaje hasło" autocomplete="off"></div>
+    <div class="chipy tryb" role="group" aria-label="Jak łączyć hasła" hidden>Hasła:<button type="button" data-tryb="">wszystkie</button><button type="button" data-tryb="lub">którekolwiek</button></div>
     <div class="chipy okresy" role="group" aria-label="Okres">${PERIODS.map(([v, l]) => `<button type="button" data-okres="${v}">${l}</button>`).join("")}</div>
     <div class="zakres" hidden><label>od<input type="date" data-z="od" min="${first}" max="${LAST}"></label><label>do<input type="date" data-z="do" min="${first}" max="${LAST}"></label></div>
     <details class="filtry"><summary>Filtry <small></small></summary><div class="pola">
@@ -109,21 +145,25 @@
       <label class="cala">Kategoria (artykuły bez sygnałów)<select data-f="kat"></select></label><button type="button" class="czysc cala">Wyczyść filtry i szukanie</button>
     </div></details>
     <div class="wiersz"><div class="info" aria-live="polite"></div><div class="chipy widoki" role="group" aria-label="Widok">` +
-    `<button type="button" data-widok="lista">Lista</button><button type="button" data-widok="kraje">Po krajach</button></div></div><div class="wykres" hidden></div>
+    `<button type="button" data-widok="lista">Lista</button><button type="button" data-widok="kraje">Po krajach</button>` +
+    `<button type="button" data-sort title="Kolejność po dacie i godzinie"></button></div></div><div class="wykres" hidden></div>
     <details class="slowa"><summary>Słowa <small></small></summary><div class="slowa-c"></div></details>
     <div class="wyniki"></div>`;
   const $ = sel => app.querySelector(sel);
   const q = $(".q"), info = $(".info"), chart = $(".wykres"), out = $(".wyniki");
-  q.value = f.q;
   if (window.plxKolko) app.querySelectorAll(".chipy").forEach(window.plxKolko);
 
   // --- dane ---------------------------------------------------------------------------------------------------------
   const packs = {};
+  const row = d => ([src, t, pl, u, s, lem, kat, ts, tf, op, ops]) => {
+    ops = ops ?? (s.length ? "analiza" : "");                 // paczki sprzed pól opisu: opis ze streszczenia sygnału
+    return { d, src, k: (SPIS.zrodla[src] || [])[1] || "", t, pl, u, s, lem: lem ? lem.split(" ") : [], kat: kat || "",
+             ts: ts || "", tf: tf || "", op: op || (ops === "analiza" && s.length ? s[0][4] : ""), ops };
+  };
   const load = d => packs[d] || (packs[d] = fetch(`${d}.json${GZ ? ".gz" : ""}`).then(r => {
     if (!r.ok) throw new Error(`${d}: ${r.status}`);
     return GZ ? new Response(r.body.pipeThrough(new DecompressionStream("gzip"))).json() : r.json();
-  }).then(rows => rows.map(([src, t, pl, u, s, lem, kat]) => ({ d, src, k: (SPIS.zrodla[src] || [])[1] || "", t, pl, u, s, lem: lem ? lem.split(" ") : [], kat: kat || "" })))
-    .catch(e => { delete packs[d]; throw e; }));
+  }).then(rows => rows.map(row(d))).catch(e => { delete packs[d]; throw e; }));
 
   const period = () => {
     if (f.okres === "all" || !LAST) return DAYS;
@@ -145,31 +185,36 @@
     }, () => null)));
     if (my !== token) return;
     failed = days.filter((d, i) => !lists[i]);
-    arts = lists.filter(Boolean).flat();
+    // od najnowszych po dacie i godzinie; bez czasu (stare paczki) dzień, kolejność z paczki zostaje (sortowanie stabilne)
+    arts = lists.filter(Boolean).flat().sort((a, b) => { const x = a.ts || a.d, y = b.ts || b.d; return x < y ? 1 : x > y ? -1 : 0; });
     options();
     results();
   }
 
   // --- filtry -------------------------------------------------------------------------------------------------------
-  // hasło od 5 liter bez 1–2 końcowych samogłosek łapie odmiany (grenlandia → grenland: Grenlandii, Grenlandią);
-  // hasło do 3 liter tylko jako całe słowo (UE, PiS nie trafiają w „opis”)
-  const terms = () => norm(f.q).split(/\s+/).filter(Boolean).map(w => w.length <= 3
+  // słowo od 5 liter bez 1–2 końcowych samogłosek łapie odmiany (grenlandia → grenland: Grenlandii, Grenlandią);
+  // słowo do 3 liter tylko jako całe słowo (UE, PiS nie trafiają w „opis”); słowa jednego hasła muszą być wszystkie
+  const parse = s => norm(s).split(/\s+/).filter(Boolean).map(w => w.length <= 3
     ? { w, re: new RegExp(`(^|[^\\p{L}\\p{N}])${w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![\\p{L}\\p{N}])`, "gu") }
     : { w: w.length >= 5 ? w.replace(/[aeiouy]{1,2}$/, "") : w });
-  const hits = (s, t) => {                                   // początki trafień hasła w tekście po norm()
+  const groups = () => allTerms().map(parse).filter(g => g.length);
+  const hits = (s, t) => {                                   // początki trafień słowa w tekście po norm()
     const at = [];
     if (t.re) for (const m of s.matchAll(t.re)) at.push(m.index + m[1].length);
     else for (let i = s.indexOf(t.w); i >= 0; i = s.indexOf(t.w, i + t.w.length)) at.push(i);
     return at;
   };
   const has = (s, t) => t.re ? hits(s, t).length > 0 : s.includes(t.w);
-  const text = a => a.x || (a.x = norm([a.t, a.pl, ...a.s.map(s => s[3] + "\n" + s[4])].join("\n")));
+  const text = a => a.x || (a.x = norm([a.t, a.pl, a.ops === "zajawka" ? a.op : "", ...a.s.map(s => s[3] + "\n" + s[4])].join("\n")));
   const stanceOk = st => !f.st || (f.st === "nie-neutralny" ? st !== "neutralny" : st === f.st);
   const sigOk = s => (!f.th || s[0] === f.th) && stanceOk(s[1]) && (!f.ak || s[2] === f.ak);
   const filtered = () => {
-    const ws = terms();
-    return arts.filter(a => (!f.kraj || a.k === f.kraj) && (!f.src || a.src === f.src) && (!f.kat || a.kat === f.kat)
-      && (!(f.th || f.st || f.ak) || a.s.some(sigOk)) && ws.every(t => has(text(a), t)));
+    const gs = groups(), any = f.tryb === "lub";
+    const fits = g => a => g.every(t => has(text(a), t));
+    const textOk = a => !gs.length || (any ? gs.some(g => fits(g)(a)) : gs.every(g => fits(g)(a)));
+    const list = arts.filter(a => (!f.kraj || a.k === f.kraj) && (!f.src || a.src === f.src) && (!f.kat || a.kat === f.kat)
+      && (!(f.th || f.st || f.ak) || a.s.some(sigOk)) && textOk(a));
+    return f.sort === "stare" ? list.reverse() : list;
   };
 
   function options() {
@@ -215,8 +260,13 @@
     if (f.ak) tags.push("aktor: " + actorName(f.ak));
     if (f.kat) tags.push("kategoria: " + f.kat);
     $(".filtry small").textContent = tags.length ? "· " + tags.join(", ") : "";
+    $(".hasla").innerHTML = chips.map((c, i) =>
+      `<span class="haslo">${esc(c)}<button type="button" data-usun="${i}" aria-label="Usuń hasło: ${esc(c)}">×</button></span>`).join("");
+    $(".tryb").hidden = allTerms().length < 2;
+    app.querySelectorAll("[data-tryb]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.tryb === f.tryb)));
     app.querySelectorAll("[data-okres]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.okres === f.okres)));
     app.querySelectorAll("[data-widok]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.widok === f.widok)));
+    $("[data-sort]").textContent = f.sort === "stare" ? "najstarsze ↑" : "najnowsze ↓";
     const z = $(".zakres");
     z.hidden = f.okres !== "zakres";
     if (!z.hidden) {
@@ -242,12 +292,10 @@
     return html + (open ? "</mark>" : "");
   }
 
-  function snippet(a, ws) {                                   // trafienie tylko w ramie albo streszczeniu: pokaż je
-    const head = norm(a.t + " " + a.pl);
-    const rest = ws.filter(t => !has(head, t));
-    if (!rest.length) return "";
-    for (const s of a.s) for (const part of [s[3], s[4]]) {
-      const n = norm(part), i = hits(n, rest[0])[0] ?? -1;
+  function snippet(a, ws) {                                   // trafienie tylko w innej ramie albo streszczeniu: pokaż je
+    const head = norm(a.t + " " + a.pl + " " + a.op);
+    for (const t of ws.filter(t => !has(head, t))) for (const s of a.s) for (const part of [s[3], s[4]]) {
+      const n = norm(part), i = hits(n, t)[0] ?? -1;
       if (i < 0) continue;
       const words = part.split(/\s+/);
       if (words.length <= 15) return mark(part, ws);
@@ -257,13 +305,31 @@
     return "";
   }
 
+  function when(a) {                                          // czas lokalny przeglądarki; „pobrano”, gdy nie ma wiarygodnej publikacji
+    const t = a.ts ? new Date(a.ts) : null;
+    if (!t || isNaN(t)) return `<span class="cz">${short(a.d)}</span>`;
+    const day = `${two(t.getDate())}.${two(t.getMonth() + 1)}`, hour = `${two(t.getHours())}:${two(t.getMinutes())}`;
+    return a.tf === "f" ? `<span class="cz" title="Godzina pobrania: brak wiarygodnej godziny publikacji">${day}, pobrano ${hour}</span>`
+      : `<time class="cz" datetime="${esc(a.ts)}">${day}, ${hour}</time>`;
+  }
+
+  const tag = (kind, value, label, pre = "") =>
+    `<button type="button" class="tag" data-tag="${kind}" data-v="${esc(value)}" aria-pressed="${f[kind] === value}" ` +
+    `title="${f[kind] === value ? "Zdejmij filtr" : "Pokaż tylko takie"}">${pre}${esc(label)}</button>`;
+
   const item = (a, ws, withCountry = true) => {
     const url = /^https?:\/\//i.test(a.u) ? a.u : "#";
     const snip = snippet(a, ws);
+    const uniq = xs => [...new Set(xs)];
+    const tags = (withCountry && a.k ? tag("kraj", a.k, a.k, flag(a.k)) : "") + tag("src", a.src, srcName(a.src)) +
+      uniq(a.s.map(s => s[0])).filter(t => SPIS.tematy[t]).map(t => tag("th", t, SPIS.tematy[t])).join("") +
+      uniq(a.s.map(s => s[2])).slice(0, 2).map(x => tag("ak", x, actorName(x), "<i>aktor</i>")).join("") +
+      uniq(a.s.map(s => s[1])).filter(s => s !== "neutralny").map(s => tag("st", s, s, "<i>ton</i>")).join("") +
+      (a.kat ? tag("kat", a.kat, a.kat, "<i>kategoria</i>") : "");
     return `<li><a href="${esc(url)}" target="_blank" rel="noopener">${mark(a.pl || a.t, ws)}</a>` +
       (a.pl ? `<span class="org" dir="auto">${mark(a.t, ws)}</span>` : "") +
-      `<span class="meta">${withCountry ? `<b title="${esc(countryName(a.k))}">${esc(a.k)}</b> · ` : ""}${esc(srcName(a.src))} · ${short(a.d)}</span>` +
-      (snip ? `<span class="snip">${snip}</span>` : "") + "</li>";
+      (a.op ? `<span class="opis" data-opis title="Kliknij, aby rozwinąć albo zwinąć"><small>${a.ops === "zajawka" ? "z zajawki" : "z analizy"}:</small> ${mark(a.op, ws)}</span>` : "") +
+      (snip ? `<span class="snip">${snip}</span>` : "") + `<span class="tagi">${when(a)}${tags}</span></li>`;
   };
 
   function drawChart(list) {
@@ -306,9 +372,25 @@
     chart.hidden = false;
   }
 
+  function byCountry(list, ws) {                              // sekcje krajów; flagi nad nimi wybierają, które pokazać
+    const by = {};
+    for (const a of list) (by[a.k] || (by[a.k] = [])).push(a);
+    const order = Object.keys(by).sort((x, y) => by[y].length - by[x].length);
+    const pick = f.pk.split(",").filter(k => by[k]);
+    const nav = '<div class="chipy kraje-wyb" role="group" aria-label="Kraje do pokazania">' +
+      `<button type="button" data-pk="" aria-pressed="${!pick.length}">wszystkie</button>` +
+      order.map(k => `<button type="button" data-pk="${esc(k)}" aria-pressed="${pick.includes(k)}" title="${esc(countryName(k))}">` +
+        `${flag(k)}${esc(k)} <i>${num(by[k].length)}</i></button>`).join("") + "</div>";
+    return nav + '<div class="kols">' + (pick.length ? order.filter(k => pick.includes(k)) : order).map(k =>
+      `<section class="kol"><h3><button type="button" data-lista="${esc(k)}">${flag(k)}${esc(countryName(k))} <small>${esc(k)} · ${num(by[k].length)}</small></button></h3>` +
+      `<ol>${by[k].slice(0, 5).map(a => item(a, ws, false)).join("")}</ol>` +
+      (by[k].length > 5 ? `<button type="button" class="wiecej" data-lista="${esc(k)}">wszystkie ${num(by[k].length)} ›</button>` : "") +
+      "</section>").join("") + "</div>";
+  }
+
   function results() {
     summary();
-    const ws = terms(), list = filtered();
+    const ws = groups().flat(), list = filtered();
     const range = days.length ? (days.length === 1 ? short(days[0]) : `${short(days[days.length - 1])}–${short(days[0])}`) : "";
     const narrowed = ws.length || f.kraj || f.src || f.th || f.st || f.ak || f.kat;
     info.innerHTML = `<b>${num(list.length)}</b> ${narrowed ? `z ${num(arts.length)} ${plural(arts.length)}` : plural(list.length)} · ${range}` +
@@ -320,13 +402,8 @@
       return;
     }
     if (f.widok === "kraje") {
-      const groups = {};
-      for (const a of list) (groups[a.k] || (groups[a.k] = [])).push(a);
-      out.innerHTML = '<div class="kols">' + Object.keys(groups).sort((x, y) => groups[y].length - groups[x].length).map(k =>
-        `<section class="kol"><h3><button type="button" data-lista="${esc(k)}">${esc(countryName(k))} <small>${esc(k)} · ${num(groups[k].length)}</small></button></h3>` +
-        `<ol>${groups[k].slice(0, 5).map(a => item(a, ws, false)).join("")}</ol>` +
-        (groups[k].length > 5 ? `<button type="button" class="wiecej" data-lista="${esc(k)}">wszystkie ${num(groups[k].length)} ›</button>` : "") +
-        "</section>").join("") + "</div>";
+      out.innerHTML = byCountry(list, ws);
+      if (window.plxKolko) window.plxKolko(out.querySelector(".kraje-wyb"));
       return;
     }
     out.innerHTML = `<ol>${list.slice(0, shown).map(a => item(a, ws)).join("")}</ol>` +
@@ -335,7 +412,7 @@
 
   // --- słowa: najczęstsze w wybranych artykułach i rosnące dziś (liczone przy budowie, ostatni dzień archiwum) ---------------
   function words(list) {                                      // lematy i pary (a_b); para wypiera pojedyncze słowo, gdy tłumaczy ≥ 60% jego trafień
-    const c = {}, used = new Set(norm(f.q).split(/\s+/));
+    const c = {}, used = new Set(allTerms().flatMap(t => norm(t).split(/\s+/)));
     for (const a of list) for (const w of a.lem) c[w] = (c[w] || 0) + 1;
     const label = w => w.replace(/_/g, " ");
     const free = w => !w.split("_").some(p => used.has(norm(p)));
@@ -346,7 +423,7 @@
     const rise = (SPIS.rosnace[f.kraj] || (f.kraj ? [] : SPIS.rosnace[""]) || []).filter(r => free(r[0])).slice(0, 10);
     const btn = (w, n) => `<button type="button" data-slowo="${esc(label(w))}">${esc(label(w))}${n ? `<i>${n}</i>` : ""}</button>`;
     $(".slowa small").textContent = top.length ? "· " + top.slice(0, 3).map(label).join(", ") : "";
-    $(".slowa-c").innerHTML = (top.length ? `<h4>Najczęstsze w wynikach</h4><div class="chipy">${top.map(w => btn(w, c[w])).join("")}</div>` : "") +
+    $(".slowa-c").innerHTML = (top.length ? `<h4>Najczęstsze w wynikach (klik dodaje hasło)</h4><div class="chipy">${top.map(w => btn(w, c[w])).join("")}</div>` : "") +
       (rise.length ? `<h4>Rosnące ${SPIS.rosnace_dzien ? short(SPIS.rosnace_dzien) : "dziś"} (vs średnia z 7 dni${f.kraj ? ", " + esc(countryName(f.kraj)) : ""})</h4>` +
         `<div class="chipy">${rise.map(r => btn(r[0], "×" + r[1])).join("")}</div>` : "") || '<p class="pusto">Brak słów dla tego wyboru.</p>';
   }
@@ -357,7 +434,21 @@
   let typing;
   q.addEventListener("input", () => {
     clearTimeout(typing);
-    typing = setTimeout(() => { f.q = q.value.trim(); changed(); }, 250);
+    typing = setTimeout(() => { pend = q.value.replace(/\|/g, " "); syncQ(); changed(); }, 250);
+  });
+  q.addEventListener("keydown", ev => {
+    if (ev.key === "Enter" && !ev.isComposing) {               // tekst w trakcie pisania staje się chmurką
+      ev.preventDefault();
+      clearTimeout(typing);
+      addChip(q.value);
+      q.value = pend = "";
+      syncQ();
+      changed();
+    } else if (ev.key === "Backspace" && !q.value && chips.length) {
+      chips.pop();
+      syncQ();
+      changed();
+    }
   });
   app.addEventListener("change", ev => {
     const el = ev.target;
@@ -371,19 +462,41 @@
     }
   });
   app.addEventListener("click", ev => {
+    const opis = ev.target.closest("[data-opis]");
+    if (opis) { opis.classList.toggle("cale"); return; }
     const b = ev.target.closest("button");
     if (!b) return;
     if (b.dataset.slowo) {
-      f.q = b.dataset.slowo;
-      q.value = f.q;
+      addChip(b.dataset.slowo);
       changed();
       info.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else if (b.dataset.usun !== undefined) {
+      chips.splice(Number(b.dataset.usun), 1);
+      syncQ();
+      changed();
+      q.focus({ preventScroll: true });
+    } else if (b.dataset.tryb !== undefined) {
+      f.tryb = b.dataset.tryb;
+      changed();
+    } else if (b.dataset.tag) {                               // znacznik pod artykułem: ustawia filtr, drugi klik go zdejmuje
+      const k = b.dataset.tag;
+      f[k] = f[k] === b.dataset.v ? "" : b.dataset.v;
+      if (k === "kraj") fixSrc();
+      options();
+      changed();
+    } else if (b.dataset.pk !== undefined) {
+      const pick = f.pk.split(",").filter(Boolean), k = b.dataset.pk;
+      f.pk = !k ? "" : (pick.includes(k) ? pick.filter(x => x !== k) : [...pick, k]).join(",");
+      changed();
     } else if (b.dataset.okres) {
       f.okres = b.dataset.okres;
       if (f.okres === "zakres" && !f.od) { f.od = shift(LAST, -6); f.do = LAST; }
       changed(true);
     } else if (b.dataset.widok) {
       f.widok = b.dataset.widok;
+      changed();
+    } else if ("sort" in b.dataset) {
+      f.sort = f.sort === "stare" ? "" : "stare";
       changed();
     } else if ("wiecej" in b.dataset) {
       shown += PAGE;
@@ -404,8 +517,10 @@
       allRows = !allRows;
       results();
     } else if (b.classList.contains("czysc")) {
-      Object.assign(f, { q: "", kraj: "", src: "", th: "", st: "", ak: "", kat: "" });
-      q.value = "";
+      Object.assign(f, { tryb: "", kraj: "", src: "", th: "", st: "", ak: "", kat: "", pk: "" });
+      chips = [];
+      q.value = pend = "";
+      syncQ();
       options();
       changed();
     }

@@ -1,3 +1,18 @@
+# Archiwum: hasła w chmurkach, czas i znaczniki przy artykułach, opisy, wybór krajów — 2026-10-06
+
+- `assets/archiwum.js`: kilka haseł naraz jako chmurki z „×” (Enter albo klik w słowo z panelu Słowa; Backspace w pustym
+  polu zdejmuje ostatnie), łączone „wszystkie” (domyślnie) albo „którekolwiek”; w adresie `q=a|b&tryb=lub`. Tekst
+  w trakcie pisania filtruje od razu.
+- Przy artykule data i godzina w czasie lokalnym (z RSS; bez wiarygodnej publikacji „pobrano HH:MM”); kolejność od
+  najnowszych po dacie i godzinie, przełącznik „najstarsze ↑”.
+- Opis pod tytułem: streszczenie pierwszego sygnału („z analizy”) albo zdanie z zajawki („z zajawki”), 3 linie, klik
+  rozwija; podświetlenie haseł także w opisie.
+- Klikalne znaczniki pod artykułem: kraj (flaga), źródło, tematy stałe, do 2 aktorów, ton (bez neutralnego), kategoria;
+  klik ustawia filtr, drugi zdejmuje.
+- „Po krajach”: flagi krajów (jak kraje-nav) wybierają, które sekcje pokazać (`pk=RU,PL`), „wszystkie” wraca.
+- Flagi to kopia `FLAG_SVG` ze stron dnia; `tests/test_archiwum_js.py` pilnuje zgodności i tego, że interfejs czyta
+  wszystkie pola wiersza paczki (`archive.records`).
+
 # Archiwum: opisy z zajawek, czas, stałe pary słów — 2026-10-06
 
 - `scripts/v2/kategorie.py`: w tym samym wsadzie kategoria + jedno zdanie PL z tytułu i zajawki RSS (tylko gdy zajawka
