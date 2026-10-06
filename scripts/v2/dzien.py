@@ -134,7 +134,7 @@ def timed(run: Callable[[list[str], dict], int], timings: Timings | None, name: 
 
 
 def run_parallel(steps: list[Step], day: str, state: State, run: Callable[[list[str], dict], int], dry: bool = False,
-                 timings: Timings | None = None, workers: int = 5) -> bool:
+                 timings: Timings | None = None, workers: int = 9) -> bool:
     """Like run_steps, but steps start as soon as their `after` are finished; first failure stops new starts
     (running ones are awaited), rerun continues from there."""
     env = {**os.environ, "DZIEN": day, "PYTHONIOENCODING": "utf-8"}
@@ -255,6 +255,7 @@ def main(argv: list[str]) -> int:
         ok = phase("faza1", lambda: run_parallel(phase1(day), day, state, shell, dry, tm))
     if ok and only is None and not dry:
         # streszczenia czytają linki ze stron, nie obrazki: strony „wstępne”, potem streszczenia równolegle z obrazkami
+        (Path("data/widok") / day / "_paski").mkdir(parents=True, exist_ok=True)   # świeży dzień bez tego szuka start.png (układ pasami)
         ok = phase("strony-wstepne", lambda: run_steps(pages(day), day, state, shell, timings=tm))
         if ok:
             box: dict = {}
