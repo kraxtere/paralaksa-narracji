@@ -15,15 +15,18 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from paralaksa.site.data import COUNTRY_NAMES
-from paralaksa.site.slowa import lemmas, rising
+from paralaksa.site.slowa import fixed_pairs, fold_pairs, lemmas, rising
 
 CATEGORIES_FILE = Path("data/widok/kategorie.json")      # {id artykułu: kategoria}, scripts/v2/kategorie.py (lokalnie, Codex)
 RISING_WORDS = 12
+MIN_PAIR = 3                                              # para słów trafia do paczek od tylu tytułów w całym archiwum
 
 
-def load_categories(path: Path = CATEGORIES_FILE) -> dict[int, str]:
+def load_categories(path: Path = CATEGORIES_FILE) -> dict[int, dict]:
+    """{id: {"k": category, "o": description}}; the old format {id: category} is read too."""
     try:
-        return {int(k): v for k, v in json.loads(path.read_text(encoding="utf-8")).items()}
+        return {int(k): ({"k": v} if isinstance(v, str) else v)
+                for k, v in json.loads(path.read_text(encoding="utf-8")).items()}
     except (OSError, ValueError):
         return {}
 
@@ -35,11 +38,15 @@ def _utc(stamp: str | None) -> datetime | None:
         return None
 
 
-def records(payload: dict, categories: dict[int, str] | None = None) -> list[list]:
+def records(payload: dict, categories: dict[int, dict] | None = None) -> list[list]:
     """Compact rows of one day from `daily_payload`: [source, title, Polish title or "", url,
     [[theme, stance, actor, frame, summary_pl], ...], lemmas of the Polish title (space-separated, "" without one),
-    general category (only for articles without signals, "" otherwise)]; articles published before the window are dropped."""
+    general category (only for articles without signals, "" otherwise), time "YYYY-MM-DDTHH:MMZ" (UTC), time kind
+    "p" (publication time, inside the window) or "f" (download time, publication missing or outside the window),
+    description (only for articles without signals, from the RSS lead; "" otherwise: the page shows the first
+    signal's summary), description source "analiza" | "zajawka" | ""]; articles published before the window are dropped."""
     start = _utc(payload["publikacja"]["publication_window_start"])
+    end = _utc(payload["publikacja"].get("publication_window_end_exclusive"))
     rows = []
     for a in payload["artykuly"]:
         pub = _utc(a["pub"])
@@ -48,9 +55,26 @@ def records(payload: dict, categories: dict[int, str] | None = None) -> list[lis
         pl = a.get("pl") or ""
         polish = pl or (a["tytul"] if a.get("kraj") == "PL" else "")        # źródła polskie: tytuł oryginalny jest polski
         sig = [[s["th"], s["st"], s["actor"], s["frame"], s["sum"]] for s in a["s"]]
+        extra = (categories or {}).get(a["id"]) or {}
+        reliable = pub is not None and (end is None or pub < end)
+        stamp = pub if reliable else _utc(a.get("fetched")) or pub
+        opis = "" if sig else extra.get("o") or ""
         rows.append([a["src"], a["tytul"], "" if pl == a["tytul"] else pl, a["url"], sig,
-                     " ".join(lemmas(polish)), "" if sig else (categories or {}).get(a["id"], "")])
+                     " ".join(lemmas(polish)), "" if sig else extra.get("k") or "",
+                     stamp.strftime("%Y-%m-%dT%H:%MZ") if stamp else "", "p" if reliable else "f",
+                     opis, "analiza" if sig else "zajawka" if opis else ""])
     return rows
+
+
+def fold_all(days: dict[str, list[list]]) -> None:
+    """Stałe pary słów z całego archiwum (Morze Czarne, Donald Tusk): zdejmuje z tytułów słowa występujące prawie
+    wyłącznie w parze, więc para zastępuje je w listach i w słowach rosnących."""
+    rows = [r for day in days.values() for r in day]
+    titles = [r[5].split() for r in rows]
+    counts = Counter(w for t in titles for w in t if "_" in w)
+    titles = [[w for w in t if "_" not in w or counts[w] >= MIN_PAIR] for t in titles]      # rzadkie pary tylko puchną paczki
+    for r, words in zip(rows, fold_pairs(titles, fixed_pairs(titles, MIN_PAIR))):
+        r[5] = " ".join(words)
 
 
 def rising_words(days: dict[str, list[list]], sources: dict[str, dict]) -> dict:
@@ -85,6 +109,7 @@ def write(dest: Path, days: dict[str, list[list]], sources: dict[str, dict], the
     """Writes the day packs and index.html with the list of days (newest first) and the dictionaries of the filters;
     returns the list (`spis`). `sources` as in `daily_payload` (id → name, kraj), `theme_names` the fixed themes."""
     dest.mkdir(parents=True, exist_ok=True)
+    fold_all(days)
     used = set()
     listing = []
     for day in sorted(days, reverse=True):

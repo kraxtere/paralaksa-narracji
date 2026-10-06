@@ -267,7 +267,10 @@ def test_v2_archive_day_packs_without_fulltexts(tmp_path, conn):
     title = lambda i: conn.execute("SELECT title, url FROM articles WHERE id = ?", (i,)).fetchone()
     rows_by_title = {r[1]: r for r in rows}
     assert title(old)[0] not in rows_by_title
-    assert rows_by_title[title(bare)[0]] == ["ua1", title(bare)[0], "", title(bare)[1], [], "", ""]   # bez PL tytułu: bez lematów
+    bare_row = rows_by_title[title(bare)[0]]
+    assert bare_row[:7] == ["ua1", title(bare)[0], "", title(bare)[1], [], "", ""]   # bez PL tytułu: bez lematów
+    assert re.fullmatch(r"\d{4}-\d\d-\d\dT\d\d:\d\dZ", bare_row[7]) and bare_row[8] in "pf" and bare_row[9:] == ["", ""]
+    assert rows_by_title[title(aid)[0]][10] == "analiza" and rows_by_title[title(aid)[0]][9] == ""
     assert rows_by_title[title(aid)[0]][4] == [["russia", "alarm", "UA", "Rosja zagraża", f"Streszczenie sygnału {aid}."]]
     assert len(rows) == 4 and "Lead." not in raw and "dowód" not in raw          # bez leadów, pełnych tekstów i dowodów
     page = (arch / "index.html").read_text(encoding="utf-8")

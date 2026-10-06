@@ -26,14 +26,27 @@ def test_archive_rows_carry_lemmas_and_category_and_rising_words():
     from paralaksa.site import archive
 
     def art(i, src, pl, sig=()):
-        return {"id": i, "src": src, "tytul": pl, "pl": pl, "url": f"u{i}", "pub": None, "s": list(sig)}
+        return {"id": i, "src": src, "tytul": pl, "pl": pl, "url": f"u{i}", "pub": None, "fetched": None, "s": list(sig)}
 
     payload = {"publikacja": {"publication_window_start": "2026-01-01T00:00:00+00:00"},
                "artykuly": [art(1, "a", "Huragan uderza w Meksyk"), art(2, "a", "Huragan nad Kubą"), art(3, "b", "Mecz w Lidze")]
                + [art(10 + i, "a", "Huragan zalewa wybrzeże") for i in range(4)]}
-    rows = archive.records(payload, {3: "sport", 1: "pogoda"})
+    rows = archive.records(payload, {3: {"k": "sport", "o": "Opis meczu."}, 1: {"k": "pogoda"}})
     assert rows[0][5].startswith("huragan") and rows[0][6] == "pogoda" and rows[2][6] == "sport"
+    assert rows[2][9:] == ["Opis meczu.", "zajawka"] and rows[0][9:] == ["", ""]
+    assert rows[0][8] == "f" and rows[0][7] == ""                  # bez publikacji i bez pobrania: pusty czas
     sources = {"a": {"name": "A", "kraj": "UA"}, "b": {"name": "B", "kraj": "PL"}}
     days = {"2026-05-02": rows, "2026-05-01": [r[:5] + ["liga", ""] for r in rows]}
     out = archive.rising_words(days, sources)
     assert out[""][0][0] == "huragan" and out["UA"][0][0] == "huragan"
+
+
+def test_fixed_pairs_drop_only_words_that_live_in_the_pair():
+    from paralaksa.site.slowa import fixed_pairs, fold_pairs
+
+    titles = [lemmas(t) for t in ["Donald Trump grozi", "Donald Trump wygrał", "Donald Trump mówi", "Trump odpowiada Rosji",
+                                  "Trump leci do Azji", "Rosja atakuje"]]
+    pairs = fixed_pairs(titles)
+    assert pairs["donald_trump"] == {"donald"}              # „trump” występuje też sam, więc zostaje
+    folded = fold_pairs(titles, pairs)
+    assert "donald" not in folded[0] and "donald_trump" in folded[0] and "trump" in folded[0] and "trump" in folded[3]

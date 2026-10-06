@@ -1,3 +1,14 @@
+# Archiwum: opisy z zajawek, czas, stałe pary słów — 2026-10-06
+
+- `scripts/v2/kategorie.py`: w tym samym wsadzie kategoria + jedno zdanie PL z tytułu i zajawki RSS (tylko gdy zajawka
+  ma ≥ 40 znaków; bez pełnych tekstów); `--opisy` dopisuje opisy do wcześniej sklasyfikowanych. `data/widok/kategorie.json`
+  teraz {id: {"k", "o"}} (stary format się wczytuje). Zaległość 2257 opisów: 5 h okno +16 pp, tygodniowe +2 pp.
+- Paczki dnia: pola 7–10 wiersza: czas UTC `RRRR-MM-DDTHH:MMZ`, znacznik `p` (publikacja w oknie) / `f` (pobranie), opis
+  (tylko bez sygnałów, z zajawki), źródło opisu `analiza` | `zajawka` | "" (przy `analiza` strona bierze streszczenie
+  pierwszego sygnału). `daily_payload` ma `fetched` artykułu.
+- `slowa.py`: stałe pary (≥ 3 trafienia, słowo prawie zawsze w parze: ≥ 70% jego trafień) zdejmują z tytułu słowo
+  pokryte parą (Donald Trump zdejmuje „donald”, zostaje „trump”); rzadkie pary poza paczkami (paczka dnia ok. +40%).
+
 # Archiwum: kategorie bez sygnałów i słowa kluczowe — 2026-10-05
 
 - `scripts/v2/kategorie.py`: kategoria ogólna (polityka, gospodarka, sport, kultura i rozrywka, technologia i AI, nauka,

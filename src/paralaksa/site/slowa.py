@@ -17,7 +17,7 @@ tym tej ten ta to te tego temu tych tą po na do od za ze we wo przy pod między
 może mają ma mieć być miał miała mają został została zostało zostały można trzeba będzie bardzo więcej mniej
 nowy nowa nowe nowych nowej pierwszy pierwsza pierwsze jeden jedna jedno dwa dwie dwóch trzy lat rok roku
 dzień dni dnia po-raz raz lata roku roczny
-podczas gdy drugi wielki wielka wielkie sprawa kraj mówi mówią powiedział powiedziała twierdzi uważa chce chcą podał podała ujawnił ujawnia
+wszystek poza podczas gdy drugi wielki wielka wielkie sprawa kraj mówi mówią powiedział powiedziała twierdzi uważa chce chcą podał podała ujawnił ujawnia
 """.split())
 
 
@@ -65,3 +65,31 @@ def rising(today: Counter, previous: list[Counter], min_today: int = 5) -> list[
         avg = sum(p.get(w, 0) for p in previous) / n
         rows.append((w, c, round(avg, 2), round(c / (avg + 1), 2)))
     return sorted(rows, key=lambda r: (-r[3], -r[1], r[0]))
+
+
+def fixed_pairs(titles: list[list[str]], min_pair: int = 3, ratio: float = 0.7) -> dict[str, set[str]]:
+    """Stałe pary (nazwy wielowyrazowe): para a_b z co najmniej `min_pair` trafieniami, w której słowo występuje
+    prawie wyłącznie razem z partnerem (≥ `ratio` jego wszystkich trafień). Zwraca {para: słowa do zdjęcia}:
+    Donald Trump zdejmuje „donald” (zawsze z Trumpem), ale zostawia „trump” (często samotny)."""
+    single: Counter = Counter()
+    pair: Counter = Counter()
+    for t in titles:
+        for w in t:
+            (pair if "_" in w else single)[w] += 1
+    out: dict[str, set[str]] = {}
+    for p, n in pair.items():
+        if n < min_pair:
+            continue
+        drop = {w for w in p.split("_") if n >= ratio * single[w]}
+        if drop:
+            out[p] = drop
+    return out
+
+
+def fold_pairs(titles: list[list[str]], pairs: dict[str, set[str]]) -> list[list[str]]:
+    """Zdejmuje z każdego tytułu słowa pokryte stałą parą, która w nim występuje."""
+    out = []
+    for t in titles:
+        gone = set().union(*(pairs[w] for w in t if w in pairs)) if any(w in pairs for w in t) else set()
+        out.append([w for w in t if w not in gone])
+    return out
