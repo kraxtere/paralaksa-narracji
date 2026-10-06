@@ -1,0 +1,1071 @@
+{
+  "date": "2026-10-06",
+  "complete": false,
+  "synthesis": "lokalnie (plx report)",
+  "n_signals": 0,
+  "cost_usd": 0,
+  "warnings": [
+    "niepełna ekstrakcja: agenciabrasil: 0 oczekujących, 10 błędów; aljazeera: 0 oczekujących, 21 błędów; bbc: 0 oczekujących, 26 błędów; cgtn: 0 oczekujących, 17 błędów; chinanews: 0 oczekujących, 56 błędów; dailysabah: 0 oczekujących, 17 błędów; folha: 0 oczekujących, 19 błędów; fox: 0 oczekujących, 20 błędów; francetvinfo: 0 oczekujących, 35 błędów; gazeta: 0 oczekujących, 29 błędów; globaltimes: 0 oczekujących, 13 błędów; guardian: 0 oczekujących, 33 błędów; haaretz: 0 oczekujących, 33 błędów; hongkongfp: 0 oczekujących, 6 błędów; hurriyet: 0 oczekujących, 9 błędów; index_hu: 0 oczekujących, 43 błędów; iranintl: 0 oczekujących, 13 błędów; israelhayom: 0 oczekujących, 9 błędów; jpost: 0 oczekujących, 8 błędów; lefigaro: 0 oczekujących, 18 błędów; magyarnemzet: 0 oczekujących, 23 błędów; mehr_en: 0 oczekujących, 29 błędów; npr: 0 oczekujących, 8 błędów; onet: 0 oczekujących, 20 błędów; pbs: 0 oczekujących, 26 błędów; pravda_ua: 0 oczekujących, 20 błędów; propublica: 0 oczekujących, 1 błędów; rfi_en: 0 oczekujących, 6 błędów; rg: 0 oczekujących, 100 błędów; rp: 0 oczekujących, 20 błędów; rthk: 0 oczekujących, 26 błędów; scmp: 0 oczekujących, 34 błędów; spiegel: 0 oczekujących, 20 błędów; tagesschau: 0 oczekujących, 39 błędów; tehrantimes: 0 oczekujących, 29 błędów; thehindu: 0 oczekujących, 34 błędów; ukrinform: 0 oczekujących, 28 błędów; wafa: 0 oczekujących, 69 błędów; wp: 0 oczekujących, 15 błędów",
+    "brak materiałów z aktywnych źródeł: indianexpress, alquds_ps, izvestia, telex",
+    "błędy kanałów: alquds_ps, indianexpress, izvestia, telex"
+  ],
+  "blocking": [
+    "niepełna ekstrakcja: agenciabrasil: 0 oczekujących, 10 błędów; aljazeera: 0 oczekujących, 21 błędów; bbc: 0 oczekujących, 26 błędów; cgtn: 0 oczekujących, 17 błędów; chinanews: 0 oczekujących, 56 błędów; dailysabah: 0 oczekujących, 17 błędów; folha: 0 oczekujących, 19 błędów; fox: 0 oczekujących, 20 błędów; francetvinfo: 0 oczekujących, 35 błędów; gazeta: 0 oczekujących, 29 błędów; globaltimes: 0 oczekujących, 13 błędów; guardian: 0 oczekujących, 33 błędów; haaretz: 0 oczekujących, 33 błędów; hongkongfp: 0 oczekujących, 6 błędów; hurriyet: 0 oczekujących, 9 błędów; index_hu: 0 oczekujących, 43 błędów; iranintl: 0 oczekujących, 13 błędów; israelhayom: 0 oczekujących, 9 błędów; jpost: 0 oczekujących, 8 błędów; lefigaro: 0 oczekujących, 18 błędów; magyarnemzet: 0 oczekujących, 23 błędów; mehr_en: 0 oczekujących, 29 błędów; npr: 0 oczekujących, 8 błędów; onet: 0 oczekujących, 20 błędów; pbs: 0 oczekujących, 26 błędów; pravda_ua: 0 oczekujących, 20 błędów; propublica: 0 oczekujących, 1 błędów; rfi_en: 0 oczekujących, 6 błędów; rg: 0 oczekujących, 100 błędów; rp: 0 oczekujących, 20 błędów; rthk: 0 oczekujących, 26 błędów; scmp: 0 oczekujących, 34 błędów; spiegel: 0 oczekujących, 20 błędów; tagesschau: 0 oczekujących, 39 błędów; tehrantimes: 0 oczekujących, 29 błędów; thehindu: 0 oczekujących, 34 błędów; ukrinform: 0 oczekujących, 28 błędów; wafa: 0 oczekujących, 69 błędów; wp: 0 oczekujących, 15 błędów"
+  ],
+  "sources": [
+    {
+      "source_id": "agenciabrasil",
+      "name": "Agência Brasil",
+      "country": "BR",
+      "aliases": [
+        "Agência Brasil",
+        "Agencia Brasil",
+        "Agência"
+      ],
+      "language": "pt",
+      "ownership": "EBC; publiczna agencja brazylijska",
+      "scope": "all",
+      "sections": [
+        "all"
+      ],
+      "articles": 10,
+      "eligible": 10,
+      "fulltext": 10,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 10,
+      "genres": {
+        "unknown": 10
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "aljazeera",
+      "name": "Al Jazeera English",
+      "country": "QA",
+      "aliases": [
+        "Al Jazeer",
+        "Al-Jazeer",
+        "Al Dżazir",
+        "Al-Dżazir",
+        "Al Jazira"
+      ],
+      "language": "en",
+      "ownership": "finansowanie przez państwo Katar",
+      "scope": "all",
+      "sections": [
+        "all"
+      ],
+      "articles": 21,
+      "eligible": 21,
+      "fulltext": 0,
+      "lead_only": 21,
+      "pending": 0,
+      "failed": 21,
+      "genres": {
+        "unknown": 20,
+        "opinion": 1
+      },
+      "genre_shares": {
+        "unknown": 0.9523809523809523,
+        "opinion": 0.047619047619047616
+      }
+    },
+    {
+      "source_id": "bbc",
+      "name": "BBC News",
+      "country": "UK",
+      "aliases": [
+        "BBC"
+      ],
+      "language": "en",
+      "ownership": "nadawca publiczny",
+      "scope": "world; europe",
+      "sections": [
+        "europe",
+        "world"
+      ],
+      "articles": 28,
+      "eligible": 26,
+      "fulltext": 28,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 26,
+      "genres": {
+        "unknown": 28
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "cgtn",
+      "name": "CGTN",
+      "country": "CN",
+      "aliases": [
+        "CGTN"
+      ],
+      "language": "en",
+      "ownership": "państwowy nadawca China Media Group",
+      "scope": "world",
+      "sections": [
+        "world"
+      ],
+      "articles": 17,
+      "eligible": 17,
+      "fulltext": 17,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 17,
+      "genres": {
+        "unknown": 17
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "chinanews",
+      "name": "China News Service (中新网)",
+      "country": "CN",
+      "aliases": [
+        "China News Service",
+        "Chinanews",
+        "中新网"
+      ],
+      "language": "zh",
+      "ownership": "państwowa agencja informacyjna ChRL",
+      "scope": "world; politics",
+      "sections": [
+        "politics",
+        "world"
+      ],
+      "articles": 56,
+      "eligible": 56,
+      "fulltext": 56,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 56,
+      "genres": {
+        "unknown": 56
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "dailysabah",
+      "name": "Daily Sabah",
+      "country": "TR",
+      "aliases": [
+        "Daily Sabah"
+      ],
+      "language": "en",
+      "ownership": "prywatne, Turkuvaz Media (prorządowe)",
+      "scope": "world",
+      "sections": [
+        "world"
+      ],
+      "articles": 17,
+      "eligible": 17,
+      "fulltext": 17,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 17,
+      "genres": {
+        "unknown": 17
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "folha",
+      "name": "Folha de S.Paulo",
+      "country": "BR",
+      "aliases": [
+        "Folha"
+      ],
+      "language": "pt",
+      "ownership": "Grupo Folha",
+      "scope": "mundo",
+      "sections": [
+        "mundo"
+      ],
+      "articles": 19,
+      "eligible": 19,
+      "fulltext": 19,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 19,
+      "genres": {
+        "unknown": 19
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "fox",
+      "name": "Fox News",
+      "country": "US",
+      "aliases": [
+        "Fox News",
+        "Foksa",
+        "Fox"
+      ],
+      "language": "en",
+      "ownership": "Fox Corporation",
+      "scope": "us; world",
+      "sections": [
+        "us",
+        "world"
+      ],
+      "articles": 20,
+      "eligible": 20,
+      "fulltext": 20,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 20,
+      "genres": {
+        "unknown": 20
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "francetvinfo",
+      "name": "francetvinfo",
+      "country": "FR",
+      "aliases": [
+        "France Info",
+        "francetvinfo"
+      ],
+      "language": "fr",
+      "ownership": "publiczne (France Télévisions)",
+      "scope": "titres",
+      "sections": [
+        "titres"
+      ],
+      "articles": 36,
+      "eligible": 35,
+      "fulltext": 36,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 35,
+      "genres": {
+        "unknown": 36
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "gazeta",
+      "name": "Gazeta.pl",
+      "country": "PL",
+      "aliases": [
+        "Gazeta.pl"
+      ],
+      "language": "pl",
+      "ownership": "niezweryfikowane",
+      "scope": "zakres określony przez kanały; próbka nie jest reprezentatywna",
+      "sections": [
+        "wiadomosci"
+      ],
+      "articles": 29,
+      "eligible": 29,
+      "fulltext": 29,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 29,
+      "genres": {
+        "unknown": 29
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "globaltimes",
+      "name": "Global Times",
+      "country": "CN",
+      "aliases": [
+        "Global Times"
+      ],
+      "language": "en",
+      "ownership": "państwowe, wydawany przez People's Daily (KPCh)",
+      "scope": "all",
+      "sections": [
+        "all"
+      ],
+      "articles": 17,
+      "eligible": 13,
+      "fulltext": 17,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 13,
+      "genres": {
+        "unknown": 17
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "guardian",
+      "name": "The Guardian",
+      "country": "UK",
+      "aliases": [
+        "Guardian"
+      ],
+      "language": "en",
+      "ownership": "prywatne; szczegóły struktury do uzupełnienia",
+      "scope": "world",
+      "sections": [
+        "world"
+      ],
+      "articles": 33,
+      "eligible": 33,
+      "fulltext": 33,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 33,
+      "genres": {
+        "unknown": 33
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "haaretz",
+      "name": "Haaretz English",
+      "country": "IL",
+      "aliases": [
+        "Haaretz"
+      ],
+      "language": "en",
+      "ownership": "prywatne, rodzina Schocken i M. DuMont Schauberg",
+      "scope": "latest",
+      "sections": [
+        "latest"
+      ],
+      "articles": 33,
+      "eligible": 33,
+      "fulltext": 0,
+      "lead_only": 33,
+      "pending": 0,
+      "failed": 33,
+      "genres": {
+        "unknown": 33
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "hongkongfp",
+      "name": "Hong Kong Free Press",
+      "country": "HK",
+      "aliases": [
+        "Hong Kong Free Press",
+        "HKFP"
+      ],
+      "language": "en",
+      "ownership": "niezależna redakcja non-profit",
+      "scope": "all",
+      "sections": [
+        "all"
+      ],
+      "articles": 6,
+      "eligible": 6,
+      "fulltext": 6,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 6,
+      "genres": {
+        "unknown": 6
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "hurriyet",
+      "name": "Hürriyet Daily News",
+      "country": "TR",
+      "aliases": [
+        "Hürriyet",
+        "Hurriyet"
+      ],
+      "language": "en",
+      "ownership": "prywatne, Demirören Holding",
+      "scope": "world",
+      "sections": [
+        "world"
+      ],
+      "articles": 9,
+      "eligible": 9,
+      "fulltext": 9,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 9,
+      "genres": {
+        "unknown": 9
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "index_hu",
+      "name": "Index",
+      "country": "HU",
+      "aliases": [
+        "Index",
+        "index.hu"
+      ],
+      "language": "hu",
+      "ownership": "prywatne; od 2020 linia zbliżona do kręgu Fidesz (do potwierdzenia)",
+      "scope": "24ora",
+      "sections": [
+        "24ora"
+      ],
+      "articles": 43,
+      "eligible": 43,
+      "fulltext": 43,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 43,
+      "genres": {
+        "unknown": 43
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "iranintl",
+      "name": "Iran International",
+      "country": "IR",
+      "aliases": [
+        "Iran International",
+        "Iran Intl"
+      ],
+      "language": "en",
+      "ownership": "emigracyjna (Londyn), opozycyjna wobec władz IR; kanał pod domeną bez www",
+      "scope": "all",
+      "sections": [
+        "all"
+      ],
+      "articles": 13,
+      "eligible": 13,
+      "fulltext": 13,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 13,
+      "genres": {
+        "unknown": 13
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "israelhayom",
+      "name": "Israel Hayom",
+      "country": "IL",
+      "aliases": [
+        "Israel Hayom"
+      ],
+      "language": "en",
+      "ownership": "prywatne, rodzina Adelsonów (prorządowe)",
+      "scope": "all",
+      "sections": [
+        "all"
+      ],
+      "articles": 9,
+      "eligible": 9,
+      "fulltext": 0,
+      "lead_only": 9,
+      "pending": 0,
+      "failed": 9,
+      "genres": {
+        "unknown": 9
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "jpost",
+      "name": "The Jerusalem Post",
+      "country": "IL",
+      "aliases": [
+        "Jerusalem Post",
+        "JPost"
+      ],
+      "language": "en",
+      "ownership": "prywatne; szczegóły do weryfikacji",
+      "scope": "frontpage",
+      "sections": [
+        "frontpage"
+      ],
+      "articles": 20,
+      "eligible": 8,
+      "fulltext": 20,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 8,
+      "genres": {
+        "unknown": 20
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "lefigaro",
+      "name": "Le Figaro",
+      "country": "FR",
+      "aliases": [
+        "Le Figaro",
+        "lefigaro.fr"
+      ],
+      "language": "fr",
+      "ownership": "prywatne (Groupe Dassault); centroprawicowe; część treści za paywallem, w próbie 3/3 pełne",
+      "scope": "actualites",
+      "sections": [
+        "actualites"
+      ],
+      "articles": 18,
+      "eligible": 18,
+      "fulltext": 18,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 18,
+      "genres": {
+        "unknown": 18
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "magyarnemzet",
+      "name": "Magyar Nemzet",
+      "country": "HU",
+      "aliases": [
+        "Magyar Nemzet",
+        "magyarnemzet.hu"
+      ],
+      "language": "hu",
+      "ownership": "prywatne (grupa Mediaworks/KESMA); linia prorządowa wobec Fidesz; część artykułów krótka",
+      "scope": "all",
+      "sections": [
+        "all"
+      ],
+      "articles": 23,
+      "eligible": 23,
+      "fulltext": 23,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 23,
+      "genres": {
+        "unknown": 23
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "mehr_en",
+      "name": "Mehr News (EN)",
+      "country": "IR",
+      "aliases": [
+        "Mehr News",
+        "Mehr"
+      ],
+      "language": "en",
+      "ownership": "agencja półpaństwowa; linia zbliżona do IRGC, ostry język",
+      "scope": "all",
+      "sections": [
+        "all"
+      ],
+      "articles": 29,
+      "eligible": 29,
+      "fulltext": 29,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 29,
+      "genres": {
+        "unknown": 29
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "npr",
+      "name": "NPR",
+      "country": "US",
+      "aliases": [
+        "NPR"
+      ],
+      "language": "en",
+      "ownership": "non-profit; sieć stacji członkowskich",
+      "scope": "world",
+      "sections": [
+        "world"
+      ],
+      "articles": 8,
+      "eligible": 8,
+      "fulltext": 8,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 8,
+      "genres": {
+        "unknown": 8
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "onet",
+      "name": "Onet Wiadomości",
+      "country": "PL",
+      "aliases": [
+        "Onet"
+      ],
+      "language": "pl",
+      "ownership": "prywatne; szczegóły struktury do uzupełnienia",
+      "scope": "wiadomosci",
+      "sections": [
+        "wiadomosci"
+      ],
+      "articles": 20,
+      "eligible": 20,
+      "fulltext": 20,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 20,
+      "genres": {
+        "unknown": 20
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "pbs",
+      "name": "PBS News",
+      "country": "US",
+      "aliases": [
+        "PBS"
+      ],
+      "language": "en",
+      "ownership": "publiczny nadawca non-profit; szczegóły finansowania do weryfikacji",
+      "scope": "headlines; politics",
+      "sections": [
+        "headlines",
+        "politics"
+      ],
+      "articles": 26,
+      "eligible": 26,
+      "fulltext": 26,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 26,
+      "genres": {
+        "unknown": 26
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "pravda_ua",
+      "name": "Ukraińska Prawda",
+      "country": "UA",
+      "aliases": [
+        "Ukraińska Prawda",
+        "Ukraińskiej Prawd",
+        "Ukraińską Prawd",
+        "Ukrainska Pravda",
+        "Ukrainska Prawda"
+      ],
+      "language": "uk",
+      "ownership": "prywatne; szczegóły struktury do uzupełnienia",
+      "scope": "wiadomosci",
+      "sections": [
+        "wiadomosci"
+      ],
+      "articles": 20,
+      "eligible": 20,
+      "fulltext": 20,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 20,
+      "genres": {
+        "unknown": 20
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "propublica",
+      "name": "ProPublica",
+      "country": "US",
+      "aliases": [
+        "ProPublic"
+      ],
+      "language": "en",
+      "ownership": "niezależna redakcja non-profit",
+      "scope": "investigations",
+      "sections": [
+        "investigations"
+      ],
+      "articles": 1,
+      "eligible": 1,
+      "fulltext": 1,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 1,
+      "genres": {
+        "unknown": 1
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "rfi_en",
+      "name": "RFI (English)",
+      "country": "FR",
+      "aliases": [
+        "RFI",
+        "rfi.fr"
+      ],
+      "language": "en",
+      "ownership": "publiczne (France Médias Monde; ten sam wydawca co France 24)",
+      "scope": "all",
+      "sections": [
+        "all"
+      ],
+      "articles": 6,
+      "eligible": 6,
+      "fulltext": 6,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 6,
+      "genres": {
+        "unknown": 6
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "rg",
+      "name": "Rossijskaja Gazieta",
+      "country": "RU",
+      "aliases": [
+        "Российская газета",
+        "RG"
+      ],
+      "language": "ru",
+      "ownership": "rządowy dziennik Federacji Rosyjskiej (publikuje akty prawne)",
+      "scope": "all",
+      "sections": [
+        "all"
+      ],
+      "articles": 100,
+      "eligible": 100,
+      "fulltext": 100,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 100,
+      "genres": {
+        "unknown": 100
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "rp",
+      "name": "Rzeczpospolita",
+      "country": "PL",
+      "aliases": [
+        "Rzeczpospolit",
+        "rp.pl"
+      ],
+      "language": "pl",
+      "ownership": "prywatne; szczegóły struktury do uzupełnienia",
+      "scope": "glowne",
+      "sections": [
+        "glowne"
+      ],
+      "articles": 20,
+      "eligible": 20,
+      "fulltext": 0,
+      "lead_only": 20,
+      "pending": 0,
+      "failed": 20,
+      "genres": {
+        "unknown": 20
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "rthk",
+      "name": "RTHK",
+      "country": "HK",
+      "aliases": [
+        "RTHK",
+        "Radio Television Hong Kong"
+      ],
+      "language": "en",
+      "ownership": "publiczny nadawca, departament rządu Hongkongu",
+      "scope": "local; world",
+      "sections": [
+        "local",
+        "world"
+      ],
+      "articles": 26,
+      "eligible": 26,
+      "fulltext": 26,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 26,
+      "genres": {
+        "unknown": 26
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "scmp",
+      "name": "South China Morning Post",
+      "country": "HK",
+      "aliases": [
+        "South China Morning Post",
+        "SCMP"
+      ],
+      "language": "en",
+      "ownership": "prywatne, Alibaba Group",
+      "scope": "china; world",
+      "sections": [
+        "china",
+        "world"
+      ],
+      "articles": 34,
+      "eligible": 34,
+      "fulltext": 0,
+      "lead_only": 34,
+      "pending": 0,
+      "failed": 34,
+      "genres": {
+        "unknown": 34
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "spiegel",
+      "name": "Der Spiegel",
+      "country": "DE",
+      "aliases": [
+        "Spiegel",
+        "Spiegl"
+      ],
+      "language": "de",
+      "ownership": "prywatne; szczegóły struktury do uzupełnienia",
+      "scope": "ausland",
+      "sections": [
+        "ausland"
+      ],
+      "articles": 20,
+      "eligible": 20,
+      "fulltext": 0,
+      "lead_only": 20,
+      "pending": 0,
+      "failed": 20,
+      "genres": {
+        "unknown": 20
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "tagesschau",
+      "name": "Tagesschau (ARD)",
+      "country": "DE",
+      "aliases": [
+        "Tagesschau",
+        "ARD"
+      ],
+      "language": "de",
+      "ownership": "nadawca publiczny",
+      "scope": "alle",
+      "sections": [
+        "alle"
+      ],
+      "articles": 39,
+      "eligible": 39,
+      "fulltext": 39,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 39,
+      "genres": {
+        "unknown": 39
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "tehrantimes",
+      "name": "Tehran Times",
+      "country": "IR",
+      "aliases": [
+        "Tehran Times",
+        "tehrantimes.com"
+      ],
+      "language": "en",
+      "ownership": "powiązane z państwem (Islamic Culture and Relations Organization); stanowisko oficjalne",
+      "scope": "all",
+      "sections": [
+        "all"
+      ],
+      "articles": 29,
+      "eligible": 29,
+      "fulltext": 28,
+      "lead_only": 1,
+      "pending": 0,
+      "failed": 29,
+      "genres": {
+        "unknown": 29
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "thehindu",
+      "name": "The Hindu",
+      "country": "IN",
+      "aliases": [
+        "The Hindu"
+      ],
+      "language": "en",
+      "ownership": "prywatne, The Hindu Group (Kasturi & Sons)",
+      "scope": "international",
+      "sections": [
+        "international"
+      ],
+      "articles": 34,
+      "eligible": 34,
+      "fulltext": 34,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 34,
+      "genres": {
+        "unknown": 34
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "ukrinform",
+      "name": "Ukrinform",
+      "country": "UA",
+      "aliases": [
+        "Ukrinform"
+      ],
+      "language": "uk",
+      "ownership": "państwowa ukraińska agencja informacyjna",
+      "scope": "ostatnie",
+      "sections": [
+        "ostatnie"
+      ],
+      "articles": 28,
+      "eligible": 28,
+      "fulltext": 28,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 28,
+      "genres": {
+        "unknown": 28
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "wafa",
+      "name": "WAFA (وفا)",
+      "country": "PS",
+      "aliases": [
+        "WAFA",
+        "Wafa"
+      ],
+      "language": "ar",
+      "ownership": "oficjalna agencja Autonomii Palestyńskiej",
+      "scope": "all",
+      "sections": [
+        "all"
+      ],
+      "articles": 84,
+      "eligible": 69,
+      "fulltext": 84,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 69,
+      "genres": {
+        "unknown": 84
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    },
+    {
+      "source_id": "wp",
+      "name": "Wirtualna Polska",
+      "country": "PL",
+      "aliases": [
+        "Wirtualna Polska"
+      ],
+      "language": "pl",
+      "ownership": "niezweryfikowane",
+      "scope": "zakres określony przez kanały; próbka nie jest reprezentatywna",
+      "sections": [
+        "wiadomosci"
+      ],
+      "articles": 15,
+      "eligible": 15,
+      "fulltext": 15,
+      "lead_only": 0,
+      "pending": 0,
+      "failed": 15,
+      "genres": {
+        "unknown": 15
+      },
+      "genre_shares": {
+        "unknown": 1.0
+      }
+    }
+  ]
+}
