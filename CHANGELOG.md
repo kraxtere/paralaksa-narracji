@@ -1,3 +1,15 @@
+# dzien.py: faza 1 równolegle, streszczenia razem z obrazkami, pomiar czasu — 2026-10-06
+
+- `scripts/v2/dzien.py` (tylko organizacja, treści i skrypty kroków bez zmian): `Step.after` + `run_parallel` (5 wątków; pierwszy
+  błąd zatrzymuje nowe starty, wznowienie jak dawniej). Zależności fazy 1 wyprowadzone z kodu: `os-dzien` i `kraje-D` czytają
+  `data/stories/D.json` (po `site`), `kraje-D` wyklucza też wynik `os-dzien`, `os-ciag`/`os-opisy` piszą ten sam magazyn osi,
+  `kraje-ciag` po `kraje-D`; `kategorie`, `report`, `dzien_prasy` tylko czytają bazę.
+- Streszczenia czytają linki `data-a` ze stron, nie obrazki: pełny przebieg = strony wstępne → (streszczenia ‖ obrazki) → strony
+  końcowe + publikacja. `--faza 3` samodzielnie bez zmian (strony, streszczenia, strony). `--faza 1|2` jak dawniej.
+- Pomiar: `data/widok/D/_czasy.json` (fazy i kroki), podsumowanie na końcu. Test `test_parallel_respects_after_and_stops_on_failure`.
+- `PASKI_ODSTEP` (10 s) i limit procesów bez zmian; skrócenie ryzykowne bez pomiaru 429 (dobowa pula obrazków osobna), do decyzji po pierwszych czasach.
+- Uwaga: `kategorie` i `site` równolegle piszą do bazy tylko przy tłumaczeniach nagłówków (SQLite blokuje, nie psuje).
+
 # Archiwum: filtry progresywne, kategoria na górze, czytelna karta, Tłumacz — 2026-10-06
 
 - `assets/archiwum.js` (tylko interfejs; `slowa.py`, `kategorie.py` i dane bez zmian). Kolejność strony: szukanie z chmurkami

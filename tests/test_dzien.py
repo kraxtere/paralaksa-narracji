@@ -68,3 +68,32 @@ def test_main_stops_after_failed_phase(tmp_path, monkeypatch):
     called = []
     monkeypatch.setattr(dzien, "phase2", lambda d: called.append(d) or True)
     assert dzien.main(["2026-10-05"]) == 1 and not called
+
+
+def test_parallel_respects_after_and_stops_on_failure(tmp_path, monkeypatch):
+    import threading
+    import time
+    monkeypatch.chdir(tmp_path)
+    day, order, lock = "2026-10-05", [], threading.Lock()
+    tm = dzien.Timings(day)
+
+    def fake(cmd, env):
+        name = cmd[-1]
+        with lock:
+            order.append(("start", name))
+        time.sleep(0.05)
+        with lock:
+            order.append(("end", name))
+        return 0
+
+    mk = lambda n, *a: dzien.Step(n, [n], after=a)  # noqa: E731
+    steps = [mk("a"), mk("b"), mk("c", "a"), mk("d", "b", "c")]
+    assert dzien.run_parallel(steps, day, dzien.State(day), fake, timings=tm)
+    pos = {e: i for i, e in enumerate(order)}
+    assert pos[("start", "b")] < pos[("end", "a")]                       # niezależne ruszyły razem
+    assert pos[("end", "a")] < pos[("start", "c")] and pos[("end", "c")] < pos[("start", "d")]
+    assert set(tm.steps) == {"a", "b", "c", "d"}
+
+    state = dzien.State("2026-10-06")
+    assert not dzien.run_parallel(steps, "2026-10-06", state, lambda c, e: 1 if c[-1] == "a" else 0)
+    assert "c" not in state.done and "d" not in state.done

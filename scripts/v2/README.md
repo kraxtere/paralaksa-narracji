@@ -7,8 +7,8 @@ robi Codex z limitu konta (`codex_limit.py` pokazuje zużycie). Nigdy w Actions.
 ## Nowy dzień D: jedno polecenie (od 05.10)
 
 `python scripts/v2/dzien.py D [--publikuj] [--faza 1|2|3] [--sucho]` robi kroki poniżej w trzech fazach i wznawia od miejsca przerwania
-(gotowe pomija; stan w `data/widok/D/_dzien.json`):
-1. teksty po kolei: `plx site`, `plx report`, `dzien_prasy`, `os_czasu dzien/ciag/opisy`, `kraje.py D` i `kraje.py ciag D`;
+(gotowe pomija; stan w `data/widok/D/_dzien.json`, czasy kroków i faz w `_czasy.json` + podsumowanie na końcu). Streszczenia idą równolegle z obrazkami (po stronach „wstępnych”), strony końcowe po obu:
+1. teksty, niezależne kroki równolegle (`site`, `report`, `kategorie`, `dzien_prasy` od razu; `os-dzien` po `site`, `os-ciag` i `os-opisy` po nim, `kraje-D` po `site` i `os-dzien`, `kraje-ciag` po `kraje-D`; zależności w `phase1()`): `plx site`, `plx report`, `dzien_prasy`, `os_czasu dzien/ciag/opisy`, `kraje.py D` i `kraje.py ciag D`;
 2. wszystkie obrazki dnia w jednej kolejce `paski.run_all` (paski tematów i krajów w tematach, okładka, oś, kraje wszystkich krajów),
    jeden proces na obrazek (`PASKI_PROCESY=100` domyślnie), starty co 10 s, po 429 hamowanie jak w kroku 6;
    teksty potrzebne obrazkom (podsumowania, `plakat-*.json`) powstają przy budowie zleceń (z pamięci podręcznej);
