@@ -1,3 +1,9 @@
+# Ekstrakcja przez Codex na stałe — 2026-10-06
+
+- Decyzja właściciela: bez płatnych API (DeepSeek); ekstrakcja lokalnie przez Codex z limitu konta (`codex:gpt-6-luna:medium`,
+  wsady 25, prompt v3 w `scripts/v2/prompt_luna_v3.md`). Skrypt dnia: `scripts/ekstrakcja_codex_dnia.py` (opcje: `--model`, `--wsad`,
+  `--rownolegle`, `--dodatek`, `--limit`). Zmiana procedury i `daily.yml`: osobno, po zgodzie właściciela.
+
 # Archiwum: jeden filtr „Temat” zamiast kategorii i tematów — 2026-10-06
 
 - `archiwum.js`: znika wiersz „Kategoria” (przyciski „tematy analizy”, „polityka”…) i osobny filtr tematu w „Więcej filtrów”.
@@ -10,6 +16,13 @@
   opcje zerowe ukryte, wybrana zostaje; ton i aktor nadal dotyczą sygnałów (artykuły bez sygnałów znikają z listy tematów).
   Znacznik pod artykułem to jeden „temat” (bez „kategoria”). Stare linki `#kat=…` działają jak `#th=…`; `kat=*` ignorowane.
 - Testy: `tests/test_archiwum_ui.py` (lista tematów, scalanie, progresja, stary link); wykres i pozostałe filtry bez zmian.
+
+# schema.py: naprawa evidence_span z wielokropkiem — 2026-10-06
+
+- `parse_extraction` z `source_text`: gdy `evidence_span` skleja fragmenty przez „...”/„…”, wybierany jest najdłuższy kawałek, który
+  sam występuje dosłownie w artykule (min. 3 słowa, maks. 15; `longest_verbatim_segment`), i liczony jako `repairs`. Gdy żaden
+  kawałek nie spełnia warunków, sygnał nadal jest odrzucany jak dotąd. Reszta walidacji bez poluzowania. Powód: test Luny
+  (Codex) odrzucał ok. 7% sygnałów, z czego część to wielokropki mimo zakazu w prompcie. Testy w `tests/test_extract_schema.py`.
 
 # dzien.py: faza 1 równolegle, streszczenia razem z obrazkami, pomiar czasu — 2026-10-06
 

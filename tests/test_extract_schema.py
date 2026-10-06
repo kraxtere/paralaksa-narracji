@@ -54,6 +54,19 @@ def test_ellipsis_evidence_rejected():
     assert out.signals == [] and "wielokropk" in out.errors[0]
 
 
+def test_ellipsis_evidence_repaired_to_longest_verbatim_piece():
+    out = parse([sig(evidence_span="Prezydent ... wezwał sojuszników do dostaw obrony powietrznej")])
+    assert out.clean and out.repairs == 1
+    assert out.signals[0].evidence_span == "wezwał sojuszników do dostaw obrony powietrznej"
+    out = parse([sig(evidence_span="Rosja przeprowadziła zmasowany atak … a gdzieś indziej wymyślony fragment tekstu")])
+    assert out.clean and out.signals[0].evidence_span == "Rosja przeprowadziła zmasowany atak"
+
+
+def test_ellipsis_evidence_not_repaired_when_no_piece_is_verbatim():
+    out = parse([sig(evidence_span="wymyślony początek zdania ... drugi wymyślony fragment tekstu")])
+    assert out.signals == [] and out.repairs == 0 and "wielokropk" in out.errors[0]
+
+
 def test_non_verbatim_evidence_rejected():
     out = parse([sig(evidence_span="Rosja zaatakowała Kijów rakietami")])
     assert out.signals == [] and "dosłownie" in out.errors[0]
