@@ -88,7 +88,7 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
     }).catch(() => {});
   }
 
-  // Kafelek „Dzień po dniu” (v2/os.json, gdy jest) na samej górze strony dnia, zaraz pod paskiem (od 01.10), w stylu sekcji okładki:
+  // Kafelek „Dzień po dniu” (v2/os.json, gdy jest) na stronie dnia jako druga pozycja: zaraz pod nagłówkiem „Co w prasie piszczy” (okładka HTML, od 02.10; bez niej pod paskiem), w stylu sekcji okładki:
   // oś ostatnich dni z kwadratowymi kadrami na zakładkę; otwiera oś na tym dniu (#d=), a dzień spoza osi na jej końcu
   if (!("wstecz" in box.dataset)) {
     fetch(new URL("os.json", base), { cache: "no-store" }).then(r => r.ok ? r.json() : null).then(w => {
@@ -117,7 +117,7 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
       const days = w.dni.map(x => `<span class="d"><span class="st">${x.obrazki.map(f => `<img src="${dir + f}" alt="" loading="lazy">`).join("")}` +
         `</span><span class="kr"></span><b>${short(x.d)}</b></span>`).join("");
       a.innerHTML = `<span class="gl"><span class="et">Dzień po dniu</span><i>Oś czasu ›</i></span><span class="os">${days}</span>`;
-      const put = () => box.after(a);
+      const put = () => (document.querySelector('[data-sekcja="okladka"] .okl-h') || box).after(a);
       document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", put) : put();
     }).catch(() => {});
   }

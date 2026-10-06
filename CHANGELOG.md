@@ -67,6 +67,15 @@
   dla kont bez hasła (wcześniej wymagały hasła).
 - Testy `tests/test_site_konta.py`; `CLAUDE.md`: „pod hasłem” → „prywatna: dostęp przez link zaproszenia, noindex”.
 
+# Nazwa okładki: „Co w prasie piszczy” (bez „tam”) — 2026-10-05 (nie zacommitowane)
+
+- `okladka.py` TITLE i test; strony dni przebudowane i opublikowane (tylko HTML).
+
+# Strona dnia: oś „Dzień po dniu” pod blokiem o prasie — 2026-10-05 (nie zacommitowane)
+
+- `pasek.js`: kafelek osi wstawiany zaraz po nagłówku `.okl-h` bloku okładki („Co w prasie piszczy”), przed Wydarzeniami dnia; bez okładki HTML jak dotąd pod paskiem.
+  Zmiana tylko po stronie JS, HTML dni bez zmian; bez testów (brak testów JS).
+
 # Procedura dnia w trzech fazach: `scripts/v2/dzien.py` — 2026-10-05 (nie zacommitowane)
 
 - Faza 1 teksty po kolei, faza 2 wszystkie obrazki dnia (paski tematów i krajów w tematach, okładka, oś, kraje) w jednej kolejce

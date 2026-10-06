@@ -16,7 +16,7 @@ from widok_obrazkowy import (DAY, FLAGS, NAMES, OUT, PASKI, PEOPLE_STYLE, esc, f
                              n_kraje)
 
 SUBTITLE = "Jeden dzień, wiele perspektyw"
-TITLE = "Co tam w prasie piszczy"
+TITLE = "Co w prasie piszczy"
 # nazwy sekcji okładki (decyzja właściciela 2026-10-02)
 EVENTS, TONES, SELF = "Tego dnia", "Tonacje", "Autoportret"
 
