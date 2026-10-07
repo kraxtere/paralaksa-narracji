@@ -122,8 +122,14 @@ def run(country: str, items: list[dict]) -> list[dict]:
 
 
 def main(day: str) -> None:
-    from codex_limit import usage
+    import codex_limit
     from widok_obrazkowy import TEXT_MODEL
+
+    def usage() -> dict:                                      # tylko statystyka kosztu: brak odczytu nie może zatrzymać kroku
+        try:
+            return codex_limit.usage()
+        except RuntimeError:
+            return {}
     data = inputs(day)
     order = sorted(data, key=lambda c: (c != "PL", c))
     before = usage()

@@ -1,3 +1,14 @@
+# Strona dnia 07.10: poprawki widok_obrazkowy — 2026-10-07
+
+- `theme_page`: kraje zapisanego `plakat-*.json`, których nie ma już w danych tematu (po przeliczeniu raportu), są pomijane (wcześniej `KeyError`).
+- `limit_guard`: odczyt limitu Codexa co najwyżej raz na 2 min na proces; gdy odczyt się nie uda (błąd sieci), kontrola jest pomijana
+  zamiast przerywać obrazki i streszczenia. Stop przy >= 95% działa, gdy odczyt się powiedzie. `kraje.py`: odczyt limitu tylko do statystyki,
+  jego brak nie przerywa kroku (wcześniej tracił wynik).
+- Kraje 07.10 po dociągnięciu: dla krajów z innymi tytułami tematów niż zapisane przy obrazkach przywrócono tematy z pierwszego przebiegu
+  (obrazki w `data/widok/kraje/D/` pasują tylko przy zgodnych tytułach).
+- Procedura po dociągnięciu źródeł lokalnie: po zmianie danych dnia trzeba zresetować kroki (`_dzien.json`, `data/stories/D.json`,
+  `reports/D.json`, wyniki osi i krajów) oraz usunąć zdarzenia dnia z `data/widok/os/plan.json`, bo numery historii się zmieniają.
+
 # daily.yml: tylko ingest i backup — 2026-10-06
 
 - Za zgodą właściciela Actions robi `plx ingest` + snapshot/backup bazy; bez ekstrakcji i bez kluczy DeepSeek/Anthropic (artykuły zostają

@@ -318,10 +318,24 @@ def poster_prompt(t: dict, cs: list[dict]) -> str:
             "Use correct Polish diacritics. No other text anywhere.")
 
 
+_LIMIT_CACHE = {"t": -1e9}
+
+
 def limit_guard() -> None:
     """Stop before a Codex call when an account window is nearly used up (beyond it work would draw on paid credits)."""
+    import time
     from codex_limit import usage
-    used = {k: v for k, v in usage().items() if not k.endswith("reset")}
+    now = time.monotonic()
+    if now - _LIMIT_CACHE["t"] < 120:                         # odczyt rzadko: co ok. 2 min na proces, nie przy każdym obrazku
+        return
+    try:
+        current = usage()
+    except RuntimeError as e:                                 # odczyt limitu bywa niedostępny (błąd sieci): to nie powód do przerwania pracy
+        _LIMIT_CACHE["t"] = now
+        print(f"limit Codex: odczyt niedostępny, pomijam kontrolę ({str(e)[:60]})")
+        return
+    _LIMIT_CACHE["t"] = now
+    used = {k: v for k, v in current.items() if not k.endswith("reset")}
     print("limit Codex:", ", ".join(f"{k} {v}%" for k, v in used.items()))
     if any(v is not None and v >= 95 for v in used.values()):
         raise SystemExit("limit Codex prawie wyczerpany (>= 95%): przerywam, żeby nie iść z kredytów")
@@ -445,6 +459,7 @@ def theme_nav(ts: list[dict], t: dict) -> str:
 
 
 def theme_page(t: dict, opisy: dict, pl: dict, cs: list[dict], debug: bool = False, ts: list[dict] | None = None) -> str:
+    cs = [x for x in cs if x["kraj"] in t["kraje"]]          # zapisany plakat mógł powstać przed przeliczeniem tematu
     poster = {x["kraj"]: x for x in cs}
     ids = {sg["article_id"] for c in t["kraje"] for sg in theme_articles(t, opisy, c)} | {x["article_id"] for x in cs}
     info = article_info(ids)
