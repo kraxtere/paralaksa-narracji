@@ -1,3 +1,11 @@
+# Serwer strony: cache i gzip przeciw zużyciu transferu — 2026-10-08
+
+- Powód: 5 GB transferu Rendera zużyte w 8 dni. Każda publikacja to force-push i nowy deploy, więc wszystkie pliki miały nowe `Last-Modified`
+  i przeglądarki pobierały je od nowa (to samo po restarcie usypiającego się serwisu).
+- `hosting/server.py`: obrazki, js, css, json mają ETag z zawartości (304 po deployu i restarcie); obrazki dodatkowo `max-age=86400`;
+  HTML (z indywidualnym dopiskiem) idzie gzipem, nadal `no-cache`. Test w `tests/test_site_publish.py`.
+- Efekt dopiero po publikacji strony (`plx site --publikuj`), bo serwer jest wdrażany razem ze stroną.
+
 # Strona dnia 07.10: poprawki widok_obrazkowy — 2026-10-07
 
 - `theme_page`: kraje zapisanego `plakat-*.json`, których nie ma już w danych tematu (po przeliczeniu raportu), są pomijane (wcześniej `KeyError`).

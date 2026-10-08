@@ -19,6 +19,7 @@ That is the only part outside the standard library; without it the site works th
 from __future__ import annotations
 
 import base64
+import gzip
 import hashlib
 import hmac
 import html
@@ -271,12 +272,20 @@ def minutes(seconds: float) -> str:
     return f"{round(seconds)} s" if seconds < 60 else f"{round(seconds / 60)} min"
 
 
+IMAGE_TYPES = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg", ".ico"}
+ETAG_TYPES = IMAGE_TYPES | {".js", ".css", ".json", ".webmanifest"}
+IMAGE_CACHE = "private, max-age=86400"
+ETAGS: dict[tuple[str, int, int], str] = {}
+
+
 class Handler(SimpleHTTPRequestHandler):
     extensions_map = {**SimpleHTTPRequestHandler.extensions_map, ".webmanifest": "application/manifest+json"}
 
+    cache_control = "private, no-cache"
+
     def end_headers(self) -> None:
         self.send_header("X-Robots-Tag", "noindex, nofollow")
-        self.send_header("Cache-Control", "private, no-cache")
+        self.send_header("Cache-Control", self.cache_control)
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("Referrer-Policy", "no-referrer")
         super().end_headers()
@@ -371,8 +380,35 @@ class Handler(SimpleHTTPRequestHandler):
             self._send(b"", 401, head=True)
         return None
 
+    def send_head(self):
+        """Files with a content ETag, so a redeploy or restart (new mtimes) does not make browsers download everything
+        again; images also stay in the browser for a day without asking."""
+        path = Path(self.translate_path(self.path))
+        if not path.is_file() or path.suffix.lower() not in ETAG_TYPES:
+            return super().send_head()
+        st = path.stat()
+        key = (str(path), st.st_size, st.st_mtime_ns)
+        etag = ETAGS.get(key)
+        if etag is None:
+            etag = ETAGS[key] = '"' + hashlib.sha1(path.read_bytes()).hexdigest() + '"'
+        self.cache_control = IMAGE_CACHE if path.suffix.lower() in IMAGE_TYPES else "private, no-cache"
+        if self.headers.get("If-None-Match") == etag:
+            self.send_response(304)
+            self.send_header("ETag", etag)
+            self.end_headers()
+            return None
+        self.send_response(200)
+        self.send_header("Content-Type", self.guess_type(str(path)))
+        self.send_header("Content-Length", str(st.st_size))
+        self.send_header("ETag", etag)
+        self.end_headers()
+        return path.open("rb")
+
     def _send(self, body: bytes, status: int = 200, ctype: str = "text/html; charset=utf-8", head: bool = False,
               headers: list[tuple[str, str]] = ()) -> None:
+        if ctype.startswith("text/html") and len(body) > 1024 and "gzip" in self.headers.get("Accept-Encoding", ""):
+            body = gzip.compress(body, 6)
+            headers = [*headers, ("Content-Encoding", "gzip"), ("Vary", "Accept-Encoding")]
         self.send_response(status)
         self.send_header("Content-Type", ctype)
         self.send_header("Content-Length", str(len(body)))

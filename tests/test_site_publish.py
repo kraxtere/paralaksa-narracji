@@ -117,3 +117,24 @@ def test_publish_stages_site_and_force_pushes(tmp_path, monkeypatch):
     assert seen["push"][-2:] == ["https://github.com/kraxtere/paralaksa-strona.git", "main"] and "--force" in seen["push"]
     with pytest.raises(RuntimeError, match="najpierw plx site"):
         publish.stage(tmp_path / "brak", tmp_path / "out")
+
+
+def test_server_caches_images_and_compresses_html(monkeypatch, tmp_path):
+    srv, base = _server(monkeypatch, tmp_path, "zespol", "tajne-haslo")
+    (tmp_path / "obraz.png").write_bytes(b"png" * 100)
+    (tmp_path / "duza.html").write_text("<p>x</p>" * 400, encoding="utf-8")
+    auth = "Basic " + base64.b64encode(b"zespol:tajne-haslo").decode()
+    try:
+        req = urllib.request.Request(base + "/obraz.png", headers={"Authorization": auth})
+        with urllib.request.urlopen(req, timeout=5) as r:
+            etag = r.headers["ETag"]
+            assert r.status == 200 and r.read() == b"png" * 100 and "max-age=86400" in r.headers["Cache-Control"]
+        req = urllib.request.Request(base + "/obraz.png", headers={"Authorization": auth, "If-None-Match": etag})
+        with pytest.raises(urllib.error.HTTPError) as e:                      # niezmieniony plik: 304 bez treści
+            urllib.request.urlopen(req, timeout=5)
+        assert e.value.code == 304
+        req = urllib.request.Request(base + "/duza.html", headers={"Authorization": auth, "Accept-Encoding": "gzip"})
+        with urllib.request.urlopen(req, timeout=5) as r:
+            assert r.headers["Content-Encoding"] == "gzip" and r.headers["Cache-Control"] == "private, no-cache"
+    finally:
+        srv.shutdown()
