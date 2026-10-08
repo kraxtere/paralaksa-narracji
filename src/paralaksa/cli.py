@@ -270,6 +270,8 @@ def site(
     make_zip: bool = typer.Option(False, "--zip", help="Dodatkowo spakuj stronę do .zip (do przesłania)."),
     publish_site: bool = typer.Option(False, "--publikuj",
                                       help="Wypchnij stronę do prywatnego repo SITE_REPO (Render, pod hasłem)."),
+    publish_hf: bool = typer.Option(False, "--publikuj-hf",
+                                    help="Wypchnij stronę do Space na Hugging Face (HF_SPACE i HF_TOKEN w .env); zapasowy hosting."),
     no_stories: bool = typer.Option(False, "--bez-historii",
                                     help="Nie wywołuj modelu: historie dnia i tłumaczenia nagłówków tylko z zapisanych."),
     stories_dir: Path = typer.Option(Path("data/stories"), "--historie-dir", help="Zapisane historie dnia (JSON)."),
@@ -431,6 +433,18 @@ def site(
             typer.echo(f"Opublikowano w {repo}: {publish(out_dir, repo)}")
         except RuntimeError as e:
             typer.echo(f"BŁĄD publikacji: {e}", err=True)
+            raise typer.Exit(1)
+    if publish_hf:
+        from paralaksa.site.publish import publish_hf as _publish_hf
+
+        space = os.environ.get("HF_SPACE", "")
+        if not space:
+            typer.echo("BŁĄD: brak HF_SPACE w .env (użytkownik/nazwa Space)", err=True)
+            raise typer.Exit(1)
+        try:
+            typer.echo(f"Opublikowano w Space {space}: {_publish_hf(out_dir, space, os.environ.get('HF_TOKEN', ''))}")
+        except RuntimeError as e:
+            typer.echo(f"BŁĄD publikacji HF: {e}", err=True)
             raise typer.Exit(1)
 
 

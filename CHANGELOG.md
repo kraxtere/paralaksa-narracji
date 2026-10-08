@@ -1,3 +1,11 @@
+# Zapasowy hosting: Hugging Face Space (Docker) — 2026-10-08
+
+- Powód: Render zatrzymał serwis po 5 GB transferu. `plx site --publikuj-hf` układa katalog jak `--publikuj` (`publish.stage_hf`), dokłada
+  `hosting/hf/Dockerfile` (python:3.12-slim, uid 1000, `PORT=7860`) i README Space (YAML `sdk: docker`, `app_port: 7860`), wypycha jednym
+  commitem do `HF_SPACE` (użytkownik/nazwa) z `HF_TOKEN` (tylko w URL pushu, bez zapisu w `.git/config`, maskowany w błędach).
+- `server.py`: adres dla powiadomień push z `PUBLIC_URL` (przed `RENDER_EXTERNAL_URL`). Serwer nie zapisuje na dysk (konta i subskrypcje
+  w repo ACTIVITY_REPO), więc restart Space niczego nie gubi. Pliki strony < 10 MB, Git LFS niepotrzebny. Testy w `tests/test_site_publish.py`.
+
 # Serwer strony: cache i gzip przeciw zużyciu transferu — 2026-10-08
 
 - Powód: 5 GB transferu Rendera zużyte w 8 dni. Każda publikacja to force-push i nowy deploy, więc wszystkie pliki miały nowe `Last-Modified`

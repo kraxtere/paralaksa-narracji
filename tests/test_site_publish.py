@@ -138,3 +138,42 @@ def test_server_caches_images_and_compresses_html(monkeypatch, tmp_path):
             assert r.headers["Content-Encoding"] == "gzip" and r.headers["Cache-Control"] == "private, no-cache"
     finally:
         srv.shutdown()
+
+
+def test_stage_hf_adds_dockerfile_and_space_readme(tmp_path):
+    site = tmp_path / "site"
+    site.mkdir()
+    (site / "index.html").write_text("x", encoding="utf-8")
+    dest = tmp_path / "out"
+    publish.stage_hf(site, dest)
+    assert (dest / "public" / "index.html").is_file() and (dest / "server.py").is_file()
+    assert "COPY --chown=user public/" in (dest / "Dockerfile").read_text(encoding="utf-8")
+    assert (dest / "README.md").read_text(encoding="utf-8").startswith("---\ntitle:")
+    assert "sdk: docker" in (dest / "README.md").read_text(encoding="utf-8") and not (dest / "render.yaml").exists()
+
+
+def test_publish_hf_pushes_with_token_in_url_only_and_masks_it(tmp_path):
+    site = tmp_path / "site"
+    site.mkdir()
+    (site / "index.html").write_text("x", encoding="utf-8")
+    calls = []
+
+    def run(args, **kw):
+        calls.append(args)
+        return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
+
+    publish.publish_hf(site, "ktos/paralaksa", "hf_SEKRET", run)
+    push = calls[-1]
+    assert push[:4] == ["git", "push", "-q", "--force"] and push[4] == "https://user:hf_SEKRET@huggingface.co/spaces/ktos/paralaksa"
+    assert not any("remote" in c for c in calls)
+
+    def failing(args, **kw):
+        return subprocess.CompletedProcess(args, 1 if args[1] == "push" else 0, stdout="", stderr=f"fatal: {args[-2]}")
+
+    with pytest.raises(RuntimeError) as e:
+        publish.publish_hf(site, "ktos/paralaksa", "hf_SEKRET", failing)
+    assert "hf_SEKRET" not in str(e.value)
+    with pytest.raises(RuntimeError):
+        publish.publish_hf(site, "zle", "t", run)
+    with pytest.raises(RuntimeError):
+        publish.publish_hf(site, "ktos/paralaksa", "", run)

@@ -863,7 +863,7 @@ def setup_push() -> str:
         return "bez repo aktywności"
     try:
         PUSH_KEY = powiadomienia.public_key(key)
-        send = powiadomienia.sender(key, os.environ.get("RENDER_EXTERNAL_URL") or "https://paralaksa.onrender.com")
+        send = powiadomienia.sender(key, os.environ.get("PUBLIC_URL") or os.environ.get("RENDER_EXTERNAL_URL") or "https://paralaksa.onrender.com")
     except Exception as e:                          # brak cryptography/pywebpush albo zły klucz
         return f"wyłączone ({type(e).__name__}: {e})"
     PUSH = powiadomienia.Subscriptions(STORE.files)

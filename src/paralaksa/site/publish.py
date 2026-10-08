@@ -29,6 +29,14 @@ def stage(site_dir: Path, dest: Path) -> None:
     shutil.copytree(site_dir, dest / "public", ignore=shutil.ignore_patterns("*.zip"))
 
 
+def stage_hf(site_dir: Path, dest: Path) -> None:
+    """Hugging Face Space (Docker): same layout as stage(), plus Dockerfile and the Space README (YAML header)."""
+    stage(site_dir, dest)
+    (dest / "render.yaml").unlink()
+    shutil.copy2(HOSTING / "hf" / "Dockerfile", dest / "Dockerfile")
+    shutil.copy2(HOSTING / "hf" / "README.md", dest / "README.md")
+
+
 def _run(run: Runner, args: list[str], cwd: Path | None = None) -> str:
     res = run(args, cwd=cwd, capture_output=True, text=True, encoding="utf-8")
     if res.returncode != 0:
@@ -55,4 +63,25 @@ def publish(site_dir: Path, repo: str, run: Runner = subprocess.run) -> str:
         _run(run, ["git", "add", "-A"], work)
         _run(run, ["git", "commit", "-q", "-m", message], work)
         _run(run, ["git", "push", "-q", "--force", f"https://github.com/{repo}.git", "main"], work)
+    return message
+
+
+def publish_hf(site_dir: Path, space: str, token: str, run: Runner = subprocess.run) -> str:
+    """Force-push one commit to the Hugging Face Space repo (user/name). The token lives only in the push URL
+    (no remote is stored in .git/config) and is masked in errors. Files are under 10 MB, so no Git LFS is needed."""
+    if not REPO_RE.match(space):
+        raise RuntimeError(f"HF_SPACE ma postać użytkownik/nazwa, jest: {space!r}")
+    if not token:
+        raise RuntimeError("brak HF_TOKEN w .env")
+    message = f"Strona {datetime.now(timezone.utc):%Y-%m-%d %H:%M} UTC"
+    with tempfile.TemporaryDirectory(prefix="plx-hf-", ignore_cleanup_errors=True) as tmp:
+        work = Path(tmp) / "repo"
+        stage_hf(site_dir, work)
+        _run(run, ["git", "init", "-q", "-b", "main"], work)
+        _run(run, ["git", "add", "-A"], work)
+        _run(run, ["git", "commit", "-q", "-m", message], work)
+        try:
+            _run(run, ["git", "push", "-q", "--force", f"https://user:{token}@huggingface.co/spaces/{space}", "main"], work)
+        except RuntimeError as e:
+            raise RuntimeError(str(e).replace(token, "***")) from None
     return message
