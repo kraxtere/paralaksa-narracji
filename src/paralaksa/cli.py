@@ -272,6 +272,9 @@ def site(
                                       help="Wypchnij stronę do prywatnego repo SITE_REPO (Render, pod hasłem)."),
     publish_hf: bool = typer.Option(False, "--publikuj-hf",
                                     help="Wypchnij stronę do Space na Hugging Face (HF_SPACE i HF_TOKEN w .env); zapasowy hosting."),
+    publish_cf: bool = typer.Option(False, "--publikuj-cf",
+                                    help="Wdróż statyczną kopię na Cloudflare Pages (CF_PROJECT, CLOUDFLARE_API_TOKEN, "
+                                         "CLOUDFLARE_ACCOUNT_ID w .env; opcjonalnie CF_ANALYTICS_TOKEN)."),
     no_stories: bool = typer.Option(False, "--bez-historii",
                                     help="Nie wywołuj modelu: historie dnia i tłumaczenia nagłówków tylko z zapisanych."),
     stories_dir: Path = typer.Option(Path("data/stories"), "--historie-dir", help="Zapisane historie dnia (JSON)."),
@@ -433,6 +436,20 @@ def site(
             typer.echo(f"Opublikowano w {repo}: {publish(out_dir, repo)}")
         except RuntimeError as e:
             typer.echo(f"BŁĄD publikacji: {e}", err=True)
+            raise typer.Exit(1)
+    if publish_cf:
+        from paralaksa.site.publish import publish_cf as _publish_cf
+
+        project = os.environ.get("CF_PROJECT", "")
+        if not project:
+            typer.echo("BŁĄD: brak CF_PROJECT w .env (nazwa projektu Cloudflare Pages)", err=True)
+            raise typer.Exit(1)
+        try:
+            typer.echo(f"Wdrożono w Cloudflare Pages ({project}): " + _publish_cf(
+                out_dir, project, os.environ.get("CLOUDFLARE_API_TOKEN", ""), os.environ.get("CLOUDFLARE_ACCOUNT_ID", ""),
+                os.environ.get("CF_ANALYTICS_TOKEN", "")))
+        except RuntimeError as e:
+            typer.echo(f"BŁĄD publikacji CF: {e}", err=True)
             raise typer.Exit(1)
     if publish_hf:
         from paralaksa.site.publish import publish_hf as _publish_hf

@@ -177,3 +177,58 @@ def test_publish_hf_pushes_with_token_in_url_only_and_masks_it(tmp_path):
         publish.publish_hf(site, "zle", "t", run)
     with pytest.raises(RuntimeError):
         publish.publish_hf(site, "ktos/paralaksa", "", run)
+
+
+def _mini_site(tmp_path):
+    site = tmp_path / "site"
+    (site / "v2" / "2026-10-08").mkdir(parents=True)
+    (site / "v2" / "dni.json").write_text('["2026-10-08", "2026-10-07"]', encoding="utf-8")
+    (site / "v2" / "2026-10-08" / "index.html").write_text("<html><body>x</body></html>", encoding="utf-8")
+    (site / "index.html").write_text("<html><body>stara</body></html>", encoding="utf-8")
+    (site / "sw.js").write_text("//", encoding="utf-8")
+    return site
+
+
+def test_stage_cf_static_layout(tmp_path):
+    site = _mini_site(tmp_path)
+    dest = tmp_path / "out"
+    publish.stage_cf(site, dest)
+    assert not (dest / "server.py").exists() and (dest / "sw.js").is_file()
+    assert (dest / "_redirects").read_text(encoding="utf-8") == "/ /v2/2026-10-08/index.html 302\n"
+    assert "X-Robots-Tag: noindex" in (dest / "_headers").read_text(encoding="utf-8")
+    assert "Disallow: /" in (dest / "robots.txt").read_text(encoding="utf-8")
+    assert "cloudflareinsights" not in (dest / "v2" / "2026-10-08" / "index.html").read_text(encoding="utf-8")
+
+
+def test_stage_cf_analytics_only_with_token(tmp_path):
+    site = _mini_site(tmp_path)
+    dest = tmp_path / "out"
+    publish.stage_cf(site, dest, "a" * 32)
+    assert "data-cf-beacon" in (dest / "v2" / "2026-10-08" / "index.html").read_text(encoding="utf-8")
+    with pytest.raises(RuntimeError):
+        publish.stage_cf(site, tmp_path / "out2", "zły token\"<")
+
+
+def test_publish_cf_runs_wrangler_with_secrets_in_env_only(tmp_path):
+    site = _mini_site(tmp_path)
+    seen = {}
+
+    def run(args, **kw):
+        seen["args"], seen["env"] = args, kw.get("env")
+        return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
+
+    publish.publish_cf(site, "paralaksa", "TOKEN123", "acc42", "", run)
+    assert "pages" in seen["args"] and "deploy" in seen["args"] and "paralaksa" in seen["args"]
+    assert not any("TOKEN123" in a or "acc42" in a for a in seen["args"])
+    assert seen["env"]["CLOUDFLARE_API_TOKEN"] == "TOKEN123" and seen["env"]["CLOUDFLARE_ACCOUNT_ID"] == "acc42"
+
+    def failing(args, **kw):
+        return subprocess.CompletedProcess(args, 1, stdout="", stderr="auth TOKEN123 odrzucony")
+
+    with pytest.raises(RuntimeError) as e:
+        publish.publish_cf(site, "paralaksa", "TOKEN123", "acc42", "", failing)
+    assert "TOKEN123" not in str(e.value)
+    with pytest.raises(RuntimeError):
+        publish.publish_cf(site, "Zła Nazwa", "t", "a", "", run)
+    with pytest.raises(RuntimeError):
+        publish.publish_cf(site, "paralaksa", "", "a", "", run)

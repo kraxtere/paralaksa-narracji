@@ -4,6 +4,8 @@ Every publish replaces the repo content with a single fresh commit (force push),
 old builds. Refuses to push unless GitHub reports the repo as private."""
 from __future__ import annotations
 
+import json
+import os
 import re
 import shutil
 import subprocess
@@ -37,8 +39,86 @@ def stage_hf(site_dir: Path, dest: Path) -> None:
     shutil.copy2(HOSTING / "hf" / "README.md", dest / "README.md")
 
 
-def _run(run: Runner, args: list[str], cwd: Path | None = None) -> str:
-    res = run(args, cwd=cwd, capture_output=True, text=True, encoding="utf-8")
+CF_HEADERS = """/*
+  X-Robots-Tag: noindex, nofollow
+  X-Content-Type-Options: nosniff
+/*.html
+  Cache-Control: no-cache
+/*.js
+  Cache-Control: no-cache
+/*.json
+  Cache-Control: no-cache
+/*.webp
+  Cache-Control: public, max-age=86400
+/*.png
+  Cache-Control: public, max-age=86400
+/*.jpg
+  Cache-Control: public, max-age=86400
+/*.svg
+  Cache-Control: public, max-age=86400
+"""
+DAY_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+CF_TOKEN_RE = re.compile(r"^[A-Za-z0-9]{16,64}$")
+
+
+def latest_day(site_dir: Path) -> str | None:
+    """Newest day of version 2.0 (v2/dni.json), if its page was built."""
+    try:
+        days = json.loads((site_dir / "v2" / "dni.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    day = days[0] if isinstance(days, list) and days else ""
+    return day if isinstance(day, str) and DAY_RE.match(day) and (site_dir / "v2" / day / "index.html").is_file() else None
+
+
+def stage_cf(site_dir: Path, dest: Path, analytics_token: str = "") -> None:
+    """Cloudflare Pages: only the built site (no server), plus _headers, robots.txt and _redirects ("/" -> newest day).
+    The static pages already carry no backend hooks (the person menu, heartbeat and push exist only when the Render server
+    injects window.plxJa), so nothing is rewritten except the optional Web Analytics beacon (cookie-free)."""
+    if not (site_dir / "index.html").is_file():
+        raise RuntimeError(f"brak zbudowanej strony w {site_dir} (najpierw plx site)")
+    shutil.copytree(site_dir, dest, ignore=shutil.ignore_patterns("*.zip"), dirs_exist_ok=True)
+    (dest / "_headers").write_text(CF_HEADERS, encoding="utf-8")
+    (dest / "robots.txt").write_text("User-agent: *\nDisallow: /\n", encoding="utf-8")
+    day = latest_day(dest)
+    if day:
+        (dest / "_redirects").write_text(f"/ /v2/{day}/index.html 302\n", encoding="utf-8")
+    if analytics_token:
+        if not CF_TOKEN_RE.match(analytics_token):
+            raise RuntimeError("CF_ANALYTICS_TOKEN ma nieprawidłowy format")
+        beacon = ('<script defer src="https://static.cloudflareinsights.com/beacon.min.js" '
+                  f"data-cf-beacon='{{\"token\": \"{analytics_token}\"}}'></script>")
+        for page in dest.rglob("*.html"):
+            text = page.read_text(encoding="utf-8")
+            if "</body>" in text:
+                page.write_text(text.replace("</body>", beacon + "</body>", 1), encoding="utf-8")
+
+
+def publish_cf(site_dir: Path, project: str, api_token: str, account_id: str, analytics_token: str = "",
+               run: Runner = subprocess.run) -> str:
+    """Direct upload with wrangler (`npx wrangler pages deploy`): no extra repo, no git history growing. The API token and
+    account id go only into the child's environment (never into files or arguments)."""
+    if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,56}", project):
+        raise RuntimeError(f"CF_PROJECT ma postać małe-litery-cyfry-myślniki, jest: {project!r}")
+    if not api_token or not account_id:
+        raise RuntimeError("brak CLOUDFLARE_API_TOKEN lub CLOUDFLARE_ACCOUNT_ID w .env")
+    message = f"Strona {datetime.now(timezone.utc):%Y-%m-%d %H:%M} UTC"
+    npx = shutil.which("npx") or "npx"
+    with tempfile.TemporaryDirectory(prefix="plx-cf-", ignore_cleanup_errors=True) as tmp:
+        work = Path(tmp) / "public"
+        stage_cf(site_dir, work, analytics_token)
+        env = {**os.environ, "CLOUDFLARE_API_TOKEN": api_token, "CLOUDFLARE_ACCOUNT_ID": account_id}
+        try:
+            _run(run, [npx, "--yes", "wrangler", "pages", "deploy", str(work), "--project-name", project,
+                       "--branch", "main", "--commit-message", message, "--commit-dirty=true"], env=env)
+        except RuntimeError as e:
+            raise RuntimeError(str(e).replace(api_token, "***")) from None
+    return message
+
+
+def _run(run: Runner, args: list[str], cwd: Path | None = None, env: dict | None = None) -> str:
+    kw = {"env": env} if env is not None else {}
+    res = run(args, cwd=cwd, capture_output=True, text=True, encoding="utf-8", **kw)
     if res.returncode != 0:
         raise RuntimeError(f"{' '.join(args[:3])}: {(res.stderr or res.stdout).strip()}")
     return (res.stdout or "").strip()

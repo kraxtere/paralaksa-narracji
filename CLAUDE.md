@@ -11,7 +11,7 @@ Limit konta jest wąskim gardłem. Każdy krok czyta cały kontekst od nowa, wi�
 
 ## Projekt
 **Paralaksa narracji / zdarzeń**: codzienny przegląd prasy z 17 krajów (43 źródła, `config/sources.yaml`), strona wewnętrzna
-prywatna: dostęp przez link zaproszenia, noindex (wersja 2.0 obrazkowa). Spec: `SPEC.md` (radar→paralaksa,
+prywatna: dostęp przez link zaproszenia, noindex (wersja 2.0 obrazkowa); od 09.10 równolegle publiczna statyczna kopia na Cloudflare Pages (`plx site --publikuj-cf`, noindex), Render z logowaniem pozostaje. Spec: `SPEC.md` (radar→paralaksa,
 `src/radar`→`src/paralaksa`, `radar`→`plx`, `data/paralaksa.db`).
 Stan i obsługa: `docs/CURRENT_HANDOFF.md`, `docs/OPERATIONS.md`, `docs/SOURCE_REVIEW.md`, `docs/PARALAKSA_ZDARZEN.md`, `CHANGELOG.md`.
 Procedura dnia strony 2.0: `scripts/v2/README.md`.

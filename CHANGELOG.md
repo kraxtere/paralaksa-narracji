@@ -1,3 +1,13 @@
+# Statyczna kopia na Cloudflare Pages — 2026-10-09
+
+- Powód: Render zatrzymany po 5 GB transferu; Docker Space na HF wymaga płatnego planu. `plx site --publikuj-cf` (`publish.stage_cf`, `publish_cf`)
+  wdraża `npx wrangler pages deploy` (bezpośredni upload, bez dodatkowego repo; token i Account ID tylko w środowisku procesu).
+  Katalog: sama strona + `_headers` (noindex, cache obrazków 1 dzień, html/js/json no-cache), `robots.txt` (Disallow), `_redirects` (`/` → najnowszy
+  dzień z `v2/dni.json`, odświeżany przy każdym wdrożeniu). Opcjonalny beacon Cloudflare Web Analytics tylko przy `CF_ANALYTICS_TOKEN`.
+- Strona statyczna nie ma haków serwera (menu osoby, heartbeat, push wstawia tylko server.py przez `window.plxJa`), więc nic nie trzeba wyłączać;
+  `sw.js` i manifest działają (instalacja jako aplikacja), bez push. Limity Free: 20 000 plików i 25 MiB na plik; mamy ok. 3600 plików, max <10 MB.
+- `.env`: `CF_PROJECT`, `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, opcjonalnie `CF_ANALYTICS_TOKEN`. Testy w `tests/test_site_publish.py`.
+
 # Zapasowy hosting: Hugging Face Space (Docker) — 2026-10-08
 
 - Powód: Render zatrzymał serwis po 5 GB transferu. `plx site --publikuj-hf` układa katalog jak `--publikuj` (`publish.stage_hf`), dokłada
