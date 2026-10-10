@@ -186,6 +186,9 @@ def _mini_site(tmp_path):
     (site / "v2" / "2026-10-08" / "index.html").write_text("<html><body>x</body></html>", encoding="utf-8")
     (site / "index.html").write_text("<html><body>stara</body></html>", encoding="utf-8")
     (site / "sw.js").write_text("//", encoding="utf-8")
+    (site / "dziennik").mkdir()
+    (site / "dziennik" / "d.html").write_text('<a href="../index.html#dziennik">x</a>', encoding="utf-8")
+    (site / "v2" / "2026-10-08" / "x.html").write_text('<a href="../index.html">v2</a>', encoding="utf-8")
     return site
 
 
@@ -194,7 +197,11 @@ def test_stage_cf_static_layout(tmp_path):
     dest = tmp_path / "out"
     publish.stage_cf(site, dest)
     assert not (dest / "server.py").exists() and (dest / "sw.js").is_file()
-    assert (dest / "_redirects").read_text(encoding="utf-8") == "/ /v2/2026-10-08/index.html 302\n"
+    root = (dest / "index.html").read_text(encoding="utf-8")
+    assert 'url=/v2/2026-10-08/"' in root and "stara" not in root and not (dest / "_redirects").exists()
+    assert "stara" in (dest / "przeglad.html").read_text(encoding="utf-8")
+    assert 'href="../przeglad.html#dziennik"' in (dest / "dziennik" / "d.html").read_text(encoding="utf-8")
+    assert 'href="../index.html"' in (dest / "v2" / "2026-10-08" / "x.html").read_text(encoding="utf-8")
     assert "X-Robots-Tag: noindex" in (dest / "_headers").read_text(encoding="utf-8")
     assert "Disallow: /" in (dest / "robots.txt").read_text(encoding="utf-8")
     assert "cloudflareinsights" not in (dest / "v2" / "2026-10-08" / "index.html").read_text(encoding="utf-8")

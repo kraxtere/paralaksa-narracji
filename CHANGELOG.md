@@ -1,3 +1,12 @@
+# Cloudflare Pages: strona główna i aplikacja — 2026-10-11
+
+- `/` zwracał stary „Przegląd” (root `index.html`), a `_redirects` nie zadziałało. `stage_cf` nie wysyła już `_redirects`: root `index.html` to teraz
+  strona z natychmiastowym przekierowaniem (meta refresh + `location.replace`) na `/v2/NAJNOWSZY/` (forma katalogowa, bo Pages odpowiada 308 na `.html`),
+  a stary „Przegląd” jest pod `/przeglad.html` (linki z `dziennik/` i `zdarzenia/` przepisane w kopii wdrożeniowej).
+- Manifest ma `start_url` i `scope` względne (`./`), więc pasują do domeny `pages.dev`; bez zmian.
+- Ekstrakcja 10.10: dwa artykuły z `extracted=2` (walidacja po ponowieniu) blokowały `plx report` (niepełna ekstrakcja); ponowne uruchomienie
+  `ekstrakcja_codex_dnia.py` dla dnia je naprawia (losowo, do 2–3 prób).
+
 # Statyczna kopia na Cloudflare Pages — 2026-10-09
 
 - Powód: Render zatrzymany po 5 GB transferu; Docker Space na HF wymaga płatnego planu. `plx site --publikuj-cf` (`publish.stage_cf`, `publish_cf`)

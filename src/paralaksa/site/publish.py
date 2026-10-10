@@ -72,8 +72,28 @@ def latest_day(site_dir: Path) -> str | None:
     return day if isinstance(day, str) and DAY_RE.match(day) and (site_dir / "v2" / day / "index.html").is_file() else None
 
 
+def _root_redirect(dest: Path, day: str) -> None:
+    """The old root "Przegląd" moves to /przeglad.html (links from dziennik/ and zdarzenia/ follow); / jumps to the newest day.
+    Target is the directory form /v2/DAY/ (Pages answers .html and index.html with a 308 to it)."""
+    old = dest / "index.html"
+    old.rename(dest / "przeglad.html")
+    page = dest / "przeglad.html"
+    page.write_text(page.read_text(encoding="utf-8").replace('href="index.html', 'href="przeglad.html'), encoding="utf-8")
+    for folder in ("dziennik", "zdarzenia"):
+        for sub in (dest / folder).glob("*.html"):
+            text = sub.read_text(encoding="utf-8")
+            if 'href="../index.html' in text:
+                sub.write_text(text.replace('href="../index.html', 'href="../przeglad.html'), encoding="utf-8")
+    target = f"/v2/{day}/"
+    old.write_text(
+        '<!doctype html>\n<html lang="pl"><head><meta charset="utf-8"><meta name="robots" content="noindex, nofollow">'
+        f'<meta http-equiv="refresh" content="0; url={target}"><title>Paralaksa</title>'
+        f'<script>location.replace("{target}" + location.hash)</script></head>'
+        f'<body><p><a href="{target}">Paralaksa</a></p></body></html>\n', encoding="utf-8")
+
+
 def stage_cf(site_dir: Path, dest: Path, analytics_token: str = "") -> None:
-    """Cloudflare Pages: only the built site (no server), plus _headers, robots.txt and _redirects ("/" -> newest day).
+    """Cloudflare Pages: only the built site (no server), plus _headers, robots.txt and a root page that jumps to the newest day.
     The static pages already carry no backend hooks (the person menu, heartbeat and push exist only when the Render server
     injects window.plxJa), so nothing is rewritten except the optional Web Analytics beacon (cookie-free)."""
     if not (site_dir / "index.html").is_file():
@@ -82,8 +102,8 @@ def stage_cf(site_dir: Path, dest: Path, analytics_token: str = "") -> None:
     (dest / "_headers").write_text(CF_HEADERS, encoding="utf-8")
     (dest / "robots.txt").write_text("User-agent: *\nDisallow: /\n", encoding="utf-8")
     day = latest_day(dest)
-    if day:
-        (dest / "_redirects").write_text(f"/ /v2/{day}/index.html 302\n", encoding="utf-8")
+    if day:                                                 # a root _redirects rule did not win over the root index.html on Pages
+        _root_redirect(dest, day)
     if analytics_token:
         if not CF_TOKEN_RE.match(analytics_token):
             raise RuntimeError("CF_ANALYTICS_TOKEN ma nieprawidłowy format")
