@@ -9,6 +9,7 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
@@ -103,7 +104,7 @@ def publish_cf(site_dir: Path, project: str, api_token: str, account_id: str, an
     if not api_token or not account_id:
         raise RuntimeError("brak CLOUDFLARE_API_TOKEN lub CLOUDFLARE_ACCOUNT_ID w .env")
     message = f"Strona {datetime.now(timezone.utc):%Y-%m-%d %H:%M} UTC"
-    npx = shutil.which("npx") or "npx"
+    npx = (shutil.which("npx.cmd") if sys.platform == "win32" else None) or shutil.which("npx") or "npx"
     with tempfile.TemporaryDirectory(prefix="plx-cf-", ignore_cleanup_errors=True) as tmp:
         work = Path(tmp) / "public"
         stage_cf(site_dir, work, analytics_token)
