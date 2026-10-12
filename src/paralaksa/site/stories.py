@@ -7,6 +7,7 @@ import hashlib
 import json
 import re
 import sqlite3
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -182,6 +183,14 @@ def _call(client: Any, model: str, custom_id: str, prompt: str) -> Any:
     return res
 
 
+def parallel_map(fn: Any, items: list, workers: int = 6) -> list:
+    """fn over items in threads, results in the order of `items` (same as a plain loop); the first error in that order is raised."""
+    if len(items) < 2:
+        return [fn(i) for i in items]
+    with ThreadPoolExecutor(max_workers=min(workers, len(items))) as pool:
+        return list(pool.map(fn, items))
+
+
 def generate(client: Any, model: str, day: str, items: list[dict], cache_dir: Path) -> dict:
     """Find events with candidates, then verify each candidate and translate the ones that pass (in chunks of
     VERIFY_CHUNK articles). The result (also an empty one) is cached, so rebuilding the site does not pay again."""
@@ -189,14 +198,16 @@ def generate(client: Any, model: str, day: str, items: list[dict], cache_dir: Pa
     cands = parse_candidates(first.text, items)
     calls = [first]
     pool = [i for c in cands for i in c["ids"]]
-    for n, k in enumerate(range(0, len(pool), VERIFY_CHUNK), 1):
-        calls.append(_call(client, model, f"historie-weryfikacja-{day}-{n}",
-                           build_verify_prompt(cands, items, pool[k:k + VERIFY_CHUNK])))
+    chunks = [(n, pool[k:k + VERIFY_CHUNK]) for n, k in enumerate(range(0, len(pool), VERIFY_CHUNK), 1)]
+    calls += parallel_map(lambda nc: _call(client, model, f"historie-weryfikacja-{day}-{nc[0]}",
+                                           build_verify_prompt(cands, items, nc[1])), chunks)
     out = {"day": day, "model": model, "prompt": PROMPT_VERSION, "input_hash": input_hash(items),
            "created": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
            "cost_usd": round(sum(c.cost_usd for c in calls), 4),
            "input_tokens": sum(c.input_tokens for c in calls), "output_tokens": sum(c.output_tokens for c in calls),
            "kandydaci": cands, "historie": parse_stories(cands, [c.text for c in calls[1:]], items)}
     cache_dir.mkdir(parents=True, exist_ok=True)
-    (cache_dir / f"{day}.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+    tmp = cache_dir / f"{day}.json.tmp"                 # atomic: dzien.py starts os-dzien as soon as this file is complete
+    tmp.write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+    tmp.replace(cache_dir / f"{day}.json")
     return out

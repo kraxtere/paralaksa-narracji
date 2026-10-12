@@ -66,7 +66,7 @@ def test_main_stops_after_failed_phase(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     monkeypatch.setattr(dzien, "shell", lambda c, e: 1)
     called = []
-    monkeypatch.setattr(dzien, "phase2", lambda d: called.append(d) or True)
+    monkeypatch.setattr(dzien, "phase2", lambda d, timings=None: called.append(d) or True)
     assert dzien.main(["2026-10-05"]) == 1 and not called
 
 
@@ -97,3 +97,67 @@ def test_parallel_respects_after_and_stops_on_failure(tmp_path, monkeypatch):
     state = dzien.State("2026-10-06")
     assert not dzien.run_parallel(steps, "2026-10-06", state, lambda c, e: 1 if c[-1] == "a" else 0)
     assert "c" not in state.done and "d" not in state.done
+
+def test_phase1_graph_has_no_cycle_and_osdzien_waits_for_stories_marker():
+    steps = {s.name: s for s in dzien.phase1("2026-10-12")}
+    assert steps["os-dzien"].after == () and steps["os-dzien"].wait_files == (Path("data/stories/2026-10-12.json"),)
+    assert set(steps["kraje-D"].after) == {"site", "os-dzien"}            # kraje.py czyta data/tytuly/D.json, więc czeka na cały site
+    assert steps["os-ciag"].after == ("os-dzien",) and steps["kraje-ciag"].after == ("kraje-D",)
+    done, left = set(), list(steps)
+    while left:                                                            # każdy krok ma wszystkie `after` wcześniej: brak cyklu
+        ready_now = [n for n in left if all(a in done for a in steps[n].after)]
+        assert ready_now, f"cykl: {left}"
+        done |= set(ready_now)
+        left = [n for n in left if n not in done]
+
+
+def test_step_starts_when_marker_file_is_ready_while_other_step_still_runs(tmp_path, monkeypatch):
+    import threading
+    import time
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(dzien, "POLL_S", 0.05)
+    day, order, lock = "2026-10-12", [], threading.Lock()
+    marker = Path("marker.json")
+
+    def fake(cmd, env):
+        name = cmd[-1]
+        with lock:
+            order.append(("start", name))
+        if name == "site":
+            time.sleep(0.2)
+            marker.write_text("{", encoding="utf-8")             # niekompletny JSON: jeszcze nie gotowy
+            time.sleep(0.1)
+            marker.write_text("{}", encoding="utf-8")
+            time.sleep(1.5)
+        with lock:
+            order.append(("end", name))
+        return 0
+
+    steps = [dzien.Step("site", ["site"]), dzien.Step("os", ["os"], wait_files=(marker,))]
+    assert dzien.run_parallel(steps, day, dzien.State(day), fake)
+    pos = {e: i for i, e in enumerate(order)}
+    assert pos[("start", "os")] < pos[("end", "site")]                    # nie czekał na koniec site
+    assert marker.read_text(encoding="utf-8") == "{}"
+
+
+def test_step_with_marker_that_never_appears_is_left_pending(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    steps = [dzien.Step("site", ["site"]), dzien.Step("os", ["os"], wait_files=(Path("brak.json"),))]
+    assert not dzien.run_parallel(steps, "2026-10-12", dzien.State("2026-10-12"), lambda c, e: 0)
+
+
+def test_timings_keep_earlier_phases_and_record_start_end(tmp_path, monkeypatch):
+    import json
+    monkeypatch.chdir(tmp_path)
+    first = dzien.Timings("2026-10-12")
+    first.step("site", 10.0)
+    first.phase("faza1", 12.0)
+    first.save()
+    second = dzien.Timings("2026-10-12")                                  # kolejny proces (faza 2) nie nadpisuje
+    second.step("obraz:x", 3.0)
+    second.phase("faza2", 4.0)
+    second.save()
+    data = json.loads(Path("data/widok/2026-10-12/_czasy.json").read_text(encoding="utf-8"))
+    assert data["fazy"] == {"faza1": 12.0, "faza2": 4.0} and set(data["kroki"]) == {"site", "obraz:x"}
+    assert [r["krok"] for r in data["przebiegi"]] == ["site", "obraz:x"]
+    assert set(data["przebiegi"][0]) == {"krok", "start", "koniec", "s"}

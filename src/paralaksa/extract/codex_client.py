@@ -13,9 +13,12 @@ import glob
 import os
 import subprocess
 import tempfile
+import time
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
+from paralaksa.extract.call_log import log_call
 from paralaksa.extract.llm_client import LLMRequest, LLMResult
 
 EFFORTS = {"low", "medium", "high"}
@@ -81,6 +84,13 @@ class CodexClient:
         self.timeout_s, self._run = timeout_s, run
 
     def complete(self, req: LLMRequest) -> LLMResult:
+        started, t0 = datetime.now(timezone.utc), time.monotonic()
+        result = self._complete(req)
+        chars = sum(len(str(m.get("content", ""))) for m in req.messages)
+        log_call(req.custom_id, chars, time.monotonic() - t0, result.ok, req.model, started)
+        return result
+
+    def _complete(self, req: LLMRequest) -> LLMResult:
         result = LLMResult(custom_id=req.custom_id, model=req.model, mode="direct")
         with tempfile.TemporaryDirectory(prefix="plx-codex-") as tmp:
             folder = Path(tmp)

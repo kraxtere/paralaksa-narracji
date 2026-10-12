@@ -312,41 +312,64 @@ def site(
     model = settings.models.site_model()
     client = None
     spent = 0.0
+    import threading as _threading
+    shared = _threading.Lock()          # stories_for and titles_for run in parallel threads (site.data.daily_payload)
+
+    def get_client():
+        nonlocal client
+        with shared:
+            client = client or build_client(model, settings.pricing, settings.extract.batch_poll_interval_s,
+                                            settings.extract.batch_timeout_h)
+            return client
+
+    def own_conn():                      # a sqlite connection must not cross threads: each callback reads on its own
+        c = open_db_readonly(path)
+        if c is not None:
+            c.row_factory = sqlite3.Row
+        return c
 
     def stories_for(day: str, eligible: set[int]) -> dict | None:
-        nonlocal client, spent
-        items = stories.story_items(conn, day, eligible)
+        nonlocal spent
+        sconn = own_conn()
+        try:
+            items = stories.story_items(sconn, day, eligible)
+        finally:
+            if sconn is not None:
+                sconn.close()
         cached = stories.load_cached(stories_dir, day, items)
         if cached is not None or no_stories:
             return cached
         try:
-            client = client or build_client(model, settings.pricing, settings.extract.batch_poll_interval_s,
-                                            settings.extract.batch_timeout_h)
-            out = stories.generate(client, model, day, items, stories_dir)
+            out = stories.generate(get_client(), model, day, items, stories_dir)
         except RuntimeError as e:
             typer.echo(f"OSTRZEŻENIE: {e}; strona bez historii dnia {day}", err=True)
             return None
-        spent += out["cost_usd"]
+        with shared:
+            spent += out["cost_usd"]
         typer.echo(f"Historie dnia {day}: {len(out['historie'])} ({out['input_tokens']} + {out['output_tokens']} tokenów, "
                    f"{out['cost_usd']:.3f} $)")
         return out
 
     def titles_for(day: str, ids: set[int]) -> dict[int, str]:
-        nonlocal client, spent
+        nonlocal spent
         if no_stories:
             return titles.cached(titles_dir, day)
-        items = titles.title_items(conn, ids)
+        tconn = own_conn()
+        try:
+            items = titles.title_items(tconn, ids)
+        finally:
+            if tconn is not None:
+                tconn.close()
         known = titles.cached(titles_dir, day)
         if all(i["id"] in known for i in items):
             return known
         try:
-            client = client or build_client(model, settings.pricing, settings.extract.batch_poll_interval_s,
-                                            settings.extract.batch_timeout_h)
-            out = titles.translate(client, model, day, items, titles_dir)
+            out = titles.translate(get_client(), model, day, items, titles_dir)
         except RuntimeError as e:
             typer.echo(f"OSTRZEŻENIE: {e}; nagłówki dnia {day} bez tłumaczenia", err=True)
             return known
-        spent += out["run_cost"]
+        with shared:
+            spent += out["run_cost"]
         for err in out["errors"]:
             typer.echo(f"OSTRZEŻENIE: tłumaczenia {day}: {err}", err=True)
         typer.echo(f"Tłumaczenia nagłówków {day}: {out['translated']} nowych, bez tłumaczenia {out['missing']} "

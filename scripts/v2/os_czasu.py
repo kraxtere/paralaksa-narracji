@@ -97,8 +97,9 @@ def extra_events(day: str) -> None:
                  + S.PROMPT.format(max_stories=EXTRA_MAX, min_countries=EXTRA_MIN_COUNTRIES, items=lines))
     cands = S.parse_candidates(first, items)
     pool = [i for c in cands for i in c["ids"]]
-    checks = [call(f"os-dodatkowe-weryfikacja-{day}-{k}", S.build_verify_prompt(cands, items, pool[k:k + S.VERIFY_CHUNK]))
-              for k in range(0, len(pool), S.VERIFY_CHUNK)]
+    checks = S.parallel_map(lambda k: call(f"os-dodatkowe-weryfikacja-{day}-{k}",
+                                           S.build_verify_prompt(cands, items, pool[k:k + S.VERIFY_CHUNK])),
+                            list(range(0, len(pool), S.VERIFY_CHUNK)))      # równolegle, wyniki w kolejności porcji
     found = S.parse_stories(cands, checks, items, min_countries=EXTRA_MIN_COUNTRIES, limit=EXTRA_MAX)
     EXTRA.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps({"day": day, "model": TEXT_MODEL, "kandydaci": cands, "historie": found},

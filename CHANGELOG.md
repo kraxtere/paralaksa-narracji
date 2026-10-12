@@ -1,3 +1,16 @@
+# Przyspieszenie fazy 1 dzien.py — 2026-10-13
+
+- Przyczyna (analiza 12.10): faza 1 = `site` → `os-dzien` → `kraje-D` → `kraje-ciag`, a czas wynika z długich wywołań Codexa w `plx site` (historie dnia,
+  potem tłumaczenia nagłówków po kolei) i w `os-dzien` (weryfikacje szeregowo); liczba wywołań i kontekst historii się nie zmieniły.
+- `os-dzien` rusza, gdy `data/stories/D.json` jest kompletny (`Step.wait_files`, sprawdzanie co `POLL_S` = 2 s), nie po całym `plx site`. `kraje-D` nadal
+  czeka na cały `site` (czyta `data/tytuly/D.json`). `stories.generate` zapisuje plik atomowo.
+- `plx site`: historie dnia i tłumaczenia nagłówków dnia idą równolegle (`site/data.py`; każdy callback ma własne połączenie SQLite, klient i koszt pod blokadą),
+  tłumaczenia po 60 nagłówków i 8 workerów (było 120 i 4). Weryfikacje historii (`stories.generate`) i `os_czasu.extra_events` równolegle
+  (`stories.parallel_map`, wyniki w kolejności porcji, jak w pętli).
+- Logi: `paralaksa/extract/call_log.py` zapisuje czas każdego wywołania Codexa (CodexClient i `codex_text`) do `data/widok/D/_wywolania.jsonl`;
+  `_czasy.json` zachowuje fazy i kroki z poprzednich procesów, dodaje `przebiegi` ze startem i końcem (także obrazki fazy 2).
+- Testy: graf `phase1` bez cyklu, start po markerze, kolejność wyników, log wywołań (`tests/test_dzien.py`, `tests/test_przyspieszenie_fazy1.py`).
+
 # Cloudflare Pages: strona główna i aplikacja — 2026-10-11
 
 - `/` zwracał stary „Przegląd” (root `index.html`), a `_redirects` nie zadziałało. `stage_cf` nie wysyła już `_redirects`: root `index.html` to teraz

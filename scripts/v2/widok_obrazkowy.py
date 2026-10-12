@@ -370,13 +370,21 @@ def theme_country_data(t: dict, pl: dict, cs: list[dict]) -> dict[str, dict]:
 
 def codex_text(work: Path, prompt_text: str, image: Path | None = None) -> str:
     """One read-only Codex call on the weaker text model; returns the last message."""
+    import time
+    from datetime import datetime, timezone
+    from paralaksa.extract.call_log import log_call
     limit_guard()
     work.mkdir(parents=True, exist_ok=True)
     (work / "polecenie.txt").write_text(prompt_text, encoding="utf-8")
-    subprocess.run([codex_exe(), "exec", "--skip-git-repo-check", "--ephemeral", "-C", str(work.resolve()), "--sandbox",
-                    "read-only", *TEXT_MODEL, "-o", str((work / "odp.txt").resolve()),
-                    *(["-i", str(image.resolve())] if image else []), "-"],
-                   input=prompt_text.encode("utf-8"), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=900, check=True)
+    started, t0, ok = datetime.now(timezone.utc), time.monotonic(), False
+    try:
+        subprocess.run([codex_exe(), "exec", "--skip-git-repo-check", "--ephemeral", "-C", str(work.resolve()), "--sandbox",
+                        "read-only", *TEXT_MODEL, "-o", str((work / "odp.txt").resolve()),
+                        *(["-i", str(image.resolve())] if image else []), "-"],
+                       input=prompt_text.encode("utf-8"), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=900, check=True)
+        ok = True
+    finally:
+        log_call(work.name, len(prompt_text), time.monotonic() - t0, ok, "codex-text", started)     # czas wywołania do _wywolania.jsonl
     return (work / "odp.txt").read_text(encoding="utf-8")
 
 

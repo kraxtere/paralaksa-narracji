@@ -7,7 +7,8 @@ Faza 2: WSZYSTKIE obrazki dnia w jednej kolejce (paski tematów i krajów w tema
         jeden proces na obrazek, starty co 10 s (`PASKI_ODSTEP`), po 429 hamowanie i ponowienie (paski.run_all).
          Streszczenia (potrzebują tylko linków ze stron) idą równolegle z obrazkami, po stronach „wstępnych”.
 Faza 3: strony końcowe, z `--publikuj` także plx site --publikuj (samodzielnie: strony, streszczenia, strony, publikacja).
-Czasy kroków i faz: data/widok/D/_czasy.json, podsumowanie na końcu.
+Czasy kroków i faz: data/widok/D/_czasy.json (fazy, kroki, przebiegi ze startem i końcem; kolejne fazy dopisują, nie nadpisują),
+czasy wywołań modelu: data/widok/D/_wywolania.jsonl (paralaksa.extract.call_log); podsumowanie na końcu.
 Stan kroków: data/widok/DZIEN/_dzien.json; krok z gotowym wynikiem (plik) albo zapisany w stanie jest pomijany.
 Baza data/prod.db tylko do odczytu (jak w README).
 """
@@ -21,6 +22,7 @@ import threading
 import time
 from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable
 
@@ -28,6 +30,7 @@ HERE = Path(__file__).resolve().parent
 PY = sys.executable
 PLX = str(Path(PY).with_name("plx.exe" if os.name == "nt" else "plx"))
 DB = "data/prod.db"
+POLL_S = 2          # co ile sekund run_parallel sprawdza markery gotowości (wait_files)
 
 
 @dataclass
@@ -37,6 +40,17 @@ class Step:
     result: Path | None = None        # istniejący plik = krok już zrobiony (bez wpisu w stanie)
     always: bool = False              # budowa stron i publikacja: za każdym razem (tanie, po poprawce obrazka trzeba je złożyć)
     after: tuple[str, ...] = ()       # kroki, które muszą się skończyć wcześniej (faza 1 idzie równolegle, reszta bez zależności rusza od razu)
+    wait_files: tuple[Path, ...] = () # markery gotowości: krok rusza, gdy te pliki istnieją (i są kompletnym JSON-em), choć krok który je pisze jeszcze trwa
+
+
+def ready(path: Path) -> bool:
+    """Marker file is there and complete (JSON parses): another step may still be running that wrote it."""
+    try:
+        if path.suffix == ".json":
+            json.loads(path.read_text(encoding="utf-8"))
+        return path.is_file()
+    except (OSError, ValueError):
+        return False
 
 
 def script(name: str, *args: str) -> list[str]:
@@ -45,15 +59,17 @@ def script(name: str, *args: str) -> list[str]:
 
 def phase1(day: str) -> list[Step]:
     """Kolejność listy jest poprawna także szeregowo; `after` pozwala `run_parallel` ruszyć niezależne kroki od razu.
-    Zależności: os-dzien i kraje-D czytają data/stories/D.json (site); kraje-D wyklucza też wynik os-dzien (assigned);
-    os-ciag/os-opisy zapisują ten sam magazyn osi po os-dzien; kraje-ciag po kraje-D. kategorie, report i dzien_prasy
-    czytają tylko bazę (do odczytu) i nie zależą od reszty."""
+    Zależności: os-dzien czyta tylko data/stories/D.json, więc rusza, gdy ten plik jest gotowy (marker `wait_files`), nie po całym
+    `plx site` (tłumaczenia nagłówków i budowa stron trwają dalej obok); kraje-D czyta też data/tytuly/D.json, więc czeka na
+    cały site, a wyklucza też wynik os-dzien (assigned); os-ciag/os-opisy zapisują ten sam magazyn osi po os-dzien;
+    kraje-ciag po kraje-D. kategorie, report i dzien_prasy czytają tylko bazę (do odczytu) i nie zależą od reszty."""
     return [
         Step("kategorie", script("kategorie.py")),        # kategoria ogólna artykułów bez sygnałów (archiwum); dokańcza brakujące
         Step("site", [PLX, "site", "--db", DB], Path(f"data/stories/{day}.json")),
         Step("report", [PLX, "report", "--date", day, "--db", DB], Path(f"reports/{day}.json")),
         Step("dzien_prasy", script("dzien_prasy.py", day, "--bez-opisow"), Path(f"data/dzien_prasy/{day}/opisy.json")),
-        Step("os-dzien", script("os_czasu.py", "dzien", day), Path(f"data/widok/os/dodatkowe/{day}.json"), after=("site",)),
+        Step("os-dzien", script("os_czasu.py", "dzien", day), Path(f"data/widok/os/dodatkowe/{day}.json"),
+             wait_files=(Path(f"data/stories/{day}.json"),)),
         Step("os-ciag", script("os_czasu.py", "ciag", day), Path(f"data/widok/os/ciag/{day}.json"), after=("os-dzien",)),
         Step("os-opisy", script("os_czasu.py", "opisy"), after=("os-ciag",)),
         Step("kraje-D", script("kraje.py", day), Path(f"data/widok/kraje/{day}.json"), after=("site", "os-dzien")),
@@ -102,19 +118,34 @@ class Timings:
         self.path = Path("data/widok") / day / "_czasy.json"
         self.steps: dict[str, float] = {}
         self.phases: dict[str, float] = {}
+        self.runs: list[dict] = []        # start/koniec każdego przebiegu kroku (UTC, HH:MM:SS) w tym procesie
         self.lock = threading.Lock()
+        try:                              # wcześniejsze fazy tego dnia zostają (dawniej każdy proces nadpisywał plik)
+            self.prev = json.loads(self.path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            self.prev = {}
 
-    def step(self, name: str, secs: float) -> None:
+    def step(self, name: str, secs: float, started: datetime | None = None) -> None:
+        end = datetime.now(timezone.utc)
         with self.lock:
             self.steps[name] = round(self.steps.get(name, 0) + secs, 1)
+            self.runs.append({"krok": name, "start": (started or end).strftime("%H:%M:%S"), "koniec": end.strftime("%H:%M:%S"),
+                              "s": round(secs, 1)})
 
     def phase(self, name: str, secs: float) -> None:
         with self.lock:
             self.phases[name] = round(self.phases.get(name, 0) + secs, 1)
 
     def save(self) -> None:
+        def merged(key: str, now: dict) -> dict:
+            out = dict(self.prev.get(key, {}))
+            for k, v in now.items():
+                out[k] = round(out.get(k, 0) + v, 1)
+            return out
+        data = {"fazy": merged("fazy", self.phases), "kroki": merged("kroki", self.steps),
+                "przebiegi": [*self.prev.get("przebiegi", []), *self.runs]}
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        self.path.write_text(json.dumps({"fazy": self.phases, "kroki": self.steps}, ensure_ascii=False, indent=1), encoding="utf-8")
+        self.path.write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
 
     def summary(self) -> str:
         slow = sorted(self.steps.items(), key=lambda kv: -kv[1])[:6]
@@ -124,12 +155,12 @@ class Timings:
 
 def timed(run: Callable[[list[str], dict], int], timings: Timings | None, name: str) -> Callable[[list[str], dict], int]:
     def inner(cmd: list[str], env: dict) -> int:
-        t0 = time.monotonic()
+        t0, started = time.monotonic(), datetime.now(timezone.utc)
         try:
             return run(cmd, env)
         finally:
             if timings:
-                timings.step(name, time.monotonic() - t0)
+                timings.step(name, time.monotonic() - t0, started)
     return inner
 
 
@@ -165,12 +196,12 @@ def run_parallel(steps: list[Step], day: str, state: State, run: Callable[[list[
                     print(f"= {s.name}: gotowe, pomijam", flush=True)
                     finished.add(s.name)
                     pending.remove(s)
-                elif all(a in finished for a in s.after):
+                elif all(a in finished for a in s.after) and all(ready(w) for w in s.wait_files):
                     pending.remove(s)
                     running[pool.submit(work, s)] = s
             if not running:
                 break
-            done, _ = wait(list(running), return_when=FIRST_COMPLETED)
+            done, _ = wait(list(running), timeout=POLL_S, return_when=FIRST_COMPLETED)     # co POLL_S także sprawdza markery gotowości
             for f in done:
                 s = running.pop(f)
                 if f.result() == 0:
@@ -216,13 +247,25 @@ def image_jobs(day: str) -> list[tuple[str, object]]:
     return unique
 
 
-def phase2(day: str, build: Callable[[str], list[tuple[str, object]]] = image_jobs) -> bool:
+def timed_job(fn: Callable[[], object], timings: Timings, name: str) -> Callable[[], object]:
+    def inner():
+        t0, started = time.monotonic(), datetime.now(timezone.utc)
+        try:
+            return fn()
+        finally:
+            timings.step(name, time.monotonic() - t0, started)
+    return inner
+
+
+def phase2(day: str, build: Callable[[str], list[tuple[str, object]]] = image_jobs, timings: Timings | None = None) -> bool:
     import paski
     os.environ.setdefault("PASKI_PROCESY", "100")          # jeden proces na obrazek; tempo wyznacza odstęp 10 s
     jobs = build(day)
     if not jobs:
         print("= obrazki: wszystkie gotowe", flush=True)
         return True
+    if timings:                                             # start/koniec każdego obrazka do _czasy.json (przebiegi)
+        jobs = [(label, timed_job(fn, timings, f"obraz:{label}")) for label, fn in jobs]
     results = paski.run_all(jobs)
     return all(v == "ok" for v in results.values())
 
@@ -262,7 +305,7 @@ def main(argv: list[str]) -> int:
             th = threading.Thread(target=lambda: box.update(
                 ok=phase("streszczenia", lambda: run_steps([summaries_step(day)], day, state, shell, timings=tm))))
             th.start()
-            img_ok = phase("faza2", lambda: phase2(day))
+            img_ok = phase("faza2", lambda: phase2(day, timings=tm))
             th.join()
             if not img_ok:
                 print("! obrazki: część odrzucona lub przerwana (429); ponowne uruchomienie robi tylko brakujące", flush=True)
@@ -274,7 +317,7 @@ def main(argv: list[str]) -> int:
     else:
         code = 1
         if ok and only == "2" and not dry:
-            ok = phase("faza2", lambda: phase2(day))
+            ok = phase("faza2", lambda: phase2(day, timings=tm))
             code = 2
             if not ok:
                 print("! obrazki: część odrzucona lub przerwana (429); ponowne uruchomienie robi tylko brakujące", flush=True)

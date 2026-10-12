@@ -13,8 +13,8 @@ from typing import Any
 from paralaksa.site.stories import _as_int, _call, _json
 
 PROMPT_VERSION = "tytuly-v1"
-CHUNK = 120        # nagłówków na wywołanie; odpowiedź musi się zmieścić w max_tokens
-WORKERS = 4
+CHUNK = 60         # nagłówków na wywołanie (od 12.10 połowa dawnych 120: krótsza odpowiedź = krótszy ogon czasu); musi się zmieścić w max_tokens
+WORKERS = 8
 
 PROMPT = """Przetłumacz nagłówki prasowe na polski. Każdy wiersz: numer, kod języka, oryginalny nagłówek.
 Tłumacz wiernie: bez dodawania, pomijania ani łagodzenia informacji, zachowaj cudzysłowy i ton nagłówka.
