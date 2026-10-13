@@ -11,18 +11,28 @@ def test_steps_skip_done_and_resume(tmp_path, monkeypatch):
     Path("data/stories").mkdir(parents=True)
     Path(f"data/stories/{day}.json").write_text("{}")                 # wynik pierwszego kroku istnieje
     ran, state = [], dzien.State(day)
+    results = {tuple(s.cmd): s.result for s in dzien.phase1(day)}
+
+    def make_result(cmd):                                             # krok z kodem 0 zostawia swój plik wynikowy
+        r = results.get(tuple(cmd))
+        if r is not None:
+            r.parent.mkdir(parents=True, exist_ok=True)
+            r.write_text("{}")
 
     def fake(cmd, env):
         ran.append(cmd[-1] if len(cmd) < 3 else cmd[2])
         assert env["DZIEN"] == day
-        return 1 if len(ran) == 4 else 0                              # czwarty uruchomiony krok pada
+        if len(ran) == 4:
+            return 1                                                  # czwarty uruchomiony krok pada
+        make_result(cmd)
+        return 0
 
     assert not dzien.run_steps(dzien.phase1(day), day, state, fake)
     assert len(ran) == 4 and "site" not in state.done and state.done == ["kategorie", "report", "dzien_prasy"][: len(state.done)]
     first_failed = [s.name for s in dzien.phase1(day)][4]
     assert first_failed not in state.done
     ran.clear()
-    assert dzien.run_steps(dzien.phase1(day), day, dzien.State(day), lambda c, e: 0)   # wznowienie: nic nie pada
+    assert dzien.run_steps(dzien.phase1(day), day, dzien.State(day), lambda c, e: make_result(c) or 0)   # wznowienie: nic nie pada
     assert dzien.State(day).done[-1] == "kraje-ciag"
 
 
@@ -140,10 +150,19 @@ def test_step_starts_when_marker_file_is_ready_while_other_step_still_runs(tmp_p
     assert marker.read_text(encoding="utf-8") == "{}"
 
 
-def test_step_with_marker_that_never_appears_is_left_pending(tmp_path, monkeypatch):
+def test_step_with_marker_that_never_appears_is_left_pending(tmp_path, monkeypatch, capsys):
     monkeypatch.chdir(tmp_path)
     steps = [dzien.Step("site", ["site"]), dzien.Step("os", ["os"], wait_files=(Path("brak.json"),))]
     assert not dzien.run_parallel(steps, "2026-10-12", dzien.State("2026-10-12"), lambda c, e: 0)
+    assert "nie ruszyły: os (brak markera: brak.json)" in capsys.readouterr().out
+
+
+def test_main_exits_nonzero_when_marker_never_appears(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(dzien, "phase1", lambda day: [dzien.Step("site", ["site"]),
+                                                      dzien.Step("os", ["os"], wait_files=(Path("brak.json"),))])
+    monkeypatch.setattr(dzien, "shell", lambda c, e: 0)
+    assert dzien.main(["2026-10-12", "--faza", "1"]) != 0
 
 
 def test_timings_keep_earlier_phases_and_record_start_end(tmp_path, monkeypatch):
@@ -161,3 +180,13 @@ def test_timings_keep_earlier_phases_and_record_start_end(tmp_path, monkeypatch)
     assert data["fazy"] == {"faza1": 12.0, "faza2": 4.0} and set(data["kroki"]) == {"site", "obraz:x"}
     assert [r["krok"] for r in data["przebiegi"]] == ["site", "obraz:x"]
     assert set(data["przebiegi"][0]) == {"krok", "start", "koniec", "s"}
+
+
+def test_step_exit_zero_without_result_file_fails_and_is_not_marked_done(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    state = dzien.State("2026-10-12")
+    steps = [dzien.Step("site", ["site"], Path("stories.json")),
+             dzien.Step("os", ["os"], wait_files=(Path("stories.json"),))]
+    assert not dzien.run_parallel(steps, "2026-10-12", state, lambda c, e: 0)
+    assert not state.has("site")
+    assert not dzien.run_steps(steps[:1], "2026-10-12", state, lambda c, e: 0)

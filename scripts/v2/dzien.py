@@ -31,6 +31,7 @@ PY = sys.executable
 PLX = str(Path(PY).with_name("plx.exe" if os.name == "nt" else "plx"))
 DB = "data/prod.db"
 POLL_S = 2          # co ile sekund run_parallel sprawdza markery gotowości (wait_files)
+WORKERS = int(os.environ.get("DZIEN_WORKERS", "9"))   # równoległe kroki fazy 1; mniej przy 429 z Codexa
 
 
 @dataclass
@@ -165,7 +166,7 @@ def timed(run: Callable[[list[str], dict], int], timings: Timings | None, name: 
 
 
 def run_parallel(steps: list[Step], day: str, state: State, run: Callable[[list[str], dict], int], dry: bool = False,
-                 timings: Timings | None = None, workers: int = 9) -> bool:
+                 timings: Timings | None = None, workers: int | None = None) -> bool:
     """Like run_steps, but steps start as soon as their `after` are finished; first failure stops new starts
     (running ones are awaited), rerun continues from there."""
     env = {**os.environ, "DZIEN": day, "PYTHONIOENCODING": "utf-8"}
@@ -180,6 +181,9 @@ def run_parallel(steps: list[Step], day: str, state: State, run: Callable[[list[
     def work(s: Step) -> int:
         print(f"> {s.name}", flush=True)
         code = timed(run, timings, s.name)(s.cmd, env)
+        if code == 0 and s.result is not None and not s.result.exists():
+            print(f"! {s.name}: kod 0, ale brak wyniku {s.result}", flush=True)
+            code = 1                     # np. plx site bez historii dnia: os-dzien czekałby na marker w nieskończoność
         if code == 0:
             with lock:
                 state.add(s.name)
@@ -187,7 +191,7 @@ def run_parallel(steps: list[Step], day: str, state: State, run: Callable[[list[
             print(f"! {s.name}: kod {code}, przerwano (ponowne uruchomienie wznawia)", flush=True)
         return code
 
-    with ThreadPoolExecutor(max_workers=workers) as pool:
+    with ThreadPoolExecutor(max_workers=workers or WORKERS) as pool:
         while pending or running:
             for s in list(pending):
                 if failed:
@@ -208,6 +212,9 @@ def run_parallel(steps: list[Step], day: str, state: State, run: Callable[[list[
                     finished.add(s.name)
                 else:
                     failed = True
+    if pending and not failed:
+        print("! nie ruszyły: " + ", ".join(s.name for s in pending) + " (brak markera: "
+              + ", ".join(str(w) for s in pending for w in s.wait_files if not ready(w)) + ")", flush=True)
     return not failed and not pending
 
 
@@ -223,6 +230,9 @@ def run_steps(steps: list[Step], day: str, state: State, run: Callable[[list[str
         if dry:
             continue
         code = timed(run, timings, s.name)(s.cmd, env)
+        if code == 0 and s.result is not None and not s.result.exists():
+            print(f"! {s.name}: kod 0, ale brak wyniku {s.result}", flush=True)
+            code = 1
         if code != 0:
             print(f"! {s.name}: kod {code}, przerwano (ponowne uruchomienie wznawia)", flush=True)
             return False

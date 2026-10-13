@@ -4,6 +4,7 @@ an id, so later builds translate only new articles."""
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
@@ -14,7 +15,7 @@ from paralaksa.site.stories import _as_int, _call, _json
 
 PROMPT_VERSION = "tytuly-v1"
 CHUNK = 60         # nagłówków na wywołanie (od 12.10 połowa dawnych 120: krótsza odpowiedź = krótszy ogon czasu); musi się zmieścić w max_tokens
-WORKERS = 8
+WORKERS = int(os.environ.get("PLX_TYTULY_WORKERS", "8"))
 
 PROMPT = """Przetłumacz nagłówki prasowe na polski. Każdy wiersz: numer, kod języka, oryginalny nagłówek.
 Tłumacz wiernie: bez dodawania, pomijania ani łagodzenia informacji, zachowaj cudzysłowy i ton nagłówka.

@@ -1,3 +1,11 @@
+# dzien.py: krok bez wyniku to błąd, współbieżność przez zmienne — 2026-10-13
+
+- Przebieg 13.10: `plx site` przy 429 z Codexa skończył się kodem 0 bez `data/stories/D.json` („strona bez historii”), krok zapisał się jako gotowy,
+  a `os-dzien` i dalsze czekały na marker; wznowienie nic nie robiło. Teraz krok z `result`, który zwraca 0 bez pliku wynikowego, jest błędem
+  (nie trafia do `_dzien.json`) w `run_parallel` i `run_steps`; niespełnione markery wypisuje „! nie ruszyły: … (brak markera: …)”. Kod wyjścia 1.
+- Współbieżność bez zmiany logiki: `DZIEN_WORKERS` (kroki fazy 1, domyślnie 9), `PLX_TYTULY_WORKERS` (tłumaczenia nagłówków, domyślnie 8).
+- Testy: `tests/test_dzien.py` (krok bez wyniku, exit ≠ 0 przy braku markera, komunikat).
+
 # Przyspieszenie fazy 1 dzien.py — 2026-10-13
 
 - Przyczyna (analiza 12.10): faza 1 = `site` → `os-dzien` → `kraje-D` → `kraje-ciag`, a czas wynika z długich wywołań Codexa w `plx site` (historie dnia,
