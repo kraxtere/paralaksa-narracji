@@ -84,7 +84,7 @@ def runs_strips(png: Path) -> list[tuple[int, int, int, int]]:
     return boxes
 
 
-def chosen_strips(png: Path, n: int) -> list[tuple[int, int, int, int]]:
+def chosen_strips(png: Path, n: int, edges_of_thick: bool = False) -> list[tuple[int, int, int, int]]:
     """Pixel boxes (x0, y0, x1, y1) of exactly n strips, or [] when no set of n-1 inner bars fits.
 
     A bar is a horizontal band 6 px to 3% of the height thick whose rows are >= 95% dark pixels of one uniform tone
@@ -113,6 +113,9 @@ def chosen_strips(png: Path, n: int) -> list[tuple[int, int, int, int]]:
             bands.append((start, y - 1))
             start = None
     thin = [(a, b) for a, b in bands if b - a + 1 <= 0.03 * h]
+    if edges_of_thick:                                                # ciemna scena zlana z ramką: ramka na brzegu grubego pasma
+        thin = sorted(thin + [e for a, b in bands if b - a + 1 > 0.03 * h and 0 < a and b < h - 1
+                              for e in ((a, a + 13), (b - 13, b))])
     top = next((b for a, b in thin if a == 0), -1)                    # ramka zewnętrzna (gdy jest)
     bottom = next((a for a, b in thin if b == h - 1), h)
     inner = [(a, b) for a, b in thin if b - a >= 5 and a > top and b < bottom]
@@ -121,7 +124,8 @@ def chosen_strips(png: Path, n: int) -> list[tuple[int, int, int, int]]:
         edges = [(top, top), *pick, (bottom, bottom)]
         heights = [nxt[0] - prev[1] - 1 for prev, nxt in zip(edges, edges[1:])]
         if min(heights) >= least:
-            weight = (sum(b - a for a, b in pick), -(max(heights) - min(heights)))   # remis: równiejsze paski
+            spread = max(heights) - min(heights)
+            weight = (0, -spread) if edges_of_thick else (sum(b - a for a, b in pick), -spread)   # remis: równiejsze paski
             if best is None or weight > best[0]:
                 best = (weight, edges)
     if best is None:
@@ -138,13 +142,28 @@ def chosen_strips(png: Path, n: int) -> list[tuple[int, int, int, int]]:
     return boxes
 
 
-def detect_strips(png: Path, n: int) -> list[tuple[int, int, int, int]]:
+def _detect(png: Path, n: int) -> list[tuple[int, int, int, int]]:
     """Strips by all wide dark bars (runs_strips); when their count is not n or a strip is under 40% of the mean
     strip height (a scene line taken for a bar), the best choice of n-1 bars (chosen_strips)."""
     boxes = runs_strips(png)
     if len(boxes) == n and min(b[3] - b[1] for b in boxes) + 1 >= 0.4 * sum(b[3] - b[1] + 1 for b in boxes) / n:
         return boxes
     return chosen_strips(png, n)
+
+
+def _spread(boxes: list) -> int:
+    hs = [b[3] - b[1] for b in boxes]
+    return max(hs) - min(hs) if hs else 10 ** 6
+
+
+def detect_strips(png: Path, n: int) -> list[tuple[int, int, int, int]]:
+    """_detect, a przy wyraźnie nierównych paskach (prompt każe robić równe; ciemna scena zlana z ramką) także próba
+    z ramkami na brzegach grubych ciemnych pasm: wygrywa równiejszy układ."""
+    boxes = _detect(png, n)
+    if boxes and _spread(boxes) <= 0.25 * sum(b[3] - b[1] for b in boxes) / n:
+        return boxes
+    alt = chosen_strips(png, n, edges_of_thick=True)
+    return alt if alt and _spread(alt) < _spread(boxes) else boxes
 
 
 def cut(original: Path, dest: list[Path]) -> bool:

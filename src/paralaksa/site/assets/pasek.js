@@ -15,6 +15,8 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
 
 (() => {
   const LOGO = "__LOGO__";
+  const KRAJE = "__KRAJE__";                                      // plx site: liczba krajów z aktywnych źródeł (config/sources.yaml) albo null
+  const krajow = KRAJE ? KRAJE + " krajów" : "wielu krajów";
   const box = document.getElementById("pasek");
   if (!box) return;
   const base = new URL(".", document.currentScript.src);          // .../v2/
@@ -44,6 +46,19 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
     "@media(min-width:640px){.bar2 .nawi{position:static;flex:0 1 430px;margin-left:auto;padding:0;background:none;border:0;box-shadow:none}" +
     "body{padding-bottom:0}.baner-ja{bottom:8px!important}.bar2 .nawi a,.bar2 .nawi .pusty{background:#2c2924;color:#f4f0e8;border-color:#8a7f6e}" +
     ".bar2 .nawi a small{color:#d8d1c3}.bar2 .nawi select,.bar2 .nawi .data{background:#f4f0e8;color:#1d1b18;border-color:#f4f0e8}}" +
+    // przycisk Udostępnij (ikona obok logo, od 17.10) i komunikat „Skopiowano”; powitanie (modal przy pierwszym wejściu)
+    ".bar2 .udo{flex:none;width:34px;height:34px;border-radius:50%;border:1px solid #5a554c;background:#2c2924;color:#f4f0e8;display:flex;" +
+    "align-items:center;justify-content:center;cursor:pointer;padding:0}.bar2 .udo:hover,.bar2 .udo:focus-visible{border-color:#f4f0e8;outline:2px solid #8a3b2a}" +
+    "@media(pointer:coarse){.bar2 .udo{width:40px;height:40px}}" +
+    ".udo-info{position:fixed;top:60px;right:16px;z-index:60;background:#1d1b18;color:#f4f0e8;padding:8px 14px;border-radius:8px;" +
+    "font:14px Segoe UI,sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.3)}" +
+    ".pow-tlo{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:16px}" +
+    ".pow{background:#f4f0e8;color:#1d1b18;max-width:440px;width:100%;max-height:calc(100vh - 32px);overflow:auto;border:2px solid #1d1b18;" +
+    "border-radius:14px;padding:20px;font:15px/1.45 Segoe UI,sans-serif;box-sizing:border-box}" +
+    ".pow h2{margin:0 0 10px;font:700 21px Georgia,serif}.pow p{margin:0 0 10px}.pow ul{margin:0 0 12px;padding-left:20px}.pow li{margin-bottom:4px}" +
+    ".pow label{display:flex;align-items:center;gap:8px;margin:12px 0;font-size:14px;color:#3d3a34;cursor:pointer}" +
+    ".pow input{width:18px;height:18px;flex:none}.pow .ok{display:block;width:100%;min-height:46px;border:0;border-radius:10px;background:#1d1b18;" +
+    "color:#f4f0e8;font:700 16px Segoe UI,sans-serif;cursor:pointer}.pow .ok:focus-visible,.pow input:focus-visible{outline:2px solid #8a3b2a;outline-offset:2px}" +
     ".stopka{max-width:720px;margin:28px auto 0;padding:14px 16px 72px;border-top:1px solid #ddd5c7;" +
     "display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 16px;color:#7a746a;font:13px Segoe UI,sans-serif}" +
     ".stopka a{color:#8a3b2a}" +
@@ -55,6 +70,83 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
     `<nav class="nawi" aria-label="Wybór dnia"></nav><span class="dni"></span>`;
   const right = box.querySelector(".dni");                     // miejsce na menu osoby (serwer)
   const nav = box.querySelector(".nawi");
+  // Udostępnij: zawsze cała Paralaksa (adres główny, który otwiera najnowszy dzień). Telefon i tablet (dotyk): systemowe okno
+  // udostępniania (w aplikacji z ekranu głównego to samo co w innych aplikacjach: WhatsApp, SMS…); komputer albo brak
+  // navigator.share: kopiowanie linku do schowka z komunikatem „Skopiowano” (bez schowka: okno z linkiem do skopiowania ręcznie).
+  const rootUrl = new URL("../", base).href;
+  const opis = `Paralaksa narracji: jak prasa z ${krajow} opisuje to samo wydarzenie. Codzienny przegląd w obrazkach.`;
+  const udo = document.createElement("button");
+  udo.type = "button";
+  udo.className = "udo";
+  udo.title = "Udostępnij Paralaksę";
+  udo.setAttribute("aria-label", "Udostępnij Paralaksę");
+  udo.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>';
+  right.append(udo);
+  let infoTimer = 0;
+  const info = text => {
+    let el = document.querySelector(".udo-info");
+    if (!el) { el = document.createElement("div"); el.className = "udo-info"; el.setAttribute("role", "status"); document.body.append(el); }
+    el.textContent = text;
+    clearTimeout(infoTimer);
+    infoTimer = setTimeout(() => el.remove(), 2200);
+  };
+  udo.onclick = async () => {
+    if (navigator.share && matchMedia("(pointer:coarse)").matches) {
+      try { await navigator.share({ title: "Paralaksa narracji", text: opis, url: rootUrl }); return; }
+      catch (e) { if (e && e.name === "AbortError") return; }          // anulowane przez osobę: bez kopiowania
+    }
+    try { await navigator.clipboard.writeText(rootUrl); info("Skopiowano"); }
+    catch (e) { window.prompt("Skopiuj link do Paralaksy:", rootUrl); }
+  };
+
+  // Powitanie: modal z krótkim opisem. Pokazuje się przy wejściu raz na kartę przeglądarki, dopóki ktoś nie zaznaczy
+  // „Nie pokazuj więcej” (wtedy flaga w localStorage na stałe). Stały link „O Paralaksie” w stopce i w menu osoby.
+  const powitanie = (() => {
+    const KEY = "plx-powitanie", SES = "plx-powitanie-sesja";
+    const mem = (st, k, v) => { try { return v === undefined ? window[st].getItem(k) : window[st].setItem(k, v); } catch (e) { return null; } };
+    const open = () => {
+      if (document.getElementById("plx-powitanie")) return;
+      const back = document.createElement("div");
+      back.id = "plx-powitanie";
+      back.className = "pow-tlo";
+      back.innerHTML = `<div class="pow" role="dialog" aria-modal="true" aria-labelledby="pow-h"><h2 id="pow-h">Czym jest Paralaksa narracji?</h2>` +
+        `<p>Codzienny przegląd prasy z ${krajow}. Pokazujemy, <b>jak media opisują to samo wydarzenie</b>: o czym piszą, ` +
+        `w jakiej ramie i jakim tonem. Opisujemy przekaz medialny, a nie fakty: nie oceniamy, kto ma rację.</p>` +
+        `<p><b>Co tu znajdziesz:</b></p><ul><li>Sprawy dnia: ta sama sprawa oczami prasy z różnych krajów</li>` +
+        `<li>Dzień po dniu: oś czasu wydarzeń</li><li>Czym żyje kraj: o czym pisze prasa jednego kraju</li>` +
+        `<li>Archiwum: wcześniejsze dni i wyszukiwarka nagłówków</li></ul>` +
+        `<label><input type="checkbox" class="nie"> Nie pokazuj więcej</label><button type="button" class="ok">Zaczynam</button></div>`;
+      const before = document.activeElement;
+      const keys = e => {
+        if (e.key === "Escape") { e.preventDefault(); close(); return; }
+        if (e.key !== "Tab") return;
+        const f = [...back.querySelectorAll("input,button")];
+        const i = f.indexOf(document.activeElement);
+        if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
+        else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
+      };
+      const close = () => {
+        if (back.querySelector(".nie").checked) mem("localStorage", KEY, "1");
+        back.remove();
+        document.removeEventListener("keydown", keys, true);
+        if (before && before.focus) before.focus();
+      };
+      back.querySelector(".ok").onclick = close;
+      back.addEventListener("click", e => { if (e.target === back) close(); });
+      document.addEventListener("keydown", keys, true);
+      document.body.append(back);
+      back.querySelector(".ok").focus();
+    };
+    const auto = () => {
+      if (window.top !== window || mem("localStorage", KEY) || mem("sessionStorage", SES)) return;
+      mem("sessionStorage", SES, "1");
+      open();
+    };
+    document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", auto) : auto();
+    return open;
+  })();
+  const oParalaksie = el => el.addEventListener("click", e => { e.preventDefault(); powitanie(); });
+
   const wide = matchMedia("(min-width:480px)").matches;      // na telefonie skrót dnia tygodnia, żeby data się mieściła
   const long = d => new Date(d + "T12:00:00").toLocaleDateString("pl-PL", { weekday: wide ? "long" : "short", day: "numeric", month: "long" });
   const link = (d, text, title) => {
@@ -418,7 +510,9 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
       if (!standalone && installEvent) inst = `<p><button class="inst">Zainstaluj aplikację</button></p>`;
       else if (!standalone && ios) inst = `<p class="s">Aplikacja na iPhonie: Udostępnij → „Do ekranu początkowego”.</p>`;
       menu.innerHTML = `<p>Zalogowano: <b class="kto"></b></p>${push}${inst}<div class="r">` +
-        (ja.wlasciciel ? `<a href="/osoby">Osoby</a>` : "<span></span>") + `<a href="/wyloguj">Wyloguj</a></div>`;
+        (ja.wlasciciel ? `<a href="/osoby">Osoby</a>` : "<span></span>") + `<a href="/wyloguj">Wyloguj</a></div>` +
+        `<p class="s"><a href="#o-paralaksie" class="o-par">O Paralaksie</a></p>`;
+      oParalaksie(menu.querySelector(".o-par"));
       menu.querySelector(".kto").textContent = ja.imie;
       const ib = menu.querySelector(".inst");
       if (ib) ib.onclick = () => { menu.hidden = true; install(); };
@@ -495,7 +589,8 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
     const foot = document.createElement("footer");
     foot.className = "stopka";
     foot.innerHTML = `<span>Paralaksa · wersja wewnętrzna · nowy dzień codziennie około 19:00</span>` +
-      `<a href="${new URL("../index.html", base).href}">Stara wersja</a>`;
+      `<a href="#o-paralaksie" class="o-par">O Paralaksie</a><a href="${new URL("../index.html", base).href}">Stara wersja</a>`;
+    oParalaksie(foot.querySelector(".o-par"));
     document.body.append(foot);
   });
 })();

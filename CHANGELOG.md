@@ -1,3 +1,20 @@
+# Przycisk Udostępnij, powitanie, poprawka cięcia okładki — 2026-10-17
+
+- Pasek (`assets/pasek.js`): ikona „Udostępnij Paralaksę” obok logo (`aria-label`, bez napisu). Zawsze cała Paralaksa: link do roota
+  (`new URL("../", base)`, na Cloudflare przekierowanie na najnowszy dzień) z opisem „Paralaksa narracji: jak prasa z N krajów opisuje to samo
+  wydarzenie. Codzienny przegląd w obrazkach.” Telefon i tablet (dotyk + `navigator.share`): systemowe okno udostępniania, też z aplikacji
+  zainstalowanej na ekranie głównym; komputer: kopiowanie linku z komunikatem „Skopiowano” (bez schowka: okno z linkiem). Bez ekranu wyboru.
+- N krajów z danych: `build._active_countries()` liczy kraje aktywnych źródeł z `config/sources.yaml` (dziś 17) i wstawia do `pasek.js`
+  (`"__KRAJE__"`); gdy konfiguracji nie da się wczytać, tekst brzmi „z wielu krajów”.
+- Powitanie (modal „Czym jest Paralaksa narracji?”): raz na kartę przeglądarki, dopóki ktoś nie zaznaczy „Nie pokazuj więcej” (flaga
+  `plx-powitanie` w localStorage na stałe, `plx-powitanie-sesja` w sessionStorage). Stały link „O Paralaksie” w stopce i w menu osoby (Render).
+  Treść wstępna z mojej propozycji; do podmiany na wersję z drugiej sesji.
+- `paski.py`: ciemna scena zlana z ramką (okładka 15.10, `okladka2-A`: pasy 586/224/676 px) dawała nierówne cięcie. `detect_strips` przy
+  wyraźnie nierównych pasach próbuje ramek na brzegach grubych ciemnych pasm i bierze równiejszy układ (15.10 → 494/490/504 px). Ponownie
+  przecięte okładki 02.10 i 03.10.
+- Testy: asercje w `tests/test_site.py` (pasek z ikoną, „O Paralaksie”, brak niepodmienionego `__KRAJE__`); zachowanie w przeglądarce sprawdzone
+  ręcznie (Playwright: kopiowanie, `navigator.share`, powitanie, flaga).
+
 # dzien.py: krok bez wyniku to błąd, współbieżność przez zmienne — 2026-10-13
 
 - Przebieg 13.10: `plx site` przy 429 z Codexa skończył się kodem 0 bez `data/stories/D.json` („strona bez historii”), krok zapisał się jako gotowy,
