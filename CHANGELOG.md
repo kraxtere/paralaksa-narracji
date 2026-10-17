@@ -1,3 +1,8 @@
+# dzien.py: --publikuj-cf — 2026-10-17
+
+- `python scripts/v2/dzien.py D --publikuj-cf` dokłada na końcu `plx site --db data/prod.db --bez-historii --publikuj-cf` (Cloudflare Pages), także w pełnym
+  przebiegu bez `--faza` (wcześniej flaga działała tylko przy `--faza 3`, a pełny przebieg kończył się bez publikacji).
+
 # Oś czasu: kółko myszy i kolejność wątków — 2026-10-17
 
 - Kółko na komputerze (`scripts/v2/os_czasu.py`, JS strony): oś przesuwa się w bok tylko na wysokości paska z datą i obrazków (od góry

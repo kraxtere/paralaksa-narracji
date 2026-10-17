@@ -88,13 +88,16 @@ def summaries_step(day: str) -> Step:
     return Step("streszczenia", script("streszczenia.py", day), always=True)
 
 
-def final_steps(day: str, publish: bool) -> list[Step]:
-    return [Step("publikacja", [PLX, "site", "--db", DB, "--publikuj"], always=True)] if publish else []
+def final_steps(day: str, publish: bool, publish_cf: bool = False) -> list[Step]:
+    steps = [Step("publikacja", [PLX, "site", "--db", DB, "--publikuj"], always=True)] if publish else []
+    if publish_cf:
+        steps.append(Step("publikacja-cf", [PLX, "site", "--db", DB, "--bez-historii", "--publikuj-cf"], always=True))
+    return steps
 
 
-def phase3(day: str, publish: bool) -> list[Step]:
+def phase3(day: str, publish: bool, publish_cf: bool = False) -> list[Step]:
     """Samodzielna faza 3 (--faza 3): strony, streszczenia, strony ponownie, publikacja."""
-    return [*pages(day), summaries_step(day), *pages(day, "-2"), *final_steps(day, publish)]
+    return [*pages(day), summaries_step(day), *pages(day, "-2"), *final_steps(day, publish, publish_cf)]
 
 
 class State:
@@ -290,6 +293,7 @@ def main(argv: list[str]) -> int:
     ap.add_argument("dzien", help="RRRR-MM-DD")
     ap.add_argument("--faza", choices=["1", "2", "3"], help="tylko jedna faza")
     ap.add_argument("--publikuj", action="store_true", help="na końcu plx site --publikuj")
+    ap.add_argument("--publikuj-cf", action="store_true", help="na końcu plx site --publikuj-cf (Cloudflare Pages)")
     ap.add_argument("--sucho", action="store_true", help="pokaż kroki fazy 1 i 3, nic nie uruchamiaj")
     a = ap.parse_args(argv)
     day, only, dry = a.dzien, a.faza, a.sucho
@@ -322,7 +326,7 @@ def main(argv: list[str]) -> int:
             ok = img_ok and box.get("ok", False)
             code = 2 if not img_ok else 1
         if ok:
-            ok = phase("strony-koncowe", lambda: run_steps(pages(day, "-2") + final_steps(day, a.publikuj), day, state, shell, timings=tm))
+            ok = phase("strony-koncowe", lambda: run_steps(pages(day, "-2") + final_steps(day, a.publikuj, a.publikuj_cf), day, state, shell, timings=tm))
             code = 1
     else:
         code = 1
@@ -332,7 +336,7 @@ def main(argv: list[str]) -> int:
             if not ok:
                 print("! obrazki: część odrzucona lub przerwana (429); ponowne uruchomienie robi tylko brakujące", flush=True)
         if ok and only == "3":
-            ok = phase("faza3", lambda: run_steps(phase3(day, a.publikuj), day, state, shell, dry, tm))
+            ok = phase("faza3", lambda: run_steps(phase3(day, a.publikuj, a.publikuj_cf), day, state, shell, dry, tm))
             code = 1
     if not dry:
         tm.phase("razem", time.monotonic() - t_all)
