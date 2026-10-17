@@ -527,7 +527,11 @@ function zaznacz(d){if(d===cur)return;cur=d;chips.forEach(c=>{c.classList.toggle
 const dniWidoczne=()=>[...new Set(vis().map(e=>e.dataset.d))];
 os.addEventListener('scrollend',()=>{clearTimeout(auto);auto=0});
 let kolko=0,kolkoT=0;
-os.addEventListener('wheel',ev=>{if(ev.ctrlKey||!ev.target.closest('.karta')||Math.abs(ev.deltaX)>=Math.abs(ev.deltaY))return;
+// kółko przesuwa oś w bok tylko na wysokości daty i obrazków (pas od góry kart do dołu obrazka), niżej (tekst, nagłówki) przewija stronę
+const pasObrazkow=ev=>{const e=vis()[0];if(!e)return false;const d=e.querySelector('.data').getBoundingClientRect(),
+ im=e.querySelector('.karta img'),k=e.querySelector('.karta').getBoundingClientRect(),
+ dol=im?im.getBoundingClientRect().bottom:Math.min(k.bottom,k.top+300);return ev.clientY>=d.top&&ev.clientY<=dol};
+os.addEventListener('wheel',ev=>{if(ev.ctrlKey||Math.abs(ev.deltaX)>=Math.abs(ev.deltaY)||!pasObrazkow(ev))return;
  const v=vis(),x=os.scrollLeft,i=v.findIndex(e=>lewo(e)>=x-5),j=ev.deltaY>0?i+1:i-1;
  if(i<0||j<0||j>=v.length)return;ev.preventDefault();
  if(Date.now()<kolkoT)return;kolko+=ev.deltaY;if(Math.abs(kolko)<40)return;
@@ -560,7 +564,9 @@ def page() -> str:
     evs = events(plan)
     names = {w["id"]: w["nazwa"] for w in plan["watki"]}
     counts = {w: sum(e["watek"] == w for e in evs) for w in names}
-    shown = [w for w in plan["watki"] if counts[w["id"]] >= 2]          # wątek z jednym zdarzeniem: bez filtra
+    recent = {w: max(e["czas"] for e in evs if e["watek"] == w) for w in names if counts[w]}
+    shown = sorted((w for w in plan["watki"] if counts[w["id"]] >= 2),         # wątek z jednym zdarzeniem: bez filtra
+                   key=lambda w: (recent[w["id"]], counts[w["id"]]), reverse=True)   # ostatnio wspomniane pierwsze, najstarsze na końcu
     chips = '<button data-w="*" class="on">Wszystko</button>' + "".join(
         f'<button data-w="{esc(w["id"])}">{esc(w["nazwa"])} <span class="s">{counts[w["id"]]}</span></button>' for w in shown)
     first, last_day = min(e["dzien"] for e in evs), max(e["dzien"] for e in evs)
@@ -589,7 +595,7 @@ def page() -> str:
             + '</div></div></article>')
     last = max(plan["dni"])
     body = (f'<div id="pasek" data-dzien="{last}" data-wstecz></div><script src="../pasek.js"></script>'
-            f'<div class="head"><h1>Oś czasu</h1><p>Najważniejsze sprawy dzień po dniu. Przesuń w bok albo wybierz dzień; '
+            f'<div class="head"><h1>Oś czasu</h1><p>Najważniejsze sprawy dzień po dniu. Kółko myszy na obrazkach przesuwa oś w bok, na tekście przewija stronę; można też wybrać dzień; '
             f'wątek zawęża oś do jednej sprawy. Dzień to przegląd prasy, w którym sprawa pojawiła się pierwszy raz; '
             f'godzina to pierwszy nagłówek w analizowanych źródłach (czas polski), nie godzina samego zdarzenia.</p></div>'
             f'<nav class="wybor-dni" aria-label="Dni"><div class="in"><button class="strz w" aria-label="Poprzedni dzień">‹</button>'

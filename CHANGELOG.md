@@ -1,3 +1,12 @@
+# Oś czasu: kółko myszy i kolejność wątków — 2026-10-17
+
+- Kółko na komputerze (`scripts/v2/os_czasu.py`, JS strony): oś przesuwa się w bok tylko na wysokości paska z datą i obrazków (od góry
+  karty do dołu obrazka), niżej (tekst, nagłówki, przerwy) kółko przewija stronę. Wcześniej rozstrzygało, czy kursor jest na karcie.
+  Opis pod tytułem osi mówi to samo.
+- Filtry wątków nad osią: od ostatnio wspomnianych (najnowszy czas zdarzenia, przy remisie więcej zdarzeń); najstarsze wątki na końcu.
+  „Wszystko” zostaje pierwsze; wątek z jednym zdarzeniem nadal bez filtra.
+- Sprawdzone w przeglądarce (Playwright, strona osi z 16.10): kółko na obrazku i na dacie przesuwa w bok, na tekście przewija stronę.
+
 # Przycisk Udostępnij, powitanie, poprawka cięcia okładki — 2026-10-17
 
 - Pasek (`assets/pasek.js`): ikona „Udostępnij Paralaksę” obok logo (`aria-label`, bez napisu). Zawsze cała Paralaksa: link do roota
