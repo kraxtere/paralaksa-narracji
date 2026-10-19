@@ -224,7 +224,7 @@ def shell(title: str, body: str, debug: bool = False) -> str:
             f'color:#7a746a;font-size:.8em;font-weight:400;white-space:nowrap}}.src img{{width:16px;height:16px;border-radius:3px}}'
             f'.list p{{line-height:1.5}}.list li{{line-height:1.4;margin:4px 0}}.list .ciag{{border-left:4px solid #8a3b2a;'
             f'background:#fbf8f2;padding:8px 12px;border-radius:0 8px 8px 0}}.ciag b{{color:#8a3b2a}}.list .ciag a{{color:#8a3b2a}}'
-            f'h2 .src{{font-size:.55em}}.list h3{{margin:14px 0 2px;font-size:1.05em}}.osk{{font-size:.55em;font-weight:400;margin-left:8px;color:#8a3b2a;white-space:nowrap}}.pas{{display:block;width:100%;height:auto;border-radius:10px;margin:18px 0 6px}}.il{{width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:3px}}{STRIPS_CSS}</style></head><body>{body}</body></html>')
+            f'h2 .src{{font-size:.55em}}.list h3{{margin:14px 0 2px;font-size:1.05em}}.osk{{display:inline-block;font-size:.5em;font-weight:700;margin-left:10px;padding:7px 15px;border-radius:999px;background:var(--cegla,#8a3b2a);color:var(--papier,#f4f0e8);text-decoration:none;white-space:nowrap;vertical-align:middle;box-shadow:0 1px 4px rgba(0,0,0,.18)}}.osk:hover,.osk:focus-visible{{background:var(--tusz,#1d1b18);outline:2px solid var(--cegla,#8a3b2a);outline-offset:2px}}.pas{{display:block;width:100%;height:auto;border-radius:10px;margin:18px 0 6px}}.il{{width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:3px}}{STRIPS_CSS}</style></head><body>{body}</body></html>')
 
 
 def main_theme(ids: set[int]) -> dict[int, str]:
@@ -758,17 +758,19 @@ def lives_title(c: str) -> str:
 COUNTRY_PICK_JS = """<script>(()=>{const box=document.querySelector('.jeden'),nav=box.querySelector('.kraje-nav'),
 all=box.hasAttribute('data-wszystkie'),ss=[...box.querySelectorAll('section[id^=kraj-]')];box.classList.add('js');
 if(all){const w=document.createElement('a');w.href='#';w.className='kraj-pig';w.dataset.k='';w.textContent='Wszystkie kraje';nav.prepend(w)}
-const bs=[...nav.querySelectorAll('a')];window.plxKolko&&plxKolko(nav);
+const dol=nav.cloneNode(true);dol.classList.add('dol');dol.setAttribute('aria-label','Wybór kraju (na końcu strony)');box.append(dol);
+const navs=[nav,dol],bs=navs.flatMap(n=>[...n.querySelectorAll('a')]);navs.forEach(n=>window.plxKolko&&plxKolko(n));
 ss.forEach(s=>s.hasAttribute('data-zwin')&&s.querySelectorAll(':scope>.pas-kraju,:scope>.dymek,:scope>h2').forEach(e=>
  e.onclick=ev=>{if(!ev.target.closest('a,button'))s.classList.toggle('zwin')}));
 function pick(c,push){if(c&&!ss.some(s=>s.id==='kraj-'+c))c='';if(!c&&!all)c=ss[0]&&ss[0].id.slice(5);
  ss.forEach(s=>{s.classList.toggle('on',!c||s.id==='kraj-'+c);s.classList.toggle('zwin',!c&&s.hasAttribute('data-zwin'))});bs.forEach(b=>{const on=b.dataset.k===c;b.classList.toggle('on',on);
- if(on)nav.scrollLeft+=b.getBoundingClientRect().left-nav.getBoundingClientRect().left-8});
+ if(on){const n=b.parentElement;n.scrollLeft+=b.getBoundingClientRect().left-n.getBoundingClientRect().left-8}});
  if(push)history.replaceState(null,'',c?'#'+c:location.pathname+location.search)}
-bs.forEach(b=>b.onclick=e=>{e.preventDefault();pick(b.dataset.k,true)});
+bs.forEach(b=>b.onclick=e=>{e.preventDefault();pick(b.dataset.k,true);if(b.closest('.dol'))box.scrollIntoView({behavior:'smooth',block:'start'})});
 const h=()=>pick(location.hash.slice(1).replace(/^kraj-/,'')||(all?'':'PL'),false);addEventListener('hashchange',h);h()})()</script>"""
 COUNTRY_PICK_CSS = (".jeden .kraje-nav{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;padding-bottom:4px}"
-                    ".jeden .kraje-nav a.on{background:var(--cegla);border-color:var(--cegla);color:var(--papier)}"
+                    # ten sam wybór kraju na końcu strony: po przeczytaniu kraju do końca przechodzi się od razu do następnego
+                    ".jeden .kraje-nav.dol{margin:22px 0 4px;padding-top:12px;border-top:1px solid var(--linia)}"                    ".jeden .kraje-nav a.on{background:var(--cegla);border-color:var(--cegla);color:var(--papier)}"
                     ".jeden.js section[id^=kraj-]{display:none}.jeden.js section[id^=kraj-].on{display:block}"
                     # strona tematu, „Wszystkie kraje”: karty zwinięte do paska z dymkiem i belki kraju, klik rozwija opis i artykuły
                     ".jeden.js section.zwin>:not(.pas-kraju):not(.dymek):not(h2){display:none}"

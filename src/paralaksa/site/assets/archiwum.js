@@ -77,11 +77,11 @@
     ":root{--papier:#f4f0e8;--tusz:#1d1b18;--cegla:#8a3b2a;--szary:#7a746a;--opis:#4b463f;--karta:#fbf8f2;--linia:#ddd5c7;--zaznacz:#f1d9a8}" +
     "body{margin:0;background:var(--papier);color:var(--tusz);font-family:Segoe UI,sans-serif}" +
     ".arch{max-width:720px;margin:auto;padding:6px 14px 40px;box-sizing:border-box}" +
-    ".arch h1{margin:12px 0 2px;color:var(--cegla);font:700 1.6em Georgia,serif}.arch .lead{margin:0 0 10px;color:var(--szary);font-size:.88em}" +
+    ".arch h1{margin:14px 0 8px;padding:6px 14px;background:var(--cegla);color:var(--papier);font:700 1.3em Georgia,serif;border-radius:4px 4px 0 0}.arch .lead{margin:0 0 10px;color:var(--szary);font-size:.88em}" +
     // pole szukania z chmurkami haseł w środku
     ".szukaj{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:5px 8px;border:2px solid var(--tusz);border-radius:10px;background:var(--karta)}" +
     ".szukaj:focus-within{outline:3px solid var(--cegla);outline-offset:1px}.hasla{display:contents}" +
-    ".haslo{display:inline-flex;align-items:center;max-width:100%;padding:4px 2px 4px 11px;border-radius:999px;background:var(--tusz);color:var(--papier);" +
+    ".haslo{display:inline-flex;align-items:center;max-width:100%;padding:4px 2px 4px 11px;border-radius:999px;background:var(--cegla);color:var(--papier);" +
     "font:600 14px Segoe UI,sans-serif}.haslo button{all:unset;cursor:pointer;padding:0 8px;font-size:18px;line-height:1}" +
     ".haslo button:focus-visible{outline:2px solid var(--papier);border-radius:50%}" +
     ".q{flex:1 1 9em;min-width:0;padding:7px 4px;border:0;outline:0;background:transparent;color:var(--tusz);font:16px Segoe UI,sans-serif}" +
@@ -89,7 +89,7 @@
     ".tryb.chipy{overflow:visible}.tryb button{padding:4px 10px;font-size:13px}" +
     ".chipy{display:flex;gap:6px;overflow-x:auto;margin:8px 0;padding-bottom:2px;scrollbar-width:thin}" +
     ".chipy button{flex:none;padding:7px 12px;border:2px solid var(--tusz);border-radius:999px;background:var(--karta);color:var(--tusz);" +
-    "font:600 14px Segoe UI,sans-serif;cursor:pointer}.chipy button[aria-pressed=true]{background:var(--tusz);color:var(--papier)}" +
+    "font:600 14px Segoe UI,sans-serif;cursor:pointer}.chipy button[aria-pressed=true]{background:var(--cegla);border-color:var(--cegla);color:var(--papier)}" +
     ".chipy button i{margin-left:5px;color:var(--szary);font-style:normal;font-weight:400}.chipy button[aria-pressed=true] i{color:var(--papier)}" +
     ".chipy button:focus-visible,.arch select:focus-visible,.arch input[type=date]:focus-visible,.wiecej:focus-visible,.wk button:focus-visible," +
     ".kol h3 button:focus-visible,.tag:focus-visible,.tt a:focus-visible,.tlum:focus-visible,.rozwin:focus-visible,.zdejmij:focus-visible" +

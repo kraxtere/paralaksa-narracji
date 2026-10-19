@@ -1,3 +1,17 @@
+# Strona 2.0: drobiazgi UX, udostępnianie tematów, przewodnik — 2026-10-17
+
+- `pasek.js`: przycisk udostępniania tematu (sama ikona, bez dokładania rzędów), nie przy artykułach i nie w linii tytułu: na karcie tematu z artykułami po prawej w rzędzie „Artykuły (N)” (kraje, oś kraju), na karcie zdarzenia osi czasu po prawej w linii przycisku „Czytaj”, na stronie tematu, sprawy i autoportretu po prawej na końcu opisu (`p.s`). Link = ta strona + `?t=<id pierwszego artykułu karty>` (+ hash widoku), nigdy oryginał; wejście z `?t=` rozwija `details`, przewija do karty i zaznacza ją (`.wsk`). Pasek: strona dnia = cała Paralaksa, podstrona = bieżąca strona. Wspólna funkcja `udostepnij`.
+- `pasek.js`: powitanie przepisane (wybrane redakcje, przekaz nie fakty, zastrzeżenie, nazwy sekcji jak na stronie) i przewodnik po stronie dnia:
+  kroki Dzień po dniu → Tego dnia → Tonacje → Autoportret → Czym żyją kraje → Archiwum + zakończenie „Wybierz sprawę”; światło na elemencie,
+  panel przy dolnej krawędzi (nad paskiem dni), Wstecz/Dalej/Pomiń, Esc, focus. Flaga `plx-przewodnik-v1` w `localStorage` (pokazane/ukonczony/pominiety;
+  stary „Nie pokazuj więcej” `plx-powitanie` nadal wyłącza). Kroki bez elementu pomijane. „O Paralaksie” otwiera to samo; z podstrony „Pokaż mi stronę”
+  prowadzi na stronę dnia z `?przewodnik=1`. Teksty: `docs/PRZEWODNIK_BURZA_MOZGOW.md` (Codex gpt-6.1-sol, high).
+- `widok_obrazkowy.py`: „Czym żyją kraje” i strony tematów z wyborem kraju także pod treścią (`.kraje-nav.dol`, po kliknięciu przewija na górę);
+  `.osk` („Cała oś kraju →”, „cały dzień →”) jako zaokrąglony przycisk.
+- `os_czasu.py`: etykieta wątku na karcie osi (`.watek`) jako większy bąbelek ze strzałką ›, hover/fokus, podpowiedź „Pokaż tylko ten wątek”.
+- `archiwum.js`, `pasek.js` (kafel „Archiwum”): kolorystyka jak reszta strony: tytuł jako belka sekcji, aktywne chipy i hasła w kolorze cegły, kafel z gradientem.
+- `docs/POMYSLY.md`: lista drobiazgów do zrobienia zbiorczo.
+
 # dzien.py: --publikuj-cf — 2026-10-17
 
 - `python scripts/v2/dzien.py D --publikuj-cf` dokłada na końcu `plx site --db data/prod.db --bez-historii --publikuj-cf` (Cloudflare Pages), także w pełnym

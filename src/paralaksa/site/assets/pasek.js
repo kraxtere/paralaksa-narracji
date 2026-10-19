@@ -70,7 +70,7 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
     `<nav class="nawi" aria-label="Wybór dnia"></nav><span class="dni"></span>`;
   const right = box.querySelector(".dni");                     // miejsce na menu osoby (serwer)
   const nav = box.querySelector(".nawi");
-  // Udostępnij: zawsze cała Paralaksa (adres główny, który otwiera najnowszy dzień). Telefon i tablet (dotyk): systemowe okno
+  // Udostępnij: na stronie dnia cała Paralaksa (adres główny, który otwiera najnowszy dzień), na podstronach ta strona. Telefon i tablet (dotyk): systemowe okno
   // udostępniania (w aplikacji z ekranu głównego to samo co w innych aplikacjach: WhatsApp, SMS…); komputer albo brak
   // navigator.share: kopiowanie linku do schowka z komunikatem „Skopiowano” (bez schowka: okno z linkiem do skopiowania ręcznie).
   const rootUrl = new URL("../", base).href;
@@ -90,56 +90,193 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
     clearTimeout(infoTimer);
     infoTimer = setTimeout(() => el.remove(), 2200);
   };
-  udo.onclick = async () => {
+  const udostepnij = async (url, title, text) => {
     if (navigator.share && matchMedia("(pointer:coarse)").matches) {
-      try { await navigator.share({ title: "Paralaksa narracji", text: opis, url: rootUrl }); return; }
+      try { await navigator.share({ title, text, url }); return; }
       catch (e) { if (e && e.name === "AbortError") return; }          // anulowane przez osobę: bez kopiowania
     }
-    try { await navigator.clipboard.writeText(rootUrl); info("Skopiowano"); }
-    catch (e) { window.prompt("Skopiuj link do Paralaksy:", rootUrl); }
+    try { await navigator.clipboard.writeText(url); info("Skopiowano"); }
+    catch (e) { window.prompt("Skopiuj link:", url); }
   };
+  // Pasek: strona dnia = cała Paralaksa (adres główny); podstrona (temat, sprawa, kraj, oś) = ta strona, z hashem (wybrany kraj,
+  // dzień i wątek osi). Przy artykule (przycisk w karcie, niżej) link prowadzi do tego miejsca u nas, nigdy do oryginału.
+  const podstrona = "wstecz" in box.dataset;
+  const tuUrl = () => { const u = new URL(location.href); u.searchParams.delete("a"); u.searchParams.delete("t"); return u.href; };
+  if (podstrona) { udo.title = "Udostępnij tę stronę"; udo.setAttribute("aria-label", "Udostępnij tę stronę"); }
+  udo.onclick = () => podstrona
+    ? udostepnij(tuUrl(), document.title, `${document.title} · Paralaksa narracji`)
+    : udostepnij(rootUrl, "Paralaksa narracji", opis);
 
-  // Powitanie: modal z krótkim opisem. Pokazuje się przy wejściu raz na kartę przeglądarki, dopóki ktoś nie zaznaczy
-  // „Nie pokazuj więcej” (wtedy flaga w localStorage na stałe). Stały link „O Paralaksie” w stopce i w menu osoby.
+  // Powitanie i przewodnik (od 17.10). Modal „Czym jest Paralaksa” pokazuje się raz (flaga plx-przewodnik-v1 w localStorage:
+  // pokazane / ukonczony / pominiety; dawna flaga plx-powitanie też wyłącza zaproszenie) i proponuje przewodnik po stronie dnia:
+  // kilka kroków ze światłem na elemencie i panelem z objaśnieniem. Stały link „O Paralaksie” (stopka, menu osoby) otwiera
+  // ten sam modal. Kroki z brakującym elementem są pomijane; nazwy sekcji jak na stronie. Teksty: docs/PRZEWODNIK_BURZA_MOZGOW.md.
+  const memo = (st, k, v) => { try { return v === undefined ? window[st].getItem(k) : window[st].setItem(k, v); } catch (e) { return null; } };
+  const PKEY = "plx-przewodnik-v1";
+  const pst = document.createElement("style");
+  pst.textContent =
+    ".pow .dr{display:block;width:100%;min-height:44px;margin-top:8px;border:2px solid #1d1b18;border-radius:10px;background:#f4f0e8;color:#1d1b18;" +
+    "font:600 15px Segoe UI,sans-serif;cursor:pointer}.pow .dr:focus-visible{outline:2px solid #8a3b2a;outline-offset:2px}" +
+    ".pow .mala{margin:0 0 10px;color:#5a554c;font-size:13px}" +
+    ".pz-tlo{position:fixed;inset:0;z-index:90}.pz-sp{position:absolute;z-index:91;border-radius:10px;pointer-events:none;" +
+    "box-shadow:0 0 0 9999px rgba(20,18,15,.62);outline:3px solid #f4f0e8;transition:top .25s,left .25s,width .25s,height .25s}" +
+    ".pz-pan{position:fixed;z-index:95;left:50%;transform:translateX(-50%);bottom:calc(86px + env(safe-area-inset-bottom));" +
+    "width:min(440px,calc(100vw - 24px));box-sizing:border-box;background:#f4f0e8;color:#1d1b18;border:2px solid #1d1b18;" +
+    "border-radius:14px;padding:14px 16px;font:15px/1.45 Segoe UI,sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.35)}" +
+    ".pz-pan .nr{margin:0 0 2px;color:#8a3b2a;font:700 12px Segoe UI,sans-serif;letter-spacing:.06em;text-transform:uppercase}" +
+    ".pz-pan h3{margin:0 0 6px;font:700 19px Georgia,serif}.pz-pan p{margin:0 0 12px}" +
+    ".pz-pan .rz{display:flex;gap:8px;align-items:center}.pz-pan button{min-height:44px;padding:0 14px;border-radius:10px;" +
+    "border:2px solid #1d1b18;background:#f4f0e8;color:#1d1b18;font:600 15px Segoe UI,sans-serif;cursor:pointer}" +
+    ".pz-pan .dalej{flex:1;background:#1d1b18;color:#f4f0e8;font-weight:700}.pz-pan .pomin{margin-left:auto;border-color:transparent;text-decoration:underline}" +
+    ".pz-pan button:focus-visible{outline:2px solid #8a3b2a;outline-offset:2px}" +
+    "@media(min-width:640px){.pz-pan{bottom:24px}}" +
+    "@media(prefers-reduced-motion:reduce){.pz-sp{transition:none}}";
+  document.head.append(pst);
+
+  const przewodnik = (() => {
+    const sek = name => {
+      const h = [...document.querySelectorAll("h2.pp-sek")].find(x => x.textContent.trim() === name);
+      return h && h.nextElementSibling ? [h, h.nextElementSibling] : [];
+    };
+    const STEPS = [
+      { t: "Sprawy mają ciąg dalszy", x: "Oś łączy najważniejsze sprawy z kolejnych dni i pozwala wrócić do wcześniejszych opisów. Data to dzień przeglądu prasy, niekoniecznie dzień zdarzenia.",
+        el: () => [document.querySelector(".kafel-os")] },
+      { t: "O czym pisano najwięcej", x: "Tu zaczynasz: sprawy, które tego dnia opisały redakcje z wielu krajów. Otwórz kartę, żeby zobaczyć, jak każda z nich ją przedstawia.",
+        el: () => sek("Tego dnia") },
+      { t: "Inne akcenty", x: "Dwa opisy tego samego tematu obok siebie. Zwróć uwagę, co redakcje podkreślają i jak przedstawiają sprawę. Różnica nie musi oznaczać sprzeczności.",
+        el: () => sek("Tonacje") },
+      { t: "O sobie i z zewnątrz", x: "Jak wybrane redakcje opisują własny kraj, a jak przedstawiają go redakcje zagraniczne. To obraz medialny, nie poglądy wszystkich mieszkańców.",
+        el: () => sek("Autoportret") },
+      { t: "Co zajmuje prasę kraju", x: "Tematy prasy jednego kraju, które nie weszły do wielokrajowych spraw dnia. To nie dowód, że inne media o nich milczą.",
+        el: () => sek("Czym żyją kraje") },
+      { t: "Szukaj samodzielnie", x: "Artykuły ze wszystkich zebranych dni. Zawężaj wyniki według kraju, źródła, tematu i tonu.",
+        el: () => sek("Archiwum") },
+    ];
+    const rectOf = els => {
+      let t = 1e9, l = 1e9, b = 0, r = 0;
+      els.forEach(e => { const q = e.getBoundingClientRect(); t = Math.min(t, q.top); l = Math.min(l, q.left); b = Math.max(b, q.bottom); r = Math.max(r, q.right); });
+      return { t: t + scrollY, l: l + scrollX, w: r - l, h: b - t };
+    };
+    const calm = matchMedia("(prefers-reduced-motion:reduce)").matches;
+    let live = false;
+    const start = () => {
+      if (live) return;
+      const steps = STEPS.map(s => ({ ...s, els: s.el().filter(e => e && e.offsetParent !== null) })).filter(s => s.els.length);
+      if (!steps.length) return;
+      live = true;
+      const before = document.activeElement;
+      const catcher = document.createElement("div"); catcher.className = "pz-tlo";
+      const spot = document.createElement("div"); spot.className = "pz-sp";
+      const pan = document.createElement("div");
+      pan.className = "pz-pan"; pan.setAttribute("role", "dialog"); pan.setAttribute("aria-labelledby", "pz-h"); pan.setAttribute("aria-live", "polite");
+      document.body.append(catcher, spot, pan);
+      let i = 0, final = false;
+      const fit = () => {
+        const s = steps[i];
+        if (final || !s) return;
+        const r = rectOf(s.els), pad = 6;
+        spot.style.cssText = `top:${r.t - pad}px;left:${Math.max(4, r.l - pad)}px;width:${r.w + 2 * pad}px;height:${r.h + 2 * pad}px`;
+      };
+      const finish = flag => {
+        memo("localStorage", PKEY, flag);
+        catcher.remove(); spot.remove(); pan.remove(); live = false;
+        document.removeEventListener("keydown", keys, true); removeEventListener("resize", fit);
+        if (before && before.focus) before.focus();
+      };
+      const render = () => {
+        const s = steps[i];
+        if (final) {
+          spot.style.display = "none";
+          const first = document.querySelector("h2.pp-sek + .pp-k a[href]");
+          pan.innerHTML = `<h3 id="pz-h">Wybierz sprawę</h3><p>Zacznij od interesującej Cię karty. Do przewodnika wrócisz przez „O Paralaksie” na dole strony.</p>` +
+            `<div class="rz">${first ? '<button type="button" class="dalej otw">Otwórz pierwszą sprawę</button>' : ""}<button type="button" class="zostan">Zostań na okładce</button></div>`;
+          pan.querySelector(".zostan").onclick = () => finish("ukonczony");
+          const o = pan.querySelector(".otw"); if (o) o.onclick = () => { finish("ukonczony"); location.href = first.href; };
+          (o || pan.querySelector(".zostan")).focus();
+          return;
+        }
+        spot.style.display = "";
+        pan.innerHTML = `<p class="nr">${i + 1} z ${steps.length}</p><h3 id="pz-h">${s.t}</h3><p>${s.x}</p>` +
+          `<div class="rz"><button type="button" class="wstecz"${i ? "" : " hidden"}>Wstecz</button>` +
+          `<button type="button" class="dalej">${i === steps.length - 1 ? "Koniec" : "Dalej"}</button>` +
+          `<button type="button" class="pomin">Pomiń</button></div>`;
+        pan.querySelector(".wstecz").onclick = () => { i--; render(); };
+        pan.querySelector(".dalej").onclick = () => { if (i === steps.length - 1) { final = true; } else { i++; } render(); };
+        pan.querySelector(".pomin").onclick = () => finish("pominiety");
+        pan.querySelector(".dalej").focus({ preventScroll: true });
+        const r = rectOf(s.els), room = innerHeight - pan.offsetHeight - (innerWidth < 640 ? 100 : 40);
+        const top = Math.max(12, Math.min(72, (room - r.h) / 2));
+        scrollTo({ top: Math.max(0, r.t - top), behavior: calm ? "auto" : "smooth" });
+        fit(); setTimeout(fit, 500);
+      };
+      const keys = e => {
+        if (e.key === "Escape") { e.preventDefault(); finish("pominiety"); return; }
+        if (e.key !== "Tab") return;
+        const f = [...pan.querySelectorAll("button:not([hidden])")];
+        const k = f.indexOf(document.activeElement);
+        if (e.shiftKey && k <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
+        else if (!e.shiftKey && k === f.length - 1) { e.preventDefault(); f[0].focus(); }
+      };
+      document.addEventListener("keydown", keys, true);
+      addEventListener("resize", fit);
+      render();
+    };
+    return start;
+  })();
+
   const powitanie = (() => {
-    const KEY = "plx-powitanie", SES = "plx-powitanie-sesja";
-    const mem = (st, k, v) => { try { return v === undefined ? window[st].getItem(k) : window[st].setItem(k, v); } catch (e) { return null; } };
+    const SES = "plx-powitanie-sesja";
+    const podstronaPow = "wstecz" in box.dataset;
     const open = () => {
       if (document.getElementById("plx-powitanie")) return;
       const back = document.createElement("div");
       back.id = "plx-powitanie";
       back.className = "pow-tlo";
       back.innerHTML = `<div class="pow" role="dialog" aria-modal="true" aria-labelledby="pow-h"><h2 id="pow-h">Czym jest Paralaksa narracji?</h2>` +
-        `<p>Codzienny przegląd prasy z ${krajow}. Pokazujemy, <b>jak media opisują to samo wydarzenie</b>: o czym piszą, ` +
-        `w jakiej ramie i jakim tonem. Opisujemy przekaz medialny, a nie fakty: nie oceniamy, kto ma rację.</p>` +
-        `<p><b>Co tu znajdziesz:</b></p><ul><li>Sprawy dnia: ta sama sprawa oczami prasy z różnych krajów</li>` +
-        `<li>Dzień po dniu: oś czasu wydarzeń</li><li>Czym żyje kraj: o czym pisze prasa jednego kraju</li>` +
-        `<li>Archiwum: wcześniejsze dni i wyszukiwarka nagłówków</li></ul>` +
-        `<label><input type="checkbox" class="nie"> Nie pokazuj więcej</label><button type="button" class="ok">Zaczynam</button></div>`;
+        `<p>Codziennie zestawiamy, jak wybrane redakcje z ${krajow} opisują te same sprawy. Pokazujemy podobieństwa i różnice w przekazie, ` +
+        `jego ciąg dalszy oraz tematy prasy poszczególnych krajów.</p>` +
+        `<p>Opisujemy <b>przekaz medialny, nie fakty</b>: nie rozstrzygamy, co jest prawdą. To przegląd wybranych redakcji, nie wszystkich mediów ani opinii mieszkańców krajów. ` +
+        `Brak tematu w zestawieniu nie oznacza, że nikt o nim nie pisał.</p>` +
+        `<p class="mala">Na stronie: Dzień po dniu · Tego dnia · Tonacje · Autoportret · Czym żyją kraje · Czym żyła prasa · Archiwum. ` +
+        `Nazwa: paralaksa to zmiana widoku zależnie od miejsca, z którego patrzymy.</p>` +
+        `<button type="button" class="ok">Pokaż mi stronę</button><button type="button" class="dr">Przeglądam samodzielnie</button></div>`;
       const before = document.activeElement;
       const keys = e => {
         if (e.key === "Escape") { e.preventDefault(); close(); return; }
         if (e.key !== "Tab") return;
-        const f = [...back.querySelectorAll("input,button")];
+        const f = [...back.querySelectorAll("button")];
         const i = f.indexOf(document.activeElement);
         if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
         else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
       };
       const close = () => {
-        if (back.querySelector(".nie").checked) mem("localStorage", KEY, "1");
         back.remove();
         document.removeEventListener("keydown", keys, true);
         if (before && before.focus) before.focus();
       };
-      back.querySelector(".ok").onclick = close;
+      back.querySelector(".ok").onclick = () => {
+        close();
+        if (podstronaPow) location.href = page(day) + "?przewodnik=1";      // przewodnik jest na stronie dnia
+        else przewodnik();
+      };
+      back.querySelector(".dr").onclick = close;
       back.addEventListener("click", e => { if (e.target === back) close(); });
       document.addEventListener("keydown", keys, true);
       document.body.append(back);
       back.querySelector(".ok").focus();
     };
     const auto = () => {
-      if (window.top !== window || mem("localStorage", KEY) || mem("sessionStorage", SES)) return;
-      mem("sessionStorage", SES, "1");
+      if (window.top !== window) return;
+      const q = new URLSearchParams(location.search);
+      if (q.get("przewodnik") && !podstronaPow) {                          // wejście z „Pokaż mi stronę” na podstronie
+        q.delete("przewodnik");
+        history.replaceState(null, "", location.pathname + (q.toString() ? "?" + q : "") + location.hash);
+        setTimeout(przewodnik, 900);
+        return;
+      }
+      if (memo("localStorage", PKEY) || memo("localStorage", "plx-powitanie") || memo("sessionStorage", SES)) return;
+      memo("sessionStorage", SES, "1");
+      memo("localStorage", PKEY, "pokazane");
       open();
     };
     document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", auto) : auto();
@@ -369,6 +506,60 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
         a.title = "Kliknij, aby rozwinąć streszczenie";
       }));
   });
+  // Udostępnianie tematu (od 17.10): sama ikona (bez napisu), bez dokładania pustych rzędów. Karta tematu z oryginalnymi artykułami
+  // (h3 przed listą .arts): ikona po prawej w rzędzie „Artykuły (N)”, nad artykułami; karta zdarzenia na osi czasu: po prawej, w linii
+  // przycisku „Czytaj”; strona tematu, sprawy, autoportretu: po prawej na końcu opisu (akapit .s). Link = ta strona + ?t=<id pierwszego
+  // artykułu karty> (+ hash widoku, np. kraj), nigdy oryginał. Wejście z ?t= przewija do karty i na chwilę ją zaznacza.
+  document.addEventListener("DOMContentLoaded", () => {
+    const holderOf = arts => {
+      const ev = arts.closest("article.ev");
+      if (ev) return { box: ev, head: ev.querySelector(".tresc h2") };
+      let el = arts.previousElementSibling;
+      while (el && !/^H[23]$/.test(el.tagName)) el = el.previousElementSibling;
+      return el && el.tagName === "H3" ? { box: el, head: el } : null;
+    };
+    const ikona = '<svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>';
+    const przycisk = (aria, onclick) => {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "tem-udo"; b.title = "Udostępnij temat"; b.setAttribute("aria-label", aria);
+      b.innerHTML = ikona;
+      b.onclick = e => { e.preventDefault(); e.stopPropagation(); onclick(); };
+      return b;
+    };
+    let kart = 0;
+    document.querySelectorAll(".arts").forEach(arts => {
+      const first = arts.querySelector("a[data-a]");
+      const h = first && holderOf(arts);
+      if (!h || !h.head || h.box.dataset.udo) return;
+      h.box.dataset.udo = "1"; kart++;
+      const tytul = () => [...h.head.childNodes].map(n => n.textContent).join("").trim();
+      const w = przycisk("Udostępnij temat: " + tytul(), () => {
+        const u = new URL(location.href);
+        u.searchParams.delete("a");
+        u.searchParams.set("t", first.dataset.a);
+        udostepnij(u.href, tytul(), `Paralaksa narracji: ${tytul()}`);
+      });
+      if (h.box.tagName === "ARTICLE") h.head.after(w);
+      else (arts.querySelector(".arts-l") || arts).append(w);
+    });
+    if (!kart && podstrona && document.querySelector(".arts")) {         // cała strona jest tematem: ikona na końcu opisu
+      const w = przycisk("Udostępnij ten temat", () => udostepnij(tuUrl(), document.title, `${document.title} · Paralaksa narracji`));
+      const note = document.querySelector("p.s");
+      note ? note.prepend(w) : box.after(w);
+    }
+    const id = new URL(location.href).searchParams.get("t");
+    const a = id && document.querySelector(`.arts a[data-a="${CSS.escape(id)}"]`);
+    const h = a && holderOf(a.closest(".arts"));
+    if (!h) return;
+    const det = h.box.closest("details"); if (det) det.open = true;
+    const sec = h.box.closest("section.zwin"); if (sec) sec.classList.remove("zwin");
+    setTimeout(() => {
+      if (!h.box.offsetParent) return;                                 // karta w ukrytym widoku (inny kraj): bez przewijania
+      h.box.scrollIntoView({ block: "center", inline: "center" });
+      h.box.classList.add("wsk");
+      setTimeout(() => h.box.classList.remove("wsk"), 4500);
+    }, 350);
+  });
   const sst = document.createElement("style");
   sst.textContent =
     ":root{--art-tlo:#fffdf8;--art-tlo-hover:#f6f0e4;--art-linia:#ddd5c7;--art-tusz:#1d1b18;--art-szary:#7a746a;" +
@@ -379,6 +570,13 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
     "text-transform:uppercase;margin:0 0 6px}ul.arts-u{list-style:none;margin:0;padding:0}" +
     "li.art{margin:0 0 8px;padding:0;background:var(--art-tlo);border:1px solid var(--art-linia);border-radius:12px;" +
     "overflow:hidden;line-height:1.4}" +
+    ".tem-udo{display:inline-flex;align-items:center;justify-content:center;flex:none;width:34px;height:34px;padding:0;" +
+    "border:1px solid var(--art-linia);border-radius:50%;background:var(--art-tlo);color:var(--art-akcent);cursor:pointer}" +
+    ".tem-udo:hover,.tem-udo:focus-visible{border-color:var(--art-akcent);background:var(--art-tlo-hover)}" +
+    ".tem-udo:focus-visible{outline:2px solid var(--art-focus);outline-offset:1px}@media(pointer:coarse){.tem-udo{width:40px;height:40px}}" +
+    ".arts-l{display:flex;align-items:center;justify-content:space-between}.arts-l .tem-udo{margin:-10px 0 -10px 8px}" +
+    ".tresc .tem-udo{float:right;margin:2px 0 0 8px}p.s>.tem-udo{float:right;margin:-4px 0 0 10px}" +
+    ".wsk{outline:3px solid var(--art-akcent);outline-offset:4px;border-radius:8px}" +
     "li.art>a[data-a]{display:flex;flex-direction:column;gap:4px;position:relative;padding:10px 52px 10px 12px;" +
     "color:var(--art-tusz);text-decoration:none;font-weight:500;cursor:pointer;border-radius:12px}" +
     "li.art>a[data-a]:hover{background:var(--art-tlo-hover)}" +
@@ -582,7 +780,7 @@ window.plxKolko = el => el.addEventListener("wheel", ev => {
         `<a class="okl-pas arch-pas" href="${new URL("archiwum/index.html?dzien=" + day, base).href}">` +
         "<span class=\"okl-t\"><b>Szukaj we wszystkich artykułach <span class=\"strz\">›</span></b>" +
         "<span class=\"okl-n\">Nagłówki, ramy i streszczenia ze wszystkich dni; kraj, źródło, temat, ton</span></span></a>" +
-        "<style>.arch-pas{min-height:96px}.arch-pas .okl-t{padding-top:30px}" +
+        "<style>.arch-pas{min-height:96px;background:linear-gradient(120deg,var(--tusz) 55%,var(--cegla))}.arch-pas .okl-t{padding-top:30px}" +
         ".arch-pas .strz{float:right;font-size:1.3em;line-height:.8}</style>";
       document.body.append(a);
     }

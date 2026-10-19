@@ -501,8 +501,10 @@ body{margin:0;background:#f4f0e8;color:#1d1b18;font-family:Segoe UI,sans-serif}
 .karta{background:#fbf8f2;border:1px solid #ddd5c7;border-radius:14px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.06)}
 .karta img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#ebe4d6}
 .tresc{padding:10px 12px 12px}.tresc h2{font-size:1.08em;margin:0 0 6px;line-height:1.3}
-.watek{display:inline-block;font-size:.75em;color:#8a3b2a;border:1px solid #e3c9c0;border-radius:999px;padding:1px 8px;
- margin-bottom:6px;cursor:pointer;background:none;font-family:inherit}
+.watek{display:inline-flex;align-items:center;gap:6px;font-size:.84em;font-weight:600;color:#8a3b2a;background:#f6e6e0;
+ border:1px solid #d9b3a6;border-radius:999px;padding:5px 12px;margin-bottom:8px;cursor:pointer;font-family:inherit;
+ box-shadow:0 1px 2px rgba(0,0,0,.08)}.watek::after{content:'›';font-size:1.25em;line-height:1}
+.watek:hover,.watek:focus-visible{background:#8a3b2a;border-color:#8a3b2a;color:#fff;outline:none}
 .opis{margin:0 0 6px;font-size:.9em;line-height:1.4;color:#3a362f}.kraje{color:#7a746a;font-size:.82em;margin:4px 0}.tresc details{margin-top:6px;font-size:.88em}
 .tresc summary{cursor:pointer;color:#8a3b2a}.tresc li{margin:6px 0;line-height:1.35}.tresc li a{color:#1d1b18}
 .s{color:#7a746a;font-size:.85em}.wiecej{display:inline-block;margin-top:8px;color:#8a3b2a;font-weight:600;text-decoration:none}
@@ -582,7 +584,8 @@ def page() -> str:
                                        f'{esc(src_name(h["zrodlo"]))}, {h["czas"]:%d.%m %H:%M}') for h in e["naglowki"]])
         img = f'<img src="ev-{e["nr"]}.png" alt="" loading="lazy">' if (OUT / f"ev-{e['nr']}.png").exists() else ""
         more = f' · {len(e["dni"])} dni w Wydarzeniach dnia' if len(e["dni"]) > 1 else ""
-        tag = f'<button class="watek" data-w="{esc(w)}">{esc(names[w])}</button>' if w else ""
+        tag = (f'<button class="watek" data-w="{esc(w)}" title="Pokaż tylko ten wątek">{esc(names[w])}</button>'
+               if w else "")
         cards.append(
             f'<article class="ev" data-d="{d.isoformat()}" data-w="{esc(w)}"><div class="data"><b>{d:%d.%m}</b>'
             f'<span>{DAY_NAMES[d.weekday()]} · 1. nagłówek {when}</span></div><div class="linia"><i></i></div><div class="karta">{img}'
