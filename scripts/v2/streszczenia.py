@@ -76,7 +76,8 @@ def prompt(batch: list[dict]) -> str:
         "na kogo powołuje się redakcja, czyje stanowiska przytacza i jakie ma ujęcie (np. podkreśla skutki dla…, oddaje głos…).\n"
         "- TYLKO LEAD: 1–2 zdania z tego, co jest w tytule i leadzie; nie dopowiadaj reszty.\n"
         "Zasady: wyłącznie na podstawie podanego tekstu, bez własnej wiedzy, bez ocen prawdziwości i bez prognoz. Twierdzenia "
-        "sporne przypisz („według ministerstwa…”, „gazeta pisze…”, „autor ocenia…”). Pisz własnymi słowami; cytat najwyżej "
+        "sporne przypisz („według ministerstwa…”, „autor ocenia…”), ale zacznij od samej historii (co się stało, kto, gdzie), "
+        "nie od redakcji ani od „gazeta pisze…”; powołanie na źródło dopiero dalej w tekście. Pisz własnymi słowami; cytat najwyżej "
         "jeden na streszczenie i najwyżej 10 słów. Nie zaczynaj od „Artykuł…” w każdym streszczeniu, nie powtarzaj tytułu "
         "słowo w słowo, nie używaj myślników jako przecinków. Nazwy własne w polskiej pisowni.\n"
         "Zwróć WYŁĄCZNIE JSON: {\"streszczenia\":[{\"id\":123,\"tekst\":\"...\"}]} z wszystkimi id.\n\n" + parts)

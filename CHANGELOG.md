@@ -1,3 +1,11 @@
+# Prompty tekstów: zaczynać od historii, nie od redakcji — 2026-10-23
+
+- Decyzja właściciela: teksty (opisy „Czym żyje kraj”, streszczenia artykułów, podsumowania krajów w tematach i `_opis`, opisy kart w `widok_tresci.py`,
+  hasło/opis/wątki „Dzień prasy”) otwiera sama historia (co się dzieje, kto, gdzie), nie nazwa gazety ani „według X”/„X pisze”.
+  Źródło dalej w zdaniu albo w nawiasie po twierdzeniu; przypisywanie twierdzeń zostaje. Zmienione: `kraje.py`, `streszczenia.py`,
+  `widok_obrazkowy.py`, `widok_tresci.py`, `dzien_prasy.py`. Obowiązuje od dnia 24.10 (23.10 bez przebudowy). Oś (`os_czasu.py`) już nie wymieniała redakcji.
+  Nie ruszone: `prompts/synthesize_*.md` (raport okładkowy) i prompt ekstrakcji.
+
 # Strona 2.0: drobiazgi UX, udostępnianie tematów, przewodnik — 2026-10-17
 
 - `pasek.js`: przycisk udostępniania tematu (sama ikona, bez dokładania rzędów), nie przy artykułach i nie w linii tytułu: na karcie tematu z artykułami po prawej w rzędzie „Artykuły (N)” (kraje, oś kraju), na karcie zdarzenia osi czasu po prawej w linii przycisku „Czytaj”, na stronie tematu, sprawy i autoportretu po prawej na końcu opisu (`p.s`). Link = ta strona + `?t=<id pierwszego artykułu karty>` (+ hash widoku), nigdy oryginał; wejście z `?t=` rozwija `details`, przewija do karty i zaznacza ją (`.wsk`). Pasek: strona dnia = cała Paralaksa, podstrona = bieżąca strona. Wspólna funkcja `udostepnij`.
@@ -11,6 +19,14 @@
 - `os_czasu.py`: etykieta wątku na karcie osi (`.watek`) jako większy bąbelek ze strzałką ›, hover/fokus, podpowiedź „Pokaż tylko ten wątek”.
 - `archiwum.js`, `pasek.js` (kafel „Archiwum”): kolorystyka jak reszta strony: tytuł jako belka sekcji, aktywne chipy i hasła w kolorze cegły, kafel z gradientem.
 - `docs/POMYSLY.md`: lista drobiazgów do zrobienia zbiorczo.
+
+# Autoportret: najpierw historia, źródła na końcu — 2026-10-17
+
+- `prompts/synthesize_report.md` i `prompts/synthesize_cover.md`: pola `jak_opisuje_siebie` i `jak_opisuja_go_inni` zaczynają się od perspektywy kraju
+  („Francja widzi…”, „Z zewnątrz Francja rysuje się jako…”), nazwy redakcji w nawiasie na końcu, kraj po polsku (nie „źródła z FR”). Walidacja bez zmian.
+- `scripts/v2/widok_tresci.py` (`welcome_prompt`): to samo dla akapitów karty autoobrazu na stronie dnia.
+- Dni 12–17.10: teksty autoobrazu w `reports/D.json` przepisane na nowy układ (te same redakcje i treść; gdy oryginał nie nazywał redakcji: „(analizowane
+  źródła z tego kraju)”), strony przebudowane i opublikowane. Baza i `reports/*.md` bez zmian.
 
 # dzien.py: --publikuj-cf — 2026-10-17
 
