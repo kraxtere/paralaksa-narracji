@@ -1,3 +1,7 @@
+# Podsumowania tematów: odporność na pomyłkę modelu — 2026-10-25
+
+- `widok_obrazkowy.summaries`: drugi dzień z rzędu (24.10, 25.10) pierwsze wywołanie dla `economy_sanctions` było odrzucane jako „niekompletne podsumowania krajów”, a ponowny przebieg przechodził. Teraz: obce `_article_ids` są odfiltrowywane zamiast unieważniać całość, błąd wskazuje konkretną regułę (klucze / puste podsumowanie / `_opis` < 180 słów / brak identyfikatorów), a wywołanie jest raz ponawiane w tym samym przebiegu. Progi bez zmian. Przyczyna w pierwszej odpowiedzi nie została potwierdzona (nieudana odpowiedź została nadpisana), więc kolejny komunikat powie, która reguła zawiodła.
+
 # Prompty tekstów: zaczynać od historii, nie od redakcji — 2026-10-23
 
 - Decyzja właściciela: teksty (opisy „Czym żyje kraj”, streszczenia artykułów, podsumowania krajów w tematach i `_opis`, opisy kart w `widok_tresci.py`,

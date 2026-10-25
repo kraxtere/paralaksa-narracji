@@ -422,15 +422,27 @@ def summaries(t: dict, pl: dict, cs: list[dict]) -> dict:
     if cached is not None:
         return cached
     work = OUT / f"_pods-{t['temat']}"
-    raw = codex_text(work, prompt_text)
-    res = json.loads(raw[raw.index("{"):raw.rindex("}") + 1])
     allowed = {s["article_id"] for c in data.values() for s in c["sygnaly"]}
-    if (set(res) != set(data) | {"_opis", "_article_ids"}
-            or not all(isinstance(res[c], str) and res[c].strip() for c in data)
-            or not isinstance(res.get("_opis"), str) or not res["_opis"].strip()
-            or len(res["_opis"].split()) < 180
-            or not res.get("_article_ids") or not set(res["_article_ids"]) <= allowed):
-        raise ValueError(f"{t['temat']}: niekompletne podsumowania krajów")
+    problem = ""
+    for attempt in (1, 2):
+        raw = codex_text(work, prompt_text)
+        res = json.loads(raw[raw.index("{"):raw.rindex("}") + 1])
+        if isinstance(res.get("_article_ids"), list):      # obcy identyfikator (pomyłka modelu) nie unieważnia całości
+            res["_article_ids"] = [i for i in res["_article_ids"] if i in allowed]
+        if set(res) != set(data) | {"_opis", "_article_ids"}:
+            problem = f"klucze {sorted(set(res) ^ (set(data) | {'_opis', '_article_ids'}))}"
+        elif not all(isinstance(res[c], str) and res[c].strip() for c in data):
+            problem = "puste podsumowanie kraju"
+        elif not isinstance(res["_opis"], str) or len(res["_opis"].split()) < 180:
+            problem = "_opis krótszy niż 180 słów"
+        elif not res["_article_ids"]:
+            problem = "brak poprawnych _article_ids"
+        else:
+            problem = ""
+            break
+        print(f"{t['temat']}: odpowiedź odrzucona ({problem}), próba {attempt}/2", flush=True)
+    if problem:
+        raise ValueError(f"{t['temat']}: niekompletne podsumowania krajów ({problem})")
     save_cache(path, res, inputs, "temat-opisy-v2")
     return res
 
