@@ -1,3 +1,8 @@
+# Obrazki: max 12 procesów Codex, odzysk po timeoucie — 2026-10-30
+
+- 30.10 `dzien.py` odpalał 38 obrazków naraz (`PASKI_PROCESY=100`); Codex zwolnił, 37 przekroczyło timeout 900 s, wszystkie odrzucone i powtórzone, co kosztowało ok. 37 pp okna 5-godzinnego.
+- Teraz max 12 naraz (`PASKI_PROCESY`), timeout 1500 s, a po timeoucie `salvage_image` kopiuje obraz zapisany już przez Codex (ścieżka z `codex.log`) jako `pasy.png`.
+
 # Automat dnia: `scripts/dzien_auto.py` — 2026-10-28
 
 - Decyzja właściciela: „zbuduj dzień” = dzień ma być na stronie (Cloudflare), bez pilnowania. Kilka złych artykułów nie może wstrzymać dnia (28.10 dwa

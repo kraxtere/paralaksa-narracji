@@ -272,7 +272,7 @@ def timed_job(fn: Callable[[], object], timings: Timings, name: str) -> Callable
 
 def phase2(day: str, build: Callable[[str], list[tuple[str, object]]] = image_jobs, timings: Timings | None = None) -> bool:
     import paski
-    os.environ.setdefault("PASKI_PROCESY", "100")          # jeden proces na obrazek; tempo wyznacza odstęp 10 s
+    os.environ.setdefault("PASKI_PROCESY", "12")           # max 12 naraz (przy 38 naraz Codex zwalniał i wszystko przekraczało timeout)
     jobs = build(day)
     if not jobs:
         print("= obrazki: wszystkie gotowe", flush=True)

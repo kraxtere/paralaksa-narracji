@@ -347,11 +347,31 @@ def run_codex(folder: Path, prompt_text: str, image: Path | None = None) -> None
     folder.mkdir(parents=True, exist_ok=True)
     (folder / "polecenie.txt").write_text(prompt_text, encoding="utf-8")
     with open(folder / "codex.log", "w", encoding="utf-8") as log:
-        subprocess.run([codex_exe(), "exec", "--skip-git-repo-check", "-C", str(folder.resolve()), "--sandbox",
-                        "workspace-write", "-c", 'model_reasoning_effort="medium"',
-                        "Read the file polecenie.txt in the current directory (UTF-8) and follow its instructions exactly.",
-                        *(["-i", str(image.resolve())] if image else [])],
-                       stdout=log, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, timeout=900)
+        try:
+            subprocess.run([codex_exe(), "exec", "--skip-git-repo-check", "-C", str(folder.resolve()), "--sandbox",
+                            "workspace-write", "-c", 'model_reasoning_effort="medium"',
+                            "Read the file polecenie.txt in the current directory (UTF-8) and follow its instructions exactly.",
+                            *(["-i", str(image.resolve())] if image else [])],
+                           stdout=log, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL, timeout=1500)
+        except subprocess.TimeoutExpired:
+            if not salvage_image(folder):
+                raise
+            print(f"{folder.name}: timeout, obraz był już zapisany, odzyskany", flush=True)
+
+
+def salvage_image(folder: Path) -> bool:
+    """After a timeout: if Codex had already generated the picture (its path is in codex.log), copy it as pasy.png,
+    so the tokens are not spent twice."""
+    try:
+        text = (folder / "codex.log").read_text(encoding="utf-8", errors="replace").replace("\\\\", "\\")
+    except OSError:
+        return False
+    for path in reversed(re.findall(r"[A-Za-z]:\\[^'\"\r\n]*?generated_images\\[^'\"\r\n]*?\.png", text)):
+        src = Path(path)
+        if src.exists() and src.stat().st_size > 50_000:
+            shutil.copyfile(src, folder / "pasy.png")
+            return True
+    return False
 
 
 def theme_country_data(t: dict, pl: dict, cs: list[dict]) -> dict[str, dict]:
