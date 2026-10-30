@@ -237,6 +237,7 @@ def test_v2_copies_finished_views_without_work_files(tmp_path):
     assert json.loads((tmp_path / "v2" / "os.json").read_text(encoding="utf-8"))["od"] == "2026-09-23"
     bar = (tmp_path / "v2" / "pasek.js").read_text(encoding="utf-8")                  # wspólny pasek z logo w środku
     assert "__LOGO__" not in bar and "<svg" in bar and "dni.json" in bar and "Stara wersja" in bar
+    assert "__KRAJE__" not in bar and "Udostępnij Paralaksę" in bar and "O Paralaksie" in bar and "plx-powitanie" in bar
     assert "streszczenia/" in bar and "Przejdź do artykułu" in bar
     assert "ma-str" in bar and "var(--art-akcent)" in bar and "Kliknij, aby rozwinąć streszczenie" in bar
     assert "const archive = false;" in bar                    # bez archiwum: bez kafla na dole strony dnia

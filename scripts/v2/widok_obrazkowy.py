@@ -224,7 +224,7 @@ def shell(title: str, body: str, debug: bool = False) -> str:
             f'color:#7a746a;font-size:.8em;font-weight:400;white-space:nowrap}}.src img{{width:16px;height:16px;border-radius:3px}}'
             f'.list p{{line-height:1.5}}.list li{{line-height:1.4;margin:4px 0}}.list .ciag{{border-left:4px solid #8a3b2a;'
             f'background:#fbf8f2;padding:8px 12px;border-radius:0 8px 8px 0}}.ciag b{{color:#8a3b2a}}.list .ciag a{{color:#8a3b2a}}'
-            f'h2 .src{{font-size:.55em}}.list h3{{margin:14px 0 2px;font-size:1.05em}}.osk{{font-size:.55em;font-weight:400;margin-left:8px;color:#8a3b2a;white-space:nowrap}}.pas{{display:block;width:100%;height:auto;border-radius:10px;margin:18px 0 6px}}.il{{width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:3px}}{STRIPS_CSS}</style></head><body>{body}</body></html>')
+            f'h2 .src{{font-size:.55em}}.list h3{{margin:14px 0 2px;font-size:1.05em}}.osk{{display:inline-block;font-size:.5em;font-weight:700;margin-left:10px;padding:7px 15px;border-radius:999px;background:var(--cegla,#8a3b2a);color:var(--papier,#f4f0e8);text-decoration:none;white-space:nowrap;vertical-align:middle;box-shadow:0 1px 4px rgba(0,0,0,.18)}}.osk:hover,.osk:focus-visible{{background:var(--tusz,#1d1b18);outline:2px solid var(--cegla,#8a3b2a);outline-offset:2px}}.pas{{display:block;width:100%;height:auto;border-radius:10px;margin:18px 0 6px}}.il{{width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:3px}}{STRIPS_CSS}</style></head><body>{body}</body></html>')
 
 
 def main_theme(ids: set[int]) -> dict[int, str]:
@@ -318,10 +318,24 @@ def poster_prompt(t: dict, cs: list[dict]) -> str:
             "Use correct Polish diacritics. No other text anywhere.")
 
 
+_LIMIT_CACHE = {"t": -1e9}
+
+
 def limit_guard() -> None:
     """Stop before a Codex call when an account window is nearly used up (beyond it work would draw on paid credits)."""
+    import time
     from codex_limit import usage
-    used = {k: v for k, v in usage().items() if not k.endswith("reset")}
+    now = time.monotonic()
+    if now - _LIMIT_CACHE["t"] < 120:                         # odczyt rzadko: co ok. 2 min na proces, nie przy każdym obrazku
+        return
+    try:
+        current = usage()
+    except RuntimeError as e:                                 # odczyt limitu bywa niedostępny (błąd sieci): to nie powód do przerwania pracy
+        _LIMIT_CACHE["t"] = now
+        print(f"limit Codex: odczyt niedostępny, pomijam kontrolę ({str(e)[:60]})")
+        return
+    _LIMIT_CACHE["t"] = now
+    used = {k: v for k, v in current.items() if not k.endswith("reset")}
     print("limit Codex:", ", ".join(f"{k} {v}%" for k, v in used.items()))
     if any(v is not None and v >= 95 for v in used.values()):
         raise SystemExit("limit Codex prawie wyczerpany (>= 95%): przerywam, żeby nie iść z kredytów")
@@ -356,13 +370,21 @@ def theme_country_data(t: dict, pl: dict, cs: list[dict]) -> dict[str, dict]:
 
 def codex_text(work: Path, prompt_text: str, image: Path | None = None) -> str:
     """One read-only Codex call on the weaker text model; returns the last message."""
+    import time
+    from datetime import datetime, timezone
+    from paralaksa.extract.call_log import log_call
     limit_guard()
     work.mkdir(parents=True, exist_ok=True)
     (work / "polecenie.txt").write_text(prompt_text, encoding="utf-8")
-    subprocess.run([codex_exe(), "exec", "--skip-git-repo-check", "--ephemeral", "-C", str(work.resolve()), "--sandbox",
-                    "read-only", *TEXT_MODEL, "-o", str((work / "odp.txt").resolve()),
-                    *(["-i", str(image.resolve())] if image else []), "-"],
-                   input=prompt_text.encode("utf-8"), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=900, check=True)
+    started, t0, ok = datetime.now(timezone.utc), time.monotonic(), False
+    try:
+        subprocess.run([codex_exe(), "exec", "--skip-git-repo-check", "--ephemeral", "-C", str(work.resolve()), "--sandbox",
+                        "read-only", *TEXT_MODEL, "-o", str((work / "odp.txt").resolve()),
+                        *(["-i", str(image.resolve())] if image else []), "-"],
+                       input=prompt_text.encode("utf-8"), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=900, check=True)
+        ok = True
+    finally:
+        log_call(work.name, len(prompt_text), time.monotonic() - t0, ok, "codex-text", started)     # czas wywołania do _wywolania.jsonl
     return (work / "odp.txt").read_text(encoding="utf-8")
 
 
@@ -377,8 +399,10 @@ def summaries(t: dict, pl: dict, cs: list[dict]) -> dict:
         "pogrupowane po krajach.\n"
         "Dla KAŻDEGO kraju napisz podsumowanie po polsku, 1–2 zdania, najwyżej 40 słów, rzeczowo: o czym pisała prasa tego kraju w tym temacie, "
         "jakim tonem i z jakiej perspektywy, a jeśli źródła kraju się różnią, to czym. Jeśli podano 'na_plakacie', zacznij "
-        "od tej sprawy, własnymi słowami (nie pisz, że to nagłówek, plakat ani temat nagłówkowy). Nazywaj redakcje (pole zrodlo). Tylko na podstawie danych, bez własnej wiedzy, "
-        "bez ocen prawdziwości i bez prognoz; pisz „według X”, „X przedstawia”. Cytaty najwyżej 15 słów. "
+        "od tej sprawy, własnymi słowami (nie pisz, że to nagłówek, plakat ani temat nagłówkowy). Nazywaj redakcje (pole zrodlo), "
+        "ale podsumowanie zaczynaj od historii (co się dzieje), nie od nazwy gazety ani od „według X”; redakcję podaj dalej "
+        "w zdaniu albo w nawiasie po twierdzeniu. Tylko na podstawie danych, bez własnej wiedzy, "
+        "bez ocen prawdziwości i bez prognoz; przypisuj („według X”, „X przedstawia”) w środku zdania, nie na jego początku. Cytaty najwyżej 15 słów. "
         "Nie używaj myślników jako przecinków.\n"
         "Dodaj _opis: jeden spójny tekst, 4 akapity rozdzielone pustą linią, razem 250–350 słów. Pierwszy akapit to "
         "samodzielny wstęp 3–4 zdania (około 60–90 słów; czytelnik może nie rozwinąć reszty). Dalsze akapity go rozwijają, "
@@ -398,15 +422,27 @@ def summaries(t: dict, pl: dict, cs: list[dict]) -> dict:
     if cached is not None:
         return cached
     work = OUT / f"_pods-{t['temat']}"
-    raw = codex_text(work, prompt_text)
-    res = json.loads(raw[raw.index("{"):raw.rindex("}") + 1])
     allowed = {s["article_id"] for c in data.values() for s in c["sygnaly"]}
-    if (set(res) != set(data) | {"_opis", "_article_ids"}
-            or not all(isinstance(res[c], str) and res[c].strip() for c in data)
-            or not isinstance(res.get("_opis"), str) or not res["_opis"].strip()
-            or len(res["_opis"].split()) < 180
-            or not res.get("_article_ids") or not set(res["_article_ids"]) <= allowed):
-        raise ValueError(f"{t['temat']}: niekompletne podsumowania krajów")
+    problem = ""
+    for attempt in (1, 2):
+        raw = codex_text(work, prompt_text)
+        res = json.loads(raw[raw.index("{"):raw.rindex("}") + 1])
+        if isinstance(res.get("_article_ids"), list):      # obcy identyfikator (pomyłka modelu) nie unieważnia całości
+            res["_article_ids"] = [i for i in res["_article_ids"] if i in allowed]
+        if set(res) != set(data) | {"_opis", "_article_ids"}:
+            problem = f"klucze {sorted(set(res) ^ (set(data) | {'_opis', '_article_ids'}))}"
+        elif not all(isinstance(res[c], str) and res[c].strip() for c in data):
+            problem = "puste podsumowanie kraju"
+        elif not isinstance(res["_opis"], str) or len(res["_opis"].split()) < 180:
+            problem = "_opis krótszy niż 180 słów"
+        elif not res["_article_ids"]:
+            problem = "brak poprawnych _article_ids"
+        else:
+            problem = ""
+            break
+        print(f"{t['temat']}: odpowiedź odrzucona ({problem}), próba {attempt}/2", flush=True)
+    if problem:
+        raise ValueError(f"{t['temat']}: niekompletne podsumowania krajów ({problem})")
     save_cache(path, res, inputs, "temat-opisy-v2")
     return res
 
@@ -445,6 +481,7 @@ def theme_nav(ts: list[dict], t: dict) -> str:
 
 
 def theme_page(t: dict, opisy: dict, pl: dict, cs: list[dict], debug: bool = False, ts: list[dict] | None = None) -> str:
+    cs = [x for x in cs if x["kraj"] in t["kraje"]]          # zapisany plakat mógł powstać przed przeliczeniem tematu
     poster = {x["kraj"]: x for x in cs}
     ids = {sg["article_id"] for c in t["kraje"] for sg in theme_articles(t, opisy, c)} | {x["article_id"] for x in cs}
     info = article_info(ids)
@@ -735,17 +772,19 @@ def lives_title(c: str) -> str:
 COUNTRY_PICK_JS = """<script>(()=>{const box=document.querySelector('.jeden'),nav=box.querySelector('.kraje-nav'),
 all=box.hasAttribute('data-wszystkie'),ss=[...box.querySelectorAll('section[id^=kraj-]')];box.classList.add('js');
 if(all){const w=document.createElement('a');w.href='#';w.className='kraj-pig';w.dataset.k='';w.textContent='Wszystkie kraje';nav.prepend(w)}
-const bs=[...nav.querySelectorAll('a')];window.plxKolko&&plxKolko(nav);
+const dol=nav.cloneNode(true);dol.classList.add('dol');dol.setAttribute('aria-label','Wybór kraju (na końcu strony)');box.append(dol);
+const navs=[nav,dol],bs=navs.flatMap(n=>[...n.querySelectorAll('a')]);navs.forEach(n=>window.plxKolko&&plxKolko(n));
 ss.forEach(s=>s.hasAttribute('data-zwin')&&s.querySelectorAll(':scope>.pas-kraju,:scope>.dymek,:scope>h2').forEach(e=>
  e.onclick=ev=>{if(!ev.target.closest('a,button'))s.classList.toggle('zwin')}));
 function pick(c,push){if(c&&!ss.some(s=>s.id==='kraj-'+c))c='';if(!c&&!all)c=ss[0]&&ss[0].id.slice(5);
  ss.forEach(s=>{s.classList.toggle('on',!c||s.id==='kraj-'+c);s.classList.toggle('zwin',!c&&s.hasAttribute('data-zwin'))});bs.forEach(b=>{const on=b.dataset.k===c;b.classList.toggle('on',on);
- if(on)nav.scrollLeft+=b.getBoundingClientRect().left-nav.getBoundingClientRect().left-8});
+ if(on){const n=b.parentElement;n.scrollLeft+=b.getBoundingClientRect().left-n.getBoundingClientRect().left-8}});
  if(push)history.replaceState(null,'',c?'#'+c:location.pathname+location.search)}
-bs.forEach(b=>b.onclick=e=>{e.preventDefault();pick(b.dataset.k,true)});
+bs.forEach(b=>b.onclick=e=>{e.preventDefault();pick(b.dataset.k,true);if(b.closest('.dol'))box.scrollIntoView({behavior:'smooth',block:'start'})});
 const h=()=>pick(location.hash.slice(1).replace(/^kraj-/,'')||(all?'':'PL'),false);addEventListener('hashchange',h);h()})()</script>"""
 COUNTRY_PICK_CSS = (".jeden .kraje-nav{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;padding-bottom:4px}"
-                    ".jeden .kraje-nav a.on{background:var(--cegla);border-color:var(--cegla);color:var(--papier)}"
+                    # ten sam wybór kraju na końcu strony: po przeczytaniu kraju do końca przechodzi się od razu do następnego
+                    ".jeden .kraje-nav.dol{margin:22px 0 4px;padding-top:12px;border-top:1px solid var(--linia)}"                    ".jeden .kraje-nav a.on{background:var(--cegla);border-color:var(--cegla);color:var(--papier)}"
                     ".jeden.js section[id^=kraj-]{display:none}.jeden.js section[id^=kraj-].on{display:block}"
                     # strona tematu, „Wszystkie kraje”: karty zwinięte do paska z dymkiem i belki kraju, klik rozwija opis i artykuły
                     ".jeden.js section.zwin>:not(.pas-kraju):not(.dymek):not(h2){display:none}"

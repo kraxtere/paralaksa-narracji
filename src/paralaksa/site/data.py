@@ -5,6 +5,7 @@ import html
 import json
 import re
 import sqlite3
+from concurrent.futures import ThreadPoolExecutor
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -228,8 +229,13 @@ def daily_payload(conn: sqlite3.Connection, day: str, report: dict | None, theme
     for a in arts.values():
         counts[a["kraj"]] = counts.get(a["kraj"], 0) + 1
         srcs.setdefault(a["kraj"], set()).add(a["src"])
-    stories = stories_for(day, eligible) if stories_for and arts else None
-    polish = dict(titles_for(day, set(arts)) or {}) if titles_for and arts else {}
+    if stories_for and titles_for and arts:               # independent model steps (stories read signals, titles the headlines)
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            f_stories, f_titles = pool.submit(stories_for, day, eligible), pool.submit(titles_for, day, set(arts))
+            stories, polish = f_stories.result(), dict(f_titles.result() or {})
+    else:
+        stories = stories_for(day, eligible) if stories_for and arts else None
+        polish = dict(titles_for(day, set(arts)) or {}) if titles_for and arts else {}
     for st in (stories or {}).get("historie") or []:          # tłumaczenia z historii dnia uzupełniają braki
         for k in st["kraje"]:
             if k["article_id"] in arts and k["naglowek_pl"] != arts[k["article_id"]]["tytul"]:

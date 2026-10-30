@@ -93,12 +93,24 @@ def extra_events(day: str) -> None:
             raise SystemExit(f"{cid}: {res.error}")
         return res.text
 
-    first = call(f"os-dodatkowe-{day}", f"Te wydarzenia są już opisane osobno, pomiń je:\n{skip}\n\n"
-                 + S.PROMPT.format(max_stories=EXTRA_MAX, min_countries=EXTRA_MIN_COUNTRIES, items=lines))
-    cands = S.parse_candidates(first, items)
+    prompt = (f"Te wydarzenia są już opisane osobno, pomiń je:\n{skip}\n\n"
+              + S.PROMPT.format(max_stories=EXTRA_MAX, min_countries=EXTRA_MIN_COUNTRIES, items=lines))
+    raw_dir = EXTRA / "_raw"
+    raw_dir.mkdir(parents=True, exist_ok=True)
+    for attempt in range(1, 4):
+        first = call(f"os-dodatkowe-{day}", prompt)
+        (raw_dir / f"{day}_{attempt}.txt").write_text(first, encoding="utf-8")   # surowa odpowiedź do diagnozy
+        cands = S.parse_candidates(first, items)
+        # puste kandydaci przy setkach artykułów to błąd modelu/zapisu (29.10 przeszło po cichu), nie „brak tematów”
+        if cands or len(items) < 500:
+            break
+        print(f"dalsze zdarzenia {day}: 0 kandydatów przy {len(items)} artykułach, ponawiam ({attempt}/3)")
+    else:
+        raise SystemExit(f"dalsze zdarzenia {day}: 3 razy 0 kandydatów przy {len(items)} artykułach, przerwano")
     pool = [i for c in cands for i in c["ids"]]
-    checks = [call(f"os-dodatkowe-weryfikacja-{day}-{k}", S.build_verify_prompt(cands, items, pool[k:k + S.VERIFY_CHUNK]))
-              for k in range(0, len(pool), S.VERIFY_CHUNK)]
+    checks = S.parallel_map(lambda k: call(f"os-dodatkowe-weryfikacja-{day}-{k}",
+                                           S.build_verify_prompt(cands, items, pool[k:k + S.VERIFY_CHUNK])),
+                            list(range(0, len(pool), S.VERIFY_CHUNK)))      # równolegle, wyniki w kolejności porcji
     found = S.parse_stories(cands, checks, items, min_countries=EXTRA_MIN_COUNTRIES, limit=EXTRA_MAX)
     EXTRA.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps({"day": day, "model": TEXT_MODEL, "kandydaci": cands, "historie": found},
@@ -500,8 +512,10 @@ body{margin:0;background:#f4f0e8;color:#1d1b18;font-family:Segoe UI,sans-serif}
 .karta{background:#fbf8f2;border:1px solid #ddd5c7;border-radius:14px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.06)}
 .karta img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#ebe4d6}
 .tresc{padding:10px 12px 12px}.tresc h2{font-size:1.08em;margin:0 0 6px;line-height:1.3}
-.watek{display:inline-block;font-size:.75em;color:#8a3b2a;border:1px solid #e3c9c0;border-radius:999px;padding:1px 8px;
- margin-bottom:6px;cursor:pointer;background:none;font-family:inherit}
+.watek{display:inline-flex;align-items:center;gap:6px;font-size:.84em;font-weight:600;color:#8a3b2a;background:#f6e6e0;
+ border:1px solid #d9b3a6;border-radius:999px;padding:5px 12px;margin-bottom:8px;cursor:pointer;font-family:inherit;
+ box-shadow:0 1px 2px rgba(0,0,0,.08)}.watek::after{content:'›';font-size:1.25em;line-height:1}
+.watek:hover,.watek:focus-visible{background:#8a3b2a;border-color:#8a3b2a;color:#fff;outline:none}
 .opis{margin:0 0 6px;font-size:.9em;line-height:1.4;color:#3a362f}.kraje{color:#7a746a;font-size:.82em;margin:4px 0}.tresc details{margin-top:6px;font-size:.88em}
 .tresc summary{cursor:pointer;color:#8a3b2a}.tresc li{margin:6px 0;line-height:1.35}.tresc li a{color:#1d1b18}
 .s{color:#7a746a;font-size:.85em}.wiecej{display:inline-block;margin-top:8px;color:#8a3b2a;font-weight:600;text-decoration:none}
@@ -526,7 +540,11 @@ function zaznacz(d){if(d===cur)return;cur=d;chips.forEach(c=>{c.classList.toggle
 const dniWidoczne=()=>[...new Set(vis().map(e=>e.dataset.d))];
 os.addEventListener('scrollend',()=>{clearTimeout(auto);auto=0});
 let kolko=0,kolkoT=0;
-os.addEventListener('wheel',ev=>{if(ev.ctrlKey||!ev.target.closest('.karta')||Math.abs(ev.deltaX)>=Math.abs(ev.deltaY))return;
+// kółko przesuwa oś w bok tylko na wysokości daty i obrazków (pas od góry kart do dołu obrazka), niżej (tekst, nagłówki) przewija stronę
+const pasObrazkow=ev=>{const e=vis()[0];if(!e)return false;const d=e.querySelector('.data').getBoundingClientRect(),
+ im=e.querySelector('.karta img'),k=e.querySelector('.karta').getBoundingClientRect(),
+ dol=im?im.getBoundingClientRect().bottom:Math.min(k.bottom,k.top+300);return ev.clientY>=d.top&&ev.clientY<=dol};
+os.addEventListener('wheel',ev=>{if(ev.ctrlKey||Math.abs(ev.deltaX)>=Math.abs(ev.deltaY)||!pasObrazkow(ev))return;
  const v=vis(),x=os.scrollLeft,i=v.findIndex(e=>lewo(e)>=x-5),j=ev.deltaY>0?i+1:i-1;
  if(i<0||j<0||j>=v.length)return;ev.preventDefault();
  if(Date.now()<kolkoT)return;kolko+=ev.deltaY;if(Math.abs(kolko)<40)return;
@@ -559,7 +577,9 @@ def page() -> str:
     evs = events(plan)
     names = {w["id"]: w["nazwa"] for w in plan["watki"]}
     counts = {w: sum(e["watek"] == w for e in evs) for w in names}
-    shown = [w for w in plan["watki"] if counts[w["id"]] >= 2]          # wątek z jednym zdarzeniem: bez filtra
+    recent = {w: max(e["czas"] for e in evs if e["watek"] == w) for w in names if counts[w]}
+    shown = sorted((w for w in plan["watki"] if counts[w["id"]] >= 2),         # wątek z jednym zdarzeniem: bez filtra
+                   key=lambda w: (recent[w["id"]], counts[w["id"]]), reverse=True)   # ostatnio wspomniane pierwsze, najstarsze na końcu
     chips = '<button data-w="*" class="on">Wszystko</button>' + "".join(
         f'<button data-w="{esc(w["id"])}">{esc(w["nazwa"])} <span class="s">{counts[w["id"]]}</span></button>' for w in shown)
     first, last_day = min(e["dzien"] for e in evs), max(e["dzien"] for e in evs)
@@ -575,7 +595,8 @@ def page() -> str:
                                        f'{esc(src_name(h["zrodlo"]))}, {h["czas"]:%d.%m %H:%M}') for h in e["naglowki"]])
         img = f'<img src="ev-{e["nr"]}.png" alt="" loading="lazy">' if (OUT / f"ev-{e['nr']}.png").exists() else ""
         more = f' · {len(e["dni"])} dni w Wydarzeniach dnia' if len(e["dni"]) > 1 else ""
-        tag = f'<button class="watek" data-w="{esc(w)}">{esc(names[w])}</button>' if w else ""
+        tag = (f'<button class="watek" data-w="{esc(w)}" title="Pokaż tylko ten wątek">{esc(names[w])}</button>'
+               if w else "")
         cards.append(
             f'<article class="ev" data-d="{d.isoformat()}" data-w="{esc(w)}"><div class="data"><b>{d:%d.%m}</b>'
             f'<span>{DAY_NAMES[d.weekday()]} · 1. nagłówek {when}</span></div><div class="linia"><i></i></div><div class="karta">{img}'
@@ -588,7 +609,7 @@ def page() -> str:
             + '</div></div></article>')
     last = max(plan["dni"])
     body = (f'<div id="pasek" data-dzien="{last}" data-wstecz></div><script src="../pasek.js"></script>'
-            f'<div class="head"><h1>Oś czasu</h1><p>Najważniejsze sprawy dzień po dniu. Przesuń w bok albo wybierz dzień; '
+            f'<div class="head"><h1>Oś czasu</h1><p>Najważniejsze sprawy dzień po dniu. Kółko myszy na obrazkach przesuwa oś w bok, na tekście przewija stronę; można też wybrać dzień; '
             f'wątek zawęża oś do jednej sprawy. Dzień to przegląd prasy, w którym sprawa pojawiła się pierwszy raz; '
             f'godzina to pierwszy nagłówek w analizowanych źródłach (czas polski), nie godzina samego zdarzenia.</p></div>'
             f'<nav class="wybor-dni" aria-label="Dni"><div class="in"><button class="strz w" aria-label="Poprzedni dzień">‹</button>'

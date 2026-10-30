@@ -117,3 +117,125 @@ def test_publish_stages_site_and_force_pushes(tmp_path, monkeypatch):
     assert seen["push"][-2:] == ["https://github.com/kraxtere/paralaksa-strona.git", "main"] and "--force" in seen["push"]
     with pytest.raises(RuntimeError, match="najpierw plx site"):
         publish.stage(tmp_path / "brak", tmp_path / "out")
+
+
+def test_server_caches_images_and_compresses_html(monkeypatch, tmp_path):
+    srv, base = _server(monkeypatch, tmp_path, "zespol", "tajne-haslo")
+    (tmp_path / "obraz.png").write_bytes(b"png" * 100)
+    (tmp_path / "duza.html").write_text("<p>x</p>" * 400, encoding="utf-8")
+    auth = "Basic " + base64.b64encode(b"zespol:tajne-haslo").decode()
+    try:
+        req = urllib.request.Request(base + "/obraz.png", headers={"Authorization": auth})
+        with urllib.request.urlopen(req, timeout=5) as r:
+            etag = r.headers["ETag"]
+            assert r.status == 200 and r.read() == b"png" * 100 and "max-age=86400" in r.headers["Cache-Control"]
+        req = urllib.request.Request(base + "/obraz.png", headers={"Authorization": auth, "If-None-Match": etag})
+        with pytest.raises(urllib.error.HTTPError) as e:                      # niezmieniony plik: 304 bez treści
+            urllib.request.urlopen(req, timeout=5)
+        assert e.value.code == 304
+        req = urllib.request.Request(base + "/duza.html", headers={"Authorization": auth, "Accept-Encoding": "gzip"})
+        with urllib.request.urlopen(req, timeout=5) as r:
+            assert r.headers["Content-Encoding"] == "gzip" and r.headers["Cache-Control"] == "private, no-cache"
+    finally:
+        srv.shutdown()
+
+
+def test_stage_hf_adds_dockerfile_and_space_readme(tmp_path):
+    site = tmp_path / "site"
+    site.mkdir()
+    (site / "index.html").write_text("x", encoding="utf-8")
+    dest = tmp_path / "out"
+    publish.stage_hf(site, dest)
+    assert (dest / "public" / "index.html").is_file() and (dest / "server.py").is_file()
+    assert "COPY --chown=user public/" in (dest / "Dockerfile").read_text(encoding="utf-8")
+    assert (dest / "README.md").read_text(encoding="utf-8").startswith("---\ntitle:")
+    assert "sdk: docker" in (dest / "README.md").read_text(encoding="utf-8") and not (dest / "render.yaml").exists()
+
+
+def test_publish_hf_pushes_with_token_in_url_only_and_masks_it(tmp_path):
+    site = tmp_path / "site"
+    site.mkdir()
+    (site / "index.html").write_text("x", encoding="utf-8")
+    calls = []
+
+    def run(args, **kw):
+        calls.append(args)
+        return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
+
+    publish.publish_hf(site, "ktos/paralaksa", "hf_SEKRET", run)
+    push = calls[-1]
+    assert push[:4] == ["git", "push", "-q", "--force"] and push[4] == "https://user:hf_SEKRET@huggingface.co/spaces/ktos/paralaksa"
+    assert not any("remote" in c for c in calls)
+
+    def failing(args, **kw):
+        return subprocess.CompletedProcess(args, 1 if args[1] == "push" else 0, stdout="", stderr=f"fatal: {args[-2]}")
+
+    with pytest.raises(RuntimeError) as e:
+        publish.publish_hf(site, "ktos/paralaksa", "hf_SEKRET", failing)
+    assert "hf_SEKRET" not in str(e.value)
+    with pytest.raises(RuntimeError):
+        publish.publish_hf(site, "zle", "t", run)
+    with pytest.raises(RuntimeError):
+        publish.publish_hf(site, "ktos/paralaksa", "", run)
+
+
+def _mini_site(tmp_path):
+    site = tmp_path / "site"
+    (site / "v2" / "2026-10-08").mkdir(parents=True)
+    (site / "v2" / "dni.json").write_text('["2026-10-08", "2026-10-07"]', encoding="utf-8")
+    (site / "v2" / "2026-10-08" / "index.html").write_text("<html><body>x</body></html>", encoding="utf-8")
+    (site / "index.html").write_text("<html><body>stara</body></html>", encoding="utf-8")
+    (site / "sw.js").write_text("//", encoding="utf-8")
+    (site / "dziennik").mkdir()
+    (site / "dziennik" / "d.html").write_text('<a href="../index.html#dziennik">x</a>', encoding="utf-8")
+    (site / "v2" / "2026-10-08" / "x.html").write_text('<a href="../index.html">v2</a>', encoding="utf-8")
+    return site
+
+
+def test_stage_cf_static_layout(tmp_path):
+    site = _mini_site(tmp_path)
+    dest = tmp_path / "out"
+    publish.stage_cf(site, dest)
+    assert not (dest / "server.py").exists() and (dest / "sw.js").is_file()
+    root = (dest / "index.html").read_text(encoding="utf-8")
+    assert 'url=/v2/2026-10-08/"' in root and "stara" not in root and not (dest / "_redirects").exists()
+    assert "stara" in (dest / "przeglad.html").read_text(encoding="utf-8")
+    assert 'href="../przeglad.html#dziennik"' in (dest / "dziennik" / "d.html").read_text(encoding="utf-8")
+    assert 'href="../index.html"' in (dest / "v2" / "2026-10-08" / "x.html").read_text(encoding="utf-8")
+    assert "X-Robots-Tag: noindex" in (dest / "_headers").read_text(encoding="utf-8")
+    assert "Disallow: /" in (dest / "robots.txt").read_text(encoding="utf-8")
+    assert "cloudflareinsights" not in (dest / "v2" / "2026-10-08" / "index.html").read_text(encoding="utf-8")
+
+
+def test_stage_cf_analytics_only_with_token(tmp_path):
+    site = _mini_site(tmp_path)
+    dest = tmp_path / "out"
+    publish.stage_cf(site, dest, "a" * 32)
+    assert "data-cf-beacon" in (dest / "v2" / "2026-10-08" / "index.html").read_text(encoding="utf-8")
+    with pytest.raises(RuntimeError):
+        publish.stage_cf(site, tmp_path / "out2", "zły token\"<")
+
+
+def test_publish_cf_runs_wrangler_with_secrets_in_env_only(tmp_path):
+    site = _mini_site(tmp_path)
+    seen = {}
+
+    def run(args, **kw):
+        seen["args"], seen["env"] = args, kw.get("env")
+        return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
+
+    publish.publish_cf(site, "paralaksa", "TOKEN123", "acc42", "", run)
+    assert "pages" in seen["args"] and "deploy" in seen["args"] and "paralaksa" in seen["args"]
+    assert not any("TOKEN123" in a or "acc42" in a for a in seen["args"])
+    assert seen["env"]["CLOUDFLARE_API_TOKEN"] == "TOKEN123" and seen["env"]["CLOUDFLARE_ACCOUNT_ID"] == "acc42"
+
+    def failing(args, **kw):
+        return subprocess.CompletedProcess(args, 1, stdout="", stderr="auth TOKEN123 odrzucony")
+
+    with pytest.raises(RuntimeError) as e:
+        publish.publish_cf(site, "paralaksa", "TOKEN123", "acc42", "", failing)
+    assert "TOKEN123" not in str(e.value)
+    with pytest.raises(RuntimeError):
+        publish.publish_cf(site, "Zła Nazwa", "t", "a", "", run)
+    with pytest.raises(RuntimeError):
+        publish.publish_cf(site, "paralaksa", "", "a", "", run)

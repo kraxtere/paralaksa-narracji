@@ -53,7 +53,9 @@ Zasady:
 - żadnych trendów ani porównań z innymi dniami („coraz”, „znowu”, „rośnie”), nie ma linii bazowej;
 - cytat w „…” tylko dosłownie z DANYCH, maks. 15 słów;
 - każdy wątek ma article_ids wyłącznie z DANYCH;
-- twierdzenia redakcji przypisuj im („onet pisał, że…”, „według Global Times…”), nie podawaj ich jako faktów;
+- twierdzenia redakcji przypisuj im, nie podawaj ich jako faktów, ale każdy opis i zdanie zaczynaj od samej historii
+  (co się dzieje), nigdy od nazwy redakcji ani „według X”; redakcję podaj dalej w zdaniu albo w nawiasie
+  (np. „Rząd zapowiada podwyżki (onet), a komentatorzy ostrzegają przed skutkami (Global Times)”);
 - hasło nazywa JEDNĄ konkretną sprawę dnia (wydarzenie, osoba, miejsce), którą redakcje opisywały najczęściej albo najmocniej;
   zakazane w haśle: wyliczanka tematów, „w centrum uwagi”, „dominuje”, „napięcia”;
 - bez komentarzy o danych (np. że jakaś redakcja „nie pojawiła się”).
@@ -61,7 +63,7 @@ Zasady:
 Zwróć JSON:
 {{"haslo": "hasło dnia, maks. 60 znaków, bez clickbaitu",
   "opis": "2–3 zdania, maks. 320 znaków: czym żyły analizowane źródła i w jakim tonie",
-  "watki": [{{"temat": "<id tematu z DANYCH>", "zdanie": "maks. 140 znaków, z nazwą redakcji", "article_ids": [..]}}]}}
+  "watki": [{{"temat": "<id tematu z DANYCH>", "zdanie": "maks. 140 znaków, zaczyna się od historii, nazwa redakcji w środku lub w nawiasie na końcu", "article_ids": [..]}}]}}
 (maks. 3 wątki, od najważniejszego)
 
 DANE:

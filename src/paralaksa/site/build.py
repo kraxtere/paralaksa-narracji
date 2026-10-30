@@ -169,6 +169,15 @@ def edition_note(day: str, stories_dir: Path) -> dict:
             "tresc": "; ".join(titles) if titles else "Nowe wydanie jest gotowe."}
 
 
+def _active_countries() -> int | None:
+    """Number of countries with an active source (config/sources.yaml), for the share text and the welcome; None if unreadable."""
+    try:
+        from ..config import load_sources
+        return len({s.country for s in load_sources() if s.active}) or None
+    except Exception:
+        return None
+
+
 def copy_v2(src: Path | None, dest: Path, with_archive: bool = False) -> list[str]:
     """Wersja 2.0 (prototyp obrazkowy, data/widok/<dzień>/ z data/widok_obrazkowy.py): kopiuje gotowe strony i obrazy,
     bez plików roboczych (nazwy od „_”), i dopisuje v2/index.html z listą dni (najnowszy otwiera się od razu),
@@ -212,7 +221,8 @@ def copy_v2(src: Path | None, dest: Path, with_archive: bool = False) -> list[st
                                                  encoding="utf-8")
         # wspólny pasek i stopka wszystkich stron 2.0 (strony mają tylko <div id="pasek"> i ten skrypt)
         (dest / "pasek.js").write_text(_asset("pasek.js").replace('"__LOGO__"', json.dumps(logo_inline("logo-ciemne-tlo", "plx")))
-                                       .replace('"__ARCHIWUM__"', json.dumps(with_archive)), encoding="utf-8")
+                                       .replace('"__ARCHIWUM__"', json.dumps(with_archive))
+                                       .replace('"__KRAJE__"', json.dumps(_active_countries())), encoding="utf-8")
         links ="".join(f'<li><a href="{d}/index.html">{d}</a></li>' for d in days)
         (dest / "index.html").write_text(
             f'<!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="robots" content="noindex">'

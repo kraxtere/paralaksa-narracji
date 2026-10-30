@@ -270,6 +270,11 @@ def site(
     make_zip: bool = typer.Option(False, "--zip", help="Dodatkowo spakuj stronę do .zip (do przesłania)."),
     publish_site: bool = typer.Option(False, "--publikuj",
                                       help="Wypchnij stronę do prywatnego repo SITE_REPO (Render, pod hasłem)."),
+    publish_hf: bool = typer.Option(False, "--publikuj-hf",
+                                    help="Wypchnij stronę do Space na Hugging Face (HF_SPACE i HF_TOKEN w .env); zapasowy hosting."),
+    publish_cf: bool = typer.Option(False, "--publikuj-cf",
+                                    help="Wdróż statyczną kopię na Cloudflare Pages (CF_PROJECT, CLOUDFLARE_API_TOKEN, "
+                                         "CLOUDFLARE_ACCOUNT_ID w .env; opcjonalnie CF_ANALYTICS_TOKEN)."),
     no_stories: bool = typer.Option(False, "--bez-historii",
                                     help="Nie wywołuj modelu: historie dnia i tłumaczenia nagłówków tylko z zapisanych."),
     stories_dir: Path = typer.Option(Path("data/stories"), "--historie-dir", help="Zapisane historie dnia (JSON)."),
@@ -307,41 +312,64 @@ def site(
     model = settings.models.site_model()
     client = None
     spent = 0.0
+    import threading as _threading
+    shared = _threading.Lock()          # stories_for and titles_for run in parallel threads (site.data.daily_payload)
+
+    def get_client():
+        nonlocal client
+        with shared:
+            client = client or build_client(model, settings.pricing, settings.extract.batch_poll_interval_s,
+                                            settings.extract.batch_timeout_h)
+            return client
+
+    def own_conn():                      # a sqlite connection must not cross threads: each callback reads on its own
+        c = open_db_readonly(path)
+        if c is not None:
+            c.row_factory = sqlite3.Row
+        return c
 
     def stories_for(day: str, eligible: set[int]) -> dict | None:
-        nonlocal client, spent
-        items = stories.story_items(conn, day, eligible)
+        nonlocal spent
+        sconn = own_conn()
+        try:
+            items = stories.story_items(sconn, day, eligible)
+        finally:
+            if sconn is not None:
+                sconn.close()
         cached = stories.load_cached(stories_dir, day, items)
         if cached is not None or no_stories:
             return cached
         try:
-            client = client or build_client(model, settings.pricing, settings.extract.batch_poll_interval_s,
-                                            settings.extract.batch_timeout_h)
-            out = stories.generate(client, model, day, items, stories_dir)
+            out = stories.generate(get_client(), model, day, items, stories_dir)
         except RuntimeError as e:
             typer.echo(f"OSTRZEŻENIE: {e}; strona bez historii dnia {day}", err=True)
             return None
-        spent += out["cost_usd"]
+        with shared:
+            spent += out["cost_usd"]
         typer.echo(f"Historie dnia {day}: {len(out['historie'])} ({out['input_tokens']} + {out['output_tokens']} tokenów, "
                    f"{out['cost_usd']:.3f} $)")
         return out
 
     def titles_for(day: str, ids: set[int]) -> dict[int, str]:
-        nonlocal client, spent
+        nonlocal spent
         if no_stories:
             return titles.cached(titles_dir, day)
-        items = titles.title_items(conn, ids)
+        tconn = own_conn()
+        try:
+            items = titles.title_items(tconn, ids)
+        finally:
+            if tconn is not None:
+                tconn.close()
         known = titles.cached(titles_dir, day)
         if all(i["id"] in known for i in items):
             return known
         try:
-            client = client or build_client(model, settings.pricing, settings.extract.batch_poll_interval_s,
-                                            settings.extract.batch_timeout_h)
-            out = titles.translate(client, model, day, items, titles_dir)
+            out = titles.translate(get_client(), model, day, items, titles_dir)
         except RuntimeError as e:
             typer.echo(f"OSTRZEŻENIE: {e}; nagłówki dnia {day} bez tłumaczenia", err=True)
             return known
-        spent += out["run_cost"]
+        with shared:
+            spent += out["run_cost"]
         for err in out["errors"]:
             typer.echo(f"OSTRZEŻENIE: tłumaczenia {day}: {err}", err=True)
         typer.echo(f"Tłumaczenia nagłówków {day}: {out['translated']} nowych, bez tłumaczenia {out['missing']} "
@@ -431,6 +459,32 @@ def site(
             typer.echo(f"Opublikowano w {repo}: {publish(out_dir, repo)}")
         except RuntimeError as e:
             typer.echo(f"BŁĄD publikacji: {e}", err=True)
+            raise typer.Exit(1)
+    if publish_cf:
+        from paralaksa.site.publish import publish_cf as _publish_cf
+
+        project = os.environ.get("CF_PROJECT", "")
+        if not project:
+            typer.echo("BŁĄD: brak CF_PROJECT w .env (nazwa projektu Cloudflare Pages)", err=True)
+            raise typer.Exit(1)
+        try:
+            typer.echo(f"Wdrożono w Cloudflare Pages ({project}): " + _publish_cf(
+                out_dir, project, os.environ.get("CLOUDFLARE_API_TOKEN", ""), os.environ.get("CLOUDFLARE_ACCOUNT_ID", ""),
+                os.environ.get("CF_ANALYTICS_TOKEN", "")))
+        except RuntimeError as e:
+            typer.echo(f"BŁĄD publikacji CF: {e}", err=True)
+            raise typer.Exit(1)
+    if publish_hf:
+        from paralaksa.site.publish import publish_hf as _publish_hf
+
+        space = os.environ.get("HF_SPACE", "")
+        if not space:
+            typer.echo("BŁĄD: brak HF_SPACE w .env (użytkownik/nazwa Space)", err=True)
+            raise typer.Exit(1)
+        try:
+            typer.echo(f"Opublikowano w Space {space}: {_publish_hf(out_dir, space, os.environ.get('HF_TOKEN', ''))}")
+        except RuntimeError as e:
+            typer.echo(f"BŁĄD publikacji HF: {e}", err=True)
             raise typer.Exit(1)
 
 
