@@ -2,6 +2,7 @@
 
 - 30.10 `dzien.py` odpalał 38 obrazków naraz (`PASKI_PROCESY=100`); Codex zwolnił, 37 przekroczyło timeout 900 s, wszystkie odrzucone i powtórzone, co kosztowało ok. 37 pp okna 5-godzinnego.
 - Dodatkowo: jeśli pierwsze 12 obrazków przejdzie poniżej 600 s (`PASKI_SZYBKO_S`), reszta idzie bez limitu procesów; przy wolnym Codexie zostaje 12.
+- Bramka przed obrazkami (`codex_width` w `dzien.py`): jedno wywołanie „OK” mierzy Codexa; ≤25 s → 12 procesów, ≤60 s → 6, wolniej → 4 (do 3 pomiarów co 3 min). Rozszerzenie „reszta bez limitu” działa tylko przy 12.
 - Teraz max 12 naraz (`PASKI_PROCESY`), timeout 1500 s, a po timeoucie `salvage_image` kopiuje obraz zapisany już przez Codex (ścieżka z `codex.log`) jako `pasy.png`.
 
 # Automat dnia: `scripts/dzien_auto.py` — 2026-10-28

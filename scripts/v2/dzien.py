@@ -18,6 +18,7 @@ import json
 import os
 import subprocess
 import sys
+import tempfile
 import threading
 import time
 from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
@@ -270,13 +271,45 @@ def timed_job(fn: Callable[[], object], timings: Timings, name: str) -> Callable
     return inner
 
 
+def codex_probe() -> float:
+    """Seconds of one trivial text call ("OK"): a cheap measure of how fast Codex is right now (no image, almost no tokens)."""
+    sys.path.insert(0, str(HERE))
+    from komiks_codex import codex_exe
+    from widok_obrazkowy import TEXT_MODEL
+    t0 = time.monotonic()
+    try:
+        with tempfile.TemporaryDirectory() as d:
+            subprocess.run([codex_exe(), "exec", "--skip-git-repo-check", "--ephemeral", "-C", d, "--sandbox", "read-only",
+                            *TEXT_MODEL, "-"], input=b"Reply with the single word OK.", capture_output=True, timeout=180, check=True)
+    except Exception:  # noqa: BLE001
+        return 999.0
+    return time.monotonic() - t0
+
+
+def codex_width() -> int:
+    """Gate before the image phase: fast Codex -> 12 processes (and all the rest once the first dozen is fast too, see
+    paski.run_all); slower -> 6; slow -> 4, with up to 3 probes 3 min apart while it is very slow."""
+    ok_s, slow_s = int(os.environ.get("PROBA_OK_S", "25")), int(os.environ.get("PROBA_WOLNO_S", "60"))
+    for attempt in range(1, 4):
+        sec = codex_probe()
+        print(f"próba szybkości Codexa: {sec:.0f} s (próba {attempt})", flush=True)
+        if sec <= ok_s:
+            return 12
+        if sec <= slow_s:
+            return 6
+        if attempt < 3:
+            time.sleep(180)
+    return 4
+
+
 def phase2(day: str, build: Callable[[str], list[tuple[str, object]]] = image_jobs, timings: Timings | None = None) -> bool:
     import paski
-    os.environ.setdefault("PASKI_PROCESY", "12")           # max 12 naraz (przy 38 naraz Codex zwalniał i wszystko przekraczało timeout)
     jobs = build(day)
     if not jobs:
         print("= obrazki: wszystkie gotowe", flush=True)
         return True
+    if "PASKI_PROCESY" not in os.environ:
+        os.environ["PASKI_PROCESY"] = str(codex_width())
     if timings:                                             # start/koniec każdego obrazka do _czasy.json (przebiegi)
         jobs = [(label, timed_job(fn, timings, f"obraz:{label}")) for label, fn in jobs]
     results = paski.run_all(jobs)

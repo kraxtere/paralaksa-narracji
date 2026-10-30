@@ -220,7 +220,7 @@ def run_all(jobs: list[tuple[str, object]]) -> dict[str, str]:
             if res == "ok":
                 times.append(time.time() - t_job)
             # pierwsze obrazki poszły w normalnym czasie (Codex nie zwalnia): reszta bez limitu procesów
-            if len(times) == width and max(times) < FAST_S and not state["hits"] and state["width"] == width:
+            if width >= 12 and len(times) == width and max(times) < FAST_S and not state["hits"] and state["width"] == width:
                 state["width"] = max(width, int(os.environ.get("PASKI_ROZPED", "100")))
                 print(f"Codex szybki (pierwsze {width} obrazków w {int(max(times))} s): reszta bez limitu procesów", flush=True)
             if res == "429":
