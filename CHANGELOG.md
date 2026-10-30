@@ -1,3 +1,13 @@
+# Automat dnia: `scripts/dzien_auto.py` — 2026-10-28
+
+- Decyzja właściciela: „zbuduj dzień” = dzień ma być na stronie (Cloudflare), bez pilnowania. Kilka złych artykułów nie może wstrzymać dnia (28.10 dwa
+  artykuły chinanews z `extracted=2` zablokowały `report`, a dzień stał kilka godzin nieopublikowany).
+- `dzien_auto.py`: daily w Actions skończony → baza z Release → ekstrakcja Codex dni D i D-1 (max 3 próby; reszta dostaje `extracted=3` i trafia do
+  `pominiete` w `data/auto/D.json`) → baza z powrotem do Release → `dzien.py D --publikuj-cf` (max 3 próby) → kontrola, że paralaksa.pages.dev pokazuje D.
+  Stan w `data/auto/D.json`, log `data/auto/auto.log`. Kody: 0 na stronie, 1 błąd, 10 czekaj, 11 daily jeszcze nie ruszył.
+  28.10: pierwszy przebieg (w trakcie ręcznego) dał kolizję plików, a kontrola strony dostawała 403 bez User-Agent (poprawione).
+- Zadanie Harmonogramu Windows `Paralaksa-dzien-auto` (od 28.10, zgoda właściciela): co 30 min i przy logowaniu, bez Claude; log `data/auto/auto.log`.
+
 # Podsumowania tematów: odporność na pomyłkę modelu — 2026-10-25
 
 - `widok_obrazkowy.summaries`: drugi dzień z rzędu (24.10, 25.10) pierwsze wywołanie dla `economy_sanctions` było odrzucane jako „niekompletne podsumowania krajów”, a ponowny przebieg przechodził. Teraz: obce `_article_ids` są odfiltrowywane zamiast unieważniać całość, błąd wskazuje konkretną regułę (klucze / puste podsumowanie / `_opis` < 180 słów / brak identyfikatorów), a wywołanie jest raz ponawiane w tym samym przebiegu. Progi bez zmian. Przyczyna w pierwszej odpowiedzi nie została potwierdzona (nieudana odpowiedź została nadpisana), więc kolejny komunikat powie, która reguła zawiodła.

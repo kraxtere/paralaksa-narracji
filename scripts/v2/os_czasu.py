@@ -93,9 +93,20 @@ def extra_events(day: str) -> None:
             raise SystemExit(f"{cid}: {res.error}")
         return res.text
 
-    first = call(f"os-dodatkowe-{day}", f"Te wydarzenia są już opisane osobno, pomiń je:\n{skip}\n\n"
-                 + S.PROMPT.format(max_stories=EXTRA_MAX, min_countries=EXTRA_MIN_COUNTRIES, items=lines))
-    cands = S.parse_candidates(first, items)
+    prompt = (f"Te wydarzenia są już opisane osobno, pomiń je:\n{skip}\n\n"
+              + S.PROMPT.format(max_stories=EXTRA_MAX, min_countries=EXTRA_MIN_COUNTRIES, items=lines))
+    raw_dir = EXTRA / "_raw"
+    raw_dir.mkdir(parents=True, exist_ok=True)
+    for attempt in range(1, 4):
+        first = call(f"os-dodatkowe-{day}", prompt)
+        (raw_dir / f"{day}_{attempt}.txt").write_text(first, encoding="utf-8")   # surowa odpowiedź do diagnozy
+        cands = S.parse_candidates(first, items)
+        # puste kandydaci przy setkach artykułów to błąd modelu/zapisu (29.10 przeszło po cichu), nie „brak tematów”
+        if cands or len(items) < 500:
+            break
+        print(f"dalsze zdarzenia {day}: 0 kandydatów przy {len(items)} artykułach, ponawiam ({attempt}/3)")
+    else:
+        raise SystemExit(f"dalsze zdarzenia {day}: 3 razy 0 kandydatów przy {len(items)} artykułach, przerwano")
     pool = [i for c in cands for i in c["ids"]]
     checks = S.parallel_map(lambda k: call(f"os-dodatkowe-weryfikacja-{day}-{k}",
                                            S.build_verify_prompt(cands, items, pool[k:k + S.VERIFY_CHUNK])),
