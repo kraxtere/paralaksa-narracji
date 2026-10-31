@@ -17,3 +17,4 @@ reports/burza-archiwum.md
 scripts/_*.py
 scripts/_*.md
 .wrangler/
+ostatnia-sesja.txt
