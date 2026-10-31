@@ -10,3 +10,10 @@ build/
 dist/
 
 state-cache/
+
+# Wygenerowane lokalnie (plx report przy budowie dnia) i stare eksperymenty
+reports/2026-10-*
+reports/burza-archiwum.md
+scripts/_*.py
+scripts/_*.md
+.wrangler/
