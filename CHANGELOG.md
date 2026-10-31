@@ -1,3 +1,7 @@
+# Automat: martwa blokada — 2026-10-31
+
+- 31.10 automat zginął w trakcie ekstrakcji (17:17), a `data/auto/.lock` blokował kolejne przebiegi przez 6 h. Teraz blokada liczy się tylko, gdy proces z pliku żyje (`pid_alive`).
+
 # Obrazki: max 12 procesów Codex, odzysk po timeoucie — 2026-10-30
 
 - 30.10 `dzien.py` odpalał 38 obrazków naraz (`PASKI_PROCESY=100`); Codex zwolnił, 37 przekroczyło timeout 900 s, wszystkie odrzucone i powtórzone, co kosztowało ok. 37 pp okna 5-godzinnego.

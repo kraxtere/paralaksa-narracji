@@ -166,6 +166,14 @@ def site_shows(day: str) -> bool:
         return False
 
 
+def pid_alive(pid: str) -> bool:
+    """A lock left by a killed run (reboot, sleep, closed window) must not block the next scheduled run for hours."""
+    if not pid.isdigit():
+        return False
+    p = subprocess.run(["tasklist", "/FI", f"PID eq {pid}", "/FO", "CSV", "/NH"], capture_output=True, text=True)
+    return f'"{pid}"' in p.stdout
+
+
 def main(argv: list[str]) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("dzien", nargs="?", help="RRRR-MM-DD (domyślnie dzień ostatniego przebiegu daily)")
@@ -204,7 +212,7 @@ def main(argv: list[str]) -> int:
         log(f"BŁĄD: za mało miejsca na dysku ({free_gb:.1f} GB wolnego), nie ruszam; zwolnij miejsce")
         return 1
     lock = ROOT / "data" / "auto" / ".lock"
-    if lock.exists() and time.time() - lock.stat().st_mtime < 6 * 3600:
+    if lock.exists() and time.time() - lock.stat().st_mtime < 6 * 3600 and pid_alive(lock.read_text().strip()):
         log("inny przebieg automatu trwa (blokada), wychodzę")
         return 10
     lock.write_text(str(os.getpid()))
