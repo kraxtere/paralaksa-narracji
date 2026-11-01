@@ -33,6 +33,7 @@ DB = ROOT / "data" / "prod.db"
 CACHE = ROOT / "state-cache" / "auto"
 SITE = "https://paralaksa.pages.dev/"
 GIT_BIN = Path(r"C:\Program Files\Git\usr\bin")
+TRIGGER_AT = "16:30"          # local (PL) time: if the daily from the GitHub schedule has not started by then, start it by hand
 
 
 def log(msg: str) -> None:
@@ -166,6 +167,28 @@ def site_shows(day: str) -> bool:
         return False
 
 
+def wait_for_daily(max_min: int = 120) -> list[dict]:
+    """Daily in Actions is running: poll every minute and go on as soon as it finishes (no waiting for the next 15-min tick)."""
+    start = time.time()
+    while time.time() - start < max_min * 60:
+        runs = gh_runs()
+        if all(r["status"] == "completed" for r in runs):
+            log("daily zakończony, jadę dalej")
+            return runs
+        if int(time.time() - start) % 300 < 60:
+            log("daily w toku, czekam")
+        time.sleep(60)
+    raise RuntimeError(f"daily nie skończył się w {max_min} min")
+
+
+def pid_alive(pid: str) -> bool:
+    """A lock left by a killed run (reboot, sleep, closed window) must not block the next scheduled run for hours."""
+    if not pid.isdigit():
+        return False
+    p = subprocess.run(["tasklist", "/FI", f"PID eq {pid}", "/FO", "CSV", "/NH"], capture_output=True, text=True)
+    return f'"{pid}"' in p.stdout
+
+
 def main(argv: list[str]) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("dzien", nargs="?", help="RRRR-MM-DD (domyślnie dzień ostatniego przebiegu daily)")
@@ -180,6 +203,12 @@ def main(argv: list[str]) -> int:
         return 0
     runs = gh_runs()
     day = a.dzien or run_day(runs)
+    if not a.dzien and day != today and not a.sucho and datetime.now().strftime("%H:%M") >= TRIGGER_AT:
+        log(f"daily dla {today} nie ruszył do {TRIGGER_AT}, uruchamiam ręcznie (workflow_dispatch)")
+        if run(["gh", "workflow", "run", "daily.yml"]).returncode == 0:
+            time.sleep(30)
+            runs = gh_runs()
+            day = run_day(runs)
     if not day or (not a.dzien and day != today):
         log(f"daily dla {today} jeszcze nie ruszył (ostatni: {day})")
         return 11
@@ -187,10 +216,8 @@ def main(argv: list[str]) -> int:
     if st.done("opublikowany"):
         log(f"{day}: już na stronie, nic do zrobienia")
         return 0
-    if any(r["status"] != "completed" for r in runs):
-        log("daily w toku, czekam")
-        return 10
-    if runs[0]["conclusion"] != "success":
+    daily_running = any(r["status"] != "completed" for r in runs)
+    if not daily_running and runs[0]["conclusion"] != "success":
         log(f"ostatni daily zakończył się: {runs[0]['conclusion']}, nie ruszam")
         return 1
     prev = (datetime.strptime(day, "%Y-%m-%d") - timedelta(days=1)).strftime("%Y-%m-%d")
@@ -204,11 +231,15 @@ def main(argv: list[str]) -> int:
         log(f"BŁĄD: za mało miejsca na dysku ({free_gb:.1f} GB wolnego), nie ruszam; zwolnij miejsce")
         return 1
     lock = ROOT / "data" / "auto" / ".lock"
-    if lock.exists() and time.time() - lock.stat().st_mtime < 6 * 3600:
+    if lock.exists() and time.time() - lock.stat().st_mtime < 6 * 3600 and pid_alive(lock.read_text().strip()):
         log("inny przebieg automatu trwa (blokada), wychodzę")
         return 10
     lock.write_text(str(os.getpid()))
     try:
+        if daily_running:
+            runs = wait_for_daily()
+            if runs[0]["conclusion"] != "success":
+                raise RuntimeError(f"daily zakończył się: {runs[0]['conclusion']}")
         if not st.done("baza_pobrana"):
             download_db()
             st.set("baza_pobrana")

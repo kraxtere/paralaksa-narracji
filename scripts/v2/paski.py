@@ -207,14 +207,22 @@ def run_all(jobs: list[tuple[str, object]]) -> dict[str, str]:
     print(f"obrazków do zrobienia: {len(jobs)}", flush=True)
     width = int(os.environ.get("PASKI_PROCESY", "8"))
     t0, state, lock = time.time(), {"width": width, "gap": int(os.environ.get("PASKI_ODSTEP", "10")), "hits": 0, "stop": False}, threading.Lock()
-    queue, running, results = [(label, fn, 0) for label, fn in jobs], [], {}
+    queue, running, results, times = [(label, fn, 0) for label, fn in jobs], [], {}, []
+    FAST_S = int(os.environ.get("PASKI_SZYBKO_S", "600"))
 
     def work(label, fn, tries, slowed):
+        t_job = time.time()
         try:
             res = fn()
         except BaseException as e:                                   # SystemExit z limit_guard też
             res = f"błąd: {e}"
         with lock:
+            if res == "ok":
+                times.append(time.time() - t_job)
+            # pierwsze obrazki poszły w normalnym czasie (Codex nie zwalnia): reszta bez limitu procesów
+            if width >= 12 and len(times) == width and max(times) < FAST_S and not state["hits"] and state["width"] == width:
+                state["width"] = max(width, int(os.environ.get("PASKI_ROZPED", "100")))
+                print(f"Codex szybki (pierwsze {width} obrazków w {int(max(times))} s): reszta bez limitu procesów", flush=True)
             if res == "429":
                 state["hits"] += 1
                 state["width"], state["gap"] = 4, 20

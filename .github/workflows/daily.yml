@@ -11,22 +11,27 @@ on:
         default: false
 permissions:
   contents: write
+  actions: read
 concurrency:
   group: daily
   cancel-in-progress: false
 jobs:
-  # Spóźniony cron po ręcznym przebiegu tego dnia (UTC) kończy się bez pracy; ręczne wywołanie liczy zawsze.
+  # Spóźniony cron kończy się bez pracy, gdy tego dnia (UTC) inny przebieg już jest w toku lub się udał
+  # (ręczny albo wyzwolony przez automat dnia); ręczne wywołanie (workflow_dispatch) liczy zawsze.
   check:
     runs-on: ubuntu-latest
     outputs:
       run: ${{ steps.check.outputs.run }}
     steps:
-      - uses: actions/checkout@v4
       - id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           day=$(date -u +%F)
-          if [ "${{ github.event_name }}" = schedule ] && [ -f "reports/$day.status.json" ]; then
-            echo "::notice::Przebieg $day już był (ręczny); harmonogram pominięty."
+          other=$(gh run list --repo "${{ github.repository }}" --workflow daily.yml --limit 20 --json databaseId,createdAt,status,conclusion \
+            --jq "[.[] | select(.databaseId != ${{ github.run_id }}) | select(.createdAt | startswith(\"$day\")) | select(.status != \"completed\" or .conclusion == \"success\")] | length")
+          if [ "${{ github.event_name }}" = schedule ] && [ "${other:-0}" -gt 0 ]; then
+            echo "::notice::Przebieg $day już jest (w toku lub zakończony); harmonogram pominięty."
             echo run=false >> "$GITHUB_OUTPUT"
           else
             echo run=true >> "$GITHUB_OUTPUT"

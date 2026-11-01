@@ -37,6 +37,7 @@ Procedura dnia strony 2.0: `scripts/v2/README.md`.
 - `.github/workflows/daily.yml`: cron, baza w zaszyfrowanym Release, bez syntezy.
 
 ## Konwencje
+- Porządek w repo (decyzja właściciela 2026-10-31): w głównym folderze nie leżą żadne luźne pliki poza dokumentacją i konfiguracją. Logi poleceń i przebiegów dnia: `data/logi/` (np. `data/logi/dzien_2026-10-31.log`), tymczasowe pliki: scratchpad sesji, jednorazowe wyniki i eksporty: `data/` (w .gitignore).
 - Identyfikatory/docstringi po angielsku; CLI, YAML, raporty, strona po polsku. Daty w bazie ISO 8601 UTC.
 - Nie normalizuj zapisywanego URL (`clean_url` zapis, `normalize_url` tylko hash).
 - Testy bez sieci; fixtures w `tests/fixtures/`. Kolory strony tylko przez zmienne CSS; nie używać `data-theme` na klikanych elementach.

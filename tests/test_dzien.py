@@ -64,10 +64,11 @@ def test_phase2_single_queue_and_failure(monkeypatch):
     import paski
     monkeypatch.setattr(paski, "run_all", fake_run_all)
     monkeypatch.delenv("PASKI_PROCESY", raising=False)
+    monkeypatch.setattr(dzien, "codex_probe", lambda: 5.0)
     assert not dzien.phase2("2026-10-05", build=lambda d: [("a", lambda: "ok"), ("b", lambda: "429")])
     assert seen["labels"] == ["a", "b"]
     import os
-    assert os.environ["PASKI_PROCESY"] == "100"
+    assert os.environ["PASKI_PROCESY"] == "12"
     monkeypatch.delenv("PASKI_PROCESY")
     assert dzien.phase2("2026-10-05", build=lambda d: [])                # nic do zrobienia
 
@@ -190,3 +191,10 @@ def test_step_exit_zero_without_result_file_fails_and_is_not_marked_done(tmp_pat
     assert not dzien.run_parallel(steps, "2026-10-12", state, lambda c, e: 0)
     assert not state.has("site")
     assert not dzien.run_steps(steps[:1], "2026-10-12", state, lambda c, e: 0)
+
+
+def test_codex_width_gate(monkeypatch):
+    monkeypatch.setattr(dzien.time, "sleep", lambda s: None)
+    for sec, want in ((5.0, 12), (40.0, 6), (120.0, 4)):
+        monkeypatch.setattr(dzien, "codex_probe", lambda sec=sec: sec)
+        assert dzien.codex_width() == want

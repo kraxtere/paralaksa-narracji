@@ -1,3 +1,20 @@
+# Daily: stała pora i jeden przebieg dziennie — 2026-11-01
+
+- Cron GitHuba spóźnia się o godziny (`30 10` UTC startuje 14:00–17:30 UTC), a ręczny przebieg i spóźniony cron dublowały się: 1.11 ręczny 49 min + cron 7 min. Strażnik w `daily.yml` (`check`) sprawdzał plik `reports/D.status.json` w repo, który nie zdążył się pojawić.
+- Strażnik sprawdza teraz `gh run list`: cron pomija przebieg, gdy tego dnia (UTC) inny jest w toku lub zakończony sukcesem (`actions: read`). Ręczne `workflow_dispatch` liczy zawsze.
+- `dzien_auto.py`: jeśli o 16:30 (czas lokalny, `TRIGGER_AT`) daily nie ruszył, uruchamia go przez `gh workflow run daily.yml`; gdy daily jest w toku, czeka w pętli co minutę i rusza od razu po jego końcu (bez czekania na następne 15 min).
+
+# Automat: martwa blokada — 2026-10-31
+
+- 31.10 automat zginął w trakcie ekstrakcji (17:17), a `data/auto/.lock` blokował kolejne przebiegi przez 6 h. Teraz blokada liczy się tylko, gdy proces z pliku żyje (`pid_alive`).
+
+# Obrazki: max 12 procesów Codex, odzysk po timeoucie — 2026-10-30
+
+- 30.10 `dzien.py` odpalał 38 obrazków naraz (`PASKI_PROCESY=100`); Codex zwolnił, 37 przekroczyło timeout 900 s, wszystkie odrzucone i powtórzone, co kosztowało ok. 37 pp okna 5-godzinnego.
+- Dodatkowo: jeśli pierwsze 12 obrazków przejdzie poniżej 600 s (`PASKI_SZYBKO_S`), reszta idzie bez limitu procesów; przy wolnym Codexie zostaje 12.
+- Bramka przed obrazkami (`codex_width` w `dzien.py`): jedno wywołanie „OK” mierzy Codexa; ≤25 s → 12 procesów, ≤60 s → 6, wolniej → 4 (do 3 pomiarów co 3 min). Rozszerzenie „reszta bez limitu” działa tylko przy 12.
+- Teraz max 12 naraz (`PASKI_PROCESY`), timeout 1500 s, a po timeoucie `salvage_image` kopiuje obraz zapisany już przez Codex (ścieżka z `codex.log`) jako `pasy.png`.
+
 # Automat dnia: `scripts/dzien_auto.py` — 2026-10-28
 
 - Decyzja właściciela: „zbuduj dzień” = dzień ma być na stronie (Cloudflare), bez pilnowania. Kilka złych artykułów nie może wstrzymać dnia (28.10 dwa
