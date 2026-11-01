@@ -1,3 +1,9 @@
+# Daily: stała pora i jeden przebieg dziennie — 2026-11-01
+
+- Cron GitHuba spóźnia się o godziny (`30 10` UTC startuje 14:00–17:30 UTC), a ręczny przebieg i spóźniony cron dublowały się: 1.11 ręczny 49 min + cron 7 min. Strażnik w `daily.yml` (`check`) sprawdzał plik `reports/D.status.json` w repo, który nie zdążył się pojawić.
+- Strażnik sprawdza teraz `gh run list`: cron pomija przebieg, gdy tego dnia (UTC) inny jest w toku lub zakończony sukcesem (`actions: read`). Ręczne `workflow_dispatch` liczy zawsze.
+- `dzien_auto.py`: jeśli o 16:30 (czas lokalny, `TRIGGER_AT`) daily nie ruszył, uruchamia go przez `gh workflow run daily.yml`; gdy daily jest w toku, czeka w pętli co minutę i rusza od razu po jego końcu (bez czekania na następne 15 min).
+
 # Automat: martwa blokada — 2026-10-31
 
 - 31.10 automat zginął w trakcie ekstrakcji (17:17), a `data/auto/.lock` blokował kolejne przebiegi przez 6 h. Teraz blokada liczy się tylko, gdy proces z pliku żyje (`pid_alive`).
