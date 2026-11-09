@@ -1,3 +1,8 @@
+# Streszczenia: luźniejsza walidacja długości — 2026-11-09
+
+- `scripts/v2/streszczenia.py`: zdań nie liczymy już jako powodu do ponowienia (prompt dalej prosi o 3–5). Twardo 2–12 zdań (lead najwyżej 5); ponowienie gotowej odpowiedzi kosztowało więcej tokenów niż dłuższe streszczenie. Cytaty dalej maks. 15 słów. Decyzja właściciela.
+- `scripts/v2/kraje.py`: tak samo twarde progi: tytuł tematu ≤9 słów (prompt 6), opis 15–120 słów (prompt 25–70). Oś czasu (`os_czasu.py`) miała opisy już luźne (20–70 przy prośbie o 25–60); liczba nowych zdarzeń na dzień bez zmian.
+
 # Daily: stała pora i jeden przebieg dziennie — 2026-11-01
 
 - Cron GitHuba spóźnia się o godziny (`30 10` UTC startuje 14:00–17:30 UTC), a ręczny przebieg i spóźniony cron dublowały się: 1.11 ręczny 49 min + cron 7 min. Strażnik w `daily.yml` (`check`) sprawdzał plik `reports/D.status.json` w repo, który nie zdążył się pojawić.

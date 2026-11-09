@@ -95,10 +95,12 @@ def check(batch: list[dict], got: dict[int, str]) -> list[str]:
             errors.append(f"#{a['id']}: brak streszczenia")
             continue
         n = sentences(t)
-        if a["lead"] and n > 3:
-            errors.append(f"#{a['id']}: {n} zdań, przy samym leadzie najwyżej 2")
-        if not a["lead"] and not 3 <= n <= 6:
-            errors.append(f"#{a['id']}: {n} zdań, ma być 3–5")
+        # luźne progi (decyzja właściciela 09.11): prompt prosi o 3–5 zdań, ale gotowej odpowiedzi
+        # nie ponawiamy z powodu długości — ponowienie kosztuje więcej tokenów niż dłuższe streszczenie
+        if a["lead"] and n > 5:
+            errors.append(f"#{a['id']}: {n} zdań, przy samym leadzie najwyżej 3")
+        if not a["lead"] and not 2 <= n <= 12:
+            errors.append(f"#{a['id']}: {n} zdań, ma być 3–5 (twardo 2–12)")
         # w prompcie 10 słów, twardy próg to zasada projektu (cytaty maks. 15 słów)
         errors += [f"#{a['id']}: cytat ma {len(q.split())} słów, najwyżej 10" for q in QUOTE.findall(t) if len(q.split()) > 15]
     return errors

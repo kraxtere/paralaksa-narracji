@@ -24,7 +24,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 OUT = Path("data/widok/kraje")
-MAX_TOPICS, MAX_IDS, MAX_TITLE_WORDS, MIN_DESC_WORDS, MAX_DESC_WORDS = 5, 4, 6, 25, 70
+# twarde progi luźniejsze niż w prompcie (09.11): prompt prosi o tytuł ≤6 i opis 25–70 słów, ale ponowienia z powodu długości nie opłacają się
+MAX_TOPICS, MAX_IDS, MAX_TITLE_WORDS, MIN_DESC_WORDS, MAX_DESC_WORDS = 5, 4, 9, 15, 120
 
 
 def assigned(day: str) -> set[int]:
